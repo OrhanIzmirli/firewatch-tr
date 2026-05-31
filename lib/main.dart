@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,14 +12,15 @@ import 'services/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Firebase Initialize
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
-  await NotificationService.instance.initialize();
-  await FireMonitoringService.instance.initialize();
+
+  if (!kIsWeb) {
+    await NotificationService.instance.initialize();
+    await FireMonitoringService.instance.initialize();
+  }
 
   runApp(const ProviderScope(child: FireWatchApp()));
 }

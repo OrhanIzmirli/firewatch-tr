@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143885119597",
+    "project_id": "firewatch-tr",
+    "storage_bucket": "firewatch-tr.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143885119597:android:6d0e2888d790a598e10f64",
+        "android_client_info": {
+          "package_name": "com.oguzh.firewatch.firewatch_tr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_SYwTkB4clF_Orm9KCZUn32dIhyzVyJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

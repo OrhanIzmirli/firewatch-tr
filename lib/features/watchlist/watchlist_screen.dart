@@ -9,9 +9,12 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
+import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 
 class WatchlistScreen extends ConsumerStatefulWidget {
@@ -22,9 +25,13 @@ class WatchlistScreen extends ConsumerStatefulWidget {
 }
 
 class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
+  static const _cacheKey = 'watchlist_fires';
+
   final FireApiService _fireApiService = FireApiService();
   List<FirePoint> _allFires = [];
   bool _loading = true;
+  bool _isOffline = false;
+  DateTime? _cachedAt;
 
   @override
   void initState() {
@@ -33,11 +40,24 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
   }
 
   Future<void> _loadFires() async {
+    if (mounted) setState(() => _loading = true);
     try {
       final fires = await _fireApiService.fetchTurkeyFires();
-      if (mounted) setState(() { _allFires = fires; _loading = false; });
+      await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
+      if (mounted) setState(() { _allFires = fires; _loading = false; _isOffline = false; });
     } catch (_) {
-      if (mounted) setState(() => _loading = false);
+      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, savedAt) = cached;
+            _allFires = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+            _cachedAt = savedAt;
+            _isOffline = true;
+          }
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -72,11 +92,16 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
             ).animate().fadeIn(duration: 240.ms).slideX(begin: 0.2, end: 0),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: _loadFires,
+        color: AppColors.primary,
+        child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
             GlassPanel(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +125,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
             const SizedBox(height: AppSpacing.xxl),
 
             if (_loading)
-              const Center(child: CircularProgressIndicator(color: AppColors.primary))
+              const SkeletonListLoader(count: 2)
             else if (savedIds.isEmpty)
               GlassPanel(
                 child: Column(
@@ -226,6 +251,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                 }),
             ],
           ],
+        ),
         ),
       ),
     );

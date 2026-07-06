@@ -27,6 +27,21 @@ class NewsItem {
     required this.paragraphs,
   });
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'source': source,
+        'source_url': sourceUrl,
+        'published_at': publishedAt,
+        'summary': summary,
+        'category': category,
+        'related_region': relatedRegion,
+        'read_minutes': readMinutes,
+        'is_breaking': isBreaking,
+        'highlights': highlights,
+        'paragraphs': paragraphs,
+      };
+
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
       id: json['id']?.toString() ?? '',

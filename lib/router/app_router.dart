@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/emergency/emergency_screen.dart';
+import '../features/fire_detail/fire_deep_link_screen.dart';
 import '../features/fire_detail/fire_detail_screen.dart';
 import '../features/home/main_shell_screen.dart';
 import '../features/location_permission/location_permission_screen.dart';
 import '../features/news/news_detail_screen.dart';
+import '../features/notification_permission/notification_permission_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/risk/risk_screen.dart';
 import '../features/safety/safety_guide_screen.dart';
@@ -32,6 +34,10 @@ class AppRouter {
       GoRoute(
         path: '/location-permission',
         builder: (context, state) => const LocationPermissionScreen(),
+      ),
+      GoRoute(
+        path: '/notification-permission',
+        builder: (context, state) => const NotificationPermissionScreen(),
       ),
       GoRoute(
         path: '/app',
@@ -68,7 +74,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/fire/:id',
-        builder: (context, state) => const MainShellScreen(initialIndex: 0),
+        builder: (context, state) => FireDeepLinkScreen(fireId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: '/news-detail',

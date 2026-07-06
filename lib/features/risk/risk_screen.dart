@@ -6,8 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 
 class RiskScreen extends StatefulWidget {
@@ -18,9 +21,13 @@ class RiskScreen extends StatefulWidget {
 }
 
 class _RiskScreenState extends State<RiskScreen> {
+  static const _cacheKey = 'risk_summary';
+
   final Dio _dio = Dio();
   List<Map<String, dynamic>> _regions = [];
   bool _loading = true;
+  bool _isOffline = false;
+  DateTime? _cachedAt;
 
   @override
   void initState() {
@@ -29,19 +36,34 @@ class _RiskScreenState extends State<RiskScreen> {
   }
 
   Future<void> _loadRiskData() async {
+    if (mounted) setState(() => _loading = true);
     try {
       final response = await _dio.get(
         'https://firewatch-tr-backend.onrender.com/api/risk/summary',
       );
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
+        final regions = data.map((e) => Map<String, dynamic>.from(e)).toList();
+        await OfflineCacheService.instance.save(_cacheKey, regions);
         if (mounted) setState(() {
-          _regions = data.map((e) => Map<String, dynamic>.from(e)).toList();
+          _regions = regions;
           _loading = false;
+          _isOffline = false;
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _loading = false);
+      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, savedAt) = cached;
+            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+            _cachedAt = savedAt;
+            _isOffline = true;
+          }
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -154,6 +176,14 @@ class _RiskScreenState extends State<RiskScreen> {
         FlSpot(e.key.toDouble(), (e.value['general_risk_score'] as int).toDouble())
     ).toList();
 
+    DateTime? lastCalculated;
+    for (final region in _regions) {
+      final parsed = DateTime.tryParse(region['date']?.toString() ?? '');
+      if (parsed != null && (lastCalculated == null || parsed.isAfter(lastCalculated))) {
+        lastCalculated = parsed;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.riskTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
@@ -164,13 +194,22 @@ class _RiskScreenState extends State<RiskScreen> {
           ),
         ],
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      body: RefreshIndicator(
+        onRefresh: _loadRiskData,
+        color: AppColors.primary,
+        child: _loading
+          ? ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              children: const [SkeletonMetricGrid(count: 4), SizedBox(height: AppSpacing.xl), SkeletonListLoader(count: 3)],
+            )
           : SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                   GlassPanel(
                     padding: const EdgeInsets.all(AppSpacing.xl),
                     child: Column(
@@ -180,6 +219,19 @@ class _RiskScreenState extends State<RiskScreen> {
                         const SizedBox(height: AppSpacing.lg),
                         Text(l10n.riskSummaryTitle,
                             style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
+                        if (lastCalculated != null) ...[
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(Icons.update_rounded, size: 14, color: mutedTextColor),
+                              const SizedBox(width: 4),
+                              Text(
+                                l10n.fireDetailLastUpdate('${lastCalculated.day.toString().padLeft(2, '0')}.${lastCalculated.month.toString().padLeft(2, '0')}.${lastCalculated.year} ${lastCalculated.hour.toString().padLeft(2, '0')}:${lastCalculated.minute.toString().padLeft(2, '0')}'),
+                                style: GoogleFonts.inter(fontSize: 12, color: mutedTextColor),
+                              ),
+                            ],
+                          ),
+                        ],
                         const SizedBox(height: AppSpacing.sm),
                         Text(l10n.riskSummarySubtitle,
                             style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
@@ -444,6 +496,7 @@ class _RiskScreenState extends State<RiskScreen> {
                 ],
               ),
             ),
+      ),
     );
   }
 }

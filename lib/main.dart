@@ -8,6 +8,7 @@ import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
+import 'services/background_task_service.dart';
 import 'services/fire_monitoring_service.dart';
 import 'services/locale_provider.dart';
 import 'services/notification_service.dart';
@@ -23,6 +24,9 @@ Future<void> main() async {
   if (!kIsWeb) {
     await NotificationService.instance.initialize();
     await FireMonitoringService.instance.initialize();
+    if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
+      await BackgroundTaskService.instance.initialize();
+    }
   }
 
   runApp(const ProviderScope(child: FireWatchApp()));

@@ -12,9 +12,13 @@ import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
+import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
+import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/summary_card.dart';
 
@@ -26,6 +30,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  static const _newsCacheKey = 'home_news';
+  static const _firesCacheKey = 'home_fires';
+
   final TextEditingController _searchController = TextEditingController();
   final NewsService _newsService = NewsService();
   final FireApiService _fireApiService = FireApiService();
@@ -34,6 +41,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<FirePoint> _firePoints = [];
   bool _newsLoading = true;
   bool _fireLoading = true;
+  bool _newsOffline = false;
+  bool _firesOffline = false;
+  DateTime? _newsCachedAt;
+  DateTime? _firesCachedAt;
 
   @override
   void initState() {
@@ -42,20 +53,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _loadData() async {
-    _loadNews();
-    _loadFires();
+    await Future.wait([_loadNews(), _loadFires()]);
   }
 
   Future<void> _loadNews() async {
+    if (mounted) setState(() => _newsLoading = true);
     try {
       final news = await _newsService.fetchNewsFromRender(limit: 3);
-      if (mounted) setState(() { _topNews = news; _newsLoading = false; });
+      await OfflineCacheService.instance.save(_newsCacheKey, news.map((n) => n.toJson()).toList());
+      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsOffline = false; });
     } catch (_) {
-      if (mounted) setState(() => _newsLoading = false);
+      final cached = await OfflineCacheService.instance.load(_newsCacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, savedAt) = cached;
+            _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
+            _newsCachedAt = savedAt;
+            _newsOffline = true;
+          }
+          _newsLoading = false;
+        });
+      }
     }
   }
 
   Future<void> _loadFires() async {
+    if (mounted) setState(() => _fireLoading = true);
     try {
       final fires = await _fireApiService.fetchTurkeyFires();
       final enriched = <FirePoint>[];
@@ -63,12 +87,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final cityInfo = await _fireApiService.getNearestCity(point.latitude, point.longitude);
         enriched.add(point.copyWith(cityName: cityInfo['city'], nearestRegion: cityInfo['region']));
       }
+      final allPoints = [...enriched, ...fires.skip(10)];
+      await OfflineCacheService.instance.save(_firesCacheKey, allPoints.map((p) => p.toJson()).toList());
       if (mounted) setState(() {
-        _firePoints = [...enriched, ...fires.skip(10)];
+        _firePoints = allPoints;
         _fireLoading = false;
+        _firesOffline = false;
       });
     } catch (_) {
-      if (mounted) setState(() => _fireLoading = false);
+      final cached = await OfflineCacheService.instance.load(_firesCacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, savedAt) = cached;
+            _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+            _firesCachedAt = savedAt;
+            _firesOffline = true;
+          }
+          _fireLoading = false;
+        });
+      }
     }
   }
 
@@ -198,11 +236,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        color: AppColors.primary,
+        child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (_firesOffline && _firesCachedAt != null) OfflineBanner(lastUpdated: _firesCachedAt!),
             // ── Header ──────────────────────────────────────
             GlassPanel(
               padding: const EdgeInsets.all(AppSpacing.xl),
@@ -284,7 +327,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: AppSpacing.md),
 
             if (_fireLoading)
-              const Center(child: CircularProgressIndicator(color: AppColors.primary))
+              const SkeletonMetricGrid(count: 3)
             else
               GridView.count(
                 crossAxisCount: 2,
@@ -326,12 +369,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
 
+            if (_newsOffline && _newsCachedAt != null) OfflineBanner(lastUpdated: _newsCachedAt!),
             if (_newsLoading)
-              const Center(child: CircularProgressIndicator(color: AppColors.primary))
+              const SkeletonListLoader(count: 2)
             else if (_topNews.isEmpty)
-              GlassPanel(
-                child: Text(l10n.homeNewsLoading,
-                    style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+              EmptyStateView(
+                icon: Icons.newspaper_outlined,
+                title: l10n.emptyStateGenericTitle,
+                subtitle: l10n.emptyStateGenericSubtitle,
               )
             else
               ..._topNews.asMap().entries.map((entry) {
@@ -418,10 +463,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             if (_fireLoading)
-              const Center(child: CircularProgressIndicator(color: AppColors.primary))
+              const SkeletonListLoader(count: 3)
             else if (_firePoints.isEmpty)
-              GlassPanel(
-                child: Center(child: Text(l10n.homeNoActiveFires, style: GoogleFonts.inter(fontSize: 14))),
+              EmptyStateView(
+                icon: Icons.local_fire_department_outlined,
+                title: l10n.homeNoActiveFires,
               )
             else
               ..._firePoints
@@ -501,6 +547,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             const SizedBox(height: 110),
           ],
+        ),
         ),
       ),
     );

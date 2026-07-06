@@ -2245,6 +2245,132 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bildirimi Gönder'**
   String get reportPanelSubmit;
+
+  /// No description provided for @offlineBannerLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevrimdışı mod • Son güncelleme: {time}'**
+  String offlineBannerLabel(String time);
+
+  /// No description provided for @errorStateTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir şeyler ters gitti'**
+  String get errorStateTitle;
+
+  /// No description provided for @errorStateGeneric.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veriler yüklenemedi. Lütfen tekrar deneyin.'**
+  String get errorStateGeneric;
+
+  /// No description provided for @emptyStateGenericTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gösterilecek veri yok'**
+  String get emptyStateGenericTitle;
+
+  /// No description provided for @emptyStateGenericSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu anda burada gösterilecek bir şey bulunmuyor.'**
+  String get emptyStateGenericSubtitle;
+
+  /// No description provided for @notifPermTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önemli uyarıları kaçırma'**
+  String get notifPermTitle;
+
+  /// No description provided for @notifPermSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim izniyle yakınındaki yangın olaylarını ve kritik durum değişikliklerini anında öğrenebilirsin.'**
+  String get notifPermSubtitle;
+
+  /// No description provided for @notifPermNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.'**
+  String get notifPermNote;
+
+  /// No description provided for @notifPermEnable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimleri Etkinleştir'**
+  String get notifPermEnable;
+
+  /// No description provided for @notifPermSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdilik Geç'**
+  String get notifPermSkip;
+
+  /// No description provided for @notifPermGranted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim izni verildi. Teşekkürler!'**
+  String get notifPermGranted;
+
+  /// No description provided for @notifPermDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsin.'**
+  String get notifPermDenied;
+
+  /// No description provided for @locPermServiceOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.'**
+  String get locPermServiceOff;
+
+  /// No description provided for @locPermDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.'**
+  String get locPermDenied;
+
+  /// No description provided for @locPermDeniedForever.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.'**
+  String get locPermDeniedForever;
+
+  /// No description provided for @locPermError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.'**
+  String get locPermError;
+
+  /// No description provided for @locPermTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınındaki olayları gösterelim'**
+  String get locPermTitle;
+
+  /// No description provided for @locPermSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.'**
+  String get locPermSubtitle;
+
+  /// No description provided for @locPermNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.'**
+  String get locPermNote;
+
+  /// No description provided for @locPermEnable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu Etkinleştir'**
+  String get locPermEnable;
+
+  /// No description provided for @locPermSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdilik Geç'**
+  String get locPermSkip;
 }
 
 class _AppLocalizationsDelegate

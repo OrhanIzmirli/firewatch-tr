@@ -489,5 +489,32 @@
   "reportPanelWindSwitch": "Rüzgar güçlü görünüyor",
   "reportPanelSettlementSwitch": "Yerleşim alanına yakın",
   "reportPanelSubmitting": "Gönderiliyor...",
-  "reportPanelSubmit": "Bildirimi Gönder"
+  "reportPanelSubmit": "Bildirimi Gönder",
+
+  "offlineBannerLabel": "Çevrimdışı mod • Son güncelleme: {time}",
+  "@offlineBannerLabel": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "errorStateTitle": "Bir şeyler ters gitti",
+  "errorStateGeneric": "Veriler yüklenemedi. Lütfen tekrar deneyin.",
+  "emptyStateGenericTitle": "Gösterilecek veri yok",
+  "emptyStateGenericSubtitle": "Şu anda burada gösterilecek bir şey bulunmuyor.",
+
+  "notifPermTitle": "Önemli uyarıları kaçırma",
+  "notifPermSubtitle": "Bildirim izniyle yakınındaki yangın olaylarını ve kritik durum değişikliklerini anında öğrenebilirsin.",
+  "notifPermNote": "Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.",
+  "notifPermEnable": "Bildirimleri Etkinleştir",
+  "notifPermSkip": "Şimdilik Geç",
+  "notifPermGranted": "Bildirim izni verildi. Teşekkürler!",
+  "notifPermDenied": "Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsin.",
+
+  "locPermServiceOff": "Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.",
+  "locPermDenied": "Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.",
+  "locPermDeniedForever": "Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.",
+  "locPermError": "Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.",
+  "locPermTitle": "Yakınındaki olayları gösterelim",
+  "locPermSubtitle": "Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.",
+  "locPermNote": "Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.",
+  "locPermEnable": "Konumu Etkinleştir",
+  "locPermSkip": "Şimdilik Geç"
 }

@@ -1215,4 +1215,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportPanelSubmit => 'Submit Report';
+
+  @override
+  String offlineBannerLabel(String time) {
+    return 'Offline mode • Last updated: $time';
+  }
+
+  @override
+  String get errorStateTitle => 'Something went wrong';
+
+  @override
+  String get errorStateGeneric => 'Couldn\'t load data. Please try again.';
+
+  @override
+  String get emptyStateGenericTitle => 'Nothing to show';
+
+  @override
+  String get emptyStateGenericSubtitle =>
+      'There\'s nothing here to display right now.';
+
+  @override
+  String get notifPermTitle => 'Don\'t miss important alerts';
+
+  @override
+  String get notifPermSubtitle =>
+      'With notification permission, you\'ll instantly learn about nearby wildfire events and critical status changes.';
+
+  @override
+  String get notifPermNote =>
+      'This permission isn\'t required. You can skip it for now and still use the app.';
+
+  @override
+  String get notifPermEnable => 'Enable Notifications';
+
+  @override
+  String get notifPermSkip => 'Skip for Now';
+
+  @override
+  String get notifPermGranted => 'Notification permission granted. Thanks!';
+
+  @override
+  String get notifPermDenied =>
+      'Notification permission denied. You can enable it later in Settings.';
+
+  @override
+  String get locPermServiceOff =>
+      'Location service appears to be off. You can still continue using the app.';
+
+  @override
+  String get locPermDenied =>
+      'Location permission denied. You can continue without location for now.';
+
+  @override
+  String get locPermDeniedForever =>
+      'Location permission was permanently denied. You can enable it in Settings.';
+
+  @override
+  String get locPermError =>
+      'Something went wrong getting location permission. You can skip for now.';
+
+  @override
+  String get locPermTitle => 'Let\'s show you nearby events';
+
+  @override
+  String get locPermSubtitle =>
+      'With location access, we can show wildfire events, risky regions, and more relevant alerts near you.';
+
+  @override
+  String get locPermNote =>
+      'This permission isn\'t required. You can skip it for now and still use the app.';
+
+  @override
+  String get locPermEnable => 'Enable Location';
+
+  @override
+  String get locPermSkip => 'Skip for Now';
 }

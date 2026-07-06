@@ -7,8 +7,12 @@ import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
+import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
+import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
@@ -21,13 +25,27 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  static const _cacheKey = 'news_list';
+  static const _pageSize = 20;
+
   final NewsService _newsService = NewsService();
+  final ScrollController _scrollController = ScrollController();
 
   String _selectedCategory = 'Tümü';
   String _selectedRegion = 'Tümü';
   List<NewsItem> _allNews = [];
   bool _isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
+  bool _isOffline = false;
+  DateTime? _cachedAt;
   String? _errorMessage;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   static const List<String> _categories = [
     'Tümü', 'Risk', 'Operasyon', 'Güvenlik', 'Güncelleme',
@@ -74,29 +92,77 @@ class _NewsScreenState extends State<NewsScreen> {
   void initState() {
     super.initState();
     _loadNews();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_hasMore || _isLoadingMore || _isLoading) return;
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      _loadMore();
+    }
   }
 
   Future<void> _loadNews() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
+      _hasMore = true;
     });
 
     try {
       final news = await _newsService.fetchNewsFromRender(
         category: _categoryParams[_selectedCategory],
-        limit: 50,
+        limit: _pageSize,
+        offset: 0,
       );
+      if (_selectedCategory == 'Tümü') {
+        await OfflineCacheService.instance.save(_cacheKey, news.map((n) => n.toJson()).toList());
+      }
+      if (!mounted) return;
       setState(() {
         _allNews = news;
         _isLoading = false;
+        _isOffline = false;
+        _hasMore = news.length >= _pageSize;
       });
     } catch (e) {
       if (!mounted) return;
+      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      if (cached != null) {
+        final (data, savedAt) = cached;
+        setState(() {
+          _allNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
+          _cachedAt = savedAt;
+          _isOffline = true;
+          _isLoading = false;
+          _hasMore = false;
+        });
+      } else {
+        setState(() {
+          _errorMessage = AppLocalizations.of(context)!.newsFetchFailed;
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadMore() async {
+    setState(() => _isLoadingMore = true);
+    try {
+      final more = await _newsService.fetchNewsFromRender(
+        category: _categoryParams[_selectedCategory],
+        limit: _pageSize,
+        offset: _allNews.length,
+      );
+      if (!mounted) return;
       setState(() {
-        _errorMessage = AppLocalizations.of(context)!.newsFetchFailed;
-        _isLoading = false;
+        _allNews = [..._allNews, ...more];
+        _hasMore = more.length >= _pageSize;
+        _isLoadingMore = false;
       });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isLoadingMore = false);
     }
   }
 
@@ -178,11 +244,17 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: _loadNews,
+        color: AppColors.primary,
+        child: SingleChildScrollView(
+        controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
             // ── Header ────────────────────────────────────────
             GlassPanel(
               child: Column(
@@ -310,43 +382,17 @@ class _NewsScreenState extends State<NewsScreen> {
             const SizedBox(height: AppSpacing.md),
 
             if (_isLoading)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 48),
-                child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
-              )
+              const SkeletonListLoader(count: 4)
             else if (_errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 48),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Icon(Icons.wifi_off_rounded, size: 48,
-                          color: AppColors.primary.withValues(alpha: 0.5)),
-                      const SizedBox(height: 16),
-                      Text(_errorMessage!, style: GoogleFonts.inter(fontSize: 15)),
-                      const SizedBox(height: 16),
-                      FilledButton.icon(
-                        onPressed: _loadNews,
-                        icon: const Icon(Icons.refresh),
-                        label: Text(l10n.commonTryAgain),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+              ErrorStateView(message: _errorMessage, onRetry: _loadNews)
             else if (filteredItems.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 48),
-                child: Center(
-                  child: Text(
-                    _selectedRegion != 'Tümü'
-                        ? l10n.newsNoneInRegion(_regionLabel(l10n, _selectedRegion))
-                        : l10n.newsNoneInCategory,
-                    style: GoogleFonts.inter(fontSize: 15),
-                  ),
-                ),
+              EmptyStateView(
+                icon: Icons.article_outlined,
+                title: _selectedRegion != 'Tümü'
+                    ? l10n.newsNoneInRegion(_regionLabel(l10n, _selectedRegion))
+                    : l10n.newsNoneInCategory,
               )
-            else
+            else ...[
               ...filteredItems.asMap().entries.map((entry) {
                 final index = entry.key;
                 final NewsItem item = entry.value;
@@ -361,7 +407,14 @@ class _NewsScreenState extends State<NewsScreen> {
                       .scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)),
                 );
               }),
+              if (_isLoadingMore)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2.4)),
+                ),
+            ],
           ],
+        ),
         ),
       ),
     );

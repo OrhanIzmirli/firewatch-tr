@@ -23,6 +23,32 @@ class FirePoint {
     this.nearestRegion,
   });
 
+  Map<String, dynamic> toJson() => {
+        'latitude': latitude,
+        'longitude': longitude,
+        'brightness': brightness,
+        'confidence': confidence,
+        'satellite': satellite,
+        'acquisitionDate': acquisitionDate,
+        'acquisitionTime': acquisitionTime,
+        'distanceKm': distanceKm,
+        'cityName': cityName,
+        'nearestRegion': nearestRegion,
+      };
+
+  factory FirePoint.fromJson(Map<String, dynamic> json) => FirePoint(
+        latitude: (json['latitude'] as num).toDouble(),
+        longitude: (json['longitude'] as num).toDouble(),
+        brightness: json['brightness'] as String,
+        confidence: json['confidence'] as String,
+        satellite: json['satellite'] as String,
+        acquisitionDate: json['acquisitionDate'] as String,
+        acquisitionTime: json['acquisitionTime'] as String,
+        distanceKm: (json['distanceKm'] as num?)?.toDouble(),
+        cityName: json['cityName'] as String?,
+        nearestRegion: json['nearestRegion'] as String?,
+      );
+
   FirePoint copyWith({
     double? latitude,
     double? longitude,

@@ -14,7 +14,9 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
+import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -30,9 +32,13 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  static const _cacheKey = 'map_fires';
+
   bool _isReportOpen = false;
   bool _isLoading = true;
   String? _errorMessage;
+  bool _isOffline = false;
+  DateTime? _cachedAt;
 
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
@@ -91,16 +97,31 @@ class _MapScreenState extends State<MapScreen> {
       }
       final allPoints = [...enriched, ...withDistances.skip(10)];
       final nearby = _buildNearbyList(allPoints);
+      await OfflineCacheService.instance.save(_cacheKey, allPoints.map((p) => p.toJson()).toList());
 
       if (!mounted) return;
       setState(() {
         _firePoints = allPoints;
         _nearbyFirePoints = nearby;
         _isLoading = false;
+        _isOffline = false;
       });
     } catch (_) {
+      final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (!mounted) return;
-      setState(() { _errorMessage = AppLocalizations.of(context)!.mapFetchError; _isLoading = false; });
+      if (cached != null) {
+        final (data, savedAt) = cached;
+        final points = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+        setState(() {
+          _firePoints = points;
+          _nearbyFirePoints = _buildNearbyList(points);
+          _cachedAt = savedAt;
+          _isOffline = true;
+          _isLoading = false;
+        });
+      } else {
+        setState(() { _errorMessage = AppLocalizations.of(context)!.mapFetchError; _isLoading = false; });
+      }
     }
   }
 
@@ -259,11 +280,16 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
+          RefreshIndicator(
+            onRefresh: _loadFirePoints,
+            color: AppColors.primary,
+            child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                 GlassPanel(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,6 +512,7 @@ class _MapScreenState extends State<MapScreen> {
 
                 const SizedBox(height: 110),
               ],
+            ),
             ),
           ),
 

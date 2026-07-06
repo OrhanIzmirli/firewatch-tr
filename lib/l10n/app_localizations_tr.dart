@@ -1211,4 +1211,79 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelSubmit => 'Bildirimi Gönder';
+
+  @override
+  String offlineBannerLabel(String time) {
+    return 'Çevrimdışı mod • Son güncelleme: $time';
+  }
+
+  @override
+  String get errorStateTitle => 'Bir şeyler ters gitti';
+
+  @override
+  String get errorStateGeneric => 'Veriler yüklenemedi. Lütfen tekrar deneyin.';
+
+  @override
+  String get emptyStateGenericTitle => 'Gösterilecek veri yok';
+
+  @override
+  String get emptyStateGenericSubtitle =>
+      'Şu anda burada gösterilecek bir şey bulunmuyor.';
+
+  @override
+  String get notifPermTitle => 'Önemli uyarıları kaçırma';
+
+  @override
+  String get notifPermSubtitle =>
+      'Bildirim izniyle yakınındaki yangın olaylarını ve kritik durum değişikliklerini anında öğrenebilirsin.';
+
+  @override
+  String get notifPermNote =>
+      'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.';
+
+  @override
+  String get notifPermEnable => 'Bildirimleri Etkinleştir';
+
+  @override
+  String get notifPermSkip => 'Şimdilik Geç';
+
+  @override
+  String get notifPermGranted => 'Bildirim izni verildi. Teşekkürler!';
+
+  @override
+  String get notifPermDenied =>
+      'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsin.';
+
+  @override
+  String get locPermServiceOff =>
+      'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.';
+
+  @override
+  String get locPermDenied =>
+      'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.';
+
+  @override
+  String get locPermDeniedForever =>
+      'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.';
+
+  @override
+  String get locPermError =>
+      'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.';
+
+  @override
+  String get locPermTitle => 'Yakınındaki olayları gösterelim';
+
+  @override
+  String get locPermSubtitle =>
+      'Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.';
+
+  @override
+  String get locPermNote =>
+      'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.';
+
+  @override
+  String get locPermEnable => 'Konumu Etkinleştir';
+
+  @override
+  String get locPermSkip => 'Şimdilik Geç';
 }

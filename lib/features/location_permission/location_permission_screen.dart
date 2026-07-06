@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 
 class LocationPermissionScreen extends StatefulWidget {
   const LocationPermissionScreen({super.key});
@@ -30,8 +31,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
 
       if (!serviceEnabled) {
         setState(() {
-          _message =
-          'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.';
+          _message = AppLocalizations.of(context)!.locPermServiceOff;
           _isLoading = false;
         });
         return;
@@ -47,8 +47,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
 
       if (permission == LocationPermission.denied) {
         setState(() {
-          _message =
-          'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.';
+          _message = AppLocalizations.of(context)!.locPermDenied;
           _isLoading = false;
         });
         return;
@@ -56,29 +55,29 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
 
       if (permission == LocationPermission.deniedForever) {
         setState(() {
-          _message =
-          'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.';
+          _message = AppLocalizations.of(context)!.locPermDeniedForever;
           _isLoading = false;
         });
         return;
       }
 
-      context.go('/app');
+      context.go('/notification-permission');
     } catch (e) {
+      if (!mounted) return;
       setState(() {
-        _message =
-        'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.';
+        _message = AppLocalizations.of(context)!.locPermError;
         _isLoading = false;
       });
     }
   }
 
   void _skipForNow() {
-    context.go('/app');
+    context.go('/notification-permission');
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -168,7 +167,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                   const SizedBox(height: 36),
 
                   Text(
-                    'Yakınındaki olayları gösterelim',
+                    l10n.locPermTitle,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 28,
@@ -183,7 +182,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                   const SizedBox(height: AppSpacing.md),
 
                   Text(
-                    'Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.',
+                    l10n.locPermSubtitle,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 16,
@@ -215,7 +214,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                         const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: Text(
-                            'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.',
+                            l10n.locPermNote,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               height: 1.45,
@@ -288,7 +287,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                         ),
                       )
                           : Text(
-                        'Konumu Etkinleştir',
+                        l10n.locPermEnable,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -323,7 +322,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                         ),
                       ),
                       child: Text(
-                        'Şimdilik Geç',
+                        l10n.locPermSkip,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

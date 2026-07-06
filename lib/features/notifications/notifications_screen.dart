@@ -11,8 +11,11 @@ import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../services/notification_service.dart';
+import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -23,9 +26,13 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  static const _cacheKey = 'notifications_fires';
+
   bool _isBusy = false;
   bool _permissionGranted = false;
   bool _fireLoading = true;
+  bool _isOffline = false;
+  DateTime? _cachedAt;
 
   List<FirePoint> _highRiskFires = [];
   List<FirePoint> _allFires = [];
@@ -40,8 +47,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Future<void> _loadFires() async {
+    if (mounted) setState(() => _fireLoading = true);
     try {
       final fires = await _fireApiService.fetchTurkeyFires();
+      await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
       if (mounted) setState(() {
         _allFires = fires;
         _highRiskFires = fires
@@ -49,9 +58,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             .take(10)
             .toList();
         _fireLoading = false;
+        _isOffline = false;
       });
     } catch (_) {
-      if (mounted) setState(() => _fireLoading = false);
+      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, savedAt) = cached;
+            final fires = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+            _allFires = fires;
+            _highRiskFires = fires
+                .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
+                .take(10)
+                .toList();
+            _cachedAt = savedAt;
+            _isOffline = true;
+          }
+          _fireLoading = false;
+        });
+      }
     }
   }
 
@@ -165,11 +191,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               return ValueListenableBuilder<List<FirePoint>>(
                 valueListenable: _monitor.nearbyMatchesNotifier,
                 builder: (context, nearbyMatches, _) {
-                  return SingleChildScrollView(
+                  return RefreshIndicator(
+                    onRefresh: _loadFires,
+                    color: AppColors.primary,
+                    child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                         // ── Header ───────────────────────────────
                         GlassPanel(
                           child: Column(
@@ -350,7 +381,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         const SizedBox(height: AppSpacing.md),
 
                         if (_fireLoading)
-                          const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                          const SkeletonListLoader(count: 3)
                         else if (_highRiskFires.isEmpty)
                           GlassPanel(
                             child: Text(l10n.notificationsNoHighRisk,
@@ -452,6 +483,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
                         const SizedBox(height: 110),
                       ],
+                    ),
                     ),
                   );
                 },

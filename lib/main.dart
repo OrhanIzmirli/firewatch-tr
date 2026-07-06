@@ -17,15 +17,31 @@ import 'services/settings_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e, st) {
+    debugPrint('Firebase.initializeApp failed: $e\n$st');
+  }
 
   if (!kIsWeb) {
-    await NotificationService.instance.initialize();
-    await FireMonitoringService.instance.initialize();
+    try {
+      await NotificationService.instance.initialize();
+    } catch (e, st) {
+      debugPrint('NotificationService.initialize failed: $e\n$st');
+    }
+    try {
+      await FireMonitoringService.instance.initialize();
+    } catch (e, st) {
+      debugPrint('FireMonitoringService.initialize failed: $e\n$st');
+    }
     if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
-      await BackgroundTaskService.instance.initialize();
+      try {
+        await BackgroundTaskService.instance.initialize();
+      } catch (e, st) {
+        debugPrint('BackgroundTaskService.initialize failed: $e\n$st');
+      }
     }
   }
 

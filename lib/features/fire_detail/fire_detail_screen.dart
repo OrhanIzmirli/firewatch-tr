@@ -248,7 +248,7 @@ FireWatch TR ile takip ediliyor.
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppSpacing.md),
                       child: InkWell(
-                        onTap: () => _openNewsUrl(item.sourceUrl ?? ''),
+                        onTap: () => _openNewsUrl(item.sourceUrl),
                         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                         child: GlassPanel(
                           child: Column(

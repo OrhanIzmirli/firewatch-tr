@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -23,7 +24,8 @@ class EmergencyScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _shareLocation() async {
+  Future<void> _shareLocation(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       final permission = await Geolocator.checkPermission();
       Position? position;
@@ -39,19 +41,20 @@ class EmergencyScreen extends StatelessWidget {
       final mapsUrl = 'https://maps.google.com/?q=$lat,$lng';
 
       await Share.share(
-        '🔥 Acil Durum - Konumum:\n$mapsUrl\n\nLat: $lat\nLng: $lng\n\nFireWatch TR ile paylaşıldı.',
-        subject: 'Acil Konum Paylaşımı',
+        l10n.emergencyShareLocationText(mapsUrl, lat, lng),
+        subject: l10n.emergencyShareLocationSubject,
       );
     } catch (e) {
       await Share.share(
-        '🔥 Acil Durum bildirimi - FireWatch TR',
-        subject: 'Acil Durum',
+        l10n.emergencyShareFallbackText,
+        subject: l10n.emergencyTitle,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -63,7 +66,7 @@ class EmergencyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acil Durum',
+        title: Text(l10n.emergencyTitle,
             style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
       ),
       body: SingleChildScrollView(
@@ -76,31 +79,31 @@ class EmergencyScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const StatusChip(
-                    label: 'Acil Hazırlık Merkezi',
+                  StatusChip(
+                    label: l10n.emergencyPrepCenter,
                     icon: Icons.emergency_rounded,
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Hızlı Müdahale Araçları',
+                  Text(l10n.emergencyQuickToolsTitle,
                       style: GoogleFonts.inter(
                           fontSize: 30,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda topla.',
+                    l10n.emergencyQuickToolsSubtitle,
                     style: GoogleFonts.inter(
                         fontSize: 15, height: 1.45, color: secondaryTextColor),
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
-                      const StatusChip(
-                          label: 'Hazır Kal', icon: Icons.bolt_rounded),
+                      StatusChip(
+                          label: l10n.emergencyStayReady, icon: Icons.bolt_rounded),
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          'Tahliye ve iletişim adımlarını önceden planlamak zaman kazandırır.',
+                          l10n.emergencyStayReadyNote,
                           style: GoogleFonts.inter(
                               fontSize: 13, color: secondaryTextColor),
                         ),
@@ -117,9 +120,9 @@ class EmergencyScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(
-              title: 'Hızlı Eylemler',
-              subtitle: 'Tek dokunuşta kritik aksiyonlar',
+            SectionHeader(
+              title: l10n.emergencyQuickActions,
+              subtitle: l10n.emergencyQuickActionsSubtitle,
               icon: Icons.flash_on_rounded,
             ).animate(delay: 90.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -134,32 +137,32 @@ class EmergencyScreen extends StatelessWidget {
               childAspectRatio: 1.08,
               children: [
                 EmergencyActionCard(
-                  title: '112 Ara',
-                  subtitle: 'Genel acil yardım hattı',
+                  title: l10n.emergencyCall112,
+                  subtitle: l10n.emergencyCall112Subtitle,
                   icon: Icons.call_rounded,
                   accent: AppColors.danger,
                   delay: const Duration(milliseconds: 140),
                   onTap: () => _call('112'),
                 ),
                 EmergencyActionCard(
-                  title: '177 Orman',
-                  subtitle: 'Yangın bildirimi hattı',
+                  title: l10n.emergencyCall177,
+                  subtitle: l10n.emergencyCall177Subtitle,
                   icon: Icons.local_fire_department_rounded,
                   accent: AppColors.primary,
                   delay: const Duration(milliseconds: 220),
                   onTap: () => _call('177'),
                 ),
                 EmergencyActionCard(
-                  title: 'Konum Paylaş',
-                  subtitle: 'Yakınlarına yer bildir',
+                  title: l10n.emergencyShareLocation,
+                  subtitle: l10n.emergencyShareLocationSubtitle,
                   icon: Icons.share_location_rounded,
                   accent: AppColors.warning,
                   delay: const Duration(milliseconds: 300),
-                  onTap: _shareLocation,
+                  onTap: () => _shareLocation(context),
                 ),
                 EmergencyActionCard(
-                  title: 'Tahliye Planı',
-                  subtitle: 'Çıkış adımlarını gözden geçir',
+                  title: l10n.emergencyEvacuationPlan,
+                  subtitle: l10n.emergencyEvacuationPlanSubtitle,
                   icon: Icons.directions_run_rounded,
                   accent: AppColors.success,
                   delay: const Duration(milliseconds: 380),
@@ -170,18 +173,18 @@ class EmergencyScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Acil İletişim Hatları',
-              subtitle: 'Temel numaraları hazır tut',
+            SectionHeader(
+              title: l10n.emergencyContactLines,
+              subtitle: l10n.emergencyContactLinesSubtitle,
               icon: Icons.phone_in_talk_rounded,
             ).animate(delay: 130.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
 
             EmergencyContactCard(
-              title: 'Acil Çağrı Merkezi',
+              title: l10n.emergencyCallCenter,
               number: '112',
-              subtitle: 'Sağlık, itfaiye, polis ve genel acil durum',
+              subtitle: l10n.emergencyCallCenterSubtitle,
               icon: Icons.call_rounded,
               accent: AppColors.danger,
               delay: const Duration(milliseconds: 180),
@@ -189,9 +192,9 @@ class EmergencyScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             EmergencyContactCard(
-              title: 'Orman Yangını Hattı',
+              title: l10n.emergencyForestLine,
               number: '177',
-              subtitle: 'Orman ve yangın bildirimi için hızlı erişim',
+              subtitle: l10n.emergencyForestLineSubtitle,
               icon: Icons.forest_rounded,
               accent: AppColors.primary,
               delay: const Duration(milliseconds: 250),
@@ -199,9 +202,9 @@ class EmergencyScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             EmergencyContactCard(
-              title: 'AFAD Acil',
+              title: l10n.emergencyAfad,
               number: '122',
-              subtitle: 'Afet ve acil durum yönetimi',
+              subtitle: l10n.emergencyAfadSubtitle,
               icon: Icons.campaign_rounded,
               accent: AppColors.warning,
               delay: const Duration(milliseconds: 320),
@@ -210,37 +213,37 @@ class EmergencyScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Tahliye Çantası',
-              subtitle: 'Hazır bulunsun',
+            SectionHeader(
+              title: l10n.emergencyBag,
+              subtitle: l10n.emergencyBagSubtitle,
               icon: Icons.backpack_rounded,
             ).animate(delay: 170.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
 
-            const _ChecklistCard(
-              title: 'Kimlik ve temel belgeler',
-              subtitle: 'Kimlik, önemli evrak ve telefonunu tek yerde tut.',
-              delay: Duration(milliseconds: 220),
+            _ChecklistCard(
+              title: l10n.emergencyBagDocs,
+              subtitle: l10n.emergencyBagDocsSubtitle,
+              delay: const Duration(milliseconds: 220),
             ),
             const SizedBox(height: AppSpacing.sm),
-            const _ChecklistCard(
-              title: 'Su, ilaç ve şarj ekipmanı',
-              subtitle: 'Kısa süreli tahliyede kritik olacak temel ihtiyaçlar.',
-              delay: Duration(milliseconds: 290),
+            _ChecklistCard(
+              title: l10n.emergencyBagSupplies,
+              subtitle: l10n.emergencyBagSuppliesSubtitle,
+              delay: const Duration(milliseconds: 290),
             ),
             const SizedBox(height: AppSpacing.sm),
-            const _ChecklistCard(
-              title: 'Yakınlarla buluşma noktası',
-              subtitle: 'Ayrı düşme ihtimaline karşı önceden karar ver.',
-              delay: Duration(milliseconds: 360),
+            _ChecklistCard(
+              title: l10n.emergencyBagMeetingPoint,
+              subtitle: l10n.emergencyBagMeetingPointSubtitle,
+              delay: const Duration(milliseconds: 360),
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'İletişim Notu',
-              subtitle: 'Panik anında kısa hareket planı',
+            SectionHeader(
+              title: l10n.emergencyCommNote,
+              subtitle: l10n.emergencyCommNoteSubtitle,
               icon: Icons.sticky_note_2_rounded,
             ).animate(delay: 210.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -250,20 +253,20 @@ class EmergencyScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('1. Resmi uyarıları doğrula',
+                  Text(l10n.emergencyStep1,
                       style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('2. Yakınlarını kısa mesajla haberdar et',
+                  Text(l10n.emergencyStep2,
                       style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    '3. Gerekliyse temel çantanı al ve güvenli çıkış rotasına yönel',
+                    l10n.emergencyStep3,
                     style: GoogleFonts.inter(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,

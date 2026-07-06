@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -42,6 +43,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final savedIds = ref.watch(watchlistProvider);
 
     // Kaydedilen yangın noktalarını bul
@@ -60,12 +62,12 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kaydedilenler', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.watchlistTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           if (savedIds.isNotEmpty)
             TextButton(
               onPressed: () => ref.read(watchlistProvider.notifier).clear(),
-              child: Text('Temizle',
+              child: Text(l10n.watchlistClear,
                   style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w700)),
             ).animate().fadeIn(duration: 240.ms).slideX(begin: 0.2, end: 0),
         ],
@@ -80,14 +82,14 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   StatusChip(
-                    label: savedIds.isEmpty ? 'Kayıt Yok' : '${savedIds.length} kayıt',
+                    label: savedIds.isEmpty ? l10n.watchlistNoRecords : l10n.watchlistRecordCount(savedIds.length),
                     icon: Icons.bookmark_rounded,
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Watchlist',
+                  Text(l10n.watchlistHeading,
                       style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('Takip etmek istediğin yangın noktalarını burada saklayabilirsin.',
+                  Text(l10n.watchlistHeadingSubtitle,
                       style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                 ],
               ),
@@ -110,12 +112,12 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                     ).animate(onPlay: (c) => c.repeat(reverse: true))
                         .scale(begin: const Offset(0.96, 0.96), end: const Offset(1.04, 1.04), duration: 1400.ms, curve: Curves.easeInOut),
                     const SizedBox(height: AppSpacing.lg),
-                    Text('Henüz kaydedilmiş olay yok',
+                    Text(l10n.watchlistEmptyTitle,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor))
                         .animate(delay: 100.ms).fadeIn(duration: 260.ms).slideY(begin: 0.1, end: 0),
                     const SizedBox(height: AppSpacing.sm),
-                    Text('Yangın detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsin.',
+                    Text(l10n.watchlistEmptySubtitle,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor))
                         .animate(delay: 170.ms).fadeIn(duration: 260.ms).slideY(begin: 0.1, end: 0),
@@ -124,8 +126,8 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
               ).animate(delay: 120.ms).fadeIn(duration: 320.ms).scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)).slideY(begin: 0.05, end: 0)
             else ...[
               SectionHeader(
-                title: 'Kaydedilen Noktalar',
-                subtitle: '${savedIds.length} yangın noktası takipte',
+                title: l10n.watchlistSavedPoints,
+                subtitle: l10n.watchlistSavedPointsSubtitle(savedIds.length),
                 icon: Icons.local_fire_department_rounded,
               ).animate(delay: 100.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
               const SizedBox(height: AppSpacing.md),
@@ -137,13 +139,13 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                       const Icon(Icons.sync_rounded, color: AppColors.primary, size: 32),
                       const SizedBox(height: AppSpacing.md),
                       Text(
-                        '${savedIds.length} kaydedilmiş yangın noktası var.',
+                        l10n.watchlistSyncingTitle(savedIds.length),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'NASA verisi yenileniyor olabilir. Kaydedilen noktalar uydu güncellemesinde değişebilir.',
+                        l10n.watchlistSyncingSubtitle,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor),
                       ),
@@ -151,7 +153,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                       OutlinedButton.icon(
                         onPressed: _loadFires,
                         icon: const Icon(Icons.refresh_rounded),
-                        label: const Text('Yenile'),
+                        label: Text(l10n.commonRefresh),
                       ),
                     ],
                   ),

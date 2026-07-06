@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import 'glass_panel.dart';
 import 'status_chip.dart';
 
@@ -44,11 +45,12 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
   }
 
   Future<void> _getLocation() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoadingLocation = true);
     try {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        _showSnack('Konum servisi kapalı. Lütfen açın.');
+        _showSnack(l10n.reportPanelLocationServiceOff);
         return;
       }
 
@@ -58,7 +60,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       }
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        _showSnack('Konum izni verilmedi.');
+        _showSnack(l10n.reportPanelLocationPermissionDenied);
         return;
       }
 
@@ -84,15 +86,24 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         });
       }
     } catch (e) {
-      _showSnack('Konum alınamadı: ${e.toString().substring(0, 40)}');
+      _showSnack(AppLocalizations.of(context)!.reportPanelLocationError(e.toString().substring(0, 40)));
     } finally {
       if (mounted) setState(() => _isLoadingLocation = false);
     }
   }
 
+  String _severityLabel(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'Düşük': return l10n.commonLow;
+      case 'Yüksek': return l10n.commonHigh;
+      default: return l10n.commonMedium;
+    }
+  }
+
   Future<void> _submitReport() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_latitude == null || _longitude == null) {
-      _showSnack('Lütfen önce konumunuzu alın.');
+      _showSnack(l10n.reportPanelNeedLocationFirst);
       return;
     }
 
@@ -100,14 +111,14 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
     try {
       final extraDetails = <String>[];
-      if (_smokeVisible) extraDetails.add('Yoğun duman gözlemlendi');
-      if (_windStrong) extraDetails.add('Güçlü rüzgar mevcut');
-      if (_nearSettlement) extraDetails.add('Yerleşim alanına yakın');
+      if (_smokeVisible) extraDetails.add(l10n.reportPanelSmokeObserved);
+      if (_windStrong) extraDetails.add(l10n.reportPanelStrongWindPresent);
+      if (_nearSettlement) extraDetails.add(l10n.reportPanelNearSettlementNote);
 
       final description = [
         if (_noteController.text.isNotEmpty) _noteController.text,
         if (extraDetails.isNotEmpty) extraDetails.join(', '),
-        'Risk seviyesi: $_selectedSeverity',
+        l10n.reportPanelRiskLevelLine(_severityLabel(l10n, _selectedSeverity)),
       ].join('\n');
 
       final response = await _dio.post(
@@ -116,12 +127,12 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
           'latitude': _latitude,
           'longitude': _longitude,
           'title': _detectedCity != null
-              ? '$_detectedCity yangın bildirimi'
-              : 'Yangın bildirimi',
+              ? l10n.reportPanelCityFireReport(_detectedCity!)
+              : l10n.reportPanelFireReport,
           'description': description,
           'reporter_name': _nameController.text.isNotEmpty
               ? _nameController.text
-              : 'Anonim',
+              : l10n.commonAnonymous,
         },
       );
 
@@ -139,14 +150,14 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                   ? const Color(0xFF1A1A2E)
                   : Colors.white,
               title: Text(
-                verified ? '✅ Rapor Doğrulandı' : '⏳ Rapor Alındı',
+                verified ? l10n.reportPanelVerifiedTitle : l10n.reportPanelReceivedTitle,
                 style: GoogleFonts.inter(fontWeight: FontWeight.w800),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Şehir: $city', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                  Text(l10n.reportPanelCityLabel(city), style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
                   Text(message, style: GoogleFonts.inter(fontSize: 13, height: 1.4)),
                 ],
@@ -157,7 +168,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                     Navigator.pop(context);
                     widget.onClose();
                   },
-                  child: const Text('Tamam'),
+                  child: Text(l10n.reportPanelOk),
                 ),
               ],
             ),
@@ -165,7 +176,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         }
       }
     } catch (e) {
-      _showSnack('Rapor gönderilemedi. İnternet bağlantınızı kontrol edin.');
+      _showSnack(AppLocalizations.of(context)!.reportPanelSubmitFailed);
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
@@ -180,6 +191,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -204,8 +216,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
           children: [
             Row(
               children: [
-                const Expanded(
-                  child: StatusChip(label: 'Yeni Bildirim', icon: Icons.edit_location_alt_rounded),
+                Expanded(
+                  child: StatusChip(label: l10n.reportPanelNewReport, icon: Icons.edit_location_alt_rounded),
                 ).animate().fadeIn(duration: 280.ms).slideX(begin: -0.04, end: 0),
                 IconButton(onPressed: widget.onClose, icon: const Icon(Icons.close_rounded))
                     .animate(delay: 60.ms).fadeIn(duration: 240.ms).scale(
@@ -213,11 +225,11 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
               ],
             ),
             const SizedBox(height: AppSpacing.lg),
-            Text('Yangın Raporla',
+            Text(l10n.reportPanelTitle,
                 style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w800, color: titleColor))
                 .animate(delay: 80.ms).fadeIn(duration: 280.ms).slideY(begin: 0.08, end: 0),
             const SizedBox(height: AppSpacing.sm),
-            Text('GPS ile konumunuzu alın ve yangını bildirin. NASA verisiyle otomatik doğrulanacak.',
+            Text(l10n.reportPanelSubtitle,
                 style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor))
                 .animate(delay: 140.ms).fadeIn(duration: 280.ms).slideY(begin: 0.08, end: 0),
             const SizedBox(height: AppSpacing.xl),
@@ -232,7 +244,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Konum', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: fieldLabelColor)),
+                          Text(l10n.reportPanelLocation, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: fieldLabelColor)),
                           const SizedBox(height: AppSpacing.sm),
                           if (_latitude != null)
                             Container(
@@ -250,7 +262,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          _detectedCity != null ? '$_detectedCity, $_detectedRegion' : 'Konum alındı',
+                                          _detectedCity != null ? '$_detectedCity, $_detectedRegion' : l10n.reportPanelLocationObtained,
                                           style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor),
                                         ),
                                         Text(
@@ -264,7 +276,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                               ),
                             )
                           else
-                            Text('Henüz konum alınmadı', style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                            Text(l10n.reportPanelNoLocationYet, style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
                           const SizedBox(height: AppSpacing.md),
                           SizedBox(
                             width: double.infinity,
@@ -273,7 +285,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                               icon: _isLoadingLocation
                                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
                                   : const Icon(Icons.my_location_rounded),
-                              label: Text(_latitude != null ? 'Konumu Yenile' : 'GPS ile Konum Al'),
+                              label: Text(_latitude != null ? l10n.reportPanelRefreshLocation : l10n.reportPanelGetGpsLocation),
                             ),
                           ),
                         ],
@@ -284,15 +296,15 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
                     // ── Risk Seviyesi ──────────────────────────────
                     _PanelField(
-                      label: 'Risk Seviyesi',
+                      label: l10n.reportPanelRiskLevel,
                       labelColor: fieldLabelColor,
                       delay: 250.ms,
                       child: DropdownButtonFormField<String>(
                         value: _selectedSeverity,
-                        items: const [
-                          DropdownMenuItem(value: 'Düşük', child: Text('Düşük')),
-                          DropdownMenuItem(value: 'Orta', child: Text('Orta')),
-                          DropdownMenuItem(value: 'Yüksek', child: Text('Yüksek')),
+                        items: [
+                          DropdownMenuItem(value: 'Düşük', child: Text(l10n.commonLow)),
+                          DropdownMenuItem(value: 'Orta', child: Text(l10n.commonMedium)),
+                          DropdownMenuItem(value: 'Yüksek', child: Text(l10n.commonHigh)),
                         ],
                         onChanged: (value) { if (value != null) setState(() => _selectedSeverity = value); },
                       ),
@@ -302,14 +314,14 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
                     // ── İsim ──────────────────────────────────────
                     _PanelField(
-                      label: 'Adınız (isteğe bağlı)',
+                      label: l10n.reportPanelYourName,
                       labelColor: fieldLabelColor,
                       delay: 290.ms,
                       child: TextField(
                         controller: _nameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Anonim olarak gönderilecek',
-                          prefixIcon: Icon(Icons.person_outline_rounded),
+                        decoration: InputDecoration(
+                          hintText: l10n.reportPanelAnonymousHint,
+                          prefixIcon: const Icon(Icons.person_outline_rounded),
                         ),
                       ),
                     ),
@@ -318,14 +330,14 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
                     // ── Not ───────────────────────────────────────
                     _PanelField(
-                      label: 'Ek Not',
+                      label: l10n.reportPanelExtraNote,
                       labelColor: fieldLabelColor,
                       delay: 320.ms,
                       child: TextField(
                         controller: _noteController,
                         maxLines: 3,
-                        decoration: const InputDecoration(
-                          hintText: 'Alev yüksekliği, duman yoğunluğu, yol durumu...',
+                        decoration: InputDecoration(
+                          hintText: l10n.reportPanelNoteHint,
                           alignLabelWithHint: true,
                         ),
                       ),
@@ -345,7 +357,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             contentPadding: EdgeInsets.zero,
                             value: _smokeVisible,
                             onChanged: (v) => setState(() => _smokeVisible = v),
-                            title: Text('Yoğun duman gözleniyor',
+                            title: Text(l10n.reportPanelSmokeSwitch,
                                 style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
                           ),
                           Divider(color: dividerColor),
@@ -353,7 +365,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             contentPadding: EdgeInsets.zero,
                             value: _windStrong,
                             onChanged: (v) => setState(() => _windStrong = v),
-                            title: Text('Rüzgar güçlü görünüyor',
+                            title: Text(l10n.reportPanelWindSwitch,
                                 style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
                           ),
                           Divider(color: dividerColor),
@@ -361,7 +373,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             contentPadding: EdgeInsets.zero,
                             value: _nearSettlement,
                             onChanged: (v) => setState(() => _nearSettlement = v),
-                            title: Text('Yerleşim alanına yakın',
+                            title: Text(l10n.reportPanelSettlementSwitch,
                                 style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
                           ),
                         ],
@@ -382,7 +394,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 icon: _isSubmitting
                     ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : const Icon(Icons.send_rounded),
-                label: Text(_isSubmitting ? 'Gönderiliyor...' : 'Bildirimi Gönder'),
+                label: Text(_isSubmitting ? l10n.reportPanelSubmitting : l10n.reportPanelSubmit),
               ),
             ).animate(delay: 460.ms).fadeIn(duration: 280.ms).slideY(begin: 0.16, end: 0).scale(
                   begin: const Offset(0.97, 0.97), end: const Offset(1, 1)),
@@ -391,7 +403,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(onPressed: widget.onClose, child: const Text('Vazgeç')),
+              child: OutlinedButton(onPressed: widget.onClose, child: Text(l10n.commonCancel)),
             ).animate(delay: 530.ms).fadeIn(duration: 280.ms).slideY(begin: 0.16, end: 0).scale(
                   begin: const Offset(0.97, 0.97), end: const Offset(1, 1)),
           ],

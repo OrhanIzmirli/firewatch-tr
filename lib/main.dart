@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
 import 'services/fire_monitoring_service.dart';
+import 'services/locale_provider.dart';
 import 'services/notification_service.dart';
 import 'services/settings_provider.dart';
 
@@ -31,6 +34,7 @@ class FireWatchApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
@@ -39,6 +43,14 @@ class FireWatchApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: settings.darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       routerConfig: AppRouter.router,
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }

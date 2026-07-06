@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
@@ -72,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _showFirePreview(BuildContext context, FirePoint point) {
+    final l10n = AppLocalizations.of(context)!;
     final bright = double.tryParse(point.brightness) ?? 0;
     final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(0) : bright.toStringAsFixed(0);
     final theme = Theme.of(context);
@@ -83,10 +85,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : Colors.black.withValues(alpha: 0.66);
 
     String alanTahmini;
-    if (bright >= 370) alanTahmini = '100 hektardan fazla';
-    else if (bright >= 330) alanTahmini = '10–100 hektar';
-    else if (bright >= 300) alanTahmini = '10 hektardan az';
-    else alanTahmini = 'Uydu çözünürlüğü yetersiz';
+    if (bright >= 370) alanTahmini = l10n.homeAreaOver100Ha;
+    else if (bright >= 330) alanTahmini = l10n.homeArea10to100Ha;
+    else if (bright >= 300) alanTahmini = l10n.homeAreaUnder10Ha;
+    else alanTahmini = l10n.homeAreaInsufficientRes;
 
     showModalBottomSheet(
       context: context,
@@ -109,7 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                '${point.regionName} Bölgesi',
+                l10n.homeFireRegionTitle(point.regionName),
                 style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -118,13 +120,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor),
               ),
               const SizedBox(height: AppSpacing.lg),
-              _PreviewRow(icon: Icons.thermostat_rounded, label: 'Sıcaklık', value: '$tempC°C'),
+              _PreviewRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '$tempC°C'),
               const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.area_chart_rounded, label: 'Tahmini Alan', value: alanTahmini),
+              _PreviewRow(icon: Icons.area_chart_rounded, label: l10n.homeEstimatedArea, value: alanTahmini),
               const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.satellite_alt_rounded, label: 'Uydu', value: point.satellite),
+              _PreviewRow(icon: Icons.satellite_alt_rounded, label: l10n.commonSatellite, value: point.satellite),
               const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.location_on_rounded, label: 'Koordinat', value: point.locationLabel),
+              _PreviewRow(icon: Icons.location_on_rounded, label: l10n.commonCoordinate, value: point.locationLabel),
               const SizedBox(height: AppSpacing.lg),
               Row(
                 children: [
@@ -135,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         context.push('/map', extra: {'lat': point.latitude, 'lng': point.longitude});
                       },
                       icon: const Icon(Icons.map_rounded),
-                      label: const Text('Haritada Gör'),
+                      label: Text(l10n.commonViewOnMap),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.md),
@@ -146,7 +148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         context.push('/fire-detail', extra: convertPointToFireEvent(point));
                       },
                       icon: const Icon(Icons.arrow_forward_rounded),
-                      label: const Text('Detay'),
+                      label: Text(l10n.commonDetail),
                     ),
                   ),
                 ],
@@ -166,6 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -190,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('FireWatch TR', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.appName, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],
@@ -206,19 +209,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const StatusChip(label: 'Canlı Durum Özeti', icon: Icons.bolt_rounded),
+                  StatusChip(label: l10n.homeLiveSummary, icon: Icons.bolt_rounded),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Türkiye Yangın Takibi',
+                  Text(l10n.homeHeaderTitle,
                       style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: primaryTextColor)),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.',
+                  Text(l10n.homeHeaderSubtitle,
                       style: GoogleFonts.inter(fontSize: 16, height: 1.45, color: secondaryTextColor)),
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
                       Icon(Icons.access_time_rounded, size: 18, color: tertiaryTextColor),
                       const SizedBox(width: AppSpacing.sm),
-                      Text('NASA FIRMS • Canlı Veri',
+                      Text(l10n.homeNasaLiveData,
                           style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor)),
                     ],
                   ),
@@ -229,7 +232,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: FilledButton.icon(
                           onPressed: () => context.push('/risk'),
                           icon: const Icon(Icons.auto_graph_rounded),
-                          label: const Text('Risk Analizi'),
+                          label: Text(l10n.homeRiskAnalysis),
                         ),
                       ),
                       const SizedBox(width: AppSpacing.md),
@@ -237,7 +240,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: OutlinedButton.icon(
                           onPressed: () => context.push('/watchlist'),
                           icon: const Icon(Icons.bookmark_rounded),
-                          label: Text('Kaydedilenler (${savedIds.length})'),
+                          label: Text(l10n.homeSaved(savedIds.length)),
                         ),
                       ),
                     ],
@@ -249,7 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: OutlinedButton.icon(
                           onPressed: () => context.push('/safety-guide'),
                           icon: const Icon(Icons.shield_outlined),
-                          label: const Text('Güvenlik'),
+                          label: Text(l10n.homeSafety),
                         ),
                       ),
                       const SizedBox(width: AppSpacing.md),
@@ -257,7 +260,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: OutlinedButton.icon(
                           onPressed: () => context.push('/emergency'),
                           icon: const Icon(Icons.emergency_rounded),
-                          label: const Text('Acil Durum'),
+                          label: Text(l10n.commonEmergency),
                         ),
                       ),
                     ],
@@ -273,9 +276,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: AppSpacing.xxl),
 
             // ── Genel Bakış ──────────────────────────────────
-            const SectionHeader(
-              title: 'Genel Bakış',
-              subtitle: 'NASA FIRMS anlık verisi',
+            SectionHeader(
+              title: l10n.homeOverview,
+              subtitle: l10n.homeOverviewSubtitle,
               icon: Icons.dashboard_customize_rounded,
             ),
             const SizedBox(height: AppSpacing.md),
@@ -291,9 +294,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisSpacing: AppSpacing.md,
                 childAspectRatio: 1.1,
                 children: [
-                  SummaryCard(title: 'Toplam Nokta', value: _firePoints.length.toString(), icon: Icons.local_fire_department),
-                  SummaryCard(title: 'Yüksek Risk', value: highConfFires.toString(), icon: Icons.warning_amber_rounded),
-                  SummaryCard(title: 'Normal', value: nominalFires.toString(), icon: Icons.verified_outlined),
+                  SummaryCard(title: l10n.homeTotalPoints, value: _firePoints.length.toString(), icon: Icons.local_fire_department),
+                  SummaryCard(title: l10n.homeHighRisk, value: highConfFires.toString(), icon: Icons.warning_amber_rounded),
+                  SummaryCard(title: l10n.homeNominal, value: nominalFires.toString(), icon: Icons.verified_outlined),
                 ],
               ),
 
@@ -301,8 +304,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             // ── Son Haberler ─────────────────────────────────
             SectionHeader(
-              title: 'Son Haberler',
-              subtitle: 'Öne çıkan gelişmeler',
+              title: l10n.homeLatestNews,
+              subtitle: l10n.homeLatestNewsSubtitle,
               icon: Icons.newspaper_rounded,
               trailing: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -315,7 +318,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     const Icon(Icons.bolt_rounded, size: 16, color: AppColors.primary),
                     const SizedBox(width: AppSpacing.sm),
-                    Text('${_topNews.where((e) => e.isBreaking).length} sıcak',
+                    Text(l10n.homeBreakingCount(_topNews.where((e) => e.isBreaking).length),
                         style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
                   ],
                 ),
@@ -327,7 +330,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Center(child: CircularProgressIndicator(color: AppColors.primary))
             else if (_topNews.isEmpty)
               GlassPanel(
-                child: Text('Haber yükleniyor...',
+                child: Text(l10n.homeNewsLoading,
                     style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
               )
             else
@@ -350,8 +353,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             // ── Aktif Termal Noktalar ─────────────────────────
             SectionHeader(
-              title: 'Aktif Termal Noktalar',
-              subtitle: 'NASA FIRMS • PostGIS şehir tespiti',
+              title: l10n.homeActiveThermalPoints,
+              subtitle: l10n.homeActiveThermalSubtitle,
               icon: FontAwesomeIcons.fireFlameCurved,
               trailing: InkWell(
                 onTap: () => context.push('/map'),
@@ -367,7 +370,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       const Icon(Icons.map_rounded, size: 16, color: AppColors.primary),
                       const SizedBox(width: AppSpacing.sm),
-                      Text('Harita', style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                      Text(l10n.homeMap, style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
                     ],
                   ),
                 ),
@@ -380,19 +383,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _FilterChip(label: 'Tümü', selected: query.isEmpty, onTap: () { _searchController.clear(); setState(() {}); }),
+                  _FilterChip(label: l10n.commonAll, selected: query.isEmpty, onTap: () { _searchController.clear(); setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Yüksek Risk', selected: query == 'yüksek', onTap: () { _searchController.text = 'yüksek'; setState(() {}); }),
+                  _FilterChip(label: l10n.homeFilterHighRisk, selected: query == 'yüksek', onTap: () { _searchController.text = 'yüksek'; setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Orta Risk', selected: query == 'orta', onTap: () { _searchController.text = 'orta'; setState(() {}); }),
+                  _FilterChip(label: l10n.homeFilterMediumRisk, selected: query == 'orta', onTap: () { _searchController.text = 'orta'; setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Ege', selected: query == 'ege', onTap: () { _searchController.text = 'ege'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionEge, selected: query == 'ege', onTap: () { _searchController.text = 'ege'; setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Akdeniz', selected: query == 'akdeniz', onTap: () { _searchController.text = 'akdeniz'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionAkdeniz, selected: query == 'akdeniz', onTap: () { _searchController.text = 'akdeniz'; setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Marmara', selected: query == 'marmara', onTap: () { _searchController.text = 'marmara'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionMarmara, selected: query == 'marmara', onTap: () { _searchController.text = 'marmara'; setState(() {}); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: 'Karadeniz', selected: query == 'karadeniz', onTap: () { _searchController.text = 'karadeniz'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionKaradeniz, selected: query == 'karadeniz', onTap: () { _searchController.text = 'karadeniz'; setState(() {}); }),
                 ],
               ),
             ),
@@ -404,7 +407,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 controller: _searchController,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  hintText: 'Şehir veya bölge ara...',
+                  hintText: l10n.homeSearchHint,
                   prefixIcon: const Icon(Icons.search_rounded),
                   suffixIcon: query.isNotEmpty
                       ? IconButton(onPressed: () { _searchController.clear(); setState(() {}); }, icon: const Icon(Icons.close_rounded))
@@ -418,7 +421,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Center(child: CircularProgressIndicator(color: AppColors.primary))
             else if (_firePoints.isEmpty)
               GlassPanel(
-                child: Center(child: Text('Aktif yangın noktası bulunamadı.', style: GoogleFonts.inter(fontSize: 14))),
+                child: Center(child: Text(l10n.homeNoActiveFires, style: GoogleFonts.inter(fontSize: 14))),
               )
             else
               ..._firePoints

@@ -1,0 +1,2282 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_en.dart';
+import 'app_localizations_tr.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('tr'),
+  ];
+
+  /// No description provided for @appName.
+  ///
+  /// In tr, this message translates to:
+  /// **'FireWatch TR'**
+  String get appName;
+
+  /// No description provided for @commonDetail.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detay'**
+  String get commonDetail;
+
+  /// No description provided for @commonRefresh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yenile'**
+  String get commonRefresh;
+
+  /// No description provided for @commonViewOnMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritada Gör'**
+  String get commonViewOnMap;
+
+  /// No description provided for @commonOpenOnMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritada Aç'**
+  String get commonOpenOnMap;
+
+  /// No description provided for @commonShare.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paylaş'**
+  String get commonShare;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vazgeç'**
+  String get commonCancel;
+
+  /// No description provided for @commonLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yükleniyor...'**
+  String get commonLoading;
+
+  /// No description provided for @commonTemperature.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcaklık'**
+  String get commonTemperature;
+
+  /// No description provided for @commonSatellite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu'**
+  String get commonSatellite;
+
+  /// No description provided for @commonCoordinate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koordinat'**
+  String get commonCoordinate;
+
+  /// No description provided for @commonWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgar'**
+  String get commonWind;
+
+  /// No description provided for @commonRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk'**
+  String get commonRisk;
+
+  /// No description provided for @commonStatus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Durum'**
+  String get commonStatus;
+
+  /// No description provided for @commonAnonymous.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anonim'**
+  String get commonAnonymous;
+
+  /// No description provided for @commonAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü'**
+  String get commonAll;
+
+  /// No description provided for @commonHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek'**
+  String get commonHigh;
+
+  /// No description provided for @commonMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta'**
+  String get commonMedium;
+
+  /// No description provided for @commonLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük'**
+  String get commonLow;
+
+  /// No description provided for @commonCritical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kritik'**
+  String get commonCritical;
+
+  /// No description provided for @commonEmergency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Durum'**
+  String get commonEmergency;
+
+  /// No description provided for @commonTryAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene'**
+  String get commonTryAgain;
+
+  /// No description provided for @commonRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yenile'**
+  String get commonRetry;
+
+  /// No description provided for @commonDistance.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzaklık'**
+  String get commonDistance;
+
+  /// No description provided for @commonDetection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit'**
+  String get commonDetection;
+
+  /// No description provided for @regionEge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ege'**
+  String get regionEge;
+
+  /// No description provided for @regionAkdeniz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Akdeniz'**
+  String get regionAkdeniz;
+
+  /// No description provided for @regionMarmara.
+  ///
+  /// In tr, this message translates to:
+  /// **'Marmara'**
+  String get regionMarmara;
+
+  /// No description provided for @regionKaradeniz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karadeniz'**
+  String get regionKaradeniz;
+
+  /// No description provided for @regionIcAnadolu.
+  ///
+  /// In tr, this message translates to:
+  /// **'İç Anadolu'**
+  String get regionIcAnadolu;
+
+  /// No description provided for @regionDoguAnadolu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğu Anadolu'**
+  String get regionDoguAnadolu;
+
+  /// No description provided for @regionGuneydoguAnadolu.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güneydoğu Anadolu'**
+  String get regionGuneydoguAnadolu;
+
+  /// No description provided for @regionTurkiyeGeneli.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Geneli'**
+  String get regionTurkiyeGeneli;
+
+  /// No description provided for @timeAgoJustNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Az önce'**
+  String get timeAgoJustNow;
+
+  /// No description provided for @timeAgoMinutes.
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dakika önce'**
+  String timeAgoMinutes(int minutes);
+
+  /// No description provided for @timeAgoHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saat önce'**
+  String timeAgoHours(int hours);
+
+  /// No description provided for @timeAgoDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün önce'**
+  String timeAgoDays(int days);
+
+  /// No description provided for @splashTagline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangınları takip et, güvende kal'**
+  String get splashTagline;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geç'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get onboardingContinue;
+
+  /// No description provided for @onboardingTitle1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif olayları takip et'**
+  String get onboardingTitle1;
+
+  /// No description provided for @onboardingDesc1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye genelindeki yangın olaylarını tek ekranda takip et ve durum değişikliklerini hızlıca gör.'**
+  String get onboardingDesc1;
+
+  /// No description provided for @onboardingTitle2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınındaki bölgeleri gör'**
+  String get onboardingTitle2;
+
+  /// No description provided for @onboardingDesc2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita ve bölge odaklı ekranlarla sana yakın olayları daha hızlı fark et.'**
+  String get onboardingDesc2;
+
+  /// No description provided for @onboardingTitle3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik yönlendirmeleri al'**
+  String get onboardingTitle3;
+
+  /// No description provided for @onboardingDesc3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.'**
+  String get onboardingDesc3;
+
+  /// No description provided for @homeLiveSummary.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlı Durum Özeti'**
+  String get homeLiveSummary;
+
+  /// No description provided for @homeHeaderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Yangın Takibi'**
+  String get homeHeaderTitle;
+
+  /// No description provided for @homeHeaderSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.'**
+  String get homeHeaderSubtitle;
+
+  /// No description provided for @homeNasaLiveData.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS • Canlı Veri'**
+  String get homeNasaLiveData;
+
+  /// No description provided for @homeRiskAnalysis.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Analizi'**
+  String get homeRiskAnalysis;
+
+  /// No description provided for @homeSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilenler ({count})'**
+  String homeSaved(int count);
+
+  /// No description provided for @homeSafety.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik'**
+  String get homeSafety;
+
+  /// No description provided for @homeOverview.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel Bakış'**
+  String get homeOverview;
+
+  /// No description provided for @homeOverviewSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS anlık verisi'**
+  String get homeOverviewSubtitle;
+
+  /// No description provided for @homeTotalPoints.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam Nokta'**
+  String get homeTotalPoints;
+
+  /// No description provided for @homeHighRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek Risk'**
+  String get homeHighRisk;
+
+  /// No description provided for @homeNominal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Normal'**
+  String get homeNominal;
+
+  /// No description provided for @homeLatestNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Haberler'**
+  String get homeLatestNews;
+
+  /// No description provided for @homeLatestNewsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öne çıkan gelişmeler'**
+  String get homeLatestNewsSubtitle;
+
+  /// No description provided for @homeBreakingCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} sıcak'**
+  String homeBreakingCount(int count);
+
+  /// No description provided for @homeNewsLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haber yükleniyor...'**
+  String get homeNewsLoading;
+
+  /// No description provided for @homeActiveThermalPoints.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif Termal Noktalar'**
+  String get homeActiveThermalPoints;
+
+  /// No description provided for @homeActiveThermalSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS • PostGIS şehir tespiti'**
+  String get homeActiveThermalSubtitle;
+
+  /// No description provided for @homeMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita'**
+  String get homeMap;
+
+  /// No description provided for @homeFilterHighRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek Risk'**
+  String get homeFilterHighRisk;
+
+  /// No description provided for @homeFilterMediumRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta Risk'**
+  String get homeFilterMediumRisk;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şehir veya bölge ara...'**
+  String get homeSearchHint;
+
+  /// No description provided for @homeNoActiveFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif yangın noktası bulunamadı.'**
+  String get homeNoActiveFires;
+
+  /// No description provided for @homeFireRegionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} Bölgesi'**
+  String homeFireRegionTitle(String region);
+
+  /// No description provided for @homeEstimatedArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahmini Alan'**
+  String get homeEstimatedArea;
+
+  /// No description provided for @homeAreaOver100Ha.
+  ///
+  /// In tr, this message translates to:
+  /// **'100 hektardan fazla'**
+  String get homeAreaOver100Ha;
+
+  /// No description provided for @homeArea10to100Ha.
+  ///
+  /// In tr, this message translates to:
+  /// **'10–100 hektar'**
+  String get homeArea10to100Ha;
+
+  /// No description provided for @homeAreaUnder10Ha.
+  ///
+  /// In tr, this message translates to:
+  /// **'10 hektardan az'**
+  String get homeAreaUnder10Ha;
+
+  /// No description provided for @homeAreaInsufficientRes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu çözünürlüğü yetersiz'**
+  String get homeAreaInsufficientRes;
+
+  /// No description provided for @mapFetchError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın verileri alınamadı.'**
+  String get mapFetchError;
+
+  /// No description provided for @mapTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Haritası'**
+  String get mapTitle;
+
+  /// No description provided for @mapLiveMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlı Harita'**
+  String get mapLiveMap;
+
+  /// No description provided for @mapHeaderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Geneli Yangın Görünümü'**
+  String get mapHeaderTitle;
+
+  /// No description provided for @mapHeaderSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.'**
+  String get mapHeaderSubtitle;
+
+  /// No description provided for @mapArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita Alanı'**
+  String get mapArea;
+
+  /// No description provided for @mapAreaSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS canlı marker görünümü'**
+  String get mapAreaSubtitle;
+
+  /// No description provided for @mapGoToMe.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bana Git'**
+  String get mapGoToMe;
+
+  /// No description provided for @mapNearbyFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınımdaki Yangınlar'**
+  String get mapNearbyFires;
+
+  /// No description provided for @mapNearbyFiresSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumuna en yakın canlı tespitler'**
+  String get mapNearbyFiresSubtitle;
+
+  /// No description provided for @mapReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Raporla'**
+  String get mapReport;
+
+  /// No description provided for @mapKmAway.
+  ///
+  /// In tr, this message translates to:
+  /// **'{distance} km uzaklıkta'**
+  String mapKmAway(String distance);
+
+  /// No description provided for @fireDetailTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Detayı'**
+  String get fireDetailTitle;
+
+  /// No description provided for @fireDetailLastUpdate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son güncelleme: {time}'**
+  String fireDetailLastUpdate(String time);
+
+  /// No description provided for @fireDetailKeyMetrics.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temel Metrikler'**
+  String get fireDetailKeyMetrics;
+
+  /// No description provided for @fireDetailEventInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olay Bilgileri'**
+  String get fireDetailEventInfo;
+
+  /// No description provided for @fireDetailCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şehir'**
+  String get fireDetailCity;
+
+  /// No description provided for @fireDetailDistrict.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlçe'**
+  String get fireDetailDistrict;
+
+  /// No description provided for @fireDetailStarted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlangıç'**
+  String get fireDetailStarted;
+
+  /// No description provided for @fireDetailSpreadRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yayılım Riski'**
+  String get fireDetailSpreadRisk;
+
+  /// No description provided for @fireDetailAffectedArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'Etkilenen Alan'**
+  String get fireDetailAffectedArea;
+
+  /// No description provided for @fireDetailRecommendedActions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önerilen Aksiyonlar'**
+  String get fireDetailRecommendedActions;
+
+  /// No description provided for @fireDetailAddedToWatchlist.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olay watchlist listesine eklendi.'**
+  String get fireDetailAddedToWatchlist;
+
+  /// No description provided for @fireDetailRemovedFromWatchlist.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olay watchlist listesinden kaldırıldı.'**
+  String get fireDetailRemovedFromWatchlist;
+
+  /// No description provided for @fireDetailSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedildi'**
+  String get fireDetailSaved;
+
+  /// No description provided for @fireDetailSaveToWatchlist.
+  ///
+  /// In tr, this message translates to:
+  /// **'Watchlist\'e Kaydet'**
+  String get fireDetailSaveToWatchlist;
+
+  /// No description provided for @fireDetailRelatedNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgili Haberler'**
+  String get fireDetailRelatedNews;
+
+  /// No description provided for @fireDetailNoNewsFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haber bulunamadı'**
+  String get fireDetailNoNewsFound;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsNewAlerts.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yeni uyarı'**
+  String notificationsNewAlerts(int count);
+
+  /// No description provided for @notificationsUpToDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncel'**
+  String get notificationsUpToDate;
+
+  /// No description provided for @notificationsFeedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olay Bildirim Akışı'**
+  String get notificationsFeedTitle;
+
+  /// No description provided for @notificationsFeedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip et.'**
+  String get notificationsFeedSubtitle;
+
+  /// No description provided for @notificationsTools.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim Araçları'**
+  String get notificationsTools;
+
+  /// No description provided for @notificationsToolsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzin ver, test et, yangın bildirimi simüle et'**
+  String get notificationsToolsSubtitle;
+
+  /// No description provided for @notificationsPermissionGranted.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzin Var'**
+  String get notificationsPermissionGranted;
+
+  /// No description provided for @notificationsPermissionDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzin Yok'**
+  String get notificationsPermissionDenied;
+
+  /// No description provided for @notificationsMonitoringOn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip Açık'**
+  String get notificationsMonitoringOn;
+
+  /// No description provided for @notificationsMonitoringOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip Kapalı'**
+  String get notificationsMonitoringOff;
+
+  /// No description provided for @notificationsRequestPermission.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim İzni İste'**
+  String get notificationsRequestPermission;
+
+  /// No description provided for @notificationsSendTest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Test Bildirimi Gönder'**
+  String get notificationsSendTest;
+
+  /// No description provided for @notificationsSendDemoFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Demo Yangın Bildirimi Gönder'**
+  String get notificationsSendDemoFire;
+
+  /// No description provided for @notificationsScanNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi Tara'**
+  String get notificationsScanNow;
+
+  /// No description provided for @notificationsStartMonitoring.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik Taramayı Başlat'**
+  String get notificationsStartMonitoring;
+
+  /// No description provided for @notificationsStopMonitoring.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik Taramayı Durdur'**
+  String get notificationsStopMonitoring;
+
+  /// No description provided for @notificationsNearbyLiveFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki Canlı Yangınlar'**
+  String get notificationsNearbyLiveFires;
+
+  /// No description provided for @notificationsNearbyLiveFiresSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumuna 50 km içinde bulunan noktalar'**
+  String get notificationsNearbyLiveFiresSubtitle;
+
+  /// No description provided for @notificationsDistanceAndTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'{distance} km uzaklıkta • {timeAgo}'**
+  String notificationsDistanceAndTime(String distance, String timeAgo);
+
+  /// No description provided for @notificationsRiskLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk: {level}'**
+  String notificationsRiskLabel(String level);
+
+  /// No description provided for @notificationsRecentAlerts.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Uyarılar'**
+  String get notificationsRecentAlerts;
+
+  /// No description provided for @notificationsHighRiskCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yüksek riskli nokta'**
+  String notificationsHighRiskCount(int count);
+
+  /// No description provided for @notificationsUnreadCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} okunmadı'**
+  String notificationsUnreadCount(int count);
+
+  /// No description provided for @notificationsNoHighRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an yüksek riskli yangın noktası bulunmuyor.'**
+  String get notificationsNoHighRisk;
+
+  /// No description provided for @notificationsHighRiskDetectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek Riskli Termal Tespit'**
+  String get notificationsHighRiskDetectionTitle;
+
+  /// No description provided for @notificationsHighRiskDetectionBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.'**
+  String notificationsHighRiskDetectionBody(String region, String temp);
+
+  /// No description provided for @watchlistTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilenler'**
+  String get watchlistTitle;
+
+  /// No description provided for @watchlistClear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temizle'**
+  String get watchlistClear;
+
+  /// No description provided for @watchlistNoRecords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt Yok'**
+  String get watchlistNoRecords;
+
+  /// No description provided for @watchlistRecordCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kayıt'**
+  String watchlistRecordCount(int count);
+
+  /// No description provided for @watchlistHeading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Watchlist'**
+  String get watchlistHeading;
+
+  /// No description provided for @watchlistHeadingSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip etmek istediğin yangın noktalarını burada saklayabilirsin.'**
+  String get watchlistHeadingSubtitle;
+
+  /// No description provided for @watchlistEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz kaydedilmiş olay yok'**
+  String get watchlistEmptyTitle;
+
+  /// No description provided for @watchlistEmptySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsin.'**
+  String get watchlistEmptySubtitle;
+
+  /// No description provided for @watchlistSavedPoints.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilen Noktalar'**
+  String get watchlistSavedPoints;
+
+  /// No description provided for @watchlistSavedPointsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yangın noktası takipte'**
+  String watchlistSavedPointsSubtitle(int count);
+
+  /// No description provided for @watchlistSyncingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kaydedilmiş yangın noktası var.'**
+  String watchlistSyncingTitle(int count);
+
+  /// No description provided for @watchlistSyncingSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA verisi yenileniyor olabilir. Kaydedilen noktalar uydu güncellemesinde değişebilir.'**
+  String get watchlistSyncingSubtitle;
+
+  /// No description provided for @emergencyShareLocationText.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔥 Acil Durum - Konumum:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nFireWatch TR ile paylaşıldı.'**
+  String emergencyShareLocationText(String url, String lat, String lng);
+
+  /// No description provided for @emergencyShareLocationSubject.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Konum Paylaşımı'**
+  String get emergencyShareLocationSubject;
+
+  /// No description provided for @emergencyShareFallbackText.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔥 Acil Durum bildirimi - FireWatch TR'**
+  String get emergencyShareFallbackText;
+
+  /// No description provided for @emergencyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Durum'**
+  String get emergencyTitle;
+
+  /// No description provided for @emergencyPrepCenter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Hazırlık Merkezi'**
+  String get emergencyPrepCenter;
+
+  /// No description provided for @emergencyQuickToolsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Müdahale Araçları'**
+  String get emergencyQuickToolsTitle;
+
+  /// No description provided for @emergencyQuickToolsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda topla.'**
+  String get emergencyQuickToolsSubtitle;
+
+  /// No description provided for @emergencyStayReady.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazır Kal'**
+  String get emergencyStayReady;
+
+  /// No description provided for @emergencyStayReadyNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye ve iletişim adımlarını önceden planlamak zaman kazandırır.'**
+  String get emergencyStayReadyNote;
+
+  /// No description provided for @emergencyQuickActions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Eylemler'**
+  String get emergencyQuickActions;
+
+  /// No description provided for @emergencyQuickActionsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek dokunuşta kritik aksiyonlar'**
+  String get emergencyQuickActionsSubtitle;
+
+  /// No description provided for @emergencyCall112.
+  ///
+  /// In tr, this message translates to:
+  /// **'112 Ara'**
+  String get emergencyCall112;
+
+  /// No description provided for @emergencyCall112Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel acil yardım hattı'**
+  String get emergencyCall112Subtitle;
+
+  /// No description provided for @emergencyCall177.
+  ///
+  /// In tr, this message translates to:
+  /// **'177 Orman'**
+  String get emergencyCall177;
+
+  /// No description provided for @emergencyCall177Subtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın bildirimi hattı'**
+  String get emergencyCall177Subtitle;
+
+  /// No description provided for @emergencyShareLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum Paylaş'**
+  String get emergencyShareLocation;
+
+  /// No description provided for @emergencyShareLocationSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınlarına yer bildir'**
+  String get emergencyShareLocationSubtitle;
+
+  /// No description provided for @emergencyEvacuationPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye Planı'**
+  String get emergencyEvacuationPlan;
+
+  /// No description provided for @emergencyEvacuationPlanSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış adımlarını gözden geçir'**
+  String get emergencyEvacuationPlanSubtitle;
+
+  /// No description provided for @emergencyContactLines.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil İletişim Hatları'**
+  String get emergencyContactLines;
+
+  /// No description provided for @emergencyContactLinesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temel numaraları hazır tut'**
+  String get emergencyContactLinesSubtitle;
+
+  /// No description provided for @emergencyCallCenter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Çağrı Merkezi'**
+  String get emergencyCallCenter;
+
+  /// No description provided for @emergencyCallCenterSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağlık, itfaiye, polis ve genel acil durum'**
+  String get emergencyCallCenterSubtitle;
+
+  /// No description provided for @emergencyForestLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orman Yangını Hattı'**
+  String get emergencyForestLine;
+
+  /// No description provided for @emergencyForestLineSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orman ve yangın bildirimi için hızlı erişim'**
+  String get emergencyForestLineSubtitle;
+
+  /// No description provided for @emergencyAfad.
+  ///
+  /// In tr, this message translates to:
+  /// **'AFAD Acil'**
+  String get emergencyAfad;
+
+  /// No description provided for @emergencyAfadSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Afet ve acil durum yönetimi'**
+  String get emergencyAfadSubtitle;
+
+  /// No description provided for @emergencyBag.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye Çantası'**
+  String get emergencyBag;
+
+  /// No description provided for @emergencyBagSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazır bulunsun'**
+  String get emergencyBagSubtitle;
+
+  /// No description provided for @emergencyBagDocs.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kimlik ve temel belgeler'**
+  String get emergencyBagDocs;
+
+  /// No description provided for @emergencyBagDocsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kimlik, önemli evrak ve telefonunu tek yerde tut.'**
+  String get emergencyBagDocsSubtitle;
+
+  /// No description provided for @emergencyBagSupplies.
+  ///
+  /// In tr, this message translates to:
+  /// **'Su, ilaç ve şarj ekipmanı'**
+  String get emergencyBagSupplies;
+
+  /// No description provided for @emergencyBagSuppliesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa süreli tahliyede kritik olacak temel ihtiyaçlar.'**
+  String get emergencyBagSuppliesSubtitle;
+
+  /// No description provided for @emergencyBagMeetingPoint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınlarla buluşma noktası'**
+  String get emergencyBagMeetingPoint;
+
+  /// No description provided for @emergencyBagMeetingPointSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrı düşme ihtimaline karşı önceden karar ver.'**
+  String get emergencyBagMeetingPointSubtitle;
+
+  /// No description provided for @emergencyCommNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'İletişim Notu'**
+  String get emergencyCommNote;
+
+  /// No description provided for @emergencyCommNoteSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Panik anında kısa hareket planı'**
+  String get emergencyCommNoteSubtitle;
+
+  /// No description provided for @emergencyStep1.
+  ///
+  /// In tr, this message translates to:
+  /// **'1. Resmi uyarıları doğrula'**
+  String get emergencyStep1;
+
+  /// No description provided for @emergencyStep2.
+  ///
+  /// In tr, this message translates to:
+  /// **'2. Yakınlarını kısa mesajla haberdar et'**
+  String get emergencyStep2;
+
+  /// No description provided for @emergencyStep3.
+  ///
+  /// In tr, this message translates to:
+  /// **'3. Gerekliyse temel çantanı al ve güvenli çıkış rotasına yönel'**
+  String get emergencyStep3;
+
+  /// No description provided for @safetyGuideTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik Rehberi'**
+  String get safetyGuideTitle;
+
+  /// No description provided for @safetyGuideEmergencyInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Durum Bilgisi'**
+  String get safetyGuideEmergencyInfo;
+
+  /// No description provided for @safetyGuideCenterTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Güvenlik Merkezi'**
+  String get safetyGuideCenterTitle;
+
+  /// No description provided for @safetyGuideCenterSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın sırasında ne yapacağını hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.'**
+  String get safetyGuideCenterSubtitle;
+
+  /// No description provided for @safetyGuideQuickActions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Aksiyonlar'**
+  String get safetyGuideQuickActions;
+
+  /// No description provided for @safetyGuideQuickActionsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk bakışta kritik davranışlar'**
+  String get safetyGuideQuickActionsSubtitle;
+
+  /// No description provided for @safetyGuideReadyEvacuate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliyeye Hazır Ol'**
+  String get safetyGuideReadyEvacuate;
+
+  /// No description provided for @safetyGuideReadyEvacuateSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış planını netleştir'**
+  String get safetyGuideReadyEvacuateSubtitle;
+
+  /// No description provided for @safetyGuideTakeSmokeSeriously.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dumanı Ciddiye Al'**
+  String get safetyGuideTakeSmokeSeriously;
+
+  /// No description provided for @safetyGuideTakeSmokeSeriouslySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kapalı alana geç, maske kullan'**
+  String get safetyGuideTakeSmokeSeriouslySubtitle;
+
+  /// No description provided for @safetyGuideFollowOfficials.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yetkili Duyuruları İzle'**
+  String get safetyGuideFollowOfficials;
+
+  /// No description provided for @safetyGuideFollowOfficialsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmi kaynakları takip et'**
+  String get safetyGuideFollowOfficialsSubtitle;
+
+  /// No description provided for @safetyGuideDontDelay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geç Kalma'**
+  String get safetyGuideDontDelay;
+
+  /// No description provided for @safetyGuideDontDelaySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye çağrısını bekletme'**
+  String get safetyGuideDontDelaySubtitle;
+
+  /// No description provided for @safetyGuideChecklist.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Kontrol Listesi'**
+  String get safetyGuideChecklist;
+
+  /// No description provided for @safetyGuideChecklistSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın anında temel adımlar'**
+  String get safetyGuideChecklistSubtitle;
+
+  /// No description provided for @safetyGuideChecklist1Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kimlik, telefon ve şarj aletini hazır tut'**
+  String get safetyGuideChecklist1Title;
+
+  /// No description provided for @safetyGuideChecklist1Desc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zorunlu temel eşyaları tek yerde topla.'**
+  String get safetyGuideChecklist1Desc;
+
+  /// No description provided for @safetyGuideChecklist2Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kapı ve pencere durumunu kontrol et'**
+  String get safetyGuideChecklist2Title;
+
+  /// No description provided for @safetyGuideChecklist2Desc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duman girişini azaltmak için açık alanları gözden geçir.'**
+  String get safetyGuideChecklist2Desc;
+
+  /// No description provided for @safetyGuideChecklist3Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aile / yakınlarınla buluşma planı belirle'**
+  String get safetyGuideChecklist3Title;
+
+  /// No description provided for @safetyGuideChecklist3Desc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrı düşerseniz nerede buluşacağınızı önceden bil.'**
+  String get safetyGuideChecklist3Desc;
+
+  /// No description provided for @safetyGuideChecklist4Title.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmi tahliye rotasını takip et'**
+  String get safetyGuideChecklist4Title;
+
+  /// No description provided for @safetyGuideChecklist4Desc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendi başına riskli güzergah uydurma.'**
+  String get safetyGuideChecklist4Desc;
+
+  /// No description provided for @safetyGuideDetailedGuide.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detaylı Rehber'**
+  String get safetyGuideDetailedGuide;
+
+  /// No description provided for @safetyGuideDetailedGuideSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senaryoya göre açılır bilgi kartları'**
+  String get safetyGuideDetailedGuideSubtitle;
+
+  /// No description provided for @safetyGuideAtHomeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evdeysen ne yapmalısın?'**
+  String get safetyGuideAtHomeTitle;
+
+  /// No description provided for @safetyGuideAtHome1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duman yoğunluğu varsa kapı ve pencereleri kapalı tut.'**
+  String get safetyGuideAtHome1;
+
+  /// No description provided for @safetyGuideAtHome2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Elektrik, gaz ve hızlı çıkış güzergahını kontrol et.'**
+  String get safetyGuideAtHome2;
+
+  /// No description provided for @safetyGuideAtHome3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye çağrısı varsa eşyaları toplamaya çalışma, çıkışa odaklan.'**
+  String get safetyGuideAtHome3;
+
+  /// No description provided for @safetyGuideAtHome4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine al.'**
+  String get safetyGuideAtHome4;
+
+  /// No description provided for @safetyGuideInCarTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Araçtayken ne yapmalısın?'**
+  String get safetyGuideInCarTitle;
+
+  /// No description provided for @safetyGuideInCar1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yoğun duman içinden geçmeye çalışma.'**
+  String get safetyGuideInCar1;
+
+  /// No description provided for @safetyGuideInCar2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mümkünse güvenli açık alana veya yerleşim merkezine yönel.'**
+  String get safetyGuideInCar2;
+
+  /// No description provided for @safetyGuideInCar3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aracı kuru otların ve ağaç altlarının yanında bırakma.'**
+  String get safetyGuideInCar3;
+
+  /// No description provided for @safetyGuideInCar4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerle.'**
+  String get safetyGuideInCar4;
+
+  /// No description provided for @safetyGuideOutsideTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dışarıdaysan ne yapmalısın?'**
+  String get safetyGuideOutsideTitle;
+
+  /// No description provided for @safetyGuideOutside1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgar yönünü gözlemle ve yangının önüne geçme.'**
+  String get safetyGuideOutside1;
+
+  /// No description provided for @safetyGuideOutside2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek bitki örtüsünden ve dar vadilerden uzaklaş.'**
+  String get safetyGuideOutside2;
+
+  /// No description provided for @safetyGuideOutside3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Topluluk halinde hareket ediyorsan dağılmadan ilerle.'**
+  String get safetyGuideOutside3;
+
+  /// No description provided for @safetyGuideOutside4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil durumda açık, çıplak ve yanıcı olmayan alana çık.'**
+  String get safetyGuideOutside4;
+
+  /// No description provided for @safetyGuideEvacOrderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye emri geldiyse ne yapmalısın?'**
+  String get safetyGuideEvacOrderTitle;
+
+  /// No description provided for @safetyGuideEvacOrder1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emri geciktirme, \"biraz daha bekleyeyim\" deme.'**
+  String get safetyGuideEvacOrder1;
+
+  /// No description provided for @safetyGuideEvacOrder2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sadece temel eşyaları al ve çıkışa odaklan.'**
+  String get safetyGuideEvacOrder2;
+
+  /// No description provided for @safetyGuideEvacOrder3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınlarını tek tek arayıp vakit kaybetme, önceden plan kullan.'**
+  String get safetyGuideEvacOrder3;
+
+  /// No description provided for @safetyGuideEvacOrder4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yetkililerin toplama alanı duyurusunu takip et.'**
+  String get safetyGuideEvacOrder4;
+
+  /// No description provided for @safetyGuideEmergencyNumbers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil Numaralar'**
+  String get safetyGuideEmergencyNumbers;
+
+  /// No description provided for @safetyGuideEmergencyNumbersSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı erişim için not düş'**
+  String get safetyGuideEmergencyNumbersSubtitle;
+
+  /// No description provided for @safetyGuideCallCenterSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel acil durum hattı'**
+  String get safetyGuideCallCenterSubtitle;
+
+  /// No description provided for @safetyGuideForestNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orman Yangını Bildirimi'**
+  String get safetyGuideForestNotice;
+
+  /// No description provided for @safetyGuideForestNoticeSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın ve orman hattı'**
+  String get safetyGuideForestNoticeSubtitle;
+
+  /// No description provided for @safetyGuideAfadLocal.
+  ///
+  /// In tr, this message translates to:
+  /// **'AFAD / Yerel Yönlendirme'**
+  String get safetyGuideAfadLocal;
+
+  /// No description provided for @safetyGuideAfadLocalNumber.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerel duyuruları takip et'**
+  String get safetyGuideAfadLocalNumber;
+
+  /// No description provided for @safetyGuideAfadLocalSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel anons ve yönlendirme önemli'**
+  String get safetyGuideAfadLocalSubtitle;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsPreferences.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tercihler'**
+  String get settingsPreferences;
+
+  /// No description provided for @settingsAppSettings.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama Ayarları'**
+  String get settingsAppSettings;
+
+  /// No description provided for @settingsAppSettingsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimleri, konum tabanlı uyarıları ve uygulama davranışını buradan özelleştir.'**
+  String get settingsAppSettingsSubtitle;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsNotificationsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyarı tercihlerini yönet'**
+  String get settingsNotificationsSubtitle;
+
+  /// No description provided for @settingsPushNotifications.
+  ///
+  /// In tr, this message translates to:
+  /// **'Push Bildirimleri'**
+  String get settingsPushNotifications;
+
+  /// No description provided for @settingsPushNotificationsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni olaylar ve önemli değişiklikler için bildirim al'**
+  String get settingsPushNotificationsSubtitle;
+
+  /// No description provided for @settingsNearbyAlerts.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki Olay Uyarıları'**
+  String get settingsNearbyAlerts;
+
+  /// No description provided for @settingsNearbyAlertsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumuna yakın bölgelerde olay varsa öncelikli göster'**
+  String get settingsNearbyAlertsSubtitle;
+
+  /// No description provided for @settingsAppBehavior.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama Davranışı'**
+  String get settingsAppBehavior;
+
+  /// No description provided for @settingsAppBehaviorSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görünüm ve yenileme sıklığı'**
+  String get settingsAppBehaviorSubtitle;
+
+  /// No description provided for @settingsDarkMode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koyu Tema'**
+  String get settingsDarkMode;
+
+  /// No description provided for @settingsDarkModeSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Premium koyu görünümü aktif tut'**
+  String get settingsDarkModeSubtitle;
+
+  /// No description provided for @settingsRefreshInterval.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri Yenileme Aralığı'**
+  String get settingsRefreshInterval;
+
+  /// No description provided for @settingsRefreshIntervalSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saha verilerinin ne sıklıkla yenileneceğini seç'**
+  String get settingsRefreshIntervalSubtitle;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dil'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsLanguageSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama dilini seç'**
+  String get settingsLanguageSubtitle;
+
+  /// No description provided for @settingsLanguageTurkish.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkçe'**
+  String get settingsLanguageTurkish;
+
+  /// No description provided for @settingsLanguageEnglish.
+  ///
+  /// In tr, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
+  /// No description provided for @settingsAppInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama Bilgisi'**
+  String get settingsAppInfo;
+
+  /// No description provided for @settingsAppInfoSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sürüm ve ürün özeti'**
+  String get settingsAppInfoSubtitle;
+
+  /// No description provided for @settingsInfoApp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama'**
+  String get settingsInfoApp;
+
+  /// No description provided for @settingsInfoVersion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sürüm'**
+  String get settingsInfoVersion;
+
+  /// No description provided for @settingsInfoVersionValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'v1.0.0 demo'**
+  String get settingsInfoVersionValue;
+
+  /// No description provided for @settingsInfoPlatform.
+  ///
+  /// In tr, this message translates to:
+  /// **'Platform'**
+  String get settingsInfoPlatform;
+
+  /// No description provided for @settingsInfoPlatformValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Flutter / Android'**
+  String get settingsInfoPlatformValue;
+
+  /// No description provided for @settingsInfoPurpose.
+  ///
+  /// In tr, this message translates to:
+  /// **'Amaç'**
+  String get settingsInfoPurpose;
+
+  /// No description provided for @settingsInfoPurposeValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın odaklı disaster tracking'**
+  String get settingsInfoPurposeValue;
+
+  /// No description provided for @settingsFooterNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.'**
+  String get settingsFooterNote;
+
+  /// No description provided for @riskTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Analizi'**
+  String get riskTitle;
+
+  /// No description provided for @riskLiveView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlı Risk Görünümü'**
+  String get riskLiveView;
+
+  /// No description provided for @riskSummaryTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Yangın Risk Özeti'**
+  String get riskSummaryTitle;
+
+  /// No description provided for @riskSummarySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.'**
+  String get riskSummarySubtitle;
+
+  /// No description provided for @riskHighestRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek risk: {region} ({score}/100)'**
+  String riskHighestRisk(String region, int score);
+
+  /// No description provided for @riskDataLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri yükleniyor...'**
+  String get riskDataLoading;
+
+  /// No description provided for @riskKeyIndicators.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Göstergeler'**
+  String get riskKeyIndicators;
+
+  /// No description provided for @riskTurkeyAverage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye ortalaması'**
+  String get riskTurkeyAverage;
+
+  /// No description provided for @riskGeneralRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel Risk'**
+  String get riskGeneralRisk;
+
+  /// No description provided for @riskOutOf100.
+  ///
+  /// In tr, this message translates to:
+  /// **'100 üzerinden'**
+  String get riskOutOf100;
+
+  /// No description provided for @riskWindIncreasesSpread.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yayılımı artırıyor'**
+  String get riskWindIncreasesSpread;
+
+  /// No description provided for @riskWindNormal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Normal seviye'**
+  String get riskWindNormal;
+
+  /// No description provided for @riskHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nem'**
+  String get riskHumidity;
+
+  /// No description provided for @riskHumidityLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük nem'**
+  String get riskHumidityLow;
+
+  /// No description provided for @riskHumidityMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta nem'**
+  String get riskHumidityMedium;
+
+  /// No description provided for @riskHumidityHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek nem'**
+  String get riskHumidityHigh;
+
+  /// No description provided for @riskTempCritical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kritik seviye'**
+  String get riskTempCritical;
+
+  /// No description provided for @riskTempNormal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Normal'**
+  String get riskTempNormal;
+
+  /// No description provided for @riskRegionalDistribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel Risk Dağılımı'**
+  String get riskRegionalDistribution;
+
+  /// No description provided for @riskRegionalDistributionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncel bölge skorları'**
+  String get riskRegionalDistributionSubtitle;
+
+  /// No description provided for @riskScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Skoru'**
+  String get riskScore;
+
+  /// No description provided for @riskRegionDetails.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölge Detayları'**
+  String get riskRegionDetails;
+
+  /// No description provided for @riskRegionDetailsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gerçek hava verisi'**
+  String get riskRegionDetailsSubtitle;
+
+  /// No description provided for @riskScoreOutOf100.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk skoru: {score}/100'**
+  String riskScoreOutOf100(int score);
+
+  /// No description provided for @riskEnvironmentalFactors.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevresel Faktörler'**
+  String get riskEnvironmentalFactors;
+
+  /// No description provided for @riskDrynessIndex.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuruluk İndeksi'**
+  String get riskDrynessIndex;
+
+  /// No description provided for @riskDrynessVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok yüksek'**
+  String get riskDrynessVeryHigh;
+
+  /// No description provided for @riskWindPressure.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgar Baskısı'**
+  String get riskWindPressure;
+
+  /// No description provided for @riskVegetationDensity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitki Yoğunluğu'**
+  String get riskVegetationDensity;
+
+  /// No description provided for @riskVegetationMediumHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta - Yüksek'**
+  String get riskVegetationMediumHigh;
+
+  /// No description provided for @riskHumidityLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nem Seviyesi'**
+  String get riskHumidityLevel;
+
+  /// No description provided for @riskNoteHighTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek sıcaklık ({temp}°C)'**
+  String riskNoteHighTemp(int temp);
+
+  /// No description provided for @riskNoteMildTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ilık hava ({temp}°C)'**
+  String riskNoteMildTemp(int temp);
+
+  /// No description provided for @riskNoteCoolTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Serin hava ({temp}°C)'**
+  String riskNoteCoolTemp(int temp);
+
+  /// No description provided for @riskNoteLowHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük nem (%{hum})'**
+  String riskNoteLowHumidity(int hum);
+
+  /// No description provided for @riskNoteMediumHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta nem (%{hum})'**
+  String riskNoteMediumHumidity(int hum);
+
+  /// No description provided for @riskNoteHighHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek nem (%{hum})'**
+  String riskNoteHighHumidity(int hum);
+
+  /// No description provided for @riskNoteStrongWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güçlü rüzgar ({wind}km/h)'**
+  String riskNoteStrongWind(int wind);
+
+  /// No description provided for @riskNoteMediumWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta rüzgar ({wind}km/h)'**
+  String riskNoteMediumWind(int wind);
+
+  /// No description provided for @newsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberler'**
+  String get newsTitle;
+
+  /// No description provided for @newsLiveFeed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlı Bilgi Akışı'**
+  String get newsLiveFeed;
+
+  /// No description provided for @newsCenterTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Haber Merkezi'**
+  String get newsCenterTitle;
+
+  /// No description provided for @newsCenterSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saha güncellemeleri, risk uyarıları ve güvenlik odaklı gelişmeleri tek akışta takip et.'**
+  String get newsCenterSubtitle;
+
+  /// No description provided for @newsFeatured.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öne Çıkan Gelişme'**
+  String get newsFeatured;
+
+  /// No description provided for @newsFeaturedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünün dikkat çeken başlığı'**
+  String get newsFeaturedSubtitle;
+
+  /// No description provided for @newsCategories.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategoriler'**
+  String get newsCategories;
+
+  /// No description provided for @newsCategoriesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Akışı filtrele'**
+  String get newsCategoriesSubtitle;
+
+  /// No description provided for @newsCategoryRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk'**
+  String get newsCategoryRisk;
+
+  /// No description provided for @newsCategoryOperation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Operasyon'**
+  String get newsCategoryOperation;
+
+  /// No description provided for @newsCategorySafety.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik'**
+  String get newsCategorySafety;
+
+  /// No description provided for @newsCategoryUpdate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncelleme'**
+  String get newsCategoryUpdate;
+
+  /// No description provided for @newsRegions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeler'**
+  String get newsRegions;
+
+  /// No description provided for @newsRegionsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeye göre filtrele'**
+  String get newsRegionsSubtitle;
+
+  /// No description provided for @newsLatest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Haberler'**
+  String get newsLatest;
+
+  /// No description provided for @newsRecordsFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kayıt bulundu'**
+  String newsRecordsFound(int count);
+
+  /// No description provided for @newsFetchFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberler yüklenemedi'**
+  String get newsFetchFailed;
+
+  /// No description provided for @newsNoneInRegion.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} bölgesinde haber yok.'**
+  String newsNoneInRegion(String region);
+
+  /// No description provided for @newsNoneInCategory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kategoride haber yok.'**
+  String get newsNoneInCategory;
+
+  /// No description provided for @reportPanelLocationServiceOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum servisi kapalı. Lütfen açın.'**
+  String get reportPanelLocationServiceOff;
+
+  /// No description provided for @reportPanelLocationPermissionDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni verilmedi.'**
+  String get reportPanelLocationPermissionDenied;
+
+  /// No description provided for @reportPanelLocationError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alınamadı: {error}'**
+  String reportPanelLocationError(String error);
+
+  /// No description provided for @reportPanelNeedLocationFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen önce konumunuzu alın.'**
+  String get reportPanelNeedLocationFirst;
+
+  /// No description provided for @reportPanelSmokeObserved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yoğun duman gözlemlendi'**
+  String get reportPanelSmokeObserved;
+
+  /// No description provided for @reportPanelStrongWindPresent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güçlü rüzgar mevcut'**
+  String get reportPanelStrongWindPresent;
+
+  /// No description provided for @reportPanelNearSettlementNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerleşim alanına yakın'**
+  String get reportPanelNearSettlementNote;
+
+  /// No description provided for @reportPanelRiskLevelLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk seviyesi: {level}'**
+  String reportPanelRiskLevelLine(String level);
+
+  /// No description provided for @reportPanelCityFireReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'{city} yangın bildirimi'**
+  String reportPanelCityFireReport(String city);
+
+  /// No description provided for @reportPanelFireReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın bildirimi'**
+  String get reportPanelFireReport;
+
+  /// No description provided for @reportPanelVerifiedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'✅ Rapor Doğrulandı'**
+  String get reportPanelVerifiedTitle;
+
+  /// No description provided for @reportPanelReceivedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'⏳ Rapor Alındı'**
+  String get reportPanelReceivedTitle;
+
+  /// No description provided for @reportPanelCityLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şehir: {city}'**
+  String reportPanelCityLabel(String city);
+
+  /// No description provided for @reportPanelSubmitFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rapor gönderilemedi. İnternet bağlantınızı kontrol edin.'**
+  String get reportPanelSubmitFailed;
+
+  /// No description provided for @reportPanelOk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamam'**
+  String get reportPanelOk;
+
+  /// No description provided for @reportPanelNewReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Bildirim'**
+  String get reportPanelNewReport;
+
+  /// No description provided for @reportPanelTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Raporla'**
+  String get reportPanelTitle;
+
+  /// No description provided for @reportPanelSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'GPS ile konumunuzu alın ve yangını bildirin. NASA verisiyle otomatik doğrulanacak.'**
+  String get reportPanelSubtitle;
+
+  /// No description provided for @reportPanelLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum'**
+  String get reportPanelLocation;
+
+  /// No description provided for @reportPanelLocationObtained.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alındı'**
+  String get reportPanelLocationObtained;
+
+  /// No description provided for @reportPanelNoLocationYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz konum alınmadı'**
+  String get reportPanelNoLocationYet;
+
+  /// No description provided for @reportPanelGetGpsLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'GPS ile Konum Al'**
+  String get reportPanelGetGpsLocation;
+
+  /// No description provided for @reportPanelRefreshLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu Yenile'**
+  String get reportPanelRefreshLocation;
+
+  /// No description provided for @reportPanelRiskLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Seviyesi'**
+  String get reportPanelRiskLevel;
+
+  /// No description provided for @reportPanelYourName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adınız (isteğe bağlı)'**
+  String get reportPanelYourName;
+
+  /// No description provided for @reportPanelAnonymousHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anonim olarak gönderilecek'**
+  String get reportPanelAnonymousHint;
+
+  /// No description provided for @reportPanelExtraNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ek Not'**
+  String get reportPanelExtraNote;
+
+  /// No description provided for @reportPanelNoteHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alev yüksekliği, duman yoğunluğu, yol durumu...'**
+  String get reportPanelNoteHint;
+
+  /// No description provided for @reportPanelSmokeSwitch.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yoğun duman gözleniyor'**
+  String get reportPanelSmokeSwitch;
+
+  /// No description provided for @reportPanelWindSwitch.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgar güçlü görünüyor'**
+  String get reportPanelWindSwitch;
+
+  /// No description provided for @reportPanelSettlementSwitch.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerleşim alanına yakın'**
+  String get reportPanelSettlementSwitch;
+
+  /// No description provided for @reportPanelSubmitting.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönderiliyor...'**
+  String get reportPanelSubmitting;
+
+  /// No description provided for @reportPanelSubmit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimi Gönder'**
+  String get reportPanelSubmit;
+}
+
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['en', 'tr'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
+    case 'tr':
+      return AppLocalizationsTr();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}

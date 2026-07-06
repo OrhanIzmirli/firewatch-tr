@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -12,6 +13,7 @@ class SafetyGuideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -24,7 +26,7 @@ class SafetyGuideScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Güvenlik Rehberi',
+          l10n.safetyGuideTitle,
           style: GoogleFonts.inter(
             fontWeight: FontWeight.w700,
           ),
@@ -40,13 +42,13 @@ class SafetyGuideScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const StatusChip(
-                    label: 'Acil Durum Bilgisi',
+                  StatusChip(
+                    label: l10n.safetyGuideEmergencyInfo,
                     icon: Icons.shield_outlined,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Yangın Güvenlik Merkezi',
+                    l10n.safetyGuideCenterTitle,
                     style: GoogleFonts.inter(
                       fontSize: 30,
                       fontWeight: FontWeight.w800,
@@ -55,7 +57,7 @@ class SafetyGuideScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Yangın sırasında ne yapacağını hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.',
+                    l10n.safetyGuideCenterSubtitle,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       height: 1.45,
@@ -76,9 +78,9 @@ class SafetyGuideScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(
-              title: 'Hızlı Aksiyonlar',
-              subtitle: 'İlk bakışta kritik davranışlar',
+            SectionHeader(
+              title: l10n.safetyGuideQuickActions,
+              subtitle: l10n.safetyGuideQuickActionsSubtitle,
               icon: Icons.flash_on_rounded,
             )
                 .animate(delay: 80.ms)
@@ -94,43 +96,43 @@ class SafetyGuideScreen extends StatelessWidget {
               crossAxisSpacing: AppSpacing.md,
               mainAxisSpacing: AppSpacing.md,
               childAspectRatio: 1.08,
-              children: const [
+              children: [
                 _QuickActionCard(
-                  title: 'Tahliyeye Hazır Ol',
-                  subtitle: 'Çıkış planını netleştir',
+                  title: l10n.safetyGuideReadyEvacuate,
+                  subtitle: l10n.safetyGuideReadyEvacuateSubtitle,
                   icon: Icons.directions_run_rounded,
                   accent: AppColors.primary,
-                  delay: Duration(milliseconds: 140),
+                  delay: const Duration(milliseconds: 140),
                 ),
                 _QuickActionCard(
-                  title: 'Dumanı Ciddiye Al',
-                  subtitle: 'Kapalı alana geç, maske kullan',
+                  title: l10n.safetyGuideTakeSmokeSeriously,
+                  subtitle: l10n.safetyGuideTakeSmokeSeriouslySubtitle,
                   icon: Icons.masks_rounded,
                   accent: AppColors.warning,
-                  delay: Duration(milliseconds: 220),
+                  delay: const Duration(milliseconds: 220),
                 ),
                 _QuickActionCard(
-                  title: 'Yetkili Duyuruları İzle',
-                  subtitle: 'Resmi kaynakları takip et',
+                  title: l10n.safetyGuideFollowOfficials,
+                  subtitle: l10n.safetyGuideFollowOfficialsSubtitle,
                   icon: Icons.campaign_rounded,
                   accent: AppColors.primary,
-                  delay: Duration(milliseconds: 300),
+                  delay: const Duration(milliseconds: 300),
                 ),
                 _QuickActionCard(
-                  title: 'Geç Kalma',
-                  subtitle: 'Tahliye çağrısını bekletme',
+                  title: l10n.safetyGuideDontDelay,
+                  subtitle: l10n.safetyGuideDontDelaySubtitle,
                   icon: Icons.warning_amber_rounded,
                   accent: AppColors.danger,
-                  delay: Duration(milliseconds: 380),
+                  delay: const Duration(milliseconds: 380),
                 ),
               ],
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Acil Kontrol Listesi',
-              subtitle: 'Yangın anında temel adımlar',
+            SectionHeader(
+              title: l10n.safetyGuideChecklist,
+              subtitle: l10n.safetyGuideChecklistSubtitle,
               icon: Icons.checklist_rounded,
             )
                 .animate(delay: 130.ms)
@@ -139,35 +141,35 @@ class SafetyGuideScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.md),
 
-            const _ChecklistTile(
-              title: 'Kimlik, telefon ve şarj aletini hazır tut',
-              description: 'Zorunlu temel eşyaları tek yerde topla.',
-              delay: Duration(milliseconds: 180),
+            _ChecklistTile(
+              title: l10n.safetyGuideChecklist1Title,
+              description: l10n.safetyGuideChecklist1Desc,
+              delay: const Duration(milliseconds: 180),
             ),
             const SizedBox(height: AppSpacing.sm),
-            const _ChecklistTile(
-              title: 'Kapı ve pencere durumunu kontrol et',
-              description: 'Duman girişini azaltmak için açık alanları gözden geçir.',
-              delay: Duration(milliseconds: 250),
+            _ChecklistTile(
+              title: l10n.safetyGuideChecklist2Title,
+              description: l10n.safetyGuideChecklist2Desc,
+              delay: const Duration(milliseconds: 250),
             ),
             const SizedBox(height: AppSpacing.sm),
-            const _ChecklistTile(
-              title: 'Aile / yakınlarınla buluşma planı belirle',
-              description: 'Ayrı düşerseniz nerede buluşacağınızı önceden bil.',
-              delay: Duration(milliseconds: 320),
+            _ChecklistTile(
+              title: l10n.safetyGuideChecklist3Title,
+              description: l10n.safetyGuideChecklist3Desc,
+              delay: const Duration(milliseconds: 320),
             ),
             const SizedBox(height: AppSpacing.sm),
-            const _ChecklistTile(
-              title: 'Resmi tahliye rotasını takip et',
-              description: 'Kendi başına riskli güzergah uydurma.',
-              delay: Duration(milliseconds: 390),
+            _ChecklistTile(
+              title: l10n.safetyGuideChecklist4Title,
+              description: l10n.safetyGuideChecklist4Desc,
+              delay: const Duration(milliseconds: 390),
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Detaylı Rehber',
-              subtitle: 'Senaryoya göre açılır bilgi kartları',
+            SectionHeader(
+              title: l10n.safetyGuideDetailedGuide,
+              subtitle: l10n.safetyGuideDetailedGuideSubtitle,
               icon: Icons.menu_book_rounded,
             )
                 .animate(delay: 180.ms)
@@ -176,59 +178,59 @@ class SafetyGuideScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.md),
 
-            const _GuideAccordion(
-              title: 'Evdeysen ne yapmalısın?',
+            _GuideAccordion(
+              title: l10n.safetyGuideAtHomeTitle,
               icon: Icons.home_rounded,
               points: [
-                'Duman yoğunluğu varsa kapı ve pencereleri kapalı tut.',
-                'Elektrik, gaz ve hızlı çıkış güzergahını kontrol et.',
-                'Tahliye çağrısı varsa eşyaları toplamaya çalışma, çıkışa odaklan.',
-                'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine al.',
+                l10n.safetyGuideAtHome1,
+                l10n.safetyGuideAtHome2,
+                l10n.safetyGuideAtHome3,
+                l10n.safetyGuideAtHome4,
               ],
-              delay: Duration(milliseconds: 230),
+              delay: const Duration(milliseconds: 230),
             ),
             const SizedBox(height: AppSpacing.md),
-            const _GuideAccordion(
-              title: 'Araçtayken ne yapmalısın?',
+            _GuideAccordion(
+              title: l10n.safetyGuideInCarTitle,
               icon: Icons.directions_car_filled_rounded,
               points: [
-                'Yoğun duman içinden geçmeye çalışma.',
-                'Mümkünse güvenli açık alana veya yerleşim merkezine yönel.',
-                'Aracı kuru otların ve ağaç altlarının yanında bırakma.',
-                'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerle.',
+                l10n.safetyGuideInCar1,
+                l10n.safetyGuideInCar2,
+                l10n.safetyGuideInCar3,
+                l10n.safetyGuideInCar4,
               ],
-              delay: Duration(milliseconds: 300),
+              delay: const Duration(milliseconds: 300),
             ),
             const SizedBox(height: AppSpacing.md),
-            const _GuideAccordion(
-              title: 'Dışarıdaysan ne yapmalısın?',
+            _GuideAccordion(
+              title: l10n.safetyGuideOutsideTitle,
               icon: Icons.terrain_rounded,
               points: [
-                'Rüzgar yönünü gözlemle ve yangının önüne geçme.',
-                'Yüksek bitki örtüsünden ve dar vadilerden uzaklaş.',
-                'Topluluk halinde hareket ediyorsan dağılmadan ilerle.',
-                'Acil durumda açık, çıplak ve yanıcı olmayan alana çık.',
+                l10n.safetyGuideOutside1,
+                l10n.safetyGuideOutside2,
+                l10n.safetyGuideOutside3,
+                l10n.safetyGuideOutside4,
               ],
-              delay: Duration(milliseconds: 370),
+              delay: const Duration(milliseconds: 370),
             ),
             const SizedBox(height: AppSpacing.md),
-            const _GuideAccordion(
-              title: 'Tahliye emri geldiyse ne yapmalısın?',
+            _GuideAccordion(
+              title: l10n.safetyGuideEvacOrderTitle,
               icon: Icons.gpp_good_rounded,
               points: [
-                'Emri geciktirme, “biraz daha bekleyeyim” deme.',
-                'Sadece temel eşyaları al ve çıkışa odaklan.',
-                'Yakınlarını tek tek arayıp vakit kaybetme, önceden plan kullan.',
-                'Yetkililerin toplama alanı duyurusunu takip et.',
+                l10n.safetyGuideEvacOrder1,
+                l10n.safetyGuideEvacOrder2,
+                l10n.safetyGuideEvacOrder3,
+                l10n.safetyGuideEvacOrder4,
               ],
-              delay: Duration(milliseconds: 440),
+              delay: const Duration(milliseconds: 440),
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Acil Numaralar',
-              subtitle: 'Hızlı erişim için not düş',
+            SectionHeader(
+              title: l10n.safetyGuideEmergencyNumbers,
+              subtitle: l10n.safetyGuideEmergencyNumbersSubtitle,
               icon: Icons.phone_in_talk_rounded,
             )
                 .animate(delay: 230.ms)
@@ -237,25 +239,25 @@ class SafetyGuideScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.md),
 
-            const _EmergencyNumberCard(
-              title: 'Acil Çağrı Merkezi',
+            _EmergencyNumberCard(
+              title: l10n.emergencyCallCenter,
               number: '112',
-              subtitle: 'Genel acil durum hattı',
-              delay: Duration(milliseconds: 280),
+              subtitle: l10n.safetyGuideCallCenterSubtitle,
+              delay: const Duration(milliseconds: 280),
             ),
             const SizedBox(height: AppSpacing.md),
-            const _EmergencyNumberCard(
-              title: 'Orman Yangını Bildirimi',
+            _EmergencyNumberCard(
+              title: l10n.safetyGuideForestNotice,
               number: '177',
-              subtitle: 'Yangın ve orman hattı',
-              delay: Duration(milliseconds: 350),
+              subtitle: l10n.safetyGuideForestNoticeSubtitle,
+              delay: const Duration(milliseconds: 350),
             ),
             const SizedBox(height: AppSpacing.md),
-            const _EmergencyNumberCard(
-              title: 'AFAD / Yerel Yönlendirme',
-              number: 'Yerel duyuruları takip et',
-              subtitle: 'Bölgesel anons ve yönlendirme önemli',
-              delay: Duration(milliseconds: 420),
+            _EmergencyNumberCard(
+              title: l10n.safetyGuideAfadLocal,
+              number: l10n.safetyGuideAfadLocalNumber,
+              subtitle: l10n.safetyGuideAfadLocalSubtitle,
+              delay: const Duration(milliseconds: 420),
             ),
           ],
         ),

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -17,28 +18,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<_OnboardingItem> _items = const [
+  List<_OnboardingItem> _items(AppLocalizations l10n) => [
     _OnboardingItem(
       icon: Icons.local_fire_department_rounded,
-      title: 'Aktif olayları takip et',
-      description:
-      'Türkiye genelindeki yangın olaylarını tek ekranda takip et ve durum değişikliklerini hızlıca gör.',
+      title: l10n.onboardingTitle1,
+      description: l10n.onboardingDesc1,
     ),
     _OnboardingItem(
       icon: Icons.map_rounded,
-      title: 'Yakınındaki bölgeleri gör',
-      description:
-      'Harita ve bölge odaklı ekranlarla sana yakın olayları daha hızlı fark et.',
+      title: l10n.onboardingTitle2,
+      description: l10n.onboardingDesc2,
     ),
     _OnboardingItem(
       icon: Icons.shield_outlined,
-      title: 'Güvenlik yönlendirmeleri al',
-      description:
-      'Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.',
+      title: l10n.onboardingTitle3,
+      description: l10n.onboardingDesc3,
     ),
   ];
-
-  bool get _isLastPage => _currentPage == _items.length - 1;
 
   Future<void> _finishOnboarding() async {
     final prefs = SharedPreferencesAsync();
@@ -48,8 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     context.go('/location-permission');
   }
 
-  void _nextPage() {
-    if (_isLastPage) {
+  void _nextPage(bool isLastPage) {
+    if (isLastPage) {
       _finishOnboarding();
       return;
     }
@@ -68,6 +64,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final items = _items(l10n);
+    final isLastPage = _currentPage == items.length - 1;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -115,7 +114,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       TextButton(
                         onPressed: _finishOnboarding,
                         child: Text(
-                          'Geç',
+                          l10n.onboardingSkip,
                           style: GoogleFonts.inter(
                             color: AppColors.white.withValues(alpha: 0.82),
                             fontWeight: FontWeight.w600,
@@ -127,14 +126,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: _items.length,
+                      itemCount: items.length,
                       onPageChanged: (value) {
                         setState(() {
                           _currentPage = value;
                         });
                       },
                       itemBuilder: (context, index) {
-                        final pageItem = _items[index];
+                        final pageItem = items[index];
 
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +187,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      _items.length,
+                      items.length,
                           (index) => AnimatedContainer(
                         duration: const Duration(milliseconds: 220),
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -208,7 +207,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: _nextPage,
+                      onPressed: () => _nextPage(isLastPage),
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.white,
@@ -220,7 +219,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       child: Text(
-                        _isLastPage ? 'Devam Et' : 'Sonraki',
+                        isLastPage ? l10n.onboardingContinue : l10n.onboardingNext,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

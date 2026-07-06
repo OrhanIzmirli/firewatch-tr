@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
 import '../../shared/widgets/glass_panel.dart';
@@ -45,6 +46,30 @@ class _NewsScreenState extends State<NewsScreen> {
     'Güncelleme': 'Güncelleme',
   };
 
+  String _categoryLabel(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'Risk': return l10n.newsCategoryRisk;
+      case 'Operasyon': return l10n.newsCategoryOperation;
+      case 'Güvenlik': return l10n.newsCategorySafety;
+      case 'Güncelleme': return l10n.newsCategoryUpdate;
+      default: return l10n.commonAll;
+    }
+  }
+
+  String _regionLabel(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'Ege': return l10n.regionEge;
+      case 'Akdeniz': return l10n.regionAkdeniz;
+      case 'Marmara': return l10n.regionMarmara;
+      case 'İç Anadolu': return l10n.regionIcAnadolu;
+      case 'Karadeniz': return l10n.regionKaradeniz;
+      case 'Doğu Anadolu': return l10n.regionDoguAnadolu;
+      case 'Güneydoğu Anadolu': return l10n.regionGuneydoguAnadolu;
+      case 'Türkiye Geneli': return l10n.regionTurkiyeGeneli;
+      default: return l10n.commonAll;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,8 +92,9 @@ class _NewsScreenState extends State<NewsScreen> {
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
-        _errorMessage = 'Haberler yüklenemedi';
+        _errorMessage = AppLocalizations.of(context)!.newsFetchFailed;
         _isLoading = false;
       });
     }
@@ -128,6 +154,7 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final filteredItems = _filteredItems;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -141,7 +168,7 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Haberler',
+          l10n.newsTitle,
           style: GoogleFonts.inter(fontWeight: FontWeight.w700),
         ),
         actions: [
@@ -161,13 +188,13 @@ class _NewsScreenState extends State<NewsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const StatusChip(
-                    label: 'Canlı Bilgi Akışı',
+                  StatusChip(
+                    label: l10n.newsLiveFeed,
                     icon: Icons.newspaper_rounded,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Yangın Haber Merkezi',
+                    l10n.newsCenterTitle,
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
@@ -176,7 +203,7 @@ class _NewsScreenState extends State<NewsScreen> {
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Saha güncellemeleri, risk uyarıları ve güvenlik odaklı gelişmeleri tek akışta takip et.',
+                    l10n.newsCenterSubtitle,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       height: 1.45,
@@ -195,9 +222,9 @@ class _NewsScreenState extends State<NewsScreen> {
 
             // ── Featured Card ──────────────────────────────────
             if (_allNews.isNotEmpty) ...[
-              const SectionHeader(
-                title: 'Öne Çıkan Gelişme',
-                subtitle: 'Bugünün dikkat çeken başlığı',
+              SectionHeader(
+                title: l10n.newsFeatured,
+                subtitle: l10n.newsFeaturedSubtitle,
                 icon: Icons.bolt_rounded,
               ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -212,9 +239,9 @@ class _NewsScreenState extends State<NewsScreen> {
             ],
 
             // ── Kategoriler ────────────────────────────────────
-            const SectionHeader(
-              title: 'Kategoriler',
-              subtitle: 'Akışı filtrele',
+            SectionHeader(
+              title: l10n.newsCategories,
+              subtitle: l10n.newsCategoriesSubtitle,
               icon: Icons.tune_rounded,
             ).animate(delay: 120.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -227,7 +254,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 final index = entry.key;
                 final category = entry.value;
                 return _buildFilterChip(
-                  label: category,
+                  label: _categoryLabel(l10n, category),
                   isSelected: _selectedCategory == category,
                   isDark: isDark,
                   onTap: () {
@@ -242,9 +269,9 @@ class _NewsScreenState extends State<NewsScreen> {
             const SizedBox(height: AppSpacing.xxl),
 
             // ── Bölgeler ───────────────────────────────────────
-            const SectionHeader(
-              title: 'Bölgeler',
-              subtitle: 'Bölgeye göre filtrele',
+            SectionHeader(
+              title: l10n.newsRegions,
+              subtitle: l10n.newsRegionsSubtitle,
               icon: Icons.map_rounded,
             ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -257,7 +284,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 final index = entry.key;
                 final region = entry.value;
                 return _buildFilterChip(
-                  label: region,
+                  label: _regionLabel(l10n, region),
                   isSelected: _selectedRegion == region,
                   isDark: isDark,
                   onTap: () {
@@ -273,10 +300,10 @@ class _NewsScreenState extends State<NewsScreen> {
 
             // ── Son Haberler ───────────────────────────────────
             SectionHeader(
-              title: 'Son Haberler',
+              title: l10n.newsLatest,
               subtitle: _isLoading
-                  ? 'Yükleniyor...'
-                  : '${filteredItems.length} kayıt bulundu',
+                  ? l10n.commonLoading
+                  : l10n.newsRecordsFound(filteredItems.length),
               icon: Icons.article_rounded,
             ).animate(delay: 160.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -301,7 +328,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       FilledButton.icon(
                         onPressed: _loadNews,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Tekrar Dene'),
+                        label: Text(l10n.commonTryAgain),
                       ),
                     ],
                   ),
@@ -313,8 +340,8 @@ class _NewsScreenState extends State<NewsScreen> {
                 child: Center(
                   child: Text(
                     _selectedRegion != 'Tümü'
-                        ? '$_selectedRegion bölgesinde haber yok.'
-                        : 'Bu kategoride haber yok.',
+                        ? l10n.newsNoneInRegion(_regionLabel(l10n, _selectedRegion))
+                        : l10n.newsNoneInCategory,
                     style: GoogleFonts.inter(fontSize: 15),
                   ),
                 ),

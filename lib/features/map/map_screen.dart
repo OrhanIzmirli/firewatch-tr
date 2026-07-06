@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -99,7 +100,7 @@ class _MapScreenState extends State<MapScreen> {
       });
     } catch (_) {
       if (!mounted) return;
-      setState(() { _errorMessage = 'Yangın verileri alınamadı.'; _isLoading = false; });
+      setState(() { _errorMessage = AppLocalizations.of(context)!.mapFetchError; _isLoading = false; });
     }
   }
 
@@ -120,7 +121,8 @@ class _MapScreenState extends State<MapScreen> {
     return sortable.take(5).toList();
   }
 
-  String _timeAgo(String acqDate, String acqTime) {
+  String _timeAgo(BuildContext context, String acqDate, String acqTime) {
+    final l10n = AppLocalizations.of(context)!;
     try {
       final timeStr = acqTime.padLeft(4, '0');
       final hour = int.parse(timeStr.substring(0, 2));
@@ -129,9 +131,9 @@ class _MapScreenState extends State<MapScreen> {
       if (dateParts.length != 3) return acqDate;
       final dt = DateTime.utc(int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2]), hour, minute);
       final diff = DateTime.now().toUtc().difference(dt);
-      if (diff.inMinutes < 60) return '${diff.inMinutes} dakika önce';
-      if (diff.inHours < 24) return '${diff.inHours} saat önce';
-      return '${diff.inDays} gün önce';
+      if (diff.inMinutes < 60) return l10n.timeAgoMinutes(diff.inMinutes);
+      if (diff.inHours < 24) return l10n.timeAgoHours(diff.inHours);
+      return l10n.timeAgoDays(diff.inDays);
     } catch (_) {
       return '$acqDate $acqTime';
     }
@@ -159,7 +161,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _openFireBottomSheet(FirePoint point) {
     setState(() => _selectedPoint = point);
-    final timeAgo = _timeAgo(point.acquisitionDate, point.acquisitionTime);
+    final timeAgo = _timeAgo(context, point.acquisitionDate, point.acquisitionTime);
     final bright = double.tryParse(point.brightness) ?? 0;
     final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(1) : bright.toStringAsFixed(1);
 
@@ -168,6 +170,7 @@ class _MapScreenState extends State<MapScreen> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (_) {
+        final l10n = AppLocalizations.of(context)!;
         final theme = Theme.of(context);
         final isDark = theme.brightness == Brightness.dark;
         final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
@@ -198,14 +201,14 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(point.riskReason, style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
-                _DetailRow(icon: Icons.thermostat_rounded, label: 'Sıcaklık', value: '$tempC°C', color: secondaryTextColor),
+                _DetailRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '$tempC°C', color: secondaryTextColor),
                 const SizedBox(height: 8),
-                _DetailRow(icon: Icons.satellite_alt_rounded, label: 'Uydu', value: point.satellite, color: secondaryTextColor),
+                _DetailRow(icon: Icons.satellite_alt_rounded, label: l10n.commonSatellite, value: point.satellite, color: secondaryTextColor),
                 const SizedBox(height: 8),
-                _DetailRow(icon: Icons.calendar_today_rounded, label: 'Tespit', value: '${point.formattedDate} ${point.formattedTime}', color: secondaryTextColor),
+                _DetailRow(icon: Icons.calendar_today_rounded, label: l10n.commonDetection, value: '${point.formattedDate} ${point.formattedTime}', color: secondaryTextColor),
                 if (point.distanceKm != null) ...[
                   const SizedBox(height: 8),
-                  _DetailRow(icon: Icons.near_me_rounded, label: 'Uzaklık', value: '${point.distanceKm!.toStringAsFixed(1)} km', color: secondaryTextColor),
+                  _DetailRow(icon: Icons.near_me_rounded, label: l10n.commonDistance, value: '${point.distanceKm!.toStringAsFixed(1)} km', color: secondaryTextColor),
                 ],
                 const SizedBox(height: AppSpacing.lg),
                 GlassPanel(
@@ -219,7 +222,7 @@ class _MapScreenState extends State<MapScreen> {
                       child: OutlinedButton.icon(
                         onPressed: () { Navigator.pop(context); _mapController.move(LatLng(point.latitude, point.longitude), 13); },
                         icon: const Icon(Icons.map_rounded),
-                        label: const Text('Haritada Gör'),
+                        label: Text(l10n.commonViewOnMap),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.md),
@@ -227,7 +230,7 @@ class _MapScreenState extends State<MapScreen> {
                       child: FilledButton.icon(
                         onPressed: () { Navigator.pop(context); context.push('/fire-detail', extra: convertPointToFireEvent(point)); },
                         icon: const Icon(Icons.arrow_forward_rounded),
-                        label: const Text('Detay'),
+                        label: Text(l10n.commonDetail),
                       ),
                     ),
                   ],
@@ -242,6 +245,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
     final panelWidth = screenWidth * 0.78;
     final theme = Theme.of(context);
@@ -251,7 +255,7 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yangın Haritası', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.mapTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
       ),
       body: Stack(
         children: [
@@ -264,19 +268,19 @@ class _MapScreenState extends State<MapScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const StatusChip(label: 'Canlı Harita', icon: Icons.map_rounded),
+                      StatusChip(label: l10n.mapLiveMap, icon: Icons.map_rounded),
                       const SizedBox(height: AppSpacing.lg),
-                      Text('Türkiye Geneli Yangın Görünümü',
+                      Text(l10n.mapHeaderTitle,
                           style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: titleColor)),
                       const SizedBox(height: AppSpacing.sm),
-                      Text('NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.',
+                      Text(l10n.mapHeaderSubtitle,
                           style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                     ],
                   ),
                 ).animate().fadeIn(duration: 450.ms).scale(begin: const Offset(0.97, 0.97), end: const Offset(1, 1), curve: Curves.easeOutCubic).slideY(begin: 0.06, end: 0),
 
                 const SizedBox(height: AppSpacing.xxl),
-                const SectionHeader(title: 'Harita Alanı', subtitle: 'NASA FIRMS canlı marker görünümü', icon: Icons.public_rounded),
+                SectionHeader(title: l10n.mapArea, subtitle: l10n.mapAreaSubtitle, icon: Icons.public_rounded),
                 const SizedBox(height: AppSpacing.md),
 
                 GlassPanel(
@@ -353,7 +357,7 @@ class _MapScreenState extends State<MapScreen> {
                                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                                       const Icon(Icons.refresh_rounded, size: 18, color: AppColors.primary),
                                       const SizedBox(width: AppSpacing.sm),
-                                      Text('Yenile', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                                      Text(l10n.commonRefresh, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                                     ]),
                                   ),
                                 ),
@@ -365,7 +369,7 @@ class _MapScreenState extends State<MapScreen> {
                                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                                         const Icon(Icons.near_me_rounded, size: 18, color: AppColors.primary),
                                         const SizedBox(width: AppSpacing.sm),
-                                        Text('Bana Git', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                                        Text(l10n.mapGoToMe, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                                       ]),
                                     ),
                                   ),
@@ -381,12 +385,12 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.xxl),
 
                 if (_nearbyFirePoints.isNotEmpty) ...[
-                  const SectionHeader(title: 'Yakınımdaki Yangınlar', subtitle: 'Konumuna en yakın canlı tespitler', icon: Icons.near_me_rounded),
+                  SectionHeader(title: l10n.mapNearbyFires, subtitle: l10n.mapNearbyFiresSubtitle, icon: Icons.near_me_rounded),
                   const SizedBox(height: AppSpacing.md),
                   ..._nearbyFirePoints.asMap().entries.map((entry) {
                     final index = entry.key;
                     final point = entry.value;
-                    final timeAgo = _timeAgo(point.acquisitionDate, point.acquisitionTime);
+                    final timeAgo = _timeAgo(context, point.acquisitionDate, point.acquisitionTime);
                     final bright = double.tryParse(point.brightness) ?? 0;
                     final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(1) : bright.toStringAsFixed(1);
 
@@ -424,7 +428,7 @@ class _MapScreenState extends State<MapScreen> {
                                         ),
                                         Text(
                                           point.distanceKm != null
-                                              ? '${point.distanceKm!.toStringAsFixed(1)} km uzaklıkta • $timeAgo'
+                                              ? l10n.notificationsDistanceAndTime(point.distanceKm!.toStringAsFixed(1), timeAgo)
                                               : timeAgo,
                                           style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor),
                                         ),
@@ -529,7 +533,7 @@ class _MapScreenState extends State<MapScreen> {
               foregroundColor: AppColors.white,
               elevation: 10,
               icon: const Icon(Icons.edit_location_alt_rounded),
-              label: Text('Raporla', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+              label: Text(l10n.mapReport, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
             ),
           ),
         ),

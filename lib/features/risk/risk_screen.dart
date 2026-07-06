@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -44,40 +45,44 @@ class _RiskScreenState extends State<RiskScreen> {
     }
   }
 
-  String _displayName(String region) {
+  String _displayName(AppLocalizations l10n, String region) {
     switch (region) {
-      case 'Ic Anadolu': return 'İç Anadolu';
-      case 'Dogu Anadolu': return 'Doğu Anadolu';
-      case 'Guneydogu Anadolu': return 'Güneydoğu Anadolu';
+      case 'Ic Anadolu': return l10n.regionIcAnadolu;
+      case 'Dogu Anadolu': return l10n.regionDoguAnadolu;
+      case 'Guneydogu Anadolu': return l10n.regionGuneydoguAnadolu;
+      case 'Ege': return l10n.regionEge;
+      case 'Akdeniz': return l10n.regionAkdeniz;
+      case 'Marmara': return l10n.regionMarmara;
+      case 'Karadeniz': return l10n.regionKaradeniz;
       default: return region;
     }
   }
 
-  String _riskLevelTr(String level) {
+  String _riskLevelTr(AppLocalizations l10n, String level) {
     switch (level) {
-      case 'Critical': return 'Kritik';
-      case 'High': return 'Yüksek';
-      case 'Medium': return 'Orta';
-      default: return 'Düşük';
+      case 'Critical': return l10n.commonCritical;
+      case 'High': return l10n.commonHigh;
+      case 'Medium': return l10n.commonMedium;
+      default: return l10n.commonLow;
     }
   }
 
-  String _riskNote(Map<String, dynamic> region) {
+  String _riskNote(AppLocalizations l10n, Map<String, dynamic> region) {
     final temp = double.tryParse(region['temperature'].toString()) ?? 0;
     final hum = double.tryParse(region['humidity'].toString()) ?? 0;
     final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
 
     final parts = <String>[];
-    if (temp >= 35) parts.add('Yüksek sıcaklık (${temp.toInt()}°C)');
-    else if (temp >= 25) parts.add('Ilık hava (${temp.toInt()}°C)');
-    else parts.add('Serin hava (${temp.toInt()}°C)');
+    if (temp >= 35) parts.add(l10n.riskNoteHighTemp(temp.toInt()));
+    else if (temp >= 25) parts.add(l10n.riskNoteMildTemp(temp.toInt()));
+    else parts.add(l10n.riskNoteCoolTemp(temp.toInt()));
 
-    if (hum <= 30) parts.add('Düşük nem (%${hum.toInt()})');
-    else if (hum <= 50) parts.add('Orta nem (%${hum.toInt()})');
-    else parts.add('Yüksek nem (%${hum.toInt()})');
+    if (hum <= 30) parts.add(l10n.riskNoteLowHumidity(hum.toInt()));
+    else if (hum <= 50) parts.add(l10n.riskNoteMediumHumidity(hum.toInt()));
+    else parts.add(l10n.riskNoteHighHumidity(hum.toInt()));
 
-    if (wind >= 30) parts.add('Güçlü rüzgar (${wind.toInt()}km/h)');
-    else if (wind >= 15) parts.add('Orta rüzgar (${wind.toInt()}km/h)');
+    if (wind >= 30) parts.add(l10n.riskNoteStrongWind(wind.toInt()));
+    else if (wind >= 15) parts.add(l10n.riskNoteMediumWind(wind.toInt()));
 
     return parts.join(' • ');
   }
@@ -126,6 +131,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -140,9 +146,9 @@ class _RiskScreenState extends State<RiskScreen> {
 
     final topRegion = _highestRisk;
     final avgRiskScore = _avgRisk.toInt();
-    final overallLevel = avgRiskScore >= 75 ? 'Kritik' :
-                         avgRiskScore >= 50 ? 'Yüksek' :
-                         avgRiskScore >= 25 ? 'Orta' : 'Düşük';
+    final overallLevel = avgRiskScore >= 75 ? l10n.commonCritical :
+                         avgRiskScore >= 50 ? l10n.commonHigh :
+                         avgRiskScore >= 25 ? l10n.commonMedium : l10n.commonLow;
 
     final chartSpots = _regions.asMap().entries.map((e) =>
         FlSpot(e.key.toDouble(), (e.value['general_risk_score'] as int).toDouble())
@@ -150,7 +156,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Risk Analizi', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.riskTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
@@ -170,12 +176,12 @@ class _RiskScreenState extends State<RiskScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const StatusChip(label: 'Canlı Risk Görünümü', icon: Icons.auto_graph_rounded),
+                        StatusChip(label: l10n.riskLiveView, icon: Icons.auto_graph_rounded),
                         const SizedBox(height: AppSpacing.lg),
-                        Text('Türkiye Yangın Risk Özeti',
+                        Text(l10n.riskSummaryTitle,
                             style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
                         const SizedBox(height: AppSpacing.sm),
-                        Text('Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.',
+                        Text(l10n.riskSummarySubtitle,
                             style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                         const SizedBox(height: AppSpacing.lg),
                         Row(
@@ -185,8 +191,8 @@ class _RiskScreenState extends State<RiskScreen> {
                             Expanded(
                               child: Text(
                                 topRegion != null
-                                    ? 'En yüksek risk: ${_displayName(topRegion['region'])} (${topRegion['general_risk_score']}/100)'
-                                    : 'Veri yükleniyor...',
+                                    ? l10n.riskHighestRisk(_displayName(l10n, topRegion['region']), topRegion['general_risk_score'])
+                                    : l10n.riskDataLoading,
                                 style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -203,9 +209,9 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxl),
 
-                  const SectionHeader(
-                    title: 'Ana Göstergeler',
-                    subtitle: 'Türkiye ortalaması',
+                  SectionHeader(
+                    title: l10n.riskKeyIndicators,
+                    subtitle: l10n.riskTurkeyAverage,
                     icon: Icons.dashboard_rounded,
                   ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -220,33 +226,33 @@ class _RiskScreenState extends State<RiskScreen> {
                     childAspectRatio: 1.15,
                     children: [
                       _RiskMetricCard(
-                        title: 'Genel Risk',
+                        title: l10n.riskGeneralRisk,
                         value: '$avgRiskScore',
-                        subtitle: '100 üzerinden',
+                        subtitle: l10n.riskOutOf100,
                         icon: Icons.local_fire_department_rounded,
                         accent: avgRiskScore >= 50 ? AppColors.danger : AppColors.warning,
                         delay: const Duration(milliseconds: 140),
                       ),
                       _RiskMetricCard(
-                        title: 'Rüzgar',
+                        title: l10n.commonWind,
                         value: '${_avgWind.toInt()} km/h',
-                        subtitle: _avgWind >= 30 ? 'Yayılımı artırıyor' : 'Normal seviye',
+                        subtitle: _avgWind >= 30 ? l10n.riskWindIncreasesSpread : l10n.riskWindNormal,
                         icon: Icons.air_rounded,
                         accent: AppColors.warning,
                         delay: const Duration(milliseconds: 220),
                       ),
                       _RiskMetricCard(
-                        title: 'Nem',
+                        title: l10n.riskHumidity,
                         value: '%${_avgHumidity.toInt()}',
-                        subtitle: _avgHumidity <= 30 ? 'Düşük nem' : _avgHumidity <= 50 ? 'Orta nem' : 'Yüksek nem',
+                        subtitle: _avgHumidity <= 30 ? l10n.riskHumidityLow : _avgHumidity <= 50 ? l10n.riskHumidityMedium : l10n.riskHumidityHigh,
                         icon: Icons.water_drop_outlined,
                         accent: AppColors.primary,
                         delay: const Duration(milliseconds: 300),
                       ),
                       _RiskMetricCard(
-                        title: 'Sıcaklık',
+                        title: l10n.commonTemperature,
                         value: '${_avgTemp.toInt()}°C',
-                        subtitle: _avgTemp >= 35 ? 'Kritik seviye' : _avgTemp >= 25 ? 'Yüksek' : 'Normal',
+                        subtitle: _avgTemp >= 35 ? l10n.riskTempCritical : _avgTemp >= 25 ? l10n.commonHigh : l10n.riskTempNormal,
                         icon: Icons.thermostat_rounded,
                         accent: _avgTemp >= 35 ? AppColors.danger : AppColors.warning,
                         delay: const Duration(milliseconds: 380),
@@ -257,9 +263,9 @@ class _RiskScreenState extends State<RiskScreen> {
                   const SizedBox(height: AppSpacing.xxxl),
 
                   if (chartSpots.isNotEmpty) ...[
-                    const SectionHeader(
-                      title: 'Bölgesel Risk Dağılımı',
-                      subtitle: 'Güncel bölge skorları',
+                    SectionHeader(
+                      title: l10n.riskRegionalDistribution,
+                      subtitle: l10n.riskRegionalDistributionSubtitle,
                       icon: Icons.show_chart_rounded,
                     ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -271,7 +277,7 @@ class _RiskScreenState extends State<RiskScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Risk Skoru',
+                            Text(l10n.riskScore,
                                 style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
                             const SizedBox(height: AppSpacing.lg),
                             Expanded(
@@ -311,7 +317,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                         getTitlesWidget: (value, meta) {
                                           final idx = value.toInt();
                                           if (idx < 0 || idx >= _regions.length) return const SizedBox.shrink();
-                                          final name = _displayName(_regions[idx]['region']);
+                                          final name = _displayName(l10n, _regions[idx]['region']);
                                           final short = name.length > 4 ? name.substring(0, 4) : name;
                                           return Padding(
                                             padding: const EdgeInsets.only(top: 8),
@@ -366,9 +372,9 @@ class _RiskScreenState extends State<RiskScreen> {
                     const SizedBox(height: AppSpacing.xxxl),
                   ],
 
-                  const SectionHeader(
-                    title: 'Bölge Detayları',
-                    subtitle: 'Gerçek hava verisi',
+                  SectionHeader(
+                    title: l10n.riskRegionDetails,
+                    subtitle: l10n.riskRegionDetailsSubtitle,
                     icon: Icons.public_rounded,
                   ).animate(delay: 200.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
@@ -382,10 +388,11 @@ class _RiskScreenState extends State<RiskScreen> {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppSpacing.md),
                       child: _RegionRiskCard(
-                        region: _displayName(region['region']),
-                        risk: _riskLevelTr(level),
+                        region: _displayName(l10n, region['region']),
+                        risk: _riskLevelTr(l10n, level),
+                        rawLevel: level,
                         score: score,
-                        note: _riskNote(region),
+                        note: _riskNote(l10n, region),
                         delay: Duration(milliseconds: 240 + (idx * 70)),
                       ),
                     );
@@ -393,42 +400,42 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxxl),
 
-                  const SectionHeader(
-                    title: 'Çevresel Faktörler',
-                    subtitle: 'Türkiye ortalaması',
+                  SectionHeader(
+                    title: l10n.riskEnvironmentalFactors,
+                    subtitle: l10n.riskTurkeyAverage,
                     icon: Icons.eco_outlined,
                   ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
 
                   _ProgressFactorCard(
-                    title: 'Kuruluk İndeksi',
+                    title: l10n.riskDrynessIndex,
                     value: _avgDryness / 100,
-                    label: _avgDryness >= 70 ? 'Çok yüksek' : _avgDryness >= 50 ? 'Yüksek' : 'Orta',
+                    label: _avgDryness >= 70 ? l10n.riskDrynessVeryHigh : _avgDryness >= 50 ? l10n.commonHigh : l10n.commonMedium,
                     color: AppColors.danger,
                     delay: const Duration(milliseconds: 280),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   _ProgressFactorCard(
-                    title: 'Rüzgar Baskısı',
+                    title: l10n.riskWindPressure,
                     value: (_avgWind / 80).clamp(0, 1),
-                    label: _avgWind >= 50 ? 'Yüksek' : _avgWind >= 25 ? 'Orta' : 'Düşük',
+                    label: _avgWind >= 50 ? l10n.commonHigh : _avgWind >= 25 ? l10n.commonMedium : l10n.commonLow,
                     color: AppColors.warning,
                     delay: const Duration(milliseconds: 350),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   _ProgressFactorCard(
-                    title: 'Bitki Yoğunluğu',
+                    title: l10n.riskVegetationDensity,
                     value: _avgVegetation / 100,
-                    label: _avgVegetation >= 60 ? 'Orta - Yüksek' : 'Orta',
+                    label: _avgVegetation >= 60 ? l10n.riskVegetationMediumHigh : l10n.commonMedium,
                     color: AppColors.primary,
                     delay: const Duration(milliseconds: 420),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   _ProgressFactorCard(
-                    title: 'Nem Seviyesi',
+                    title: l10n.riskHumidityLevel,
                     value: (_avgHumidity / 100).clamp(0, 1),
-                    label: _avgHumidity >= 60 ? 'Yüksek' : _avgHumidity >= 40 ? 'Orta' : 'Düşük',
+                    label: _avgHumidity >= 60 ? l10n.commonHigh : _avgHumidity >= 40 ? l10n.commonMedium : l10n.commonLow,
                     color: AppColors.success,
                     delay: const Duration(milliseconds: 490),
                   ),
@@ -504,6 +511,7 @@ class _RiskMetricCard extends StatelessWidget {
 class _RegionRiskCard extends StatelessWidget {
   final String region;
   final String risk;
+  final String rawLevel;
   final int score;
   final String note;
   final Duration delay;
@@ -511,22 +519,24 @@ class _RegionRiskCard extends StatelessWidget {
   const _RegionRiskCard({
     required this.region,
     required this.risk,
+    required this.rawLevel,
     required this.score,
     required this.note,
     this.delay = Duration.zero,
   });
 
   Color get accent {
-    switch (risk) {
-      case 'Kritik': return AppColors.danger;
-      case 'Yüksek': return AppColors.danger;
-      case 'Orta': return AppColors.warning;
+    switch (rawLevel) {
+      case 'Critical': return AppColors.danger;
+      case 'High': return AppColors.danger;
+      case 'Medium': return AppColors.warning;
       default: return AppColors.success;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
@@ -562,7 +572,7 @@ class _RegionRiskCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text('Risk skoru: $score/100',
+          Text(l10n.riskScoreOutOf100(score),
               style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: accent)),
           const SizedBox(height: 4),
           Text(note,

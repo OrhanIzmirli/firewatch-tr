@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
@@ -36,7 +37,8 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   }
 
   // "1041" → "10:41" → "X saat önce"
-  String _formatUpdatedAt(String raw) {
+  String _formatUpdatedAt(BuildContext context, String raw) {
+    final l10n = AppLocalizations.of(context)!;
     try {
       // Eğer sayısal ise saat formatına çevir
       if (RegExp(r'^\d{3,4}$').hasMatch(raw.trim())) {
@@ -46,10 +48,10 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
         final now = DateTime.now();
         final dt = DateTime(now.year, now.month, now.day, hour, minute);
         final diff = now.difference(dt);
-        if (diff.inMinutes < 1) return 'Az önce';
-        if (diff.inMinutes < 60) return '${diff.inMinutes} dakika önce';
-        if (diff.inHours < 24) return '${diff.inHours} saat önce';
-        return '${diff.inDays} gün önce';
+        if (diff.inMinutes < 1) return l10n.timeAgoJustNow;
+        if (diff.inMinutes < 60) return l10n.timeAgoMinutes(diff.inMinutes);
+        if (diff.inHours < 24) return l10n.timeAgoHours(diff.inHours);
+        return l10n.timeAgoDays(diff.inDays);
       }
       return raw;
     } catch (_) {
@@ -87,6 +89,7 @@ FireWatch TR ile takip ediliyor.
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final fire = widget.fireEvent;
     final savedIds = ref.watch(watchlistProvider);
     final isSaved = savedIds.contains(fire.id);
@@ -105,7 +108,7 @@ FireWatch TR ile takip ediliyor.
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yangın Detayı',
+        title: Text(l10n.fireDetailTitle,
             style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
       ),
       body: SingleChildScrollView(
@@ -130,7 +133,7 @@ FireWatch TR ile takip ediliyor.
                       Icon(Icons.access_time_rounded, size: 18, color: tertiaryTextColor),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
-                        'Son güncelleme: ${_formatUpdatedAt(fire.updatedAt)}',
+                        l10n.fireDetailLastUpdate(_formatUpdatedAt(context, fire.updatedAt)),
                         style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor),
                       ),
                     ],
@@ -141,37 +144,37 @@ FireWatch TR ile takip ediliyor.
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(title: 'Temel Metrikler', icon: Icons.analytics_rounded),
+            SectionHeader(title: l10n.fireDetailKeyMetrics, icon: Icons.analytics_rounded),
             const SizedBox(height: AppSpacing.md),
 
             Row(
               children: [
-                Expanded(child: _MetricCard(title: 'Risk', value: fire.riskLevel)),
+                Expanded(child: _MetricCard(title: l10n.commonRisk, value: fire.riskLevel)),
                 const SizedBox(width: AppSpacing.md),
-                Expanded(child: _MetricCard(title: 'Durum', value: fire.status)),
+                Expanded(child: _MetricCard(title: l10n.commonStatus, value: fire.status)),
               ],
             ),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(title: 'Olay Bilgileri', icon: Icons.info_outline_rounded),
+            SectionHeader(title: l10n.fireDetailEventInfo, icon: Icons.info_outline_rounded),
             const SizedBox(height: AppSpacing.md),
 
-            _InfoRow(label: 'Şehir', value: fire.city),
+            _InfoRow(label: l10n.fireDetailCity, value: fire.city),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: 'İlçe', value: fire.district),
+            _InfoRow(label: l10n.fireDetailDistrict, value: fire.district),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: 'Başlangıç', value: fire.startedAt),
+            _InfoRow(label: l10n.fireDetailStarted, value: fire.startedAt),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: 'Rüzgar', value: fire.windStatus),
+            _InfoRow(label: l10n.commonWind, value: fire.windStatus),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: 'Yayılım Riski', value: fire.spreadRisk),
+            _InfoRow(label: l10n.fireDetailSpreadRisk, value: fire.spreadRisk),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: 'Etkilenen Alan', value: fire.affectedArea),
+            _InfoRow(label: l10n.fireDetailAffectedArea, value: fire.affectedArea),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(title: 'Önerilen Aksiyonlar', icon: Icons.checklist_rounded),
+            SectionHeader(title: l10n.fireDetailRecommendedActions, icon: Icons.checklist_rounded),
             const SizedBox(height: AppSpacing.md),
 
             ...fire.recommendedActions.map((action) => Padding(
@@ -187,7 +190,7 @@ FireWatch TR ile takip ediliyor.
                   child: FilledButton.icon(
                     onPressed: _openInAppMap,
                     icon: const Icon(Icons.map),
-                    label: const Text('Haritada Aç'),
+                    label: Text(l10n.commonOpenOnMap),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -195,7 +198,7 @@ FireWatch TR ile takip ediliyor.
                   child: OutlinedButton.icon(
                     onPressed: _shareFireEvent,
                     icon: const Icon(Icons.share),
-                    label: const Text('Paylaş'),
+                    label: Text(l10n.commonShare),
                   ),
                 ),
               ],
@@ -213,21 +216,21 @@ FireWatch TR ile takip ediliyor.
                     SnackBar(
                       content: Text(
                         nowSaved
-                            ? 'Olay watchlist listesine eklendi.'
-                            : 'Olay watchlist listesinden kaldırıldı.',
+                            ? l10n.fireDetailAddedToWatchlist
+                            : l10n.fireDetailRemovedFromWatchlist,
                         style: GoogleFonts.inter(),
                       ),
                     ),
                   );
                 },
                 icon: Icon(isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
-                label: Text(isSaved ? 'Kaydedildi' : 'Watchlist\'e Kaydet'),
+                label: Text(isSaved ? l10n.fireDetailSaved : l10n.fireDetailSaveToWatchlist),
               ),
             ),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(title: 'İlgili Haberler', icon: Icons.article),
+            SectionHeader(title: l10n.fireDetailRelatedNews, icon: Icons.article),
             const SizedBox(height: AppSpacing.md),
 
             FutureBuilder<List<NewsItem>>(
@@ -239,7 +242,7 @@ FireWatch TR ile takip ediliyor.
                 final news = snapshot.data ?? [];
                 if (news.isEmpty) {
                   return GlassPanel(
-                    child: Text('Haber bulunamadı',
+                    child: Text(l10n.fireDetailNoNewsFound,
                         style: GoogleFonts.inter(color: secondaryTextColor)),
                   );
                 }

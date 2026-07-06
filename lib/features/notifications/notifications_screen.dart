@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -54,7 +55,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
   }
 
-  String _timeAgo(String acqDate, String acqTime) {
+  String _timeAgo(BuildContext context, String acqDate, String acqTime) {
+    final l10n = AppLocalizations.of(context)!;
     try {
       final timeStr = acqTime.padLeft(4, '0');
       final hour = int.parse(timeStr.substring(0, 2));
@@ -68,9 +70,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         hour, minute,
       );
       final diff = DateTime.now().toUtc().difference(dt);
-      if (diff.inMinutes < 60) return '${diff.inMinutes} dk önce';
-      if (diff.inHours < 24) return '${diff.inHours} saat önce';
-      return '${diff.inDays} gün önce';
+      if (diff.inMinutes < 60) return l10n.timeAgoMinutes(diff.inMinutes);
+      if (diff.inHours < 24) return l10n.timeAgoHours(diff.inHours);
+      return l10n.timeAgoDays(diff.inDays);
     } catch (_) {
       return '$acqDate $acqTime';
     }
@@ -137,6 +139,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -148,7 +151,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bildirimler', style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.notificationsTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadFires),
         ],
@@ -174,15 +177,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             children: [
                               StatusChip(
                                 label: _highRiskFires.isNotEmpty
-                                    ? '${_highRiskFires.length} yeni uyarı'
-                                    : 'Güncel',
+                                    ? l10n.notificationsNewAlerts(_highRiskFires.length)
+                                    : l10n.notificationsUpToDate,
                                 icon: Icons.notifications_active_rounded,
                               ),
                               const SizedBox(height: AppSpacing.lg),
-                              Text('Olay Bildirim Akışı',
+                              Text(l10n.notificationsFeedTitle,
                                   style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
                               const SizedBox(height: AppSpacing.sm),
-                              Text('Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip et.',
+                              Text(l10n.notificationsFeedSubtitle,
                                   style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                             ],
                           ),
@@ -191,9 +194,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         const SizedBox(height: AppSpacing.xxl),
 
                         // ── Bildirim Araçları ─────────────────────
-                        const SectionHeader(
-                          title: 'Bildirim Araçları',
-                          subtitle: 'İzin ver, test et, yangın bildirimi simüle et',
+                        SectionHeader(
+                          title: l10n.notificationsTools,
+                          subtitle: l10n.notificationsToolsSubtitle,
                           icon: Icons.tune_rounded,
                         ),
                         const SizedBox(height: AppSpacing.md),
@@ -205,12 +208,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               Row(
                                 children: [
                                   StatusChip(
-                                    label: _permissionGranted ? 'İzin Var' : 'İzin Yok',
+                                    label: _permissionGranted ? l10n.notificationsPermissionGranted : l10n.notificationsPermissionDenied,
                                     icon: _permissionGranted ? Icons.check_circle_rounded : Icons.block_rounded,
                                   ),
                                   const SizedBox(width: AppSpacing.sm),
                                   StatusChip(
-                                    label: isRunning ? 'Takip Açık' : 'Takip Kapalı',
+                                    label: isRunning ? l10n.notificationsMonitoringOn : l10n.notificationsMonitoringOff,
                                     icon: isRunning ? Icons.radar_rounded : Icons.pause_circle_outline_rounded,
                                   ),
                                 ],
@@ -223,7 +226,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: FilledButton.icon(
                                   onPressed: _isBusy ? null : _requestNotificationPermission,
                                   icon: const Icon(Icons.notifications_active_rounded),
-                                  label: const Text('Bildirim İzni İste'),
+                                  label: Text(l10n.notificationsRequestPermission),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -232,7 +235,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: OutlinedButton.icon(
                                   onPressed: _isBusy ? null : _sendTestNotification,
                                   icon: const Icon(Icons.bolt_rounded),
-                                  label: const Text('Test Bildirimi Gönder'),
+                                  label: Text(l10n.notificationsSendTest),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -241,7 +244,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: OutlinedButton.icon(
                                   onPressed: _isBusy ? null : _sendDemoFireNotification,
                                   icon: const Icon(Icons.local_fire_department_rounded),
-                                  label: const Text('Demo Yangın Bildirimi Gönder'),
+                                  label: Text(l10n.notificationsSendDemoFire),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -250,7 +253,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: OutlinedButton.icon(
                                   onPressed: _isBusy ? null : _checkNearbyFireRisk,
                                   icon: const Icon(Icons.near_me_rounded),
-                                  label: const Text('Şimdi Tara'),
+                                  label: Text(l10n.notificationsScanNow),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -259,7 +262,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: FilledButton.icon(
                                   onPressed: _isBusy || isRunning ? null : _startAutoMonitoring,
                                   icon: const Icon(Icons.play_arrow_rounded),
-                                  label: const Text('Otomatik Taramayı Başlat'),
+                                  label: Text(l10n.notificationsStartMonitoring),
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -268,7 +271,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 child: OutlinedButton.icon(
                                   onPressed: _isBusy || !isRunning ? null : _stopAutoMonitoring,
                                   icon: const Icon(Icons.stop_circle_rounded),
-                                  label: const Text('Otomatik Taramayı Durdur'),
+                                  label: Text(l10n.notificationsStopMonitoring),
                                 ),
                               ),
                             ],
@@ -278,9 +281,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         // ── Yakındaki Canlı Yangınlar ─────────────
                         if (nearbyMatches.isNotEmpty) ...[
                           const SizedBox(height: AppSpacing.xxl),
-                          const SectionHeader(
-                            title: 'Yakındaki Canlı Yangınlar',
-                            subtitle: 'Konumuna 50 km içinde bulunan noktalar',
+                          SectionHeader(
+                            title: l10n.notificationsNearbyLiveFires,
+                            subtitle: l10n.notificationsNearbyLiveFiresSubtitle,
                             icon: Icons.local_fire_department_rounded,
                           ),
                           const SizedBox(height: AppSpacing.md),
@@ -308,10 +311,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           Text(fire.regionName,
                                               style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
                                           const SizedBox(height: 4),
-                                          Text('${fire.distanceKm?.toStringAsFixed(1) ?? '-'} km uzaklıkta • ${_timeAgo(fire.acquisitionDate, fire.acquisitionTime)}',
+                                          Text(l10n.notificationsDistanceAndTime(fire.distanceKm?.toStringAsFixed(1) ?? '-', _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime)),
                                               style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 4),
-                                          Text('Risk: ${fire.riskLevel}',
+                                          Text(l10n.notificationsRiskLabel(fire.riskLevel),
                                               style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
                                         ],
                                       ),
@@ -327,8 +330,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
                         // ── NASA FIRMS Yüksek Risk Uyarıları ─────
                         SectionHeader(
-                          title: 'Son Uyarılar',
-                          subtitle: _fireLoading ? 'Yükleniyor...' : '${_highRiskFires.length} yüksek riskli nokta',
+                          title: l10n.notificationsRecentAlerts,
+                          subtitle: _fireLoading ? l10n.commonLoading : l10n.notificationsHighRiskCount(_highRiskFires.length),
                           icon: Icons.bolt_rounded,
                           trailing: _highRiskFires.isNotEmpty
                               ? Container(
@@ -338,7 +341,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
                                   ),
                                   child: Text(
-                                    '${_highRiskFires.length} okunmadı',
+                                    l10n.notificationsUnreadCount(_highRiskFires.length),
                                     style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
                                   ),
                                 )
@@ -350,14 +353,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           const Center(child: CircularProgressIndicator(color: AppColors.primary))
                         else if (_highRiskFires.isEmpty)
                           GlassPanel(
-                            child: Text('Şu an yüksek riskli yangın noktası bulunmuyor.',
+                            child: Text(l10n.notificationsNoHighRisk,
                                 style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
                           )
                         else
                           ..._highRiskFires.asMap().entries.map((entry) {
                             final index = entry.key;
                             final fire = entry.value;
-                            final timeAgo = _timeAgo(fire.acquisitionDate, fire.acquisitionTime);
+                            final timeAgo = _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime);
                             final bright = double.tryParse(fire.brightness) ?? 0;
 
                             return Padding(
@@ -392,7 +395,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      'Yüksek Riskli Termal Tespit',
+                                                      l10n.notificationsHighRiskDetectionTitle,
                                                       style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800),
                                                     ),
                                                   ),
@@ -408,13 +411,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                               const SizedBox(height: AppSpacing.sm),
                                               Text(
-                                                '${fire.regionName} bölgesinde ${bright.toStringAsFixed(0)}K ısı tespit edildi. Aktif yangın ihtimali yüksek.',
+                                                l10n.notificationsHighRiskDetectionBody(fire.regionName, bright.toStringAsFixed(0)),
                                                 style: GoogleFonts.inter(fontSize: 13, height: 1.42, color: secondaryTextColor),
                                               ),
                                               const SizedBox(height: AppSpacing.md),
                                               Row(
                                                 children: [
-                                                  const StatusChip(label: 'Yüksek', icon: Icons.warning_amber_rounded),
+                                                  StatusChip(label: l10n.commonHigh, icon: Icons.warning_amber_rounded),
                                                   const SizedBox(width: AppSpacing.sm),
                                                   Expanded(
                                                     child: Text(

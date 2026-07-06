@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -37,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Stack(
         children: [
@@ -98,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'FireWatch TR',
+                      l10n.appName,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         fontSize: 30,
@@ -108,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Yangınları takip et, güvende kal',
+                      l10n.splashTagline,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         fontSize: 15,

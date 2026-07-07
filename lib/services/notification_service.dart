@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 
+import '../l10n/l10n_lookup.dart';
 import '../router/app_router.dart';
 import 'render_api_service.dart';
 
@@ -63,15 +64,16 @@ class NotificationService {
       await _renderApi.subscribeToNotifications(token);
     }
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (kDebugMode) {
         print('Foreground message: ${message.notification?.title}');
       }
       final notification = message.notification;
       if (notification != null) {
+        final l10n = await currentAppLocalizations();
         showManualAlert(
-          title: notification.title ?? 'FireWatch TR',
-          body: notification.body ?? 'Yeni bildirim',
+          title: notification.title ?? l10n.appName,
+          body: notification.body ?? l10n.notifNewNotificationBody,
           payload: message.data['fire_id'] != null
               ? 'fire:${message.data['fire_id']}'
               : 'alerts_tab',
@@ -135,10 +137,11 @@ class NotificationService {
   }
 
   Future<void> showTestNotification() async {
+    final l10n = await currentAppLocalizations();
     await _plugin.show(
       1001,
-      'FireWatch TR',
-      'Test bildirimi hazır.',
+      l10n.appName,
+      l10n.notifTestBody,
       _notificationDetails(),
       payload: 'alerts_tab',
     );
@@ -148,10 +151,11 @@ class NotificationService {
     required int count,
     required String distanceLabel,
   }) async {
+    final l10n = await currentAppLocalizations();
     await _plugin.show(
       2001,
-      'Yakınında yangın tespiti var',
-      '$distanceLabel içinde $count yangın noktası bulundu.',
+      l10n.notifNearbyFireTitle,
+      l10n.notifNearbyFireBody(distanceLabel, count),
       _notificationDetails(),
       payload: 'alerts_tab',
     );

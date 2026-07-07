@@ -486,22 +486,22 @@ class _RefreshIntervalTile extends StatelessWidget {
               DropdownButtonFormField<String>(
                 value: value,
                 isExpanded: true,
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: '5 dk',
-                    child: Text('5 dk'),
+                    child: Text(l10n.settingsRefreshInterval5Min),
                   ),
                   DropdownMenuItem(
                     value: '15 dk',
-                    child: Text('15 dk'),
+                    child: Text(l10n.settingsRefreshInterval15Min),
                   ),
                   DropdownMenuItem(
                     value: '30 dk',
-                    child: Text('30 dk'),
+                    child: Text(l10n.settingsRefreshInterval30Min),
                   ),
                   DropdownMenuItem(
                     value: '60 dk',
-                    child: Text('60 dk'),
+                    child: Text(l10n.settingsRefreshInterval60Min),
                   ),
                 ],
                 onChanged: onChanged,

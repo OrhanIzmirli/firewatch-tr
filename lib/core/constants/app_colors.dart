@@ -11,4 +11,18 @@ class AppColors {
   static const Color warning = Color(0xFFF59E0B);
 
   static const Color white = Colors.white;
+
+  /// Maps a canonical (non-localized) risk tier — 'high' | 'medium' | 'low'
+  /// — to its semantic color. Use this instead of matching localized label
+  /// text, which varies by language.
+  static Color forRiskTier(String tier) {
+    switch (tier) {
+      case 'high':
+        return danger;
+      case 'medium':
+        return warning;
+      default:
+        return success;
+    }
+  }
 }

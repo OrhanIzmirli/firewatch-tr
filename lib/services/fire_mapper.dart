@@ -1,7 +1,8 @@
+import '../l10n/app_localizations.dart';
 import '../models/fire_event.dart';
 import '../models/fire_point.dart';
 
-FireEvent convertPointToFireEvent(FirePoint point) {
+FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
   // Kelvin → Celsius
   final bright = double.tryParse(point.brightness) ?? 0;
   final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(1) : bright.toStringAsFixed(1);
@@ -25,65 +26,66 @@ FireEvent convertPointToFireEvent(FirePoint point) {
       );
       final diff = DateTime.now().toUtc().difference(dt);
       if (diff.inMinutes < 60) {
-        timeAgo = '${diff.inMinutes} dakika önce';
+        timeAgo = l10n.timeAgoMinutes(diff.inMinutes);
       } else if (diff.inHours < 24) {
-        timeAgo = '${diff.inHours} saat önce';
+        timeAgo = l10n.timeAgoHours(diff.inHours);
       } else {
-        timeAgo = '${diff.inDays} gün önce';
+        timeAgo = l10n.timeAgoDays(diff.inDays);
       }
     } catch (_) {}
   }
 
   // Konum ismi
-  final cityName = point.cityName ?? point.regionName;
+  final cityName = point.cityName ?? point.regionDisplayName(l10n);
   final distanceStr = point.distanceKm != null
-      ? '${point.distanceKm!.toStringAsFixed(1)} km uzaklıkta'
-      : point.locationLabel;
+      ? l10n.mapKmAway(point.distanceKm!.toStringAsFixed(1))
+      : point.locationLabelText(l10n);
 
   // Etkilenen alan tahmini (brightness'a göre)
   String affectedArea;
   if (bright >= 370) {
-    affectedArea = 'Geniş alan (>100 hektar tahmini)';
+    affectedArea = l10n.fireEventAreaLarge;
   } else if (bright >= 330) {
-    affectedArea = 'Orta alan (10-100 hektar tahmini)';
+    affectedArea = l10n.fireEventAreaMedium;
   } else if (bright >= 300) {
-    affectedArea = 'Küçük alan (<10 hektar tahmini)';
+    affectedArea = l10n.fireEventAreaSmall;
   } else {
-    affectedArea = 'Uydu çözünürlüğü yetersiz';
+    affectedArea = l10n.homeAreaInsufficientRes;
   }
 
   // Rüzgar — Open-Meteo koordinat bazlı açıklama
-  final windStatus = 'Gerçek veri için harita üzerinde kontrol et';
+  final windStatus = l10n.fireEventWindStatus;
 
   return FireEvent(
     id: '${point.latitude}-${point.longitude}-${point.acquisitionDate}-${point.acquisitionTime}',
-    title: cityName.isNotEmpty ? '$cityName Bölgesi Termal Tespiti' : 'Canlı Yangın Tespiti',
+    title: cityName.isNotEmpty ? l10n.fireEventRegionTitle(cityName) : l10n.fireEventLiveDetectionTitle,
     city: cityName,
     district: distanceStr,
-    description: point.riskReason,
-    status: point.riskLevel == 'Yüksek'
-        ? 'Aktif'
-        : point.riskLevel == 'Orta'
-            ? 'İzleniyor'
-            : 'Kontrol Altında',
-    riskLevel: point.riskLevel,
+    description: point.riskReasonText(l10n),
+    status: point.riskTier == 'high'
+        ? l10n.fireEventStatusActive
+        : point.riskTier == 'medium'
+            ? l10n.fireEventStatusMonitoring
+            : l10n.fireEventStatusControlled,
+    riskLevel: point.riskLevelLabel(l10n),
+    riskTier: point.riskTier,
     updatedAt: timeAgo,
     startedAt: formattedStart,
     affectedArea: affectedArea,
     windStatus: windStatus,
-    spreadRisk: point.riskLevel == 'Yüksek'
-        ? 'Yüksek — aktif izleme gerekli'
-        : point.riskLevel == 'Orta'
-            ? 'Orta — dikkatli takip et'
-            : 'Düşük',
+    spreadRisk: point.riskTier == 'high'
+        ? l10n.fireEventSpreadHigh
+        : point.riskTier == 'medium'
+            ? l10n.fireEventSpreadMedium
+            : l10n.fireEventSpreadLow,
     lat: point.latitude,
     lng: point.longitude,
     recommendedActions: [
-      point.recommendedAction,
-      'Sıcaklık: $tempC°C (Termal değer: ${bright.toStringAsFixed(0)}K)',
-      'Uydu: ${point.satellite}',
-      'Koordinat: ${point.locationLabel}',
-      'Tespit: $formattedStart',
+      point.recommendedActionText(l10n),
+      l10n.fireEventTempLine(tempC, bright.toStringAsFixed(0)),
+      l10n.fireEventSatelliteLine(point.satellite),
+      l10n.fireEventCoordinateLine(point.locationLabelText(l10n)),
+      l10n.fireEventDetectionLine(formattedStart),
     ],
   );
 }

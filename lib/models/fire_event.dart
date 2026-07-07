@@ -6,6 +6,9 @@ class FireEvent {
   final String description;
   final String status;
   final String riskLevel;
+  /// Canonical (non-localized) risk tier — 'high' | 'medium' | 'low' — used
+  /// for color-coding, independent of the localized [riskLevel] display text.
+  final String riskTier;
   final String updatedAt;
   final String startedAt;
   final String affectedArea;
@@ -23,6 +26,7 @@ class FireEvent {
     required this.description,
     required this.status,
     required this.riskLevel,
+    required this.riskTier,
     required this.updatedAt,
     required this.startedAt,
     required this.affectedArea,

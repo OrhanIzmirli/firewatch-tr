@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
 import 'fire_api_service.dart';
 import 'notification_service.dart';
@@ -16,8 +17,7 @@ class FireMonitoringService {
   final FireApiService _fireApiService = FireApiService();
 
   final ValueNotifier<bool> isRunningNotifier = ValueNotifier<bool>(false);
-  final ValueNotifier<String> statusNotifier =
-      ValueNotifier<String>('Monitoring servisi hazır.');
+  final ValueNotifier<String> statusNotifier = ValueNotifier<String>('');
   final ValueNotifier<List<FirePoint>> nearbyMatchesNotifier =
       ValueNotifier<List<FirePoint>>(<FirePoint>[]);
 
@@ -31,18 +31,21 @@ class FireMonitoringService {
   static const String _lastAlertCountKey = 'monitor_last_alert_count';
 
   Future<void> initialize() async {
-    statusNotifier.value = 'Monitoring servisi hazır.';
+    final l10n = await currentAppLocalizations();
+    statusNotifier.value = l10n.monitorStatusReady;
   }
 
   Future<void> startMonitoring() async {
+    final l10n = await currentAppLocalizations();
+
     if (_timer != null) {
-      statusNotifier.value = 'Otomatik tarama zaten çalışıyor.';
+      statusNotifier.value = l10n.monitorStatusAlreadyRunning;
       isRunningNotifier.value = true;
       return;
     }
 
     isRunningNotifier.value = true;
-    statusNotifier.value = 'Otomatik tarama başlatıldı...';
+    statusNotifier.value = l10n.monitorStatusStarted;
 
     await checkNow(triggerNotification: true);
 
@@ -52,19 +55,21 @@ class FireMonitoringService {
   }
 
   Future<void> stopMonitoring() async {
+    final l10n = await currentAppLocalizations();
     _timer?.cancel();
     _timer = null;
     isRunningNotifier.value = false;
-    statusNotifier.value = 'Otomatik tarama durduruldu.';
+    statusNotifier.value = l10n.monitorStatusStopped;
   }
 
   Future<void> checkNow({bool triggerNotification = false}) async {
+    final l10n = await currentAppLocalizations();
     try {
-      statusNotifier.value = 'Konum alınıyor...';
+      statusNotifier.value = l10n.monitorStatusGettingLocation;
 
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        statusNotifier.value = 'Konum servisi kapalı. Lütfen konumu açın.';
+        statusNotifier.value = l10n.monitorStatusLocationServiceOff;
         nearbyMatchesNotifier.value = <FirePoint>[];
         return;
       }
@@ -75,7 +80,7 @@ class FireMonitoringService {
       }
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        statusNotifier.value = 'Konum izni verilmedi.';
+        statusNotifier.value = l10n.monitorStatusLocationDenied;
         nearbyMatchesNotifier.value = <FirePoint>[];
         return;
       }
@@ -87,12 +92,12 @@ class FireMonitoringService {
         ),
       );
 
-      statusNotifier.value = 'NASA FIRMS verisi çekiliyor...';
+      statusNotifier.value = l10n.monitorStatusFetchingData;
 
       final fires = await _fireApiService.fetchTurkeyFires();
 
       if (fires.isEmpty) {
-        statusNotifier.value = 'Şu an aktif yangın verisi bulunamadı.';
+        statusNotifier.value = l10n.monitorStatusNoActiveFires;
         nearbyMatchesNotifier.value = <FirePoint>[];
         return;
       }
@@ -110,13 +115,11 @@ class FireMonitoringService {
       nearbyMatchesNotifier.value = nearby;
 
       if (nearby.isEmpty) {
-        statusNotifier.value =
-            '✅ 50 km içinde canlı yangın tespiti yok. (${fires.length} nokta tarandı)';
+        statusNotifier.value = l10n.monitorStatusNoNearbyFires(fires.length);
         return;
       }
 
-      statusNotifier.value =
-          '⚠️ 50 km içinde ${nearby.length} yangın noktası bulundu!';
+      statusNotifier.value = l10n.monitorStatusNearbyFiresFound(nearby.length);
 
       if (triggerNotification) {
         final shouldNotify = await _shouldSendNearbyAlert(nearby.length);
@@ -132,12 +135,11 @@ class FireMonitoringService {
       if (kDebugMode) debugPrint('Fire monitoring error: $e');
 
       if (e.toString().contains('timeout')) {
-        statusNotifier.value =
-            'NASA API bağlantı zaman aşımı. İnternet bağlantınızı kontrol edin.';
+        statusNotifier.value = l10n.monitorStatusTimeout;
       } else if (e.toString().contains('location')) {
-        statusNotifier.value = 'Konum alınamadı. Lütfen tekrar deneyin.';
+        statusNotifier.value = l10n.monitorStatusLocationFailed;
       } else {
-        statusNotifier.value = 'Tarama başarısız: ${e.toString().substring(0, 50)}';
+        statusNotifier.value = l10n.monitorStatusScanFailed(e.toString().substring(0, 50));
       }
       nearbyMatchesNotifier.value = <FirePoint>[];
     }

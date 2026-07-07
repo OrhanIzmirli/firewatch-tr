@@ -1,3 +1,5 @@
+import '../l10n/app_localizations.dart';
+
 class FirePoint {
   final double latitude;
   final double longitude;
@@ -75,35 +77,67 @@ class FirePoint {
     );
   }
 
-  // Önce cityName, yoksa koordinat bazlı bölge
-  String get regionName {
-    if (cityName != null && cityName!.isNotEmpty) return cityName!;
-    if (nearestRegion != null && nearestRegion!.isNotEmpty) return nearestRegion!;
+  /// Canonical (non-localized) region key derived from coordinates, used only
+  /// as a bbox fallback when the backend hasn't supplied a city/region name.
+  /// Null when [cityName] or [nearestRegion] is available (those are proper
+  /// nouns and are shown as-is regardless of locale). Used for filter-chip
+  /// matching — never shown to the user directly.
+  String? get regionKey {
+    if (cityName != null && cityName!.isNotEmpty) return null;
+    if (nearestRegion != null && nearestRegion!.isNotEmpty) return null;
 
     final lat = latitude;
     final lng = longitude;
 
-    if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'Ege Bölgesi';
-    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) return 'Akdeniz Bölgesi';
-    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) return 'Marmara Bölgesi';
-    if (lat >= 40.5 && lat <= 42.2) return 'Karadeniz Bölgesi';
-    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) return 'İç Anadolu';
-    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) return 'Doğu Anadolu';
-    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) return 'Güneydoğu Anadolu';
+    if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
+    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) return 'akdeniz';
+    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) return 'marmara';
+    if (lat >= 40.5 && lat <= 42.2) return 'karadeniz';
+    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) return 'ic_anadolu';
+    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) return 'dogu_anadolu';
+    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) return 'guneydogu_anadolu';
 
-    return 'Türkiye';
+    return null;
   }
 
-  String get riskLevel {
+  /// Display name for the point's region/city. City/region names coming from
+  /// the backend are proper nouns and are shown as-is in every locale; only
+  /// the coordinate-based fallback is translated.
+  String regionDisplayName(AppLocalizations l10n) {
+    if (cityName != null && cityName!.isNotEmpty) return cityName!;
+    if (nearestRegion != null && nearestRegion!.isNotEmpty) return nearestRegion!;
+
+    switch (regionKey) {
+      case 'ege': return l10n.regionEge;
+      case 'akdeniz': return l10n.regionAkdeniz;
+      case 'marmara': return l10n.regionMarmara;
+      case 'karadeniz': return l10n.regionKaradeniz;
+      case 'ic_anadolu': return l10n.regionIcAnadolu;
+      case 'dogu_anadolu': return l10n.regionDoguAnadolu;
+      case 'guneydogu_anadolu': return l10n.regionGuneydoguAnadolu;
+      default: return l10n.regionTurkiyeGeneli;
+    }
+  }
+
+  /// Canonical (non-localized) risk tier, used for filtering/coloring logic.
+  String get riskTier {
     final c = confidence.toLowerCase().trim();
-    if (c.contains('high') || c == 'h') return 'Yüksek';
-    if (c.contains('nominal') || c == 'n') return 'Orta';
-    return 'Düşük';
+    if (c.contains('high') || c == 'h') return 'high';
+    if (c.contains('nominal') || c == 'n') return 'medium';
+    return 'low';
   }
 
-  String get locationLabel {
-    final latDir = latitude >= 0 ? 'K' : 'G';
-    final lngDir = longitude >= 0 ? 'D' : 'B';
+  String riskLevelLabel(AppLocalizations l10n) {
+    switch (riskTier) {
+      case 'high': return l10n.commonHigh;
+      case 'medium': return l10n.commonMedium;
+      default: return l10n.commonLow;
+    }
+  }
+
+  String locationLabelText(AppLocalizations l10n) {
+    final latDir = latitude >= 0 ? l10n.compassNorth : l10n.compassSouth;
+    final lngDir = longitude >= 0 ? l10n.compassEast : l10n.compassWest;
     return '${latitude.abs().toStringAsFixed(2)}°$latDir ${longitude.abs().toStringAsFixed(2)}°$lngDir';
   }
 
@@ -123,43 +157,38 @@ class FirePoint {
     return acquisitionTime;
   }
 
-  String get riskReason {
+  String riskReasonText(AppLocalizations l10n) {
     final bright = double.tryParse(brightness) ?? 0;
-    switch (riskLevel) {
-      case 'Yüksek':
+    final temp = bright.toStringAsFixed(0);
+    switch (riskTier) {
+      case 'high':
         return bright > 0
-            ? 'Termal sensör ${bright.toStringAsFixed(0)}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.'
-            : 'Yüksek güven seviyesinde termal anomali tespit edildi. Aktif yangın olabilir.';
-      case 'Orta':
+            ? l10n.riskReasonHighWithTemp(temp)
+            : l10n.riskReasonHighNoTemp;
+      case 'medium':
         return bright > 0
-            ? 'Termal sensör ${bright.toStringAsFixed(0)}K ısı ölçtü. Anız yakma, tarım faaliyeti veya erken evre yangın olabilir.'
-            : 'Orta düzey termal anomali. Bölge izleme altında tutulmalı.';
+            ? l10n.riskReasonMediumWithTemp(temp)
+            : l10n.riskReasonMediumNoTemp;
       default:
         return bright > 0
-            ? 'Düşük ısı değeri (${bright.toStringAsFixed(0)}K). Sanayi, seracılık veya doğal ısı kaynağı olabilir.'
-            : 'Düşük seviye termal aktivite. Takip önerilir.';
+            ? l10n.riskReasonLowWithTemp(temp)
+            : l10n.riskReasonLowNoTemp;
     }
   }
 
-  String get generatedDescription {
-    switch (riskLevel) {
-      case 'Yüksek':
-        return 'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.';
-      case 'Orta':
-        return 'Orta seviye ısı artışı. Bölge izleme gerektirir.';
-      default:
-        return 'Düşük seviye termal aktivite. Takip önerilir.';
+  String generatedDescriptionText(AppLocalizations l10n) {
+    switch (riskTier) {
+      case 'high': return l10n.fireGeneratedDescHigh;
+      case 'medium': return l10n.fireGeneratedDescMedium;
+      default: return l10n.fireGeneratedDescLow;
     }
   }
 
-  String get recommendedAction {
-    switch (riskLevel) {
-      case 'Yüksek':
-        return 'Bölgeden uzak dur, resmi yönlendirmeleri takip et ve tahliye hazırlığını yap.';
-      case 'Orta':
-        return 'Gelişmeleri takip et, bölgeye gereksiz yaklaşma.';
-      default:
-        return 'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
+  String recommendedActionText(AppLocalizations l10n) {
+    switch (riskTier) {
+      case 'high': return l10n.fireRecommendedActionHigh;
+      case 'medium': return l10n.fireRecommendedActionMedium;
+      default: return l10n.fireRecommendedActionLow;
     }
   }
 }

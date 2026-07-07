@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../services/fire_monitoring_service.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../map/map_screen.dart';
 import '../news/news_screen.dart';
 import '../notifications/notifications_screen.dart';
@@ -30,6 +32,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex.clamp(0, 4);
+    if (_currentIndex == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        // Give the Home tab's first frame a moment to settle before measuring targets.
+        await Future.delayed(const Duration(milliseconds: 400));
+        if (!mounted) return;
+        await maybeShowCoachMarks(context);
+      });
+    }
   }
 
   @override
@@ -51,13 +61,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
     const SettingsScreen(),
   ];
 
-  Widget _alertsIcon(bool selected, int unreadCount) {
+  Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
     final icon = Icon(selected ? Icons.notifications : Icons.notifications_none);
-    if (unreadCount <= 0) return icon;
-    return Badge(
-      label: Text(unreadCount > 9 ? '9+' : '$unreadCount'),
-      child: icon,
-    );
+    final child = unreadCount <= 0
+        ? icon
+        : Badge(
+            label: Text(unreadCount > 9 ? '9+' : '$unreadCount'),
+            child: icon,
+          );
+    return key == null ? child : KeyedSubtree(key: key, child: child);
   }
 
   @override
@@ -71,9 +83,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.map_outlined),
-            selectedIcon: Icon(Icons.map),
+          NavigationDestination(
+            icon: KeyedSubtree(key: CoachMarkKeys.mapNavIcon, child: const Icon(Icons.map_outlined)),
+            selectedIcon: const Icon(Icons.map),
             label: 'Map',
           ),
           const NavigationDestination(
@@ -82,7 +94,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: 'News',
           ),
           NavigationDestination(
-            icon: _alertsIcon(false, nearbyMatches.length),
+            icon: _alertsIcon(false, nearbyMatches.length, key: CoachMarkKeys.alertsNavIcon),
             selectedIcon: _alertsIcon(true, nearbyMatches.length),
             label: 'Alerts',
           ),

@@ -1290,4 +1290,360 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locPermSkip => 'Skip for Now';
+
+  @override
+  String get compassNorth => 'N';
+
+  @override
+  String get compassSouth => 'S';
+
+  @override
+  String get compassEast => 'E';
+
+  @override
+  String get compassWest => 'W';
+
+  @override
+  String riskReasonHighWithTemp(String temp) {
+    return 'Thermal sensor detected ${temp}K heat. High likelihood of an active fire — stay away from the area.';
+  }
+
+  @override
+  String get riskReasonHighNoTemp =>
+      'A high-confidence thermal anomaly was detected. This may be an active fire.';
+
+  @override
+  String riskReasonMediumWithTemp(String temp) {
+    return 'Thermal sensor measured ${temp}K heat. This could be stubble burning, farming activity, or an early-stage fire.';
+  }
+
+  @override
+  String get riskReasonMediumNoTemp =>
+      'A medium-level thermal anomaly. The area should be kept under observation.';
+
+  @override
+  String riskReasonLowWithTemp(String temp) {
+    return 'Low heat value (${temp}K). Could be industrial activity, greenhouses, or a natural heat source.';
+  }
+
+  @override
+  String get riskReasonLowNoTemp =>
+      'Low-level thermal activity. Monitoring is recommended.';
+
+  @override
+  String get fireGeneratedDescHigh =>
+      'High-intensity thermal activity. Strong likelihood of an active fire.';
+
+  @override
+  String get fireGeneratedDescMedium =>
+      'Moderate heat increase. The area needs monitoring.';
+
+  @override
+  String get fireGeneratedDescLow =>
+      'Low-level thermal activity. Monitoring is recommended.';
+
+  @override
+  String get fireRecommendedActionHigh =>
+      'Stay away from the area, follow official guidance, and prepare for possible evacuation.';
+
+  @override
+  String get fireRecommendedActionMedium =>
+      'Keep track of developments and avoid getting close to the area unnecessarily.';
+
+  @override
+  String get fireRecommendedActionLow =>
+      'No urgent action needed right now — keep an eye on the area.';
+
+  @override
+  String fireEventRegionTitle(String city) {
+    return '$city Region Thermal Detection';
+  }
+
+  @override
+  String get fireEventLiveDetectionTitle => 'Live Fire Detection';
+
+  @override
+  String get fireEventStatusActive => 'Active';
+
+  @override
+  String get fireEventStatusMonitoring => 'Monitoring';
+
+  @override
+  String get fireEventStatusControlled => 'Under Control';
+
+  @override
+  String get fireEventSpreadHigh => 'High — active monitoring required';
+
+  @override
+  String get fireEventSpreadMedium => 'Medium — monitor carefully';
+
+  @override
+  String get fireEventSpreadLow => 'Low';
+
+  @override
+  String get fireEventWindStatus => 'Check the map for real wind data';
+
+  @override
+  String get fireEventAreaLarge => 'Large area (>100 hectares estimated)';
+
+  @override
+  String get fireEventAreaMedium => 'Medium area (10-100 hectares estimated)';
+
+  @override
+  String get fireEventAreaSmall => 'Small area (<10 hectares estimated)';
+
+  @override
+  String fireEventTempLine(String temp, String kelvin) {
+    return 'Temperature: $temp°C (Thermal value: ${kelvin}K)';
+  }
+
+  @override
+  String fireEventSatelliteLine(String satellite) {
+    return 'Satellite: $satellite';
+  }
+
+  @override
+  String fireEventCoordinateLine(String coordinate) {
+    return 'Coordinate: $coordinate';
+  }
+
+  @override
+  String fireEventDetectionLine(String datetime) {
+    return 'Detected: $datetime';
+  }
+
+  @override
+  String fireDetailShareText(
+    String title,
+    String city,
+    String district,
+    String status,
+    String risk,
+    String description,
+  ) {
+    return '🔥 Fire Alert\n\n📍 $title\n📌 $city / $district\n\n🚨 Status: $status\n⚠️ Risk: $risk\n\n📝 $description\n\nTracked with FireWatch TR.';
+  }
+
+  @override
+  String get notificationsDemoAlertTitle => 'Critical Fire Alert';
+
+  @override
+  String notificationsDemoAlertBody(String region) {
+    return 'High-risk thermal activity detected in the $region region.';
+  }
+
+  @override
+  String get settingsRefreshInterval5Min => '5 min';
+
+  @override
+  String get settingsRefreshInterval15Min => '15 min';
+
+  @override
+  String get settingsRefreshInterval30Min => '30 min';
+
+  @override
+  String get settingsRefreshInterval60Min => '60 min';
+
+  @override
+  String get newsDetailTitle => 'News Detail';
+
+  @override
+  String get newsDetailHighlightsTitle => 'Highlights';
+
+  @override
+  String get newsDetailHighlightsSubtitle => 'Quick summary';
+
+  @override
+  String get newsDetailFullContentTitle => 'Full Content';
+
+  @override
+  String get newsDetailFullContentSubtitle => 'Full story summary';
+
+  @override
+  String get newsDetailRelatedRegionTitle => 'Related Region';
+
+  @override
+  String get newsDetailRelatedRegionSubtitle => 'Linked risk area';
+
+  @override
+  String get newsDetailRelatedRegionNote =>
+      'This development may be linked to the region\'s risk and operations flow.';
+
+  @override
+  String newsDetailReadMinutes(int minutes) {
+    return '$minutes min read';
+  }
+
+  @override
+  String get newsTranslate => 'Translate';
+
+  @override
+  String get newsTranslating => 'Translating...';
+
+  @override
+  String get newsTranslated => 'Translated';
+
+  @override
+  String get newsShowOriginal => 'Show Original';
+
+  @override
+  String get newsTranslationFailed => 'Translation failed.';
+
+  @override
+  String get coachMarksGotIt => 'Got it';
+
+  @override
+  String get coachMarksSkip => 'Skip tutorial';
+
+  @override
+  String get coachMarksNext => 'Next';
+
+  @override
+  String coachMarksStepCount(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get coachMarkMapTitle => 'Map & Fire Markers';
+
+  @override
+  String get coachMarkMapDesc =>
+      'Flame markers on the map show live fire detections from NASA satellite data. Tap a marker to see details — you can also report a new fire from the map screen.';
+
+  @override
+  String get coachMarkRiskTitle => 'Risk Levels';
+
+  @override
+  String get coachMarkRiskDesc =>
+      'Every fire point is labeled High, Medium, or Low risk. These tags help you quickly understand how dangerous an area is.';
+
+  @override
+  String get coachMarkWatchlistTitle => 'Watchlist';
+
+  @override
+  String get coachMarkWatchlistDesc =>
+      'Save fire points you want to keep an eye on, and quickly find them again here.';
+
+  @override
+  String get coachMarkNotificationsTitle => 'Notifications';
+
+  @override
+  String get coachMarkNotificationsDesc =>
+      'Get instant alerts for fires near you, and start automatic scanning from here.';
+
+  @override
+  String get riskTabTurkeyOverview => 'Turkey Overview';
+
+  @override
+  String get riskTabMyLocation => 'My Location';
+
+  @override
+  String get riskMyLocationGettingLocation => 'Getting your location...';
+
+  @override
+  String get riskMyLocationPermissionDenied =>
+      'Location permission denied. Allow access to see your region\'s risk info.';
+
+  @override
+  String get riskMyLocationServiceOff =>
+      'Location service is off. Please enable it.';
+
+  @override
+  String get riskMyLocationError =>
+      'Couldn\'t get your location. Please try again.';
+
+  @override
+  String get riskMyLocationRegionNotFound =>
+      'Your region wasn\'t found in the risk data.';
+
+  @override
+  String get riskMyLocationEnableButton => 'Enable Location';
+
+  @override
+  String riskMyLocationYourRegion(String city, String region) {
+    return 'Your region: $city ($region)';
+  }
+
+  @override
+  String riskMyLocationRankLabel(int rank) {
+    return 'Rank: $rank/7';
+  }
+
+  @override
+  String riskMyLocationVsAverage(String diff) {
+    return 'Compared to Turkey average: $diff';
+  }
+
+  @override
+  String get riskMyLocationMetricsTitle => 'Your Region\'s Data';
+
+  @override
+  String get riskChartTapHint => 'Tap a region for details';
+
+  @override
+  String get monitorStatusReady => 'Monitoring service ready.';
+
+  @override
+  String get monitorStatusAlreadyRunning =>
+      'Automatic scanning is already running.';
+
+  @override
+  String get monitorStatusStarted => 'Automatic scanning started...';
+
+  @override
+  String get monitorStatusStopped => 'Automatic scanning stopped.';
+
+  @override
+  String get monitorStatusGettingLocation => 'Getting location...';
+
+  @override
+  String get monitorStatusLocationServiceOff =>
+      'Location service is off. Please turn it on.';
+
+  @override
+  String get monitorStatusLocationDenied => 'Location permission denied.';
+
+  @override
+  String get monitorStatusFetchingData => 'Fetching NASA FIRMS data...';
+
+  @override
+  String get monitorStatusNoActiveFires =>
+      'No active fire data found right now.';
+
+  @override
+  String monitorStatusNoNearbyFires(int count) {
+    return '✅ No live fire detections within 50 km. ($count points scanned)';
+  }
+
+  @override
+  String monitorStatusNearbyFiresFound(int count) {
+    return '⚠️ $count fire points found within 50 km!';
+  }
+
+  @override
+  String get monitorStatusTimeout =>
+      'NASA API connection timed out. Check your internet connection.';
+
+  @override
+  String get monitorStatusLocationFailed =>
+      'Couldn\'t get location. Please try again.';
+
+  @override
+  String monitorStatusScanFailed(String error) {
+    return 'Scan failed: $error';
+  }
+
+  @override
+  String get notifNearbyFireTitle => 'Fire detected nearby';
+
+  @override
+  String notifNearbyFireBody(String distance, int count) {
+    return '$count fire points found within $distance.';
+  }
+
+  @override
+  String get notifTestBody => 'Test notification ready.';
+
+  @override
+  String get notifNewNotificationBody => 'New notification';
 }

@@ -4,18 +4,81 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
+import '../../services/news_translation_service.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
 
-class NewsDetailScreen extends StatelessWidget {
+class NewsDetailScreen extends StatefulWidget {
   final NewsItem newsItem;
 
   const NewsDetailScreen({
     super.key,
     required this.newsItem,
   });
+
+  @override
+  State<NewsDetailScreen> createState() => _NewsDetailScreenState();
+}
+
+class _NewsDetailScreenState extends State<NewsDetailScreen> {
+  bool _showTranslated = false;
+  bool _translating = false;
+  bool _translationFailed = false;
+  String? _translatedTitle;
+  String? _translatedSummary;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCachedTranslation();
+  }
+
+  Future<void> _loadCachedTranslation() async {
+    final title = await NewsTranslationService.instance.getCached(widget.newsItem.id, 'title');
+    final summary = await NewsTranslationService.instance.getCached(widget.newsItem.id, 'summary');
+    if (!mounted) return;
+    if (title != null && summary != null) {
+      setState(() {
+        _translatedTitle = title;
+        _translatedSummary = summary;
+      });
+    }
+  }
+
+  Future<void> _translate() async {
+    setState(() {
+      _translating = true;
+      _translationFailed = false;
+    });
+    try {
+      final title = await NewsTranslationService.instance.translate(
+        articleId: widget.newsItem.id,
+        field: 'title',
+        text: widget.newsItem.title,
+      );
+      final summary = await NewsTranslationService.instance.translate(
+        articleId: widget.newsItem.id,
+        field: 'summary',
+        text: widget.newsItem.summary,
+      );
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = title;
+        _translatedSummary = summary;
+        _showTranslated = true;
+        _translating = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _translating = false;
+        _translationFailed = true;
+      });
+    }
+  }
 
   IconData _iconForCategory() {
     switch (newsItem.category.toLowerCase()) {
@@ -32,8 +95,14 @@ class NewsDetailScreen extends StatelessWidget {
     }
   }
 
+  NewsItem get newsItem => widget.newsItem;
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final canTranslate = locale.languageCode == 'en';
+
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -49,10 +118,14 @@ class NewsDetailScreen extends StatelessWidget {
         ? AppColors.white.withValues(alpha: 0.76)
         : Colors.black.withValues(alpha: 0.68);
 
+    final displayTitle = _showTranslated && _translatedTitle != null ? _translatedTitle! : newsItem.title;
+    final displaySummary = _showTranslated && _translatedSummary != null ? _translatedSummary! : newsItem.summary;
+    final hasTranslation = _translatedTitle != null && _translatedSummary != null;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Haber Detayı',
+          l10n.newsDetailTitle,
           style: GoogleFonts.inter(
             fontWeight: FontWeight.w700,
           ),
@@ -98,7 +171,7 @@ class NewsDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   Text(
-                    newsItem.title,
+                    displayTitle,
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
@@ -108,13 +181,52 @@ class NewsDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    newsItem.summary,
+                    displaySummary,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       height: 1.5,
                       color: secondaryTextColor,
                     ),
                   ),
+                  if (canTranslate) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    if (_translating)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.newsTranslating,
+                              style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                        ],
+                      )
+                    else
+                      Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.sm,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: hasTranslation
+                                ? () => setState(() => _showTranslated = !_showTranslated)
+                                : _translate,
+                            icon: Icon(hasTranslation && _showTranslated ? Icons.undo_rounded : Icons.translate_rounded, size: 18),
+                            label: Text(
+                              hasTranslation
+                                  ? (_showTranslated ? l10n.newsShowOriginal : l10n.newsTranslated)
+                                  : l10n.newsTranslate,
+                            ),
+                          ),
+                          if (_translationFailed)
+                            Text(l10n.newsTranslationFailed,
+                                style: GoogleFonts.inter(fontSize: 12, color: AppColors.danger)),
+                        ],
+                      ),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
@@ -128,7 +240,7 @@ class NewsDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${newsItem.readMinutes} dk okuma',
+                        l10n.newsDetailReadMinutes(newsItem.readMinutes),
                         style: GoogleFonts.inter(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -150,9 +262,9 @@ class NewsDetailScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            const SectionHeader(
-              title: 'Öne Çıkan Noktalar',
-              subtitle: 'Hızlı özet',
+            SectionHeader(
+              title: l10n.newsDetailHighlightsTitle,
+              subtitle: l10n.newsDetailHighlightsSubtitle,
               icon: Icons.stars_rounded,
             )
                 .animate(delay: 90.ms)
@@ -205,9 +317,9 @@ class NewsDetailScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'Detaylı İçerik',
-              subtitle: 'Gelişmenin tam özeti',
+            SectionHeader(
+              title: l10n.newsDetailFullContentTitle,
+              subtitle: l10n.newsDetailFullContentSubtitle,
               icon: Icons.menu_book_rounded,
             )
                 .animate(delay: 150.ms)
@@ -248,9 +360,9 @@ class NewsDetailScreen extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.xxxl),
 
-            const SectionHeader(
-              title: 'İlgili Bölge',
-              subtitle: 'Bağlantılı risk alanı',
+            SectionHeader(
+              title: l10n.newsDetailRelatedRegionTitle,
+              subtitle: l10n.newsDetailRelatedRegionSubtitle,
               icon: Icons.place_rounded,
             )
                 .animate(delay: 220.ms)
@@ -289,7 +401,7 @@ class NewsDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.',
+                          l10n.newsDetailRelatedRegionNote,
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             height: 1.45,
@@ -316,7 +428,7 @@ class NewsDetailScreen extends StatelessWidget {
                       context.push('/risk');
                     },
                     icon: const Icon(Icons.auto_graph_rounded),
-                    label: const Text('Risk Analizi'),
+                    label: Text(l10n.homeRiskAnalysis),
                   )
                       .animate(delay: 300.ms)
                       .fadeIn(duration: 280.ms)
@@ -329,7 +441,7 @@ class NewsDetailScreen extends StatelessWidget {
                       context.push('/safety-guide');
                     },
                     icon: const Icon(Icons.shield_outlined),
-                    label: const Text('Güvenlik'),
+                    label: Text(l10n.homeSafety),
                   )
                       .animate(delay: 360.ms)
                       .fadeIn(duration: 280.ms)

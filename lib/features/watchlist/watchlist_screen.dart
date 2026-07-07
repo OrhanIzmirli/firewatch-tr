@@ -195,7 +195,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                     child: GlassPanel(
                       padding: const EdgeInsets.all(AppSpacing.lg),
                       child: InkWell(
-                        onTap: () => context.push('/fire-detail', extra: convertPointToFireEvent(point)),
+                        onTap: () => context.push('/fire-detail', extra: convertPointToFireEvent(point, l10n)),
                         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,19 +205,19 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                 Expanded(
                                   child: Text(
                                     point.cityName != null
-                                        ? '${point.cityName} — ${point.nearestRegion ?? point.regionName}'
-                                        : point.regionName,
+                                        ? '${point.cityName} — ${point.nearestRegion ?? point.regionDisplayName(l10n)}'
+                                        : point.regionDisplayName(l10n),
                                     style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor),
                                   ),
                                 ),
-                                StatusChip(label: point.riskLevel, icon: Icons.warning_amber_rounded),
+                                StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
                               ],
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Text('${point.formattedDate} • ${point.formattedTime} UTC',
                                 style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor.withValues(alpha: 0.7))),
                             const SizedBox(height: AppSpacing.sm),
-                            Text(point.riskReason,
+                            Text(point.riskReasonText(l10n),
                                 maxLines: 2, overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor)),
                             const SizedBox(height: AppSpacing.sm),

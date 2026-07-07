@@ -14,6 +14,7 @@ import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
+import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -39,6 +40,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   List<NewsItem> _topNews = [];
   List<FirePoint> _firePoints = [];
+  // Canonical (non-localized) quick filter: 'high' | 'medium' | 'ege' | 'akdeniz' | 'marmara' | 'karadeniz'
+  String? _quickFilter;
   bool _newsLoading = true;
   bool _fireLoading = true;
   bool _newsOffline = false;
@@ -110,6 +113,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  bool _matchesQuickFilter(FirePoint p) {
+    final filter = _quickFilter;
+    if (filter == null) return true;
+    if (filter == 'high' || filter == 'medium') return p.riskTier == filter;
+    // Region filters: match the canonical bbox key, or the raw backend
+    // city/region text (proper nouns, same in every locale).
+    if (p.regionKey == filter) return true;
+    final nr = p.nearestRegion?.toLowerCase();
+    if (nr != null && nr.contains(filter)) return true;
+    final cn = p.cityName?.toLowerCase();
+    if (cn != null && cn.contains(filter)) return true;
+    return false;
+  }
+
   void _showFirePreview(BuildContext context, FirePoint point) {
     final l10n = AppLocalizations.of(context)!;
     final bright = double.tryParse(point.brightness) ?? 0;
@@ -142,19 +159,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               Row(
                 children: [
-                  StatusChip(label: point.riskLevel, icon: Icons.local_fire_department_rounded),
+                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
                   const SizedBox(width: 8),
                   StatusChip(label: '${point.formattedDate} ${point.formattedTime}', icon: Icons.access_time_rounded),
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                l10n.homeFireRegionTitle(point.regionName),
+                l10n.homeFireRegionTitle(point.regionDisplayName(l10n)),
                 style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
-                point.riskReason,
+                point.riskReasonText(l10n),
                 style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -164,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 8),
               _PreviewRow(icon: Icons.satellite_alt_rounded, label: l10n.commonSatellite, value: point.satellite),
               const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.location_on_rounded, label: l10n.commonCoordinate, value: point.locationLabel),
+              _PreviewRow(icon: Icons.location_on_rounded, label: l10n.commonCoordinate, value: point.locationLabelText(l10n)),
               const SizedBox(height: AppSpacing.lg),
               Row(
                 children: [
@@ -183,7 +200,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: FilledButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
-                        context.push('/fire-detail', extra: convertPointToFireEvent(point));
+                        context.push('/fire-detail', extra: convertPointToFireEvent(point, l10n));
                       },
                       icon: const Icon(Icons.arrow_forward_rounded),
                       label: Text(l10n.commonDetail),
@@ -273,6 +290,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       Expanded(
                         child: FilledButton.icon(
+                          key: CoachMarkKeys.riskButton,
                           onPressed: () => context.push('/risk'),
                           icon: const Icon(Icons.auto_graph_rounded),
                           label: Text(l10n.homeRiskAnalysis),
@@ -281,6 +299,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: OutlinedButton.icon(
+                          key: CoachMarkKeys.savedButton,
                           onPressed: () => context.push('/watchlist'),
                           icon: const Icon(Icons.bookmark_rounded),
                           label: Text(l10n.homeSaved(savedIds.length)),
@@ -428,19 +447,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _FilterChip(label: l10n.commonAll, selected: query.isEmpty, onTap: () { _searchController.clear(); setState(() {}); }),
+                  _FilterChip(label: l10n.commonAll, selected: _quickFilter == null && query.isEmpty, onTap: () { _searchController.clear(); setState(() => _quickFilter = null); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.homeFilterHighRisk, selected: query == 'yüksek', onTap: () { _searchController.text = 'yüksek'; setState(() {}); }),
+                  _FilterChip(label: l10n.homeFilterHighRisk, selected: _quickFilter == 'high', onTap: () { setState(() => _quickFilter = _quickFilter == 'high' ? null : 'high'); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.homeFilterMediumRisk, selected: query == 'orta', onTap: () { _searchController.text = 'orta'; setState(() {}); }),
+                  _FilterChip(label: l10n.homeFilterMediumRisk, selected: _quickFilter == 'medium', onTap: () { setState(() => _quickFilter = _quickFilter == 'medium' ? null : 'medium'); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionEge, selected: query == 'ege', onTap: () { _searchController.text = 'ege'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionEge, selected: _quickFilter == 'ege', onTap: () { setState(() => _quickFilter = _quickFilter == 'ege' ? null : 'ege'); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionAkdeniz, selected: query == 'akdeniz', onTap: () { _searchController.text = 'akdeniz'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionAkdeniz, selected: _quickFilter == 'akdeniz', onTap: () { setState(() => _quickFilter = _quickFilter == 'akdeniz' ? null : 'akdeniz'); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionMarmara, selected: query == 'marmara', onTap: () { _searchController.text = 'marmara'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionMarmara, selected: _quickFilter == 'marmara', onTap: () { setState(() => _quickFilter = _quickFilter == 'marmara' ? null : 'marmara'); }),
                   const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionKaradeniz, selected: query == 'karadeniz', onTap: () { _searchController.text = 'karadeniz'; setState(() {}); }),
+                  _FilterChip(label: l10n.regionKaradeniz, selected: _quickFilter == 'karadeniz', onTap: () { setState(() => _quickFilter = _quickFilter == 'karadeniz' ? null : 'karadeniz'); }),
                 ],
               ),
             ),
@@ -471,12 +490,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               )
             else
               ..._firePoints
-                  .where((p) => query.isEmpty ||
-                      p.regionName.toLowerCase().contains(query) ||
+                  .where((p) => _matchesQuickFilter(p) && (query.isEmpty ||
+                      p.regionDisplayName(l10n).toLowerCase().contains(query) ||
                       (p.cityName?.toLowerCase().contains(query) ?? false) ||
                       (p.nearestRegion?.toLowerCase().contains(query) ?? false) ||
-                      p.riskLevel.toLowerCase().contains(query) ||
-                      p.acquisitionDate.contains(query))
+                      p.riskLevelLabel(l10n).toLowerCase().contains(query) ||
+                      p.acquisitionDate.contains(query)))
                   .take(10)
                   .toList()
                   .asMap()
@@ -501,11 +520,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  point.regionName,
+                                  point.regionDisplayName(l10n),
                                   style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
                                 ),
                               ),
-                              StatusChip(label: point.riskLevel, icon: Icons.warning_amber_rounded),
+                              StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.xs),
@@ -515,7 +534,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           Text(
-                            point.riskReason,
+                            point.riskReasonText(l10n),
                             style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -532,7 +551,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Text(point.satellite, style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor)),
                               const SizedBox(width: 12),
                               Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
-                              Text('Detay', style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
+                              Text(l10n.commonDetail, style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ],

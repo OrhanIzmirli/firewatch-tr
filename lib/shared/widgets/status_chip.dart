@@ -7,15 +7,21 @@ class StatusChip extends StatelessWidget {
   final String label;
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
+  /// Optional explicit color, independent of the (localized, and therefore
+  /// unreliable to pattern-match) [label] text. Prefer passing this for any
+  /// chip that conveys severity/status, e.g. from a canonical risk tier.
+  final Color? color;
 
   const StatusChip({
     super.key,
     required this.label,
     this.icon,
     this.padding,
+    this.color,
   });
 
   Color _colorForLabel() {
+    if (color != null) return color!;
     switch (label.toLowerCase()) {
       case 'aktif':
         return AppColors.primary;

@@ -2,16 +2,43 @@ import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/fire_api_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+
+Color _colorForApiLevel(String level) {
+  switch (level) {
+    case 'Critical':
+    case 'High':
+      return AppColors.danger;
+    case 'Medium':
+      return AppColors.warning;
+    default:
+      return AppColors.success;
+  }
+}
+
+String _displayRegionName(AppLocalizations l10n, String region) {
+  switch (region) {
+    case 'Ic Anadolu': return l10n.regionIcAnadolu;
+    case 'Dogu Anadolu': return l10n.regionDoguAnadolu;
+    case 'Guneydogu Anadolu': return l10n.regionGuneydoguAnadolu;
+    case 'Ege': return l10n.regionEge;
+    case 'Akdeniz': return l10n.regionAkdeniz;
+    case 'Marmara': return l10n.regionMarmara;
+    case 'Karadeniz': return l10n.regionKaradeniz;
+    default: return region;
+  }
+}
 
 class RiskScreen extends StatefulWidget {
   const RiskScreen({super.key});
@@ -24,10 +51,17 @@ class _RiskScreenState extends State<RiskScreen> {
   static const _cacheKey = 'risk_summary';
 
   final Dio _dio = Dio();
+  final FireApiService _fireApiService = FireApiService();
   List<Map<String, dynamic>> _regions = [];
   bool _loading = true;
   bool _isOffline = false;
   DateTime? _cachedAt;
+
+  bool _showMyLocation = false;
+  bool _myLocationLoading = false;
+  String? _myLocationError;
+  String? _myCity;
+  String? _myRegionRaw;
 
   @override
   void initState() {
@@ -51,7 +85,7 @@ class _RiskScreenState extends State<RiskScreen> {
           _isOffline = false;
         });
       }
-    } catch (_) {
+    } catch (e) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (mounted) {
         setState(() {
@@ -67,17 +101,74 @@ class _RiskScreenState extends State<RiskScreen> {
     }
   }
 
-  String _displayName(AppLocalizations l10n, String region) {
-    switch (region) {
-      case 'Ic Anadolu': return l10n.regionIcAnadolu;
-      case 'Dogu Anadolu': return l10n.regionDoguAnadolu;
-      case 'Guneydogu Anadolu': return l10n.regionGuneydoguAnadolu;
-      case 'Ege': return l10n.regionEge;
-      case 'Akdeniz': return l10n.regionAkdeniz;
-      case 'Marmara': return l10n.regionMarmara;
-      case 'Karadeniz': return l10n.regionKaradeniz;
-      default: return region;
+  Future<void> _loadMyLocation() async {
+    setState(() {
+      _myLocationLoading = true;
+      _myLocationError = null;
+    });
+
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        setState(() {
+          _myLocationLoading = false;
+          _myLocationError = 'service_off';
+        });
+        return;
+      }
+
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        setState(() {
+          _myLocationLoading = false;
+          _myLocationError = 'permission_denied';
+        });
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+
+      final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
+      final regionRaw = cityInfo['region'];
+      final matches = _regions.any((r) => r['region'] == regionRaw);
+
+      if (!mounted) return;
+      setState(() {
+        _myCity = cityInfo['city'];
+        _myRegionRaw = regionRaw;
+        _myLocationLoading = false;
+        _myLocationError = matches ? null : 'region_not_found';
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _myLocationLoading = false;
+        _myLocationError = 'generic';
+      });
     }
+  }
+
+  void _selectMyLocationTab() {
+    setState(() => _showMyLocation = true);
+    if (_myCity == null && !_myLocationLoading) {
+      _loadMyLocation();
+    }
+  }
+
+  Map<String, dynamic>? get _myRegionData {
+    if (_myRegionRaw == null) return null;
+    for (final r in _regions) {
+      if (r['region'] == _myRegionRaw) return r;
+    }
+    return null;
   }
 
   String _riskLevelTr(AppLocalizations l10n, String level) {
@@ -107,6 +198,65 @@ class _RiskScreenState extends State<RiskScreen> {
     else if (wind >= 15) parts.add(l10n.riskNoteMediumWind(wind.toInt()));
 
     return parts.join(' • ');
+  }
+
+  void _showRegionDetail(BuildContext context, Map<String, dynamic> region) {
+    final l10n = AppLocalizations.of(context)!;
+    final score = region['general_risk_score'] as int;
+    final level = region['risk_level'] as String;
+    final color = _colorForApiLevel(level);
+    final temp = double.tryParse(region['temperature'].toString()) ?? 0;
+    final hum = double.tryParse(region['humidity'].toString()) ?? 0;
+    final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
+    final dryness = double.tryParse(region['dryness_index'].toString()) ?? 0;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        final theme = Theme.of(sheetContext);
+        final isDark = theme.brightness == Brightness.dark;
+        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+        final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.72) : Colors.black.withValues(alpha: 0.62);
+
+        return Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: GlassPanel(
+            padding: const EdgeInsets.all(AppSpacing.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(_displayRegionName(l10n, region['region']),
+                          style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor)),
+                    ),
+                    StatusChip(label: _riskLevelTr(l10n, level), icon: Icons.warning_amber_rounded, color: color),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(l10n.riskScoreOutOf100(score),
+                    style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+                const SizedBox(height: AppSpacing.sm),
+                Text(_riskNote(l10n, region),
+                    style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor)),
+                const SizedBox(height: AppSpacing.lg),
+                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor),
+                const SizedBox(height: 8),
+                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor),
+                const SizedBox(height: 8),
+                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor),
+                const SizedBox(height: 8),
+                _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Map<String, dynamic>? get _highestRisk {
@@ -171,10 +321,13 @@ class _RiskScreenState extends State<RiskScreen> {
     final overallLevel = avgRiskScore >= 75 ? l10n.commonCritical :
                          avgRiskScore >= 50 ? l10n.commonHigh :
                          avgRiskScore >= 25 ? l10n.commonMedium : l10n.commonLow;
-
-    final chartSpots = _regions.asMap().entries.map((e) =>
-        FlSpot(e.key.toDouble(), (e.value['general_risk_score'] as int).toDouble())
-    ).toList();
+    final overallLevelColor = avgRiskScore >= 75
+        ? AppColors.danger
+        : avgRiskScore >= 50
+            ? AppColors.danger
+            : avgRiskScore >= 25
+                ? AppColors.warning
+                : AppColors.success;
 
     DateTime? lastCalculated;
     for (final region in _regions) {
@@ -190,7 +343,11 @@ class _RiskScreenState extends State<RiskScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            onPressed: () { setState(() => _loading = true); _loadRiskData(); },
+            onPressed: () {
+              setState(() => _loading = true);
+              _loadRiskData();
+              if (_showMyLocation) _loadMyLocation();
+            },
           ),
         ],
       ),
@@ -238,12 +395,12 @@ class _RiskScreenState extends State<RiskScreen> {
                         const SizedBox(height: AppSpacing.lg),
                         Row(
                           children: [
-                            StatusChip(label: overallLevel, icon: Icons.warning_amber_rounded),
+                            StatusChip(label: overallLevel, icon: Icons.warning_amber_rounded, color: overallLevelColor),
                             const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
                                 topRegion != null
-                                    ? l10n.riskHighestRisk(_displayName(l10n, topRegion['region']), topRegion['general_risk_score'])
+                                    ? l10n.riskHighestRisk(_displayRegionName(l10n, topRegion['region']), topRegion['general_risk_score'])
                                     : l10n.riskDataLoading,
                                 style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor),
                                 overflow: TextOverflow.ellipsis,
@@ -259,8 +416,46 @@ class _RiskScreenState extends State<RiskScreen> {
                         curve: Curves.easeOutCubic,
                       ).slideY(begin: 0.06, end: 0),
 
+                  const SizedBox(height: AppSpacing.xl),
+
+                  // ── Turkey Overview / My Location toggle ──────────
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _TabToggleButton(
+                          label: l10n.riskTabTurkeyOverview,
+                          selected: !_showMyLocation,
+                          onTap: () => setState(() => _showMyLocation = false),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: _TabToggleButton(
+                          label: l10n.riskTabMyLocation,
+                          selected: _showMyLocation,
+                          onTap: _selectMyLocationTab,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: AppSpacing.xxl),
 
+                  if (_showMyLocation)
+                    _MyLocationSection(
+                      loading: _myLocationLoading,
+                      error: _myLocationError,
+                      city: _myCity,
+                      regionData: _myRegionData,
+                      regions: _regions,
+                      avgRiskScore: avgRiskScore,
+                      onRetry: _loadMyLocation,
+                      onTapRegion: () {
+                        final data = _myRegionData;
+                        if (data != null) _showRegionDetail(context, data);
+                      },
+                    )
+                  else ...[
                   SectionHeader(
                     title: l10n.riskKeyIndicators,
                     subtitle: l10n.riskTurkeyAverage,
@@ -314,7 +509,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxxl),
 
-                  if (chartSpots.isNotEmpty) ...[
+                  if (_regions.isNotEmpty) ...[
                     SectionHeader(
                       title: l10n.riskRegionalDistribution,
                       subtitle: l10n.riskRegionalDistributionSubtitle,
@@ -324,97 +519,139 @@ class _RiskScreenState extends State<RiskScreen> {
                     const SizedBox(height: AppSpacing.md),
 
                     GlassPanel(
-                      child: SizedBox(
-                        height: 260,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(l10n.riskScore,
-                                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
-                            const SizedBox(height: AppSpacing.lg),
-                            Expanded(
-                              child: LineChart(
-                                LineChartData(
-                                  minY: 0,
-                                  maxY: 100,
-                                  gridData: FlGridData(
-                                    show: true,
-                                    drawVerticalLine: false,
-                                    horizontalInterval: 25,
-                                    getDrawingHorizontalLine: (value) => FlLine(
-                                      color: isDark
-                                          ? AppColors.white.withValues(alpha: 0.08)
-                                          : Colors.black.withValues(alpha: 0.08),
-                                      strokeWidth: 1,
-                                    ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(l10n.riskScore,
+                                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
+                              ),
+                              Text(l10n.riskChartTapHint,
+                                  style: GoogleFonts.inter(fontSize: 11, color: mutedTextColor)),
+                            ],
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                          SizedBox(
+                            height: 220,
+                            child: BarChart(
+                              BarChartData(
+                                minY: 0,
+                                maxY: 100,
+                                gridData: FlGridData(
+                                  show: true,
+                                  drawVerticalLine: false,
+                                  horizontalInterval: 25,
+                                  getDrawingHorizontalLine: (value) => FlLine(
+                                    color: isDark
+                                        ? AppColors.white.withValues(alpha: 0.08)
+                                        : Colors.black.withValues(alpha: 0.08),
+                                    strokeWidth: 1,
                                   ),
-                                  titlesData: FlTitlesData(
-                                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    leftTitles: AxisTitles(
-                                      sideTitles: SideTitles(
-                                        showTitles: true,
-                                        interval: 25,
-                                        reservedSize: 34,
-                                        getTitlesWidget: (value, meta) => Text(
-                                          value.toInt().toString(),
-                                          style: GoogleFonts.inter(fontSize: 11, color: mutedTextColor),
-                                        ),
-                                      ),
-                                    ),
-                                    bottomTitles: AxisTitles(
-                                      sideTitles: SideTitles(
-                                        showTitles: true,
-                                        reservedSize: 28,
-                                        getTitlesWidget: (value, meta) {
-                                          final idx = value.toInt();
-                                          if (idx < 0 || idx >= _regions.length) return const SizedBox.shrink();
-                                          final name = _displayName(l10n, _regions[idx]['region']);
-                                          final short = name.length > 4 ? name.substring(0, 4) : name;
-                                          return Padding(
-                                            padding: const EdgeInsets.only(top: 8),
-                                            child: Text(short,
-                                                style: GoogleFonts.inter(fontSize: 10, color: mutedTextColor)),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  borderData: FlBorderData(show: false),
-                                  lineBarsData: [
-                                    LineChartBarData(
-                                      spots: chartSpots,
-                                      isCurved: true,
-                                      color: AppColors.primary,
-                                      barWidth: 3,
-                                      belowBarData: BarAreaData(
-                                        show: true,
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            AppColors.primary.withValues(alpha: 0.24),
-                                            AppColors.primary.withValues(alpha: 0.02),
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                      ),
-                                      dotData: FlDotData(
-                                        show: true,
-                                        getDotPainter: (spot, percent, barData, index) =>
-                                            FlDotCirclePainter(
-                                          radius: 4.5,
-                                          color: AppColors.primary,
-                                          strokeWidth: 2,
-                                          strokeColor: isDark ? AppColors.surface : Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
-                              ).animate(delay: 220.ms).fadeIn(duration: 500.ms).slideY(begin: 0.08, end: 0),
-                            ),
-                          ],
-                        ),
+                                titlesData: FlTitlesData(
+                                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      interval: 25,
+                                      reservedSize: 34,
+                                      getTitlesWidget: (value, meta) => Text(
+                                        value.toInt().toString(),
+                                        style: GoogleFonts.inter(fontSize: 11, color: mutedTextColor),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                borderData: FlBorderData(show: false),
+                                barTouchData: BarTouchData(
+                                  enabled: true,
+                                  touchTooltipData: BarTouchTooltipData(getTooltipColor: (_) => Colors.transparent),
+                                  touchCallback: (event, response) {
+                                    if (!event.isInterestedForInteractions) return;
+                                    final index = response?.spot?.touchedBarGroupIndex;
+                                    if (index == null || index < 0 || index >= _regions.length) return;
+                                    _showRegionDetail(context, _regions[index]);
+                                  },
+                                ),
+                                barGroups: _regions.asMap().entries.map((e) {
+                                  final region = e.value;
+                                  final score = (region['general_risk_score'] as int).toDouble();
+                                  final level = region['risk_level'] as String;
+                                  final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
+                                  return BarChartGroupData(
+                                    x: e.key,
+                                    barRods: [
+                                      BarChartRodData(
+                                        toY: score,
+                                        color: _colorForApiLevel(level),
+                                        width: 22,
+                                        borderRadius: BorderRadius.circular(6),
+                                        borderSide: isMine
+                                            ? BorderSide(color: isDark ? AppColors.white : Colors.black87, width: 2)
+                                            : BorderSide.none,
+                                        backDrawRodData: BackgroundBarChartRodData(
+                                          show: true,
+                                          toY: 100,
+                                          color: isDark
+                                              ? AppColors.white.withValues(alpha: 0.05)
+                                              : Colors.black.withValues(alpha: 0.04),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ).animate(delay: 220.ms).fadeIn(duration: 500.ms).slideY(begin: 0.08, end: 0),
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          // Full region-name legend — kept off the (space-constrained) x-axis
+                          // so long names are never truncated.
+                          Wrap(
+                            spacing: AppSpacing.sm,
+                            runSpacing: AppSpacing.sm,
+                            children: _regions.asMap().entries.map((e) {
+                              final region = e.value;
+                              final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
+                              return InkWell(
+                                borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                                onTap: () => _showRegionDetail(context, region),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                                    border: isMine ? Border.all(color: AppColors.primary.withValues(alpha: 0.5)) : null,
+                                    color: isMine ? AppColors.primary.withValues(alpha: 0.1) : null,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 8, height: 8,
+                                        decoration: BoxDecoration(
+                                          color: _colorForApiLevel(region['risk_level'] as String),
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        _displayRegionName(l10n, region['region']),
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11,
+                                          fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
+                                          color: mutedTextColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
                     ).animate(delay: 180.ms).fadeIn(duration: 380.ms).scale(
                           begin: const Offset(0.98, 0.98),
@@ -439,13 +676,17 @@ class _RiskScreenState extends State<RiskScreen> {
                     final level = region['risk_level'] as String;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                      child: _RegionRiskCard(
-                        region: _displayName(l10n, region['region']),
-                        risk: _riskLevelTr(l10n, level),
-                        rawLevel: level,
-                        score: score,
-                        note: _riskNote(l10n, region),
-                        delay: Duration(milliseconds: 240 + (idx * 70)),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+                        onTap: () => _showRegionDetail(context, region),
+                        child: _RegionRiskCard(
+                          region: _displayRegionName(l10n, region['region']),
+                          risk: _riskLevelTr(l10n, level),
+                          rawLevel: level,
+                          score: score,
+                          note: _riskNote(l10n, region),
+                          delay: Duration(milliseconds: 240 + (idx * 70)),
+                        ),
                       ),
                     );
                   }),
@@ -491,12 +732,264 @@ class _RiskScreenState extends State<RiskScreen> {
                     color: AppColors.success,
                     delay: const Duration(milliseconds: 490),
                   ),
+                  ],
 
                   const SizedBox(height: 100),
                 ],
               ),
             ),
       ),
+    );
+  }
+}
+
+class _TabToggleButton extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _TabToggleButton({required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: isDark ? 0.1 : 0.08),
+          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        ),
+        child: Text(label,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: selected ? Colors.white : AppColors.primary,
+            )),
+      ),
+    );
+  }
+}
+
+class _MyLocationSection extends StatelessWidget {
+  final bool loading;
+  final String? error;
+  final String? city;
+  final Map<String, dynamic>? regionData;
+  final List<Map<String, dynamic>> regions;
+  final int avgRiskScore;
+  final VoidCallback onRetry;
+  final VoidCallback onTapRegion;
+
+  const _MyLocationSection({
+    required this.loading,
+    required this.error,
+    required this.city,
+    required this.regionData,
+    required this.regions,
+    required this.avgRiskScore,
+    required this.onRetry,
+    required this.onTapRegion,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+    final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.74) : Colors.black.withValues(alpha: 0.66);
+
+    if (loading) {
+      return GlassPanel(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          children: [
+            const CircularProgressIndicator(color: AppColors.primary),
+            const SizedBox(height: AppSpacing.md),
+            Text(l10n.riskMyLocationGettingLocation,
+                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+          ],
+        ),
+      );
+    }
+
+    if (error != null) {
+      final message = switch (error) {
+        'service_off' => l10n.riskMyLocationServiceOff,
+        'permission_denied' => l10n.riskMyLocationPermissionDenied,
+        'region_not_found' => l10n.riskMyLocationRegionNotFound,
+        _ => l10n.riskMyLocationError,
+      };
+      return GlassPanel(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          children: [
+            Icon(Icons.location_off_rounded, color: secondaryTextColor, size: 32),
+            const SizedBox(height: AppSpacing.md),
+            Text(message, textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+            const SizedBox(height: AppSpacing.lg),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.my_location_rounded),
+              label: Text(l10n.riskMyLocationEnableButton),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final data = regionData;
+    if (data == null) {
+      return GlassPanel(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Text(l10n.riskDataLoading, style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+      );
+    }
+
+    final score = data['general_risk_score'] as int;
+    final level = data['risk_level'] as String;
+    final color = _colorForApiLevel(level);
+    final temp = double.tryParse(data['temperature'].toString()) ?? 0;
+    final hum = double.tryParse(data['humidity'].toString()) ?? 0;
+    final wind = double.tryParse(data['wind_speed'].toString()) ?? 0;
+    final dryness = double.tryParse(data['dryness_index'].toString()) ?? 0;
+
+    final sorted = [...regions]..sort((a, b) => (b['general_risk_score'] as int).compareTo(a['general_risk_score'] as int));
+    final rank = sorted.indexWhere((r) => r['region'] == data['region']) + 1;
+    final diff = score - avgRiskScore;
+    final diffStr = diff > 0 ? '+$diff' : '$diff';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+          onTap: onTapRegion,
+          child: GlassPanel(
+            padding: const EdgeInsets.all(AppSpacing.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.riskMyLocationYourRegion(city ?? '', _displayRegionName(l10n, data['region'])),
+                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor),
+                      ),
+                    ),
+                    StatusChip(label: _riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Text(l10n.riskScoreOutOf100(score),
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: color)),
+                const SizedBox(height: 4),
+                Text(l10n.riskMyLocationRankLabel(rank),
+                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                const SizedBox(height: 4),
+                Text(l10n.riskMyLocationVsAverage(diffStr),
+                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+              ],
+            ),
+          ),
+        ).animate().fadeIn(duration: 380.ms).scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)),
+
+        const SizedBox(height: AppSpacing.xxl),
+
+        SectionHeader(
+          title: l10n.riskMyLocationMetricsTitle,
+          subtitle: city ?? '',
+          icon: Icons.dashboard_rounded,
+        ),
+        const SizedBox(height: AppSpacing.md),
+
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisSpacing: AppSpacing.md,
+          mainAxisSpacing: AppSpacing.md,
+          childAspectRatio: 1.15,
+          children: [
+            _RiskMetricCard(
+              title: l10n.riskGeneralRisk,
+              value: '$score',
+              subtitle: l10n.riskOutOf100,
+              icon: Icons.local_fire_department_rounded,
+              accent: color,
+              delay: const Duration(milliseconds: 100),
+            ),
+            _RiskMetricCard(
+              title: l10n.commonWind,
+              value: '${wind.toInt()} km/h',
+              subtitle: wind >= 30 ? l10n.riskWindIncreasesSpread : l10n.riskWindNormal,
+              icon: Icons.air_rounded,
+              accent: AppColors.warning,
+              delay: const Duration(milliseconds: 160),
+            ),
+            _RiskMetricCard(
+              title: l10n.riskHumidity,
+              value: '%${hum.toInt()}',
+              subtitle: hum <= 30 ? l10n.riskHumidityLow : hum <= 50 ? l10n.riskHumidityMedium : l10n.riskHumidityHigh,
+              icon: Icons.water_drop_outlined,
+              accent: AppColors.primary,
+              delay: const Duration(milliseconds: 220),
+            ),
+            _RiskMetricCard(
+              title: l10n.commonTemperature,
+              value: '${temp.toInt()}°C',
+              subtitle: temp >= 35 ? l10n.riskTempCritical : temp >= 25 ? l10n.commonHigh : l10n.riskTempNormal,
+              icon: Icons.thermostat_rounded,
+              accent: temp >= 35 ? AppColors.danger : AppColors.warning,
+              delay: const Duration(milliseconds: 280),
+            ),
+            _RiskMetricCard(
+              title: l10n.riskDrynessIndex,
+              value: '${dryness.toInt()}',
+              subtitle: dryness >= 70 ? l10n.riskDrynessVeryHigh : dryness >= 50 ? l10n.commonHigh : l10n.commonMedium,
+              icon: Icons.grain_rounded,
+              accent: AppColors.danger,
+              delay: const Duration(milliseconds: 340),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  String _riskLevelLabel(AppLocalizations l10n, String level) {
+    switch (level) {
+      case 'Critical': return l10n.commonCritical;
+      case 'High': return l10n.commonHigh;
+      case 'Medium': return l10n.commonMedium;
+      default: return l10n.commonLow;
+    }
+  }
+}
+
+class _DetailMetricRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  const _DetailMetricRow({required this.icon, required this.label, required this.value, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: AppSpacing.sm),
+        Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
+        Expanded(child: Text(value, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color))),
+      ],
     );
   }
 }
@@ -578,14 +1071,7 @@ class _RegionRiskCard extends StatelessWidget {
     this.delay = Duration.zero,
   });
 
-  Color get accent {
-    switch (rawLevel) {
-      case 'Critical': return AppColors.danger;
-      case 'High': return AppColors.danger;
-      case 'Medium': return AppColors.warning;
-      default: return AppColors.success;
-    }
-  }
+  Color get accent => _colorForApiLevel(rawLevel);
 
   @override
   Widget build(BuildContext context) {
@@ -609,7 +1095,7 @@ class _RegionRiskCard extends StatelessWidget {
                     style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor)),
               ),
               const SizedBox(width: AppSpacing.sm),
-              StatusChip(label: risk, icon: Icons.warning_amber_rounded),
+              StatusChip(label: risk, icon: Icons.warning_amber_rounded, color: accent),
             ],
           ),
           const SizedBox(height: AppSpacing.md),

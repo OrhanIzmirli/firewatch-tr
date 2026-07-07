@@ -121,11 +121,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<void> _sendDemoFireNotification() async {
     setState(() => _isBusy = true);
     if (_highRiskFires.isNotEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       final fire = _highRiskFires.first;
       await NotificationService.instance.showFireEventAlert(
         fireId: '${fire.latitude}_${fire.longitude}',
-        title: 'Kritik Yangın Uyarısı',
-        body: '${fire.regionName} bölgesinde yüksek riskli termal aktivite tespit edildi.',
+        title: l10n.notificationsDemoAlertTitle,
+        body: l10n.notificationsDemoAlertBody(fire.regionDisplayName(l10n)),
       );
     } else {
       await NotificationService.instance.showTestNotification();
@@ -153,14 +154,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     await _monitor.stopMonitoring();
     if (!mounted) return;
     setState(() => _isBusy = false);
-  }
-
-  Color _riskColor(String level) {
-    switch (level) {
-      case 'Yüksek': return AppColors.danger;
-      case 'Orta': return AppColors.warning;
-      default: return AppColors.success;
-    }
   }
 
   @override
@@ -339,13 +332,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(fire.regionName,
+                                          Text(fire.regionDisplayName(l10n),
                                               style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
                                           const SizedBox(height: 4),
                                           Text(l10n.notificationsDistanceAndTime(fire.distanceKm?.toStringAsFixed(1) ?? '-', _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime)),
                                               style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 4),
-                                          Text(l10n.notificationsRiskLabel(fire.riskLevel),
+                                          Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
                                               style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
                                         ],
                                       ),
@@ -399,7 +392,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () => context.push('/fire-detail', extra: convertPointToFireEvent(fire)),
+                                  onTap: () => context.push('/fire-detail', extra: convertPointToFireEvent(fire, l10n)),
                                   borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                                   child: GlassPanel(
                                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -442,13 +435,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                               const SizedBox(height: AppSpacing.sm),
                                               Text(
-                                                l10n.notificationsHighRiskDetectionBody(fire.regionName, bright.toStringAsFixed(0)),
+                                                l10n.notificationsHighRiskDetectionBody(fire.regionDisplayName(l10n), bright.toStringAsFixed(0)),
                                                 style: GoogleFonts.inter(fontSize: 13, height: 1.42, color: secondaryTextColor),
                                               ),
                                               const SizedBox(height: AppSpacing.md),
                                               Row(
                                                 children: [
-                                                  StatusChip(label: l10n.commonHigh, icon: Icons.warning_amber_rounded),
+                                                  StatusChip(label: l10n.commonHigh, icon: Icons.warning_amber_rounded, color: AppColors.danger),
                                                   const SizedBox(width: AppSpacing.sm),
                                                   Expanded(
                                                     child: Text(

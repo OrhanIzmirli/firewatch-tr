@@ -70,20 +70,16 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   }
 
   Future<void> _shareFireEvent() async {
+    final l10n = AppLocalizations.of(context)!;
     final fire = widget.fireEvent;
-    final text = '''
-🔥 Yangın Uyarısı
-
-📍 ${fire.title}
-📌 ${fire.city} / ${fire.district}
-
-🚨 Durum: ${fire.status}
-⚠️ Risk: ${fire.riskLevel}
-
-📝 ${fire.description}
-
-FireWatch TR ile takip ediliyor.
-''';
+    final text = l10n.fireDetailShareText(
+      fire.title,
+      fire.city,
+      fire.district,
+      fire.status,
+      fire.riskLevel,
+      fire.description,
+    );
     await Share.share(text);
   }
 
@@ -120,7 +116,11 @@ FireWatch TR ile takip ediliyor.
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  StatusChip(label: fire.status, icon: Icons.local_fire_department_rounded),
+                  StatusChip(
+                    label: fire.status,
+                    icon: Icons.local_fire_department_rounded,
+                    color: AppColors.forRiskTier(fire.riskTier),
+                  ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(fire.title,
                       style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),

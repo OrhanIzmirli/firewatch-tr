@@ -2371,6 +2371,589 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Şimdilik Geç'**
   String get locPermSkip;
+
+  /// No description provided for @compassNorth.
+  ///
+  /// In tr, this message translates to:
+  /// **'K'**
+  String get compassNorth;
+
+  /// No description provided for @compassSouth.
+  ///
+  /// In tr, this message translates to:
+  /// **'G'**
+  String get compassSouth;
+
+  /// No description provided for @compassEast.
+  ///
+  /// In tr, this message translates to:
+  /// **'D'**
+  String get compassEast;
+
+  /// No description provided for @compassWest.
+  ///
+  /// In tr, this message translates to:
+  /// **'B'**
+  String get compassWest;
+
+  /// No description provided for @riskReasonHighWithTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Termal sensör {temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.'**
+  String riskReasonHighWithTemp(String temp);
+
+  /// No description provided for @riskReasonHighNoTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek güven seviyesinde termal anomali tespit edildi. Aktif yangın olabilir.'**
+  String get riskReasonHighNoTemp;
+
+  /// No description provided for @riskReasonMediumWithTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Termal sensör {temp}K ısı ölçtü. Anız yakma, tarım faaliyeti veya erken evre yangın olabilir.'**
+  String riskReasonMediumWithTemp(String temp);
+
+  /// No description provided for @riskReasonMediumNoTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta düzey termal anomali. Bölge izleme altında tutulmalı.'**
+  String get riskReasonMediumNoTemp;
+
+  /// No description provided for @riskReasonLowWithTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük ısı değeri ({temp}K). Sanayi, seracılık veya doğal ısı kaynağı olabilir.'**
+  String riskReasonLowWithTemp(String temp);
+
+  /// No description provided for @riskReasonLowNoTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük seviye termal aktivite. Takip önerilir.'**
+  String get riskReasonLowNoTemp;
+
+  /// No description provided for @fireGeneratedDescHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.'**
+  String get fireGeneratedDescHigh;
+
+  /// No description provided for @fireGeneratedDescMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta seviye ısı artışı. Bölge izleme gerektirir.'**
+  String get fireGeneratedDescMedium;
+
+  /// No description provided for @fireGeneratedDescLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük seviye termal aktivite. Takip önerilir.'**
+  String get fireGeneratedDescLow;
+
+  /// No description provided for @fireRecommendedActionHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeden uzak dur, resmi yönlendirmeleri takip et ve tahliye hazırlığını yap.'**
+  String get fireRecommendedActionHigh;
+
+  /// No description provided for @fireRecommendedActionMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelişmeleri takip et, bölgeye gereksiz yaklaşma.'**
+  String get fireRecommendedActionMedium;
+
+  /// No description provided for @fireRecommendedActionLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.'**
+  String get fireRecommendedActionLow;
+
+  /// No description provided for @fireEventRegionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{city} Bölgesi Termal Tespiti'**
+  String fireEventRegionTitle(String city);
+
+  /// No description provided for @fireEventLiveDetectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Canlı Yangın Tespiti'**
+  String get fireEventLiveDetectionTitle;
+
+  /// No description provided for @fireEventStatusActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif'**
+  String get fireEventStatusActive;
+
+  /// No description provided for @fireEventStatusMonitoring.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzleniyor'**
+  String get fireEventStatusMonitoring;
+
+  /// No description provided for @fireEventStatusControlled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol Altında'**
+  String get fireEventStatusControlled;
+
+  /// No description provided for @fireEventSpreadHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek — aktif izleme gerekli'**
+  String get fireEventSpreadHigh;
+
+  /// No description provided for @fireEventSpreadMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta — dikkatli takip et'**
+  String get fireEventSpreadMedium;
+
+  /// No description provided for @fireEventSpreadLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük'**
+  String get fireEventSpreadLow;
+
+  /// No description provided for @fireEventWindStatus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gerçek veri için harita üzerinde kontrol et'**
+  String get fireEventWindStatus;
+
+  /// No description provided for @fireEventAreaLarge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geniş alan (>100 hektar tahmini)'**
+  String get fireEventAreaLarge;
+
+  /// No description provided for @fireEventAreaMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta alan (10-100 hektar tahmini)'**
+  String get fireEventAreaMedium;
+
+  /// No description provided for @fireEventAreaSmall.
+  ///
+  /// In tr, this message translates to:
+  /// **'Küçük alan (<10 hektar tahmini)'**
+  String get fireEventAreaSmall;
+
+  /// No description provided for @fireEventTempLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcaklık: {temp}°C (Termal değer: {kelvin}K)'**
+  String fireEventTempLine(String temp, String kelvin);
+
+  /// No description provided for @fireEventSatelliteLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu: {satellite}'**
+  String fireEventSatelliteLine(String satellite);
+
+  /// No description provided for @fireEventCoordinateLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koordinat: {coordinate}'**
+  String fireEventCoordinateLine(String coordinate);
+
+  /// No description provided for @fireEventDetectionLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit: {datetime}'**
+  String fireEventDetectionLine(String datetime);
+
+  /// No description provided for @fireDetailShareText.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔥 Yangın Uyarısı\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Durum: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nFireWatch TR ile takip ediliyor.'**
+  String fireDetailShareText(
+    String title,
+    String city,
+    String district,
+    String status,
+    String risk,
+    String description,
+  );
+
+  /// No description provided for @notificationsDemoAlertTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kritik Yangın Uyarısı'**
+  String get notificationsDemoAlertTitle;
+
+  /// No description provided for @notificationsDemoAlertBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} bölgesinde yüksek riskli termal aktivite tespit edildi.'**
+  String notificationsDemoAlertBody(String region);
+
+  /// No description provided for @settingsRefreshInterval5Min.
+  ///
+  /// In tr, this message translates to:
+  /// **'5 dk'**
+  String get settingsRefreshInterval5Min;
+
+  /// No description provided for @settingsRefreshInterval15Min.
+  ///
+  /// In tr, this message translates to:
+  /// **'15 dk'**
+  String get settingsRefreshInterval15Min;
+
+  /// No description provided for @settingsRefreshInterval30Min.
+  ///
+  /// In tr, this message translates to:
+  /// **'30 dk'**
+  String get settingsRefreshInterval30Min;
+
+  /// No description provided for @settingsRefreshInterval60Min.
+  ///
+  /// In tr, this message translates to:
+  /// **'60 dk'**
+  String get settingsRefreshInterval60Min;
+
+  /// No description provided for @newsDetailTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haber Detayı'**
+  String get newsDetailTitle;
+
+  /// No description provided for @newsDetailHighlightsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öne Çıkan Noktalar'**
+  String get newsDetailHighlightsTitle;
+
+  /// No description provided for @newsDetailHighlightsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı özet'**
+  String get newsDetailHighlightsSubtitle;
+
+  /// No description provided for @newsDetailFullContentTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detaylı İçerik'**
+  String get newsDetailFullContentTitle;
+
+  /// No description provided for @newsDetailFullContentSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelişmenin tam özeti'**
+  String get newsDetailFullContentSubtitle;
+
+  /// No description provided for @newsDetailRelatedRegionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgili Bölge'**
+  String get newsDetailRelatedRegionTitle;
+
+  /// No description provided for @newsDetailRelatedRegionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantılı risk alanı'**
+  String get newsDetailRelatedRegionSubtitle;
+
+  /// No description provided for @newsDetailRelatedRegionNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.'**
+  String get newsDetailRelatedRegionNote;
+
+  /// No description provided for @newsDetailReadMinutes.
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dk okuma'**
+  String newsDetailReadMinutes(int minutes);
+
+  /// No description provided for @newsTranslate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevir'**
+  String get newsTranslate;
+
+  /// No description provided for @newsTranslating.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevriliyor...'**
+  String get newsTranslating;
+
+  /// No description provided for @newsTranslated.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevrildi'**
+  String get newsTranslated;
+
+  /// No description provided for @newsShowOriginal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orijinali Göster'**
+  String get newsShowOriginal;
+
+  /// No description provided for @newsTranslationFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çeviri başarısız oldu.'**
+  String get newsTranslationFailed;
+
+  /// No description provided for @coachMarksGotIt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anladım'**
+  String get coachMarksGotIt;
+
+  /// No description provided for @coachMarksSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öğreticiyi Atla'**
+  String get coachMarksSkip;
+
+  /// No description provided for @coachMarksNext.
+  ///
+  /// In tr, this message translates to:
+  /// **'İleri'**
+  String get coachMarksNext;
+
+  /// No description provided for @coachMarksStepCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{current}/{total}'**
+  String coachMarksStepCount(int current, int total);
+
+  /// No description provided for @coachMarkMapTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita ve Yangın Noktaları'**
+  String get coachMarkMapTitle;
+
+  /// No description provided for @coachMarkMapDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki alevli işaretler NASA uydu verisiyle tespit edilen canlı yangın noktalarını gösterir. Bir işarete dokunarak detayları görebilir, buradan yeni bir yangın da bildirebilirsin.'**
+  String get coachMarkMapDesc;
+
+  /// No description provided for @coachMarkRiskTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Seviyeleri'**
+  String get coachMarkRiskTitle;
+
+  /// No description provided for @coachMarkRiskDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her yangın noktası Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanı sağlar.'**
+  String get coachMarkRiskDesc;
+
+  /// No description provided for @coachMarkWatchlistTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilenler'**
+  String get coachMarkWatchlistTitle;
+
+  /// No description provided for @coachMarkWatchlistDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip etmek istediğin yangın noktalarını kaydet ve buradan hızlıca tekrar ulaş.'**
+  String get coachMarkWatchlistDesc;
+
+  /// No description provided for @coachMarkNotificationsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler'**
+  String get coachMarkNotificationsTitle;
+
+  /// No description provided for @coachMarkNotificationsDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınındaki yangınlar için anlık bildirim al ve otomatik taramayı buradan başlat.'**
+  String get coachMarkNotificationsDesc;
+
+  /// No description provided for @riskTabTurkeyOverview.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Geneli'**
+  String get riskTabTurkeyOverview;
+
+  /// No description provided for @riskTabMyLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumum'**
+  String get riskTabMyLocation;
+
+  /// No description provided for @riskMyLocationGettingLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz alınıyor...'**
+  String get riskMyLocationGettingLocation;
+
+  /// No description provided for @riskMyLocationPermissionDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni verilmedi. Bölge risk bilgisini görmek için izin ver.'**
+  String get riskMyLocationPermissionDenied;
+
+  /// No description provided for @riskMyLocationServiceOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum servisi kapalı. Lütfen açın.'**
+  String get riskMyLocationServiceOff;
+
+  /// No description provided for @riskMyLocationError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz alınamadı. Lütfen tekrar deneyin.'**
+  String get riskMyLocationError;
+
+  /// No description provided for @riskMyLocationRegionNotFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeniz risk verisinde bulunamadı.'**
+  String get riskMyLocationRegionNotFound;
+
+  /// No description provided for @riskMyLocationEnableButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu Etkinleştir'**
+  String get riskMyLocationEnableButton;
+
+  /// No description provided for @riskMyLocationYourRegion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgen: {city} ({region})'**
+  String riskMyLocationYourRegion(String city, String region);
+
+  /// No description provided for @riskMyLocationRankLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıralama: {rank}/7'**
+  String riskMyLocationRankLabel(int rank);
+
+  /// No description provided for @riskMyLocationVsAverage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye ortalamasına göre: {diff}'**
+  String riskMyLocationVsAverage(String diff);
+
+  /// No description provided for @riskMyLocationMetricsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgenin Verileri'**
+  String get riskMyLocationMetricsTitle;
+
+  /// No description provided for @riskChartTapHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detaylar için bir bölgeye dokun'**
+  String get riskChartTapHint;
+
+  /// No description provided for @monitorStatusReady.
+  ///
+  /// In tr, this message translates to:
+  /// **'Monitoring servisi hazır.'**
+  String get monitorStatusReady;
+
+  /// No description provided for @monitorStatusAlreadyRunning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik tarama zaten çalışıyor.'**
+  String get monitorStatusAlreadyRunning;
+
+  /// No description provided for @monitorStatusStarted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik tarama başlatıldı...'**
+  String get monitorStatusStarted;
+
+  /// No description provided for @monitorStatusStopped.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik tarama durduruldu.'**
+  String get monitorStatusStopped;
+
+  /// No description provided for @monitorStatusGettingLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alınıyor...'**
+  String get monitorStatusGettingLocation;
+
+  /// No description provided for @monitorStatusLocationServiceOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum servisi kapalı. Lütfen konumu açın.'**
+  String get monitorStatusLocationServiceOff;
+
+  /// No description provided for @monitorStatusLocationDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum izni verilmedi.'**
+  String get monitorStatusLocationDenied;
+
+  /// No description provided for @monitorStatusFetchingData.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS verisi çekiliyor...'**
+  String get monitorStatusFetchingData;
+
+  /// No description provided for @monitorStatusNoActiveFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an aktif yangın verisi bulunamadı.'**
+  String get monitorStatusNoActiveFires;
+
+  /// No description provided for @monitorStatusNoNearbyFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'✅ 50 km içinde canlı yangın tespiti yok. ({count} nokta tarandı)'**
+  String monitorStatusNoNearbyFires(int count);
+
+  /// No description provided for @monitorStatusNearbyFiresFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'⚠️ 50 km içinde {count} yangın noktası bulundu!'**
+  String monitorStatusNearbyFiresFound(int count);
+
+  /// No description provided for @monitorStatusTimeout.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA API bağlantı zaman aşımı. İnternet bağlantınızı kontrol edin.'**
+  String get monitorStatusTimeout;
+
+  /// No description provided for @monitorStatusLocationFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alınamadı. Lütfen tekrar deneyin.'**
+  String get monitorStatusLocationFailed;
+
+  /// No description provided for @monitorStatusScanFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarama başarısız: {error}'**
+  String monitorStatusScanFailed(String error);
+
+  /// No description provided for @notifNearbyFireTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınında yangın tespiti var'**
+  String get notifNearbyFireTitle;
+
+  /// No description provided for @notifNearbyFireBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{distance} içinde {count} yangın noktası bulundu.'**
+  String notifNearbyFireBody(String distance, int count);
+
+  /// No description provided for @notifTestBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Test bildirimi hazır.'**
+  String get notifTestBody;
+
+  /// No description provided for @notifNewNotificationBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni bildirim'**
+  String get notifNewNotificationBody;
 }
 
 class _AppLocalizationsDelegate

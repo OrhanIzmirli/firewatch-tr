@@ -516,5 +516,191 @@
   "locPermSubtitle": "Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.",
   "locPermNote": "Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.",
   "locPermEnable": "Konumu Etkinleştir",
-  "locPermSkip": "Şimdilik Geç"
+  "locPermSkip": "Şimdilik Geç",
+
+  "compassNorth": "K",
+  "compassSouth": "G",
+  "compassEast": "D",
+  "compassWest": "B",
+
+  "riskReasonHighWithTemp": "Termal sensör {temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.",
+  "@riskReasonHighWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonHighNoTemp": "Yüksek güven seviyesinde termal anomali tespit edildi. Aktif yangın olabilir.",
+  "riskReasonMediumWithTemp": "Termal sensör {temp}K ısı ölçtü. Anız yakma, tarım faaliyeti veya erken evre yangın olabilir.",
+  "@riskReasonMediumWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonMediumNoTemp": "Orta düzey termal anomali. Bölge izleme altında tutulmalı.",
+  "riskReasonLowWithTemp": "Düşük ısı değeri ({temp}K). Sanayi, seracılık veya doğal ısı kaynağı olabilir.",
+  "@riskReasonLowWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonLowNoTemp": "Düşük seviye termal aktivite. Takip önerilir.",
+
+  "fireGeneratedDescHigh": "Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.",
+  "fireGeneratedDescMedium": "Orta seviye ısı artışı. Bölge izleme gerektirir.",
+  "fireGeneratedDescLow": "Düşük seviye termal aktivite. Takip önerilir.",
+
+  "fireRecommendedActionHigh": "Bölgeden uzak dur, resmi yönlendirmeleri takip et ve tahliye hazırlığını yap.",
+  "fireRecommendedActionMedium": "Gelişmeleri takip et, bölgeye gereksiz yaklaşma.",
+  "fireRecommendedActionLow": "Şu an acil aksiyon gerekmiyor, bölgeyi takip et.",
+
+  "fireEventRegionTitle": "{city} Bölgesi Termal Tespiti",
+  "@fireEventRegionTitle": {
+    "placeholders": { "city": { "type": "String" } }
+  },
+  "fireEventLiveDetectionTitle": "Canlı Yangın Tespiti",
+  "fireEventStatusActive": "Aktif",
+  "fireEventStatusMonitoring": "İzleniyor",
+  "fireEventStatusControlled": "Kontrol Altında",
+  "fireEventSpreadHigh": "Yüksek — aktif izleme gerekli",
+  "fireEventSpreadMedium": "Orta — dikkatli takip et",
+  "fireEventSpreadLow": "Düşük",
+  "fireEventWindStatus": "Gerçek veri için harita üzerinde kontrol et",
+  "fireEventAreaLarge": "Geniş alan (>100 hektar tahmini)",
+  "fireEventAreaMedium": "Orta alan (10-100 hektar tahmini)",
+  "fireEventAreaSmall": "Küçük alan (<10 hektar tahmini)",
+  "fireEventTempLine": "Sıcaklık: {temp}°C (Termal değer: {kelvin}K)",
+  "@fireEventTempLine": {
+    "placeholders": {
+      "temp": { "type": "String" },
+      "kelvin": { "type": "String" }
+    }
+  },
+  "fireEventSatelliteLine": "Uydu: {satellite}",
+  "@fireEventSatelliteLine": {
+    "placeholders": { "satellite": { "type": "String" } }
+  },
+  "fireEventCoordinateLine": "Koordinat: {coordinate}",
+  "@fireEventCoordinateLine": {
+    "placeholders": { "coordinate": { "type": "String" } }
+  },
+  "fireEventDetectionLine": "Tespit: {datetime}",
+  "@fireEventDetectionLine": {
+    "placeholders": { "datetime": { "type": "String" } }
+  },
+
+  "fireDetailShareText": "🔥 Yangın Uyarısı\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Durum: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nFireWatch TR ile takip ediliyor.",
+  "@fireDetailShareText": {
+    "placeholders": {
+      "title": { "type": "String" },
+      "city": { "type": "String" },
+      "district": { "type": "String" },
+      "status": { "type": "String" },
+      "risk": { "type": "String" },
+      "description": { "type": "String" }
+    }
+  },
+
+  "notificationsDemoAlertTitle": "Kritik Yangın Uyarısı",
+  "notificationsDemoAlertBody": "{region} bölgesinde yüksek riskli termal aktivite tespit edildi.",
+  "@notificationsDemoAlertBody": {
+    "placeholders": { "region": { "type": "String" } }
+  },
+
+  "settingsRefreshInterval5Min": "5 dk",
+  "settingsRefreshInterval15Min": "15 dk",
+  "settingsRefreshInterval30Min": "30 dk",
+  "settingsRefreshInterval60Min": "60 dk",
+
+  "newsDetailTitle": "Haber Detayı",
+  "newsDetailHighlightsTitle": "Öne Çıkan Noktalar",
+  "newsDetailHighlightsSubtitle": "Hızlı özet",
+  "newsDetailFullContentTitle": "Detaylı İçerik",
+  "newsDetailFullContentSubtitle": "Gelişmenin tam özeti",
+  "newsDetailRelatedRegionTitle": "İlgili Bölge",
+  "newsDetailRelatedRegionSubtitle": "Bağlantılı risk alanı",
+  "newsDetailRelatedRegionNote": "Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.",
+  "newsDetailReadMinutes": "{minutes} dk okuma",
+  "@newsDetailReadMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+
+  "newsTranslate": "Çevir",
+  "newsTranslating": "Çevriliyor...",
+  "newsTranslated": "Çevrildi",
+  "newsShowOriginal": "Orijinali Göster",
+  "newsTranslationFailed": "Çeviri başarısız oldu.",
+
+  "coachMarksGotIt": "Anladım",
+  "coachMarksSkip": "Öğreticiyi Atla",
+  "coachMarksNext": "İleri",
+  "coachMarksStepCount": "{current}/{total}",
+  "@coachMarksStepCount": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "coachMarkMapTitle": "Harita ve Yangın Noktaları",
+  "coachMarkMapDesc": "Haritadaki alevli işaretler NASA uydu verisiyle tespit edilen canlı yangın noktalarını gösterir. Bir işarete dokunarak detayları görebilir, buradan yeni bir yangın da bildirebilirsin.",
+  "coachMarkRiskTitle": "Risk Seviyeleri",
+  "coachMarkRiskDesc": "Her yangın noktası Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanı sağlar.",
+  "coachMarkWatchlistTitle": "Kaydedilenler",
+  "coachMarkWatchlistDesc": "Takip etmek istediğin yangın noktalarını kaydet ve buradan hızlıca tekrar ulaş.",
+  "coachMarkNotificationsTitle": "Bildirimler",
+  "coachMarkNotificationsDesc": "Yakınındaki yangınlar için anlık bildirim al ve otomatik taramayı buradan başlat.",
+
+  "riskTabTurkeyOverview": "Türkiye Geneli",
+  "riskTabMyLocation": "Konumum",
+  "riskMyLocationGettingLocation": "Konumunuz alınıyor...",
+  "riskMyLocationPermissionDenied": "Konum izni verilmedi. Bölge risk bilgisini görmek için izin ver.",
+  "riskMyLocationServiceOff": "Konum servisi kapalı. Lütfen açın.",
+  "riskMyLocationError": "Konumunuz alınamadı. Lütfen tekrar deneyin.",
+  "riskMyLocationRegionNotFound": "Bölgeniz risk verisinde bulunamadı.",
+  "riskMyLocationEnableButton": "Konumu Etkinleştir",
+  "riskMyLocationYourRegion": "Bölgen: {city} ({region})",
+  "@riskMyLocationYourRegion": {
+    "placeholders": {
+      "city": { "type": "String" },
+      "region": { "type": "String" }
+    }
+  },
+  "riskMyLocationRankLabel": "Sıralama: {rank}/7",
+  "@riskMyLocationRankLabel": {
+    "placeholders": { "rank": { "type": "int" } }
+  },
+  "riskMyLocationVsAverage": "Türkiye ortalamasına göre: {diff}",
+  "@riskMyLocationVsAverage": {
+    "placeholders": { "diff": { "type": "String" } }
+  },
+  "riskMyLocationMetricsTitle": "Bölgenin Verileri",
+  "riskChartTapHint": "Detaylar için bir bölgeye dokun",
+
+  "monitorStatusReady": "Monitoring servisi hazır.",
+  "monitorStatusAlreadyRunning": "Otomatik tarama zaten çalışıyor.",
+  "monitorStatusStarted": "Otomatik tarama başlatıldı...",
+  "monitorStatusStopped": "Otomatik tarama durduruldu.",
+  "monitorStatusGettingLocation": "Konum alınıyor...",
+  "monitorStatusLocationServiceOff": "Konum servisi kapalı. Lütfen konumu açın.",
+  "monitorStatusLocationDenied": "Konum izni verilmedi.",
+  "monitorStatusFetchingData": "NASA FIRMS verisi çekiliyor...",
+  "monitorStatusNoActiveFires": "Şu an aktif yangın verisi bulunamadı.",
+  "monitorStatusNoNearbyFires": "✅ 50 km içinde canlı yangın tespiti yok. ({count} nokta tarandı)",
+  "@monitorStatusNoNearbyFires": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "monitorStatusNearbyFiresFound": "⚠️ 50 km içinde {count} yangın noktası bulundu!",
+  "@monitorStatusNearbyFiresFound": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "monitorStatusTimeout": "NASA API bağlantı zaman aşımı. İnternet bağlantınızı kontrol edin.",
+  "monitorStatusLocationFailed": "Konum alınamadı. Lütfen tekrar deneyin.",
+  "monitorStatusScanFailed": "Tarama başarısız: {error}",
+  "@monitorStatusScanFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "notifNearbyFireTitle": "Yakınında yangın tespiti var",
+  "notifNearbyFireBody": "{distance} içinde {count} yangın noktası bulundu.",
+  "@notifNearbyFireBody": {
+    "placeholders": {
+      "distance": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "notifTestBody": "Test bildirimi hazır.",
+  "notifNewNotificationBody": "Yeni bildirim"
 }

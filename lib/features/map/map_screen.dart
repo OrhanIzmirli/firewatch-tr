@@ -207,7 +207,7 @@ class _MapScreenState extends State<MapScreen> {
               children: [
                 Row(
                   children: [
-                    StatusChip(label: point.riskLevel, icon: Icons.local_fire_department_rounded),
+                    StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
                     const SizedBox(width: 8),
                     StatusChip(label: timeAgo, icon: Icons.access_time_rounded),
                   ],
@@ -215,12 +215,12 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.lg),
                 Text(
                   point.cityName != null
-                      ? '${point.cityName} (${point.nearestRegion ?? point.regionName})'
-                      : point.regionName,
+                      ? '${point.cityName} (${point.nearestRegion ?? point.regionDisplayName(l10n)})'
+                      : point.regionDisplayName(l10n),
                   style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                Text(point.riskReason, style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor)),
+                Text(point.riskReasonText(l10n), style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
                 _DetailRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '$tempC°C', color: secondaryTextColor),
                 const SizedBox(height: 8),
@@ -234,7 +234,7 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.lg),
                 GlassPanel(
                   padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Text(point.recommendedAction, style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: titleColor)),
+                  child: Text(point.recommendedActionText(l10n), style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: titleColor)),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Row(
@@ -249,7 +249,7 @@ class _MapScreenState extends State<MapScreen> {
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: FilledButton.icon(
-                        onPressed: () { Navigator.pop(context); context.push('/fire-detail', extra: convertPointToFireEvent(point)); },
+                        onPressed: () { Navigator.pop(context); context.push('/fire-detail', extra: convertPointToFireEvent(point, l10n)); },
                         icon: const Icon(Icons.arrow_forward_rounded),
                         label: Text(l10n.commonDetail),
                       ),
@@ -448,8 +448,8 @@ class _MapScreenState extends State<MapScreen> {
                                         // ── Şehir + Bölge ──────────────────────
                                         Text(
                                           point.cityName != null
-                                              ? '${point.cityName} — ${point.nearestRegion ?? point.regionName}'
-                                              : point.regionName,
+                                              ? '${point.cityName} — ${point.nearestRegion ?? point.regionDisplayName(l10n)}'
+                                              : point.regionDisplayName(l10n),
                                           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor),
                                         ),
                                         Text(
@@ -461,7 +461,7 @@ class _MapScreenState extends State<MapScreen> {
                                       ],
                                     ),
                                   ),
-                                  StatusChip(label: point.riskLevel, icon: Icons.warning_amber_rounded),
+                                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
                                 ],
                               ),
                               const SizedBox(height: AppSpacing.md),
@@ -474,7 +474,7 @@ class _MapScreenState extends State<MapScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(point.riskReason, style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor)),
+                                    Text(point.riskReasonText(l10n), style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor)),
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
@@ -489,7 +489,7 @@ class _MapScreenState extends State<MapScreen> {
                                         Icon(Icons.location_on_rounded, size: 14, color: secondaryTextColor),
                                         const SizedBox(width: 4),
                                         Expanded(
-                                          child: Text(point.locationLabel,
+                                          child: Text(point.locationLabelText(l10n),
                                               style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
                                               overflow: TextOverflow.ellipsis),
                                         ),

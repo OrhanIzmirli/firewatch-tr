@@ -516,5 +516,191 @@
   "locPermSubtitle": "With location access, we can show wildfire events, risky regions, and more relevant alerts near you.",
   "locPermNote": "This permission isn't required. You can skip it for now and still use the app.",
   "locPermEnable": "Enable Location",
-  "locPermSkip": "Skip for Now"
+  "locPermSkip": "Skip for Now",
+
+  "compassNorth": "N",
+  "compassSouth": "S",
+  "compassEast": "E",
+  "compassWest": "W",
+
+  "riskReasonHighWithTemp": "Thermal sensor detected {temp}K heat. High likelihood of an active fire — stay away from the area.",
+  "@riskReasonHighWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonHighNoTemp": "A high-confidence thermal anomaly was detected. This may be an active fire.",
+  "riskReasonMediumWithTemp": "Thermal sensor measured {temp}K heat. This could be stubble burning, farming activity, or an early-stage fire.",
+  "@riskReasonMediumWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonMediumNoTemp": "A medium-level thermal anomaly. The area should be kept under observation.",
+  "riskReasonLowWithTemp": "Low heat value ({temp}K). Could be industrial activity, greenhouses, or a natural heat source.",
+  "@riskReasonLowWithTemp": {
+    "placeholders": { "temp": { "type": "String" } }
+  },
+  "riskReasonLowNoTemp": "Low-level thermal activity. Monitoring is recommended.",
+
+  "fireGeneratedDescHigh": "High-intensity thermal activity. Strong likelihood of an active fire.",
+  "fireGeneratedDescMedium": "Moderate heat increase. The area needs monitoring.",
+  "fireGeneratedDescLow": "Low-level thermal activity. Monitoring is recommended.",
+
+  "fireRecommendedActionHigh": "Stay away from the area, follow official guidance, and prepare for possible evacuation.",
+  "fireRecommendedActionMedium": "Keep track of developments and avoid getting close to the area unnecessarily.",
+  "fireRecommendedActionLow": "No urgent action needed right now — keep an eye on the area.",
+
+  "fireEventRegionTitle": "{city} Region Thermal Detection",
+  "@fireEventRegionTitle": {
+    "placeholders": { "city": { "type": "String" } }
+  },
+  "fireEventLiveDetectionTitle": "Live Fire Detection",
+  "fireEventStatusActive": "Active",
+  "fireEventStatusMonitoring": "Monitoring",
+  "fireEventStatusControlled": "Under Control",
+  "fireEventSpreadHigh": "High — active monitoring required",
+  "fireEventSpreadMedium": "Medium — monitor carefully",
+  "fireEventSpreadLow": "Low",
+  "fireEventWindStatus": "Check the map for real wind data",
+  "fireEventAreaLarge": "Large area (>100 hectares estimated)",
+  "fireEventAreaMedium": "Medium area (10-100 hectares estimated)",
+  "fireEventAreaSmall": "Small area (<10 hectares estimated)",
+  "fireEventTempLine": "Temperature: {temp}°C (Thermal value: {kelvin}K)",
+  "@fireEventTempLine": {
+    "placeholders": {
+      "temp": { "type": "String" },
+      "kelvin": { "type": "String" }
+    }
+  },
+  "fireEventSatelliteLine": "Satellite: {satellite}",
+  "@fireEventSatelliteLine": {
+    "placeholders": { "satellite": { "type": "String" } }
+  },
+  "fireEventCoordinateLine": "Coordinate: {coordinate}",
+  "@fireEventCoordinateLine": {
+    "placeholders": { "coordinate": { "type": "String" } }
+  },
+  "fireEventDetectionLine": "Detected: {datetime}",
+  "@fireEventDetectionLine": {
+    "placeholders": { "datetime": { "type": "String" } }
+  },
+
+  "fireDetailShareText": "🔥 Fire Alert\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Status: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nTracked with FireWatch TR.",
+  "@fireDetailShareText": {
+    "placeholders": {
+      "title": { "type": "String" },
+      "city": { "type": "String" },
+      "district": { "type": "String" },
+      "status": { "type": "String" },
+      "risk": { "type": "String" },
+      "description": { "type": "String" }
+    }
+  },
+
+  "notificationsDemoAlertTitle": "Critical Fire Alert",
+  "notificationsDemoAlertBody": "High-risk thermal activity detected in the {region} region.",
+  "@notificationsDemoAlertBody": {
+    "placeholders": { "region": { "type": "String" } }
+  },
+
+  "settingsRefreshInterval5Min": "5 min",
+  "settingsRefreshInterval15Min": "15 min",
+  "settingsRefreshInterval30Min": "30 min",
+  "settingsRefreshInterval60Min": "60 min",
+
+  "newsDetailTitle": "News Detail",
+  "newsDetailHighlightsTitle": "Highlights",
+  "newsDetailHighlightsSubtitle": "Quick summary",
+  "newsDetailFullContentTitle": "Full Content",
+  "newsDetailFullContentSubtitle": "Full story summary",
+  "newsDetailRelatedRegionTitle": "Related Region",
+  "newsDetailRelatedRegionSubtitle": "Linked risk area",
+  "newsDetailRelatedRegionNote": "This development may be linked to the region's risk and operations flow.",
+  "newsDetailReadMinutes": "{minutes} min read",
+  "@newsDetailReadMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+
+  "newsTranslate": "Translate",
+  "newsTranslating": "Translating...",
+  "newsTranslated": "Translated",
+  "newsShowOriginal": "Show Original",
+  "newsTranslationFailed": "Translation failed.",
+
+  "coachMarksGotIt": "Got it",
+  "coachMarksSkip": "Skip tutorial",
+  "coachMarksNext": "Next",
+  "coachMarksStepCount": "{current}/{total}",
+  "@coachMarksStepCount": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "coachMarkMapTitle": "Map & Fire Markers",
+  "coachMarkMapDesc": "Flame markers on the map show live fire detections from NASA satellite data. Tap a marker to see details — you can also report a new fire from the map screen.",
+  "coachMarkRiskTitle": "Risk Levels",
+  "coachMarkRiskDesc": "Every fire point is labeled High, Medium, or Low risk. These tags help you quickly understand how dangerous an area is.",
+  "coachMarkWatchlistTitle": "Watchlist",
+  "coachMarkWatchlistDesc": "Save fire points you want to keep an eye on, and quickly find them again here.",
+  "coachMarkNotificationsTitle": "Notifications",
+  "coachMarkNotificationsDesc": "Get instant alerts for fires near you, and start automatic scanning from here.",
+
+  "riskTabTurkeyOverview": "Turkey Overview",
+  "riskTabMyLocation": "My Location",
+  "riskMyLocationGettingLocation": "Getting your location...",
+  "riskMyLocationPermissionDenied": "Location permission denied. Allow access to see your region's risk info.",
+  "riskMyLocationServiceOff": "Location service is off. Please enable it.",
+  "riskMyLocationError": "Couldn't get your location. Please try again.",
+  "riskMyLocationRegionNotFound": "Your region wasn't found in the risk data.",
+  "riskMyLocationEnableButton": "Enable Location",
+  "riskMyLocationYourRegion": "Your region: {city} ({region})",
+  "@riskMyLocationYourRegion": {
+    "placeholders": {
+      "city": { "type": "String" },
+      "region": { "type": "String" }
+    }
+  },
+  "riskMyLocationRankLabel": "Rank: {rank}/7",
+  "@riskMyLocationRankLabel": {
+    "placeholders": { "rank": { "type": "int" } }
+  },
+  "riskMyLocationVsAverage": "Compared to Turkey average: {diff}",
+  "@riskMyLocationVsAverage": {
+    "placeholders": { "diff": { "type": "String" } }
+  },
+  "riskMyLocationMetricsTitle": "Your Region's Data",
+  "riskChartTapHint": "Tap a region for details",
+
+  "monitorStatusReady": "Monitoring service ready.",
+  "monitorStatusAlreadyRunning": "Automatic scanning is already running.",
+  "monitorStatusStarted": "Automatic scanning started...",
+  "monitorStatusStopped": "Automatic scanning stopped.",
+  "monitorStatusGettingLocation": "Getting location...",
+  "monitorStatusLocationServiceOff": "Location service is off. Please turn it on.",
+  "monitorStatusLocationDenied": "Location permission denied.",
+  "monitorStatusFetchingData": "Fetching NASA FIRMS data...",
+  "monitorStatusNoActiveFires": "No active fire data found right now.",
+  "monitorStatusNoNearbyFires": "✅ No live fire detections within 50 km. ({count} points scanned)",
+  "@monitorStatusNoNearbyFires": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "monitorStatusNearbyFiresFound": "⚠️ {count} fire points found within 50 km!",
+  "@monitorStatusNearbyFiresFound": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "monitorStatusTimeout": "NASA API connection timed out. Check your internet connection.",
+  "monitorStatusLocationFailed": "Couldn't get location. Please try again.",
+  "monitorStatusScanFailed": "Scan failed: {error}",
+  "@monitorStatusScanFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "notifNearbyFireTitle": "Fire detected nearby",
+  "notifNearbyFireBody": "{count} fire points found within {distance}.",
+  "@notifNearbyFireBody": {
+    "placeholders": {
+      "distance": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "notifTestBody": "Test notification ready.",
+  "notifNewNotificationBody": "New notification"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -50,7 +51,8 @@ class _FireDeepLinkScreenState extends State<FireDeepLinkScreen> {
         // ~0.05 deg (~5km) tolerance to account for float rounding in the id.
         if (closest != null && closest.distSq < 0.05 * 0.05) {
           if (!mounted) return;
-          context.go('/fire-detail', extra: convertPointToFireEvent(closest.point));
+          final l10n = AppLocalizations.of(context)!;
+          context.go('/fire-detail', extra: convertPointToFireEvent(closest.point, l10n));
           return;
         }
       } catch (_) {

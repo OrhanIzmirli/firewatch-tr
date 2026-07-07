@@ -21,14 +21,10 @@ class CoachMarkStep {
 
 const String _seenPrefsKey = 'hasSeenCoachMarks';
 
-/// Shows the first-launch coach mark tour if it hasn't been seen yet.
-/// Safe to call every time MainShellScreen mounts — it's a no-op after the
-/// first successful (or skipped) run.
+/// Shows the first-launch coach mark tour (Home tab + bottom nav) if it
+/// hasn't been seen yet. Safe to call every time MainShellScreen mounts —
+/// it's a no-op after the first successful (or skipped) run.
 Future<void> maybeShowCoachMarks(BuildContext context) async {
-  final prefs = await SharedPreferences.getInstance();
-  if (prefs.getBool(_seenPrefsKey) ?? false) return;
-  if (!context.mounted) return;
-
   final l10n = AppLocalizations.of(context)!;
   final steps = [
     CoachMarkStep(
@@ -53,6 +49,25 @@ Future<void> maybeShowCoachMarks(BuildContext context) async {
     ),
   ];
 
+  await maybeShowScreenCoachMarks(context, prefsKey: _seenPrefsKey, steps: steps);
+}
+
+/// Generic, reusable first-visit coach mark tour for any screen. Each
+/// screen passes its own SharedPreferences key (so tours are tracked
+/// independently) and its own steps (GlobalKeys must already be attached
+/// to widgets in the current tree and laid out — call this after the
+/// first frame, with a short delay if needed).
+Future<void> maybeShowScreenCoachMarks(
+  BuildContext context, {
+  required String prefsKey,
+  required List<CoachMarkStep> steps,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+  if (prefs.getBool(prefsKey) ?? false) return;
+  if (!context.mounted) return;
+  if (steps.isEmpty) return;
+
+  final l10n = AppLocalizations.of(context)!;
   final overlay = Overlay.of(context, rootOverlay: true);
   late OverlayEntry entry;
   int index = 0;
@@ -60,7 +75,7 @@ Future<void> maybeShowCoachMarks(BuildContext context) async {
   Future<void> finish() async {
     entry.remove();
     final donePrefs = await SharedPreferences.getInstance();
-    await donePrefs.setBool(_seenPrefsKey, true);
+    await donePrefs.setBool(prefsKey, true);
   }
 
   void showStep() {

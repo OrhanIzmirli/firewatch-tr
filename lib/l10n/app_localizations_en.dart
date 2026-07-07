@@ -1722,6 +1722,98 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trustCardLabel => 'About This Data';
 
   @override
+  String get trustAspectMeaningTitle => 'What does this mean?';
+
+  @override
+  String get trustAspectSourceTitle => 'Where does this come from?';
+
+  @override
+  String get trustAspectInterpretTitle => 'How to interpret it';
+
+  @override
+  String get trustAspectActionTitle => 'What should I do?';
+
+  @override
+  String get trustHomeMeaning =>
+      'Fire counts on this screen are active thermal detections from the last 24 hours, not confirmed wildfires — some may be agricultural burns or industrial heat sources.';
+
+  @override
+  String get trustHomeSource =>
+      'Data comes from NASA FIRMS (Fire Information for Resource Management System), combining VIIRS and MODIS satellite passes, refreshed every 3 hours.';
+
+  @override
+  String get trustHomeInterpret =>
+      'A high fire count in a region doesn\'t always mean high danger — check the Risk tab for weather-adjusted risk scores before drawing conclusions.';
+
+  @override
+  String get trustHomeAction =>
+      'Tap any fire card for full details, or add it to your Watchlist to track updates. If you\'re near an active fire, check Notifications for real-time alerts.';
+
+  @override
+  String get trustMapMeaning =>
+      'Each marker is a single satellite hotspot detection, not necessarily an active fire — the confidence level shown in fire details indicates how reliable the detection is.';
+
+  @override
+  String get trustMapSource =>
+      'Hotspots come from the VIIRS instrument aboard the Suomi-NPP and NOAA-20 satellites, which detect thermal radiation from the ground.';
+
+  @override
+  String get trustMapInterpret =>
+      'Clustered numbers mean multiple detections are close together — zoom in to see individual points. Tighter clusters often indicate a larger, ongoing fire.';
+
+  @override
+  String get trustMapAction =>
+      'See a fire in person that isn\'t on the map? Use the Report button to alert others. Tap \"Nearby Fires\" to see what\'s close to your current location.';
+
+  @override
+  String get trustRiskMeaning =>
+      'The risk score (0-100) estimates wildfire likelihood by combining temperature, humidity, wind speed, and dryness — it is a forecast, not a guarantee.';
+
+  @override
+  String get trustRiskSource =>
+      'Weather data is pulled from live meteorological feeds; fire counts factor in recent NASA FIRMS detections for each region.';
+
+  @override
+  String get trustRiskInterpret =>
+      'Compare your region\'s score to the Turkey average on the chart — a score significantly above average signals elevated local conditions worth monitoring.';
+
+  @override
+  String get trustRiskAction =>
+      'If your region shows Critical or High risk, avoid open flames and report any smoke immediately. Switch to the \"My Location\" tab for a personalized breakdown.';
+
+  @override
+  String get trustNewsMeaning =>
+      'Headlines are automatically filtered to keep only wildfire, disaster, and emergency-related coverage — unrelated political or sports stories are excluded.';
+
+  @override
+  String get trustNewsSource =>
+      'Articles are aggregated from 9 established Turkish news outlets via their public RSS feeds, refreshed continuously throughout the day.';
+
+  @override
+  String get trustNewsInterpret =>
+      'A \"Breaking\" badge means the article was published very recently — always check the publish time, as wildfire situations can change quickly.';
+
+  @override
+  String get trustNewsAction =>
+      'Use the Translate button to read non-English articles, or tap \"Related Fires\" on a story to jump directly to that location on the map.';
+
+  @override
+  String get trustAlertsMeaning =>
+      'Alerts notify you when a satellite detects a fire within 50km of your last known location — they are automated and based on detection data, not verified reports.';
+
+  @override
+  String get trustAlertsSource =>
+      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location.';
+
+  @override
+  String get trustAlertsInterpret =>
+      '\"High confidence\" alerts are more reliable than \"nominal\" ones — check the risk reason text on each card for the specific factors driving that alert.';
+
+  @override
+  String get trustAlertsAction =>
+      'Grant notification permission and start Auto Monitoring to get alerts even when the app is closed. Use \"Scan Now\" anytime to manually check your surroundings.';
+
+  @override
   String get newsReadFullArticle => 'Read Full Article';
 
   @override
@@ -1840,4 +1932,160 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tooltipSatelliteModisBody =>
       'MODIS: Terra/Aqua satellite, provides wider coverage.';
+
+  @override
+  String get reportPanelDuplicateLocationBlocked =>
+      'A report has already been sent from this location. Please wait for authorities to respond.';
+
+  @override
+  String get reportPanelDailyLimitReached =>
+      'You\'ve reached today\'s report limit (max 5 per day). Please try again tomorrow.';
+
+  @override
+  String fireDetailRelatedToCity(String city) {
+    return 'Related to $city';
+  }
+
+  @override
+  String get fireDetailRegionalNews => 'Regional News';
+
+  @override
+  String get coachMarkMapMarkersTitle => 'Fire Markers';
+
+  @override
+  String get coachMarkMapMarkersDesc =>
+      'Flame icons on the map show live fire detections from NASA satellites. Tap one to see details.';
+
+  @override
+  String get coachMarkMapClustersTitle => 'Cluster Numbers';
+
+  @override
+  String get coachMarkMapClustersDesc =>
+      'Fire points close to each other group into a circle showing a count. Zoom in to split them apart.';
+
+  @override
+  String get coachMarkMapReportTitle => 'Report a Fire';
+
+  @override
+  String get coachMarkMapReportDesc =>
+      'Tap the button in the bottom right to report a fire you\'ve spotted, along with your GPS location.';
+
+  @override
+  String get coachMarkMapNearbyTitle => 'Fires Near Me';
+
+  @override
+  String get coachMarkMapNearbyDesc =>
+      'This section lists the live fire detections closest to your location, sorted by distance.';
+
+  @override
+  String get coachMarkNewsFeaturedTitle => 'Featured Story';
+
+  @override
+  String get coachMarkNewsFeaturedDesc =>
+      'Today\'s most important development is highlighted here.';
+
+  @override
+  String get coachMarkNewsCategoryTitle => 'Categories';
+
+  @override
+  String get coachMarkNewsCategoryDesc =>
+      'Filter news by Risk, Operation, Safety, or Update category.';
+
+  @override
+  String get coachMarkNewsRegionTitle => 'Regions';
+
+  @override
+  String get coachMarkNewsRegionDesc =>
+      'Filter news by a specific region to surface developments closer to you.';
+
+  @override
+  String get coachMarkNewsListTitle => 'Tap an Article';
+
+  @override
+  String get coachMarkNewsListDesc =>
+      'Tap an article to read the full text — in English mode, you can translate the title and summary with one tap.';
+
+  @override
+  String get coachMarkNotifPermissionTitle => 'Notification Permission';
+
+  @override
+  String get coachMarkNotifPermissionDesc =>
+      'Grant permission to get instant alerts about fires near you.';
+
+  @override
+  String get coachMarkNotifScanTitle => 'Scan Now';
+
+  @override
+  String get coachMarkNotifScanDesc =>
+      'Instantly check whether there are live fires within 50 km of your location.';
+
+  @override
+  String get coachMarkNotifMonitoringTitle => 'Auto Monitoring';
+
+  @override
+  String get coachMarkNotifMonitoringDesc =>
+      'Start auto monitoring so nearby fires are periodically checked even when the app is closed.';
+
+  @override
+  String get coachMarkNotifAlertsTitle => 'Alert Cards';
+
+  @override
+  String get coachMarkNotifAlertsDesc =>
+      'High-risk detections are listed here — tap a card to see the full details.';
+
+  @override
+  String get coachMarkRiskScoreTitle => 'Risk Score';
+
+  @override
+  String get coachMarkRiskScoreDesc =>
+      'This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the ℹ️ button to see exactly how.';
+
+  @override
+  String get coachMarkRiskChartTitle => 'Regional Distribution';
+
+  @override
+  String get coachMarkRiskChartDesc =>
+      'Tap a region\'s bar to see that region\'s detailed risk breakdown.';
+
+  @override
+  String get coachMarkRiskMyLocationTabTitle => 'My Location';
+
+  @override
+  String get coachMarkRiskMyLocationTabDesc =>
+      'Switch to this tab to compare your own region\'s risk against the Turkey average.';
+
+  @override
+  String get coachMarkRiskInfoTitle => 'Data Sources';
+
+  @override
+  String get coachMarkRiskInfoDesc =>
+      'The ℹ️ button explains the risk score formula, data sources, and how often it updates.';
+
+  @override
+  String get coachMarkWatchlistPurposeTitle => 'What\'s the Watchlist For?';
+
+  @override
+  String get coachMarkWatchlistPurposeDesc =>
+      'Keep the fire points you want to follow all in one place here.';
+
+  @override
+  String get coachMarkWatchlistHowToAddTitle => 'How to Add';
+
+  @override
+  String get coachMarkWatchlistHowToAddDesc =>
+      'Tap the bookmark button on a fire\'s detail screen to save it here.';
+
+  @override
+  String get coachMarkWatchlistClearTitle => 'Clear';
+
+  @override
+  String get coachMarkWatchlistClearDesc =>
+      'Use the Clear button in the top corner to remove all saved points at once.';
+
+  @override
+  String get coachMarkWatchlistTapTitle => 'View Details';
+
+  @override
+  String get coachMarkWatchlistTapDesc =>
+      'Tap a saved fire to see its current status and full details.';
 }

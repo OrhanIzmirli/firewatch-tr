@@ -349,7 +349,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ).slideY(begin: 0.08, end: 0),
 
             const SizedBox(height: AppSpacing.md),
-            TrustInfoCard(text: l10n.trustHomeInfo),
+            TrustInfoCardGroup(
+              meaning: l10n.trustHomeMeaning,
+              source: l10n.trustHomeSource,
+              interpret: l10n.trustHomeInterpret,
+              action: l10n.trustHomeAction,
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 

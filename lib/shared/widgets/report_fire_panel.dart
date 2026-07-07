@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/report_spam_guard.dart';
 import 'glass_panel.dart';
 import 'status_chip.dart';
 
@@ -107,6 +108,16 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       return;
     }
 
+    final spamCheck = await ReportSpamGuard.instance.checkBeforeSubmit(_latitude!, _longitude!);
+    if (spamCheck.isBlocked) {
+      _showSnack(
+        spamCheck.reason == ReportBlockReason.duplicateLocation
+            ? l10n.reportPanelDuplicateLocationBlocked
+            : l10n.reportPanelDailyLimitReached,
+      );
+      return;
+    }
+
     setState(() => _isSubmitting = true);
 
     try {
@@ -137,6 +148,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       );
 
       if (response.statusCode == 200) {
+        await ReportSpamGuard.instance.recordReport(_latitude!, _longitude!);
+
         final data = response.data['data'];
         final verified = data['verified'] as bool;
         final message = data['message'] as String;

@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/turkish_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
 import '../../models/news_item.dart';
@@ -19,6 +20,8 @@ import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+
+enum _RelatedNewsTier { region, city, generic }
 
 class FireDetailScreen extends ConsumerStatefulWidget {
   final FireEvent fireEvent;
@@ -41,7 +44,9 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _newsFuture = _newsService.fetchNewsFromRender(limit: 3);
+    // Fetch a larger candidate pool so _selectRelatedNews has enough to
+    // work with — only the top 3 after tiering are actually shown/translated.
+    _newsFuture = _newsService.fetchNewsFromRender(limit: 20);
   }
 
   @override
@@ -52,10 +57,35 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     if (Localizations.localeOf(context).languageCode != 'en') return;
     _newsFuture?.then((items) {
       if (!mounted) return;
-      for (final item in items) {
+      final (selected, _) = _selectRelatedNews(items, widget.fireEvent);
+      for (final item in selected) {
         _autoTranslateItem(item);
       }
     });
+  }
+
+  /// Picks up to 3 related news articles, preferring the most specific
+  /// match: (1) the article's relatedRegion matches the fire's region,
+  /// (2) the fire's city/region name appears in the article title, (3)
+  /// falls back to the most recent fire-related news already returned.
+  (List<NewsItem>, _RelatedNewsTier) _selectRelatedNews(List<NewsItem> allNews, FireEvent fire) {
+    final fireRegionFold = foldTurkish(fire.regionNameTr);
+    final cityFold = foldTurkish(fire.city);
+
+    final regionMatches = allNews.where((n) => foldTurkish(n.relatedRegion) == fireRegionFold).toList();
+    if (regionMatches.isNotEmpty) {
+      return (regionMatches.take(3).toList(), _RelatedNewsTier.region);
+    }
+
+    final titleMatches = allNews.where((n) {
+      final titleFold = foldTurkish(n.title);
+      return (cityFold.isNotEmpty && titleFold.contains(cityFold)) || titleFold.contains(fireRegionFold);
+    }).toList();
+    if (titleMatches.isNotEmpty) {
+      return (titleMatches.take(3).toList(), _RelatedNewsTier.city);
+    }
+
+    return (allNews.take(3).toList(), _RelatedNewsTier.generic);
   }
 
   Future<void> _autoTranslateItem(NewsItem item) async {
@@ -295,7 +325,14 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                final news = snapshot.data ?? [];
+                final allNews = snapshot.data ?? [];
+                if (allNews.isEmpty) {
+                  return GlassPanel(
+                    child: Text(l10n.fireDetailNoNewsFound,
+                        style: GoogleFonts.inter(color: secondaryTextColor)),
+                  );
+                }
+                final (news, tier) = _selectRelatedNews(allNews, fire);
                 if (news.isEmpty) {
                   return GlassPanel(
                     child: Text(l10n.fireDetailNoNewsFound,
@@ -303,7 +340,18 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   );
                 }
                 return Column(
-                  children: news.map((item) {
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (tier != _RelatedNewsTier.generic) ...[
+                      Text(
+                        tier == _RelatedNewsTier.city
+                            ? l10n.fireDetailRelatedToCity(fire.city)
+                            : l10n.fireDetailRegionalNews,
+                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
+                    ...news.map((item) {
                     final isTranslating = _translatingIds.contains(item.id);
                     final displayTitle = _translatedTitles[item.id] ?? item.title;
                     final displaySummary = _translatedSummaries[item.id] ?? item.summary;
@@ -352,7 +400,8 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
+                  ],
                 );
               },
             ),

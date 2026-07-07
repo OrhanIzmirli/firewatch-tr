@@ -15,6 +15,8 @@ import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/offline_cache_service.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/offline_banner.dart';
@@ -54,7 +56,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    _bootstrapMapData();
+    _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -67,6 +69,41 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _bootstrapMapData() async {
     await _loadUserLocation();
     await _loadFirePoints();
+  }
+
+  void _maybeShowMapCoachMarks() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
+      await maybeShowScreenCoachMarks(
+        context,
+        prefsKey: 'hasSeenMapTour',
+        steps: [
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.mapArea,
+            title: l10n.coachMarkMapMarkersTitle,
+            description: l10n.coachMarkMapMarkersDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.mapArea,
+            title: l10n.coachMarkMapClustersTitle,
+            description: l10n.coachMarkMapClustersDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.mapReportFab,
+            title: l10n.coachMarkMapReportTitle,
+            description: l10n.coachMarkMapReportDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.mapNearbyFiresSection,
+            title: l10n.coachMarkMapNearbyTitle,
+            description: l10n.coachMarkMapNearbyDesc,
+          ),
+        ],
+      );
+    });
   }
 
   Future<void> _loadUserLocation() async {
@@ -316,13 +353,19 @@ class _MapScreenState extends State<MapScreen> {
                 ).animate().fadeIn(duration: 450.ms).scale(begin: const Offset(0.97, 0.97), end: const Offset(1, 1), curve: Curves.easeOutCubic).slideY(begin: 0.06, end: 0),
 
                 const SizedBox(height: AppSpacing.md),
-                TrustInfoCard(text: l10n.trustMapInfo),
+                TrustInfoCardGroup(
+                  meaning: l10n.trustMapMeaning,
+                  source: l10n.trustMapSource,
+                  interpret: l10n.trustMapInterpret,
+                  action: l10n.trustMapAction,
+                ),
 
                 const SizedBox(height: AppSpacing.xxl),
                 SectionHeader(title: l10n.mapArea, subtitle: l10n.mapAreaSubtitle, icon: Icons.public_rounded),
                 const SizedBox(height: AppSpacing.md),
 
                 GlassPanel(
+                  key: CoachMarkKeys.mapArea,
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: SizedBox(
                     height: 380,
@@ -424,7 +467,7 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.xxl),
 
                 if (_nearbyFirePoints.isNotEmpty) ...[
-                  SectionHeader(title: l10n.mapNearbyFires, subtitle: l10n.mapNearbyFiresSubtitle, icon: Icons.near_me_rounded),
+                  SectionHeader(key: CoachMarkKeys.mapNearbyFiresSection, title: l10n.mapNearbyFires, subtitle: l10n.mapNearbyFiresSubtitle, icon: Icons.near_me_rounded),
                   const SizedBox(height: AppSpacing.md),
                   ..._nearbyFirePoints.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -568,6 +611,7 @@ class _MapScreenState extends State<MapScreen> {
           child: IgnorePointer(
             ignoring: _isReportOpen,
             child: FloatingActionButton.extended(
+              key: CoachMarkKeys.mapReportFab,
               onPressed: _openReportPanel,
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,

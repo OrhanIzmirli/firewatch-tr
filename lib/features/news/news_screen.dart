@@ -8,6 +8,8 @@ import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
 import '../../services/offline_cache_service.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -92,8 +94,43 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadNews();
+    _loadNews().then((_) => _maybeShowNewsCoachMarks());
     _scrollController.addListener(_onScroll);
+  }
+
+  void _maybeShowNewsCoachMarks() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
+      await maybeShowScreenCoachMarks(
+        context,
+        prefsKey: 'hasSeenNewsTour',
+        steps: [
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.newsFeatured,
+            title: l10n.coachMarkNewsFeaturedTitle,
+            description: l10n.coachMarkNewsFeaturedDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.newsCategoryFilters,
+            title: l10n.coachMarkNewsCategoryTitle,
+            description: l10n.coachMarkNewsCategoryDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.newsRegionFilters,
+            title: l10n.coachMarkNewsRegionTitle,
+            description: l10n.coachMarkNewsRegionDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.newsList,
+            title: l10n.coachMarkNewsListTitle,
+            description: l10n.coachMarkNewsListDesc,
+          ),
+        ],
+      );
+    });
   }
 
   void _onScroll() {
@@ -292,13 +329,19 @@ class _NewsScreenState extends State<NewsScreen> {
                 ).slideY(begin: 0.06, end: 0),
 
             const SizedBox(height: AppSpacing.md),
-            TrustInfoCard(text: l10n.trustNewsInfo),
+            TrustInfoCardGroup(
+              meaning: l10n.trustNewsMeaning,
+              source: l10n.trustNewsSource,
+              interpret: l10n.trustNewsInterpret,
+              action: l10n.trustNewsAction,
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 
             // ── Featured Card ──────────────────────────────────
             if (_allNews.isNotEmpty) ...[
               SectionHeader(
+                key: CoachMarkKeys.newsFeatured,
                 title: l10n.newsFeatured,
                 subtitle: l10n.newsFeaturedSubtitle,
                 icon: Icons.bolt_rounded,
@@ -324,6 +367,7 @@ class _NewsScreenState extends State<NewsScreen> {
             const SizedBox(height: AppSpacing.md),
 
             Wrap(
+              key: CoachMarkKeys.newsCategoryFilters,
               spacing: 10,
               runSpacing: 10,
               children: _categories.asMap().entries.map((entry) {
@@ -354,6 +398,7 @@ class _NewsScreenState extends State<NewsScreen> {
             const SizedBox(height: AppSpacing.md),
 
             Wrap(
+              key: CoachMarkKeys.newsRegionFilters,
               spacing: 10,
               runSpacing: 10,
               children: _regions.asMap().entries.map((entry) {
@@ -376,6 +421,7 @@ class _NewsScreenState extends State<NewsScreen> {
 
             // ── Son Haberler ───────────────────────────────────
             SectionHeader(
+              key: CoachMarkKeys.newsList,
               title: l10n.newsLatest,
               subtitle: _isLoading
                   ? l10n.commonLoading

@@ -69,6 +69,7 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
             : l10n.fireEventStatusControlled,
     riskLevel: point.riskLevelLabel(l10n),
     riskTier: point.riskTier,
+    regionNameTr: point.canonicalRegionNameTr,
     updatedAt: timeAgo,
     startedAt: formattedStart,
     affectedArea: affectedArea,

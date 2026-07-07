@@ -12,6 +12,8 @@ import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/offline_cache_service.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -44,7 +46,42 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadFires();
+    _loadFires().then((_) => _maybeShowNotifCoachMarks());
+  }
+
+  void _maybeShowNotifCoachMarks() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
+      await maybeShowScreenCoachMarks(
+        context,
+        prefsKey: 'hasSeenNotificationsTour',
+        steps: [
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.notifPermissionButton,
+            title: l10n.coachMarkNotifPermissionTitle,
+            description: l10n.coachMarkNotifPermissionDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.notifScanButton,
+            title: l10n.coachMarkNotifScanTitle,
+            description: l10n.coachMarkNotifScanDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.notifMonitoringButton,
+            title: l10n.coachMarkNotifMonitoringTitle,
+            description: l10n.coachMarkNotifMonitoringDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.notifAlertCards,
+            title: l10n.coachMarkNotifAlertsTitle,
+            description: l10n.coachMarkNotifAlertsDesc,
+          ),
+        ],
+      );
+    });
   }
 
   Future<void> _loadFires() async {
@@ -217,7 +254,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.06, end: 0),
 
                         const SizedBox(height: AppSpacing.md),
-                        TrustInfoCard(text: l10n.trustAlertsInfo),
+                        TrustInfoCardGroup(
+                          meaning: l10n.trustAlertsMeaning,
+                          source: l10n.trustAlertsSource,
+                          interpret: l10n.trustAlertsInterpret,
+                          action: l10n.trustAlertsAction,
+                        ),
 
                         const SizedBox(height: AppSpacing.xxl),
 
@@ -252,6 +294,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: FilledButton.icon(
+                                  key: CoachMarkKeys.notifPermissionButton,
                                   onPressed: _isBusy ? null : _requestNotificationPermission,
                                   icon: const Icon(Icons.notifications_active_rounded),
                                   label: Text(l10n.notificationsRequestPermission),
@@ -279,6 +322,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: OutlinedButton.icon(
+                                  key: CoachMarkKeys.notifScanButton,
                                   onPressed: _isBusy ? null : _checkNearbyFireRisk,
                                   icon: const Icon(Icons.near_me_rounded),
                                   label: Text(l10n.notificationsScanNow),
@@ -288,6 +332,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: FilledButton.icon(
+                                  key: CoachMarkKeys.notifMonitoringButton,
                                   onPressed: _isBusy || isRunning ? null : _startAutoMonitoring,
                                   icon: const Icon(Icons.play_arrow_rounded),
                                   label: Text(l10n.notificationsStartMonitoring),
@@ -363,6 +408,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
                         // ── NASA FIRMS Yüksek Risk Uyarıları ─────
                         SectionHeader(
+                          key: CoachMarkKeys.notifAlertCards,
                           title: l10n.notificationsRecentAlerts,
                           subtitle: _fireLoading ? l10n.commonLoading : l10n.notificationsHighRiskCount(_highRiskFires.length),
                           icon: Icons.bolt_rounded,

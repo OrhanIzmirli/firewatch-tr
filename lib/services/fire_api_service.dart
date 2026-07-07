@@ -1,5 +1,6 @@
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
+import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
 
 class FireApiService {
@@ -35,13 +36,13 @@ class FireApiService {
       );
       if (response.statusCode == 200) {
         final data = response.data['data'];
-        return {
-          'city': data['city'] ?? 'Türkiye',
-          'region': data['region'] ?? 'Türkiye',
-        };
+        if (data['city'] != null && data['region'] != null) {
+          return {'city': data['city'] as String, 'region': data['region'] as String};
+        }
       }
     } catch (_) {}
-    return {'city': 'Türkiye', 'region': 'Türkiye'};
+    final l10n = await currentAppLocalizations();
+    return {'city': l10n.regionTurkiyeGeneli, 'region': l10n.regionTurkiyeGeneli};
   }
 
   Future<List<FirePoint>> fetchTurkeyFires() async {
@@ -76,7 +77,7 @@ class FireApiService {
     final trackIndex = header.indexOf('track');
 
     if (latIndex == -1 || lngIndex == -1) {
-      throw Exception('CSV kolonları beklenen formatta değil.');
+      throw Exception('CSV columns are not in the expected format.');
     }
 
     final List<FirePoint> fires = [];

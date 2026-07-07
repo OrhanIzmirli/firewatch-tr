@@ -728,6 +728,35 @@
   "trustNewsInfo": "News is filtered for wildfire-related content from 9 Turkish sources.",
   "trustAlertsInfo": "Notifications are sent when a fire is detected within 50km of your location.",
   "trustCardLabel": "About This Data",
+  "trustAspectMeaningTitle": "What does this mean?",
+  "trustAspectSourceTitle": "Where does this come from?",
+  "trustAspectInterpretTitle": "How to interpret it",
+  "trustAspectActionTitle": "What should I do?",
+
+  "trustHomeMeaning": "Fire counts on this screen are active thermal detections from the last 24 hours, not confirmed wildfires — some may be agricultural burns or industrial heat sources.",
+  "trustHomeSource": "Data comes from NASA FIRMS (Fire Information for Resource Management System), combining VIIRS and MODIS satellite passes, refreshed every 3 hours.",
+  "trustHomeInterpret": "A high fire count in a region doesn't always mean high danger — check the Risk tab for weather-adjusted risk scores before drawing conclusions.",
+  "trustHomeAction": "Tap any fire card for full details, or add it to your Watchlist to track updates. If you're near an active fire, check Notifications for real-time alerts.",
+
+  "trustMapMeaning": "Each marker is a single satellite hotspot detection, not necessarily an active fire — the confidence level shown in fire details indicates how reliable the detection is.",
+  "trustMapSource": "Hotspots come from the VIIRS instrument aboard the Suomi-NPP and NOAA-20 satellites, which detect thermal radiation from the ground.",
+  "trustMapInterpret": "Clustered numbers mean multiple detections are close together — zoom in to see individual points. Tighter clusters often indicate a larger, ongoing fire.",
+  "trustMapAction": "See a fire in person that isn't on the map? Use the Report button to alert others. Tap \"Nearby Fires\" to see what's close to your current location.",
+
+  "trustRiskMeaning": "The risk score (0-100) estimates wildfire likelihood by combining temperature, humidity, wind speed, and dryness — it is a forecast, not a guarantee.",
+  "trustRiskSource": "Weather data is pulled from live meteorological feeds; fire counts factor in recent NASA FIRMS detections for each region.",
+  "trustRiskInterpret": "Compare your region's score to the Turkey average on the chart — a score significantly above average signals elevated local conditions worth monitoring.",
+  "trustRiskAction": "If your region shows Critical or High risk, avoid open flames and report any smoke immediately. Switch to the \"My Location\" tab for a personalized breakdown.",
+
+  "trustNewsMeaning": "Headlines are automatically filtered to keep only wildfire, disaster, and emergency-related coverage — unrelated political or sports stories are excluded.",
+  "trustNewsSource": "Articles are aggregated from 9 established Turkish news outlets via their public RSS feeds, refreshed continuously throughout the day.",
+  "trustNewsInterpret": "A \"Breaking\" badge means the article was published very recently — always check the publish time, as wildfire situations can change quickly.",
+  "trustNewsAction": "Use the Translate button to read non-English articles, or tap \"Related Fires\" on a story to jump directly to that location on the map.",
+
+  "trustAlertsMeaning": "Alerts notify you when a satellite detects a fire within 50km of your last known location — they are automated and based on detection data, not verified reports.",
+  "trustAlertsSource": "Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device's last known location.",
+  "trustAlertsInterpret": "\"High confidence\" alerts are more reliable than \"nominal\" ones — check the risk reason text on each card for the specific factors driving that alert.",
+  "trustAlertsAction": "Grant notification permission and start Auto Monitoring to get alerts even when the app is closed. Use \"Scan Now\" anytime to manually check your surroundings.",
   "newsReadFullArticle": "Read Full Article",
 
   "smartIntensityIntense": "An intense, high-severity fire was detected near {location}.",
@@ -779,5 +808,59 @@
   "tooltipConfidenceTitle": "What Does Confidence Mean?",
   "tooltipSatelliteTitle": "What Does Satellite Mean?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.",
-  "tooltipSatelliteModisBody": "MODIS: Terra/Aqua satellite, provides wider coverage."
+  "tooltipSatelliteModisBody": "MODIS: Terra/Aqua satellite, provides wider coverage.",
+
+  "reportPanelDuplicateLocationBlocked": "A report has already been sent from this location. Please wait for authorities to respond.",
+  "reportPanelDailyLimitReached": "You've reached today's report limit (max 5 per day). Please try again tomorrow.",
+
+  "fireDetailRelatedToCity": "Related to {city}",
+  "@fireDetailRelatedToCity": {
+    "placeholders": { "city": { "type": "String" } }
+  },
+  "fireDetailRegionalNews": "Regional News",
+
+  "coachMarkMapMarkersTitle": "Fire Markers",
+  "coachMarkMapMarkersDesc": "Flame icons on the map show live fire detections from NASA satellites. Tap one to see details.",
+  "coachMarkMapClustersTitle": "Cluster Numbers",
+  "coachMarkMapClustersDesc": "Fire points close to each other group into a circle showing a count. Zoom in to split them apart.",
+  "coachMarkMapReportTitle": "Report a Fire",
+  "coachMarkMapReportDesc": "Tap the button in the bottom right to report a fire you've spotted, along with your GPS location.",
+  "coachMarkMapNearbyTitle": "Fires Near Me",
+  "coachMarkMapNearbyDesc": "This section lists the live fire detections closest to your location, sorted by distance.",
+
+  "coachMarkNewsFeaturedTitle": "Featured Story",
+  "coachMarkNewsFeaturedDesc": "Today's most important development is highlighted here.",
+  "coachMarkNewsCategoryTitle": "Categories",
+  "coachMarkNewsCategoryDesc": "Filter news by Risk, Operation, Safety, or Update category.",
+  "coachMarkNewsRegionTitle": "Regions",
+  "coachMarkNewsRegionDesc": "Filter news by a specific region to surface developments closer to you.",
+  "coachMarkNewsListTitle": "Tap an Article",
+  "coachMarkNewsListDesc": "Tap an article to read the full text — in English mode, you can translate the title and summary with one tap.",
+
+  "coachMarkNotifPermissionTitle": "Notification Permission",
+  "coachMarkNotifPermissionDesc": "Grant permission to get instant alerts about fires near you.",
+  "coachMarkNotifScanTitle": "Scan Now",
+  "coachMarkNotifScanDesc": "Instantly check whether there are live fires within 50 km of your location.",
+  "coachMarkNotifMonitoringTitle": "Auto Monitoring",
+  "coachMarkNotifMonitoringDesc": "Start auto monitoring so nearby fires are periodically checked even when the app is closed.",
+  "coachMarkNotifAlertsTitle": "Alert Cards",
+  "coachMarkNotifAlertsDesc": "High-risk detections are listed here — tap a card to see the full details.",
+
+  "coachMarkRiskScoreTitle": "Risk Score",
+  "coachMarkRiskScoreDesc": "This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the ℹ️ button to see exactly how.",
+  "coachMarkRiskChartTitle": "Regional Distribution",
+  "coachMarkRiskChartDesc": "Tap a region's bar to see that region's detailed risk breakdown.",
+  "coachMarkRiskMyLocationTabTitle": "My Location",
+  "coachMarkRiskMyLocationTabDesc": "Switch to this tab to compare your own region's risk against the Turkey average.",
+  "coachMarkRiskInfoTitle": "Data Sources",
+  "coachMarkRiskInfoDesc": "The ℹ️ button explains the risk score formula, data sources, and how often it updates.",
+
+  "coachMarkWatchlistPurposeTitle": "What's the Watchlist For?",
+  "coachMarkWatchlistPurposeDesc": "Keep the fire points you want to follow all in one place here.",
+  "coachMarkWatchlistHowToAddTitle": "How to Add",
+  "coachMarkWatchlistHowToAddDesc": "Tap the bookmark button on a fire's detail screen to save it here.",
+  "coachMarkWatchlistClearTitle": "Clear",
+  "coachMarkWatchlistClearDesc": "Use the Clear button in the top corner to remove all saved points at once.",
+  "coachMarkWatchlistTapTitle": "View Details",
+  "coachMarkWatchlistTapDesc": "Tap a saved fire to see its current status and full details."
 }

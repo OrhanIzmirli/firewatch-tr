@@ -1718,6 +1718,98 @@ class AppLocalizationsTr extends AppLocalizations {
   String get trustCardLabel => 'Veri Kaynağı Hakkında';
 
   @override
+  String get trustAspectMeaningTitle => 'Bu ne anlama geliyor?';
+
+  @override
+  String get trustAspectSourceTitle => 'Bu nereden geliyor?';
+
+  @override
+  String get trustAspectInterpretTitle => 'Nasıl yorumlanır';
+
+  @override
+  String get trustAspectActionTitle => 'Ne yapmalıyım?';
+
+  @override
+  String get trustHomeMeaning =>
+      'Bu ekrandaki yangın sayıları, son 24 saatte tespit edilen aktif ısı anomalileridir; doğrulanmış orman yangını değildir — bazıları tarımsal yakma veya endüstriyel ısı kaynakları olabilir.';
+
+  @override
+  String get trustHomeSource =>
+      'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.';
+
+  @override
+  String get trustHomeInterpret =>
+      'Bir bölgedeki yüksek yangın sayısı her zaman yüksek tehlike anlamına gelmez — sonuca varmadan önce hava durumuna göre ayarlanmış risk puanları için Risk sekmesini kontrol edin.';
+
+  @override
+  String get trustHomeAction =>
+      'Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler\'i kontrol edin.';
+
+  @override
+  String get trustMapMeaning =>
+      'Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.';
+
+  @override
+  String get trustMapSource =>
+      'Sıcak noktalar, yerden gelen ısı radyasyonunu tespit eden Suomi-NPP ve NOAA-20 uydularındaki VIIRS cihazından gelir.';
+
+  @override
+  String get trustMapInterpret =>
+      'Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.';
+
+  @override
+  String get trustMapAction =>
+      'Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.';
+
+  @override
+  String get trustRiskMeaning =>
+      'Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.';
+
+  @override
+  String get trustRiskSource =>
+      'Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.';
+
+  @override
+  String get trustRiskInterpret =>
+      'Bölgenizin puanını grafikte Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.';
+
+  @override
+  String get trustRiskAction =>
+      'Bölgeniz Kritik veya Yüksek risk gösteriyorsa açık ateşten kaçının ve herhangi bir dumanı hemen bildirin. Kişiselleştirilmiş bir döküm için \"Konumum\" sekmesine geçin.';
+
+  @override
+  String get trustNewsMeaning =>
+      'Başlıklar yalnızca orman yangını, afet ve acil durumla ilgili haberleri tutacak şekilde otomatik olarak filtrelenir — ilgisiz siyasi veya spor haberleri hariç tutulur.';
+
+  @override
+  String get trustNewsSource =>
+      'Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.';
+
+  @override
+  String get trustNewsInterpret =>
+      '\"Son Dakika\" rozeti, makalenin çok yakın zamanda yayınlandığı anlamına gelir — orman yangını durumları hızla değişebileceğinden yayın saatini her zaman kontrol edin.';
+
+  @override
+  String get trustNewsAction =>
+      'İngilizce olmayan makaleleri okumak için Çevir düğmesini kullanın veya bir haberdeki \"İlgili Yangınlar\"a dokunarak doğrudan o konuma haritada gidin.';
+
+  @override
+  String get trustAlertsMeaning =>
+      'Uyarılar, uydu son bilinen konumunuzun 50 km içinde bir yangın tespit ettiğinde sizi bilgilendirir — bunlar otomatiktir ve doğrulanmış raporlara değil tespit verilerine dayanır.';
+
+  @override
+  String get trustAlertsSource =>
+      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla karşılaştırır.';
+
+  @override
+  String get trustAlertsInterpret =>
+      '\"Yüksek güven\" uyarıları \"nominal\" olanlardan daha güvenilirdir — o uyarıyı tetikleyen belirli faktörler için her karttaki risk nedeni metnini kontrol edin.';
+
+  @override
+  String get trustAlertsAction =>
+      'Uygulama kapalıyken bile uyarı almak için bildirim izni verin ve Otomatik İzlemeyi başlatın. Çevrenizi manuel olarak kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.';
+
+  @override
   String get newsReadFullArticle => 'Haberin Tamamını Oku';
 
   @override
@@ -1836,4 +1928,160 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get tooltipSatelliteModisBody =>
       'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.';
+
+  @override
+  String get reportPanelDuplicateLocationBlocked =>
+      'Bu konumdan zaten rapor gönderildi. Lütfen yetkililer ulaşana kadar bekleyin.';
+
+  @override
+  String get reportPanelDailyLimitReached =>
+      'Bugün için rapor gönderme limitine ulaştınız (günde en fazla 5). Lütfen yarın tekrar deneyin.';
+
+  @override
+  String fireDetailRelatedToCity(String city) {
+    return '$city ile İlgili';
+  }
+
+  @override
+  String get fireDetailRegionalNews => 'Bölgesel Haberler';
+
+  @override
+  String get coachMarkMapMarkersTitle => 'Yangın İşaretleri';
+
+  @override
+  String get coachMarkMapMarkersDesc =>
+      'Haritadaki alev ikonları NASA uydusundan gelen canlı yangın tespitlerini gösterir. Bir işarete dokunarak detayları görebilirsin.';
+
+  @override
+  String get coachMarkMapClustersTitle => 'Küme Sayıları';
+
+  @override
+  String get coachMarkMapClustersDesc =>
+      'Birbirine yakın yangın noktaları bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.';
+
+  @override
+  String get coachMarkMapReportTitle => 'Yangın Bildir';
+
+  @override
+  String get coachMarkMapReportDesc =>
+      'Sağ alttaki butona dokunarak gördüğün bir yangını GPS konumunla birlikte bildirebilirsin.';
+
+  @override
+  String get coachMarkMapNearbyTitle => 'Yakınımdaki Yangınlar';
+
+  @override
+  String get coachMarkMapNearbyDesc =>
+      'Bu bölüm, konumuna en yakın canlı yangın tespitlerini mesafe sırasına göre listeler.';
+
+  @override
+  String get coachMarkNewsFeaturedTitle => 'Öne Çıkan Haber';
+
+  @override
+  String get coachMarkNewsFeaturedDesc =>
+      'Günün en önemli gelişmesi burada öne çıkarılır.';
+
+  @override
+  String get coachMarkNewsCategoryTitle => 'Kategoriler';
+
+  @override
+  String get coachMarkNewsCategoryDesc =>
+      'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.';
+
+  @override
+  String get coachMarkNewsRegionTitle => 'Bölgeler';
+
+  @override
+  String get coachMarkNewsRegionDesc =>
+      'Haberleri belirli bir bölgeye göre filtreleyerek sana yakın gelişmeleri öne çıkarabilirsin.';
+
+  @override
+  String get coachMarkNewsListTitle => 'Habere Dokun';
+
+  @override
+  String get coachMarkNewsListDesc =>
+      'Bir habere dokunarak tam metnini oku; İngilizce moddaysan başlık ve özeti tek dokunuşla çevirebilirsin.';
+
+  @override
+  String get coachMarkNotifPermissionTitle => 'Bildirim İzni';
+
+  @override
+  String get coachMarkNotifPermissionDesc =>
+      'Yakınındaki yangınlar için anlık bildirim alabilmek üzere izin ver.';
+
+  @override
+  String get coachMarkNotifScanTitle => 'Şimdi Tara';
+
+  @override
+  String get coachMarkNotifScanDesc =>
+      'Konumunun 50 km çevresinde canlı yangın olup olmadığını anında kontrol et.';
+
+  @override
+  String get coachMarkNotifMonitoringTitle => 'Otomatik Tarama';
+
+  @override
+  String get coachMarkNotifMonitoringDesc =>
+      'Otomatik taramayı başlatarak uygulama kapalıyken bile periyodik olarak yakın çevrende kontrol yapılmasını sağla.';
+
+  @override
+  String get coachMarkNotifAlertsTitle => 'Uyarı Kartları';
+
+  @override
+  String get coachMarkNotifAlertsDesc =>
+      'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsin.';
+
+  @override
+  String get coachMarkRiskScoreTitle => 'Risk Skoru';
+
+  @override
+  String get coachMarkRiskScoreDesc =>
+      '0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını ℹ️ butonundan öğrenebilirsin.';
+
+  @override
+  String get coachMarkRiskChartTitle => 'Bölgesel Dağılım';
+
+  @override
+  String get coachMarkRiskChartDesc =>
+      'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsin.';
+
+  @override
+  String get coachMarkRiskMyLocationTabTitle => 'Konumum';
+
+  @override
+  String get coachMarkRiskMyLocationTabDesc =>
+      'Bu sekmeye geçerek kendi bölgenin riskini Türkiye ortalamasıyla karşılaştır.';
+
+  @override
+  String get coachMarkRiskInfoTitle => 'Veri Kaynakları';
+
+  @override
+  String get coachMarkRiskInfoDesc =>
+      'ℹ️ butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.';
+
+  @override
+  String get coachMarkWatchlistPurposeTitle => 'Kaydedilenler Ne İşe Yarar?';
+
+  @override
+  String get coachMarkWatchlistPurposeDesc =>
+      'Takip etmek istediğin yangın noktalarını burada bir arada tutabilirsin.';
+
+  @override
+  String get coachMarkWatchlistHowToAddTitle => 'Nasıl Eklenir?';
+
+  @override
+  String get coachMarkWatchlistHowToAddDesc =>
+      'Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.';
+
+  @override
+  String get coachMarkWatchlistClearTitle => 'Temizle';
+
+  @override
+  String get coachMarkWatchlistClearDesc =>
+      'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.';
+
+  @override
+  String get coachMarkWatchlistTapTitle => 'Detayı Gör';
+
+  @override
+  String get coachMarkWatchlistTapDesc =>
+      'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.';
 }

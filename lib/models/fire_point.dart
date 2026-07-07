@@ -1,3 +1,4 @@
+import '../core/utils/turkish_text.dart';
 import '../l10n/app_localizations.dart';
 import '../services/risk_data_cache.dart';
 
@@ -129,23 +130,6 @@ class FirePoint {
   /// backend risk-summary data — never shown to the user directly.
   String? get riskRegionKey => _bboxRegionKey(latitude, longitude);
 
-  static String _asciiFold(String s) {
-    const map = {
-      'ç': 'c', 'Ç': 'c',
-      'ğ': 'g', 'Ğ': 'g',
-      'ı': 'i', 'İ': 'i', 'I': 'i',
-      'ö': 'o', 'Ö': 'o',
-      'ş': 's', 'Ş': 's',
-      'ü': 'u', 'Ü': 'u',
-    };
-    final buffer = StringBuffer();
-    for (final rune in s.runes) {
-      final ch = String.fromCharCode(rune);
-      buffer.write(map[ch] ?? ch.toLowerCase());
-    }
-    return buffer.toString();
-  }
-
   static const _forestCities = [
     'mugla', 'antalya', 'izmir', 'bursa', 'canakkale', 'bolu',
     'kastamonu', 'artvin', 'zonguldak', 'duzce', 'manisa', 'aydin', 'denizli',
@@ -163,7 +147,7 @@ class FirePoint {
   /// back to a coastal coordinate check. Best-effort — city-level data
   /// can't distinguish e.g. a city center from surrounding countryside.
   FireLocationType get locationType {
-    final city = cityName != null ? _asciiFold(cityName!) : '';
+    final city = cityName != null ? foldTurkish(cityName!) : '';
     if (city.isNotEmpty) {
       if (_urbanCities.any(city.contains)) return FireLocationType.urban;
       if (_forestCities.any(city.contains)) return FireLocationType.forest;
@@ -191,6 +175,25 @@ class FirePoint {
       case 'dogu_anadolu': return l10n.regionDoguAnadolu;
       case 'guneydogu_anadolu': return l10n.regionGuneydoguAnadolu;
       default: return l10n.regionTurkiyeGeneli;
+    }
+  }
+
+  /// Canonical Turkish region name, independent of app locale — used to
+  /// cross-reference this point against other backend data (e.g. news
+  /// articles' relatedRegion field) that is always in Turkish regardless
+  /// of the app's display language. Not for display — use
+  /// [regionDisplayName] for that.
+  String get canonicalRegionNameTr {
+    if (nearestRegion != null && nearestRegion!.isNotEmpty) return nearestRegion!;
+    switch (regionKey ?? _bboxRegionKey(latitude, longitude)) {
+      case 'ege': return 'Ege';
+      case 'akdeniz': return 'Akdeniz';
+      case 'marmara': return 'Marmara';
+      case 'karadeniz': return 'Karadeniz';
+      case 'ic_anadolu': return 'İç Anadolu';
+      case 'dogu_anadolu': return 'Doğu Anadolu';
+      case 'guneydogu_anadolu': return 'Güneydoğu Anadolu';
+      default: return 'Türkiye Geneli';
     }
   }
 

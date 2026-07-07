@@ -22,7 +22,7 @@ class NotificationService {
       AndroidNotificationChannel(
     'firewatch_alerts',
     'Fire Alerts',
-    description: 'Yangın uyarıları ve kritik bildirimler',
+    description: 'Wildfire warnings and critical alerts',
     importance: Importance.max,
   );
 
@@ -194,7 +194,7 @@ class NotificationService {
       android: AndroidNotificationDetails(
         'firewatch_alerts',
         'Fire Alerts',
-        channelDescription: 'Yangın uyarıları ve kritik bildirimler',
+        channelDescription: 'Wildfire warnings and critical alerts',
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'firewatch_alert',

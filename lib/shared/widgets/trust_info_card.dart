@@ -9,8 +9,10 @@ import '../../l10n/app_localizations.dart';
 /// every main screen to briefly explain where its data comes from.
 class TrustInfoCard extends StatefulWidget {
   final String text;
+  final String? title;
+  final IconData icon;
 
-  const TrustInfoCard({super.key, required this.text});
+  const TrustInfoCard({super.key, required this.text, this.title, this.icon = Icons.verified_outlined});
 
   @override
   State<TrustInfoCard> createState() => _TrustInfoCardState();
@@ -39,11 +41,11 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
           children: [
             Row(
               children: [
-                const Icon(Icons.verified_outlined, size: 15, color: AppColors.primary),
+                Icon(widget.icon, size: 15, color: AppColors.primary),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    l10n.trustCardLabel,
+                    widget.title ?? l10n.trustCardLabel,
                     style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
                   ),
                 ),
@@ -69,6 +71,41 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Stack of four collapsible [TrustInfoCard]s covering what the screen's
+/// data means, where it comes from, how to interpret it, and what action
+/// to take — the four dimensions every main screen must explain.
+class TrustInfoCardGroup extends StatelessWidget {
+  final String meaning;
+  final String source;
+  final String interpret;
+  final String action;
+
+  const TrustInfoCardGroup({
+    super.key,
+    required this.meaning,
+    required this.source,
+    required this.interpret,
+    required this.action,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TrustInfoCard(title: l10n.trustAspectMeaningTitle, icon: Icons.info_outline_rounded, text: meaning),
+        const SizedBox(height: AppSpacing.sm),
+        TrustInfoCard(title: l10n.trustAspectSourceTitle, icon: Icons.satellite_alt_rounded, text: source),
+        const SizedBox(height: AppSpacing.sm),
+        TrustInfoCard(title: l10n.trustAspectInterpretTitle, icon: Icons.insights_rounded, text: interpret),
+        const SizedBox(height: AppSpacing.sm),
+        TrustInfoCard(title: l10n.trustAspectActionTitle, icon: Icons.touch_app_rounded, text: action),
+      ],
     );
   }
 }

@@ -9,6 +9,8 @@ import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/offline_cache_service.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -72,7 +74,42 @@ class _RiskScreenState extends State<RiskScreen> {
   @override
   void initState() {
     super.initState();
-    _loadRiskData();
+    _loadRiskData().then((_) => _maybeShowRiskCoachMarks());
+  }
+
+  void _maybeShowRiskCoachMarks() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
+      await maybeShowScreenCoachMarks(
+        context,
+        prefsKey: 'hasSeenRiskTour',
+        steps: [
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.riskScoreCard,
+            title: l10n.coachMarkRiskScoreTitle,
+            description: l10n.coachMarkRiskScoreDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.riskChart,
+            title: l10n.coachMarkRiskChartTitle,
+            description: l10n.coachMarkRiskChartDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.riskMyLocationTab,
+            title: l10n.coachMarkRiskMyLocationTabTitle,
+            description: l10n.coachMarkRiskMyLocationTabDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.riskInfoButton,
+            title: l10n.coachMarkRiskInfoTitle,
+            description: l10n.coachMarkRiskInfoDesc,
+          ),
+        ],
+      );
+    });
   }
 
   Future<void> _loadRiskData() async {
@@ -414,6 +451,7 @@ class _RiskScreenState extends State<RiskScreen> {
         title: Text(l10n.riskTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
+            key: CoachMarkKeys.riskInfoButton,
             icon: const Icon(Icons.info_outline_rounded),
             tooltip: l10n.riskInfoButtonTooltip,
             onPressed: () => _showRiskInfoSheet(context),
@@ -445,6 +483,7 @@ class _RiskScreenState extends State<RiskScreen> {
                 children: [
                   if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                   GlassPanel(
+                    key: CoachMarkKeys.riskScoreCard,
                     padding: const EdgeInsets.all(AppSpacing.xl),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,7 +533,12 @@ class _RiskScreenState extends State<RiskScreen> {
                       ).slideY(begin: 0.06, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
-                  TrustInfoCard(text: l10n.trustRiskInfo),
+                  TrustInfoCardGroup(
+                    meaning: l10n.trustRiskMeaning,
+                    source: l10n.trustRiskSource,
+                    interpret: l10n.trustRiskInterpret,
+                    action: l10n.trustRiskAction,
+                  ),
 
                   const SizedBox(height: AppSpacing.xl),
 
@@ -511,6 +555,7 @@ class _RiskScreenState extends State<RiskScreen> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: _TabToggleButton(
+                          key: CoachMarkKeys.riskMyLocationTab,
                           label: l10n.riskTabMyLocation,
                           selected: _showMyLocation,
                           onTap: _selectMyLocationTab,
@@ -605,6 +650,7 @@ class _RiskScreenState extends State<RiskScreen> {
                     const SizedBox(height: AppSpacing.md),
 
                     GlassPanel(
+                      key: CoachMarkKeys.riskChart,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -834,7 +880,7 @@ class _TabToggleButton extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _TabToggleButton({required this.label, required this.selected, required this.onTap});
+  const _TabToggleButton({super.key, required this.label, required this.selected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

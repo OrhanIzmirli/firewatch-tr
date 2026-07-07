@@ -11,6 +11,8 @@ import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
+import '../../shared/coach_mark_keys.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -36,7 +38,42 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
   @override
   void initState() {
     super.initState();
-    _loadFires();
+    _loadFires().then((_) => _maybeShowWatchlistCoachMarks());
+  }
+
+  void _maybeShowWatchlistCoachMarks() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context)!;
+      await maybeShowScreenCoachMarks(
+        context,
+        prefsKey: 'hasSeenWatchlistTour',
+        steps: [
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.watchlistHeader,
+            title: l10n.coachMarkWatchlistPurposeTitle,
+            description: l10n.coachMarkWatchlistPurposeDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.watchlistEmptyState,
+            title: l10n.coachMarkWatchlistHowToAddTitle,
+            description: l10n.coachMarkWatchlistHowToAddDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.watchlistClearButton,
+            title: l10n.coachMarkWatchlistClearTitle,
+            description: l10n.coachMarkWatchlistClearDesc,
+          ),
+          CoachMarkStep(
+            targetKey: CoachMarkKeys.watchlistList,
+            title: l10n.coachMarkWatchlistTapTitle,
+            description: l10n.coachMarkWatchlistTapDesc,
+          ),
+        ],
+      );
+    });
   }
 
   Future<void> _loadFires() async {
@@ -86,6 +123,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
         actions: [
           if (savedIds.isNotEmpty)
             TextButton(
+              key: CoachMarkKeys.watchlistClearButton,
               onPressed: () => ref.read(watchlistProvider.notifier).clear(),
               child: Text(l10n.watchlistClear,
                   style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w700)),
@@ -103,6 +141,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
           children: [
             if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
             GlassPanel(
+              key: CoachMarkKeys.watchlistHeader,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -128,6 +167,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
               const SkeletonListLoader(count: 2)
             else if (savedIds.isEmpty)
               GlassPanel(
+                key: CoachMarkKeys.watchlistEmptyState,
                 child: Column(
                   children: [
                     Container(
@@ -151,6 +191,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
               ).animate(delay: 120.ms).fadeIn(duration: 320.ms).scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)).slideY(begin: 0.05, end: 0)
             else ...[
               SectionHeader(
+                key: CoachMarkKeys.watchlistList,
                 title: l10n.watchlistSavedPoints,
                 subtitle: l10n.watchlistSavedPointsSubtitle(savedIds.length),
                 icon: Icons.local_fire_department_rounded,

@@ -3087,6 +3087,150 @@ abstract class AppLocalizations {
   /// **'Veri Kaynağı Hakkında'**
   String get trustCardLabel;
 
+  /// No description provided for @trustAspectMeaningTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu ne anlama geliyor?'**
+  String get trustAspectMeaningTitle;
+
+  /// No description provided for @trustAspectSourceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu nereden geliyor?'**
+  String get trustAspectSourceTitle;
+
+  /// No description provided for @trustAspectInterpretTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nasıl yorumlanır'**
+  String get trustAspectInterpretTitle;
+
+  /// No description provided for @trustAspectActionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne yapmalıyım?'**
+  String get trustAspectActionTitle;
+
+  /// No description provided for @trustHomeMeaning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu ekrandaki yangın sayıları, son 24 saatte tespit edilen aktif ısı anomalileridir; doğrulanmış orman yangını değildir — bazıları tarımsal yakma veya endüstriyel ısı kaynakları olabilir.'**
+  String get trustHomeMeaning;
+
+  /// No description provided for @trustHomeSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.'**
+  String get trustHomeSource;
+
+  /// No description provided for @trustHomeInterpret.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir bölgedeki yüksek yangın sayısı her zaman yüksek tehlike anlamına gelmez — sonuca varmadan önce hava durumuna göre ayarlanmış risk puanları için Risk sekmesini kontrol edin.'**
+  String get trustHomeInterpret;
+
+  /// No description provided for @trustHomeAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler\'i kontrol edin.'**
+  String get trustHomeAction;
+
+  /// No description provided for @trustMapMeaning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.'**
+  String get trustMapMeaning;
+
+  /// No description provided for @trustMapSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak noktalar, yerden gelen ısı radyasyonunu tespit eden Suomi-NPP ve NOAA-20 uydularındaki VIIRS cihazından gelir.'**
+  String get trustMapSource;
+
+  /// No description provided for @trustMapInterpret.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.'**
+  String get trustMapInterpret;
+
+  /// No description provided for @trustMapAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.'**
+  String get trustMapAction;
+
+  /// No description provided for @trustRiskMeaning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.'**
+  String get trustRiskMeaning;
+
+  /// No description provided for @trustRiskSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.'**
+  String get trustRiskSource;
+
+  /// No description provided for @trustRiskInterpret.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgenizin puanını grafikte Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.'**
+  String get trustRiskInterpret;
+
+  /// No description provided for @trustRiskAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeniz Kritik veya Yüksek risk gösteriyorsa açık ateşten kaçının ve herhangi bir dumanı hemen bildirin. Kişiselleştirilmiş bir döküm için \"Konumum\" sekmesine geçin.'**
+  String get trustRiskAction;
+
+  /// No description provided for @trustNewsMeaning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlıklar yalnızca orman yangını, afet ve acil durumla ilgili haberleri tutacak şekilde otomatik olarak filtrelenir — ilgisiz siyasi veya spor haberleri hariç tutulur.'**
+  String get trustNewsMeaning;
+
+  /// No description provided for @trustNewsSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.'**
+  String get trustNewsSource;
+
+  /// No description provided for @trustNewsInterpret.
+  ///
+  /// In tr, this message translates to:
+  /// **'\"Son Dakika\" rozeti, makalenin çok yakın zamanda yayınlandığı anlamına gelir — orman yangını durumları hızla değişebileceğinden yayın saatini her zaman kontrol edin.'**
+  String get trustNewsInterpret;
+
+  /// No description provided for @trustNewsAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'İngilizce olmayan makaleleri okumak için Çevir düğmesini kullanın veya bir haberdeki \"İlgili Yangınlar\"a dokunarak doğrudan o konuma haritada gidin.'**
+  String get trustNewsAction;
+
+  /// No description provided for @trustAlertsMeaning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyarılar, uydu son bilinen konumunuzun 50 km içinde bir yangın tespit ettiğinde sizi bilgilendirir — bunlar otomatiktir ve doğrulanmış raporlara değil tespit verilerine dayanır.'**
+  String get trustAlertsMeaning;
+
+  /// No description provided for @trustAlertsSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla karşılaştırır.'**
+  String get trustAlertsSource;
+
+  /// No description provided for @trustAlertsInterpret.
+  ///
+  /// In tr, this message translates to:
+  /// **'\"Yüksek güven\" uyarıları \"nominal\" olanlardan daha güvenilirdir — o uyarıyı tetikleyen belirli faktörler için her karttaki risk nedeni metnini kontrol edin.'**
+  String get trustAlertsInterpret;
+
+  /// No description provided for @trustAlertsAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama kapalıyken bile uyarı almak için bildirim izni verin ve Otomatik İzlemeyi başlatın. Çevrenizi manuel olarak kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.'**
+  String get trustAlertsAction;
+
   /// No description provided for @newsReadFullArticle.
   ///
   /// In tr, this message translates to:
@@ -3260,6 +3404,270 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.'**
   String get tooltipSatelliteModisBody;
+
+  /// No description provided for @reportPanelDuplicateLocationBlocked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu konumdan zaten rapor gönderildi. Lütfen yetkililer ulaşana kadar bekleyin.'**
+  String get reportPanelDuplicateLocationBlocked;
+
+  /// No description provided for @reportPanelDailyLimitReached.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün için rapor gönderme limitine ulaştınız (günde en fazla 5). Lütfen yarın tekrar deneyin.'**
+  String get reportPanelDailyLimitReached;
+
+  /// No description provided for @fireDetailRelatedToCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'{city} ile İlgili'**
+  String fireDetailRelatedToCity(String city);
+
+  /// No description provided for @fireDetailRegionalNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel Haberler'**
+  String get fireDetailRegionalNews;
+
+  /// No description provided for @coachMarkMapMarkersTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın İşaretleri'**
+  String get coachMarkMapMarkersTitle;
+
+  /// No description provided for @coachMarkMapMarkersDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki alev ikonları NASA uydusundan gelen canlı yangın tespitlerini gösterir. Bir işarete dokunarak detayları görebilirsin.'**
+  String get coachMarkMapMarkersDesc;
+
+  /// No description provided for @coachMarkMapClustersTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Küme Sayıları'**
+  String get coachMarkMapClustersTitle;
+
+  /// No description provided for @coachMarkMapClustersDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birbirine yakın yangın noktaları bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.'**
+  String get coachMarkMapClustersDesc;
+
+  /// No description provided for @coachMarkMapReportTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Bildir'**
+  String get coachMarkMapReportTitle;
+
+  /// No description provided for @coachMarkMapReportDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağ alttaki butona dokunarak gördüğün bir yangını GPS konumunla birlikte bildirebilirsin.'**
+  String get coachMarkMapReportDesc;
+
+  /// No description provided for @coachMarkMapNearbyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınımdaki Yangınlar'**
+  String get coachMarkMapNearbyTitle;
+
+  /// No description provided for @coachMarkMapNearbyDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bölüm, konumuna en yakın canlı yangın tespitlerini mesafe sırasına göre listeler.'**
+  String get coachMarkMapNearbyDesc;
+
+  /// No description provided for @coachMarkNewsFeaturedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öne Çıkan Haber'**
+  String get coachMarkNewsFeaturedTitle;
+
+  /// No description provided for @coachMarkNewsFeaturedDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün en önemli gelişmesi burada öne çıkarılır.'**
+  String get coachMarkNewsFeaturedDesc;
+
+  /// No description provided for @coachMarkNewsCategoryTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategoriler'**
+  String get coachMarkNewsCategoryTitle;
+
+  /// No description provided for @coachMarkNewsCategoryDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.'**
+  String get coachMarkNewsCategoryDesc;
+
+  /// No description provided for @coachMarkNewsRegionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeler'**
+  String get coachMarkNewsRegionTitle;
+
+  /// No description provided for @coachMarkNewsRegionDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberleri belirli bir bölgeye göre filtreleyerek sana yakın gelişmeleri öne çıkarabilirsin.'**
+  String get coachMarkNewsRegionDesc;
+
+  /// No description provided for @coachMarkNewsListTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Habere Dokun'**
+  String get coachMarkNewsListTitle;
+
+  /// No description provided for @coachMarkNewsListDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir habere dokunarak tam metnini oku; İngilizce moddaysan başlık ve özeti tek dokunuşla çevirebilirsin.'**
+  String get coachMarkNewsListDesc;
+
+  /// No description provided for @coachMarkNotifPermissionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim İzni'**
+  String get coachMarkNotifPermissionTitle;
+
+  /// No description provided for @coachMarkNotifPermissionDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakınındaki yangınlar için anlık bildirim alabilmek üzere izin ver.'**
+  String get coachMarkNotifPermissionDesc;
+
+  /// No description provided for @coachMarkNotifScanTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi Tara'**
+  String get coachMarkNotifScanTitle;
+
+  /// No description provided for @coachMarkNotifScanDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunun 50 km çevresinde canlı yangın olup olmadığını anında kontrol et.'**
+  String get coachMarkNotifScanDesc;
+
+  /// No description provided for @coachMarkNotifMonitoringTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik Tarama'**
+  String get coachMarkNotifMonitoringTitle;
+
+  /// No description provided for @coachMarkNotifMonitoringDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik taramayı başlatarak uygulama kapalıyken bile periyodik olarak yakın çevrende kontrol yapılmasını sağla.'**
+  String get coachMarkNotifMonitoringDesc;
+
+  /// No description provided for @coachMarkNotifAlertsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyarı Kartları'**
+  String get coachMarkNotifAlertsTitle;
+
+  /// No description provided for @coachMarkNotifAlertsDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsin.'**
+  String get coachMarkNotifAlertsDesc;
+
+  /// No description provided for @coachMarkRiskScoreTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Skoru'**
+  String get coachMarkRiskScoreTitle;
+
+  /// No description provided for @coachMarkRiskScoreDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını ℹ️ butonundan öğrenebilirsin.'**
+  String get coachMarkRiskScoreDesc;
+
+  /// No description provided for @coachMarkRiskChartTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel Dağılım'**
+  String get coachMarkRiskChartTitle;
+
+  /// No description provided for @coachMarkRiskChartDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsin.'**
+  String get coachMarkRiskChartDesc;
+
+  /// No description provided for @coachMarkRiskMyLocationTabTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumum'**
+  String get coachMarkRiskMyLocationTabTitle;
+
+  /// No description provided for @coachMarkRiskMyLocationTabDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sekmeye geçerek kendi bölgenin riskini Türkiye ortalamasıyla karşılaştır.'**
+  String get coachMarkRiskMyLocationTabDesc;
+
+  /// No description provided for @coachMarkRiskInfoTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri Kaynakları'**
+  String get coachMarkRiskInfoTitle;
+
+  /// No description provided for @coachMarkRiskInfoDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'ℹ️ butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.'**
+  String get coachMarkRiskInfoDesc;
+
+  /// No description provided for @coachMarkWatchlistPurposeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilenler Ne İşe Yarar?'**
+  String get coachMarkWatchlistPurposeTitle;
+
+  /// No description provided for @coachMarkWatchlistPurposeDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip etmek istediğin yangın noktalarını burada bir arada tutabilirsin.'**
+  String get coachMarkWatchlistPurposeDesc;
+
+  /// No description provided for @coachMarkWatchlistHowToAddTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nasıl Eklenir?'**
+  String get coachMarkWatchlistHowToAddTitle;
+
+  /// No description provided for @coachMarkWatchlistHowToAddDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.'**
+  String get coachMarkWatchlistHowToAddDesc;
+
+  /// No description provided for @coachMarkWatchlistClearTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temizle'**
+  String get coachMarkWatchlistClearTitle;
+
+  /// No description provided for @coachMarkWatchlistClearDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.'**
+  String get coachMarkWatchlistClearDesc;
+
+  /// No description provided for @coachMarkWatchlistTapTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detayı Gör'**
+  String get coachMarkWatchlistTapTitle;
+
+  /// No description provided for @coachMarkWatchlistTapDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.'**
+  String get coachMarkWatchlistTapDesc;
 }
 
 class _AppLocalizationsDelegate

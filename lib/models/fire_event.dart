@@ -9,6 +9,10 @@ class FireEvent {
   /// Canonical (non-localized) risk tier — 'high' | 'medium' | 'low' — used
   /// for color-coding, independent of the localized [riskLevel] display text.
   final String riskTier;
+  /// Canonical Turkish region name (e.g. "Ege", "İç Anadolu"), independent
+  /// of app locale — used to cross-reference backend data (news
+  /// relatedRegion) that's always in Turkish. Not for display.
+  final String regionNameTr;
   final String updatedAt;
   final String startedAt;
   final String affectedArea;
@@ -27,6 +31,7 @@ class FireEvent {
     required this.status,
     required this.riskLevel,
     required this.riskTier,
+    required this.regionNameTr,
     required this.updatedAt,
     required this.startedAt,
     required this.affectedArea,

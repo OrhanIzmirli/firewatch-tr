@@ -1,4 +1,7 @@
 import '../l10n/app_localizations.dart';
+import '../services/risk_data_cache.dart';
+
+enum FireLocationType { forest, coastal, agricultural, urban, generic }
 
 class FirePoint {
   final double latitude;
@@ -11,6 +14,12 @@ class FirePoint {
   final double? distanceKm;
   final String? cityName;
   final String? nearestRegion;
+  /// Fire Radiative Power (MW) — energy release rate, from NASA FIRMS.
+  final double frp;
+  /// Along-scan and along-track pixel size (km) — used to estimate the
+  /// area of the detection.
+  final double scanKm;
+  final double trackKm;
 
   const FirePoint({
     required this.latitude,
@@ -23,6 +32,9 @@ class FirePoint {
     this.distanceKm,
     this.cityName,
     this.nearestRegion,
+    this.frp = 0,
+    this.scanKm = 0,
+    this.trackKm = 0,
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +48,9 @@ class FirePoint {
         'distanceKm': distanceKm,
         'cityName': cityName,
         'nearestRegion': nearestRegion,
+        'frp': frp,
+        'scanKm': scanKm,
+        'trackKm': trackKm,
       };
 
   factory FirePoint.fromJson(Map<String, dynamic> json) => FirePoint(
@@ -49,6 +64,10 @@ class FirePoint {
         distanceKm: (json['distanceKm'] as num?)?.toDouble(),
         cityName: json['cityName'] as String?,
         nearestRegion: json['nearestRegion'] as String?,
+        // Absent in data cached before these fields were added.
+        frp: (json['frp'] as num?)?.toDouble() ?? 0,
+        scanKm: (json['scanKm'] as num?)?.toDouble() ?? 0,
+        trackKm: (json['trackKm'] as num?)?.toDouble() ?? 0,
       );
 
   FirePoint copyWith({
@@ -62,6 +81,9 @@ class FirePoint {
     double? distanceKm,
     String? cityName,
     String? nearestRegion,
+    double? frp,
+    double? scanKm,
+    double? trackKm,
   }) {
     return FirePoint(
       latitude: latitude ?? this.latitude,
@@ -74,7 +96,21 @@ class FirePoint {
       distanceKm: distanceKm ?? this.distanceKm,
       cityName: cityName ?? this.cityName,
       nearestRegion: nearestRegion ?? this.nearestRegion,
+      frp: frp ?? this.frp,
+      scanKm: scanKm ?? this.scanKm,
+      trackKm: trackKm ?? this.trackKm,
     );
+  }
+
+  static String? _bboxRegionKey(double lat, double lng) {
+    if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
+    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) return 'akdeniz';
+    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) return 'marmara';
+    if (lat >= 40.5 && lat <= 42.2) return 'karadeniz';
+    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) return 'ic_anadolu';
+    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) return 'dogu_anadolu';
+    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) return 'guneydogu_anadolu';
+    return null;
   }
 
   /// Canonical (non-localized) region key derived from coordinates, used only
@@ -85,19 +121,58 @@ class FirePoint {
   String? get regionKey {
     if (cityName != null && cityName!.isNotEmpty) return null;
     if (nearestRegion != null && nearestRegion!.isNotEmpty) return null;
+    return _bboxRegionKey(latitude, longitude);
+  }
 
-    final lat = latitude;
-    final lng = longitude;
+  /// Always-computed bbox region key (regardless of whether a display city
+  /// name is available), used purely to cross-reference this point against
+  /// backend risk-summary data — never shown to the user directly.
+  String? get riskRegionKey => _bboxRegionKey(latitude, longitude);
 
-    if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
-    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) return 'akdeniz';
-    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) return 'marmara';
-    if (lat >= 40.5 && lat <= 42.2) return 'karadeniz';
-    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) return 'ic_anadolu';
-    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) return 'dogu_anadolu';
-    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) return 'guneydogu_anadolu';
+  static String _asciiFold(String s) {
+    const map = {
+      'ç': 'c', 'Ç': 'c',
+      'ğ': 'g', 'Ğ': 'g',
+      'ı': 'i', 'İ': 'i', 'I': 'i',
+      'ö': 'o', 'Ö': 'o',
+      'ş': 's', 'Ş': 's',
+      'ü': 'u', 'Ü': 'u',
+    };
+    final buffer = StringBuffer();
+    for (final rune in s.runes) {
+      final ch = String.fromCharCode(rune);
+      buffer.write(map[ch] ?? ch.toLowerCase());
+    }
+    return buffer.toString();
+  }
 
-    return null;
+  static const _forestCities = [
+    'mugla', 'antalya', 'izmir', 'bursa', 'canakkale', 'bolu',
+    'kastamonu', 'artvin', 'zonguldak', 'duzce', 'manisa', 'aydin', 'denizli',
+  ];
+  static const _agriculturalCities = [
+    'konya', 'eskisehir', 'corum', 'sivas', 'yozgat', 'kirsehir', 'aksaray', 'karaman',
+  ];
+  static const _urbanCities = [
+    'istanbul', 'ankara', 'gaziantep',
+  ];
+
+  /// Rough location-type classification used to flavor generated
+  /// descriptions. Based on the resolved city name where available (a
+  /// point's cityName is a specific settlement, not the region), falling
+  /// back to a coastal coordinate check. Best-effort — city-level data
+  /// can't distinguish e.g. a city center from surrounding countryside.
+  FireLocationType get locationType {
+    final city = cityName != null ? _asciiFold(cityName!) : '';
+    if (city.isNotEmpty) {
+      if (_urbanCities.any(city.contains)) return FireLocationType.urban;
+      if (_forestCities.any(city.contains)) return FireLocationType.forest;
+      if (_agriculturalCities.any(city.contains)) return FireLocationType.agricultural;
+    }
+    if (longitude >= 26.0 && longitude <= 30.0 && latitude >= 36.0 && latitude <= 38.5) {
+      return FireLocationType.coastal;
+    }
+    return FireLocationType.generic;
   }
 
   /// Display name for the point's region/city. City/region names coming from
@@ -157,23 +232,113 @@ class FirePoint {
     return acquisitionTime;
   }
 
+  /// Smart, data-driven fire description combining several independent
+  /// clauses: intensity (brightness + FRP/area), location + location-type
+  /// hint, NASA detection confidence, the region's current spread risk
+  /// (cross-referenced against the cached risk summary, when available),
+  /// and how long ago this was detected. Composed as short standalone
+  /// sentences rather than one giant run-on sentence, for readability and
+  /// to keep the Turkish/English grammar clean without a template for
+  /// every possible combination.
   String riskReasonText(AppLocalizations l10n) {
     final bright = double.tryParse(brightness) ?? 0;
-    final temp = bright.toStringAsFixed(0);
+    final location = regionDisplayName(l10n);
+    final sentences = <String>[];
+
+    // 1. Intensity (brightness-based tiers; FRP/area add supporting detail
+    // rather than gating the tier, since FRP can be low even for a
+    // genuinely hot detection depending on pixel footprint).
+    final buffer = StringBuffer();
+    if (bright > 400) {
+      buffer.write(l10n.smartIntensityIntense(location));
+    } else if (bright >= 380) {
+      buffer.write(l10n.smartIntensityHigh(location));
+    } else if (bright >= 360) {
+      buffer.write(l10n.smartIntensityModerate(location));
+    } else if (bright >= 340) {
+      buffer.write(l10n.smartIntensityEarly(location));
+    } else {
+      buffer.write(l10n.smartIntensityAnomaly(location));
+    }
+
+    final hint = switch (locationType) {
+      FireLocationType.forest => l10n.smartLocationHintForest,
+      FireLocationType.coastal => l10n.smartLocationHintCoastal,
+      FireLocationType.urban => l10n.smartLocationHintUrban,
+      FireLocationType.agricultural => l10n.smartLocationHintAgricultural,
+      FireLocationType.generic => null,
+    };
+    if (hint != null) {
+      buffer.write(' ($hint)');
+    }
+    sentences.add(buffer.toString());
+
+    // 2. FRP / estimated area — supporting evidence for intensity.
+    if (frp > 100) {
+      sentences.add(l10n.smartFrpHigh);
+    }
+    final areaKm2 = scanKm * trackKm;
+    final hectares = (areaKm2 * 100).round();
+    if (areaKm2 > 1.0) {
+      sentences.add(l10n.smartAreaLarge(hectares));
+    } else if (areaKm2 > 0.1) {
+      sentences.add(l10n.smartAreaMedium(hectares));
+    }
+
+    // 3. NASA detection confidence.
     switch (riskTier) {
       case 'high':
-        return bright > 0
-            ? l10n.riskReasonHighWithTemp(temp)
-            : l10n.riskReasonHighNoTemp;
+        sentences.add(l10n.smartConfidenceHigh);
+        break;
       case 'medium':
-        return bright > 0
-            ? l10n.riskReasonMediumWithTemp(temp)
-            : l10n.riskReasonMediumNoTemp;
+        sentences.add(l10n.smartConfidenceMedium);
+        break;
       default:
-        return bright > 0
-            ? l10n.riskReasonLowWithTemp(temp)
-            : l10n.riskReasonLowNoTemp;
+        sentences.add(l10n.smartConfidenceLow);
     }
+
+    // 4. Region spread risk, cross-referenced from the cached risk summary.
+    final regionRisk = RiskDataCache.instance.riskForRegionKeySync(riskRegionKey);
+    final regionScore = regionRisk?['general_risk_score'] as int?;
+    if (regionScore != null) {
+      if (regionScore >= 60) {
+        sentences.add(l10n.smartSpreadDangerous);
+      } else if (regionScore >= 30) {
+        sentences.add(l10n.smartSpreadModerate);
+      } else {
+        sentences.add(l10n.smartSpreadLow);
+      }
+    }
+
+    // 5. Time since detection.
+    final detectedAt = _detectionDateTimeUtc;
+    if (detectedAt != null) {
+      final diff = DateTime.now().toUtc().difference(detectedAt);
+      if (diff.inHours < 1) {
+        sentences.add(l10n.smartTimeJustNow(satellite));
+      } else if (diff.inHours < 3) {
+        sentences.add(l10n.smartTimeRecent(diff.inHours, satellite));
+      } else if (diff.inHours < 12) {
+        sentences.add(l10n.smartTimeOlder(diff.inHours));
+      } else {
+        sentences.add(l10n.smartTimeHistorical(diff.inDays));
+      }
+    }
+
+    return sentences.join(' ');
+  }
+
+  DateTime? get _detectionDateTimeUtc {
+    final dateParts = acquisitionDate.split('-');
+    if (dateParts.length != 3) return null;
+    final timeStr = acquisitionTime.padLeft(4, '0');
+    final hour = int.tryParse(timeStr.substring(0, 2));
+    final minute = int.tryParse(timeStr.substring(2, 4));
+    final year = int.tryParse(dateParts[0]);
+    final month = int.tryParse(dateParts[1]);
+    final day = int.tryParse(dateParts[2]);
+    if (hour == null || minute == null || year == null || month == null || day == null) return null;
+    return DateTime.utc(year, month, day, hour, minute);
   }
 
   String generatedDescriptionText(AppLocalizations l10n) {

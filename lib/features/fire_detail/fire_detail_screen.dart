@@ -15,6 +15,7 @@ import '../../services/news_service.dart';
 import '../../services/news_translation_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -197,7 +198,14 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             Row(
               children: [
-                Expanded(child: _MetricCard(title: l10n.commonRisk, value: fire.riskLevel)),
+                Expanded(child: _MetricCard(
+                  title: l10n.commonRisk,
+                  value: fire.riskLevel,
+                  info: InfoIconButton(
+                    title: l10n.tooltipConfidenceTitle,
+                    bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
+                  ),
+                )),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(child: _MetricCard(title: l10n.commonStatus, value: fire.status)),
               ],
@@ -360,8 +368,9 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 class _MetricCard extends StatelessWidget {
   final String title;
   final String value;
+  final Widget? info;
 
-  const _MetricCard({required this.title, required this.value});
+  const _MetricCard({required this.title, required this.value, this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -379,7 +388,12 @@ class _MetricCard extends StatelessWidget {
         children: [
           Text(value, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: valueColor)),
           const SizedBox(height: 4),
-          Text(title, style: GoogleFonts.inter(fontSize: 13, color: labelColor)),
+          Row(
+            children: [
+              Text(title, style: GoogleFonts.inter(fontSize: 13, color: labelColor)),
+              ?info,
+            ],
+          ),
         ],
       ),
     );

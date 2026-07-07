@@ -50,7 +50,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<void> _loadFires() async {
     if (mounted) setState(() => _fireLoading = true);
     try {
-      final fires = await _fireApiService.fetchTurkeyFires();
+      final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
       if (mounted) setState(() {
         _allFires = fires;
@@ -341,6 +341,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           const SizedBox(height: 4),
                                           Text(l10n.notificationsDistanceAndTime(fire.distanceKm?.toStringAsFixed(1) ?? '-', _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime)),
                                               style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                          const SizedBox(height: 6),
+                                          Text(fire.riskReasonText(l10n),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 4),
                                           Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
                                               style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
@@ -389,7 +394,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             final index = entry.key;
                             final fire = entry.value;
                             final timeAgo = _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime);
-                            final bright = double.tryParse(fire.brightness) ?? 0;
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -439,7 +443,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                               const SizedBox(height: AppSpacing.sm),
                                               Text(
-                                                l10n.notificationsHighRiskDetectionBody(fire.regionDisplayName(l10n), bright.toStringAsFixed(0)),
+                                                fire.riskReasonText(l10n),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.inter(fontSize: 13, height: 1.42, color: secondaryTextColor),
                                               ),
                                               const SizedBox(height: AppSpacing.md),

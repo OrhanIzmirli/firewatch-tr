@@ -16,6 +16,7 @@ import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
@@ -85,13 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _loadFires() async {
     if (mounted) setState(() => _fireLoading = true);
     try {
-      final fires = await _fireApiService.fetchTurkeyFires();
-      final enriched = <FirePoint>[];
-      for (final point in fires.take(10)) {
-        final cityInfo = await _fireApiService.getNearestCity(point.latitude, point.longitude);
-        enriched.add(point.copyWith(cityName: cityInfo['city'], nearestRegion: cityInfo['region']));
-      }
-      final allPoints = [...enriched, ...fires.skip(10)];
+      final allPoints = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_firesCacheKey, allPoints.map((p) => p.toJson()).toList());
       if (mounted) setState(() {
         _firePoints = allPoints;
@@ -161,7 +156,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Row(
                 children: [
                   StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
-                  const SizedBox(width: 8),
+                  InfoIconButton(
+                    title: l10n.tooltipConfidenceTitle,
+                    bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
+                  ),
+                  const SizedBox(width: 4),
                   StatusChip(label: '${point.formattedDate} ${point.formattedTime}', icon: Icons.access_time_rounded),
                 ],
               ),
@@ -176,11 +175,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor),
               ),
               const SizedBox(height: AppSpacing.lg),
-              _PreviewRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '$tempC°C'),
+              _PreviewRow(
+                icon: Icons.thermostat_rounded,
+                label: l10n.commonTemperature,
+                value: '$tempC°C (${bright.toStringAsFixed(0)}K)',
+                info: InfoIconButton(title: l10n.tooltipTempTitle, bodyLines: [l10n.tooltipTempBody]),
+              ),
               const SizedBox(height: 8),
               _PreviewRow(icon: Icons.area_chart_rounded, label: l10n.homeEstimatedArea, value: alanTahmini),
               const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.satellite_alt_rounded, label: l10n.commonSatellite, value: point.satellite),
+              _PreviewRow(
+                icon: Icons.satellite_alt_rounded,
+                label: l10n.commonSatellite,
+                value: point.satellite,
+                info: InfoIconButton(
+                  title: l10n.tooltipSatelliteTitle,
+                  bodyLines: [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
+                ),
+              ),
               const SizedBox(height: 8),
               _PreviewRow(icon: Icons.location_on_rounded, label: l10n.commonCoordinate, value: point.locationLabelText(l10n)),
               const SizedBox(height: AppSpacing.lg),
@@ -607,8 +619,9 @@ class _PreviewRow extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
+  final Widget? info;
 
-  const _PreviewRow({required this.icon, required this.label, required this.value});
+  const _PreviewRow({required this.icon, required this.label, required this.value, this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -627,6 +640,7 @@ class _PreviewRow extends StatelessWidget {
               style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color),
               overflow: TextOverflow.ellipsis),
         ),
+        ?info,
       ],
     );
   }

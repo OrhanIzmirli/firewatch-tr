@@ -16,6 +16,7 @@ import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -84,19 +85,8 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _loadFirePoints() async {
     setState(() { _isLoading = true; _errorMessage = null; });
     try {
-      final firePoints = await _fireApiService.fetchTurkeyFires();
-      final withDistances = _attachDistances(firePoints);
-
-      // İlk 10 nokta için şehir bilgisi çek
-      final enriched = <FirePoint>[];
-      for (final point in withDistances.take(10)) {
-        final cityInfo = await _fireApiService.getNearestCity(point.latitude, point.longitude);
-        enriched.add(point.copyWith(
-          cityName: cityInfo['city'],
-          nearestRegion: cityInfo['region'],
-        ));
-      }
-      final allPoints = [...enriched, ...withDistances.skip(10)];
+      final firePoints = await _fireApiService.fetchTurkeyFiresWithCities();
+      final allPoints = _attachDistances(firePoints);
       final nearby = _buildNearbyList(allPoints);
       await OfflineCacheService.instance.save(_cacheKey, allPoints.map((p) => p.toJson()).toList());
 
@@ -209,7 +199,11 @@ class _MapScreenState extends State<MapScreen> {
                 Row(
                   children: [
                     StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
-                    const SizedBox(width: 8),
+                    InfoIconButton(
+                      title: l10n.tooltipConfidenceTitle,
+                      bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
+                    ),
+                    const SizedBox(width: 4),
                     StatusChip(label: timeAgo, icon: Icons.access_time_rounded),
                   ],
                 ),
@@ -223,9 +217,24 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(point.riskReasonText(l10n), style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
-                _DetailRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '$tempC°C', color: secondaryTextColor),
+                _DetailRow(
+                  icon: Icons.thermostat_rounded,
+                  label: l10n.commonTemperature,
+                  value: '$tempC°C (${bright.toStringAsFixed(0)}K)',
+                  color: secondaryTextColor,
+                  info: InfoIconButton(title: l10n.tooltipTempTitle, bodyLines: [l10n.tooltipTempBody]),
+                ),
                 const SizedBox(height: 8),
-                _DetailRow(icon: Icons.satellite_alt_rounded, label: l10n.commonSatellite, value: point.satellite, color: secondaryTextColor),
+                _DetailRow(
+                  icon: Icons.satellite_alt_rounded,
+                  label: l10n.commonSatellite,
+                  value: point.satellite,
+                  color: secondaryTextColor,
+                  info: InfoIconButton(
+                    title: l10n.tooltipSatelliteTitle,
+                    bodyLines: [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
+                  ),
+                ),
                 const SizedBox(height: 8),
                 _DetailRow(icon: Icons.calendar_today_rounded, label: l10n.commonDetection, value: '${point.formattedDate} ${point.formattedTime}', color: secondaryTextColor),
                 if (point.distanceKm != null) ...[
@@ -578,8 +587,9 @@ class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+  final Widget? info;
 
-  const _DetailRow({required this.icon, required this.label, required this.value, required this.color});
+  const _DetailRow({required this.icon, required this.label, required this.value, required this.color, this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -589,6 +599,7 @@ class _DetailRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
         Expanded(child: Text(value, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color))),
+        ?info,
       ],
     );
   }

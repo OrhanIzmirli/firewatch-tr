@@ -65,9 +65,15 @@ class FireApiService {
     final lngIndex = header.indexOf('longitude');
     final brightIndex = header.indexOf('bright_ti4');
     final confIndex = header.indexOf('confidence');
-    final satIndex = header.indexOf('satellite');
+    // 'satellite' is a platform code (e.g. "N" for Suomi NPP) — not
+    // meaningful to show directly. 'instrument' ("VIIRS"/"MODIS") is what
+    // users actually recognize, so that's what we display as satellite.
+    final satIndex = header.indexOf('instrument');
     final dateIndex = header.indexOf('acq_date');
     final timeIndex = header.indexOf('acq_time');
+    final frpIndex = header.indexOf('frp');
+    final scanIndex = header.indexOf('scan');
+    final trackIndex = header.indexOf('track');
 
     if (latIndex == -1 || lngIndex == -1) {
       throw Exception('CSV kolonları beklenen formatta değil.');
@@ -103,6 +109,15 @@ class FireApiService {
           acquisitionTime: timeIndex >= 0 && row.length > timeIndex
               ? row[timeIndex].toString()
               : 'Bilinmiyor',
+          frp: frpIndex >= 0 && row.length > frpIndex
+              ? double.tryParse(row[frpIndex].toString()) ?? 0
+              : 0,
+          scanKm: scanIndex >= 0 && row.length > scanIndex
+              ? double.tryParse(row[scanIndex].toString()) ?? 0
+              : 0,
+          trackKm: trackIndex >= 0 && row.length > trackIndex
+              ? double.tryParse(row[trackIndex].toString()) ?? 0
+              : 0,
         ),
       );
     }
@@ -110,25 +125,43 @@ class FireApiService {
     return fires;
   }
 
-  // Yangın noktalarını şehir bilgisiyle zenginleştir
+  /// Enriches every fire point with its nearest city/region via PostGIS.
+  ///
+  /// Points are grouped by rounded coordinate (~1km) first, since fires
+  /// cluster tightly and would resolve to the same nearest city anyway —
+  /// this cuts a list of 100+ points down to a much smaller number of
+  /// actual lookups. Those lookups run with bounded concurrency so we
+  /// don't fire 100+ simultaneous requests at the (free-tier) backend.
   Future<List<FirePoint>> fetchTurkeyFiresWithCities() async {
     final fires = await fetchTurkeyFires();
-    final enriched = <FirePoint>[];
+    if (fires.isEmpty) return fires;
 
-    // İlk 10 nokta için şehir bilgisi çek, geri kalanlar için mevcut regionName
-    for (int i = 0; i < fires.length; i++) {
-      final point = fires[i];
-      if (i < 10) {
-        final cityInfo = await getNearestCity(point.latitude, point.longitude);
-        enriched.add(point.copyWith(
-          cityName: cityInfo['city'],
-          nearestRegion: cityInfo['region'],
-        ));
-      } else {
-        enriched.add(point);
+    String keyFor(FirePoint p) =>
+        '${p.latitude.toStringAsFixed(2)}_${p.longitude.toStringAsFixed(2)}';
+
+    final representativeByKey = <String, FirePoint>{};
+    for (final p in fires) {
+      representativeByKey.putIfAbsent(keyFor(p), () => p);
+    }
+
+    const concurrency = 10;
+    final cityInfoByKey = <String, Map<String, String>>{};
+    final keys = representativeByKey.keys.toList();
+    for (var i = 0; i < keys.length; i += concurrency) {
+      final batchKeys = keys.skip(i).take(concurrency);
+      final results = await Future.wait(batchKeys.map((key) async {
+        final p = representativeByKey[key]!;
+        return MapEntry(key, await getNearestCity(p.latitude, p.longitude));
+      }));
+      for (final entry in results) {
+        cityInfoByKey[entry.key] = entry.value;
       }
     }
 
-    return enriched;
+    return fires.map((p) {
+      final info = cityInfoByKey[keyFor(p)];
+      if (info == null) return p;
+      return p.copyWith(cityName: info['city'], nearestRegion: info['region']);
+    }).toList();
   }
 }

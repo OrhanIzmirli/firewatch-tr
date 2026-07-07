@@ -727,5 +727,57 @@
   "trustRiskInfo": "Risk scores are calculated from real-time weather and NASA fire data.",
   "trustNewsInfo": "News is filtered for wildfire-related content from 9 Turkish sources.",
   "trustAlertsInfo": "Notifications are sent when a fire is detected within 50km of your location.",
-  "trustCardLabel": "About This Data"
+  "trustCardLabel": "About This Data",
+  "newsReadFullArticle": "Read Full Article",
+
+  "smartIntensityIntense": "An intense, high-severity fire was detected near {location}.",
+  "@smartIntensityIntense": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityHigh": "A high-intensity, active fire was detected near {location}.",
+  "@smartIntensityHigh": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityModerate": "Moderate thermal activity was detected near {location}.",
+  "@smartIntensityModerate": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityEarly": "This may be an early-stage fire or smoldering vegetation near {location}.",
+  "@smartIntensityEarly": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityAnomaly": "A thermal anomaly was detected near {location}.",
+  "@smartIntensityAnomaly": { "placeholders": { "location": { "type": "String" } } },
+
+  "smartLocationHintForest": "a high-risk forest area",
+  "smartLocationHintCoastal": "a coastal area",
+  "smartLocationHintUrban": "an urban area — could be a structure fire or industrial heat source",
+  "smartLocationHintAgricultural": "farmland — possible crop or stubble burning",
+
+  "smartFrpHigh": "A high Fire Radiative Power (FRP) reading indicates significant energy release.",
+  "smartAreaLarge": "Estimated fire area is large (~{hectares} hectares).",
+  "@smartAreaLarge": { "placeholders": { "hectares": { "type": "int" } } },
+  "smartAreaMedium": "Estimated fire area is medium-sized (~{hectares} hectares).",
+  "@smartAreaMedium": { "placeholders": { "hectares": { "type": "int" } } },
+
+  "smartConfidenceHigh": "NASA's satellite is highly confident this is a real fire.",
+  "smartConfidenceMedium": "Likely a fire — verification is recommended.",
+  "smartConfidenceLow": "A possible thermal anomaly — could be industrial heat or reflection, verification needed.",
+
+  "smartSpreadDangerous": "Low humidity and strong winds in the region create dangerous spread conditions.",
+  "smartSpreadModerate": "Spread risk in the region is moderate.",
+  "smartSpreadLow": "Conditions in the region aren't ideal for spread.",
+
+  "smartTimeJustNow": "Just detected by {satellite}.",
+  "@smartTimeJustNow": { "placeholders": { "satellite": { "type": "String" } } },
+  "smartTimeRecent": "Detected {hours} hours ago by {satellite} — may still be active.",
+  "@smartTimeRecent": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "satellite": { "type": "String" }
+    }
+  },
+  "smartTimeOlder": "Detected {hours} hours ago — current status unknown.",
+  "@smartTimeOlder": { "placeholders": { "hours": { "type": "int" } } },
+  "smartTimeHistorical": "An older detection from {days} days ago — may already be extinguished.",
+  "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
+
+  "tooltipTempTitle": "Temperature (Kelvin)",
+  "tooltipTempBody": "K = Kelvin (satellite temperature unit). 296K ≈ 23°C is normal. 370K ≈ 97°C indicates a fire. 400K and above means an intense fire.",
+  "tooltipConfidenceTitle": "What Does Confidence Mean?",
+  "tooltipSatelliteTitle": "What Does Satellite Mean?",
+  "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.",
+  "tooltipSatelliteModisBody": "MODIS: Terra/Aqua satellite, provides wider coverage."
 }

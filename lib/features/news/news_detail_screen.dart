@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -78,6 +79,12 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         _translationFailed = true;
       });
     }
+  }
+
+  Future<void> _openSourceUrl() async {
+    final uri = Uri.tryParse(widget.newsItem.sourceUrl);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   IconData _iconForCategory() {
@@ -260,6 +267,17 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             )
                 .slideY(begin: 0.06, end: 0),
 
+            const SizedBox(height: AppSpacing.lg),
+
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: _openSourceUrl,
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: Text(l10n.newsReadFullArticle),
+              ),
+            ).animate(delay: 100.ms).fadeIn(duration: 280.ms).slideY(begin: 0.1, end: 0),
+
             const SizedBox(height: AppSpacing.xxl),
 
             SectionHeader(
@@ -418,12 +436,23 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 .fadeIn(duration: 280.ms)
                 .slideY(begin: 0.08, end: 0),
 
+            const SizedBox(height: AppSpacing.xxl),
+
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: _openSourceUrl,
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: Text(l10n.newsReadFullArticle),
+              ),
+            ).animate(delay: 280.ms).fadeIn(duration: 280.ms).slideY(begin: 0.1, end: 0),
+
             const SizedBox(height: AppSpacing.xxxl),
 
             Row(
               children: [
                 Expanded(
-                  child: FilledButton.icon(
+                  child: OutlinedButton.icon(
                     onPressed: () {
                       context.push('/risk');
                     },

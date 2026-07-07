@@ -727,5 +727,57 @@
   "trustRiskInfo": "Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.",
   "trustNewsInfo": "Haberler 9 Türk kaynağından yangınla ilgili içerik için filtrelenir.",
   "trustAlertsInfo": "Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.",
-  "trustCardLabel": "Veri Kaynağı Hakkında"
+  "trustCardLabel": "Veri Kaynağı Hakkında",
+  "newsReadFullArticle": "Haberin Tamamını Oku",
+
+  "smartIntensityIntense": "{location} yakınında yoğun ve şiddetli bir yangın tespit edildi.",
+  "@smartIntensityIntense": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityHigh": "{location} yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.",
+  "@smartIntensityHigh": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityModerate": "{location} yakınında orta düzeyde termal aktivite tespit edildi.",
+  "@smartIntensityModerate": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityEarly": "{location} yakınında erken evre bir yangın veya için için yanan bitki örtüsü olabilir.",
+  "@smartIntensityEarly": { "placeholders": { "location": { "type": "String" } } },
+  "smartIntensityAnomaly": "{location} yakınında bir termal anomali tespit edildi.",
+  "@smartIntensityAnomaly": { "placeholders": { "location": { "type": "String" } } },
+
+  "smartLocationHintForest": "ormanlık, yüksek riskli bir bölgede",
+  "smartLocationHintCoastal": "kıyı bölgesinde",
+  "smartLocationHintUrban": "kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir",
+  "smartLocationHintAgricultural": "tarım arazisinde; anız yakma ihtimali var",
+
+  "smartFrpHigh": "Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.",
+  "smartAreaLarge": "Tahmini yangın alanı geniş (~{hectares} hektar).",
+  "@smartAreaLarge": { "placeholders": { "hectares": { "type": "int" } } },
+  "smartAreaMedium": "Tahmini yangın alanı orta büyüklükte (~{hectares} hektar).",
+  "@smartAreaMedium": { "placeholders": { "hectares": { "type": "int" } } },
+
+  "smartConfidenceHigh": "NASA uydusu bu tespitten yüksek düzeyde emin.",
+  "smartConfidenceMedium": "Muhtemelen bir yangın, doğrulama öneriliyor.",
+  "smartConfidenceLow": "Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.",
+
+  "smartSpreadDangerous": "Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.",
+  "smartSpreadModerate": "Bölgedeki yayılma riski orta düzeyde.",
+  "smartSpreadLow": "Bölgedeki koşullar yayılma için pek uygun değil.",
+
+  "smartTimeJustNow": "Az önce {satellite} tarafından tespit edildi.",
+  "@smartTimeJustNow": { "placeholders": { "satellite": { "type": "String" } } },
+  "smartTimeRecent": "{hours} saat önce {satellite} tarafından tespit edildi, hâlâ aktif olabilir.",
+  "@smartTimeRecent": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "satellite": { "type": "String" }
+    }
+  },
+  "smartTimeOlder": "{hours} saat önce tespit edildi, mevcut durumu bilinmiyor.",
+  "@smartTimeOlder": { "placeholders": { "hours": { "type": "int" } } },
+  "smartTimeHistorical": "{days} gün önce yapılmış eski bir tespit; söndürülmüş olabilir.",
+  "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
+
+  "tooltipTempTitle": "Sıcaklık (Kelvin)",
+  "tooltipTempBody": "K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.",
+  "tooltipConfidenceTitle": "Güven Seviyesi Ne Anlama Gelir?",
+  "tooltipSatelliteTitle": "Uydu Ne Anlama Gelir?",
+  "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.",
+  "tooltipSatelliteModisBody": "MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar."
 }

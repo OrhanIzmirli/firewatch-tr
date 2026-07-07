@@ -1720,4 +1720,124 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustCardLabel => 'About This Data';
+
+  @override
+  String get newsReadFullArticle => 'Read Full Article';
+
+  @override
+  String smartIntensityIntense(String location) {
+    return 'An intense, high-severity fire was detected near $location.';
+  }
+
+  @override
+  String smartIntensityHigh(String location) {
+    return 'A high-intensity, active fire was detected near $location.';
+  }
+
+  @override
+  String smartIntensityModerate(String location) {
+    return 'Moderate thermal activity was detected near $location.';
+  }
+
+  @override
+  String smartIntensityEarly(String location) {
+    return 'This may be an early-stage fire or smoldering vegetation near $location.';
+  }
+
+  @override
+  String smartIntensityAnomaly(String location) {
+    return 'A thermal anomaly was detected near $location.';
+  }
+
+  @override
+  String get smartLocationHintForest => 'a high-risk forest area';
+
+  @override
+  String get smartLocationHintCoastal => 'a coastal area';
+
+  @override
+  String get smartLocationHintUrban =>
+      'an urban area — could be a structure fire or industrial heat source';
+
+  @override
+  String get smartLocationHintAgricultural =>
+      'farmland — possible crop or stubble burning';
+
+  @override
+  String get smartFrpHigh =>
+      'A high Fire Radiative Power (FRP) reading indicates significant energy release.';
+
+  @override
+  String smartAreaLarge(int hectares) {
+    return 'Estimated fire area is large (~$hectares hectares).';
+  }
+
+  @override
+  String smartAreaMedium(int hectares) {
+    return 'Estimated fire area is medium-sized (~$hectares hectares).';
+  }
+
+  @override
+  String get smartConfidenceHigh =>
+      'NASA\'s satellite is highly confident this is a real fire.';
+
+  @override
+  String get smartConfidenceMedium =>
+      'Likely a fire — verification is recommended.';
+
+  @override
+  String get smartConfidenceLow =>
+      'A possible thermal anomaly — could be industrial heat or reflection, verification needed.';
+
+  @override
+  String get smartSpreadDangerous =>
+      'Low humidity and strong winds in the region create dangerous spread conditions.';
+
+  @override
+  String get smartSpreadModerate => 'Spread risk in the region is moderate.';
+
+  @override
+  String get smartSpreadLow =>
+      'Conditions in the region aren\'t ideal for spread.';
+
+  @override
+  String smartTimeJustNow(String satellite) {
+    return 'Just detected by $satellite.';
+  }
+
+  @override
+  String smartTimeRecent(int hours, String satellite) {
+    return 'Detected $hours hours ago by $satellite — may still be active.';
+  }
+
+  @override
+  String smartTimeOlder(int hours) {
+    return 'Detected $hours hours ago — current status unknown.';
+  }
+
+  @override
+  String smartTimeHistorical(int days) {
+    return 'An older detection from $days days ago — may already be extinguished.';
+  }
+
+  @override
+  String get tooltipTempTitle => 'Temperature (Kelvin)';
+
+  @override
+  String get tooltipTempBody =>
+      'K = Kelvin (satellite temperature unit). 296K ≈ 23°C is normal. 370K ≈ 97°C indicates a fire. 400K and above means an intense fire.';
+
+  @override
+  String get tooltipConfidenceTitle => 'What Does Confidence Mean?';
+
+  @override
+  String get tooltipSatelliteTitle => 'What Does Satellite Mean?';
+
+  @override
+  String get tooltipSatelliteViirsBody =>
+      'VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.';
+
+  @override
+  String get tooltipSatelliteModisBody =>
+      'MODIS: Terra/Aqua satellite, provides wider coverage.';
 }

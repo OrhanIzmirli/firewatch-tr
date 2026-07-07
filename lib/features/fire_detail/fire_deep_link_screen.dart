@@ -38,7 +38,8 @@ class _FireDeepLinkScreenState extends State<FireDeepLinkScreen> {
 
     if (targetLat != null && targetLng != null) {
       try {
-        final fires = await FireApiService().fetchTurkeyFires();
+        final apiService = FireApiService();
+        final fires = await apiService.fetchTurkeyFires();
         FirePointMatch? closest;
         for (final point in fires) {
           final dLat = point.latitude - targetLat;
@@ -50,9 +51,15 @@ class _FireDeepLinkScreenState extends State<FireDeepLinkScreen> {
         }
         // ~0.05 deg (~5km) tolerance to account for float rounding in the id.
         if (closest != null && closest.distSq < 0.05 * 0.05) {
+          // Only the matched point needs a city lookup — cheap single call.
+          final cityInfo = await apiService.getNearestCity(closest.point.latitude, closest.point.longitude);
+          final enrichedPoint = closest.point.copyWith(
+            cityName: cityInfo['city'],
+            nearestRegion: cityInfo['region'],
+          );
           if (!mounted) return;
           final l10n = AppLocalizations.of(context)!;
-          context.go('/fire-detail', extra: convertPointToFireEvent(closest.point, l10n));
+          context.go('/fire-detail', extra: convertPointToFireEvent(enrichedPoint, l10n));
           return;
         }
       } catch (_) {

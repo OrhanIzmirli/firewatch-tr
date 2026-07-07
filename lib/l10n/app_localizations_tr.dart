@@ -1716,4 +1716,124 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustCardLabel => 'Veri Kaynağı Hakkında';
+
+  @override
+  String get newsReadFullArticle => 'Haberin Tamamını Oku';
+
+  @override
+  String smartIntensityIntense(String location) {
+    return '$location yakınında yoğun ve şiddetli bir yangın tespit edildi.';
+  }
+
+  @override
+  String smartIntensityHigh(String location) {
+    return '$location yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.';
+  }
+
+  @override
+  String smartIntensityModerate(String location) {
+    return '$location yakınında orta düzeyde termal aktivite tespit edildi.';
+  }
+
+  @override
+  String smartIntensityEarly(String location) {
+    return '$location yakınında erken evre bir yangın veya için için yanan bitki örtüsü olabilir.';
+  }
+
+  @override
+  String smartIntensityAnomaly(String location) {
+    return '$location yakınında bir termal anomali tespit edildi.';
+  }
+
+  @override
+  String get smartLocationHintForest => 'ormanlık, yüksek riskli bir bölgede';
+
+  @override
+  String get smartLocationHintCoastal => 'kıyı bölgesinde';
+
+  @override
+  String get smartLocationHintUrban =>
+      'kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir';
+
+  @override
+  String get smartLocationHintAgricultural =>
+      'tarım arazisinde; anız yakma ihtimali var';
+
+  @override
+  String get smartFrpHigh =>
+      'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.';
+
+  @override
+  String smartAreaLarge(int hectares) {
+    return 'Tahmini yangın alanı geniş (~$hectares hektar).';
+  }
+
+  @override
+  String smartAreaMedium(int hectares) {
+    return 'Tahmini yangın alanı orta büyüklükte (~$hectares hektar).';
+  }
+
+  @override
+  String get smartConfidenceHigh =>
+      'NASA uydusu bu tespitten yüksek düzeyde emin.';
+
+  @override
+  String get smartConfidenceMedium =>
+      'Muhtemelen bir yangın, doğrulama öneriliyor.';
+
+  @override
+  String get smartConfidenceLow =>
+      'Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.';
+
+  @override
+  String get smartSpreadDangerous =>
+      'Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.';
+
+  @override
+  String get smartSpreadModerate => 'Bölgedeki yayılma riski orta düzeyde.';
+
+  @override
+  String get smartSpreadLow =>
+      'Bölgedeki koşullar yayılma için pek uygun değil.';
+
+  @override
+  String smartTimeJustNow(String satellite) {
+    return 'Az önce $satellite tarafından tespit edildi.';
+  }
+
+  @override
+  String smartTimeRecent(int hours, String satellite) {
+    return '$hours saat önce $satellite tarafından tespit edildi, hâlâ aktif olabilir.';
+  }
+
+  @override
+  String smartTimeOlder(int hours) {
+    return '$hours saat önce tespit edildi, mevcut durumu bilinmiyor.';
+  }
+
+  @override
+  String smartTimeHistorical(int days) {
+    return '$days gün önce yapılmış eski bir tespit; söndürülmüş olabilir.';
+  }
+
+  @override
+  String get tooltipTempTitle => 'Sıcaklık (Kelvin)';
+
+  @override
+  String get tooltipTempBody =>
+      'K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.';
+
+  @override
+  String get tooltipConfidenceTitle => 'Güven Seviyesi Ne Anlama Gelir?';
+
+  @override
+  String get tooltipSatelliteTitle => 'Uydu Ne Anlama Gelir?';
+
+  @override
+  String get tooltipSatelliteViirsBody =>
+      'VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.';
+
+  @override
+  String get tooltipSatelliteModisBody =>
+      'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.';
 }

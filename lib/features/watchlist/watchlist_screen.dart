@@ -42,7 +42,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
   Future<void> _loadFires() async {
     if (mounted) setState(() => _loading = true);
     try {
-      final fires = await _fireApiService.fetchTurkeyFires();
+      final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
       if (mounted) setState(() { _allFires = fires; _loading = false; _isOffline = false; });
     } catch (_) {

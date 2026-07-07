@@ -12,6 +12,7 @@ import 'services/background_task_service.dart';
 import 'services/fire_monitoring_service.dart';
 import 'services/locale_provider.dart';
 import 'services/notification_service.dart';
+import 'services/risk_data_cache.dart';
 import 'services/settings_provider.dart';
 
 Future<void> main() async {
@@ -24,6 +25,10 @@ Future<void> main() async {
   } catch (e, st) {
     debugPrint('Firebase.initializeApp failed: $e\n$st');
   }
+
+  // Fire-and-forget: enriches fire descriptions once loaded, but must not
+  // block the splash screen on a network call.
+  RiskDataCache.instance.warmUp();
 
   if (!kIsWeb) {
     try {

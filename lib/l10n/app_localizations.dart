@@ -3086,6 +3086,180 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Veri Kaynağı Hakkında'**
   String get trustCardLabel;
+
+  /// No description provided for @newsReadFullArticle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberin Tamamını Oku'**
+  String get newsReadFullArticle;
+
+  /// No description provided for @smartIntensityIntense.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} yakınında yoğun ve şiddetli bir yangın tespit edildi.'**
+  String smartIntensityIntense(String location);
+
+  /// No description provided for @smartIntensityHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.'**
+  String smartIntensityHigh(String location);
+
+  /// No description provided for @smartIntensityModerate.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} yakınında orta düzeyde termal aktivite tespit edildi.'**
+  String smartIntensityModerate(String location);
+
+  /// No description provided for @smartIntensityEarly.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} yakınında erken evre bir yangın veya için için yanan bitki örtüsü olabilir.'**
+  String smartIntensityEarly(String location);
+
+  /// No description provided for @smartIntensityAnomaly.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} yakınında bir termal anomali tespit edildi.'**
+  String smartIntensityAnomaly(String location);
+
+  /// No description provided for @smartLocationHintForest.
+  ///
+  /// In tr, this message translates to:
+  /// **'ormanlık, yüksek riskli bir bölgede'**
+  String get smartLocationHintForest;
+
+  /// No description provided for @smartLocationHintCoastal.
+  ///
+  /// In tr, this message translates to:
+  /// **'kıyı bölgesinde'**
+  String get smartLocationHintCoastal;
+
+  /// No description provided for @smartLocationHintUrban.
+  ///
+  /// In tr, this message translates to:
+  /// **'kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir'**
+  String get smartLocationHintUrban;
+
+  /// No description provided for @smartLocationHintAgricultural.
+  ///
+  /// In tr, this message translates to:
+  /// **'tarım arazisinde; anız yakma ihtimali var'**
+  String get smartLocationHintAgricultural;
+
+  /// No description provided for @smartFrpHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.'**
+  String get smartFrpHigh;
+
+  /// No description provided for @smartAreaLarge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahmini yangın alanı geniş (~{hectares} hektar).'**
+  String smartAreaLarge(int hectares);
+
+  /// No description provided for @smartAreaMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahmini yangın alanı orta büyüklükte (~{hectares} hektar).'**
+  String smartAreaMedium(int hectares);
+
+  /// No description provided for @smartConfidenceHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA uydusu bu tespitten yüksek düzeyde emin.'**
+  String get smartConfidenceHigh;
+
+  /// No description provided for @smartConfidenceMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Muhtemelen bir yangın, doğrulama öneriliyor.'**
+  String get smartConfidenceMedium;
+
+  /// No description provided for @smartConfidenceLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.'**
+  String get smartConfidenceLow;
+
+  /// No description provided for @smartSpreadDangerous.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.'**
+  String get smartSpreadDangerous;
+
+  /// No description provided for @smartSpreadModerate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgedeki yayılma riski orta düzeyde.'**
+  String get smartSpreadModerate;
+
+  /// No description provided for @smartSpreadLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgedeki koşullar yayılma için pek uygun değil.'**
+  String get smartSpreadLow;
+
+  /// No description provided for @smartTimeJustNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Az önce {satellite} tarafından tespit edildi.'**
+  String smartTimeJustNow(String satellite);
+
+  /// No description provided for @smartTimeRecent.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saat önce {satellite} tarafından tespit edildi, hâlâ aktif olabilir.'**
+  String smartTimeRecent(int hours, String satellite);
+
+  /// No description provided for @smartTimeOlder.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saat önce tespit edildi, mevcut durumu bilinmiyor.'**
+  String smartTimeOlder(int hours);
+
+  /// No description provided for @smartTimeHistorical.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün önce yapılmış eski bir tespit; söndürülmüş olabilir.'**
+  String smartTimeHistorical(int days);
+
+  /// No description provided for @tooltipTempTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcaklık (Kelvin)'**
+  String get tooltipTempTitle;
+
+  /// No description provided for @tooltipTempBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.'**
+  String get tooltipTempBody;
+
+  /// No description provided for @tooltipConfidenceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güven Seviyesi Ne Anlama Gelir?'**
+  String get tooltipConfidenceTitle;
+
+  /// No description provided for @tooltipSatelliteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu Ne Anlama Gelir?'**
+  String get tooltipSatelliteTitle;
+
+  /// No description provided for @tooltipSatelliteViirsBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.'**
+  String get tooltipSatelliteViirsBody;
+
+  /// No description provided for @tooltipSatelliteModisBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.'**
+  String get tooltipSatelliteModisBody;
 }
 
 class _AppLocalizationsDelegate

@@ -17,6 +17,7 @@ import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/trust_info_card.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -214,6 +215,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             ],
                           ),
                         ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.06, end: 0),
+
+                        const SizedBox(height: AppSpacing.md),
+                        TrustInfoCard(text: l10n.trustAlertsInfo),
 
                         const SizedBox(height: AppSpacing.xxl),
 

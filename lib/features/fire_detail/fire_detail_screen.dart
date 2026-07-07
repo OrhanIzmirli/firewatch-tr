@@ -12,9 +12,11 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
+import '../../services/news_translation_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 
 class FireDetailScreen extends ConsumerStatefulWidget {
@@ -30,10 +32,56 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   final NewsService _newsService = NewsService();
   Future<List<NewsItem>>? _newsFuture;
 
+  bool _autoTranslateKicked = false;
+  final Set<String> _translatingIds = {};
+  final Map<String, String> _translatedTitles = {};
+  final Map<String, String> _translatedSummaries = {};
+
   @override
   void initState() {
     super.initState();
     _newsFuture = _newsService.fetchNewsFromRender(limit: 3);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_autoTranslateKicked) return;
+    _autoTranslateKicked = true;
+    if (Localizations.localeOf(context).languageCode != 'en') return;
+    _newsFuture?.then((items) {
+      if (!mounted) return;
+      for (final item in items) {
+        _autoTranslateItem(item);
+      }
+    });
+  }
+
+  Future<void> _autoTranslateItem(NewsItem item) async {
+    if (!mounted) return;
+    setState(() => _translatingIds.add(item.id));
+    try {
+      final title = await NewsTranslationService.instance.translate(
+        articleId: item.id,
+        field: 'title',
+        text: item.title,
+      );
+      final summary = await NewsTranslationService.instance.translate(
+        articleId: item.id,
+        field: 'summary',
+        text: item.summary,
+      );
+      if (!mounted) return;
+      setState(() {
+        _translatedTitles[item.id] = title;
+        _translatedSummaries[item.id] = summary;
+        _translatingIds.remove(item.id);
+      });
+    } catch (_) {
+      // Falls back to showing the original Turkish text below.
+      if (!mounted) return;
+      setState(() => _translatingIds.remove(item.id));
+    }
   }
 
   // "1041" → "10:41" → "X saat önce"
@@ -248,6 +296,10 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                 }
                 return Column(
                   children: news.map((item) {
+                    final isTranslating = _translatingIds.contains(item.id);
+                    final displayTitle = _translatedTitles[item.id] ?? item.title;
+                    final displaySummary = _translatedSummaries[item.id] ?? item.summary;
+
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppSpacing.md),
                       child: InkWell(
@@ -257,11 +309,26 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item.title,
-                                  style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: titleColor)),
-                              const SizedBox(height: 6),
-                              Text(item.summary,
-                                  style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                              if (isTranslating)
+                                ShimmerWrap(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const SkeletonBox(width: double.infinity, height: 16),
+                                      const SizedBox(height: 8),
+                                      const SkeletonBox(width: double.infinity, height: 12),
+                                      const SizedBox(height: 6),
+                                      SkeletonBox(width: MediaQuery.of(context).size.width * 0.4, height: 12),
+                                    ],
+                                  ),
+                                )
+                              else ...[
+                                Text(displayTitle,
+                                    style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: titleColor)),
+                                const SizedBox(height: 6),
+                                Text(displaySummary,
+                                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                              ],
                               const SizedBox(height: 6),
                               Row(
                                 children: [

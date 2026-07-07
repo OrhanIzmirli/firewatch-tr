@@ -5,6 +5,7 @@ import '../features/emergency/emergency_screen.dart';
 import '../features/fire_detail/fire_deep_link_screen.dart';
 import '../features/fire_detail/fire_detail_screen.dart';
 import '../features/home/main_shell_screen.dart';
+import '../features/language_selection/language_selection_screen.dart';
 import '../features/location_permission/location_permission_screen.dart';
 import '../features/news/news_detail_screen.dart';
 import '../features/notification_permission/notification_permission_screen.dart';
@@ -26,6 +27,10 @@ class AppRouter {
       GoRoute(
         path: '/',
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/language-selection',
+        builder: (context, state) => const LanguageSelectionScreen(),
       ),
       GoRoute(
         path: '/onboarding',

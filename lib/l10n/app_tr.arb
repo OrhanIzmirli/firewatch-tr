@@ -702,5 +702,30 @@
     }
   },
   "notifTestBody": "Test bildirimi hazır.",
-  "notifNewNotificationBody": "Yeni bildirim"
+  "notifNewNotificationBody": "Yeni bildirim",
+
+  "riskOutsideTurkeyBanner": "Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.",
+  "riskComparisonTitle": "Türkiye Ortalamasıyla Karşılaştırma",
+  "riskComparisonHigherRisk": "Daha yüksek risk",
+  "riskComparisonLowerRisk": "Daha düşük risk",
+  "riskComparisonSimilar": "Türkiye ortalamasına yakın",
+
+  "riskInfoButtonTooltip": "Risk skoru nasıl hesaplanır?",
+  "riskInfoTitle": "Risk Skoru Nasıl Hesaplanır?",
+  "riskInfoFormulaTitle": "Skor Formülü",
+  "riskInfoFormulaTemp": "Sıcaklık (en fazla 30 puan)",
+  "riskInfoFormulaHumidity": "Düşük Nem (en fazla 25 puan)",
+  "riskInfoFormulaWind": "Rüzgar (en fazla 25 puan)",
+  "riskInfoFormulaFireCount": "NASA Yangın Sayısı (en fazla 20 puan)",
+  "riskInfoSourcesTitle": "Veri Kaynakları",
+  "riskInfoSourcesBody": "NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.",
+  "riskInfoUpdateFrequencyTitle": "Güncelleme Sıklığı",
+  "riskInfoUpdateFrequencyBody": "Risk skorları her 12 saatte bir yeniden hesaplanır.",
+
+  "trustHomeInfo": "Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.",
+  "trustMapInfo": "Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.",
+  "trustRiskInfo": "Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.",
+  "trustNewsInfo": "Haberler 9 Türk kaynağından yangınla ilgili içerik için filtrelenir.",
+  "trustAlertsInfo": "Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.",
+  "trustCardLabel": "Veri Kaynağı Hakkında"
 }

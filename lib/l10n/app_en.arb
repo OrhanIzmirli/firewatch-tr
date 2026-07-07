@@ -702,5 +702,30 @@
     }
   },
   "notifTestBody": "Test notification ready.",
-  "notifNewNotificationBody": "New notification"
+  "notifNewNotificationBody": "New notification",
+
+  "riskOutsideTurkeyBanner": "You are outside Turkey. Showing the nearest Turkish region to your location.",
+  "riskComparisonTitle": "Comparison with Turkey Average",
+  "riskComparisonHigherRisk": "Higher risk",
+  "riskComparisonLowerRisk": "Lower risk",
+  "riskComparisonSimilar": "Similar to Turkey average",
+
+  "riskInfoButtonTooltip": "How is the risk score calculated?",
+  "riskInfoTitle": "How Is the Risk Score Calculated?",
+  "riskInfoFormulaTitle": "Score Formula",
+  "riskInfoFormulaTemp": "Temperature (max 30 pts)",
+  "riskInfoFormulaHumidity": "Low Humidity (max 25 pts)",
+  "riskInfoFormulaWind": "Wind (max 25 pts)",
+  "riskInfoFormulaFireCount": "NASA Fire Count (max 20 pts)",
+  "riskInfoSourcesTitle": "Data Sources",
+  "riskInfoSourcesBody": "Calculated using NASA FIRMS satellite data, Open-Meteo weather data, and RSS news feeds.",
+  "riskInfoUpdateFrequencyTitle": "Update Frequency",
+  "riskInfoUpdateFrequencyBody": "Risk scores are recalculated every 12 hours.",
+
+  "trustHomeInfo": "Data sourced from NASA FIRMS satellite imagery, updated every 3 hours.",
+  "trustMapInfo": "Fire markers show thermal anomalies detected by the VIIRS satellite.",
+  "trustRiskInfo": "Risk scores are calculated from real-time weather and NASA fire data.",
+  "trustNewsInfo": "News is filtered for wildfire-related content from 9 Turkish sources.",
+  "trustAlertsInfo": "Notifications are sent when a fire is detected within 50km of your location.",
+  "trustCardLabel": "About This Data"
 }

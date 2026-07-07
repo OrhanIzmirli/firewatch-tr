@@ -23,13 +23,15 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(milliseconds: 1800));
 
     final prefs = SharedPreferencesAsync();
-    final hasSeenOnboarding =
-        await prefs.getBool('hasSeenOnboarding') ?? false;
+    final hasSelectedLanguage = await prefs.getBool('hasSelectedLanguage') ?? false;
+    final hasSeenOnboarding = await prefs.getBool('hasSeenOnboarding') ?? false;
 
     if (!mounted) return;
 
     if (hasSeenOnboarding) {
       context.go('/app');
+    } else if (!hasSelectedLanguage) {
+      context.go('/language-selection');
     } else {
       context.go('/onboarding');
     }

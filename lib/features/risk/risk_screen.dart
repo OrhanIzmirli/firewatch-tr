@@ -14,6 +14,7 @@ import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/trust_info_card.dart';
 
 Color _colorForApiLevel(String level) {
   switch (level) {
@@ -25,6 +26,10 @@ Color _colorForApiLevel(String level) {
     default:
       return AppColors.success;
   }
+}
+
+bool _isWithinTurkey(double lat, double lng) {
+  return lat >= 35.5 && lat <= 42.5 && lng >= 25.5 && lng <= 45.0;
 }
 
 String _displayRegionName(AppLocalizations l10n, String region) {
@@ -62,6 +67,7 @@ class _RiskScreenState extends State<RiskScreen> {
   String? _myLocationError;
   String? _myCity;
   String? _myRegionRaw;
+  bool _myLocationOutsideTurkey = false;
 
   @override
   void initState() {
@@ -144,6 +150,7 @@ class _RiskScreenState extends State<RiskScreen> {
       setState(() {
         _myCity = cityInfo['city'];
         _myRegionRaw = regionRaw;
+        _myLocationOutsideTurkey = !_isWithinTurkey(position.latitude, position.longitude);
         _myLocationLoading = false;
         _myLocationError = matches ? null : 'region_not_found';
       });
@@ -198,6 +205,71 @@ class _RiskScreenState extends State<RiskScreen> {
     else if (wind >= 15) parts.add(l10n.riskNoteMediumWind(wind.toInt()));
 
     return parts.join(' • ');
+  }
+
+  void _showRiskInfoSheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        final theme = Theme.of(sheetContext);
+        final isDark = theme.brightness == Brightness.dark;
+        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+        final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.74) : Colors.black.withValues(alpha: 0.66);
+        final mutedTextColor = isDark ? AppColors.white.withValues(alpha: 0.58) : Colors.black.withValues(alpha: 0.5);
+
+        Widget formulaLine(IconData icon, String text) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, size: 16, color: AppColors.primary),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(child: Text(text, style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor))),
+                ],
+              ),
+            );
+
+        return Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: GlassPanel(
+            padding: const EdgeInsets.all(AppSpacing.xl),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.riskInfoTitle,
+                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor)),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(l10n.riskInfoFormulaTitle,
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                  const SizedBox(height: AppSpacing.sm),
+                  formulaLine(Icons.thermostat_rounded, l10n.riskInfoFormulaTemp),
+                  formulaLine(Icons.water_drop_outlined, l10n.riskInfoFormulaHumidity),
+                  formulaLine(Icons.air_rounded, l10n.riskInfoFormulaWind),
+                  formulaLine(Icons.local_fire_department_rounded, l10n.riskInfoFormulaFireCount),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(l10n.riskInfoSourcesTitle,
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                  const SizedBox(height: 6),
+                  Text(l10n.riskInfoSourcesBody,
+                      style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor)),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(l10n.riskInfoUpdateFrequencyTitle,
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                  const SizedBox(height: 6),
+                  Text(l10n.riskInfoUpdateFrequencyBody,
+                      style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: mutedTextColor)),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showRegionDetail(BuildContext context, Map<String, dynamic> region) {
@@ -342,6 +414,11 @@ class _RiskScreenState extends State<RiskScreen> {
         title: Text(l10n.riskTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
+            icon: const Icon(Icons.info_outline_rounded),
+            tooltip: l10n.riskInfoButtonTooltip,
+            onPressed: () => _showRiskInfoSheet(context),
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: () {
               setState(() => _loading = true);
@@ -416,6 +493,9 @@ class _RiskScreenState extends State<RiskScreen> {
                         curve: Curves.easeOutCubic,
                       ).slideY(begin: 0.06, end: 0),
 
+                  const SizedBox(height: AppSpacing.md),
+                  TrustInfoCard(text: l10n.trustRiskInfo),
+
                   const SizedBox(height: AppSpacing.xl),
 
                   // ── Turkey Overview / My Location toggle ──────────
@@ -449,6 +529,12 @@ class _RiskScreenState extends State<RiskScreen> {
                       regionData: _myRegionData,
                       regions: _regions,
                       avgRiskScore: avgRiskScore,
+                      avgTemp: _avgTemp,
+                      avgHumidity: _avgHumidity,
+                      avgWind: _avgWind,
+                      avgDryness: _avgDryness,
+                      avgVegetation: _avgVegetation,
+                      outsideTurkey: _myLocationOutsideTurkey,
                       onRetry: _loadMyLocation,
                       onTapRegion: () {
                         final data = _myRegionData;
@@ -781,6 +867,12 @@ class _MyLocationSection extends StatelessWidget {
   final Map<String, dynamic>? regionData;
   final List<Map<String, dynamic>> regions;
   final int avgRiskScore;
+  final double avgTemp;
+  final double avgHumidity;
+  final double avgWind;
+  final double avgDryness;
+  final double avgVegetation;
+  final bool outsideTurkey;
   final VoidCallback onRetry;
   final VoidCallback onTapRegion;
 
@@ -791,6 +883,12 @@ class _MyLocationSection extends StatelessWidget {
     required this.regionData,
     required this.regions,
     required this.avgRiskScore,
+    required this.avgTemp,
+    required this.avgHumidity,
+    required this.avgWind,
+    required this.avgDryness,
+    required this.avgVegetation,
+    required this.outsideTurkey,
     required this.onRetry,
     required this.onTapRegion,
   });
@@ -858,6 +956,7 @@ class _MyLocationSection extends StatelessWidget {
     final hum = double.tryParse(data['humidity'].toString()) ?? 0;
     final wind = double.tryParse(data['wind_speed'].toString()) ?? 0;
     final dryness = double.tryParse(data['dryness_index'].toString()) ?? 0;
+    final vegetation = double.tryParse(data['vegetation_density'].toString()) ?? 0;
 
     final sorted = [...regions]..sort((a, b) => (b['general_risk_score'] as int).compareTo(a['general_risk_score'] as int));
     final rank = sorted.indexWhere((r) => r['region'] == data['region']) + 1;
@@ -867,6 +966,25 @@ class _MyLocationSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (outsideTurkey) ...[
+          GlassPanel(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.public_off_rounded, color: AppColors.warning),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    l10n.riskOutsideTurkeyBanner,
+                    style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 320.ms),
+          const SizedBox(height: AppSpacing.md),
+        ],
         InkWell(
           borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
           onTap: onTapRegion,
@@ -957,8 +1075,85 @@ class _MyLocationSection extends StatelessWidget {
               accent: AppColors.danger,
               delay: const Duration(milliseconds: 340),
             ),
+            _RiskMetricCard(
+              title: l10n.riskVegetationDensity,
+              value: '${vegetation.toInt()}',
+              subtitle: vegetation >= 60 ? l10n.riskVegetationMediumHigh : l10n.commonMedium,
+              icon: Icons.eco_outlined,
+              accent: AppColors.primary,
+              delay: const Duration(milliseconds: 400),
+            ),
           ],
         ),
+
+        const SizedBox(height: AppSpacing.xxl),
+
+        SectionHeader(
+          title: l10n.riskComparisonTitle,
+          subtitle: l10n.riskTurkeyAverage,
+          icon: Icons.compare_arrows_rounded,
+        ),
+        const SizedBox(height: AppSpacing.md),
+
+        GlassPanel(
+          child: Column(
+            children: [
+              _ComparisonRow(
+                icon: Icons.local_fire_department_rounded,
+                label: l10n.riskGeneralRisk,
+                regionValue: score.toDouble(),
+                avgValue: avgRiskScore.toDouble(),
+                unit: '',
+                invertedRisk: false,
+              ),
+              const Divider(height: AppSpacing.xl),
+              _ComparisonRow(
+                icon: Icons.thermostat_rounded,
+                label: l10n.commonTemperature,
+                regionValue: temp,
+                avgValue: avgTemp,
+                unit: '°C',
+                invertedRisk: false,
+              ),
+              const Divider(height: AppSpacing.xl),
+              _ComparisonRow(
+                icon: Icons.water_drop_outlined,
+                label: l10n.riskHumidity,
+                regionValue: hum,
+                avgValue: avgHumidity,
+                unit: '%',
+                invertedRisk: true,
+              ),
+              const Divider(height: AppSpacing.xl),
+              _ComparisonRow(
+                icon: Icons.air_rounded,
+                label: l10n.commonWind,
+                regionValue: wind,
+                avgValue: avgWind,
+                unit: 'km/h',
+                invertedRisk: false,
+              ),
+              const Divider(height: AppSpacing.xl),
+              _ComparisonRow(
+                icon: Icons.grain_rounded,
+                label: l10n.riskDrynessIndex,
+                regionValue: dryness,
+                avgValue: avgDryness,
+                unit: '',
+                invertedRisk: false,
+              ),
+              const Divider(height: AppSpacing.xl),
+              _ComparisonRow(
+                icon: Icons.eco_outlined,
+                label: l10n.riskVegetationDensity,
+                regionValue: vegetation,
+                avgValue: avgVegetation,
+                unit: '',
+                invertedRisk: false,
+              ),
+            ],
+          ),
+        ).animate(delay: 120.ms).fadeIn(duration: 320.ms).slideY(begin: 0.06, end: 0),
       ],
     );
   }
@@ -970,6 +1165,74 @@ class _MyLocationSection extends StatelessWidget {
       case 'Medium': return l10n.commonMedium;
       default: return l10n.commonLow;
     }
+  }
+}
+
+class _ComparisonRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final double regionValue;
+  final double avgValue;
+  final String unit;
+  /// True when a lower value means higher risk (e.g. humidity).
+  final bool invertedRisk;
+
+  const _ComparisonRow({
+    required this.icon,
+    required this.label,
+    required this.regionValue,
+    required this.avgValue,
+    required this.unit,
+    required this.invertedRisk,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
+        (isDark ? AppColors.white : const Color(0xFF0F172A));
+    final mutedColor = isDark ? AppColors.white.withValues(alpha: 0.58) : Colors.black.withValues(alpha: 0.5);
+
+    final diff = regionValue - avgValue;
+    final isSimilar = diff.abs() < 0.5;
+    final isHigherRisk = invertedRisk ? diff < 0 : diff > 0;
+    final arrowIcon = isSimilar
+        ? Icons.remove_rounded
+        : diff > 0
+            ? Icons.arrow_upward_rounded
+            : Icons.arrow_downward_rounded;
+    final riskLabel = isSimilar
+        ? l10n.riskComparisonSimilar
+        : isHigherRisk
+            ? l10n.riskComparisonHigherRisk
+            : l10n.riskComparisonLowerRisk;
+    final riskColor = isSimilar ? mutedColor : (isHigherRisk ? AppColors.danger : AppColors.success);
+
+    String fmt(double v) => unit == '%' ? '%${v.toInt()}' : '${v.toInt()}$unit';
+
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: mutedColor),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          flex: 2,
+          child: Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: titleColor)),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            '${fmt(regionValue)} vs ${fmt(avgValue)}',
+            textAlign: TextAlign.right,
+            style: GoogleFonts.inter(fontSize: 12, color: mutedColor),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Icon(arrowIcon, size: 16, color: riskColor),
+        const SizedBox(width: 2),
+        Text(riskLabel, style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: riskColor)),
+      ],
+    );
   }
 }
 

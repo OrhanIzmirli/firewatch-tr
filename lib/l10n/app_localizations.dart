@@ -2954,6 +2954,138 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Yeni bildirim'**
   String get notifNewNotificationBody;
+
+  /// No description provided for @riskOutsideTurkeyBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.'**
+  String get riskOutsideTurkeyBanner;
+
+  /// No description provided for @riskComparisonTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Ortalamasıyla Karşılaştırma'**
+  String get riskComparisonTitle;
+
+  /// No description provided for @riskComparisonHigherRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha yüksek risk'**
+  String get riskComparisonHigherRisk;
+
+  /// No description provided for @riskComparisonLowerRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha düşük risk'**
+  String get riskComparisonLowerRisk;
+
+  /// No description provided for @riskComparisonSimilar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye ortalamasına yakın'**
+  String get riskComparisonSimilar;
+
+  /// No description provided for @riskInfoButtonTooltip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk skoru nasıl hesaplanır?'**
+  String get riskInfoButtonTooltip;
+
+  /// No description provided for @riskInfoTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk Skoru Nasıl Hesaplanır?'**
+  String get riskInfoTitle;
+
+  /// No description provided for @riskInfoFormulaTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Skor Formülü'**
+  String get riskInfoFormulaTitle;
+
+  /// No description provided for @riskInfoFormulaTemp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcaklık (en fazla 30 puan)'**
+  String get riskInfoFormulaTemp;
+
+  /// No description provided for @riskInfoFormulaHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük Nem (en fazla 25 puan)'**
+  String get riskInfoFormulaHumidity;
+
+  /// No description provided for @riskInfoFormulaWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgar (en fazla 25 puan)'**
+  String get riskInfoFormulaWind;
+
+  /// No description provided for @riskInfoFormulaFireCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA Yangın Sayısı (en fazla 20 puan)'**
+  String get riskInfoFormulaFireCount;
+
+  /// No description provided for @riskInfoSourcesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri Kaynakları'**
+  String get riskInfoSourcesTitle;
+
+  /// No description provided for @riskInfoSourcesBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.'**
+  String get riskInfoSourcesBody;
+
+  /// No description provided for @riskInfoUpdateFrequencyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncelleme Sıklığı'**
+  String get riskInfoUpdateFrequencyTitle;
+
+  /// No description provided for @riskInfoUpdateFrequencyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk skorları her 12 saatte bir yeniden hesaplanır.'**
+  String get riskInfoUpdateFrequencyBody;
+
+  /// No description provided for @trustHomeInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.'**
+  String get trustHomeInfo;
+
+  /// No description provided for @trustMapInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.'**
+  String get trustMapInfo;
+
+  /// No description provided for @trustRiskInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.'**
+  String get trustRiskInfo;
+
+  /// No description provided for @trustNewsInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberler 9 Türk kaynağından yangınla ilgili içerik için filtrelenir.'**
+  String get trustNewsInfo;
+
+  /// No description provided for @trustAlertsInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.'**
+  String get trustAlertsInfo;
+
+  /// No description provided for @trustCardLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri Kaynağı Hakkında'**
+  String get trustCardLabel;
 }
 
 class _AppLocalizationsDelegate

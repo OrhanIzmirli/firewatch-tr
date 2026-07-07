@@ -1641,4 +1641,79 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notifNewNotificationBody => 'Yeni bildirim';
+
+  @override
+  String get riskOutsideTurkeyBanner =>
+      'Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.';
+
+  @override
+  String get riskComparisonTitle => 'Türkiye Ortalamasıyla Karşılaştırma';
+
+  @override
+  String get riskComparisonHigherRisk => 'Daha yüksek risk';
+
+  @override
+  String get riskComparisonLowerRisk => 'Daha düşük risk';
+
+  @override
+  String get riskComparisonSimilar => 'Türkiye ortalamasına yakın';
+
+  @override
+  String get riskInfoButtonTooltip => 'Risk skoru nasıl hesaplanır?';
+
+  @override
+  String get riskInfoTitle => 'Risk Skoru Nasıl Hesaplanır?';
+
+  @override
+  String get riskInfoFormulaTitle => 'Skor Formülü';
+
+  @override
+  String get riskInfoFormulaTemp => 'Sıcaklık (en fazla 30 puan)';
+
+  @override
+  String get riskInfoFormulaHumidity => 'Düşük Nem (en fazla 25 puan)';
+
+  @override
+  String get riskInfoFormulaWind => 'Rüzgar (en fazla 25 puan)';
+
+  @override
+  String get riskInfoFormulaFireCount =>
+      'NASA Yangın Sayısı (en fazla 20 puan)';
+
+  @override
+  String get riskInfoSourcesTitle => 'Veri Kaynakları';
+
+  @override
+  String get riskInfoSourcesBody =>
+      'NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.';
+
+  @override
+  String get riskInfoUpdateFrequencyTitle => 'Güncelleme Sıklığı';
+
+  @override
+  String get riskInfoUpdateFrequencyBody =>
+      'Risk skorları her 12 saatte bir yeniden hesaplanır.';
+
+  @override
+  String get trustHomeInfo =>
+      'Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.';
+
+  @override
+  String get trustMapInfo =>
+      'Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.';
+
+  @override
+  String get trustRiskInfo =>
+      'Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.';
+
+  @override
+  String get trustNewsInfo =>
+      'Haberler 9 Türk kaynağından yangınla ilgili içerik için filtrelenir.';
+
+  @override
+  String get trustAlertsInfo =>
+      'Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.';
+
+  @override
+  String get trustCardLabel => 'Veri Kaynağı Hakkında';
 }

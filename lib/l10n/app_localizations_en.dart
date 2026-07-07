@@ -1646,4 +1646,78 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifNewNotificationBody => 'New notification';
+
+  @override
+  String get riskOutsideTurkeyBanner =>
+      'You are outside Turkey. Showing the nearest Turkish region to your location.';
+
+  @override
+  String get riskComparisonTitle => 'Comparison with Turkey Average';
+
+  @override
+  String get riskComparisonHigherRisk => 'Higher risk';
+
+  @override
+  String get riskComparisonLowerRisk => 'Lower risk';
+
+  @override
+  String get riskComparisonSimilar => 'Similar to Turkey average';
+
+  @override
+  String get riskInfoButtonTooltip => 'How is the risk score calculated?';
+
+  @override
+  String get riskInfoTitle => 'How Is the Risk Score Calculated?';
+
+  @override
+  String get riskInfoFormulaTitle => 'Score Formula';
+
+  @override
+  String get riskInfoFormulaTemp => 'Temperature (max 30 pts)';
+
+  @override
+  String get riskInfoFormulaHumidity => 'Low Humidity (max 25 pts)';
+
+  @override
+  String get riskInfoFormulaWind => 'Wind (max 25 pts)';
+
+  @override
+  String get riskInfoFormulaFireCount => 'NASA Fire Count (max 20 pts)';
+
+  @override
+  String get riskInfoSourcesTitle => 'Data Sources';
+
+  @override
+  String get riskInfoSourcesBody =>
+      'Calculated using NASA FIRMS satellite data, Open-Meteo weather data, and RSS news feeds.';
+
+  @override
+  String get riskInfoUpdateFrequencyTitle => 'Update Frequency';
+
+  @override
+  String get riskInfoUpdateFrequencyBody =>
+      'Risk scores are recalculated every 12 hours.';
+
+  @override
+  String get trustHomeInfo =>
+      'Data sourced from NASA FIRMS satellite imagery, updated every 3 hours.';
+
+  @override
+  String get trustMapInfo =>
+      'Fire markers show thermal anomalies detected by the VIIRS satellite.';
+
+  @override
+  String get trustRiskInfo =>
+      'Risk scores are calculated from real-time weather and NASA fire data.';
+
+  @override
+  String get trustNewsInfo =>
+      'News is filtered for wildfire-related content from 9 Turkish sources.';
+
+  @override
+  String get trustAlertsInfo =>
+      'Notifications are sent when a fire is detected within 50km of your location.';
+
+  @override
+  String get trustCardLabel => 'About This Data';
 }

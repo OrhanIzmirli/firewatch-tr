@@ -14,6 +14,7 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
 
@@ -289,6 +290,9 @@ class _NewsScreenState extends State<NewsScreen> {
                   end: const Offset(1, 1),
                   curve: Curves.easeOutCubic,
                 ).slideY(begin: 0.06, end: 0),
+
+            const SizedBox(height: AppSpacing.md),
+            TrustInfoCard(text: l10n.trustNewsInfo),
 
             const SizedBox(height: AppSpacing.xxl),
 

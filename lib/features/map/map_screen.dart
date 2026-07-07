@@ -20,6 +20,7 @@ import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/trust_info_card.dart';
 
 class MapScreen extends StatefulWidget {
   final double? focusLat;
@@ -304,6 +305,9 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ).animate().fadeIn(duration: 450.ms).scale(begin: const Offset(0.97, 0.97), end: const Offset(1, 1), curve: Curves.easeOutCubic).slideY(begin: 0.06, end: 0),
+
+                const SizedBox(height: AppSpacing.md),
+                TrustInfoCard(text: l10n.trustMapInfo),
 
                 const SizedBox(height: AppSpacing.xxl),
                 SectionHeader(title: l10n.mapArea, subtitle: l10n.mapAreaSubtitle, icon: Icons.public_rounded),

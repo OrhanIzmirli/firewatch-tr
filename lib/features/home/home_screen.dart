@@ -22,6 +22,7 @@ import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/summary_card.dart';
+import '../../shared/widgets/trust_info_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -334,6 +335,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   end: const Offset(1, 1),
                   curve: Curves.easeOutCubic,
                 ).slideY(begin: 0.08, end: 0),
+
+            const SizedBox(height: AppSpacing.md),
+            TrustInfoCard(text: l10n.trustHomeInfo),
 
             const SizedBox(height: AppSpacing.xxl),
 

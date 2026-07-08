@@ -1569,16 +1569,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fireEventSpreadLow => 'Low';
 
   @override
-  String get fireEventWindStatus => 'Check the map for real wind data';
+  String fireDetailAreaMeasured(int hectares) {
+    return '~$hectares hectares (NASA satellite measurement)';
+  }
 
   @override
-  String get fireEventAreaLarge => 'Large area (>100 hectares estimated)';
+  String get fireDetailWindLoading => 'Fetching wind data...';
 
   @override
-  String get fireEventAreaMedium => 'Medium area (10-100 hectares estimated)';
+  String get fireDetailWindUnavailable => 'Wind data unavailable';
 
   @override
-  String get fireEventAreaSmall => 'Small area (<10 hectares estimated)';
+  String fireDetailWindValue(String speed, String direction) {
+    return '$speed km/h from the $direction';
+  }
+
+  @override
+  String get windDirectionN => 'North';
+
+  @override
+  String get windDirectionNE => 'Northeast';
+
+  @override
+  String get windDirectionE => 'East';
+
+  @override
+  String get windDirectionSE => 'Southeast';
+
+  @override
+  String get windDirectionS => 'South';
+
+  @override
+  String get windDirectionSW => 'Southwest';
+
+  @override
+  String get windDirectionW => 'West';
+
+  @override
+  String get windDirectionNW => 'Northwest';
+
+  @override
+  String get fireDetailFireRadiativePower => 'Fire Power';
+
+  @override
+  String fireDetailFrpValue(String frp, String intensity) {
+    return '$frp MW ($intensity)';
+  }
+
+  @override
+  String get fireDetailFrpUnavailable => 'Not available';
+
+  @override
+  String get frpIntensityLow => 'Low intensity';
+
+  @override
+  String get frpIntensityModerate => 'Moderate intensity';
+
+  @override
+  String get frpIntensityHigh => 'High intensity';
+
+  @override
+  String get frpIntensityVeryHigh => 'Very high intensity';
 
   @override
   String fireEventTempLine(String temp, String kelvin) {

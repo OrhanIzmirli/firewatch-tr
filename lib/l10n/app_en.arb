@@ -644,10 +644,40 @@
   "fireEventSpreadHigh": "High — active monitoring required",
   "fireEventSpreadMedium": "Medium — monitor carefully",
   "fireEventSpreadLow": "Low",
-  "fireEventWindStatus": "Check the map for real wind data",
-  "fireEventAreaLarge": "Large area (>100 hectares estimated)",
-  "fireEventAreaMedium": "Medium area (10-100 hectares estimated)",
-  "fireEventAreaSmall": "Small area (<10 hectares estimated)",
+  "fireDetailAreaMeasured": "~{hectares} hectares (NASA satellite measurement)",
+  "@fireDetailAreaMeasured": {
+    "placeholders": { "hectares": { "type": "int" } }
+  },
+  "fireDetailWindLoading": "Fetching wind data...",
+  "fireDetailWindUnavailable": "Wind data unavailable",
+  "fireDetailWindValue": "{speed} km/h from the {direction}",
+  "@fireDetailWindValue": {
+    "placeholders": {
+      "speed": { "type": "String" },
+      "direction": { "type": "String" }
+    }
+  },
+  "windDirectionN": "North",
+  "windDirectionNE": "Northeast",
+  "windDirectionE": "East",
+  "windDirectionSE": "Southeast",
+  "windDirectionS": "South",
+  "windDirectionSW": "Southwest",
+  "windDirectionW": "West",
+  "windDirectionNW": "Northwest",
+  "fireDetailFireRadiativePower": "Fire Power",
+  "fireDetailFrpValue": "{frp} MW ({intensity})",
+  "@fireDetailFrpValue": {
+    "placeholders": {
+      "frp": { "type": "String" },
+      "intensity": { "type": "String" }
+    }
+  },
+  "fireDetailFrpUnavailable": "Not available",
+  "frpIntensityLow": "Low intensity",
+  "frpIntensityModerate": "Moderate intensity",
+  "frpIntensityHigh": "High intensity",
+  "frpIntensityVeryHigh": "Very high intensity",
   "fireEventTempLine": "Temperature: {temp}°C (Thermal value: {kelvin}K)",
   "@fireEventTempLine": {
     "placeholders": {

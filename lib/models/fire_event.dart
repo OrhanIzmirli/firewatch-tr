@@ -15,12 +15,15 @@ class FireEvent {
   final String regionNameTr;
   final String updatedAt;
   final String startedAt;
+  /// Real measured area from NASA FIRMS' scan/track pixel-size fields
+  /// (already formatted for display) — not a brightness-based estimate.
   final String affectedArea;
-  final String windStatus;
   final String spreadRisk;
   final List<String> recommendedActions;
   final double lat;
   final double lng;
+  /// Fire Radiative Power (MW) from NASA FIRMS — 0 when not available.
+  final double frp;
 
   const FireEvent({
     required this.id,
@@ -35,10 +38,10 @@ class FireEvent {
     required this.updatedAt,
     required this.startedAt,
     required this.affectedArea,
-    required this.windStatus,
     required this.spreadRisk,
     required this.recommendedActions,
     required this.lat,
     required this.lng,
+    this.frp = 0,
   });
 }

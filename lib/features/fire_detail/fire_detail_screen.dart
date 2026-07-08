@@ -9,12 +9,14 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/turkish_text.dart';
+import '../../core/utils/wind_direction.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
 import '../../services/news_translation_service.dart';
 import '../../services/watchlist_provider.dart';
+import '../../services/wind_service.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
@@ -35,6 +37,7 @@ class FireDetailScreen extends ConsumerStatefulWidget {
 class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   final NewsService _newsService = NewsService();
   Future<List<NewsItem>>? _newsFuture;
+  Future<WindReading?>? _windFuture;
 
   bool _autoTranslateKicked = false;
   final Set<String> _translatingIds = {};
@@ -47,6 +50,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     // Fetch a larger candidate pool so _selectRelatedNews has enough to
     // work with — only the top 3 after tiering are actually shown/translated.
     _newsFuture = _newsService.fetchNewsFromRender(limit: 20);
+    _windFuture = WindService.instance.getWind(widget.fireEvent.lat, widget.fireEvent.lng);
   }
 
   @override
@@ -136,6 +140,21 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     } catch (_) {
       return raw;
     }
+  }
+
+  String _frpDisplayValue(AppLocalizations l10n, double frp) {
+    if (frp <= 0) return l10n.fireDetailFrpUnavailable;
+    final String intensity;
+    if (frp > 100) {
+      intensity = l10n.frpIntensityVeryHigh;
+    } else if (frp > 50) {
+      intensity = l10n.frpIntensityHigh;
+    } else if (frp >= 10) {
+      intensity = l10n.frpIntensityModerate;
+    } else {
+      intensity = l10n.frpIntensityLow;
+    }
+    return l10n.fireDetailFrpValue(frp.round().toString(), intensity);
   }
 
   Future<void> _openNewsUrl(String url) async {
@@ -252,11 +271,30 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
             const SizedBox(height: AppSpacing.sm),
             _InfoRow(label: l10n.fireDetailStarted, value: fire.startedAt),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: l10n.commonWind, value: fire.windStatus),
+            FutureBuilder<WindReading?>(
+              future: _windFuture,
+              builder: (context, snapshot) {
+                final String value;
+                if (snapshot.connectionState != ConnectionState.done) {
+                  value = l10n.fireDetailWindLoading;
+                } else if (snapshot.data == null) {
+                  value = l10n.fireDetailWindUnavailable;
+                } else {
+                  final wind = snapshot.data!;
+                  value = l10n.fireDetailWindValue(
+                    wind.speedKmh.round().toString(),
+                    windDirectionLabel(l10n, wind.directionDeg),
+                  );
+                }
+                return _InfoRow(label: l10n.commonWind, value: value);
+              },
+            ),
             const SizedBox(height: AppSpacing.sm),
             _InfoRow(label: l10n.fireDetailSpreadRisk, value: fire.spreadRisk),
             const SizedBox(height: AppSpacing.sm),
             _InfoRow(label: l10n.fireDetailAffectedArea, value: fire.affectedArea),
+            const SizedBox(height: AppSpacing.sm),
+            _InfoRow(label: l10n.fireDetailFireRadiativePower, value: _frpDisplayValue(l10n, fire.frp)),
 
             const SizedBox(height: AppSpacing.xxl),
 

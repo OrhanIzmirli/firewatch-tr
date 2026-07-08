@@ -1566,17 +1566,67 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fireEventSpreadLow => 'Düşük';
 
   @override
-  String get fireEventWindStatus =>
-      'Gerçek veri için harita üzerinde kontrol et';
+  String fireDetailAreaMeasured(int hectares) {
+    return '~$hectares hektar (NASA uydu ölçümü)';
+  }
 
   @override
-  String get fireEventAreaLarge => 'Geniş alan (>100 hektar tahmini)';
+  String get fireDetailWindLoading => 'Rüzgar verisi alınıyor...';
 
   @override
-  String get fireEventAreaMedium => 'Orta alan (10-100 hektar tahmini)';
+  String get fireDetailWindUnavailable => 'Rüzgar verisi alınamadı';
 
   @override
-  String get fireEventAreaSmall => 'Küçük alan (<10 hektar tahmini)';
+  String fireDetailWindValue(String speed, String direction) {
+    return '$speed km/s $direction yönünde';
+  }
+
+  @override
+  String get windDirectionN => 'Kuzey';
+
+  @override
+  String get windDirectionNE => 'Kuzeydoğu';
+
+  @override
+  String get windDirectionE => 'Doğu';
+
+  @override
+  String get windDirectionSE => 'Güneydoğu';
+
+  @override
+  String get windDirectionS => 'Güney';
+
+  @override
+  String get windDirectionSW => 'Güneybatı';
+
+  @override
+  String get windDirectionW => 'Batı';
+
+  @override
+  String get windDirectionNW => 'Kuzeybatı';
+
+  @override
+  String get fireDetailFireRadiativePower => 'Ateş Gücü';
+
+  @override
+  String fireDetailFrpValue(String frp, String intensity) {
+    return '$frp MW ($intensity)';
+  }
+
+  @override
+  String get fireDetailFrpUnavailable => 'Mevcut değil';
+
+  @override
+  String get frpIntensityLow => 'Düşük yoğunluk';
+
+  @override
+  String get frpIntensityModerate => 'Orta yoğunluk';
+
+  @override
+  String get frpIntensityHigh => 'Yüksek yoğunluk';
+
+  @override
+  String get frpIntensityVeryHigh => 'Çok yüksek yoğunluk';
 
   @override
   String fireEventTempLine(String temp, String kelvin) {

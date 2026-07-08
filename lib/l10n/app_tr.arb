@@ -644,10 +644,40 @@
   "fireEventSpreadHigh": "Yüksek — aktif izleme gerekli",
   "fireEventSpreadMedium": "Orta — dikkatli takip et",
   "fireEventSpreadLow": "Düşük",
-  "fireEventWindStatus": "Gerçek veri için harita üzerinde kontrol et",
-  "fireEventAreaLarge": "Geniş alan (>100 hektar tahmini)",
-  "fireEventAreaMedium": "Orta alan (10-100 hektar tahmini)",
-  "fireEventAreaSmall": "Küçük alan (<10 hektar tahmini)",
+  "fireDetailAreaMeasured": "~{hectares} hektar (NASA uydu ölçümü)",
+  "@fireDetailAreaMeasured": {
+    "placeholders": { "hectares": { "type": "int" } }
+  },
+  "fireDetailWindLoading": "Rüzgar verisi alınıyor...",
+  "fireDetailWindUnavailable": "Rüzgar verisi alınamadı",
+  "fireDetailWindValue": "{speed} km/s {direction} yönünde",
+  "@fireDetailWindValue": {
+    "placeholders": {
+      "speed": { "type": "String" },
+      "direction": { "type": "String" }
+    }
+  },
+  "windDirectionN": "Kuzey",
+  "windDirectionNE": "Kuzeydoğu",
+  "windDirectionE": "Doğu",
+  "windDirectionSE": "Güneydoğu",
+  "windDirectionS": "Güney",
+  "windDirectionSW": "Güneybatı",
+  "windDirectionW": "Batı",
+  "windDirectionNW": "Kuzeybatı",
+  "fireDetailFireRadiativePower": "Ateş Gücü",
+  "fireDetailFrpValue": "{frp} MW ({intensity})",
+  "@fireDetailFrpValue": {
+    "placeholders": {
+      "frp": { "type": "String" },
+      "intensity": { "type": "String" }
+    }
+  },
+  "fireDetailFrpUnavailable": "Mevcut değil",
+  "frpIntensityLow": "Düşük yoğunluk",
+  "frpIntensityModerate": "Orta yoğunluk",
+  "frpIntensityHigh": "Yüksek yoğunluk",
+  "frpIntensityVeryHigh": "Çok yüksek yoğunluk",
   "fireEventTempLine": "Sıcaklık: {temp}°C (Termal değer: {kelvin}K)",
   "@fireEventTempLine": {
     "placeholders": {

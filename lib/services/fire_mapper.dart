@@ -41,20 +41,13 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
       ? l10n.mapKmAway(point.distanceKm!.toStringAsFixed(1))
       : point.locationLabelText(l10n);
 
-  // Etkilenen alan tahmini (brightness'a göre)
-  String affectedArea;
-  if (bright >= 370) {
-    affectedArea = l10n.fireEventAreaLarge;
-  } else if (bright >= 330) {
-    affectedArea = l10n.fireEventAreaMedium;
-  } else if (bright >= 300) {
-    affectedArea = l10n.fireEventAreaSmall;
-  } else {
-    affectedArea = l10n.homeAreaInsufficientRes;
-  }
-
-  // Rüzgar — Open-Meteo koordinat bazlı açıklama
-  final windStatus = l10n.fireEventWindStatus;
+  // Gerçek etkilenen alan — NASA'nın scan × track piksel boyutu alanlarından
+  // (km cinsinden) hesaplanır, brightness tahmini değil.
+  final areaKm2 = point.scanKm * point.trackKm;
+  final hectares = (areaKm2 * 100).round();
+  final affectedArea = areaKm2 > 0
+      ? l10n.fireDetailAreaMeasured(hectares)
+      : l10n.homeAreaInsufficientRes;
 
   return FireEvent(
     id: '${point.latitude}-${point.longitude}-${point.acquisitionDate}-${point.acquisitionTime}',
@@ -73,7 +66,7 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
     updatedAt: timeAgo,
     startedAt: formattedStart,
     affectedArea: affectedArea,
-    windStatus: windStatus,
+    frp: point.frp,
     spreadRisk: point.riskTier == 'high'
         ? l10n.fireEventSpreadHigh
         : point.riskTier == 'medium'

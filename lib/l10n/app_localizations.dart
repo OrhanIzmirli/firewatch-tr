@@ -2827,29 +2827,119 @@ abstract class AppLocalizations {
   /// **'Düşük'**
   String get fireEventSpreadLow;
 
-  /// No description provided for @fireEventWindStatus.
+  /// No description provided for @fireDetailAreaMeasured.
   ///
   /// In tr, this message translates to:
-  /// **'Gerçek veri için harita üzerinde kontrol et'**
-  String get fireEventWindStatus;
+  /// **'~{hectares} hektar (NASA uydu ölçümü)'**
+  String fireDetailAreaMeasured(int hectares);
 
-  /// No description provided for @fireEventAreaLarge.
+  /// No description provided for @fireDetailWindLoading.
   ///
   /// In tr, this message translates to:
-  /// **'Geniş alan (>100 hektar tahmini)'**
-  String get fireEventAreaLarge;
+  /// **'Rüzgar verisi alınıyor...'**
+  String get fireDetailWindLoading;
 
-  /// No description provided for @fireEventAreaMedium.
+  /// No description provided for @fireDetailWindUnavailable.
   ///
   /// In tr, this message translates to:
-  /// **'Orta alan (10-100 hektar tahmini)'**
-  String get fireEventAreaMedium;
+  /// **'Rüzgar verisi alınamadı'**
+  String get fireDetailWindUnavailable;
 
-  /// No description provided for @fireEventAreaSmall.
+  /// No description provided for @fireDetailWindValue.
   ///
   /// In tr, this message translates to:
-  /// **'Küçük alan (<10 hektar tahmini)'**
-  String get fireEventAreaSmall;
+  /// **'{speed} km/s {direction} yönünde'**
+  String fireDetailWindValue(String speed, String direction);
+
+  /// No description provided for @windDirectionN.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuzey'**
+  String get windDirectionN;
+
+  /// No description provided for @windDirectionNE.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuzeydoğu'**
+  String get windDirectionNE;
+
+  /// No description provided for @windDirectionE.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğu'**
+  String get windDirectionE;
+
+  /// No description provided for @windDirectionSE.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güneydoğu'**
+  String get windDirectionSE;
+
+  /// No description provided for @windDirectionS.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güney'**
+  String get windDirectionS;
+
+  /// No description provided for @windDirectionSW.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güneybatı'**
+  String get windDirectionSW;
+
+  /// No description provided for @windDirectionW.
+  ///
+  /// In tr, this message translates to:
+  /// **'Batı'**
+  String get windDirectionW;
+
+  /// No description provided for @windDirectionNW.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuzeybatı'**
+  String get windDirectionNW;
+
+  /// No description provided for @fireDetailFireRadiativePower.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ateş Gücü'**
+  String get fireDetailFireRadiativePower;
+
+  /// No description provided for @fireDetailFrpValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{frp} MW ({intensity})'**
+  String fireDetailFrpValue(String frp, String intensity);
+
+  /// No description provided for @fireDetailFrpUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevcut değil'**
+  String get fireDetailFrpUnavailable;
+
+  /// No description provided for @frpIntensityLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük yoğunluk'**
+  String get frpIntensityLow;
+
+  /// No description provided for @frpIntensityModerate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta yoğunluk'**
+  String get frpIntensityModerate;
+
+  /// No description provided for @frpIntensityHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek yoğunluk'**
+  String get frpIntensityHigh;
+
+  /// No description provided for @frpIntensityVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok yüksek yoğunluk'**
+  String get frpIntensityVeryHigh;
 
   /// No description provided for @fireEventTempLine.
   ///

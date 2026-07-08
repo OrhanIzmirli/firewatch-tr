@@ -4,6 +4,24 @@ import 'package:geolocator/geolocator.dart';
 import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
 
+/// Result of a nearest-city lookup. [outsideTurkey] is true when the
+/// coordinate fell outside Turkey's bounding box — the backend refuses to
+/// match it against a Turkish city in that case (rather than confidently
+/// returning the "nearest" one anyway, which could be hundreds of km away).
+class NearestCityResult {
+  final bool outsideTurkey;
+  final String? city;
+  final String? region;
+  final double? distanceKm;
+
+  const NearestCityResult({
+    required this.outsideTurkey,
+    this.city,
+    this.region,
+    this.distanceKm,
+  });
+}
+
 class FireApiService {
   FireApiService();
 
@@ -29,7 +47,7 @@ class FireApiService {
   }
 
   // En yakın şehri PostGIS ile bul
-  Future<Map<String, String>> getNearestCity(double lat, double lng) async {
+  Future<NearestCityResult> getNearestCity(double lat, double lng) async {
     try {
       final response = await _dio.get(
         '$_backendUrl/api/fires/nearest-city',
@@ -37,13 +55,25 @@ class FireApiService {
       );
       if (response.statusCode == 200) {
         final data = response.data['data'];
+        if (data['outsideTurkey'] == true) {
+          return const NearestCityResult(outsideTurkey: true);
+        }
         if (data['city'] != null && data['region'] != null) {
-          return {'city': data['city'] as String, 'region': data['region'] as String};
+          return NearestCityResult(
+            outsideTurkey: false,
+            city: data['city'] as String,
+            region: data['region'] as String,
+            distanceKm: (data['distance_km'] as num?)?.toDouble(),
+          );
         }
       }
     } catch (_) {}
     final l10n = await currentAppLocalizations();
-    return {'city': l10n.regionTurkiyeGeneli, 'region': l10n.regionTurkiyeGeneli};
+    return NearestCityResult(
+      outsideTurkey: false,
+      city: l10n.regionTurkiyeGeneli,
+      region: l10n.regionTurkiyeGeneli,
+    );
   }
 
   Future<List<FirePoint>> fetchTurkeyFires() async {
@@ -212,7 +242,7 @@ class FireApiService {
     }
 
     const concurrency = 10;
-    final cityInfoByKey = <String, Map<String, String>>{};
+    final cityInfoByKey = <String, NearestCityResult>{};
     final keys = representativeByKey.keys.toList();
     for (var i = 0; i < keys.length; i += concurrency) {
       final batchKeys = keys.skip(i).take(concurrency);
@@ -227,8 +257,8 @@ class FireApiService {
 
     return fires.map((p) {
       final info = cityInfoByKey[keyFor(p)];
-      if (info == null) return p;
-      return p.copyWith(cityName: info['city'], nearestRegion: info['region']);
+      if (info == null || info.outsideTurkey) return p;
+      return p.copyWith(cityName: info.city, nearestRegion: info.region);
     }).toList();
   }
 }

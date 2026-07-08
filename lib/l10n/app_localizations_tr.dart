@@ -172,6 +172,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeNasaLiveData => 'NASA FIRMS • Canlı Veri';
 
   @override
+  String get homeOutsideTurkeyLocation => 'Yurt dışı konumu';
+
+  @override
   String get homeRiskAnalysis => 'Risk Analizi';
 
   @override
@@ -1227,10 +1230,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsTranslateCardButton => 'Çevir';
 
   @override
-  String get newsRegions => 'Bölgeler';
+  String get newsContentFiltersTitle => 'Durum Filtreleri';
 
   @override
-  String get newsRegionsSubtitle => 'Bölgeye göre filtrele';
+  String get newsContentFiltersSubtitle => 'Neler olduğuna göre filtrele';
+
+  @override
+  String get newsFilterMyRegion => 'Bölgem';
 
   @override
   String get newsLatest => 'Son Haberler';
@@ -1244,12 +1250,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsFetchFailed => 'Haberler yüklenemedi';
 
   @override
-  String newsNoneInRegion(String region) {
-    return '$region bölgesinde haber yok.';
-  }
-
-  @override
-  String get newsNoneInCategory => 'Bu kategoride haber yok.';
+  String get newsNoneInCategory => 'Bu filtreyle eşleşen haber yok.';
 
   @override
   String get reportPanelLocationServiceOff =>
@@ -1926,7 +1927,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskOutsideTurkeyBanner =>
-      'Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.';
+      'Türkiye dışındasınız — konumunuz için bölgesel risk verisi mevcut değil.';
+
+  @override
+  String riskMyLocationPostgisDistance(String distance) {
+    return 'PostGIS • $distance km uzaklıkta';
+  }
 
   @override
   String get riskComparisonTitle => 'Türkiye Ortalamasıyla Karşılaştırma';
@@ -2277,11 +2283,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.';
 
   @override
-  String get coachMarkNewsRegionTitle => 'Bölgeler';
+  String get coachMarkNewsRegionTitle => 'Durum Filtreleri';
 
   @override
   String get coachMarkNewsRegionDesc =>
-      'Haberleri belirli bir bölgeye göre filtreleyerek sana yakın gelişmeleri öne çıkarabilirsin.';
+      'Önem derecesine göre filtrele — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgeni gör.';
 
   @override
   String get coachMarkNewsListTitle => 'Habere Dokun';

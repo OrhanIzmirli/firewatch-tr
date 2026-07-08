@@ -172,6 +172,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNasaLiveData => 'NASA FIRMS • Live Data';
 
   @override
+  String get homeOutsideTurkeyLocation => 'Outside Turkey';
+
+  @override
   String get homeRiskAnalysis => 'Risk Analysis';
 
   @override
@@ -1230,10 +1233,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newsTranslateCardButton => 'Translate';
 
   @override
-  String get newsRegions => 'Regions';
+  String get newsContentFiltersTitle => 'Status Filters';
 
   @override
-  String get newsRegionsSubtitle => 'Filter by region';
+  String get newsContentFiltersSubtitle => 'Filter by what\'s happening';
+
+  @override
+  String get newsFilterMyRegion => 'My Region';
 
   @override
   String get newsLatest => 'Latest News';
@@ -1247,12 +1253,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newsFetchFailed => 'Failed to load news';
 
   @override
-  String newsNoneInRegion(String region) {
-    return 'No news in $region.';
-  }
-
-  @override
-  String get newsNoneInCategory => 'No news in this category.';
+  String get newsNoneInCategory => 'No news matches this filter.';
 
   @override
   String get reportPanelLocationServiceOff =>
@@ -1931,7 +1932,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskOutsideTurkeyBanner =>
-      'You are outside Turkey. Showing the nearest Turkish region to your location.';
+      'You\'re outside Turkey — regional risk data isn\'t available for your location.';
+
+  @override
+  String riskMyLocationPostgisDistance(String distance) {
+    return 'PostGIS • $distance km away';
+  }
 
   @override
   String get riskComparisonTitle => 'Comparison with Turkey Average';
@@ -2281,11 +2287,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Filter news by Risk, Operation, Safety, or Update category.';
 
   @override
-  String get coachMarkNewsRegionTitle => 'Regions';
+  String get coachMarkNewsRegionTitle => 'Status Filters';
 
   @override
   String get coachMarkNewsRegionDesc =>
-      'Filter news by a specific region to surface developments closer to you.';
+      'Filter by severity — critical, active, monitoring, info — or just your own region.';
 
   @override
   String get coachMarkNewsListTitle => 'Tap an Article';

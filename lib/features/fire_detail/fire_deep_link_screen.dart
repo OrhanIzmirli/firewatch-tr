@@ -54,8 +54,8 @@ class _FireDeepLinkScreenState extends State<FireDeepLinkScreen> {
           // Only the matched point needs a city lookup — cheap single call.
           final cityInfo = await apiService.getNearestCity(closest.point.latitude, closest.point.longitude);
           final enrichedPoint = closest.point.copyWith(
-            cityName: cityInfo['city'],
-            nearestRegion: cityInfo['region'],
+            cityName: cityInfo.city,
+            nearestRegion: cityInfo.region,
           );
           if (!mounted) return;
           final l10n = AppLocalizations.of(context)!;

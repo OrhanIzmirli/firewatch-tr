@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/news_content_analysis.dart';
+import '../../core/utils/turkish_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
+import '../../services/fire_api_service.dart';
 import '../../services/news_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -20,6 +24,8 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
+
+enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -38,10 +44,12 @@ class _NewsScreenState extends State<NewsScreen> {
   static bool _englishBannerDismissed = false;
 
   final NewsService _newsService = NewsService();
+  final FireApiService _fireApiService = FireApiService();
   final ScrollController _scrollController = ScrollController();
 
   String _selectedCategory = 'Tümü';
-  String _selectedRegion = 'Tümü';
+  _NewsFilterKind _selectedFilter = _NewsFilterKind.all;
+  String? _myRegionRaw;
   List<NewsItem> _allNews = [];
   bool _isLoading = true;
   bool _isLoadingMore = false;
@@ -58,11 +66,6 @@ class _NewsScreenState extends State<NewsScreen> {
 
   static const List<String> _categories = [
     'Tümü', 'Risk', 'Operasyon', 'Güvenlik', 'Güncelleme',
-  ];
-
-  static const List<String> _regions = [
-    'Tümü', 'Ege', 'Akdeniz', 'Marmara', 'İç Anadolu',
-    'Karadeniz', 'Doğu Anadolu', 'Güneydoğu Anadolu', 'Türkiye Geneli',
   ];
 
   static const Map<String, String?> _categoryParams = {
@@ -83,17 +86,65 @@ class _NewsScreenState extends State<NewsScreen> {
     }
   }
 
-  String _regionLabel(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'Ege': return l10n.regionEge;
-      case 'Akdeniz': return l10n.regionAkdeniz;
-      case 'Marmara': return l10n.regionMarmara;
-      case 'İç Anadolu': return l10n.regionIcAnadolu;
-      case 'Karadeniz': return l10n.regionKaradeniz;
-      case 'Doğu Anadolu': return l10n.regionDoguAnadolu;
-      case 'Güneydoğu Anadolu': return l10n.regionGuneydoguAnadolu;
-      case 'Türkiye Geneli': return l10n.regionTurkiyeGeneli;
-      default: return l10n.commonAll;
+  String _filterEmoji(_NewsFilterKind kind) {
+    switch (kind) {
+      case _NewsFilterKind.all: return '🗞️';
+      case _NewsFilterKind.critical: return newsRiskLevelEmoji(NewsRiskLevel.critical);
+      case _NewsFilterKind.active: return newsRiskLevelEmoji(NewsRiskLevel.active);
+      case _NewsFilterKind.monitoring: return newsRiskLevelEmoji(NewsRiskLevel.monitoring);
+      case _NewsFilterKind.info: return newsRiskLevelEmoji(NewsRiskLevel.info);
+      case _NewsFilterKind.myRegion: return '📍';
+    }
+  }
+
+  String _filterLabel(AppLocalizations l10n, _NewsFilterKind kind) {
+    switch (kind) {
+      case _NewsFilterKind.all: return l10n.commonAll;
+      case _NewsFilterKind.critical: return newsRiskLevelLabel(l10n, NewsRiskLevel.critical);
+      case _NewsFilterKind.active: return newsRiskLevelLabel(l10n, NewsRiskLevel.active);
+      case _NewsFilterKind.monitoring: return newsRiskLevelLabel(l10n, NewsRiskLevel.monitoring);
+      case _NewsFilterKind.info: return newsRiskLevelLabel(l10n, NewsRiskLevel.info);
+      case _NewsFilterKind.myRegion: return l10n.newsFilterMyRegion;
+    }
+  }
+
+  bool _matchesContentFilter(NewsItem item) {
+    switch (_selectedFilter) {
+      case _NewsFilterKind.all:
+        return true;
+      case _NewsFilterKind.myRegion:
+        final myRegion = _myRegionRaw;
+        if (myRegion == null) return false;
+        return foldTurkish(item.relatedRegion) == foldTurkish(myRegion);
+      case _NewsFilterKind.critical:
+        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.critical;
+      case _NewsFilterKind.active:
+        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.active;
+      case _NewsFilterKind.monitoring:
+        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.monitoring;
+      case _NewsFilterKind.info:
+        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.info;
+    }
+  }
+
+  /// Best-effort location fetch for the "My Region" filter — silently does
+  /// nothing if permission is denied, location is unavailable, or the user
+  /// is outside Turkey, since that filter chip just won't match anything.
+  Future<void> _loadMyRegion() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
+      );
+      final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
+      if (!mounted || cityInfo.outsideTurkey) return;
+      setState(() => _myRegionRaw = cityInfo.region);
+    } catch (_) {
+      // "My Region" filter just won't be available.
     }
   }
 
@@ -101,6 +152,7 @@ class _NewsScreenState extends State<NewsScreen> {
   void initState() {
     super.initState();
     _loadNews().then((_) => _maybeShowNewsCoachMarks());
+    _loadMyRegion();
     _scrollController.addListener(_onScroll);
   }
 
@@ -214,9 +266,7 @@ class _NewsScreenState extends State<NewsScreen> {
     return _allNews.where((item) {
       final categoryMatch = _selectedCategory == 'Tümü' ||
           item.category.toLowerCase() == _selectedCategory.toLowerCase();
-      final regionMatch = _selectedRegion == 'Tümü' ||
-          item.relatedRegion == _selectedRegion;
-      return categoryMatch && regionMatch;
+      return categoryMatch && _matchesContentFilter(item);
     }).toList();
   }
 
@@ -378,55 +428,63 @@ class _NewsScreenState extends State<NewsScreen> {
 
             const SizedBox(height: AppSpacing.md),
 
-            Wrap(
+            SingleChildScrollView(
               key: CoachMarkKeys.newsCategoryFilters,
-              spacing: 10,
-              runSpacing: 10,
-              children: _categories.asMap().entries.map((entry) {
-                final index = entry.key;
-                final category = entry.value;
-                return _buildFilterChip(
-                  label: _categoryLabel(l10n, category),
-                  isSelected: _selectedCategory == category,
-                  isDark: isDark,
-                  onTap: () {
-                    setState(() => _selectedCategory = category);
-                  },
-                ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
-                    .fadeIn(duration: 240.ms)
-                    .slideY(begin: 0.18, end: 0);
-              }).toList(),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _categories.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final category = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: _buildFilterChip(
+                      label: _categoryLabel(l10n, category),
+                      isSelected: _selectedCategory == category,
+                      isDark: isDark,
+                      onTap: () {
+                        setState(() => _selectedCategory = category);
+                      },
+                    ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
+                        .fadeIn(duration: 240.ms)
+                        .slideY(begin: 0.18, end: 0),
+                  );
+                }).toList(),
+              ),
             ),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            // ── Bölgeler ───────────────────────────────────────
+            // ── Durum Filtreleri ────────────────────────────────
             SectionHeader(
-              title: l10n.newsRegions,
-              subtitle: l10n.newsRegionsSubtitle,
-              icon: Icons.map_rounded,
+              title: l10n.newsContentFiltersTitle,
+              subtitle: l10n.newsContentFiltersSubtitle,
+              icon: Icons.filter_alt_rounded,
             ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
 
-            Wrap(
+            SingleChildScrollView(
               key: CoachMarkKeys.newsRegionFilters,
-              spacing: 10,
-              runSpacing: 10,
-              children: _regions.asMap().entries.map((entry) {
-                final index = entry.key;
-                final region = entry.value;
-                return _buildFilterChip(
-                  label: _regionLabel(l10n, region),
-                  isSelected: _selectedRegion == region,
-                  isDark: isDark,
-                  onTap: () {
-                    setState(() => _selectedRegion = region);
-                  },
-                ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
-                    .fadeIn(duration: 240.ms)
-                    .slideY(begin: 0.18, end: 0);
-              }).toList(),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _NewsFilterKind.values.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final kind = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: _buildFilterChip(
+                      label: '${_filterEmoji(kind)} ${_filterLabel(l10n, kind)}',
+                      isSelected: _selectedFilter == kind,
+                      isDark: isDark,
+                      onTap: () {
+                        setState(() => _selectedFilter = kind);
+                      },
+                    ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
+                        .fadeIn(duration: 240.ms)
+                        .slideY(begin: 0.18, end: 0),
+                  );
+                }).toList(),
+              ),
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
@@ -455,9 +513,7 @@ class _NewsScreenState extends State<NewsScreen> {
             else if (filteredItems.isEmpty)
               EmptyStateView(
                 icon: Icons.article_outlined,
-                title: _selectedRegion != 'Tümü'
-                    ? l10n.newsNoneInRegion(_regionLabel(l10n, _selectedRegion))
-                    : l10n.newsNoneInCategory,
+                title: l10n.newsNoneInCategory,
               )
             else ...[
               ...filteredItems.asMap().entries.map((entry) {

@@ -56,6 +56,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<FirePoint> _firePoints = [];
   List<Map<String, dynamic>> _regions = [];
   Position? _userPosition;
+  String? _myCity;
+  double? _myDistanceKm;
+  bool _myOutsideTurkey = false;
   // Canonical (non-localized) quick filter: 'high' | 'medium' | 'ege' | 'akdeniz' | 'marmara' | 'karadeniz'
   String? _quickFilter;
   bool _newsLoading = true;
@@ -93,6 +96,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
       );
       if (mounted) setState(() => _userPosition = position);
+
+      final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
+      if (!mounted) return;
+      setState(() {
+        _myOutsideTurkey = cityInfo.outsideTurkey;
+        _myCity = cityInfo.outsideTurkey ? null : cityInfo.city;
+        _myDistanceKm = cityInfo.outsideTurkey ? null : cityInfo.distanceKm;
+      });
     } catch (_) {
       // No location — nearby-fire card falls back to the Turkey-wide count.
     }
@@ -455,6 +466,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor)),
                     ],
                   ),
+                  if (_myOutsideTurkey || _myCity != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Row(
+                      children: [
+                        Icon(
+                          _myOutsideTurkey ? Icons.public_off_rounded : Icons.location_on_rounded,
+                          size: 18,
+                          color: tertiaryTextColor,
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            _myOutsideTurkey ? l10n.homeOutsideTurkeyLocation : _myCity!,
+                            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: primaryTextColor),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (!_myOutsideTurkey && _myDistanceKm != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 26, top: 2),
+                        child: Text(
+                          l10n.riskMyLocationPostgisDistance(_myDistanceKm!.toStringAsFixed(1)),
+                          style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor),
+                        ),
+                      ),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [

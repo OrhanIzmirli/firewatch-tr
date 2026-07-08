@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'NASA FIRMS • Canlı Veri'**
   String get homeNasaLiveData;
 
+  /// No description provided for @homeOutsideTurkeyLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yurt dışı konumu'**
+  String get homeOutsideTurkeyLocation;
+
   /// No description provided for @homeRiskAnalysis.
   ///
   /// In tr, this message translates to:
@@ -2270,17 +2276,23 @@ abstract class AppLocalizations {
   /// **'Çevir'**
   String get newsTranslateCardButton;
 
-  /// No description provided for @newsRegions.
+  /// No description provided for @newsContentFiltersTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgeler'**
-  String get newsRegions;
+  /// **'Durum Filtreleri'**
+  String get newsContentFiltersTitle;
 
-  /// No description provided for @newsRegionsSubtitle.
+  /// No description provided for @newsContentFiltersSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgeye göre filtrele'**
-  String get newsRegionsSubtitle;
+  /// **'Neler olduğuna göre filtrele'**
+  String get newsContentFiltersSubtitle;
+
+  /// No description provided for @newsFilterMyRegion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgem'**
+  String get newsFilterMyRegion;
 
   /// No description provided for @newsLatest.
   ///
@@ -2300,16 +2312,10 @@ abstract class AppLocalizations {
   /// **'Haberler yüklenemedi'**
   String get newsFetchFailed;
 
-  /// No description provided for @newsNoneInRegion.
-  ///
-  /// In tr, this message translates to:
-  /// **'{region} bölgesinde haber yok.'**
-  String newsNoneInRegion(String region);
-
   /// No description provided for @newsNoneInCategory.
   ///
   /// In tr, this message translates to:
-  /// **'Bu kategoride haber yok.'**
+  /// **'Bu filtreyle eşleşen haber yok.'**
   String get newsNoneInCategory;
 
   /// No description provided for @reportPanelLocationServiceOff.
@@ -3443,8 +3449,14 @@ abstract class AppLocalizations {
   /// No description provided for @riskOutsideTurkeyBanner.
   ///
   /// In tr, this message translates to:
-  /// **'Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.'**
+  /// **'Türkiye dışındasınız — konumunuz için bölgesel risk verisi mevcut değil.'**
   String get riskOutsideTurkeyBanner;
+
+  /// No description provided for @riskMyLocationPostgisDistance.
+  ///
+  /// In tr, this message translates to:
+  /// **'PostGIS • {distance} km uzaklıkta'**
+  String riskMyLocationPostgisDistance(String distance);
 
   /// No description provided for @riskComparisonTitle.
   ///
@@ -4001,13 +4013,13 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNewsRegionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgeler'**
+  /// **'Durum Filtreleri'**
   String get coachMarkNewsRegionTitle;
 
   /// No description provided for @coachMarkNewsRegionDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haberleri belirli bir bölgeye göre filtreleyerek sana yakın gelişmeleri öne çıkarabilirsin.'**
+  /// **'Önem derecesine göre filtrele — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgeni gör.'**
   String get coachMarkNewsRegionDesc;
 
   /// No description provided for @coachMarkNewsListTitle.

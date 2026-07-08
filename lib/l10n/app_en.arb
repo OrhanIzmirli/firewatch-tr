@@ -67,6 +67,7 @@
   "homeHeaderTitle": "Turkey Wildfire Tracking",
   "homeHeaderSubtitle": "Track active events, see risk levels, and quickly reach the safety guide.",
   "homeNasaLiveData": "NASA FIRMS • Live Data",
+  "homeOutsideTurkeyLocation": "Outside Turkey",
   "homeRiskAnalysis": "Risk Analysis",
   "homeSaved": "Saved ({count})",
   "@homeSaved": {
@@ -496,19 +497,16 @@
   "newsBreakingBadge": "Breaking",
   "newsEnglishBannerText": "🌐 Tap any article to translate it to English",
   "newsTranslateCardButton": "Translate",
-  "newsRegions": "Regions",
-  "newsRegionsSubtitle": "Filter by region",
+  "newsContentFiltersTitle": "Status Filters",
+  "newsContentFiltersSubtitle": "Filter by what's happening",
+  "newsFilterMyRegion": "My Region",
   "newsLatest": "Latest News",
   "newsRecordsFound": "{count} records found",
   "@newsRecordsFound": {
     "placeholders": { "count": { "type": "int" } }
   },
   "newsFetchFailed": "Failed to load news",
-  "newsNoneInRegion": "No news in {region}.",
-  "@newsNoneInRegion": {
-    "placeholders": { "region": { "type": "String" } }
-  },
-  "newsNoneInCategory": "No news in this category.",
+  "newsNoneInCategory": "No news matches this filter.",
 
   "reportPanelLocationServiceOff": "Location service is off. Please turn it on.",
   "reportPanelLocationPermissionDenied": "Location permission denied.",
@@ -834,7 +832,11 @@
   "notifTestBody": "Test notification ready.",
   "notifNewNotificationBody": "New notification",
 
-  "riskOutsideTurkeyBanner": "You are outside Turkey. Showing the nearest Turkish region to your location.",
+  "riskOutsideTurkeyBanner": "You're outside Turkey — regional risk data isn't available for your location.",
+  "riskMyLocationPostgisDistance": "PostGIS • {distance} km away",
+  "@riskMyLocationPostgisDistance": {
+    "placeholders": { "distance": { "type": "String" } }
+  },
   "riskComparisonTitle": "Comparison with Turkey Average",
   "riskComparisonHigherRisk": "Higher risk",
   "riskComparisonLowerRisk": "Lower risk",
@@ -964,8 +966,8 @@
   "coachMarkNewsFeaturedDesc": "Today's most important development is highlighted here.",
   "coachMarkNewsCategoryTitle": "Categories",
   "coachMarkNewsCategoryDesc": "Filter news by Risk, Operation, Safety, or Update category.",
-  "coachMarkNewsRegionTitle": "Regions",
-  "coachMarkNewsRegionDesc": "Filter news by a specific region to surface developments closer to you.",
+  "coachMarkNewsRegionTitle": "Status Filters",
+  "coachMarkNewsRegionDesc": "Filter by severity — critical, active, monitoring, info — or just your own region.",
   "coachMarkNewsListTitle": "Tap an Article",
   "coachMarkNewsListDesc": "Tap an article to read the full text — in English mode, you can translate the title and summary with one tap.",
 

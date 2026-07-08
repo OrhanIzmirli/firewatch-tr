@@ -67,6 +67,7 @@
   "homeHeaderTitle": "Türkiye Yangın Takibi",
   "homeHeaderSubtitle": "Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.",
   "homeNasaLiveData": "NASA FIRMS • Canlı Veri",
+  "homeOutsideTurkeyLocation": "Yurt dışı konumu",
   "homeRiskAnalysis": "Risk Analizi",
   "homeSaved": "Kaydedilenler ({count})",
   "@homeSaved": {
@@ -496,19 +497,16 @@
   "newsBreakingBadge": "Son Dakika",
   "newsEnglishBannerText": "🌐 Herhangi bir haberi İngilizceye çevirmek için dokunun",
   "newsTranslateCardButton": "Çevir",
-  "newsRegions": "Bölgeler",
-  "newsRegionsSubtitle": "Bölgeye göre filtrele",
+  "newsContentFiltersTitle": "Durum Filtreleri",
+  "newsContentFiltersSubtitle": "Neler olduğuna göre filtrele",
+  "newsFilterMyRegion": "Bölgem",
   "newsLatest": "Son Haberler",
   "newsRecordsFound": "{count} kayıt bulundu",
   "@newsRecordsFound": {
     "placeholders": { "count": { "type": "int" } }
   },
   "newsFetchFailed": "Haberler yüklenemedi",
-  "newsNoneInRegion": "{region} bölgesinde haber yok.",
-  "@newsNoneInRegion": {
-    "placeholders": { "region": { "type": "String" } }
-  },
-  "newsNoneInCategory": "Bu kategoride haber yok.",
+  "newsNoneInCategory": "Bu filtreyle eşleşen haber yok.",
 
   "reportPanelLocationServiceOff": "Konum servisi kapalı. Lütfen açın.",
   "reportPanelLocationPermissionDenied": "Konum izni verilmedi.",
@@ -834,7 +832,11 @@
   "notifTestBody": "Test bildirimi hazır.",
   "notifNewNotificationBody": "Yeni bildirim",
 
-  "riskOutsideTurkeyBanner": "Yurt dışındasınız. Size en yakın Türkiye bölgesi gösteriliyor.",
+  "riskOutsideTurkeyBanner": "Türkiye dışındasınız — konumunuz için bölgesel risk verisi mevcut değil.",
+  "riskMyLocationPostgisDistance": "PostGIS • {distance} km uzaklıkta",
+  "@riskMyLocationPostgisDistance": {
+    "placeholders": { "distance": { "type": "String" } }
+  },
   "riskComparisonTitle": "Türkiye Ortalamasıyla Karşılaştırma",
   "riskComparisonHigherRisk": "Daha yüksek risk",
   "riskComparisonLowerRisk": "Daha düşük risk",
@@ -964,8 +966,8 @@
   "coachMarkNewsFeaturedDesc": "Günün en önemli gelişmesi burada öne çıkarılır.",
   "coachMarkNewsCategoryTitle": "Kategoriler",
   "coachMarkNewsCategoryDesc": "Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.",
-  "coachMarkNewsRegionTitle": "Bölgeler",
-  "coachMarkNewsRegionDesc": "Haberleri belirli bir bölgeye göre filtreleyerek sana yakın gelişmeleri öne çıkarabilirsin.",
+  "coachMarkNewsRegionTitle": "Durum Filtreleri",
+  "coachMarkNewsRegionDesc": "Önem derecesine göre filtrele — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgeni gör.",
   "coachMarkNewsListTitle": "Habere Dokun",
   "coachMarkNewsListDesc": "Bir habere dokunarak tam metnini oku; İngilizce moddaysan başlık ve özeti tek dokunuşla çevirebilirsin.",
 

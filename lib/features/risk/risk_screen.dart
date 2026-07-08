@@ -22,10 +22,6 @@ import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 
-bool _isWithinTurkey(double lat, double lng) {
-  return lat >= 35.5 && lat <= 42.5 && lng >= 25.5 && lng <= 45.0;
-}
-
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
   /// data has loaded — used when arriving from Home's "Highest Risk
@@ -59,7 +55,7 @@ class _RiskScreenState extends State<RiskScreen> {
   String? _myLocationError;
   String? _myCity;
   String? _myRegionRaw;
-  bool _myLocationOutsideTurkey = false;
+  double? _myDistanceKm;
 
   @override
   void initState() {
@@ -201,14 +197,25 @@ class _RiskScreenState extends State<RiskScreen> {
       );
 
       final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
-      final regionRaw = cityInfo['region'];
-      final matches = _regions.any((r) => r['region'] == regionRaw);
 
       if (!mounted) return;
+      if (cityInfo.outsideTurkey) {
+        setState(() {
+          _myCity = null;
+          _myRegionRaw = null;
+          _myDistanceKm = null;
+          _myLocationLoading = false;
+          _myLocationError = 'outside_turkey';
+        });
+        return;
+      }
+
+      final regionRaw = cityInfo.region;
+      final matches = _regions.any((r) => r['region'] == regionRaw);
       setState(() {
-        _myCity = cityInfo['city'];
+        _myCity = cityInfo.city;
         _myRegionRaw = regionRaw;
-        _myLocationOutsideTurkey = !_isWithinTurkey(position.latitude, position.longitude);
+        _myDistanceKm = cityInfo.distanceKm;
         _myLocationLoading = false;
         _myLocationError = matches ? null : 'region_not_found';
       });
@@ -609,7 +616,7 @@ class _RiskScreenState extends State<RiskScreen> {
                       avgWind: _avgWind,
                       avgDryness: _avgDryness,
                       avgVegetation: _avgVegetation,
-                      outsideTurkey: _myLocationOutsideTurkey,
+                      distanceKm: _myDistanceKm,
                       onRetry: _loadMyLocation,
                       onTapRegion: () {
                         final data = _myRegionData;
@@ -993,7 +1000,7 @@ class _MyLocationSection extends StatelessWidget {
   final double avgWind;
   final double avgDryness;
   final double avgVegetation;
-  final bool outsideTurkey;
+  final double? distanceKm;
   final VoidCallback onRetry;
   final VoidCallback onTapRegion;
 
@@ -1009,7 +1016,7 @@ class _MyLocationSection extends StatelessWidget {
     required this.avgWind,
     required this.avgDryness,
     required this.avgVegetation,
-    required this.outsideTurkey,
+    required this.distanceKm,
     required this.onRetry,
     required this.onTapRegion,
   });
@@ -1041,13 +1048,18 @@ class _MyLocationSection extends StatelessWidget {
         'service_off' => l10n.riskMyLocationServiceOff,
         'permission_denied' => l10n.riskMyLocationPermissionDenied,
         'region_not_found' => l10n.riskMyLocationRegionNotFound,
+        'outside_turkey' => l10n.riskOutsideTurkeyBanner,
         _ => l10n.riskMyLocationError,
       };
       return GlassPanel(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           children: [
-            Icon(Icons.location_off_rounded, color: secondaryTextColor, size: 32),
+            Icon(
+              error == 'outside_turkey' ? Icons.public_off_rounded : Icons.location_off_rounded,
+              color: secondaryTextColor,
+              size: 32,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(message, textAlign: TextAlign.center,
                 style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
@@ -1087,25 +1099,6 @@ class _MyLocationSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (outsideTurkey) ...[
-          GlassPanel(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.public_off_rounded, color: AppColors.warning),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Text(
-                    l10n.riskOutsideTurkeyBanner,
-                    style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor),
-                  ),
-                ),
-              ],
-            ),
-          ).animate().fadeIn(duration: 320.ms),
-          const SizedBox(height: AppSpacing.md),
-        ],
         InkWell(
           borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
           onTap: onTapRegion,
@@ -1125,6 +1118,19 @@ class _MyLocationSection extends StatelessWidget {
                     StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
                   ],
                 ),
+                if (distanceKm != null) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.satellite_alt_rounded, size: 13, color: secondaryTextColor),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.riskMyLocationPostgisDistance(distanceKm!.toStringAsFixed(1)),
+                        style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
+                      ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.md),
                 Text(l10n.riskScoreOutOf100(score),
                     style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: color)),

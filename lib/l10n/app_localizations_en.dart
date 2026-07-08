@@ -198,6 +198,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNominal => 'Nominal';
 
   @override
+  String get homeOverviewActiveFiresTitle => 'Active Fire Points';
+
+  @override
+  String get homeOverviewActiveFiresSubtitle => 'Detected in last 24 hours';
+
+  @override
+  String get homeOverviewHighestRiskTitle => 'Highest Risk Region';
+
+  @override
+  String homeOverviewHighestRiskValue(String region, int score) {
+    return '$region - $score pts';
+  }
+
+  @override
+  String get homeOverviewHighestRiskSubtitle =>
+      'Highest risk in Turkey right now';
+
+  @override
+  String get homeOverviewNearbyTitle => 'Nearby Fire Alert';
+
+  @override
+  String homeOverviewNearbyValueWithLocation(int count) {
+    return '$count fires within 100km';
+  }
+
+  @override
+  String homeOverviewNearbyValueNationwide(int count) {
+    return '$count fires nationwide';
+  }
+
+  @override
+  String get homeOverviewNearbySubtitleLocated => 'Based on your GPS location';
+
+  @override
+  String get homeOverviewNearbySubtitleFallback =>
+      'Location unavailable — showing nationwide count';
+
+  @override
+  String get homeOverviewNewsTitle => 'News Update';
+
+  @override
+  String homeOverviewNewsValue(int count) {
+    return '$count new articles';
+  }
+
+  @override
+  String homeOverviewNewsSubtitleUpdated(String timeAgo) {
+    return 'Last update: $timeAgo';
+  }
+
+  @override
+  String get homeOverviewNewsNone => 'No news yet';
+
+  @override
   String get homeLatestNews => 'Latest News';
 
   @override
@@ -260,6 +314,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapLiveMap => 'Live Map';
+
+  @override
+  String get mapConfidenceFilterActive =>
+      'Showing only high/nominal confidence fires';
+
+  @override
+  String get mapConfidenceFilterClear => 'Clear';
 
   @override
   String get mapHeaderTitle => 'Turkey-wide Wildfire View';
@@ -927,6 +988,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskKeyIndicators => 'Key Indicators';
+
+  @override
+  String get riskOverviewHighestTitle => 'Highest Risk';
+
+  @override
+  String get riskOverviewHighestSubtitle => 'Tap to see full region detail';
+
+  @override
+  String get riskOverviewLowestTitle => 'Lowest Risk';
+
+  @override
+  String get riskOverviewLowestSubtitle => 'Safest region right now';
+
+  @override
+  String get riskOverviewAvgTitle => 'Turkey Average';
+
+  @override
+  String get riskOverviewAvgSubtitle => 'Out of 100, across all regions';
+
+  @override
+  String get riskOverviewTrendTitle => 'Trend';
+
+  @override
+  String get riskOverviewTrendImproving => 'Improving';
+
+  @override
+  String get riskOverviewTrendWorsening => 'Worsening';
+
+  @override
+  String get riskOverviewTrendStable => 'Stable';
+
+  @override
+  String get riskOverviewTrendNoData => 'No data';
+
+  @override
+  String riskOverviewTrendSubtitle(String delta) {
+    return '$delta pt change since last update';
+  }
+
+  @override
+  String get riskOverviewTrendNoDataSubtitle => 'Not enough history yet';
 
   @override
   String get riskTurkeyAverage => 'Turkey average';
@@ -1758,7 +1860,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustMapSource =>
-      'Hotspots come from the VIIRS instrument aboard the Suomi-NPP and NOAA-20 satellites, which detect thermal radiation from the ground.';
+      'Fire data sourced from NASA FIRMS (VIIRS & MODIS satellites). Secondary verification via EFFIS (Copernicus Emergency Management Service) will be added when their API is restored.';
 
   @override
   String get trustMapInterpret =>

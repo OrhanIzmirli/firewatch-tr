@@ -1,12 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
+import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../models/news_item.dart';
@@ -22,9 +25,9 @@ import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
+import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
-import '../../shared/widgets/summary_card.dart';
 import '../../shared/widgets/trust_info_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -37,17 +40,27 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   static const _newsCacheKey = 'home_news';
   static const _firesCacheKey = 'home_fires';
+  static const _riskCacheKey = 'home_risk';
 
   final TextEditingController _searchController = TextEditingController();
   final NewsService _newsService = NewsService();
   final FireApiService _fireApiService = FireApiService();
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+    ),
+  );
 
   List<NewsItem> _topNews = [];
   List<FirePoint> _firePoints = [];
+  List<Map<String, dynamic>> _regions = [];
+  Position? _userPosition;
   // Canonical (non-localized) quick filter: 'high' | 'medium' | 'ege' | 'akdeniz' | 'marmara' | 'karadeniz'
   String? _quickFilter;
   bool _newsLoading = true;
   bool _fireLoading = true;
+  bool _riskLoading = true;
   bool _newsOffline = false;
   bool _firesOffline = false;
   bool _newsSlowLoading = false;
@@ -59,10 +72,66 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     _loadData();
+    _loadUserPosition();
   }
 
   Future<void> _loadData() async {
-    await Future.wait([_loadNews(), _loadFires()]);
+    await Future.wait([_loadNews(), _loadFires(), _loadRiskSummary()]);
+  }
+
+  /// Best-effort location fetch for the "Nearby Fire Alert" overview card —
+  /// silently does nothing if permission is denied or location is
+  /// unavailable, since that card has a region-wide fallback.
+  Future<void> _loadUserPosition() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
+      );
+      if (mounted) setState(() => _userPosition = position);
+    } catch (_) {
+      // No location — nearby-fire card falls back to the Turkey-wide count.
+    }
+  }
+
+  Future<void> _loadRiskSummary() async {
+    if (mounted) setState(() => _riskLoading = true);
+    try {
+      final response = await raceWithCacheFallback(
+        fetch: _dio.get('https://firewatch-tr-backend.onrender.com/api/risk/summary'),
+        timeout: const Duration(seconds: 12),
+        cacheKey: _riskCacheKey,
+        onSlowFallback: (cached) {
+          if (!mounted) return;
+          final (data, _) = cached;
+          setState(() {
+            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+            _riskLoading = false;
+          });
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = response.data['data'] as List;
+        final regions = data.map((e) => Map<String, dynamic>.from(e)).toList();
+        await OfflineCacheService.instance.save(_riskCacheKey, regions);
+        if (mounted) setState(() { _regions = regions; _riskLoading = false; });
+      }
+    } catch (_) {
+      final cached = await OfflineCacheService.instance.load(_riskCacheKey);
+      if (mounted) {
+        setState(() {
+          if (cached != null) {
+            final (data, _) = cached;
+            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+          }
+          _riskLoading = false;
+        });
+      }
+    }
   }
 
   Future<void> _loadNews() async {
@@ -289,12 +358,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final savedIds = ref.watch(watchlistProvider);
     final query = _searchController.text.trim().toLowerCase();
 
-    final highConfFires = _firePoints
-        .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
-        .length;
-    final nominalFires = _firePoints
-        .where((p) => p.confidence.toLowerCase() == 'nominal' || p.confidence.toLowerCase() == 'n')
-        .length;
+    // ── Overview card 1: active (non-low-confidence) fire points ──
+    final activeFireCount = _firePoints.where((p) {
+      final c = p.confidence.toLowerCase();
+      return c.contains('high') || c == 'h' || c.contains('nominal') || c == 'n';
+    }).length;
+    final activeFireColor = activeFireCount > 10
+        ? AppColors.danger
+        : activeFireCount > 5
+            ? AppColors.warning
+            : AppColors.success;
+
+    // ── Overview card 2: highest-risk region from /api/risk/summary ──
+    Map<String, dynamic>? highestRiskRegion;
+    for (final r in _regions) {
+      final score = r['general_risk_score'] as int? ?? 0;
+      final bestSoFar = highestRiskRegion?['general_risk_score'] as int? ?? -1;
+      if (score > bestSoFar) highestRiskRegion = r;
+    }
+    final highestRiskColor = highestRiskRegion == null
+        ? AppColors.success
+        : colorForApiRiskLevel(highestRiskRegion['risk_level'] as String);
+
+    // ── Overview card 3: fires within 100km, falling back to the
+    // nationwide count when location isn't available ──
+    final position = _userPosition;
+    final nearbyCount = position == null
+        ? null
+        : _firePoints.where((p) {
+            final distanceMeters = Geolocator.distanceBetween(
+              position.latitude, position.longitude, p.latitude, p.longitude);
+            return distanceMeters <= 100000;
+          }).length;
+    final nearbyDisplayCount = nearbyCount ?? _firePoints.length;
+    final nearbyColor = nearbyDisplayCount > 0 ? AppColors.danger : AppColors.success;
+
+    // ── Overview card 4: news freshness ──
+    String newsTimeAgo = l10n.homeOverviewNewsNone;
+    if (_topNews.isNotEmpty) {
+      final published = DateTime.tryParse(_topNews.first.publishedAt);
+      if (published != null) {
+        final diff = DateTime.now().toUtc().difference(published.toUtc());
+        if (diff.inMinutes < 1) {
+          newsTimeAgo = l10n.timeAgoJustNow;
+        } else if (diff.inMinutes < 60) {
+          newsTimeAgo = l10n.timeAgoMinutes(diff.inMinutes);
+        } else if (diff.inHours < 24) {
+          newsTimeAgo = l10n.timeAgoHours(diff.inHours);
+        } else {
+          newsTimeAgo = l10n.timeAgoDays(diff.inDays);
+        }
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -404,8 +519,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
 
-            if (_fireLoading)
-              const SkeletonMetricGrid(count: 3)
+            if (_fireLoading || _riskLoading || _newsLoading)
+              const SkeletonMetricGrid(count: 4)
             else
               GridView.count(
                 crossAxisCount: 2,
@@ -413,11 +528,57 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: AppSpacing.md,
                 mainAxisSpacing: AppSpacing.md,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.95,
                 children: [
-                  SummaryCard(title: l10n.homeTotalPoints, value: _firePoints.length.toString(), icon: Icons.local_fire_department),
-                  SummaryCard(title: l10n.homeHighRisk, value: highConfFires.toString(), icon: Icons.warning_amber_rounded),
-                  SummaryCard(title: l10n.homeNominal, value: nominalFires.toString(), icon: Icons.verified_outlined),
+                  SmartOverviewCard(
+                    title: l10n.homeOverviewActiveFiresTitle,
+                    value: activeFireCount.toString(),
+                    subtitle: l10n.homeOverviewActiveFiresSubtitle,
+                    icon: Icons.local_fire_department_rounded,
+                    color: activeFireColor,
+                    delay: 0.ms,
+                    onTap: () => context.push('/map', extra: {'confidenceFilter': true}),
+                  ),
+                  SmartOverviewCard(
+                    title: l10n.homeOverviewHighestRiskTitle,
+                    value: highestRiskRegion == null
+                        ? l10n.riskDataLoading
+                        : l10n.homeOverviewHighestRiskValue(
+                            displayRegionName(l10n, highestRiskRegion['region'] as String),
+                            highestRiskRegion['general_risk_score'] as int,
+                          ),
+                    subtitle: l10n.homeOverviewHighestRiskSubtitle,
+                    icon: Icons.warning_amber_rounded,
+                    color: highestRiskColor,
+                    delay: 60.ms,
+                    onTap: highestRiskRegion == null
+                        ? null
+                        : () => context.push('/risk', extra: highestRiskRegion!['region'] as String),
+                  ),
+                  SmartOverviewCard(
+                    title: l10n.homeOverviewNearbyTitle,
+                    value: nearbyCount != null
+                        ? l10n.homeOverviewNearbyValueWithLocation(nearbyCount)
+                        : l10n.homeOverviewNearbyValueNationwide(nearbyDisplayCount),
+                    subtitle: nearbyCount != null
+                        ? l10n.homeOverviewNearbySubtitleLocated
+                        : l10n.homeOverviewNearbySubtitleFallback,
+                    icon: Icons.location_on_rounded,
+                    color: nearbyColor,
+                    delay: 120.ms,
+                    onTap: position == null
+                        ? () => context.push('/map')
+                        : () => context.push('/map', extra: {'lat': position.latitude, 'lng': position.longitude}),
+                  ),
+                  SmartOverviewCard(
+                    title: l10n.homeOverviewNewsTitle,
+                    value: l10n.homeOverviewNewsValue(_topNews.length),
+                    subtitle: l10n.homeOverviewNewsSubtitleUpdated(newsTimeAgo),
+                    icon: Icons.newspaper_rounded,
+                    color: AppColors.primary,
+                    delay: 180.ms,
+                    onTap: () => context.push('/app?tab=news'),
+                  ),
                 ],
               ),
 

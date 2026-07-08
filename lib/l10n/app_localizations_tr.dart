@@ -198,6 +198,60 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeNominal => 'Normal';
 
   @override
+  String get homeOverviewActiveFiresTitle => 'Aktif Yangın Noktaları';
+
+  @override
+  String get homeOverviewActiveFiresSubtitle => 'Son 24 saatte tespit edildi';
+
+  @override
+  String get homeOverviewHighestRiskTitle => 'En Yüksek Riskli Bölge';
+
+  @override
+  String homeOverviewHighestRiskValue(String region, int score) {
+    return '$region - $score puan';
+  }
+
+  @override
+  String get homeOverviewHighestRiskSubtitle =>
+      'Şu an Türkiye\'deki en yüksek risk';
+
+  @override
+  String get homeOverviewNearbyTitle => 'Yakın Yangın Uyarısı';
+
+  @override
+  String homeOverviewNearbyValueWithLocation(int count) {
+    return '$count yangın 100km içinde';
+  }
+
+  @override
+  String homeOverviewNearbyValueNationwide(int count) {
+    return 'Türkiye genelinde $count yangın';
+  }
+
+  @override
+  String get homeOverviewNearbySubtitleLocated => 'GPS konumunuza göre';
+
+  @override
+  String get homeOverviewNearbySubtitleFallback =>
+      'Konum bulunamadı — ülke geneli gösteriliyor';
+
+  @override
+  String get homeOverviewNewsTitle => 'Haber Güncellemesi';
+
+  @override
+  String homeOverviewNewsValue(int count) {
+    return '$count yeni haber';
+  }
+
+  @override
+  String homeOverviewNewsSubtitleUpdated(String timeAgo) {
+    return 'Son güncelleme: $timeAgo';
+  }
+
+  @override
+  String get homeOverviewNewsNone => 'Henüz haber yok';
+
+  @override
   String get homeLatestNews => 'Son Haberler';
 
   @override
@@ -260,6 +314,13 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mapLiveMap => 'Canlı Harita';
+
+  @override
+  String get mapConfidenceFilterActive =>
+      'Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor';
+
+  @override
+  String get mapConfidenceFilterClear => 'Temizle';
 
   @override
   String get mapHeaderTitle => 'Türkiye Geneli Yangın Görünümü';
@@ -924,6 +985,47 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskKeyIndicators => 'Ana Göstergeler';
+
+  @override
+  String get riskOverviewHighestTitle => 'En Yüksek Risk';
+
+  @override
+  String get riskOverviewHighestSubtitle => 'Bölge detayı için dokunun';
+
+  @override
+  String get riskOverviewLowestTitle => 'En Düşük Risk';
+
+  @override
+  String get riskOverviewLowestSubtitle => 'Şu an en güvenli bölge';
+
+  @override
+  String get riskOverviewAvgTitle => 'Türkiye Ortalaması';
+
+  @override
+  String get riskOverviewAvgSubtitle => 'Tüm bölgelerde, 100 üzerinden';
+
+  @override
+  String get riskOverviewTrendTitle => 'Trend';
+
+  @override
+  String get riskOverviewTrendImproving => 'İyileşiyor';
+
+  @override
+  String get riskOverviewTrendWorsening => 'Kötüleşiyor';
+
+  @override
+  String get riskOverviewTrendStable => 'Sabit';
+
+  @override
+  String get riskOverviewTrendNoData => 'Veri yok';
+
+  @override
+  String riskOverviewTrendSubtitle(String delta) {
+    return 'Son güncellemeden bu yana $delta puan değişim';
+  }
+
+  @override
+  String get riskOverviewTrendNoDataSubtitle => 'Henüz yeterli geçmiş veri yok';
 
   @override
   String get riskTurkeyAverage => 'Türkiye ortalaması';
@@ -1755,7 +1857,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapSource =>
-      'Sıcak noktalar, yerden gelen ısı radyasyonunu tespit eden Suomi-NPP ve NOAA-20 uydularındaki VIIRS cihazından gelir.';
+      'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API\'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.';
 
   @override
   String get trustMapInterpret =>

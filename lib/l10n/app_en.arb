@@ -78,6 +78,35 @@
   "homeTotalPoints": "Total Points",
   "homeHighRisk": "High Risk",
   "homeNominal": "Nominal",
+  "homeOverviewActiveFiresTitle": "Active Fire Points",
+  "homeOverviewActiveFiresSubtitle": "Detected in last 24 hours",
+  "homeOverviewHighestRiskTitle": "Highest Risk Region",
+  "homeOverviewHighestRiskValue": "{region} - {score} pts",
+  "@homeOverviewHighestRiskValue": {
+    "placeholders": { "region": { "type": "String" }, "score": { "type": "int" } }
+  },
+  "homeOverviewHighestRiskSubtitle": "Highest risk in Turkey right now",
+  "homeOverviewNearbyTitle": "Nearby Fire Alert",
+  "homeOverviewNearbyValueWithLocation": "{count} fires within 100km",
+  "@homeOverviewNearbyValueWithLocation": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNearbyValueNationwide": "{count} fires nationwide",
+  "@homeOverviewNearbyValueNationwide": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNearbySubtitleLocated": "Based on your GPS location",
+  "homeOverviewNearbySubtitleFallback": "Location unavailable — showing nationwide count",
+  "homeOverviewNewsTitle": "News Update",
+  "homeOverviewNewsValue": "{count} new articles",
+  "@homeOverviewNewsValue": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNewsSubtitleUpdated": "Last update: {timeAgo}",
+  "@homeOverviewNewsSubtitleUpdated": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "homeOverviewNewsNone": "No news yet",
   "homeLatestNews": "Latest News",
   "homeLatestNewsSubtitle": "Featured developments",
   "homeBreakingCount": "{count} breaking",
@@ -105,6 +134,8 @@
   "mapFetchError": "Could not fetch fire data.",
   "mapTitle": "Fire Map",
   "mapLiveMap": "Live Map",
+  "mapConfidenceFilterActive": "Showing only high/nominal confidence fires",
+  "mapConfidenceFilterClear": "Clear",
   "mapHeaderTitle": "Turkey-wide Wildfire View",
   "mapHeaderSubtitle": "Show active thermal points on the map using NASA FIRMS data.",
   "mapArea": "Map Area",
@@ -359,6 +390,22 @@
   },
   "riskDataLoading": "Loading data...",
   "riskKeyIndicators": "Key Indicators",
+  "riskOverviewHighestTitle": "Highest Risk",
+  "riskOverviewHighestSubtitle": "Tap to see full region detail",
+  "riskOverviewLowestTitle": "Lowest Risk",
+  "riskOverviewLowestSubtitle": "Safest region right now",
+  "riskOverviewAvgTitle": "Turkey Average",
+  "riskOverviewAvgSubtitle": "Out of 100, across all regions",
+  "riskOverviewTrendTitle": "Trend",
+  "riskOverviewTrendImproving": "Improving",
+  "riskOverviewTrendWorsening": "Worsening",
+  "riskOverviewTrendStable": "Stable",
+  "riskOverviewTrendNoData": "No data",
+  "riskOverviewTrendSubtitle": "{delta} pt change since last update",
+  "@riskOverviewTrendSubtitle": {
+    "placeholders": { "delta": { "type": "String" } }
+  },
+  "riskOverviewTrendNoDataSubtitle": "Not enough history yet",
   "riskTurkeyAverage": "Turkey average",
   "riskGeneralRisk": "Overall Risk",
   "riskOutOf100": "out of 100",
@@ -740,7 +787,7 @@
   "trustHomeAction": "Tap any fire card for full details, or add it to your Watchlist to track updates. If you're near an active fire, check Notifications for real-time alerts.",
 
   "trustMapMeaning": "Each marker is a single satellite hotspot detection, not necessarily an active fire — the confidence level shown in fire details indicates how reliable the detection is.",
-  "trustMapSource": "Hotspots come from the VIIRS instrument aboard the Suomi-NPP and NOAA-20 satellites, which detect thermal radiation from the ground.",
+  "trustMapSource": "Fire data sourced from NASA FIRMS (VIIRS & MODIS satellites). Secondary verification via EFFIS (Copernicus Emergency Management Service) will be added when their API is restored.",
   "trustMapInterpret": "Clustered numbers mean multiple detections are close together — zoom in to see individual points. Tighter clusters often indicate a larger, ongoing fire.",
   "trustMapAction": "See a fire in person that isn't on the map? Use the Report button to alert others. Tap \"Nearby Fires\" to see what's close to your current location.",
 

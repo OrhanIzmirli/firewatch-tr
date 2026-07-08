@@ -452,6 +452,90 @@ abstract class AppLocalizations {
   /// **'Normal'**
   String get homeNominal;
 
+  /// No description provided for @homeOverviewActiveFiresTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif Yangın Noktaları'**
+  String get homeOverviewActiveFiresTitle;
+
+  /// No description provided for @homeOverviewActiveFiresSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte tespit edildi'**
+  String get homeOverviewActiveFiresSubtitle;
+
+  /// No description provided for @homeOverviewHighestRiskTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En Yüksek Riskli Bölge'**
+  String get homeOverviewHighestRiskTitle;
+
+  /// No description provided for @homeOverviewHighestRiskValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} - {score} puan'**
+  String homeOverviewHighestRiskValue(String region, int score);
+
+  /// No description provided for @homeOverviewHighestRiskSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an Türkiye\'deki en yüksek risk'**
+  String get homeOverviewHighestRiskSubtitle;
+
+  /// No description provided for @homeOverviewNearbyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakın Yangın Uyarısı'**
+  String get homeOverviewNearbyTitle;
+
+  /// No description provided for @homeOverviewNearbyValueWithLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yangın 100km içinde'**
+  String homeOverviewNearbyValueWithLocation(int count);
+
+  /// No description provided for @homeOverviewNearbyValueNationwide.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye genelinde {count} yangın'**
+  String homeOverviewNearbyValueNationwide(int count);
+
+  /// No description provided for @homeOverviewNearbySubtitleLocated.
+  ///
+  /// In tr, this message translates to:
+  /// **'GPS konumunuza göre'**
+  String get homeOverviewNearbySubtitleLocated;
+
+  /// No description provided for @homeOverviewNearbySubtitleFallback.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum bulunamadı — ülke geneli gösteriliyor'**
+  String get homeOverviewNearbySubtitleFallback;
+
+  /// No description provided for @homeOverviewNewsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haber Güncellemesi'**
+  String get homeOverviewNewsTitle;
+
+  /// No description provided for @homeOverviewNewsValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yeni haber'**
+  String homeOverviewNewsValue(int count);
+
+  /// No description provided for @homeOverviewNewsSubtitleUpdated.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son güncelleme: {timeAgo}'**
+  String homeOverviewNewsSubtitleUpdated(String timeAgo);
+
+  /// No description provided for @homeOverviewNewsNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz haber yok'**
+  String get homeOverviewNewsNone;
+
   /// No description provided for @homeLatestNews.
   ///
   /// In tr, this message translates to:
@@ -571,6 +655,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Canlı Harita'**
   String get mapLiveMap;
+
+  /// No description provided for @mapConfidenceFilterActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor'**
+  String get mapConfidenceFilterActive;
+
+  /// No description provided for @mapConfidenceFilterClear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Temizle'**
+  String get mapConfidenceFilterClear;
 
   /// No description provided for @mapHeaderTitle.
   ///
@@ -1741,6 +1837,84 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Ana Göstergeler'**
   String get riskKeyIndicators;
+
+  /// No description provided for @riskOverviewHighestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En Yüksek Risk'**
+  String get riskOverviewHighestTitle;
+
+  /// No description provided for @riskOverviewHighestSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölge detayı için dokunun'**
+  String get riskOverviewHighestSubtitle;
+
+  /// No description provided for @riskOverviewLowestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En Düşük Risk'**
+  String get riskOverviewLowestTitle;
+
+  /// No description provided for @riskOverviewLowestSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an en güvenli bölge'**
+  String get riskOverviewLowestSubtitle;
+
+  /// No description provided for @riskOverviewAvgTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye Ortalaması'**
+  String get riskOverviewAvgTitle;
+
+  /// No description provided for @riskOverviewAvgSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm bölgelerde, 100 üzerinden'**
+  String get riskOverviewAvgSubtitle;
+
+  /// No description provided for @riskOverviewTrendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Trend'**
+  String get riskOverviewTrendTitle;
+
+  /// No description provided for @riskOverviewTrendImproving.
+  ///
+  /// In tr, this message translates to:
+  /// **'İyileşiyor'**
+  String get riskOverviewTrendImproving;
+
+  /// No description provided for @riskOverviewTrendWorsening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kötüleşiyor'**
+  String get riskOverviewTrendWorsening;
+
+  /// No description provided for @riskOverviewTrendStable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sabit'**
+  String get riskOverviewTrendStable;
+
+  /// No description provided for @riskOverviewTrendNoData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri yok'**
+  String get riskOverviewTrendNoData;
+
+  /// No description provided for @riskOverviewTrendSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son güncellemeden bu yana {delta} puan değişim'**
+  String riskOverviewTrendSubtitle(String delta);
+
+  /// No description provided for @riskOverviewTrendNoDataSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz yeterli geçmiş veri yok'**
+  String get riskOverviewTrendNoDataSubtitle;
 
   /// No description provided for @riskTurkeyAverage.
   ///
@@ -3150,7 +3324,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapSource.
   ///
   /// In tr, this message translates to:
-  /// **'Sıcak noktalar, yerden gelen ısı radyasyonunu tespit eden Suomi-NPP ve NOAA-20 uydularındaki VIIRS cihazından gelir.'**
+  /// **'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API\'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.'**
   String get trustMapSource;
 
   /// No description provided for @trustMapInterpret.

@@ -67,6 +67,7 @@ class AppRouter {
             initialIndex: 1,
             mapFocusLat: extra?['lat'] as double?,
             mapFocusLng: extra?['lng'] as double?,
+            mapConfidenceFilter: extra?['confidenceFilter'] as bool? ?? false,
           );
         },
       ),
@@ -94,7 +95,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/risk',
-        builder: (context, state) => const RiskScreen(),
+        builder: (context, state) => RiskScreen(highlightRegion: state.extra as String?),
       ),
       GoRoute(
         path: '/safety-guide',

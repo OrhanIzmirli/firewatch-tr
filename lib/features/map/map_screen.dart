@@ -30,8 +30,12 @@ import '../../shared/widgets/trust_info_card.dart';
 class MapScreen extends StatefulWidget {
   final double? focusLat;
   final double? focusLng;
+  /// When true, only fires with 'high' or 'nominal' confidence are shown
+  /// on the map — used when arriving from the Home screen's "Active Fire
+  /// Points" overview card, which counts the same subset.
+  final bool initialConfidenceFilter;
 
-  const MapScreen({super.key, this.focusLat, this.focusLng});
+  const MapScreen({super.key, this.focusLat, this.focusLng, this.initialConfidenceFilter = false});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -46,6 +50,7 @@ class _MapScreenState extends State<MapScreen> {
   bool _isOffline = false;
   bool _isSlowLoading = false;
   DateTime? _cachedAt;
+  late bool _confidenceFilterActive = widget.initialConfidenceFilter;
 
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
@@ -219,6 +224,14 @@ class _MapScreenState extends State<MapScreen> {
     return AppColors.primary;
   }
 
+  bool _isLowConfidence(FirePoint p) {
+    final c = p.confidence.toLowerCase();
+    return !(c.contains('high') || c == 'h' || c.contains('nominal') || c == 'n');
+  }
+
+  List<FirePoint> get _visibleFirePoints =>
+      _confidenceFilterActive ? _firePoints.where((p) => !_isLowConfidence(p)).toList() : _firePoints;
+
   void _focusOnFire(FirePoint point) {
     _mapController.move(LatLng(point.latitude, point.longitude), 10);
     _openFireBottomSheet(point);
@@ -374,6 +387,33 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ).animate().fadeIn(duration: 450.ms).scale(begin: const Offset(0.97, 0.97), end: const Offset(1, 1), curve: Curves.easeOutCubic).slideY(begin: 0.06, end: 0),
 
+                if (_confidenceFilterActive) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.danger.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                      border: Border.all(color: AppColors.danger.withValues(alpha: 0.28)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.filter_alt_rounded, size: 16, color: AppColors.danger),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(l10n.mapConfidenceFilterActive,
+                              style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.danger)),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() => _confidenceFilterActive = false),
+                          child: Text(l10n.mapConfidenceFilterClear,
+                              style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w800, color: AppColors.danger, decoration: TextDecoration.underline)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
                 const SizedBox(height: AppSpacing.md),
                 TrustInfoCardGroup(
                   meaning: l10n.trustMapMeaning,
@@ -419,7 +459,7 @@ class _MapScreenState extends State<MapScreen> {
                               MarkerClusterLayerWidget(
                                 options: MarkerClusterLayerOptions(
                                   maxClusterRadius: 45, size: const Size(40, 40), alignment: Alignment.center,
-                                  markers: _firePoints.map((point) {
+                                  markers: _visibleFirePoints.map((point) {
                                     final color = _markerColor(point.confidence);
                                     return Marker(
                                       point: LatLng(point.latitude, point.longitude), width: 40, height: 40,

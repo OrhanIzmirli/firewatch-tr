@@ -78,6 +78,35 @@
   "homeTotalPoints": "Toplam Nokta",
   "homeHighRisk": "Yüksek Risk",
   "homeNominal": "Normal",
+  "homeOverviewActiveFiresTitle": "Aktif Yangın Noktaları",
+  "homeOverviewActiveFiresSubtitle": "Son 24 saatte tespit edildi",
+  "homeOverviewHighestRiskTitle": "En Yüksek Riskli Bölge",
+  "homeOverviewHighestRiskValue": "{region} - {score} puan",
+  "@homeOverviewHighestRiskValue": {
+    "placeholders": { "region": { "type": "String" }, "score": { "type": "int" } }
+  },
+  "homeOverviewHighestRiskSubtitle": "Şu an Türkiye'deki en yüksek risk",
+  "homeOverviewNearbyTitle": "Yakın Yangın Uyarısı",
+  "homeOverviewNearbyValueWithLocation": "{count} yangın 100km içinde",
+  "@homeOverviewNearbyValueWithLocation": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNearbyValueNationwide": "Türkiye genelinde {count} yangın",
+  "@homeOverviewNearbyValueNationwide": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNearbySubtitleLocated": "GPS konumunuza göre",
+  "homeOverviewNearbySubtitleFallback": "Konum bulunamadı — ülke geneli gösteriliyor",
+  "homeOverviewNewsTitle": "Haber Güncellemesi",
+  "homeOverviewNewsValue": "{count} yeni haber",
+  "@homeOverviewNewsValue": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "homeOverviewNewsSubtitleUpdated": "Son güncelleme: {timeAgo}",
+  "@homeOverviewNewsSubtitleUpdated": {
+    "placeholders": { "timeAgo": { "type": "String" } }
+  },
+  "homeOverviewNewsNone": "Henüz haber yok",
   "homeLatestNews": "Son Haberler",
   "homeLatestNewsSubtitle": "Öne çıkan gelişmeler",
   "homeBreakingCount": "{count} sıcak",
@@ -105,6 +134,8 @@
   "mapFetchError": "Yangın verileri alınamadı.",
   "mapTitle": "Yangın Haritası",
   "mapLiveMap": "Canlı Harita",
+  "mapConfidenceFilterActive": "Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor",
+  "mapConfidenceFilterClear": "Temizle",
   "mapHeaderTitle": "Türkiye Geneli Yangın Görünümü",
   "mapHeaderSubtitle": "NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.",
   "mapArea": "Harita Alanı",
@@ -359,6 +390,22 @@
   },
   "riskDataLoading": "Veri yükleniyor...",
   "riskKeyIndicators": "Ana Göstergeler",
+  "riskOverviewHighestTitle": "En Yüksek Risk",
+  "riskOverviewHighestSubtitle": "Bölge detayı için dokunun",
+  "riskOverviewLowestTitle": "En Düşük Risk",
+  "riskOverviewLowestSubtitle": "Şu an en güvenli bölge",
+  "riskOverviewAvgTitle": "Türkiye Ortalaması",
+  "riskOverviewAvgSubtitle": "Tüm bölgelerde, 100 üzerinden",
+  "riskOverviewTrendTitle": "Trend",
+  "riskOverviewTrendImproving": "İyileşiyor",
+  "riskOverviewTrendWorsening": "Kötüleşiyor",
+  "riskOverviewTrendStable": "Sabit",
+  "riskOverviewTrendNoData": "Veri yok",
+  "riskOverviewTrendSubtitle": "Son güncellemeden bu yana {delta} puan değişim",
+  "@riskOverviewTrendSubtitle": {
+    "placeholders": { "delta": { "type": "String" } }
+  },
+  "riskOverviewTrendNoDataSubtitle": "Henüz yeterli geçmiş veri yok",
   "riskTurkeyAverage": "Türkiye ortalaması",
   "riskGeneralRisk": "Genel Risk",
   "riskOutOf100": "100 üzerinden",
@@ -740,7 +787,7 @@
   "trustHomeAction": "Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler'i kontrol edin.",
 
   "trustMapMeaning": "Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.",
-  "trustMapSource": "Sıcak noktalar, yerden gelen ısı radyasyonunu tespit eden Suomi-NPP ve NOAA-20 uydularındaki VIIRS cihazından gelir.",
+  "trustMapSource": "Yangın verileri NASA FIRMS'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.",
   "trustMapInterpret": "Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.",
   "trustMapAction": "Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.",
 

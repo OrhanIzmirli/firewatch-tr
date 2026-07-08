@@ -13,12 +13,14 @@ class MainShellScreen extends StatefulWidget {
   final int initialIndex;
   final double? mapFocusLat;
   final double? mapFocusLng;
+  final bool mapConfidenceFilter;
 
   const MainShellScreen({
     super.key,
     this.initialIndex = 0,
     this.mapFocusLat,
     this.mapFocusLng,
+    this.mapConfidenceFilter = false,
   });
 
   @override
@@ -55,6 +57,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     MapScreen(
       focusLat: widget.mapFocusLat,
       focusLng: widget.mapFocusLng,
+      initialConfidenceFilter: widget.mapConfidenceFilter,
     ),
     const NewsScreen(),
     const NotificationsScreen(),

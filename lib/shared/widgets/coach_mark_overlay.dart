@@ -161,28 +161,34 @@ Future<void> maybeShowScreenCoachMarks(
       final isDark = Theme.of(overlayContext).brightness == Brightness.dark;
 
       const cardMargin = AppSpacing.md;
-      // Reserve roughly a third of the screen for the card itself so the
-      // clamped position below always leaves it room to lay out, even on a
-      // small (e.g. 360x640) screen.
-      final maxCardHeight = screenSize.height * 0.42;
       final safeTop = safePadding.top + cardMargin;
       final safeBottom = screenSize.height - safePadding.bottom - cardMargin;
 
-      // Target in the bottom half of the screen → card goes above it;
-      // target in the top half → card goes below it. Either way the card
-      // never overlaps the spotlighted element.
-      final targetIsInBottomHalf = targetRect.center.dy > screenSize.height / 2;
-      final showCardBelow = !targetIsInBottomHalf;
+      // Pick whichever side of the target actually has more room, rather
+      // than just going by which half of the screen the target's center
+      // falls in — a target taller than ~half the viewport (e.g. a chart,
+      // after auto-scrolling it into view) can otherwise leave "the other
+      // half" too cramped for the card, pushing it up past the safe area
+      // and behind the status bar.
+      final spaceAbove = (targetRect.top - safeTop - cardMargin).clamp(0.0, double.infinity);
+      final spaceBelow = (safeBottom - targetRect.bottom - cardMargin).clamp(0.0, double.infinity);
+      final showCardBelow = spaceBelow >= spaceAbove;
+      final availableSpace = showCardBelow ? spaceBelow : spaceAbove;
+      // Cap how tall the card can grow even when there's plenty of room, and
+      // guarantee a usable minimum even when there's very little — in that
+      // extreme case it may brush the safe edge, but that reads far better
+      // than being unreadable.
+      final cardHeight = availableSpace.clamp(120.0, screenSize.height * 0.42);
 
-      // Clamp so the card is always fully within the safe area, regardless
-      // of how close the target is to a screen edge.
       double? top;
       double? bottom;
       if (showCardBelow) {
-        top = (targetRect.bottom + cardMargin).clamp(safeTop, safeBottom - 80);
+        final maxTop = safeBottom - cardHeight;
+        top = (targetRect.bottom + cardMargin).clamp(safeTop, maxTop < safeTop ? safeTop : maxTop);
       } else {
+        final maxBottom = screenSize.height - safeTop - cardHeight;
         bottom = (screenSize.height - targetRect.top + cardMargin)
-            .clamp(cardMargin, screenSize.height - safeTop - 80);
+            .clamp(cardMargin, maxBottom < cardMargin ? cardMargin : maxBottom);
       }
 
       return Stack(
@@ -214,7 +220,7 @@ Future<void> maybeShowScreenCoachMarks(
               child: Material(
                 color: Colors.transparent,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: maxCardHeight),
+                  constraints: BoxConstraints(maxHeight: cardHeight),
                   child: Container(
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     decoration: BoxDecoration(

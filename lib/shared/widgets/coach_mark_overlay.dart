@@ -63,19 +63,30 @@ Future<void> maybeShowScreenCoachMarks(
   required List<CoachMarkStep> steps,
 }) async {
   final prefs = await SharedPreferences.getInstance();
-  if (prefs.getBool(prefsKey) ?? false) return;
+  final alreadySeen = prefs.getBool(prefsKey) ?? false;
+  debugPrint('[CoachMarks] "$prefsKey" alreadySeen=$alreadySeen');
+  if (alreadySeen) return;
   if (!context.mounted) return;
   if (steps.isEmpty) return;
+
+  // Mark as seen immediately, BEFORE the overlay is even inserted — not
+  // after the user finishes/skips it. Screens in this app get fully
+  // disposed and recreated on every tab switch (MainShellScreen swaps
+  // widget types in a single slot rather than using an IndexedStack), so
+  // initState — and therefore this function — reruns on every visit. If
+  // the flag were only written on completion, a mid-tour tab switch would
+  // abandon the overlay without ever persisting "seen", and the tour would
+  // reappear on the next visit even though the user already saw it once.
+  await prefs.setBool(prefsKey, true);
+  debugPrint('[CoachMarks] "$prefsKey" marked as seen, showing tour now (${steps.length} steps)');
 
   final l10n = AppLocalizations.of(context)!;
   final overlay = Overlay.of(context, rootOverlay: true);
   late OverlayEntry entry;
   int index = 0;
 
-  Future<void> finish() async {
+  void finish() {
     entry.remove();
-    final donePrefs = await SharedPreferences.getInstance();
-    await donePrefs.setBool(prefsKey, true);
   }
 
   void showStep() {

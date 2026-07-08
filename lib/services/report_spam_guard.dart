@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +49,7 @@ class ReportSpamGuard {
   Future<ReportSpamCheck> checkBeforeSubmit(double lat, double lng) async {
     final now = DateTime.now();
     final history = await _loadHistory();
+    debugPrint('[ReportSpamGuard] checkBeforeSubmit lat=$lat lng=$lng — ${history.length} stored entries');
 
     // Prune anything outside the daily window while we're at it — keeps
     // the stored list from growing forever.
@@ -59,28 +61,34 @@ class ReportSpamGuard {
     for (final entry in recent) {
       final ts = DateTime.tryParse(entry['timestamp'] as String? ?? '');
       if (ts == null) continue;
-      if (now.difference(ts) >= _duplicateCooldown) continue;
+      final age = now.difference(ts);
+      if (age >= _duplicateCooldown) continue;
       final entryLat = (entry['lat'] as num?)?.toDouble();
       final entryLng = (entry['lng'] as num?)?.toDouble();
       if (entryLat == null || entryLng == null) continue;
       final distance = Geolocator.distanceBetween(lat, lng, entryLat, entryLng);
+      debugPrint('[ReportSpamGuard] compare vs entry ($entryLat, $entryLng) age=${age.inMinutes}min distance=${distance.toStringAsFixed(1)}m');
       if (distance <= _duplicateRadiusMeters) {
+        debugPrint('[ReportSpamGuard] BLOCKED — duplicate location within ${_duplicateRadiusMeters}m and ${_duplicateCooldown.inHours}h');
         return const ReportSpamCheck(ReportBlockReason.duplicateLocation);
       }
     }
 
     if (recent.length >= _dailyLimit) {
+      debugPrint('[ReportSpamGuard] BLOCKED — daily limit reached (${recent.length}/$_dailyLimit)');
       return const ReportSpamCheck(ReportBlockReason.dailyLimit);
     }
 
+    debugPrint('[ReportSpamGuard] ALLOWED — no duplicate or limit hit');
     return const ReportSpamCheck(ReportBlockReason.none);
   }
 
-  /// Records a successful submission. [lat]/[lng] are rounded to 2 decimal
-  /// places (~1.1km grid) before storing, per spec — note this is coarser
-  /// than the 500m duplicate-check radius, so the location match itself is
-  /// still computed against full-precision coordinates; only the stored
-  /// history entry is rounded.
+  /// Records a successful submission. Stores full-precision coordinates —
+  /// rounding here would let the stored point drift by up to several
+  /// hundred meters from the true report location, which could itself push
+  /// the duplicate-radius distance check (500m) over the line even for two
+  /// reports from the exact same spot. Precision is only relevant for the
+  /// distance comparison; there's no separate need to coarsen it.
   Future<void> recordReport(double lat, double lng) async {
     final now = DateTime.now();
     final history = await _loadHistory();
@@ -90,11 +98,12 @@ class ReportSpamGuard {
     }).toList();
 
     recent.add({
-      'lat': double.parse(lat.toStringAsFixed(2)),
-      'lng': double.parse(lng.toStringAsFixed(2)),
+      'lat': lat,
+      'lng': lng,
       'timestamp': now.toIso8601String(),
     });
 
+    debugPrint('[ReportSpamGuard] recordReport lat=$lat lng=$lng — history now ${recent.length} entries');
     await _saveHistory(recent);
   }
 }

@@ -108,7 +108,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       return;
     }
 
+    debugPrint('[ReportFirePanel] running spam check before submit...');
     final spamCheck = await ReportSpamGuard.instance.checkBeforeSubmit(_latitude!, _longitude!);
+    debugPrint('[ReportFirePanel] spam check result: ${spamCheck.reason}');
     if (spamCheck.isBlocked) {
       _showSnack(
         spamCheck.reason == ReportBlockReason.duplicateLocation
@@ -189,7 +191,11 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         }
       }
     } catch (e) {
-      _showSnack(AppLocalizations.of(context)!.reportPanelSubmitFailed);
+      if (e is DioException && e.response?.statusCode == 429) {
+        _showSnack(l10n.reportPanelDuplicateLocationBlocked);
+      } else {
+        _showSnack(l10n.reportPanelSubmitFailed);
+      }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }

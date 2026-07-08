@@ -270,18 +270,27 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                 const SizedBox(width: 12),
                                 Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : secondaryTextColor),
                                 const SizedBox(width: 4),
-                                Text(point.mergedSatelliteLabel,
-                                    style: GoogleFonts.inter(
-                                        fontSize: 12,
-                                        fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
-                                        color: point.isMerged ? AppColors.success : secondaryTextColor)),
+                                Flexible(
+                                  child: Text(point.mergedSatelliteLabel,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                          fontSize: 12,
+                                          fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                          color: point.isMerged ? AppColors.success : secondaryTextColor)),
+                                ),
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
                                     final id = '${point.latitude}-${point.longitude}-${point.acquisitionDate}-${point.acquisitionTime}';
                                     ref.read(watchlistProvider.notifier).toggle(id);
                                   },
-                                  child: const Icon(Icons.bookmark_rounded, color: AppColors.primary, size: 20),
+                                  behavior: HitTestBehavior.opaque,
+                                  child: const SizedBox(
+                                    width: 48,
+                                    height: 48,
+                                    child: Center(child: Icon(Icons.bookmark_rounded, color: AppColors.primary, size: 20)),
+                                  ),
                                 ),
                               ],
                             ),

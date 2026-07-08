@@ -55,6 +55,8 @@ class EmergencyActionCard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
@@ -63,6 +65,8 @@ class EmergencyActionCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     height: 1.4,

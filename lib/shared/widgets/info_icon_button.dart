@@ -58,9 +58,12 @@ class InfoIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => _show(context),
       behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Icon(Icons.info_outline_rounded, size: size, color: AppColors.primary.withValues(alpha: 0.75)),
+      child: SizedBox(
+        width: 48,
+        height: 48,
+        child: Center(
+          child: Icon(Icons.info_outline_rounded, size: size, color: AppColors.primary.withValues(alpha: 0.75)),
+        ),
       ),
     );
   }

@@ -261,12 +261,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               Row(
                 children: [
-                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                  Flexible(
+                    child: StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                  ),
                   InfoIconButton(
                     title: l10n.tooltipConfidenceTitle,
                     bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
                   ),
-                  const SizedBox(width: 4),
                   StatusChip(label: '${point.formattedDate} ${point.formattedTime}', icon: Icons.access_time_rounded),
                 ],
               ),
@@ -644,22 +645,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               title: l10n.homeActiveThermalPoints,
               subtitle: l10n.homeActiveThermalSubtitle,
               icon: FontAwesomeIcons.fireFlameCurved,
-              trailing: InkWell(
-                onTap: () => context.push('/map'),
-                borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.map_rounded, size: 16, color: AppColors.primary),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(l10n.homeMap, style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
-                    ],
+              trailing: SizedBox(
+                height: 48,
+                child: InkWell(
+                  onTap: () => context.push('/map'),
+                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.map_rounded, size: 16, color: AppColors.primary),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.homeMap, style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -772,11 +778,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               const SizedBox(width: 12),
                               Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : tertiaryTextColor),
                               const SizedBox(width: 4),
-                              Text(point.mergedSatelliteLabel,
-                                  style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
-                                      color: point.isMerged ? AppColors.success : tertiaryTextColor)),
+                              Flexible(
+                                child: Text(point.mergedSatelliteLabel,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                        color: point.isMerged ? AppColors.success : tertiaryTextColor)),
+                              ),
                               const SizedBox(width: 12),
                               Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
                               Text(l10n.commonDetail, style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
@@ -812,16 +822,22 @@ class _FilterChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(20),
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        height: 48,
+        child: Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(label,
+                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600,
+                    color: selected ? Colors.white : AppColors.primary)),
+          ),
         ),
-        child: Text(label,
-            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600,
-                color: selected ? Colors.white : AppColors.primary)),
       ),
     );
   }

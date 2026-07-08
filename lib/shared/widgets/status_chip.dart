@@ -85,17 +85,21 @@ class StatusChip extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.sm),
           ],
-          Text(
-            label,
-            style: TextStyle(
-              color: chipColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-            ),
-          )
-              .animate(onPlay: (controller) => controller.forward(from: 0))
-              .fadeIn(duration: 220.ms)
-              .slideX(begin: 0.08, end: 0),
+          Flexible(
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                color: chipColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+            )
+                .animate(onPlay: (controller) => controller.forward(from: 0))
+                .fadeIn(duration: 220.ms)
+                .slideX(begin: 0.08, end: 0),
+          ),
         ],
       ),
     );

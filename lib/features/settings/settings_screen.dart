@@ -589,27 +589,30 @@ class _LanguageOptionTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            Text(flag, style: const TextStyle(fontSize: 24)),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                label,
-                style: GoogleFonts.inter(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: titleColor,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              Text(flag, style: const TextStyle(fontSize: 24)),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: titleColor,
+                  ),
                 ),
               ),
-            ),
-            Icon(
-              selected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
-              color: selected ? AppColors.primary : (isDark ? AppColors.white.withValues(alpha: 0.4) : Colors.black.withValues(alpha: 0.32)),
-            ),
-          ],
+              Icon(
+                selected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
+                color: selected ? AppColors.primary : (isDark ? AppColors.white.withValues(alpha: 0.4) : Colors.black.withValues(alpha: 0.32)),
+              ),
+            ],
+          ),
         ),
       ),
     );

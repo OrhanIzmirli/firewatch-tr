@@ -818,36 +818,41 @@ class _RiskScreenState extends State<RiskScreen> {
                             children: _regions.asMap().entries.map((e) {
                               final region = e.value;
                               final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
-                              return InkWell(
-                                borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                                onTap: () => _showRegionDetail(context, region),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                                    border: isMine ? Border.all(color: AppColors.primary.withValues(alpha: 0.5)) : null,
-                                    color: isMine ? AppColors.primary.withValues(alpha: 0.1) : null,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 8, height: 8,
-                                        decoration: BoxDecoration(
-                                          color: colorForApiRiskLevel(region['risk_level'] as String),
-                                          shape: BoxShape.circle,
-                                        ),
+                              return SizedBox(
+                                height: 48,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                                  onTap: () => _showRegionDetail(context, region),
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                                        border: isMine ? Border.all(color: AppColors.primary.withValues(alpha: 0.5)) : null,
+                                        color: isMine ? AppColors.primary.withValues(alpha: 0.1) : null,
                                       ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        displayRegionName(l10n, region['region']),
-                                        style: GoogleFonts.inter(
-                                          fontSize: 11,
-                                          fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
-                                          color: mutedTextColor,
-                                        ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: 8, height: 8,
+                                            decoration: BoxDecoration(
+                                              color: colorForApiRiskLevel(region['risk_level'] as String),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            displayRegionName(l10n, region['region']),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 11,
+                                              fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
+                                              color: mutedTextColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               );

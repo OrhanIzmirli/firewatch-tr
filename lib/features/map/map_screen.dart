@@ -272,12 +272,13 @@ class _MapScreenState extends State<MapScreen> {
               children: [
                 Row(
                   children: [
-                    StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                    Flexible(
+                      child: StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                    ),
                     InfoIconButton(
                       title: l10n.tooltipConfidenceTitle,
                       bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
                     ),
-                    const SizedBox(width: 4),
                     StatusChip(label: timeAgo, icon: Icons.access_time_rounded),
                   ],
                 ),
@@ -409,8 +410,14 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                         GestureDetector(
                           onTap: () => setState(() => _confidenceFilterActive = false),
-                          child: Text(l10n.mapConfidenceFilterClear,
-                              style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w800, color: AppColors.danger, decoration: TextDecoration.underline)),
+                          behavior: HitTestBehavior.opaque,
+                          child: SizedBox(
+                            height: 48,
+                            child: Center(
+                              child: Text(l10n.mapConfidenceFilterClear,
+                                  style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w800, color: AppColors.danger, decoration: TextDecoration.underline)),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -605,11 +612,15 @@ class _MapScreenState extends State<MapScreen> {
                                         const SizedBox(width: 12),
                                         Icon(Icons.satellite_alt_rounded, size: 14, color: point.isMerged ? AppColors.success : secondaryTextColor),
                                         const SizedBox(width: 4),
-                                        Text(point.mergedSatelliteLabel,
-                                            style: GoogleFonts.inter(
-                                                fontSize: 12,
-                                                fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
-                                                color: point.isMerged ? AppColors.success : secondaryTextColor)),
+                                        Flexible(
+                                          child: Text(point.mergedSatelliteLabel,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 12,
+                                                  fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                                  color: point.isMerged ? AppColors.success : secondaryTextColor)),
+                                        ),
                                         const SizedBox(width: 12),
                                         Icon(Icons.location_on_rounded, size: 14, color: secondaryTextColor),
                                         const SizedBox(width: 4),

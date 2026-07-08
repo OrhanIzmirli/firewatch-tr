@@ -222,34 +222,40 @@ class _NewsScreenState extends State<NewsScreen> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.16)
-              : (isDark
-                  ? AppColors.white.withValues(alpha: 0.03)
-                  : Colors.black.withValues(alpha: 0.03)),
-          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.primary.withValues(alpha: 0.34)
-                : (isDark
-                    ? AppColors.white.withValues(alpha: 0.08)
-                    : Colors.black.withValues(alpha: 0.08)),
-          ),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: isSelected
-                ? AppColors.primary
-                : (isDark
-                    ? AppColors.white.withValues(alpha: 0.78)
-                    : Colors.black.withValues(alpha: 0.72)),
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        height: 48,
+        child: Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.primary.withValues(alpha: 0.16)
+                  : (isDark
+                      ? AppColors.white.withValues(alpha: 0.03)
+                      : Colors.black.withValues(alpha: 0.03)),
+              borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+              border: Border.all(
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.34)
+                    : (isDark
+                        ? AppColors.white.withValues(alpha: 0.08)
+                        : Colors.black.withValues(alpha: 0.08)),
+              ),
+            ),
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: isSelected
+                    ? AppColors.primary
+                    : (isDark
+                        ? AppColors.white.withValues(alpha: 0.78)
+                        : Colors.black.withValues(alpha: 0.72)),
+              ),
+            ),
           ),
         ),
       ),

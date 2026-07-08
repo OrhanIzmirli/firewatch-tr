@@ -1187,6 +1187,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newsCategoryUpdate => 'Update';
 
   @override
+  String get newsContentCategoryEvacuation => 'Evacuation';
+
+  @override
+  String get newsContentCategoryResponse => 'Response';
+
+  @override
+  String get newsContentCategoryWarning => 'Warning';
+
+  @override
+  String get newsContentCategoryEmergency => 'Emergency';
+
+  @override
+  String get newsContentCategoryWeather => 'Weather';
+
+  @override
+  String get newsContentCategoryForest => 'Forest';
+
+  @override
+  String get newsContentCategoryNews => 'News';
+
+  @override
+  String get newsRiskCritical => 'CRITICAL';
+
+  @override
+  String get newsRiskActive => 'ACTIVE';
+
+  @override
+  String get newsRiskMonitoring => 'MONITORING';
+
+  @override
+  String get newsRiskInfo => 'INFO';
+
+  @override
+  String get newsBreakingBadge => 'Breaking';
+
+  @override
+  String get newsEnglishBannerText =>
+      '🌐 Tap any article to translate it to English';
+
+  @override
+  String get newsTranslateCardButton => 'Translate';
+
+  @override
   String get newsRegions => 'Regions';
 
   @override

@@ -1184,6 +1184,49 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsCategoryUpdate => 'Güncelleme';
 
   @override
+  String get newsContentCategoryEvacuation => 'Tahliye';
+
+  @override
+  String get newsContentCategoryResponse => 'Müdahale';
+
+  @override
+  String get newsContentCategoryWarning => 'Uyarı';
+
+  @override
+  String get newsContentCategoryEmergency => 'Acil';
+
+  @override
+  String get newsContentCategoryWeather => 'Hava Durumu';
+
+  @override
+  String get newsContentCategoryForest => 'Orman';
+
+  @override
+  String get newsContentCategoryNews => 'Haber';
+
+  @override
+  String get newsRiskCritical => 'KRİTİK';
+
+  @override
+  String get newsRiskActive => 'AKTİF';
+
+  @override
+  String get newsRiskMonitoring => 'İZLENİYOR';
+
+  @override
+  String get newsRiskInfo => 'BİLGİ';
+
+  @override
+  String get newsBreakingBadge => 'Son Dakika';
+
+  @override
+  String get newsEnglishBannerText =>
+      '🌐 Herhangi bir haberi İngilizceye çevirmek için dokunun';
+
+  @override
+  String get newsTranslateCardButton => 'Çevir';
+
+  @override
   String get newsRegions => 'Bölgeler';
 
   @override

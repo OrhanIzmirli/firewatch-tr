@@ -84,28 +84,72 @@ Future<void> maybeShowScreenCoachMarks(
   final overlay = Overlay.of(context, rootOverlay: true);
   late OverlayEntry entry;
   int index = 0;
+  var closed = false;
 
   void finish() {
+    if (closed) return;
+    closed = true;
     entry.remove();
   }
 
-  void showStep() {
+  /// Advances [index] to [newIndex], skipping forward past any step whose
+  /// target isn't currently laid out (so the tour can never get stuck on a
+  /// missing element), then scrolls that target into view if it's inside a
+  /// scrollable ancestor. Returns false when there's no valid step left —
+  /// callers should close the tour in that case rather than show anything.
+  Future<bool> prepareStep(int newIndex) async {
+    index = newIndex;
+    while (index < steps.length && steps[index].targetKey.currentContext == null) {
+      index++;
+    }
+    if (index >= steps.length) return false;
+
+    final targetContext = steps[index].targetKey.currentContext;
+    if (targetContext != null) {
+      try {
+        await Scrollable.ensureVisible(
+          targetContext,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          alignment: 0.5,
+        );
+      } catch (_) {
+        // No scrollable ancestor, already visible, or the context died
+        // mid-animation (screen navigated away) — any of these are fine,
+        // the tour just proceeds with whatever position is available.
+      }
+    }
+    return true;
+  }
+
+  Future<void> goToStep(int newIndex) async {
+    if (closed) return;
+    final ok = await prepareStep(newIndex);
+    if (closed) return;
+    if (!ok) {
+      finish();
+      return;
+    }
     entry.markNeedsBuild();
   }
 
+  final hasFirstStep = await prepareStep(0);
+  if (!hasFirstStep) return;
+  if (!context.mounted) return;
+
   entry = OverlayEntry(
     builder: (overlayContext) {
-      // Skip any step whose target isn't currently laid out (defensive —
-      // all four should be mounted on the Home tab, but never crash if not).
-      while (index < steps.length && steps[index].targetKey.currentContext == null) {
-        index++;
-      }
-      if (index >= steps.length) {
+      // Defensive fallback only — goToStep()/prepareStep() already keep
+      // index pointing at a valid, laid-out step. If we still land here
+      // (e.g. the target was disposed between frames), close immediately
+      // rather than ever crash or hang on a broken frame.
+      if (index >= steps.length || steps[index].targetKey.currentContext == null) {
         WidgetsBinding.instance.addPostFrameCallback((_) => finish());
         return const SizedBox.shrink();
       }
 
       final step = steps[index];
+      final isLastStep = index == steps.length - 1;
       final renderBox = step.targetKey.currentContext!.findRenderObject() as RenderBox;
       final targetSize = renderBox.size;
       final targetPosition = renderBox.localToGlobal(Offset.zero);
@@ -124,7 +168,11 @@ Future<void> maybeShowScreenCoachMarks(
       final safeTop = safePadding.top + cardMargin;
       final safeBottom = screenSize.height - safePadding.bottom - cardMargin;
 
-      final showCardBelow = targetRect.top < screenSize.height * 0.45;
+      // Target in the bottom half of the screen → card goes above it;
+      // target in the top half → card goes below it. Either way the card
+      // never overlaps the spotlighted element.
+      final targetIsInBottomHalf = targetRect.center.dy > screenSize.height / 2;
+      final showCardBelow = !targetIsInBottomHalf;
 
       // Clamp so the card is always fully within the safe area, regardless
       // of how close the target is to a screen edge.
@@ -141,7 +189,16 @@ Future<void> maybeShowScreenCoachMarks(
         children: [
           Positioned.fill(
             child: GestureDetector(
-              onTap: finish, // tap outside the card to dismiss the tour
+              // Tapping the dark scrim advances the tour — except on the
+              // last step, where it closes it (there's nowhere left to
+              // advance to).
+              onTap: () {
+                if (isLastStep) {
+                  finish();
+                } else {
+                  goToStep(index + 1);
+                }
+              },
               child: CustomPaint(
                 painter: _SpotlightPainter(rect: targetRect),
                 child: const SizedBox.expand(),
@@ -173,7 +230,7 @@ Future<void> maybeShowScreenCoachMarks(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           GestureDetector(
-                            onTap: () {}, // swallow taps on the card itself so it doesn't dismiss
+                            onTap: () {}, // swallow taps on the card itself so it doesn't advance/dismiss
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -217,17 +274,8 @@ Future<void> maybeShowScreenCoachMarks(
                               SizedBox(
                                 height: 48,
                                 child: FilledButton(
-                                  onPressed: () {
-                                    index++;
-                                    if (index >= steps.length) {
-                                      finish();
-                                    } else {
-                                      showStep();
-                                    }
-                                  },
-                                  child: Text(
-                                    index == steps.length - 1 ? l10n.coachMarksGotIt : l10n.coachMarksNext,
-                                  ),
+                                  onPressed: () => goToStep(index + 1),
+                                  child: Text(isLastStep ? l10n.coachMarksGotIt : l10n.coachMarksNext),
                                 ),
                               ),
                             ],

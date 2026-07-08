@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/news_content_analysis.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
 import '../../services/news_translation_service.dart';
@@ -30,11 +31,26 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
   bool _translationFailed = false;
   String? _translatedTitle;
   String? _translatedSummary;
+  bool _autoTranslateKicked = false;
 
   @override
   void initState() {
     super.initState();
     _loadCachedTranslation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_autoTranslateKicked) return;
+    _autoTranslateKicked = true;
+    // "Tap any article to translate it to English" (news list banner) only
+    // holds true if opening an article actually translates it — so in
+    // English mode, kick off translation automatically rather than making
+    // the user find and press the button themselves.
+    if (Localizations.localeOf(context).languageCode != 'en') return;
+    if (_translatedTitle != null && _translatedSummary != null) return;
+    _translate();
   }
 
   Future<void> _loadCachedTranslation() async {
@@ -87,21 +103,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  IconData _iconForCategory() {
-    switch (newsItem.category.toLowerCase()) {
-      case 'risk':
-        return Icons.auto_graph_rounded;
-      case 'operasyon':
-        return Icons.local_fire_department_rounded;
-      case 'güvenlik':
-        return Icons.shield_outlined;
-      case 'güncelleme':
-        return Icons.update_rounded;
-      default:
-        return Icons.article_rounded;
-    }
-  }
-
   NewsItem get newsItem => widget.newsItem;
 
   @override
@@ -128,6 +129,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     final displayTitle = _showTranslated && _translatedTitle != null ? _translatedTitle! : newsItem.title;
     final displaySummary = _showTranslated && _translatedSummary != null ? _translatedSummary! : newsItem.summary;
     final hasTranslation = _translatedTitle != null && _translatedSummary != null;
+    final fullText = '${newsItem.title} ${newsItem.summary}';
+    final category = classifyNewsCategory(fullText);
+    final riskLevel = classifyNewsRiskLevel(fullText);
 
     return Scaffold(
       appBar: AppBar(
@@ -152,12 +156,16 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     runSpacing: 10,
                     children: [
                       StatusChip(
-                        label: newsItem.category,
-                        icon: _iconForCategory(),
+                        label: newsCategoryLabel(l10n, category),
+                        icon: newsCategoryIcon(category),
+                      ),
+                      StatusChip(
+                        label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                        color: newsRiskLevelColor(riskLevel),
                       ),
                       if (newsItem.isBreaking)
-                        const StatusChip(
-                          label: 'Breaking',
+                        StatusChip(
+                          label: l10n.newsBreakingBadge,
                           icon: Icons.bolt_rounded,
                         ),
                     ],
@@ -171,19 +179,29 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Icon(
-                      _iconForCategory(),
+                      newsCategoryIcon(category),
                       color: AppColors.primary,
                       size: 30,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
-                  Text(
-                    displayTitle,
-                    style: GoogleFonts.inter(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      height: 1.15,
-                      color: titleColor,
+                  RichText(
+                    text: TextSpan(
+                      children: highlightFireKeywords(
+                        displayTitle,
+                        GoogleFonts.inter(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          height: 1.15,
+                          color: titleColor,
+                        ),
+                        GoogleFonts.inter(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          height: 1.15,
+                          color: AppColors.primary,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),

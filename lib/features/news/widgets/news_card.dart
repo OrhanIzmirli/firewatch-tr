@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/utils/news_content_analysis.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/news_item.dart';
 import '../../../shared/widgets/glass_panel.dart';
 import '../../../shared/widgets/status_chip.dart';
@@ -17,23 +19,9 @@ class NewsCard extends StatelessWidget {
     this.onTap,
   });
 
-  IconData _iconForCategory() {
-    switch (item.category.toLowerCase()) {
-      case 'risk':
-        return Icons.auto_graph_rounded;
-      case 'operasyon':
-        return Icons.local_fire_department_rounded;
-      case 'güvenlik':
-        return Icons.shield_outlined;
-      case 'güncelleme':
-        return Icons.update_rounded;
-      default:
-        return Icons.article_rounded;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
@@ -46,6 +34,11 @@ class NewsCard extends StatelessWidget {
     final arrowColor = isDark
         ? AppColors.white.withValues(alpha: 0.42)
         : Colors.black.withValues(alpha: 0.3);
+
+    final fullText = '${item.title} ${item.summary}';
+    final category = classifyNewsCategory(fullText);
+    final riskLevel = classifyNewsRiskLevel(fullText);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     return Material(
       color: Colors.transparent,
@@ -69,7 +62,7 @@ class NewsCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
-                    _iconForCategory(),
+                    newsCategoryIcon(category),
                     color: AppColors.primary,
                     size: 24,
                   ),
@@ -85,31 +78,44 @@ class NewsCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.sm,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Expanded(
-                            child: StatusChip(
-                              label: item.category,
-                              icon: _iconForCategory(),
-                            ),
+                          StatusChip(
+                            label: newsCategoryLabel(l10n, category),
+                            icon: newsCategoryIcon(category),
                           ),
-                          if (item.isBreaking) ...[
-                            const SizedBox(width: AppSpacing.sm),
-                            const StatusChip(
-                              label: 'Breaking',
+                          StatusChip(
+                            label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                            color: newsRiskLevelColor(riskLevel),
+                          ),
+                          if (item.isBreaking)
+                            StatusChip(
+                              label: l10n.newsBreakingBadge,
                               icon: Icons.bolt_rounded,
                             ),
-                          ],
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),
-                      Text(
-                        item.title,
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          height: 1.2,
-                          color: titleColor,
+                      RichText(
+                        text: TextSpan(
+                          children: highlightFireKeywords(
+                            item.title,
+                            GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              height: 1.2,
+                              color: titleColor,
+                            ),
+                            GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              height: 1.2,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.sm),
@@ -137,7 +143,7 @@ class NewsCard extends StatelessWidget {
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           Text(
-                            '${item.readMinutes} dk',
+                            l10n.newsDetailReadMinutes(item.readMinutes),
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -146,6 +152,27 @@ class NewsCard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (isEnglish) ...[
+                        const SizedBox(height: AppSpacing.sm),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: onTap,
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 14),
+                                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
+                              ),
+                              icon: const Icon(Icons.translate_rounded, size: 16),
+                              label: Text(
+                                l10n.newsTranslateCardButton,
+                                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

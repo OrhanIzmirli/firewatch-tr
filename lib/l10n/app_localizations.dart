@@ -2186,6 +2186,90 @@ abstract class AppLocalizations {
   /// **'Güncelleme'**
   String get newsCategoryUpdate;
 
+  /// No description provided for @newsContentCategoryEvacuation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahliye'**
+  String get newsContentCategoryEvacuation;
+
+  /// No description provided for @newsContentCategoryResponse.
+  ///
+  /// In tr, this message translates to:
+  /// **'Müdahale'**
+  String get newsContentCategoryResponse;
+
+  /// No description provided for @newsContentCategoryWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyarı'**
+  String get newsContentCategoryWarning;
+
+  /// No description provided for @newsContentCategoryEmergency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil'**
+  String get newsContentCategoryEmergency;
+
+  /// No description provided for @newsContentCategoryWeather.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hava Durumu'**
+  String get newsContentCategoryWeather;
+
+  /// No description provided for @newsContentCategoryForest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orman'**
+  String get newsContentCategoryForest;
+
+  /// No description provided for @newsContentCategoryNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haber'**
+  String get newsContentCategoryNews;
+
+  /// No description provided for @newsRiskCritical.
+  ///
+  /// In tr, this message translates to:
+  /// **'KRİTİK'**
+  String get newsRiskCritical;
+
+  /// No description provided for @newsRiskActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'AKTİF'**
+  String get newsRiskActive;
+
+  /// No description provided for @newsRiskMonitoring.
+  ///
+  /// In tr, this message translates to:
+  /// **'İZLENİYOR'**
+  String get newsRiskMonitoring;
+
+  /// No description provided for @newsRiskInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'BİLGİ'**
+  String get newsRiskInfo;
+
+  /// No description provided for @newsBreakingBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Dakika'**
+  String get newsBreakingBadge;
+
+  /// No description provided for @newsEnglishBannerText.
+  ///
+  /// In tr, this message translates to:
+  /// **'🌐 Herhangi bir haberi İngilizceye çevirmek için dokunun'**
+  String get newsEnglishBannerText;
+
+  /// No description provided for @newsTranslateCardButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çevir'**
+  String get newsTranslateCardButton;
+
   /// No description provided for @newsRegions.
   ///
   /// In tr, this message translates to:

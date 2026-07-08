@@ -10,6 +10,7 @@ import '../../services/news_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
+import '../../shared/widgets/english_translation_banner.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
@@ -30,6 +31,11 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   static const _cacheKey = 'news_list';
   static const _pageSize = 20;
+
+  // Static (not instance) so it survives this screen being disposed and
+  // recreated on every tab switch — "once per session" means once per app
+  // launch, not once per visit to the News tab.
+  static bool _englishBannerDismissed = false;
 
   final NewsService _newsService = NewsService();
   final ScrollController _scrollController = ScrollController();
@@ -436,6 +442,11 @@ class _NewsScreenState extends State<NewsScreen> {
             ).animate(delay: 160.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
+
+            if (Localizations.localeOf(context).languageCode == 'en' && !_englishBannerDismissed)
+              EnglishTranslationBanner(
+                onDismiss: () => setState(() => _englishBannerDismissed = true),
+              ),
 
             if (_isLoading)
               const SkeletonListLoader(count: 4)

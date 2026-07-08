@@ -2252,6 +2252,12 @@ abstract class AppLocalizations {
   /// **'Çevrimdışı mod • Son güncelleme: {time}'**
   String offlineBannerLabel(String time);
 
+  /// No description provided for @slowLoadingBannerLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yavaş yükleniyor — önbellek verisi gösteriliyor'**
+  String get slowLoadingBannerLabel;
+
   /// No description provided for @errorStateTitle.
   ///
   /// In tr, this message translates to:

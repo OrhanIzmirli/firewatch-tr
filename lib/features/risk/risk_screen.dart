@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/offline_cache_service.dart';
@@ -15,6 +16,7 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
+import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 
@@ -57,11 +59,17 @@ class RiskScreen extends StatefulWidget {
 class _RiskScreenState extends State<RiskScreen> {
   static const _cacheKey = 'risk_summary';
 
-  final Dio _dio = Dio();
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
+    ),
+  );
   final FireApiService _fireApiService = FireApiService();
   List<Map<String, dynamic>> _regions = [];
   bool _loading = true;
   bool _isOffline = false;
+  bool _isSlowLoading = false;
   DateTime? _cachedAt;
 
   bool _showMyLocation = false;
@@ -113,10 +121,22 @@ class _RiskScreenState extends State<RiskScreen> {
   }
 
   Future<void> _loadRiskData() async {
-    if (mounted) setState(() => _loading = true);
+    if (mounted) setState(() { _loading = true; _isSlowLoading = false; });
     try {
-      final response = await _dio.get(
-        'https://firewatch-tr-backend.onrender.com/api/risk/summary',
+      final response = await raceWithCacheFallback(
+        fetch: _dio.get('https://firewatch-tr-backend.onrender.com/api/risk/summary'),
+        timeout: const Duration(seconds: 12),
+        cacheKey: _cacheKey,
+        onSlowFallback: (cached) {
+          if (!mounted) return;
+          final (data, savedAt) = cached;
+          setState(() {
+            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+            _cachedAt = savedAt;
+            _isSlowLoading = true;
+            _loading = false;
+          });
+        },
       );
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
@@ -126,6 +146,7 @@ class _RiskScreenState extends State<RiskScreen> {
           _regions = regions;
           _loading = false;
           _isOffline = false;
+          _isSlowLoading = false;
         });
       }
     } catch (e) {
@@ -138,6 +159,7 @@ class _RiskScreenState extends State<RiskScreen> {
             _cachedAt = savedAt;
             _isOffline = true;
           }
+          _isSlowLoading = false;
           _loading = false;
         });
       }
@@ -482,6 +504,7 @@ class _RiskScreenState extends State<RiskScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
+                  if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                     key: CoachMarkKeys.riskScoreCard,
                     padding: const EdgeInsets.all(AppSpacing.xl),

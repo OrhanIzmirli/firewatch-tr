@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
@@ -22,6 +23,7 @@ import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
+import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 
@@ -42,6 +44,7 @@ class _MapScreenState extends State<MapScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   bool _isOffline = false;
+  bool _isSlowLoading = false;
   DateTime? _cachedAt;
 
   List<FirePoint> _firePoints = [];
@@ -120,9 +123,25 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _loadFirePoints() async {
-    setState(() { _isLoading = true; _errorMessage = null; });
+    setState(() { _isLoading = true; _errorMessage = null; _isSlowLoading = false; });
     try {
-      final firePoints = await _fireApiService.fetchTurkeyFiresWithCities();
+      final firePoints = await raceWithCacheFallback(
+        fetch: _fireApiService.fetchTurkeyFiresWithCities(),
+        timeout: const Duration(seconds: 12),
+        cacheKey: _cacheKey,
+        onSlowFallback: (cached) {
+          if (!mounted) return;
+          final (data, savedAt) = cached;
+          final points = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+          setState(() {
+            _firePoints = points;
+            _nearbyFirePoints = _buildNearbyList(points);
+            _cachedAt = savedAt;
+            _isSlowLoading = true;
+            _isLoading = false;
+          });
+        },
+      );
       final allPoints = _attachDistances(firePoints);
       final nearby = _buildNearbyList(allPoints);
       await OfflineCacheService.instance.save(_cacheKey, allPoints.map((p) => p.toJson()).toList());
@@ -133,6 +152,7 @@ class _MapScreenState extends State<MapScreen> {
         _nearbyFirePoints = nearby;
         _isLoading = false;
         _isOffline = false;
+        _isSlowLoading = false;
       });
     } catch (_) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
@@ -145,10 +165,11 @@ class _MapScreenState extends State<MapScreen> {
           _nearbyFirePoints = _buildNearbyList(points);
           _cachedAt = savedAt;
           _isOffline = true;
+          _isSlowLoading = false;
           _isLoading = false;
         });
       } else {
-        setState(() { _errorMessage = AppLocalizations.of(context)!.mapFetchError; _isLoading = false; });
+        setState(() { _errorMessage = AppLocalizations.of(context)!.mapFetchError; _isSlowLoading = false; _isLoading = false; });
       }
     }
   }
@@ -337,6 +358,7 @@ class _MapScreenState extends State<MapScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
+                if (_isSlowLoading) const SlowLoadingBanner(),
                 GlassPanel(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

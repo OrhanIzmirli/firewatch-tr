@@ -1222,6 +1222,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get slowLoadingBannerLabel => 'Loading slowly — showing cached data';
+
+  @override
   String get errorStateTitle => 'Something went wrong';
 
   @override

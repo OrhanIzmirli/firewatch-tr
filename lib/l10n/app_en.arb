@@ -495,6 +495,7 @@
   "@offlineBannerLabel": {
     "placeholders": { "time": { "type": "String" } }
   },
+  "slowLoadingBannerLabel": "Loading slowly — showing cached data",
   "errorStateTitle": "Something went wrong",
   "errorStateGeneric": "Couldn't load data. Please try again.",
   "emptyStateGenericTitle": "Nothing to show",

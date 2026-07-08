@@ -1218,6 +1218,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get slowLoadingBannerLabel =>
+      'Yavaş yükleniyor — önbellek verisi gösteriliyor';
+
+  @override
   String get errorStateTitle => 'Bir şeyler ters gitti';
 
   @override

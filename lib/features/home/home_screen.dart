@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../models/news_item.dart';
@@ -20,6 +21,7 @@ import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
+import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/summary_card.dart';
@@ -48,6 +50,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _fireLoading = true;
   bool _newsOffline = false;
   bool _firesOffline = false;
+  bool _newsSlowLoading = false;
+  bool _firesSlowLoading = false;
   DateTime? _newsCachedAt;
   DateTime? _firesCachedAt;
 
@@ -62,12 +66,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _loadNews() async {
-    if (mounted) setState(() => _newsLoading = true);
+    if (mounted) setState(() { _newsLoading = true; _newsSlowLoading = false; });
     try {
-      final news = await _newsService.fetchNewsFromRender(limit: 3);
+      final news = await raceWithCacheFallback(
+        fetch: _newsService.fetchNewsFromRender(limit: 3),
+        timeout: const Duration(seconds: 12),
+        cacheKey: _newsCacheKey,
+        onSlowFallback: (cached) {
+          if (!mounted) return;
+          final (data, savedAt) = cached;
+          setState(() {
+            _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
+            _newsCachedAt = savedAt;
+            _newsSlowLoading = true;
+            _newsLoading = false;
+          });
+        },
+      );
       await OfflineCacheService.instance.save(_newsCacheKey, news.map((n) => n.toJson()).toList());
-      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsOffline = false; });
-    } catch (_) {
+      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsOffline = false; _newsSlowLoading = false; });
+    } catch (e, stack) {
+      debugPrint('ERROR _loadNews: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_newsCacheKey);
       if (mounted) {
         setState(() {
@@ -77,6 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             _newsCachedAt = savedAt;
             _newsOffline = true;
           }
+          _newsSlowLoading = false;
           _newsLoading = false;
         });
       }
@@ -84,16 +104,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _loadFires() async {
-    if (mounted) setState(() => _fireLoading = true);
+    if (mounted) setState(() { _fireLoading = true; _firesSlowLoading = false; });
     try {
-      final allPoints = await _fireApiService.fetchTurkeyFiresWithCities();
+      final allPoints = await raceWithCacheFallback(
+        fetch: _fireApiService.fetchTurkeyFiresWithCities(),
+        timeout: const Duration(seconds: 12),
+        cacheKey: _firesCacheKey,
+        onSlowFallback: (cached) {
+          if (!mounted) return;
+          final (data, savedAt) = cached;
+          setState(() {
+            _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
+            _firesCachedAt = savedAt;
+            _firesSlowLoading = true;
+            _fireLoading = false;
+          });
+        },
+      );
       await OfflineCacheService.instance.save(_firesCacheKey, allPoints.map((p) => p.toJson()).toList());
       if (mounted) setState(() {
         _firePoints = allPoints;
         _fireLoading = false;
         _firesOffline = false;
+        _firesSlowLoading = false;
       });
-    } catch (_) {
+    } catch (e, stack) {
+      debugPrint('ERROR _loadFires: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_firesCacheKey);
       if (mounted) {
         setState(() {
@@ -103,6 +139,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             _firesCachedAt = savedAt;
             _firesOffline = true;
           }
+          _firesSlowLoading = false;
           _fireLoading = false;
         });
       }
@@ -276,6 +313,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_firesOffline && _firesCachedAt != null) OfflineBanner(lastUpdated: _firesCachedAt!),
+            if (_firesSlowLoading) const SlowLoadingBanner(),
             // ── Header ──────────────────────────────────────
             GlassPanel(
               padding: const EdgeInsets.all(AppSpacing.xl),
@@ -410,6 +448,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: AppSpacing.md),
 
             if (_newsOffline && _newsCachedAt != null) OfflineBanner(lastUpdated: _newsCachedAt!),
+            if (_newsSlowLoading) const SlowLoadingBanner(),
             if (_newsLoading)
               const SkeletonListLoader(count: 2)
             else if (_topNews.isEmpty)

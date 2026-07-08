@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -214,8 +213,12 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _openReportPanel() => setState(() => _isReportOpen = true);
-  void _closeReportPanel() => setState(() => _isReportOpen = false);
+  void _openReportPanel() {
+    setState(() => _isReportOpen = true);
+    showReportFirePanel(context).then((_) {
+      if (mounted) setState(() => _isReportOpen = false);
+    });
+  }
 
   Color _markerColor(String confidence) {
     final c = confidence.toLowerCase();
@@ -350,8 +353,6 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final panelWidth = screenWidth * 0.78;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
@@ -640,34 +641,6 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
 
-          if (_isReportOpen)
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: _closeReportPanel,
-                child: Stack(children: [
-                  Positioned.fill(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-                      child: Container(color: Colors.black.withValues(alpha: 0.18)),
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 380),
-            curve: Curves.easeInOutCubic,
-            top: 0, bottom: 0,
-            right: _isReportOpen ? 0 : -panelWidth - 30,
-            child: SizedBox(
-              width: panelWidth,
-              child: Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.md, right: AppSpacing.md, bottom: AppSpacing.md),
-                child: ReportFirePanel(onClose: _closeReportPanel),
-              ),
-            ),
-          ),
         ],
       ),
       floatingActionButton: AnimatedSlide(

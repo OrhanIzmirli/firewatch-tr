@@ -1324,6 +1324,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportPanelSubmit => 'Submit Report';
 
   @override
+  String get reportPanelAnonymousToggle => 'Submit anonymously';
+
+  @override
+  String get reportPanelAnonymousToggleSubtitle =>
+      'Your name won\'t be shared with authorities';
+
+  @override
+  String get reportPanelPhotosLabel => 'Photos (optional)';
+
+  @override
+  String get reportPanelPhotosHint =>
+      'Add up to 3 photos to help verify the report';
+
+  @override
+  String get reportPanelAddPhoto => 'Add Photo';
+
+  @override
+  String get reportPanelPhotoSourceCamera => 'Camera';
+
+  @override
+  String get reportPanelPhotoSourceGallery => 'Gallery';
+
+  @override
+  String get reportPanelRemovePhoto => 'Remove photo';
+
+  @override
+  String get reportPanelMapAdjustHint =>
+      'Tap the map to adjust the pin location';
+
+  @override
+  String get reportPanelSuccessVerifiedTitle => 'Report Verified';
+
+  @override
+  String get reportPanelSuccessReceivedTitle => 'Report Received';
+
+  @override
+  String get reportPanelSuccessVerifiedBody =>
+      'Your report matched NASA satellite data and has been marked as verified.';
+
+  @override
+  String get reportPanelSuccessReceivedBody =>
+      'Your report was recorded and is pending manual review by our team.';
+
+  @override
+  String reportPanelReportIdLabel(String id) {
+    return 'Report ID: #$id';
+  }
+
+  @override
+  String reportPanelReportedAtLabel(String time) {
+    return 'Reported at $time';
+  }
+
+  @override
+  String get reportPanelResponseTimeVerified =>
+      'This is an active fire zone — emergency services have already been notified.';
+
+  @override
+  String get reportPanelResponseTimeReceived =>
+      'If this is an active emergency, please also call 112 directly.';
+
+  @override
+  String get reportPanelShare => 'Share';
+
+  @override
+  String get reportPanelDone => 'Done';
+
+  @override
+  String reportPanelShareText(
+    String city,
+    String region,
+    String id,
+    String status,
+  ) {
+    return 'Fire report submitted near $city, $region (#$id). $status';
+  }
+
+  @override
   String offlineBannerLabel(String time) {
     return 'Offline mode • Last updated: $time';
   }
@@ -1806,7 +1884,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskInfoUpdateFrequencyBody =>
-      'Risk scores are recalculated every 12 hours.';
+      'Risk scores are recalculated every 3 hours.';
 
   @override
   String get trustHomeInfo =>

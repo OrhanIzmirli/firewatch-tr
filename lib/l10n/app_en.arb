@@ -541,6 +541,40 @@
   "reportPanelSettlementSwitch": "Near a settlement",
   "reportPanelSubmitting": "Submitting...",
   "reportPanelSubmit": "Submit Report",
+  "reportPanelAnonymousToggle": "Submit anonymously",
+  "reportPanelAnonymousToggleSubtitle": "Your name won't be shared with authorities",
+  "reportPanelPhotosLabel": "Photos (optional)",
+  "reportPanelPhotosHint": "Add up to 3 photos to help verify the report",
+  "reportPanelAddPhoto": "Add Photo",
+  "reportPanelPhotoSourceCamera": "Camera",
+  "reportPanelPhotoSourceGallery": "Gallery",
+  "reportPanelRemovePhoto": "Remove photo",
+  "reportPanelMapAdjustHint": "Tap the map to adjust the pin location",
+  "reportPanelSuccessVerifiedTitle": "Report Verified",
+  "reportPanelSuccessReceivedTitle": "Report Received",
+  "reportPanelSuccessVerifiedBody": "Your report matched NASA satellite data and has been marked as verified.",
+  "reportPanelSuccessReceivedBody": "Your report was recorded and is pending manual review by our team.",
+  "reportPanelReportIdLabel": "Report ID: #{id}",
+  "@reportPanelReportIdLabel": {
+    "placeholders": { "id": { "type": "String" } }
+  },
+  "reportPanelReportedAtLabel": "Reported at {time}",
+  "@reportPanelReportedAtLabel": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "reportPanelResponseTimeVerified": "This is an active fire zone — emergency services have already been notified.",
+  "reportPanelResponseTimeReceived": "If this is an active emergency, please also call 112 directly.",
+  "reportPanelShare": "Share",
+  "reportPanelDone": "Done",
+  "reportPanelShareText": "Fire report submitted near {city}, {region} (#{id}). {status}",
+  "@reportPanelShareText": {
+    "placeholders": {
+      "city": { "type": "String" },
+      "region": { "type": "String" },
+      "id": { "type": "String" },
+      "status": { "type": "String" }
+    }
+  },
 
   "offlineBannerLabel": "Offline mode • Last updated: {time}",
   "@offlineBannerLabel": {
@@ -772,7 +806,7 @@
   "riskInfoSourcesTitle": "Data Sources",
   "riskInfoSourcesBody": "Calculated using NASA FIRMS satellite data, Open-Meteo weather data, and RSS news feeds.",
   "riskInfoUpdateFrequencyTitle": "Update Frequency",
-  "riskInfoUpdateFrequencyBody": "Risk scores are recalculated every 12 hours.",
+  "riskInfoUpdateFrequencyBody": "Risk scores are recalculated every 3 hours.",
 
   "trustHomeInfo": "Data sourced from NASA FIRMS satellite imagery, updated every 3 hours.",
   "trustMapInfo": "Fire markers show thermal anomalies detected by the VIIRS satellite.",

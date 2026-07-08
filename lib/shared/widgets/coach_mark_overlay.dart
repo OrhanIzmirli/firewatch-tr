@@ -111,15 +111,37 @@ Future<void> maybeShowScreenCoachMarks(
       final targetPosition = renderBox.localToGlobal(Offset.zero);
       final targetRect = (targetPosition & targetSize).inflate(8);
       final screenSize = MediaQuery.of(overlayContext).size;
+      // System status bar / notch / home-indicator insets — the card must
+      // never render behind these, or its buttons become untappable.
+      final safePadding = MediaQuery.of(overlayContext).padding;
       final isDark = Theme.of(overlayContext).brightness == Brightness.dark;
 
+      const cardMargin = AppSpacing.md;
+      // Reserve roughly a third of the screen for the card itself so the
+      // clamped position below always leaves it room to lay out, even on a
+      // small (e.g. 360x640) screen.
+      final maxCardHeight = screenSize.height * 0.42;
+      final safeTop = safePadding.top + cardMargin;
+      final safeBottom = screenSize.height - safePadding.bottom - cardMargin;
+
       final showCardBelow = targetRect.top < screenSize.height * 0.45;
+
+      // Clamp so the card is always fully within the safe area, regardless
+      // of how close the target is to a screen edge.
+      double? top;
+      double? bottom;
+      if (showCardBelow) {
+        top = (targetRect.bottom + cardMargin).clamp(safeTop, safeBottom - 80);
+      } else {
+        bottom = (screenSize.height - targetRect.top + cardMargin)
+            .clamp(cardMargin, screenSize.height - safeTop - 80);
+      }
 
       return Stack(
         children: [
           Positioned.fill(
             child: GestureDetector(
-              onTap: () {}, // swallow taps outside the card
+              onTap: finish, // tap outside the card to dismiss the tour
               child: CustomPaint(
                 painter: _SpotlightPainter(rect: targetRect),
                 child: const SizedBox.expand(),
@@ -129,69 +151,91 @@ Future<void> maybeShowScreenCoachMarks(
           Positioned(
             left: AppSpacing.lg,
             right: AppSpacing.lg,
-            top: showCardBelow ? targetRect.bottom + AppSpacing.md : null,
-            bottom: showCardBelow ? null : screenSize.height - targetRect.top + AppSpacing.md,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.surface : Colors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 8)),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      l10n.coachMarksStepCount(index + 1, steps.length),
-                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      step.title,
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: isDark ? AppColors.white : const Color(0xFF0F172A),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      step.description,
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        height: 1.45,
-                        color: isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68),
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: finish,
-                          child: Text(l10n.coachMarksSkip, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-                        ),
-                        FilledButton(
-                          onPressed: () {
-                            index++;
-                            if (index >= steps.length) {
-                              finish();
-                            } else {
-                              showStep();
-                            }
-                          },
-                          child: Text(
-                            index == steps.length - 1 ? l10n.coachMarksGotIt : l10n.coachMarksNext,
-                          ),
-                        ),
+            top: top,
+            bottom: bottom,
+            child: SafeArea(
+              child: Material(
+                color: Colors.transparent,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: maxCardHeight),
+                  child: Container(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.surface : Colors.white,
+                      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 8)),
                       ],
                     ),
-                  ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {}, // swallow taps on the card itself so it doesn't dismiss
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  l10n.coachMarksStepCount(index + 1, steps.length),
+                                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  step.title,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  step.description,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    height: 1.45,
+                                    color: isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                height: 48,
+                                child: TextButton(
+                                  onPressed: finish,
+                                  child: Text(l10n.coachMarksSkip, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 48,
+                                child: FilledButton(
+                                  onPressed: () {
+                                    index++;
+                                    if (index >= steps.length) {
+                                      finish();
+                                    } else {
+                                      showStep();
+                                    }
+                                  },
+                                  child: Text(
+                                    index == steps.length - 1 ? l10n.coachMarksGotIt : l10n.coachMarksNext,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

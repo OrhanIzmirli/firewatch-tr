@@ -541,6 +541,40 @@
   "reportPanelSettlementSwitch": "Yerleşim alanına yakın",
   "reportPanelSubmitting": "Gönderiliyor...",
   "reportPanelSubmit": "Bildirimi Gönder",
+  "reportPanelAnonymousToggle": "Anonim olarak gönder",
+  "reportPanelAnonymousToggleSubtitle": "İsminiz yetkililerle paylaşılmayacak",
+  "reportPanelPhotosLabel": "Fotoğraflar (isteğe bağlı)",
+  "reportPanelPhotosHint": "Bildirimi doğrulamaya yardımcı olması için en fazla 3 fotoğraf ekleyin",
+  "reportPanelAddPhoto": "Fotoğraf Ekle",
+  "reportPanelPhotoSourceCamera": "Kamera",
+  "reportPanelPhotoSourceGallery": "Galeri",
+  "reportPanelRemovePhoto": "Fotoğrafı kaldır",
+  "reportPanelMapAdjustHint": "Pin konumunu ayarlamak için haritaya dokunun",
+  "reportPanelSuccessVerifiedTitle": "Bildirim Doğrulandı",
+  "reportPanelSuccessReceivedTitle": "Bildirim Alındı",
+  "reportPanelSuccessVerifiedBody": "Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.",
+  "reportPanelSuccessReceivedBody": "Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.",
+  "reportPanelReportIdLabel": "Bildirim No: #{id}",
+  "@reportPanelReportIdLabel": {
+    "placeholders": { "id": { "type": "String" } }
+  },
+  "reportPanelReportedAtLabel": "{time} tarihinde bildirildi",
+  "@reportPanelReportedAtLabel": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "reportPanelResponseTimeVerified": "Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.",
+  "reportPanelResponseTimeReceived": "Eğer bu aktif bir acil durumsa lütfen doğrudan 112'yi de arayın.",
+  "reportPanelShare": "Paylaş",
+  "reportPanelDone": "Tamam",
+  "reportPanelShareText": "{city}, {region} yakınında yangın bildirimi gönderildi (#{id}). {status}",
+  "@reportPanelShareText": {
+    "placeholders": {
+      "city": { "type": "String" },
+      "region": { "type": "String" },
+      "id": { "type": "String" },
+      "status": { "type": "String" }
+    }
+  },
 
   "offlineBannerLabel": "Çevrimdışı mod • Son güncelleme: {time}",
   "@offlineBannerLabel": {
@@ -772,7 +806,7 @@
   "riskInfoSourcesTitle": "Veri Kaynakları",
   "riskInfoSourcesBody": "NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.",
   "riskInfoUpdateFrequencyTitle": "Güncelleme Sıklığı",
-  "riskInfoUpdateFrequencyBody": "Risk skorları her 12 saatte bir yeniden hesaplanır.",
+  "riskInfoUpdateFrequencyBody": "Risk skorları her 3 saatte bir yeniden hesaplanır.",
 
   "trustHomeInfo": "Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.",
   "trustMapInfo": "Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.",

@@ -1320,6 +1320,84 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportPanelSubmit => 'Bildirimi Gönder';
 
   @override
+  String get reportPanelAnonymousToggle => 'Anonim olarak gönder';
+
+  @override
+  String get reportPanelAnonymousToggleSubtitle =>
+      'İsminiz yetkililerle paylaşılmayacak';
+
+  @override
+  String get reportPanelPhotosLabel => 'Fotoğraflar (isteğe bağlı)';
+
+  @override
+  String get reportPanelPhotosHint =>
+      'Bildirimi doğrulamaya yardımcı olması için en fazla 3 fotoğraf ekleyin';
+
+  @override
+  String get reportPanelAddPhoto => 'Fotoğraf Ekle';
+
+  @override
+  String get reportPanelPhotoSourceCamera => 'Kamera';
+
+  @override
+  String get reportPanelPhotoSourceGallery => 'Galeri';
+
+  @override
+  String get reportPanelRemovePhoto => 'Fotoğrafı kaldır';
+
+  @override
+  String get reportPanelMapAdjustHint =>
+      'Pin konumunu ayarlamak için haritaya dokunun';
+
+  @override
+  String get reportPanelSuccessVerifiedTitle => 'Bildirim Doğrulandı';
+
+  @override
+  String get reportPanelSuccessReceivedTitle => 'Bildirim Alındı';
+
+  @override
+  String get reportPanelSuccessVerifiedBody =>
+      'Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.';
+
+  @override
+  String get reportPanelSuccessReceivedBody =>
+      'Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.';
+
+  @override
+  String reportPanelReportIdLabel(String id) {
+    return 'Bildirim No: #$id';
+  }
+
+  @override
+  String reportPanelReportedAtLabel(String time) {
+    return '$time tarihinde bildirildi';
+  }
+
+  @override
+  String get reportPanelResponseTimeVerified =>
+      'Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.';
+
+  @override
+  String get reportPanelResponseTimeReceived =>
+      'Eğer bu aktif bir acil durumsa lütfen doğrudan 112\'yi de arayın.';
+
+  @override
+  String get reportPanelShare => 'Paylaş';
+
+  @override
+  String get reportPanelDone => 'Tamam';
+
+  @override
+  String reportPanelShareText(
+    String city,
+    String region,
+    String id,
+    String status,
+  ) {
+    return '$city, $region yakınında yangın bildirimi gönderildi (#$id). $status';
+  }
+
+  @override
   String offlineBannerLabel(String time) {
     return 'Çevrimdışı mod • Son güncelleme: $time';
   }
@@ -1803,7 +1881,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskInfoUpdateFrequencyBody =>
-      'Risk skorları her 12 saatte bir yeniden hesaplanır.';
+      'Risk skorları her 3 saatte bir yeniden hesaplanır.';
 
   @override
   String get trustHomeInfo =>

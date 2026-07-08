@@ -2426,6 +2426,131 @@ abstract class AppLocalizations {
   /// **'Bildirimi Gönder'**
   String get reportPanelSubmit;
 
+  /// No description provided for @reportPanelAnonymousToggle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anonim olarak gönder'**
+  String get reportPanelAnonymousToggle;
+
+  /// No description provided for @reportPanelAnonymousToggleSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İsminiz yetkililerle paylaşılmayacak'**
+  String get reportPanelAnonymousToggleSubtitle;
+
+  /// No description provided for @reportPanelPhotosLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraflar (isteğe bağlı)'**
+  String get reportPanelPhotosLabel;
+
+  /// No description provided for @reportPanelPhotosHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimi doğrulamaya yardımcı olması için en fazla 3 fotoğraf ekleyin'**
+  String get reportPanelPhotosHint;
+
+  /// No description provided for @reportPanelAddPhoto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraf Ekle'**
+  String get reportPanelAddPhoto;
+
+  /// No description provided for @reportPanelPhotoSourceCamera.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kamera'**
+  String get reportPanelPhotoSourceCamera;
+
+  /// No description provided for @reportPanelPhotoSourceGallery.
+  ///
+  /// In tr, this message translates to:
+  /// **'Galeri'**
+  String get reportPanelPhotoSourceGallery;
+
+  /// No description provided for @reportPanelRemovePhoto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğrafı kaldır'**
+  String get reportPanelRemovePhoto;
+
+  /// No description provided for @reportPanelMapAdjustHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pin konumunu ayarlamak için haritaya dokunun'**
+  String get reportPanelMapAdjustHint;
+
+  /// No description provided for @reportPanelSuccessVerifiedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim Doğrulandı'**
+  String get reportPanelSuccessVerifiedTitle;
+
+  /// No description provided for @reportPanelSuccessReceivedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim Alındı'**
+  String get reportPanelSuccessReceivedTitle;
+
+  /// No description provided for @reportPanelSuccessVerifiedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.'**
+  String get reportPanelSuccessVerifiedBody;
+
+  /// No description provided for @reportPanelSuccessReceivedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.'**
+  String get reportPanelSuccessReceivedBody;
+
+  /// No description provided for @reportPanelReportIdLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim No: #{id}'**
+  String reportPanelReportIdLabel(String id);
+
+  /// No description provided for @reportPanelReportedAtLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{time} tarihinde bildirildi'**
+  String reportPanelReportedAtLabel(String time);
+
+  /// No description provided for @reportPanelResponseTimeVerified.
+  ///
+  /// In tr, this message translates to:
+  /// **'Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.'**
+  String get reportPanelResponseTimeVerified;
+
+  /// No description provided for @reportPanelResponseTimeReceived.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eğer bu aktif bir acil durumsa lütfen doğrudan 112\'yi de arayın.'**
+  String get reportPanelResponseTimeReceived;
+
+  /// No description provided for @reportPanelShare.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paylaş'**
+  String get reportPanelShare;
+
+  /// No description provided for @reportPanelDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamam'**
+  String get reportPanelDone;
+
+  /// No description provided for @reportPanelShareText.
+  ///
+  /// In tr, this message translates to:
+  /// **'{city}, {region} yakınında yangın bildirimi gönderildi (#{id}). {status}'**
+  String reportPanelShareText(
+    String city,
+    String region,
+    String id,
+    String status,
+  );
+
   /// No description provided for @offlineBannerLabel.
   ///
   /// In tr, this message translates to:
@@ -3234,7 +3359,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskInfoUpdateFrequencyBody.
   ///
   /// In tr, this message translates to:
-  /// **'Risk skorları her 12 saatte bir yeniden hesaplanır.'**
+  /// **'Risk skorları her 3 saatte bir yeniden hesaplanır.'**
   String get riskInfoUpdateFrequencyBody;
 
   /// No description provided for @trustHomeInfo.

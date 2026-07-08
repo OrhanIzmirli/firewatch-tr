@@ -434,6 +434,12 @@ abstract class AppLocalizations {
   /// **'NASA FIRMS anlık verisi'**
   String get homeOverviewSubtitle;
 
+  /// No description provided for @homeOverviewUniqueCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} benzersiz yangın noktası tespit edildi'**
+  String homeOverviewUniqueCount(int count);
+
   /// No description provided for @homeTotalPoints.
   ///
   /// In tr, this message translates to:
@@ -3584,6 +3590,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.'**
   String get tooltipSatelliteModisBody;
+
+  /// No description provided for @tooltipSatelliteMergedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.'**
+  String get tooltipSatelliteMergedBody;
+
+  /// No description provided for @fireCardMultiSourceBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çoklu kaynakla doğrulandı'**
+  String get fireCardMultiSourceBadge;
 
   /// No description provided for @reportPanelDuplicateLocationBlocked.
   ///

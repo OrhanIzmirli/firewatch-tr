@@ -501,7 +501,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                   const SizedBox(width: AppSpacing.sm),
                                                   Expanded(
                                                     child: Text(
-                                                      '$timeAgo • ${fire.satellite}',
+                                                      '$timeAgo • ${fire.mergedSatelliteLabel}',
                                                       textAlign: TextAlign.right,
                                                       style: GoogleFonts.inter(fontSize: 12,
                                                           color: isDark

@@ -75,6 +75,10 @@
   "homeSafety": "Safety",
   "homeOverview": "Overview",
   "homeOverviewSubtitle": "NASA FIRMS live data",
+  "homeOverviewUniqueCount": "{count} unique fire locations detected",
+  "@homeOverviewUniqueCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "homeTotalPoints": "Total Points",
   "homeHighRisk": "High Risk",
   "homeNominal": "Nominal",
@@ -857,6 +861,8 @@
   "tooltipSatelliteTitle": "What Does Satellite Mean?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.",
   "tooltipSatelliteModisBody": "MODIS: Terra/Aqua satellite, provides wider coverage.",
+  "tooltipSatelliteMergedBody": "This fire was independently confirmed by more than one satellite instrument within the same time and location window — higher confidence than a single detection.",
+  "fireCardMultiSourceBadge": "Multi-source confirmed",
 
   "reportPanelDuplicateLocationBlocked": "A report has already been sent from this location. Please wait for authorities to respond.",
   "reportPanelDailyLimitReached": "You've reached today's report limit (max 5 per day). Please try again tomorrow.",

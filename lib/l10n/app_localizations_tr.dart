@@ -189,6 +189,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeOverviewSubtitle => 'NASA FIRMS anlık verisi';
 
   @override
+  String homeOverviewUniqueCount(int count) {
+    return '$count benzersiz yangın noktası tespit edildi';
+  }
+
+  @override
   String get homeTotalPoints => 'Toplam Nokta';
 
   @override
@@ -2034,6 +2039,13 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get tooltipSatelliteModisBody =>
       'MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.';
+
+  @override
+  String get tooltipSatelliteMergedBody =>
+      'Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.';
+
+  @override
+  String get fireCardMultiSourceBadge => 'Çoklu kaynakla doğrulandı';
 
   @override
   String get reportPanelDuplicateLocationBlocked =>

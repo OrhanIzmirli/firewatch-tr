@@ -75,6 +75,10 @@
   "homeSafety": "Güvenlik",
   "homeOverview": "Genel Bakış",
   "homeOverviewSubtitle": "NASA FIRMS anlık verisi",
+  "homeOverviewUniqueCount": "{count} benzersiz yangın noktası tespit edildi",
+  "@homeOverviewUniqueCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "homeTotalPoints": "Toplam Nokta",
   "homeHighRisk": "Yüksek Risk",
   "homeNominal": "Normal",
@@ -857,6 +861,8 @@
   "tooltipSatelliteTitle": "Uydu Ne Anlama Gelir?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.",
   "tooltipSatelliteModisBody": "MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.",
+  "tooltipSatelliteMergedBody": "Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.",
+  "fireCardMultiSourceBadge": "Çoklu kaynakla doğrulandı",
 
   "reportPanelDuplicateLocationBlocked": "Bu konumdan zaten rapor gönderildi. Lütfen yetkililer ulaşana kadar bekleyin.",
   "reportPanelDailyLimitReached": "Bugün için rapor gönderme limitine ulaştınız (günde en fazla 5). Lütfen yarın tekrar deneyin.",

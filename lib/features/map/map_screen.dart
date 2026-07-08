@@ -299,11 +299,13 @@ class _MapScreenState extends State<MapScreen> {
                 _DetailRow(
                   icon: Icons.satellite_alt_rounded,
                   label: l10n.commonSatellite,
-                  value: point.satellite,
-                  color: secondaryTextColor,
+                  value: point.mergedSatelliteLabel,
+                  color: point.isMerged ? AppColors.success : secondaryTextColor,
                   info: InfoIconButton(
                     title: l10n.tooltipSatelliteTitle,
-                    bodyLines: [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
+                    bodyLines: point.isMerged
+                        ? [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody, l10n.tooltipSatelliteMergedBody]
+                        : [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -600,9 +602,13 @@ class _MapScreenState extends State<MapScreen> {
                                         const SizedBox(width: 4),
                                         Text('$tempC°C', style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                         const SizedBox(width: 12),
-                                        Icon(Icons.satellite_alt_rounded, size: 14, color: secondaryTextColor),
+                                        Icon(Icons.satellite_alt_rounded, size: 14, color: point.isMerged ? AppColors.success : secondaryTextColor),
                                         const SizedBox(width: 4),
-                                        Text(point.satellite, style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                        Text(point.mergedSatelliteLabel,
+                                            style: GoogleFonts.inter(
+                                                fontSize: 12,
+                                                fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                                color: point.isMerged ? AppColors.success : secondaryTextColor)),
                                         const SizedBox(width: 12),
                                         Icon(Icons.location_on_rounded, size: 14, color: secondaryTextColor),
                                         const SizedBox(width: 4),

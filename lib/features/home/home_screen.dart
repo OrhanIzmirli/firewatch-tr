@@ -293,10 +293,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _PreviewRow(
                 icon: Icons.satellite_alt_rounded,
                 label: l10n.commonSatellite,
-                value: point.satellite,
+                value: point.mergedSatelliteLabel,
+                valueColor: point.isMerged ? AppColors.success : null,
                 info: InfoIconButton(
                   title: l10n.tooltipSatelliteTitle,
-                  bodyLines: [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
+                  bodyLines: point.isMerged
+                      ? [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody, l10n.tooltipSatelliteMergedBody]
+                      : [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
                 ),
               ),
               const SizedBox(height: 8),
@@ -514,7 +517,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // ── Genel Bakış ──────────────────────────────────
             SectionHeader(
               title: l10n.homeOverview,
-              subtitle: l10n.homeOverviewSubtitle,
+              subtitle: _fireLoading ? l10n.homeOverviewSubtitle : l10n.homeOverviewUniqueCount(_firePoints.length),
               icon: Icons.dashboard_customize_rounded,
             ),
             const SizedBox(height: AppSpacing.md),
@@ -767,9 +770,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               const SizedBox(width: 4),
                               Text('$tempC°C', style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor)),
                               const SizedBox(width: 12),
-                              Icon(Icons.satellite_alt_rounded, size: 13, color: tertiaryTextColor),
+                              Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : tertiaryTextColor),
                               const SizedBox(width: 4),
-                              Text(point.satellite, style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor)),
+                              Text(point.mergedSatelliteLabel,
+                                  style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                      color: point.isMerged ? AppColors.success : tertiaryTextColor)),
                               const SizedBox(width: 12),
                               Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
                               Text(l10n.commonDetail, style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
@@ -825,8 +832,9 @@ class _PreviewRow extends StatelessWidget {
   final String label;
   final String value;
   final Widget? info;
+  final Color? valueColor;
 
-  const _PreviewRow({required this.icon, required this.label, required this.value, this.info});
+  const _PreviewRow({required this.icon, required this.label, required this.value, this.info, this.valueColor});
 
   @override
   Widget build(BuildContext context) {
@@ -837,12 +845,12 @@ class _PreviewRow extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 16, color: color),
+        Icon(icon, size: 16, color: valueColor ?? color),
         const SizedBox(width: 6),
         Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
         Expanded(
           child: Text(value,
-              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color),
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: valueColor ?? color),
               overflow: TextOverflow.ellipsis),
         ),
         ?info,

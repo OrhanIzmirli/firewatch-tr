@@ -189,6 +189,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeOverviewSubtitle => 'NASA FIRMS live data';
 
   @override
+  String homeOverviewUniqueCount(int count) {
+    return '$count unique fire locations detected';
+  }
+
+  @override
   String get homeTotalPoints => 'Total Points';
 
   @override
@@ -2037,6 +2042,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tooltipSatelliteModisBody =>
       'MODIS: Terra/Aqua satellite, provides wider coverage.';
+
+  @override
+  String get tooltipSatelliteMergedBody =>
+      'This fire was independently confirmed by more than one satellite instrument within the same time and location window — higher confidence than a single detection.';
+
+  @override
+  String get fireCardMultiSourceBadge => 'Multi-source confirmed';
 
   @override
   String get reportPanelDuplicateLocationBlocked =>

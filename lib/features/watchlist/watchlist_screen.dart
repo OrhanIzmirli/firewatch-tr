@@ -268,9 +268,13 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                 const SizedBox(width: 4),
                                 Text('$tempC°C', style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                 const SizedBox(width: 12),
-                                Icon(Icons.satellite_alt_rounded, size: 13, color: secondaryTextColor),
+                                Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : secondaryTextColor),
                                 const SizedBox(width: 4),
-                                Text(point.satellite, style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                Text(point.mergedSatelliteLabel,
+                                    style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
+                                        color: point.isMerged ? AppColors.success : secondaryTextColor)),
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {

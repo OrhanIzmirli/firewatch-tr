@@ -1,5 +1,6 @@
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
+import 'package:geolocator/geolocator.dart';
 import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
 
@@ -123,7 +124,72 @@ class FireApiService {
       );
     }
 
-    return fires;
+    return deduplicateFires(fires);
+  }
+
+  /// Merges detections of the same real-world fire reported multiple times
+  /// (e.g. by both the VIIRS and MODIS instruments passing over the same
+  /// spot minutes apart) into a single point, so the UI doesn't show two
+  /// markers for one fire. Two points are considered the same fire when
+  /// they're within 500m of each other AND detected within 3 hours of each
+  /// other. Among duplicates, the higher-confidence point is kept (ties
+  /// broken by higher brightness); the discarded point's satellite name is
+  /// recorded on the survivor's [FirePoint.mergedSatellites] so the UI can
+  /// show e.g. "VIIRS + MODIS". This also means EFFIS (once its API is
+  /// usable again) can be merged in as just another source through the
+  /// same pipeline, without any additional cross-source-specific logic.
+  static const _duplicateRadiusMeters = 500.0;
+  static const _duplicateWindow = Duration(hours: 3);
+
+  static int _confidenceRank(String confidence) {
+    final c = confidence.toLowerCase().trim();
+    if (c.contains('high') || c == 'h') return 2;
+    if (c.contains('nominal') || c == 'n') return 1;
+    return 0;
+  }
+
+  static List<FirePoint> deduplicateFires(List<FirePoint> fires) {
+    final sorted = [...fires]..sort((a, b) {
+        final rankCompare = _confidenceRank(b.confidence).compareTo(_confidenceRank(a.confidence));
+        if (rankCompare != 0) return rankCompare;
+        final aBright = double.tryParse(a.brightness) ?? 0;
+        final bBright = double.tryParse(b.brightness) ?? 0;
+        return bBright.compareTo(aBright);
+      });
+
+    final accepted = <FirePoint>[];
+    for (final candidate in sorted) {
+      var matchIndex = -1;
+      for (var i = 0; i < accepted.length; i++) {
+        final existing = accepted[i];
+        final distanceMeters = Geolocator.distanceBetween(
+          candidate.latitude, candidate.longitude, existing.latitude, existing.longitude,
+        );
+        if (distanceMeters > _duplicateRadiusMeters) continue;
+
+        final candidateTime = candidate.detectionDateTimeUtc;
+        final existingTime = existing.detectionDateTimeUtc;
+        if (candidateTime == null || existingTime == null) continue;
+        if (candidateTime.difference(existingTime).abs() > _duplicateWindow) continue;
+
+        matchIndex = i;
+        break;
+      }
+
+      if (matchIndex == -1) {
+        accepted.add(candidate);
+      } else {
+        final existing = accepted[matchIndex];
+        final alreadyMerged = existing.satellite == candidate.satellite ||
+            existing.mergedSatellites.contains(candidate.satellite);
+        if (!alreadyMerged) {
+          accepted[matchIndex] = existing.copyWith(
+            mergedSatellites: [...existing.mergedSatellites, candidate.satellite],
+          );
+        }
+      }
+    }
+    return accepted;
   }
 
   /// Enriches every fire point with its nearest city/region via PostGIS.

@@ -84,7 +84,7 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
     recommendedActions: [
       point.recommendedActionText(l10n),
       l10n.fireEventTempLine(tempC, bright.toStringAsFixed(0)),
-      l10n.fireEventSatelliteLine(point.satellite),
+      l10n.fireEventSatelliteLine(point.mergedSatelliteLabel),
       l10n.fireEventCoordinateLine(point.locationLabelText(l10n)),
       l10n.fireEventDetectionLine(formattedStart),
     ],

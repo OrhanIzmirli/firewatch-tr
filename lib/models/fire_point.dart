@@ -21,6 +21,12 @@ class FirePoint {
   /// area of the detection.
   final double scanKm;
   final double trackKm;
+  /// Other satellite/instrument names (beyond [satellite]) that reported a
+  /// detection within 500m and 3 hours of this point during
+  /// deduplication — e.g. this point's [satellite] is "VIIRS" and
+  /// [mergedSatellites] is ["MODIS"] when both sources saw the same fire.
+  /// Empty when this point wasn't merged with anything.
+  final List<String> mergedSatellites;
 
   const FirePoint({
     required this.latitude,
@@ -36,6 +42,7 @@ class FirePoint {
     this.frp = 0,
     this.scanKm = 0,
     this.trackKm = 0,
+    this.mergedSatellites = const [],
   });
 
   Map<String, dynamic> toJson() => {
@@ -52,6 +59,7 @@ class FirePoint {
         'frp': frp,
         'scanKm': scanKm,
         'trackKm': trackKm,
+        'mergedSatellites': mergedSatellites,
       };
 
   factory FirePoint.fromJson(Map<String, dynamic> json) => FirePoint(
@@ -69,6 +77,7 @@ class FirePoint {
         frp: (json['frp'] as num?)?.toDouble() ?? 0,
         scanKm: (json['scanKm'] as num?)?.toDouble() ?? 0,
         trackKm: (json['trackKm'] as num?)?.toDouble() ?? 0,
+        mergedSatellites: (json['mergedSatellites'] as List?)?.map((e) => e.toString()).toList() ?? const [],
       );
 
   FirePoint copyWith({
@@ -85,6 +94,7 @@ class FirePoint {
     double? frp,
     double? scanKm,
     double? trackKm,
+    List<String>? mergedSatellites,
   }) {
     return FirePoint(
       latitude: latitude ?? this.latitude,
@@ -100,8 +110,15 @@ class FirePoint {
       frp: frp ?? this.frp,
       scanKm: scanKm ?? this.scanKm,
       trackKm: trackKm ?? this.trackKm,
+      mergedSatellites: mergedSatellites ?? this.mergedSatellites,
     );
   }
+
+  bool get isMerged => mergedSatellites.isNotEmpty;
+
+  /// "VIIRS + MODIS"-style label combining the primary satellite with any
+  /// merged ones — for display on fire cards when [isMerged] is true.
+  String get mergedSatelliteLabel => [satellite, ...mergedSatellites].join(' + ');
 
   static String? _bboxRegionKey(double lat, double lng) {
     if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
@@ -314,13 +331,13 @@ class FirePoint {
     }
 
     // 5. Time since detection.
-    final detectedAt = _detectionDateTimeUtc;
+    final detectedAt = detectionDateTimeUtc;
     if (detectedAt != null) {
       final diff = DateTime.now().toUtc().difference(detectedAt);
       if (diff.inHours < 1) {
-        sentences.add(l10n.smartTimeJustNow(satellite));
+        sentences.add(l10n.smartTimeJustNow(mergedSatelliteLabel));
       } else if (diff.inHours < 3) {
-        sentences.add(l10n.smartTimeRecent(diff.inHours, satellite));
+        sentences.add(l10n.smartTimeRecent(diff.inHours, mergedSatelliteLabel));
       } else if (diff.inHours < 12) {
         sentences.add(l10n.smartTimeOlder(diff.inHours));
       } else {
@@ -331,7 +348,7 @@ class FirePoint {
     return sentences.join(' ');
   }
 
-  DateTime? get _detectionDateTimeUtc {
+  DateTime? get detectionDateTimeUtc {
     final dateParts = acquisitionDate.split('-');
     if (dateParts.length != 3) return null;
     final timeStr = acquisitionTime.padLeft(4, '0');

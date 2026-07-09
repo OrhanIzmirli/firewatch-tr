@@ -1584,6 +1584,18 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
 
   @override
+  String get fireStatusActive => 'Aktif Yangın';
+
+  @override
+  String get fireStatusLikelyActive => 'Muhtemelen Aktif';
+
+  @override
+  String get fireStatusMonitoring => 'İzleniyor';
+
+  @override
+  String get fireStatusHistorical => 'Geçmiş Tespit';
+
+  @override
   String fireEventRegionTitle(String city) {
     return '$city Bölgesi Termal Tespiti';
   }
@@ -2197,11 +2209,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get tooltipTempTitle => 'Sıcaklık (Kelvin)';
+  String get tooltipTempTitle => 'Sıcaklık';
 
   @override
   String get tooltipTempBody =>
-      'K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.';
+      'Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.';
 
   @override
   String get tooltipConfidenceTitle => 'Güven Seviyesi Ne Anlama Gelir?';

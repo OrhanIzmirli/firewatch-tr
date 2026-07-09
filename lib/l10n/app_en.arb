@@ -645,6 +645,11 @@
   "fireRecommendedActionMedium": "Keep track of developments and avoid getting close to the area unnecessarily.",
   "fireRecommendedActionLow": "No urgent action needed right now — keep an eye on the area.",
 
+  "fireStatusActive": "Active Fire",
+  "fireStatusLikelyActive": "Likely Active",
+  "fireStatusMonitoring": "Monitoring",
+  "fireStatusHistorical": "Historical Detection",
+
   "fireEventRegionTitle": "{city} Region Thermal Detection",
   "@fireEventRegionTitle": {
     "placeholders": { "city": { "type": "String" } }
@@ -935,8 +940,8 @@
   "smartTimeHistorical": "An older detection from {days} days ago — may already be extinguished.",
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
-  "tooltipTempTitle": "Temperature (Kelvin)",
-  "tooltipTempBody": "K = Kelvin (satellite temperature unit). 296K ≈ 23°C is normal. 370K ≈ 97°C indicates a fire. 400K and above means an intense fire.",
+  "tooltipTempTitle": "Temperature",
+  "tooltipTempBody": "Satellite-measured surface temperature. Normal ground: 25-35°C. 50°C+ is a heat anomaly. 100°C+ indicates an active fire.",
   "tooltipConfidenceTitle": "What Does Confidence Mean?",
   "tooltipSatelliteTitle": "What Does Satellite Mean?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.",

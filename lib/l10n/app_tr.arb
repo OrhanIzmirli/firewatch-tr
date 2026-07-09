@@ -645,6 +645,11 @@
   "fireRecommendedActionMedium": "Gelişmeleri takip et, bölgeye gereksiz yaklaşma.",
   "fireRecommendedActionLow": "Şu an acil aksiyon gerekmiyor, bölgeyi takip et.",
 
+  "fireStatusActive": "Aktif Yangın",
+  "fireStatusLikelyActive": "Muhtemelen Aktif",
+  "fireStatusMonitoring": "İzleniyor",
+  "fireStatusHistorical": "Geçmiş Tespit",
+
   "fireEventRegionTitle": "{city} Bölgesi Termal Tespiti",
   "@fireEventRegionTitle": {
     "placeholders": { "city": { "type": "String" } }
@@ -935,8 +940,8 @@
   "smartTimeHistorical": "{days} gün önce yapılmış eski bir tespit; söndürülmüş olabilir.",
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
-  "tooltipTempTitle": "Sıcaklık (Kelvin)",
-  "tooltipTempBody": "K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.",
+  "tooltipTempTitle": "Sıcaklık",
+  "tooltipTempBody": "Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.",
   "tooltipConfidenceTitle": "Güven Seviyesi Ne Anlama Gelir?",
   "tooltipSatelliteTitle": "Uydu Ne Anlama Gelir?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.",

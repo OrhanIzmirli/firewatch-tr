@@ -4,6 +4,30 @@ import '../services/risk_data_cache.dart';
 
 enum FireLocationType { forest, coastal, agricultural, urban, generic }
 
+/// Data-driven fire status derived from detection freshness, NASA confidence
+/// tier, and radiative power — distinct from [FirePoint.riskTier], which
+/// only reflects NASA's own confidence value. Checked most-specific-first:
+/// a `low` confidence detection is always [historical] regardless of age.
+enum FireStatus { active, likelyActive, monitoring, historical }
+
+String fireStatusEmoji(FireStatus status) {
+  switch (status) {
+    case FireStatus.active: return '🔴';
+    case FireStatus.likelyActive: return '🟠';
+    case FireStatus.monitoring: return '🟡';
+    case FireStatus.historical: return '⚫';
+  }
+}
+
+String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
+  switch (status) {
+    case FireStatus.active: return l10n.fireStatusActive;
+    case FireStatus.likelyActive: return l10n.fireStatusLikelyActive;
+    case FireStatus.monitoring: return l10n.fireStatusMonitoring;
+    case FireStatus.historical: return l10n.fireStatusHistorical;
+  }
+}
+
 class FirePoint {
   final double latitude;
   final double longitude;
@@ -228,6 +252,25 @@ class FirePoint {
       case 'medium': return l10n.commonMedium;
       default: return l10n.commonLow;
     }
+  }
+
+  /// Data-driven status combining detection age, NASA confidence, and FRP:
+  /// - <1h + high confidence + FRP>50MW → [FireStatus.active]
+  /// - <3h + high confidence → [FireStatus.likelyActive]
+  /// - <12h + nominal confidence → [FireStatus.monitoring]
+  /// - >=12h, or low confidence at any age → [FireStatus.historical]
+  FireStatus get smartStatus {
+    if (riskTier == 'low') return FireStatus.historical;
+
+    final detectedAt = detectionDateTimeUtc;
+    if (detectedAt == null) return FireStatus.historical;
+    final hours = DateTime.now().toUtc().difference(detectedAt).inHours;
+    if (hours < 0 || hours >= 12) return FireStatus.historical;
+
+    if (hours < 1 && riskTier == 'high' && frp > 50) return FireStatus.active;
+    if (hours < 3 && riskTier == 'high') return FireStatus.likelyActive;
+    if (riskTier == 'medium') return FireStatus.monitoring;
+    return FireStatus.historical;
   }
 
   String locationLabelText(AppLocalizations l10n) {

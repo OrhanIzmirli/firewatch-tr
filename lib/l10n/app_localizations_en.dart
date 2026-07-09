@@ -1587,6 +1587,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'No urgent action needed right now — keep an eye on the area.';
 
   @override
+  String get fireStatusActive => 'Active Fire';
+
+  @override
+  String get fireStatusLikelyActive => 'Likely Active';
+
+  @override
+  String get fireStatusMonitoring => 'Monitoring';
+
+  @override
+  String get fireStatusHistorical => 'Historical Detection';
+
+  @override
   String fireEventRegionTitle(String city) {
     return '$city Region Thermal Detection';
   }
@@ -2201,11 +2213,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tooltipTempTitle => 'Temperature (Kelvin)';
+  String get tooltipTempTitle => 'Temperature';
 
   @override
   String get tooltipTempBody =>
-      'K = Kelvin (satellite temperature unit). 296K ≈ 23°C is normal. 370K ≈ 97°C indicates a fire. 400K and above means an intense fire.';
+      'Satellite-measured surface temperature. Normal ground: 25-35°C. 50°C+ is a heat anomaly. 100°C+ indicates an active fire.';
 
   @override
   String get tooltipConfidenceTitle => 'What Does Confidence Mean?';

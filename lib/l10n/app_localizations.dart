@@ -2869,6 +2869,30 @@ abstract class AppLocalizations {
   /// **'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.'**
   String get fireRecommendedActionLow;
 
+  /// No description provided for @fireStatusActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif Yangın'**
+  String get fireStatusActive;
+
+  /// No description provided for @fireStatusLikelyActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Muhtemelen Aktif'**
+  String get fireStatusLikelyActive;
+
+  /// No description provided for @fireStatusMonitoring.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzleniyor'**
+  String get fireStatusMonitoring;
+
+  /// No description provided for @fireStatusHistorical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş Tespit'**
+  String get fireStatusHistorical;
+
   /// No description provided for @fireEventRegionTitle.
   ///
   /// In tr, this message translates to:
@@ -3869,13 +3893,13 @@ abstract class AppLocalizations {
   /// No description provided for @tooltipTempTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Sıcaklık (Kelvin)'**
+  /// **'Sıcaklık'**
   String get tooltipTempTitle;
 
   /// No description provided for @tooltipTempBody.
   ///
   /// In tr, this message translates to:
-  /// **'K = Kelvin (uydu sıcaklık birimi). 296K ≈ 23°C normaldir. 370K ≈ 97°C yangına işaret eder. 400K ve üzeri yoğun bir yangın anlamına gelir.'**
+  /// **'Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.'**
   String get tooltipTempBody;
 
   /// No description provided for @tooltipConfidenceTitle.

@@ -271,10 +271,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Flexible(
-                    child: StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                  StatusChip(
+                    label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                    color: fireStatusColor(point.smartStatus),
                   ),
                   InfoIconButton(
                     title: l10n.tooltipConfidenceTitle,
@@ -793,7 +798,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
                                 ),
                               ),
-                              StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                              const SizedBox(width: AppSpacing.sm),
+                              Wrap(
+                                spacing: AppSpacing.xs,
+                                runSpacing: AppSpacing.xs,
+                                alignment: WrapAlignment.end,
+                                children: [
+                                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                                  StatusChip(
+                                    label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                                    color: fireStatusColor(point.smartStatus),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.xs),

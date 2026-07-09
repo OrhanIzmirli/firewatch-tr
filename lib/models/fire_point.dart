@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+import '../core/constants/app_colors.dart';
 import '../core/utils/turkish_text.dart';
 import '../l10n/app_localizations.dart';
 import '../services/risk_data_cache.dart';
@@ -25,6 +28,15 @@ String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
     case FireStatus.likelyActive: return l10n.fireStatusLikelyActive;
     case FireStatus.monitoring: return l10n.fireStatusMonitoring;
     case FireStatus.historical: return l10n.fireStatusHistorical;
+  }
+}
+
+Color fireStatusColor(FireStatus status) {
+  switch (status) {
+    case FireStatus.active: return AppColors.danger;
+    case FireStatus.likelyActive: return AppColors.primary;
+    case FireStatus.monitoring: return AppColors.warning;
+    case FireStatus.historical: return Colors.grey;
   }
 }
 

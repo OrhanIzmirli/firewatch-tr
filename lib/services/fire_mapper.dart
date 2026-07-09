@@ -74,6 +74,7 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
             : l10n.fireEventSpreadLow,
     lat: point.latitude,
     lng: point.longitude,
+    smartStatus: point.smartStatus,
     recommendedActions: [
       point.recommendedActionText(l10n),
       l10n.fireEventTempLine(tempC, bright.toStringAsFixed(0)),

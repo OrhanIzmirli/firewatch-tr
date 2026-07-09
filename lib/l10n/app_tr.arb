@@ -561,6 +561,11 @@
   "reportPanelPhotoSourceCamera": "Kamera",
   "reportPanelPhotoSourceGallery": "Galeri",
   "reportPanelRemovePhoto": "Fotoğrafı kaldır",
+  "reportPanelUploadingPhotos": "Fotoğraflar yükleniyor…",
+  "reportPanelPhotosUploaded": "{count} fotoğraf yüklendi",
+  "@reportPanelPhotosUploaded": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "reportPanelMapAdjustHint": "Pin konumunu ayarlamak için haritaya dokunun",
   "reportPanelSuccessVerifiedTitle": "Bildirim Doğrulandı",
   "reportPanelSuccessReceivedTitle": "Bildirim Alındı",

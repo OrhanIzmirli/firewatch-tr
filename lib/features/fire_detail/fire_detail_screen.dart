@@ -12,6 +12,7 @@ import '../../core/utils/turkish_text.dart';
 import '../../core/utils/wind_direction.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
+import '../../models/fire_point.dart';
 import '../../models/news_item.dart';
 import '../../services/news_service.dart';
 import '../../services/news_translation_service.dart';
@@ -218,6 +219,26 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                     label: fire.status,
                     icon: Icons.local_fire_department_rounded,
                     color: AppColors.forRiskTier(fire.riskTier),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: fireStatusColor(fire.smartStatus).withValues(alpha: isDark ? 0.16 : 0.12),
+                      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                      border: Border.all(color: fireStatusColor(fire.smartStatus).withValues(alpha: 0.35)),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(fireStatusEmoji(fire.smartStatus), style: const TextStyle(fontSize: 20)),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(
+                          fireStatusLabel(l10n, fire.smartStatus),
+                          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: fireStatusColor(fire.smartStatus)),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(fire.title,

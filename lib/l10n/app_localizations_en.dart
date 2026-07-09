@@ -1394,6 +1394,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportPanelRemovePhoto => 'Remove photo';
 
   @override
+  String get reportPanelUploadingPhotos => 'Uploading photos…';
+
+  @override
+  String reportPanelPhotosUploaded(int count) {
+    return '$count photos uploaded';
+  }
+
+  @override
   String get reportPanelMapAdjustHint =>
       'Tap the map to adjust the pin location';
 

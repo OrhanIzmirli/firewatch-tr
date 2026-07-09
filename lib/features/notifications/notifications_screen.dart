@@ -392,8 +392,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 4),
-                                          Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
-                                              style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
+                                          Wrap(
+                                            spacing: AppSpacing.xs,
+                                            runSpacing: AppSpacing.xs,
+                                            crossAxisAlignment: WrapCrossAlignment.center,
+                                            children: [
+                                              Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
+                                                  style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
+                                              StatusChip(
+                                                label: '${fireStatusEmoji(fire.smartStatus)} ${fireStatusLabel(l10n, fire.smartStatus)}',
+                                                color: fireStatusColor(fire.smartStatus),
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -495,19 +507,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 style: GoogleFonts.inter(fontSize: 13, height: 1.42, color: secondaryTextColor),
                                               ),
                                               const SizedBox(height: AppSpacing.md),
-                                              Row(
+                                              Wrap(
+                                                spacing: AppSpacing.sm,
+                                                runSpacing: AppSpacing.xs,
+                                                crossAxisAlignment: WrapCrossAlignment.center,
                                                 children: [
                                                   StatusChip(label: l10n.commonHigh, icon: Icons.warning_amber_rounded, color: AppColors.danger),
-                                                  const SizedBox(width: AppSpacing.sm),
-                                                  Expanded(
-                                                    child: Text(
-                                                      '$timeAgo • ${fire.mergedSatelliteLabel}',
-                                                      textAlign: TextAlign.right,
-                                                      style: GoogleFonts.inter(fontSize: 12,
-                                                          color: isDark
-                                                              ? AppColors.white.withValues(alpha: 0.5)
-                                                              : Colors.black.withValues(alpha: 0.45)),
-                                                    ),
+                                                  StatusChip(
+                                                    label: '${fireStatusEmoji(fire.smartStatus)} ${fireStatusLabel(l10n, fire.smartStatus)}',
+                                                    color: fireStatusColor(fire.smartStatus),
+                                                  ),
+                                                  Text(
+                                                    '$timeAgo • ${fire.mergedSatelliteLabel}',
+                                                    style: GoogleFonts.inter(fontSize: 12,
+                                                        color: isDark
+                                                            ? AppColors.white.withValues(alpha: 0.5)
+                                                            : Colors.black.withValues(alpha: 0.45)),
                                                   ),
                                                 ],
                                               ),

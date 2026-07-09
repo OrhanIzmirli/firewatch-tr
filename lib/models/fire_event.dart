@@ -1,3 +1,5 @@
+import 'fire_point.dart';
+
 class FireEvent {
   final String id;
   final String title;
@@ -24,6 +26,9 @@ class FireEvent {
   final double lng;
   /// Fire Radiative Power (MW) from NASA FIRMS — 0 when not available.
   final double frp;
+  /// Data-driven status computed from the source FirePoint's detection age,
+  /// confidence, and FRP — see [FirePoint.smartStatus].
+  final FireStatus smartStatus;
 
   const FireEvent({
     required this.id,
@@ -43,5 +48,6 @@ class FireEvent {
     required this.lat,
     required this.lng,
     this.frp = 0,
+    this.smartStatus = FireStatus.historical,
   });
 }

@@ -2564,6 +2564,18 @@ abstract class AppLocalizations {
   /// **'Fotoğrafı kaldır'**
   String get reportPanelRemovePhoto;
 
+  /// No description provided for @reportPanelUploadingPhotos.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraflar yükleniyor…'**
+  String get reportPanelUploadingPhotos;
+
+  /// No description provided for @reportPanelPhotosUploaded.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} fotoğraf yüklendi'**
+  String reportPanelPhotosUploaded(int count);
+
   /// No description provided for @reportPanelMapAdjustHint.
   ///
   /// In tr, this message translates to:

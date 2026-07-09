@@ -561,6 +561,11 @@
   "reportPanelPhotoSourceCamera": "Camera",
   "reportPanelPhotoSourceGallery": "Gallery",
   "reportPanelRemovePhoto": "Remove photo",
+  "reportPanelUploadingPhotos": "Uploading photos…",
+  "reportPanelPhotosUploaded": "{count} photos uploaded",
+  "@reportPanelPhotosUploaded": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "reportPanelMapAdjustHint": "Tap the map to adjust the pin location",
   "reportPanelSuccessVerifiedTitle": "Report Verified",
   "reportPanelSuccessReceivedTitle": "Report Received",

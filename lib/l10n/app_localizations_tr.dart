@@ -1390,6 +1390,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportPanelRemovePhoto => 'Fotoğrafı kaldır';
 
   @override
+  String get reportPanelUploadingPhotos => 'Fotoğraflar yükleniyor…';
+
+  @override
+  String reportPanelPhotosUploaded(int count) {
+    return '$count fotoğraf yüklendi';
+  }
+
+  @override
   String get reportPanelMapAdjustHint =>
       'Pin konumunu ayarlamak için haritaya dokunun';
 

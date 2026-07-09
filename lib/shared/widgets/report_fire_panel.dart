@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -56,6 +57,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
   bool _isAnonymous = true;
   bool _isLoadingLocation = false;
   bool _isSubmitting = false;
+  bool _isEncodingPhotos = false;
+  double? _uploadProgress;
 
   double? _latitude;
   double? _longitude;
@@ -219,6 +222,15 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
           ? _nameController.text
           : l10n.commonAnonymous;
 
+      List<String>? photosBase64;
+      if (_photos.isNotEmpty) {
+        setState(() => _isEncodingPhotos = true);
+        photosBase64 = [
+          for (final photo in _photos) base64Encode(await photo.readAsBytes()),
+        ];
+        if (mounted) setState(() => _isEncodingPhotos = false);
+      }
+
       final response = await _dio.post(
         '$_backendUrl/api/fires/report',
         data: {
@@ -229,6 +241,12 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
               : l10n.reportPanelFireReport,
           'description': description,
           'reporter_name': reporterName,
+          if (photosBase64 != null) 'photos': photosBase64,
+        },
+        onSendProgress: (sent, total) {
+          if (total > 0 && mounted) {
+            setState(() => _uploadProgress = sent / total);
+          }
         },
       );
 
@@ -248,7 +266,13 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         _showSnack(l10n.reportPanelSubmitFailed);
       }
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+          _isEncodingPhotos = false;
+          _uploadProgress = null;
+        });
+      }
     }
   }
 
@@ -627,6 +651,26 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 ),
               ).animate(delay: 340.ms).fadeIn(duration: 300.ms).slideY(begin: 0.06, end: 0),
 
+              if (_isSubmitting && _photos.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  _isEncodingPhotos || _uploadProgress == null
+                      ? l10n.reportPanelUploadingPhotos
+                      : '${l10n.reportPanelUploadingPhotos} ${(_uploadProgress! * 100).round()}%',
+                  style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
+                ),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: _isEncodingPhotos ? null : _uploadProgress,
+                    minHeight: 6,
+                    backgroundColor: dividerColor,
+                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+                  ),
+                ),
+              ],
+
               const SizedBox(height: AppSpacing.xl),
 
               SizedBox(
@@ -726,6 +770,13 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
               if (createdAtLabel.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Text(l10n.reportPanelReportedAtLabel(createdAtLabel), style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+              ],
+              if ((result['photo_count'] as int? ?? 0) > 0) ...[
+                const SizedBox(height: 6),
+                Text(
+                  l10n.reportPanelPhotosUploaded(result['photo_count'] as int),
+                  style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor),
+                ),
               ],
             ],
           ),

@@ -796,6 +796,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                                   ),
                                                   FractionallySizedBox(
                                                     widthFactor: score.clamp(0, 100) / 100,
+                                                    heightFactor: 1,
                                                     alignment: Alignment.centerLeft,
                                                     child: DecoratedBox(
                                                       decoration: BoxDecoration(

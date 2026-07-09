@@ -257,21 +257,24 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${newsItem.source} • ${newsItem.publishedAt}',
+                          '${newsItem.source} • ${formatNewsTimeAgo(l10n, newsItem.publishedAt)}',
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             color: metaColor,
                           ),
                         ),
                       ),
-                      Text(
-                        l10n.newsDetailReadMinutes(newsItem.readMinutes),
-                        style: GoogleFonts.inter(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                      if (newsWordCount(newsItem) != null) ...[
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(
+                          l10n.newsWordCount(newsWordCount(newsItem)!),
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ],

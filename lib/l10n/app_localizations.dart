@@ -3152,11 +3152,11 @@ abstract class AppLocalizations {
   /// **'Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.'**
   String get newsDetailRelatedRegionNote;
 
-  /// No description provided for @newsDetailReadMinutes.
+  /// No description provided for @newsWordCount.
   ///
   /// In tr, this message translates to:
-  /// **'{minutes} dk okuma'**
-  String newsDetailReadMinutes(int minutes);
+  /// **'~{count} kelime'**
+  String newsWordCount(int count);
 
   /// No description provided for @newsTranslate.
   ///

@@ -741,9 +741,9 @@
   "newsDetailRelatedRegionTitle": "İlgili Bölge",
   "newsDetailRelatedRegionSubtitle": "Bağlantılı risk alanı",
   "newsDetailRelatedRegionNote": "Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.",
-  "newsDetailReadMinutes": "{minutes} dk okuma",
-  "@newsDetailReadMinutes": {
-    "placeholders": { "minutes": { "type": "int" } }
+  "newsWordCount": "~{count} kelime",
+  "@newsWordCount": {
+    "placeholders": { "count": { "type": "int" } }
   },
 
   "newsTranslate": "Çevir",

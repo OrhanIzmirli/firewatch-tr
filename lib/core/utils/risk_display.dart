@@ -18,6 +18,14 @@ Color colorForApiRiskLevel(String level) {
   }
 }
 
+/// Colors a 0-100 risk score directly: red above 70, orange 40-70, green
+/// below 40 — used by the regional distribution bar chart.
+Color riskScoreColor(int score) {
+  if (score > 70) return AppColors.danger;
+  if (score >= 40) return AppColors.warning;
+  return AppColors.success;
+}
+
 String displayRegionName(AppLocalizations l10n, String region) {
   switch (region) {
     case 'Ic Anadolu': return l10n.regionIcAnadolu;

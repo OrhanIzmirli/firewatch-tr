@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
@@ -742,126 +741,95 @@ class _RiskScreenState extends State<RiskScreen> {
                             ],
                           ),
                           const SizedBox(height: AppSpacing.lg),
-                          SizedBox(
-                            height: 220,
-                            child: BarChart(
-                              BarChartData(
-                                minY: 0,
-                                maxY: 100,
-                                gridData: FlGridData(
-                                  show: true,
-                                  drawVerticalLine: false,
-                                  horizontalInterval: 25,
-                                  getDrawingHorizontalLine: (value) => FlLine(
-                                    color: isDark
-                                        ? AppColors.white.withValues(alpha: 0.08)
-                                        : Colors.black.withValues(alpha: 0.08),
-                                    strokeWidth: 1,
-                                  ),
-                                ),
-                                titlesData: FlTitlesData(
-                                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      interval: 25,
-                                      reservedSize: 34,
-                                      getTitlesWidget: (value, meta) => Text(
-                                        value.toInt().toString(),
-                                        style: GoogleFonts.inter(fontSize: 11, color: mutedTextColor),
+                          Table(
+                            columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
+                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                            children: _regions.asMap().entries.map((e) {
+                              final region = e.value;
+                              final score = region['general_risk_score'] as int;
+                              final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
+                              final barColor = riskScoreColor(score);
+                              return TableRow(
+                                decoration: isMine
+                                    ? BoxDecoration(
+                                        color: AppColors.primary.withValues(alpha: 0.08),
+                                        borderRadius: BorderRadius.circular(10),
+                                      )
+                                    : null,
+                                children: [
+                                  InkWell(
+                                    onTap: () => _showRegionDetail(context, region),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                                      child: Text(
+                                        displayRegionName(l10n, region['region']),
+                                        style: GoogleFonts.inter(
+                                          fontSize: 13,
+                                          fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
+                                          color: isMine
+                                              ? (isDark ? AppColors.white : Colors.black87)
+                                              : mutedTextColor,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                borderData: FlBorderData(show: false),
-                                barTouchData: BarTouchData(
-                                  enabled: true,
-                                  touchTooltipData: BarTouchTooltipData(getTooltipColor: (_) => Colors.transparent),
-                                  touchCallback: (event, response) {
-                                    if (!event.isInterestedForInteractions) return;
-                                    final index = response?.spot?.touchedBarGroupIndex;
-                                    if (index == null || index < 0 || index >= _regions.length) return;
-                                    _showRegionDetail(context, _regions[index]);
-                                  },
-                                ),
-                                barGroups: _regions.asMap().entries.map((e) {
-                                  final region = e.value;
-                                  final score = (region['general_risk_score'] as int).toDouble();
-                                  final level = region['risk_level'] as String;
-                                  final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
-                                  return BarChartGroupData(
-                                    x: e.key,
-                                    barRods: [
-                                      BarChartRodData(
-                                        toY: score,
-                                        color: colorForApiRiskLevel(level),
-                                        width: 22,
-                                        borderRadius: BorderRadius.circular(6),
-                                        borderSide: isMine
-                                            ? BorderSide(color: isDark ? AppColors.white : Colors.black87, width: 2)
-                                            : BorderSide.none,
-                                        backDrawRodData: BackgroundBarChartRodData(
-                                          show: true,
-                                          toY: 100,
-                                          color: isDark
-                                              ? AppColors.white.withValues(alpha: 0.05)
-                                              : Colors.black.withValues(alpha: 0.04),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ).animate(delay: 220.ms).fadeIn(duration: 500.ms).slideY(begin: 0.08, end: 0),
-                          ),
-                          const SizedBox(height: AppSpacing.md),
-                          // Full region-name legend — kept off the (space-constrained) x-axis
-                          // so long names are never truncated.
-                          Wrap(
-                            spacing: AppSpacing.sm,
-                            runSpacing: AppSpacing.sm,
-                            children: _regions.asMap().entries.map((e) {
-                              final region = e.value;
-                              final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
-                              return SizedBox(
-                                height: 48,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                                  onTap: () => _showRegionDetail(context, region),
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                                        border: isMine ? Border.all(color: AppColors.primary.withValues(alpha: 0.5)) : null,
-                                        color: isMine ? AppColors.primary.withValues(alpha: 0.1) : null,
-                                      ),
+                                  InkWell(
+                                    onTap: () => _showRegionDetail(context, region),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
                                       child: Row(
-                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Container(
-                                            width: 8, height: 8,
-                                            decoration: BoxDecoration(
-                                              color: colorForApiRiskLevel(region['risk_level'] as String),
-                                              shape: BoxShape.circle,
-                                            ),
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 18,
+                                              child: Stack(
+                                                children: [
+                                                  Positioned.fill(
+                                                    child: DecoratedBox(
+                                                      decoration: BoxDecoration(
+                                                        color: isDark
+                                                            ? AppColors.white.withValues(alpha: 0.06)
+                                                            : Colors.black.withValues(alpha: 0.05),
+                                                        borderRadius: BorderRadius.circular(6),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  FractionallySizedBox(
+                                                    widthFactor: score.clamp(0, 100) / 100,
+                                                    alignment: Alignment.centerLeft,
+                                                    child: DecoratedBox(
+                                                      decoration: BoxDecoration(
+                                                        color: barColor,
+                                                        borderRadius: BorderRadius.circular(6),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ).animate(delay: (220 + e.key * 40).ms).fadeIn(duration: 320.ms).scaleX(
+                                                  begin: 0,
+                                                  end: 1,
+                                                  alignment: Alignment.centerLeft,
+                                                ),
                                           ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            displayRegionName(l10n, region['region']),
-                                            style: GoogleFonts.inter(
-                                              fontSize: 11,
-                                              fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
-                                              color: mutedTextColor,
+                                          const SizedBox(width: AppSpacing.sm),
+                                          SizedBox(
+                                            width: 28,
+                                            child: Text(
+                                              '$score',
+                                              textAlign: TextAlign.right,
+                                              style: GoogleFonts.inter(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w800,
+                                                color: barColor,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               );
                             }).toList(),
                           ),

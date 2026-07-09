@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
+import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
@@ -919,18 +920,9 @@ class _HomeNewsPreviewCard extends StatelessWidget {
 
   const _HomeNewsPreviewCard({required this.item, required this.onTap});
 
-  IconData _iconForCategory() {
-    switch (item.category.toLowerCase()) {
-      case 'risk': return Icons.auto_graph_rounded;
-      case 'operasyon': return Icons.local_fire_department_rounded;
-      case 'güvenlik': return Icons.shield_outlined;
-      case 'güncelleme': return Icons.update_rounded;
-      default: return Icons.article_rounded;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
@@ -943,6 +935,12 @@ class _HomeNewsPreviewCard extends StatelessWidget {
     final arrowColor = isDark
         ? AppColors.white.withValues(alpha: 0.42)
         : Colors.black.withValues(alpha: 0.3);
+
+    final fullText = '${item.title} ${item.summary}';
+    final category = classifyNewsCategory(fullText);
+    final riskLevel = classifyNewsRiskLevel(fullText);
+    final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
+    final wordCount = newsWordCount(item);
 
     return Material(
       color: Colors.transparent,
@@ -962,7 +960,7 @@ class _HomeNewsPreviewCard extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Icon(_iconForCategory(), color: AppColors.primary, size: 24),
+                  child: Icon(newsCategoryIcon(category), color: AppColors.primary, size: 24),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
@@ -972,8 +970,12 @@ class _HomeNewsPreviewCard extends StatelessWidget {
                       Wrap(
                         spacing: 8, runSpacing: 8,
                         children: [
-                          StatusChip(label: item.category, icon: _iconForCategory()),
-                          if (item.isBreaking) const StatusChip(label: 'Breaking', icon: Icons.bolt_rounded),
+                          StatusChip(label: newsCategoryLabel(l10n, category), icon: newsCategoryIcon(category)),
+                          StatusChip(
+                            label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                            color: newsRiskLevelColor(riskLevel),
+                          ),
+                          if (item.isBreaking) StatusChip(label: l10n.newsBreakingBadge, icon: Icons.bolt_rounded),
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),
@@ -985,10 +987,13 @@ class _HomeNewsPreviewCard extends StatelessWidget {
                       const SizedBox(height: AppSpacing.md),
                       Row(
                         children: [
-                          Expanded(child: Text('${item.source} • ${item.publishedAt}',
+                          Expanded(child: Text('${item.source} • $timeAgo',
                               style: GoogleFonts.inter(fontSize: 12, color: metaColor))),
-                          Text('${item.readMinutes} dk',
-                              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                          if (wordCount != null) ...[
+                            const SizedBox(width: AppSpacing.sm),
+                            Text(l10n.newsWordCount(wordCount),
+                                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                          ],
                         ],
                       ),
                     ],

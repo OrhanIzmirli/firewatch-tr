@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../models/news_item.dart';
 import '../constants/app_colors.dart';
 import 'turkish_text.dart';
 
@@ -143,4 +144,28 @@ IconData newsCategoryIcon(NewsContentCategory category) {
     case NewsContentCategory.forest: return Icons.forest_rounded;
     case NewsContentCategory.news: return Icons.article_rounded;
   }
+}
+
+// ── Card meta (publish time / word count — replaces the old "X dk okuma") ─
+
+/// Formats [publishedAt] (an ISO-ish timestamp string from the backend) as
+/// a relative "N saat önce" / "N hours ago" string. Falls back to the raw
+/// string when it can't be parsed.
+String formatNewsTimeAgo(AppLocalizations l10n, String publishedAt) {
+  final published = DateTime.tryParse(publishedAt);
+  if (published == null) return publishedAt;
+  final diff = DateTime.now().toUtc().difference(published.toUtc());
+  if (diff.isNegative || diff.inMinutes < 1) return l10n.timeAgoJustNow;
+  if (diff.inMinutes < 60) return l10n.timeAgoMinutes(diff.inMinutes);
+  if (diff.inHours < 24) return l10n.timeAgoHours(diff.inHours);
+  return l10n.timeAgoDays(diff.inDays);
+}
+
+/// Approximate word count of the article body (full paragraphs when
+/// available, otherwise the summary) — null when there's no text to count.
+int? newsWordCount(NewsItem item) {
+  final text = item.paragraphs.isNotEmpty ? item.paragraphs.join(' ') : item.summary;
+  final trimmed = text.trim();
+  if (trimmed.isEmpty) return null;
+  return trimmed.split(RegExp(r'\s+')).length;
 }

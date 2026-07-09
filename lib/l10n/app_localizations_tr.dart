@@ -1750,8 +1750,8 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu gelişme ilgili bölgesel risk ve operasyon akışına bağlı olabilir.';
 
   @override
-  String newsDetailReadMinutes(int minutes) {
-    return '$minutes dk okuma';
+  String newsWordCount(int count) {
+    return '~$count kelime';
   }
 
   @override

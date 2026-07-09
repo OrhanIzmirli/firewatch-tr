@@ -32,6 +32,7 @@ class FeaturedNewsCard extends StatelessWidget {
     final category = classifyNewsCategory(fullText);
     final riskLevel = classifyNewsRiskLevel(fullText);
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
 
     return Material(
       color: Colors.transparent,
@@ -130,7 +131,7 @@ class FeaturedNewsCard extends StatelessWidget {
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
-                        item.relatedRegion,
+                        '${item.source} • ${item.relatedRegion}',
                         style: GoogleFonts.inter(
                           fontSize: 13,
                           color: isDark
@@ -140,7 +141,7 @@ class FeaturedNewsCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      l10n.newsDetailReadMinutes(item.readMinutes),
+                      timeAgo,
                       style: GoogleFonts.inter(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,

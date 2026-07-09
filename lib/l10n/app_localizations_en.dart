@@ -1753,8 +1753,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'This development may be linked to the region\'s risk and operations flow.';
 
   @override
-  String newsDetailReadMinutes(int minutes) {
-    return '$minutes min read';
+  String newsWordCount(int count) {
+    return '~$count words';
   }
 
   @override

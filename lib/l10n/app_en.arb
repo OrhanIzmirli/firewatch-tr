@@ -741,9 +741,9 @@
   "newsDetailRelatedRegionTitle": "Related Region",
   "newsDetailRelatedRegionSubtitle": "Linked risk area",
   "newsDetailRelatedRegionNote": "This development may be linked to the region's risk and operations flow.",
-  "newsDetailReadMinutes": "{minutes} min read",
-  "@newsDetailReadMinutes": {
-    "placeholders": { "minutes": { "type": "int" } }
+  "newsWordCount": "~{count} words",
+  "@newsWordCount": {
+    "placeholders": { "count": { "type": "int" } }
   },
 
   "newsTranslate": "Translate",

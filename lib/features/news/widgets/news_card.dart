@@ -39,6 +39,8 @@ class NewsCard extends StatelessWidget {
     final category = classifyNewsCategory(fullText);
     final riskLevel = classifyNewsRiskLevel(fullText);
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
+    final wordCount = newsWordCount(item);
 
     return Material(
       color: Colors.transparent,
@@ -134,22 +136,24 @@ class NewsCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${item.source} • ${item.publishedAt}',
+                              '${item.source} • $timeAgo',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: metaColor,
                               ),
                             ),
                           ),
-                          const SizedBox(width: AppSpacing.sm),
-                          Text(
-                            l10n.newsDetailReadMinutes(item.readMinutes),
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primary,
+                          if (wordCount != null) ...[
+                            const SizedBox(width: AppSpacing.sm),
+                            Text(
+                              l10n.newsWordCount(wordCount),
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                       if (isEnglish) ...[

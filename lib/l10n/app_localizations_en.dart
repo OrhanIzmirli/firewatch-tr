@@ -2398,6 +2398,92 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use the Clear button in the top corner to remove all saved points at once.';
 
   @override
+  String get detectionProbableFire => '🔥 Probable Fire';
+
+  @override
+  String get detectionHighThermalAnomaly => '⚠️ High Thermal Anomaly';
+
+  @override
+  String get detectionThermalDetection => '📡 Thermal Detection';
+
+  @override
+  String get detectionLowConfidence => '❓ Low Confidence Detection';
+
+  @override
+  String get thermalAnomalyDisclaimer =>
+      'NASA satellite detects thermal anomalies. High-confidence detections may indicate active fires, but industrial heat sources can also be detected.';
+
+  @override
+  String get detectionAboutTitle => 'What is this detection?';
+
+  @override
+  String get detectionAboutViirs =>
+      'NASA VIIRS measures infrared heat at the Earth\'s surface. It identifies thermal anomalies, not confirmed fires.';
+
+  @override
+  String detectionConfidenceExplanation(String level) {
+    return 'Confidence: $level. This is the satellite algorithm\'s confidence that the pixel contains a real thermal anomaly; it does not confirm its cause.';
+  }
+
+  @override
+  String detectionFrpExplanation(String frp) {
+    return 'FRP: $frp MW. Fire Radiative Power estimates the rate of radiant heat; higher values indicate a stronger heat source, which may still be industrial or agricultural.';
+  }
+
+  @override
+  String get detectionLimitations =>
+      'Cloud, smoke, satellite resolution and non-fire heat sources can cause missed or misleading detections. Use official emergency information and direct observation for safety decisions.';
+
+  @override
+  String get feedbackSend => 'Send Feedback';
+
+  @override
+  String get feedbackTitle => 'Send Feedback';
+
+  @override
+  String get feedbackRating => 'Rating';
+
+  @override
+  String get feedbackCategory => 'Category';
+
+  @override
+  String get feedbackBug => 'Bug Report';
+
+  @override
+  String get feedbackFeature => 'Feature Request';
+
+  @override
+  String get feedbackGeneral => 'General Feedback';
+
+  @override
+  String get feedbackMessage => 'Message';
+
+  @override
+  String get feedbackEmail => 'Email (optional)';
+
+  @override
+  String get feedbackSubmit => 'Send';
+
+  @override
+  String get feedbackSuccess => 'Thank you! Your feedback was sent.';
+
+  @override
+  String get feedbackError => 'Feedback could not be sent. Please try again.';
+
+  @override
+  String get feedbackMessageRequired => 'Please enter a message.';
+
+  @override
+  String get ratingPromptTitle => 'Enjoying FireWatch TR?';
+
+  @override
+  String get ratingPromptMessage =>
+      'You have been using the app for a few days. Would you like to share your feedback?';
+
+  @override
+  String get ratingPromptLater => 'Later';
+
+  @override
   String get coachMarkWatchlistTapTitle => 'View Details';
 
   @override

@@ -2394,6 +2394,93 @@ class AppLocalizationsTr extends AppLocalizations {
       'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.';
 
   @override
+  String get detectionProbableFire => '🔥 Muhtemel Yangın';
+
+  @override
+  String get detectionHighThermalAnomaly => '⚠️ Yüksek Isı Anomalisi';
+
+  @override
+  String get detectionThermalDetection => '📡 Termal Tespit';
+
+  @override
+  String get detectionLowConfidence => '❓ Düşük Güvenilirlik';
+
+  @override
+  String get thermalAnomalyDisclaimer =>
+      'NASA uydusu termal anomalileri tespit eder. Yüksek güvenilirlikli tespitler aktif yangın göstergesi olabilir ancak endüstriyel ısı kaynakları da tespit edilebilir.';
+
+  @override
+  String get detectionAboutTitle => 'Bu tespit nedir?';
+
+  @override
+  String get detectionAboutViirs =>
+      'NASA VIIRS, Dünya yüzeyindeki kızılötesi ısıyı ölçer. Doğrulanmış yangınları değil, termal anomalileri belirler.';
+
+  @override
+  String detectionConfidenceExplanation(String level) {
+    return 'Güvenilirlik: $level. Bu değer, uydu algoritmasının pikselde gerçek bir termal anomali bulunduğuna dair güvenidir; nedenini doğrulamaz.';
+  }
+
+  @override
+  String detectionFrpExplanation(String frp) {
+    return 'FRP: $frp MW. Yangın Işıma Gücü yayılan ısının hızını tahmin eder; yüksek değer daha güçlü bir ısı kaynağıdır ancak kaynak endüstriyel veya tarımsal olabilir.';
+  }
+
+  @override
+  String get detectionLimitations =>
+      'Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.';
+
+  @override
+  String get feedbackSend => 'Geri Bildirim Gönder';
+
+  @override
+  String get feedbackTitle => 'Geri Bildirim Gönder';
+
+  @override
+  String get feedbackRating => 'Puan';
+
+  @override
+  String get feedbackCategory => 'Kategori';
+
+  @override
+  String get feedbackBug => 'Hata Bildirimi';
+
+  @override
+  String get feedbackFeature => 'Özellik İsteği';
+
+  @override
+  String get feedbackGeneral => 'Genel Geri Bildirim';
+
+  @override
+  String get feedbackMessage => 'Mesaj';
+
+  @override
+  String get feedbackEmail => 'E-posta (isteğe bağlı)';
+
+  @override
+  String get feedbackSubmit => 'Gönder';
+
+  @override
+  String get feedbackSuccess => 'Teşekkürler! Geri bildiriminiz gönderildi.';
+
+  @override
+  String get feedbackError =>
+      'Geri bildirim gönderilemedi. Lütfen tekrar deneyin.';
+
+  @override
+  String get feedbackMessageRequired => 'Lütfen bir mesaj yazın.';
+
+  @override
+  String get ratingPromptTitle => 'FireWatch TR\'yi beğendiniz mi?';
+
+  @override
+  String get ratingPromptMessage =>
+      'Uygulamayı birkaç gündür kullanıyorsunuz. Görüşlerinizi paylaşmak ister misiniz?';
+
+  @override
+  String get ratingPromptLater => 'Daha sonra';
+
+  @override
   String get coachMarkWatchlistTapTitle => 'Detayı Gör';
 
   @override

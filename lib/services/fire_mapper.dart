@@ -5,7 +5,9 @@ import '../models/fire_point.dart';
 FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
   // Kelvin → Celsius
   final bright = double.tryParse(point.brightness) ?? 0;
-  final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(1) : bright.toStringAsFixed(1);
+  final tempC = bright > 200
+      ? (bright - 273.15).toStringAsFixed(1)
+      : bright.toStringAsFixed(1);
 
   // Zaman formatı
   final timeStr = point.acquisitionTime.padLeft(4, '0');
@@ -16,13 +18,15 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
   String timeAgo = point.acquisitionTime;
 
   if (dateParts.length == 3) {
-    formattedStart = '${dateParts[2]}.${dateParts[1]}.${dateParts[0]} $hour:${minute.toString().padLeft(2, '0')}';
+    formattedStart =
+        '${dateParts[2]}.${dateParts[1]}.${dateParts[0]} $hour:${minute.toString().padLeft(2, '0')}';
     try {
       final dt = DateTime.utc(
         int.parse(dateParts[0]),
         int.parse(dateParts[1]),
         int.parse(dateParts[2]),
-        hour, minute,
+        hour,
+        minute,
       );
       final diff = DateTime.now().toUtc().difference(dt);
       if (diff.inMinutes < 60) {
@@ -51,15 +55,16 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
 
   return FireEvent(
     id: '${point.latitude}-${point.longitude}-${point.acquisitionDate}-${point.acquisitionTime}',
-    title: cityName.isNotEmpty ? l10n.fireEventRegionTitle(cityName) : l10n.fireEventLiveDetectionTitle,
+    title:
+        '${point.detectionTitle(l10n)}${cityName.isNotEmpty ? ' · $cityName' : ''}',
     city: cityName,
     district: distanceStr,
     description: point.riskReasonText(l10n),
     status: point.riskTier == 'high'
         ? l10n.fireEventStatusActive
         : point.riskTier == 'medium'
-            ? l10n.fireEventStatusMonitoring
-            : l10n.fireEventStatusControlled,
+        ? l10n.fireEventStatusMonitoring
+        : l10n.fireEventStatusControlled,
     riskLevel: point.riskLevelLabel(l10n),
     riskTier: point.riskTier,
     regionNameTr: point.canonicalRegionNameTr,
@@ -67,11 +72,13 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
     startedAt: formattedStart,
     affectedArea: affectedArea,
     frp: point.frp,
+    confidence: point.confidence,
+    brightness: bright,
     spreadRisk: point.riskTier == 'high'
         ? l10n.fireEventSpreadHigh
         : point.riskTier == 'medium'
-            ? l10n.fireEventSpreadMedium
-            : l10n.fireEventSpreadLow,
+        ? l10n.fireEventSpreadMedium
+        : l10n.fireEventSpreadLow,
     lat: point.latitude,
     lng: point.longitude,
     smartStatus: point.smartStatus,

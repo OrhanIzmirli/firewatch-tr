@@ -8,15 +8,18 @@ class FireEvent {
   final String description;
   final String status;
   final String riskLevel;
+
   /// Canonical (non-localized) risk tier — 'high' | 'medium' | 'low' — used
   /// for color-coding, independent of the localized [riskLevel] display text.
   final String riskTier;
+
   /// Canonical Turkish region name (e.g. "Ege", "İç Anadolu"), independent
   /// of app locale — used to cross-reference backend data (news
   /// relatedRegion) that's always in Turkish. Not for display.
   final String regionNameTr;
   final String updatedAt;
   final String startedAt;
+
   /// Real measured area from NASA FIRMS' scan/track pixel-size fields
   /// (already formatted for display) — not a brightness-based estimate.
   final String affectedArea;
@@ -24,8 +27,12 @@ class FireEvent {
   final List<String> recommendedActions;
   final double lat;
   final double lng;
+
   /// Fire Radiative Power (MW) from NASA FIRMS — 0 when not available.
   final double frp;
+  final String confidence;
+  final double brightness;
+
   /// Data-driven status computed from the source FirePoint's detection age,
   /// confidence, and FRP — see [FirePoint.smartStatus].
   final FireStatus smartStatus;
@@ -48,6 +55,8 @@ class FireEvent {
     required this.lat,
     required this.lng,
     this.frp = 0,
+    this.confidence = '',
+    this.brightness = 0,
     this.smartStatus = FireStatus.historical,
   });
 }

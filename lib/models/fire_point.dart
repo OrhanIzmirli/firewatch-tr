@@ -15,28 +15,40 @@ enum FireStatus { active, likelyActive, monitoring, historical }
 
 String fireStatusEmoji(FireStatus status) {
   switch (status) {
-    case FireStatus.active: return '🔴';
-    case FireStatus.likelyActive: return '🟠';
-    case FireStatus.monitoring: return '🟡';
-    case FireStatus.historical: return '⚫';
+    case FireStatus.active:
+      return '🔴';
+    case FireStatus.likelyActive:
+      return '🟠';
+    case FireStatus.monitoring:
+      return '🟡';
+    case FireStatus.historical:
+      return '⚫';
   }
 }
 
 String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
   switch (status) {
-    case FireStatus.active: return l10n.fireStatusActive;
-    case FireStatus.likelyActive: return l10n.fireStatusLikelyActive;
-    case FireStatus.monitoring: return l10n.fireStatusMonitoring;
-    case FireStatus.historical: return l10n.fireStatusHistorical;
+    case FireStatus.active:
+      return l10n.fireStatusActive;
+    case FireStatus.likelyActive:
+      return l10n.fireStatusLikelyActive;
+    case FireStatus.monitoring:
+      return l10n.fireStatusMonitoring;
+    case FireStatus.historical:
+      return l10n.fireStatusHistorical;
   }
 }
 
 Color fireStatusColor(FireStatus status) {
   switch (status) {
-    case FireStatus.active: return AppColors.danger;
-    case FireStatus.likelyActive: return AppColors.primary;
-    case FireStatus.monitoring: return AppColors.warning;
-    case FireStatus.historical: return Colors.grey;
+    case FireStatus.active:
+      return AppColors.danger;
+    case FireStatus.likelyActive:
+      return AppColors.primary;
+    case FireStatus.monitoring:
+      return AppColors.warning;
+    case FireStatus.historical:
+      return Colors.grey;
   }
 }
 
@@ -51,12 +63,15 @@ class FirePoint {
   final double? distanceKm;
   final String? cityName;
   final String? nearestRegion;
+
   /// Fire Radiative Power (MW) — energy release rate, from NASA FIRMS.
   final double frp;
+
   /// Along-scan and along-track pixel size (km) — used to estimate the
   /// area of the detection.
   final double scanKm;
   final double trackKm;
+
   /// Other satellite/instrument names (beyond [satellite]) that reported a
   /// detection within 500m and 3 hours of this point during
   /// deduplication — e.g. this point's [satellite] is "VIIRS" and
@@ -82,39 +97,43 @@ class FirePoint {
   });
 
   Map<String, dynamic> toJson() => {
-        'latitude': latitude,
-        'longitude': longitude,
-        'brightness': brightness,
-        'confidence': confidence,
-        'satellite': satellite,
-        'acquisitionDate': acquisitionDate,
-        'acquisitionTime': acquisitionTime,
-        'distanceKm': distanceKm,
-        'cityName': cityName,
-        'nearestRegion': nearestRegion,
-        'frp': frp,
-        'scanKm': scanKm,
-        'trackKm': trackKm,
-        'mergedSatellites': mergedSatellites,
-      };
+    'latitude': latitude,
+    'longitude': longitude,
+    'brightness': brightness,
+    'confidence': confidence,
+    'satellite': satellite,
+    'acquisitionDate': acquisitionDate,
+    'acquisitionTime': acquisitionTime,
+    'distanceKm': distanceKm,
+    'cityName': cityName,
+    'nearestRegion': nearestRegion,
+    'frp': frp,
+    'scanKm': scanKm,
+    'trackKm': trackKm,
+    'mergedSatellites': mergedSatellites,
+  };
 
   factory FirePoint.fromJson(Map<String, dynamic> json) => FirePoint(
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-        brightness: json['brightness'] as String,
-        confidence: json['confidence'] as String,
-        satellite: json['satellite'] as String,
-        acquisitionDate: json['acquisitionDate'] as String,
-        acquisitionTime: json['acquisitionTime'] as String,
-        distanceKm: (json['distanceKm'] as num?)?.toDouble(),
-        cityName: json['cityName'] as String?,
-        nearestRegion: json['nearestRegion'] as String?,
-        // Absent in data cached before these fields were added.
-        frp: (json['frp'] as num?)?.toDouble() ?? 0,
-        scanKm: (json['scanKm'] as num?)?.toDouble() ?? 0,
-        trackKm: (json['trackKm'] as num?)?.toDouble() ?? 0,
-        mergedSatellites: (json['mergedSatellites'] as List?)?.map((e) => e.toString()).toList() ?? const [],
-      );
+    latitude: (json['latitude'] as num).toDouble(),
+    longitude: (json['longitude'] as num).toDouble(),
+    brightness: json['brightness'] as String,
+    confidence: json['confidence'] as String,
+    satellite: json['satellite'] as String,
+    acquisitionDate: json['acquisitionDate'] as String,
+    acquisitionTime: json['acquisitionTime'] as String,
+    distanceKm: (json['distanceKm'] as num?)?.toDouble(),
+    cityName: json['cityName'] as String?,
+    nearestRegion: json['nearestRegion'] as String?,
+    // Absent in data cached before these fields were added.
+    frp: (json['frp'] as num?)?.toDouble() ?? 0,
+    scanKm: (json['scanKm'] as num?)?.toDouble() ?? 0,
+    trackKm: (json['trackKm'] as num?)?.toDouble() ?? 0,
+    mergedSatellites:
+        (json['mergedSatellites'] as List?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        const [],
+  );
 
   FirePoint copyWith({
     double? latitude,
@@ -152,18 +171,53 @@ class FirePoint {
 
   bool get isMerged => mergedSatellites.isNotEmpty;
 
+  bool get isProbableFire =>
+      riskTier == 'high' &&
+      frp > 30 &&
+      (double.tryParse(brightness) ?? 0) > 350;
+
+  String detectionTitle(AppLocalizations l10n) {
+    if (isProbableFire) return l10n.detectionProbableFire;
+    switch (riskTier) {
+      case 'high':
+        return l10n.detectionHighThermalAnomaly;
+      case 'medium':
+        return l10n.detectionThermalDetection;
+      default:
+        return l10n.detectionLowConfidence;
+    }
+  }
+
+  Color get detectionColor {
+    if (isProbableFire) return AppColors.danger;
+    switch (riskTier) {
+      case 'high':
+        return Colors.orange;
+      case 'medium':
+        return Colors.amber;
+      default:
+        return Colors.grey;
+    }
+  }
+
   /// "VIIRS + MODIS"-style label combining the primary satellite with any
   /// merged ones — for display on fire cards when [isMerged] is true.
-  String get mergedSatelliteLabel => [satellite, ...mergedSatellites].join(' + ');
+  String get mergedSatelliteLabel =>
+      [satellite, ...mergedSatellites].join(' + ');
 
   static String? _bboxRegionKey(double lat, double lng) {
     if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
-    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) return 'akdeniz';
-    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) return 'marmara';
+    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5)
+      return 'akdeniz';
+    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0)
+      return 'marmara';
     if (lat >= 40.5 && lat <= 42.2) return 'karadeniz';
-    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) return 'ic_anadolu';
-    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) return 'dogu_anadolu';
-    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) return 'guneydogu_anadolu';
+    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0)
+      return 'ic_anadolu';
+    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0)
+      return 'dogu_anadolu';
+    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5)
+      return 'guneydogu_anadolu';
     return null;
   }
 
@@ -184,15 +238,31 @@ class FirePoint {
   String? get riskRegionKey => _bboxRegionKey(latitude, longitude);
 
   static const _forestCities = [
-    'mugla', 'antalya', 'izmir', 'bursa', 'canakkale', 'bolu',
-    'kastamonu', 'artvin', 'zonguldak', 'duzce', 'manisa', 'aydin', 'denizli',
+    'mugla',
+    'antalya',
+    'izmir',
+    'bursa',
+    'canakkale',
+    'bolu',
+    'kastamonu',
+    'artvin',
+    'zonguldak',
+    'duzce',
+    'manisa',
+    'aydin',
+    'denizli',
   ];
   static const _agriculturalCities = [
-    'konya', 'eskisehir', 'corum', 'sivas', 'yozgat', 'kirsehir', 'aksaray', 'karaman',
+    'konya',
+    'eskisehir',
+    'corum',
+    'sivas',
+    'yozgat',
+    'kirsehir',
+    'aksaray',
+    'karaman',
   ];
-  static const _urbanCities = [
-    'istanbul', 'ankara', 'gaziantep',
-  ];
+  static const _urbanCities = ['istanbul', 'ankara', 'gaziantep'];
 
   /// Rough location-type classification used to flavor generated
   /// descriptions. Based on the resolved city name where available (a
@@ -204,9 +274,13 @@ class FirePoint {
     if (city.isNotEmpty) {
       if (_urbanCities.any(city.contains)) return FireLocationType.urban;
       if (_forestCities.any(city.contains)) return FireLocationType.forest;
-      if (_agriculturalCities.any(city.contains)) return FireLocationType.agricultural;
+      if (_agriculturalCities.any(city.contains))
+        return FireLocationType.agricultural;
     }
-    if (longitude >= 26.0 && longitude <= 30.0 && latitude >= 36.0 && latitude <= 38.5) {
+    if (longitude >= 26.0 &&
+        longitude <= 30.0 &&
+        latitude >= 36.0 &&
+        latitude <= 38.5) {
       return FireLocationType.coastal;
     }
     return FireLocationType.generic;
@@ -217,17 +291,26 @@ class FirePoint {
   /// the coordinate-based fallback is translated.
   String regionDisplayName(AppLocalizations l10n) {
     if (cityName != null && cityName!.isNotEmpty) return cityName!;
-    if (nearestRegion != null && nearestRegion!.isNotEmpty) return nearestRegion!;
+    if (nearestRegion != null && nearestRegion!.isNotEmpty)
+      return nearestRegion!;
 
     switch (regionKey) {
-      case 'ege': return l10n.regionEge;
-      case 'akdeniz': return l10n.regionAkdeniz;
-      case 'marmara': return l10n.regionMarmara;
-      case 'karadeniz': return l10n.regionKaradeniz;
-      case 'ic_anadolu': return l10n.regionIcAnadolu;
-      case 'dogu_anadolu': return l10n.regionDoguAnadolu;
-      case 'guneydogu_anadolu': return l10n.regionGuneydoguAnadolu;
-      default: return l10n.regionTurkiyeGeneli;
+      case 'ege':
+        return l10n.regionEge;
+      case 'akdeniz':
+        return l10n.regionAkdeniz;
+      case 'marmara':
+        return l10n.regionMarmara;
+      case 'karadeniz':
+        return l10n.regionKaradeniz;
+      case 'ic_anadolu':
+        return l10n.regionIcAnadolu;
+      case 'dogu_anadolu':
+        return l10n.regionDoguAnadolu;
+      case 'guneydogu_anadolu':
+        return l10n.regionGuneydoguAnadolu;
+      default:
+        return l10n.regionTurkiyeGeneli;
     }
   }
 
@@ -237,16 +320,25 @@ class FirePoint {
   /// of the app's display language. Not for display — use
   /// [regionDisplayName] for that.
   String get canonicalRegionNameTr {
-    if (nearestRegion != null && nearestRegion!.isNotEmpty) return nearestRegion!;
+    if (nearestRegion != null && nearestRegion!.isNotEmpty)
+      return nearestRegion!;
     switch (regionKey ?? _bboxRegionKey(latitude, longitude)) {
-      case 'ege': return 'Ege';
-      case 'akdeniz': return 'Akdeniz';
-      case 'marmara': return 'Marmara';
-      case 'karadeniz': return 'Karadeniz';
-      case 'ic_anadolu': return 'İç Anadolu';
-      case 'dogu_anadolu': return 'Doğu Anadolu';
-      case 'guneydogu_anadolu': return 'Güneydoğu Anadolu';
-      default: return 'Türkiye Geneli';
+      case 'ege':
+        return 'Ege';
+      case 'akdeniz':
+        return 'Akdeniz';
+      case 'marmara':
+        return 'Marmara';
+      case 'karadeniz':
+        return 'Karadeniz';
+      case 'ic_anadolu':
+        return 'İç Anadolu';
+      case 'dogu_anadolu':
+        return 'Doğu Anadolu';
+      case 'guneydogu_anadolu':
+        return 'Güneydoğu Anadolu';
+      default:
+        return 'Türkiye Geneli';
     }
   }
 
@@ -260,9 +352,12 @@ class FirePoint {
 
   String riskLevelLabel(AppLocalizations l10n) {
     switch (riskTier) {
-      case 'high': return l10n.commonHigh;
-      case 'medium': return l10n.commonMedium;
-      default: return l10n.commonLow;
+      case 'high':
+        return l10n.commonHigh;
+      case 'medium':
+        return l10n.commonMedium;
+      default:
+        return l10n.commonLow;
     }
   }
 
@@ -373,7 +468,9 @@ class FirePoint {
     }
 
     // 4. Region spread risk, cross-referenced from the cached risk summary.
-    final regionRisk = RiskDataCache.instance.riskForRegionKeySync(riskRegionKey);
+    final regionRisk = RiskDataCache.instance.riskForRegionKeySync(
+      riskRegionKey,
+    );
     final regionScore = regionRisk?['general_risk_score'] as int?;
     if (regionScore != null) {
       if (regionScore >= 60) {
@@ -412,23 +509,34 @@ class FirePoint {
     final year = int.tryParse(dateParts[0]);
     final month = int.tryParse(dateParts[1]);
     final day = int.tryParse(dateParts[2]);
-    if (hour == null || minute == null || year == null || month == null || day == null) return null;
+    if (hour == null ||
+        minute == null ||
+        year == null ||
+        month == null ||
+        day == null)
+      return null;
     return DateTime.utc(year, month, day, hour, minute);
   }
 
   String generatedDescriptionText(AppLocalizations l10n) {
     switch (riskTier) {
-      case 'high': return l10n.fireGeneratedDescHigh;
-      case 'medium': return l10n.fireGeneratedDescMedium;
-      default: return l10n.fireGeneratedDescLow;
+      case 'high':
+        return l10n.fireGeneratedDescHigh;
+      case 'medium':
+        return l10n.fireGeneratedDescMedium;
+      default:
+        return l10n.fireGeneratedDescLow;
     }
   }
 
   String recommendedActionText(AppLocalizations l10n) {
     switch (riskTier) {
-      case 'high': return l10n.fireRecommendedActionHigh;
-      case 'medium': return l10n.fireRecommendedActionMedium;
-      default: return l10n.fireRecommendedActionLow;
+      case 'high':
+        return l10n.fireRecommendedActionHigh;
+      case 'medium':
+        return l10n.fireRecommendedActionMedium;
+      default:
+        return l10n.fireRecommendedActionLow;
     }
   }
 }

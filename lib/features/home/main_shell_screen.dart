@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/fire_monitoring_service.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -8,6 +9,8 @@ import '../news/news_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../settings/settings_screen.dart';
 import 'home_screen.dart';
+import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/feedback_sheet.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -34,6 +37,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex.clamp(0, 4);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _maybePromptForRating(),
+    );
     if (_currentIndex == 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         // Give the Home tab's first frame a moment to settle before measuring targets.
@@ -42,6 +48,40 @@ class _MainShellScreenState extends State<MainShellScreen> {
         await maybeShowCoachMarks(context);
       });
     }
+  }
+
+  Future<void> _maybePromptForRating() async {
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    final raw = prefs.getString('first_launch_date');
+    if (raw == null) {
+      await prefs.setString('first_launch_date', now.toIso8601String());
+      return;
+    }
+    if (prefs.getBool('rating_prompt_shown') == true) return;
+    final first = DateTime.tryParse(raw);
+    if (first == null || now.difference(first).inDays < 3 || !mounted) return;
+    await prefs.setBool('rating_prompt_shown', true);
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final open = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.ratingPromptTitle),
+        content: Text(l10n.ratingPromptMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.ratingPromptLater),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.feedbackSend),
+          ),
+        ],
+      ),
+    );
+    if (open == true && mounted) await showFeedbackSheet(context);
   }
 
   @override
@@ -65,7 +105,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
   ];
 
   Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
-    final icon = Icon(selected ? Icons.notifications : Icons.notifications_none);
+    final icon = Icon(
+      selected ? Icons.notifications : Icons.notifications_none,
+    );
     final child = unreadCount <= 0
         ? icon
         : Badge(
@@ -87,7 +129,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: KeyedSubtree(key: CoachMarkKeys.mapNavIcon, child: const Icon(Icons.map_outlined)),
+            icon: KeyedSubtree(
+              key: CoachMarkKeys.mapNavIcon,
+              child: const Icon(Icons.map_outlined),
+            ),
             selectedIcon: const Icon(Icons.map),
             label: 'Map',
           ),
@@ -97,7 +142,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: 'News',
           ),
           NavigationDestination(
-            icon: _alertsIcon(false, nearbyMatches.length, key: CoachMarkKeys.alertsNavIcon),
+            icon: _alertsIcon(
+              false,
+              nearbyMatches.length,
+              key: CoachMarkKeys.alertsNavIcon,
+            ),
             selectedIcon: _alertsIcon(true, nearbyMatches.length),
             label: 'Alerts',
           ),

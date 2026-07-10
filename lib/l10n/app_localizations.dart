@@ -4202,6 +4202,162 @@ abstract class AppLocalizations {
   /// **'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.'**
   String get coachMarkWatchlistClearDesc;
 
+  /// No description provided for @detectionProbableFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔥 Muhtemel Yangın'**
+  String get detectionProbableFire;
+
+  /// No description provided for @detectionHighThermalAnomaly.
+  ///
+  /// In tr, this message translates to:
+  /// **'⚠️ Yüksek Isı Anomalisi'**
+  String get detectionHighThermalAnomaly;
+
+  /// No description provided for @detectionThermalDetection.
+  ///
+  /// In tr, this message translates to:
+  /// **'📡 Termal Tespit'**
+  String get detectionThermalDetection;
+
+  /// No description provided for @detectionLowConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'❓ Düşük Güvenilirlik'**
+  String get detectionLowConfidence;
+
+  /// No description provided for @thermalAnomalyDisclaimer.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA uydusu termal anomalileri tespit eder. Yüksek güvenilirlikli tespitler aktif yangın göstergesi olabilir ancak endüstriyel ısı kaynakları da tespit edilebilir.'**
+  String get thermalAnomalyDisclaimer;
+
+  /// No description provided for @detectionAboutTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu tespit nedir?'**
+  String get detectionAboutTitle;
+
+  /// No description provided for @detectionAboutViirs.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA VIIRS, Dünya yüzeyindeki kızılötesi ısıyı ölçer. Doğrulanmış yangınları değil, termal anomalileri belirler.'**
+  String get detectionAboutViirs;
+
+  /// No description provided for @detectionConfidenceExplanation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenilirlik: {level}. Bu değer, uydu algoritmasının pikselde gerçek bir termal anomali bulunduğuna dair güvenidir; nedenini doğrulamaz.'**
+  String detectionConfidenceExplanation(String level);
+
+  /// No description provided for @detectionFrpExplanation.
+  ///
+  /// In tr, this message translates to:
+  /// **'FRP: {frp} MW. Yangın Işıma Gücü yayılan ısının hızını tahmin eder; yüksek değer daha güçlü bir ısı kaynağıdır ancak kaynak endüstriyel veya tarımsal olabilir.'**
+  String detectionFrpExplanation(String frp);
+
+  /// No description provided for @detectionLimitations.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.'**
+  String get detectionLimitations;
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri Bildirim Gönder'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri Bildirim Gönder'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackRating.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan'**
+  String get feedbackRating;
+
+  /// No description provided for @feedbackCategory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategori'**
+  String get feedbackCategory;
+
+  /// No description provided for @feedbackBug.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hata Bildirimi'**
+  String get feedbackBug;
+
+  /// No description provided for @feedbackFeature.
+  ///
+  /// In tr, this message translates to:
+  /// **'Özellik İsteği'**
+  String get feedbackFeature;
+
+  /// No description provided for @feedbackGeneral.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel Geri Bildirim'**
+  String get feedbackGeneral;
+
+  /// No description provided for @feedbackMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesaj'**
+  String get feedbackMessage;
+
+  /// No description provided for @feedbackEmail.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta (isteğe bağlı)'**
+  String get feedbackEmail;
+
+  /// No description provided for @feedbackSubmit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönder'**
+  String get feedbackSubmit;
+
+  /// No description provided for @feedbackSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Teşekkürler! Geri bildiriminiz gönderildi.'**
+  String get feedbackSuccess;
+
+  /// No description provided for @feedbackError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri bildirim gönderilemedi. Lütfen tekrar deneyin.'**
+  String get feedbackError;
+
+  /// No description provided for @feedbackMessageRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen bir mesaj yazın.'**
+  String get feedbackMessageRequired;
+
+  /// No description provided for @ratingPromptTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'FireWatch TR\'yi beğendiniz mi?'**
+  String get ratingPromptTitle;
+
+  /// No description provided for @ratingPromptMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamayı birkaç gündür kullanıyorsunuz. Görüşlerinizi paylaşmak ister misiniz?'**
+  String get ratingPromptMessage;
+
+  /// No description provided for @ratingPromptLater.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha sonra'**
+  String get ratingPromptLater;
+
   /// No description provided for @coachMarkWatchlistTapTitle.
   ///
   /// In tr, this message translates to:

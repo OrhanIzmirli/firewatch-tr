@@ -51,7 +51,10 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     // Fetch a larger candidate pool so _selectRelatedNews has enough to
     // work with — only the top 3 after tiering are actually shown/translated.
     _newsFuture = _newsService.fetchNewsFromRender(limit: 20);
-    _windFuture = WindService.instance.getWind(widget.fireEvent.lat, widget.fireEvent.lng);
+    _windFuture = WindService.instance.getWind(
+      widget.fireEvent.lat,
+      widget.fireEvent.lng,
+    );
   }
 
   @override
@@ -73,18 +76,24 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   /// match: (1) the article's relatedRegion matches the fire's region,
   /// (2) the fire's city/region name appears in the article title, (3)
   /// falls back to the most recent fire-related news already returned.
-  (List<NewsItem>, _RelatedNewsTier) _selectRelatedNews(List<NewsItem> allNews, FireEvent fire) {
+  (List<NewsItem>, _RelatedNewsTier) _selectRelatedNews(
+    List<NewsItem> allNews,
+    FireEvent fire,
+  ) {
     final fireRegionFold = foldTurkish(fire.regionNameTr);
     final cityFold = foldTurkish(fire.city);
 
-    final regionMatches = allNews.where((n) => foldTurkish(n.relatedRegion) == fireRegionFold).toList();
+    final regionMatches = allNews
+        .where((n) => foldTurkish(n.relatedRegion) == fireRegionFold)
+        .toList();
     if (regionMatches.isNotEmpty) {
       return (regionMatches.take(3).toList(), _RelatedNewsTier.region);
     }
 
     final titleMatches = allNews.where((n) {
       final titleFold = foldTurkish(n.title);
-      return (cityFold.isNotEmpty && titleFold.contains(cityFold)) || titleFold.contains(fireRegionFold);
+      return (cityFold.isNotEmpty && titleFold.contains(cityFold)) ||
+          titleFold.contains(fireRegionFold);
     }).toList();
     if (titleMatches.isNotEmpty) {
       return (titleMatches.take(3).toList(), _RelatedNewsTier.city);
@@ -192,7 +201,8 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final titleColor = theme.textTheme.titleLarge?.color ??
+    final titleColor =
+        theme.textTheme.titleLarge?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
@@ -203,8 +213,10 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.fireDetailTitle,
-            style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(
+          l10n.fireDetailTitle,
+          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -223,37 +235,76 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   const SizedBox(height: AppSpacing.md),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                      vertical: AppSpacing.md,
+                    ),
                     decoration: BoxDecoration(
-                      color: fireStatusColor(fire.smartStatus).withValues(alpha: isDark ? 0.16 : 0.12),
-                      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                      border: Border.all(color: fireStatusColor(fire.smartStatus).withValues(alpha: 0.35)),
+                      color: fireStatusColor(
+                        fire.smartStatus,
+                      ).withValues(alpha: isDark ? 0.16 : 0.12),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.pillRadius,
+                      ),
+                      border: Border.all(
+                        color: fireStatusColor(
+                          fire.smartStatus,
+                        ).withValues(alpha: 0.35),
+                      ),
                     ),
                     child: Row(
                       children: [
-                        Text(fireStatusEmoji(fire.smartStatus), style: const TextStyle(fontSize: 20)),
+                        Text(
+                          fireStatusEmoji(fire.smartStatus),
+                          style: const TextStyle(fontSize: 20),
+                        ),
                         const SizedBox(width: AppSpacing.sm),
                         Text(
                           fireStatusLabel(l10n, fire.smartStatus),
-                          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: fireStatusColor(fire.smartStatus)),
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: fireStatusColor(fire.smartStatus),
+                          ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text(fire.title,
-                      style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
+                  Text(
+                    fire.title,
+                    style: GoogleFonts.inter(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: titleColor,
+                    ),
+                  ),
                   const SizedBox(height: AppSpacing.sm),
-                  Text(fire.description,
-                      style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
+                  Text(
+                    fire.description,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      height: 1.45,
+                      color: secondaryTextColor,
+                    ),
+                  ),
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
-                      Icon(Icons.access_time_rounded, size: 18, color: tertiaryTextColor),
+                      Icon(
+                        Icons.access_time_rounded,
+                        size: 18,
+                        color: tertiaryTextColor,
+                      ),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
-                        l10n.fireDetailLastUpdate(_formatUpdatedAt(context, fire.updatedAt)),
-                        style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor),
+                        l10n.fireDetailLastUpdate(
+                          _formatUpdatedAt(context, fire.updatedAt),
+                        ),
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: tertiaryTextColor,
+                        ),
                       ),
                     ],
                   ),
@@ -263,27 +314,44 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             const SizedBox(height: AppSpacing.xxl),
 
-            SectionHeader(title: l10n.fireDetailKeyMetrics, icon: Icons.analytics_rounded),
+            SectionHeader(
+              title: l10n.fireDetailKeyMetrics,
+              icon: Icons.analytics_rounded,
+            ),
             const SizedBox(height: AppSpacing.md),
 
             Row(
               children: [
-                Expanded(child: _MetricCard(
-                  title: l10n.commonRisk,
-                  value: fire.riskLevel,
-                  info: InfoIconButton(
-                    title: l10n.tooltipConfidenceTitle,
-                    bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
+                Expanded(
+                  child: _MetricCard(
+                    title: l10n.commonRisk,
+                    value: fire.riskLevel,
+                    info: InfoIconButton(
+                      title: l10n.tooltipConfidenceTitle,
+                      bodyLines: [
+                        l10n.smartConfidenceHigh,
+                        l10n.smartConfidenceMedium,
+                        l10n.smartConfidenceLow,
+                      ],
+                    ),
                   ),
-                )),
+                ),
                 const SizedBox(width: AppSpacing.md),
-                Expanded(child: _MetricCard(title: l10n.commonStatus, value: fire.status)),
+                Expanded(
+                  child: _MetricCard(
+                    title: l10n.commonStatus,
+                    value: fire.status,
+                  ),
+                ),
               ],
             ),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            SectionHeader(title: l10n.fireDetailEventInfo, icon: Icons.info_outline_rounded),
+            SectionHeader(
+              title: l10n.fireDetailEventInfo,
+              icon: Icons.info_outline_rounded,
+            ),
             const SizedBox(height: AppSpacing.md),
 
             _InfoRow(label: l10n.fireDetailCity, value: fire.city),
@@ -313,19 +381,48 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
             const SizedBox(height: AppSpacing.sm),
             _InfoRow(label: l10n.fireDetailSpreadRisk, value: fire.spreadRisk),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: l10n.fireDetailAffectedArea, value: fire.affectedArea),
+            _InfoRow(
+              label: l10n.fireDetailAffectedArea,
+              value: fire.affectedArea,
+            ),
             const SizedBox(height: AppSpacing.sm),
-            _InfoRow(label: l10n.fireDetailFireRadiativePower, value: _frpDisplayValue(l10n, fire.frp)),
+            _InfoRow(
+              label: l10n.fireDetailFireRadiativePower,
+              value: _frpDisplayValue(l10n, fire.frp),
+            ),
+
+            const SizedBox(height: AppSpacing.xxl),
+            SectionHeader(
+              title: l10n.detectionAboutTitle,
+              icon: Icons.satellite_alt_outlined,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _ActionCard(text: l10n.detectionAboutViirs),
+            const SizedBox(height: AppSpacing.sm),
+            _ActionCard(
+              text: l10n.detectionConfidenceExplanation(fire.riskLevel),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            _ActionCard(
+              text: l10n.detectionFrpExplanation(fire.frp.toStringAsFixed(1)),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            _ActionCard(text: l10n.detectionLimitations),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            SectionHeader(title: l10n.fireDetailRecommendedActions, icon: Icons.checklist_rounded),
+            SectionHeader(
+              title: l10n.fireDetailRecommendedActions,
+              icon: Icons.checklist_rounded,
+            ),
             const SizedBox(height: AppSpacing.md),
 
-            ...fire.recommendedActions.map((action) => Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                  child: _ActionCard(text: action),
-                )),
+            ...fire.recommendedActions.map(
+              (action) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                child: _ActionCard(text: action),
+              ),
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 
@@ -368,14 +465,25 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                     ),
                   );
                 },
-                icon: Icon(isSaved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
-                label: Text(isSaved ? l10n.fireDetailSaved : l10n.fireDetailSaveToWatchlist),
+                icon: Icon(
+                  isSaved
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                ),
+                label: Text(
+                  isSaved
+                      ? l10n.fireDetailSaved
+                      : l10n.fireDetailSaveToWatchlist,
+                ),
               ),
             ),
 
             const SizedBox(height: AppSpacing.xxl),
 
-            SectionHeader(title: l10n.fireDetailRelatedNews, icon: Icons.article),
+            SectionHeader(
+              title: l10n.fireDetailRelatedNews,
+              icon: Icons.article,
+            ),
             const SizedBox(height: AppSpacing.md),
 
             FutureBuilder<List<NewsItem>>(
@@ -387,15 +495,19 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                 final allNews = snapshot.data ?? [];
                 if (allNews.isEmpty) {
                   return GlassPanel(
-                    child: Text(l10n.fireDetailNoNewsFound,
-                        style: GoogleFonts.inter(color: secondaryTextColor)),
+                    child: Text(
+                      l10n.fireDetailNoNewsFound,
+                      style: GoogleFonts.inter(color: secondaryTextColor),
+                    ),
                   );
                 }
                 final (news, tier) = _selectRelatedNews(allNews, fire);
                 if (news.isEmpty) {
                   return GlassPanel(
-                    child: Text(l10n.fireDetailNoNewsFound,
-                        style: GoogleFonts.inter(color: secondaryTextColor)),
+                    child: Text(
+                      l10n.fireDetailNoNewsFound,
+                      style: GoogleFonts.inter(color: secondaryTextColor),
+                    ),
                   );
                 }
                 return Column(
@@ -406,60 +518,101 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         tier == _RelatedNewsTier.city
                             ? l10n.fireDetailRelatedToCity(fire.city)
                             : l10n.fireDetailRegionalNews,
-                        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.sm),
                     ],
                     ...news.map((item) {
-                    final isTranslating = _translatingIds.contains(item.id);
-                    final displayTitle = _translatedTitles[item.id] ?? item.title;
-                    final displaySummary = _translatedSummaries[item.id] ?? item.summary;
+                      final isTranslating = _translatingIds.contains(item.id);
+                      final displayTitle =
+                          _translatedTitles[item.id] ?? item.title;
+                      final displaySummary =
+                          _translatedSummaries[item.id] ?? item.summary;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                      child: InkWell(
-                        onTap: () => _openNewsUrl(item.sourceUrl),
-                        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                        child: GlassPanel(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (isTranslating)
-                                ShimmerWrap(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const SkeletonBox(width: double.infinity, height: 16),
-                                      const SizedBox(height: 8),
-                                      const SkeletonBox(width: double.infinity, height: 12),
-                                      const SizedBox(height: 6),
-                                      SkeletonBox(width: MediaQuery.of(context).size.width * 0.4, height: 12),
-                                    ],
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                        child: InkWell(
+                          onTap: () => _openNewsUrl(item.sourceUrl),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.largeCardRadius,
+                          ),
+                          child: GlassPanel(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (isTranslating)
+                                  ShimmerWrap(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SkeletonBox(
+                                          width: double.infinity,
+                                          height: 16,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const SkeletonBox(
+                                          width: double.infinity,
+                                          height: 12,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        SkeletonBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.4,
+                                          height: 12,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                else ...[
+                                  Text(
+                                    displayTitle,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w800,
+                                      color: titleColor,
+                                    ),
                                   ),
-                                )
-                              else ...[
-                                Text(displayTitle,
-                                    style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: titleColor)),
-                                const SizedBox(height: 6),
-                                Text(displaySummary,
-                                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
-                              ],
-                              const SizedBox(height: 6),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(item.source,
-                                        style: GoogleFonts.inter(fontSize: 11, color: AppColors.primary)),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    displaySummary,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      color: secondaryTextColor,
+                                    ),
                                   ),
-                                  Icon(Icons.open_in_new_rounded, size: 16, color: tertiaryTextColor),
                                 ],
-                              ),
-                            ],
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        item.source,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.open_in_new_rounded,
+                                      size: 16,
+                                      color: tertiaryTextColor,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
                   ],
                 );
               },
@@ -484,7 +637,8 @@ class _MetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final valueColor = theme.textTheme.titleLarge?.color ??
+    final valueColor =
+        theme.textTheme.titleLarge?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
     final labelColor = isDark
         ? AppColors.white.withValues(alpha: 0.7)
@@ -494,11 +648,21 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(value, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: valueColor)),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: valueColor,
+            ),
+          ),
           const SizedBox(height: 4),
           Row(
             children: [
-              Text(title, style: GoogleFonts.inter(fontSize: 13, color: labelColor)),
+              Text(
+                title,
+                style: GoogleFonts.inter(fontSize: 13, color: labelColor),
+              ),
               ?info,
             ],
           ),
@@ -521,7 +685,8 @@ class _InfoRow extends StatelessWidget {
     final labelColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.58);
-    final valueColor = theme.textTheme.bodyLarge?.color ??
+    final valueColor =
+        theme.textTheme.bodyLarge?.color ??
         (isDark ? AppColors.white : const Color(0xFF0F172A));
 
     return GlassPanel(
@@ -529,12 +694,21 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: GoogleFonts.inter(fontSize: 15, color: labelColor)),
+          Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 15, color: labelColor),
+          ),
           const SizedBox(width: AppSpacing.md),
           Flexible(
-            child: Text(value,
-                textAlign: TextAlign.right,
-                style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: valueColor)),
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: valueColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -559,10 +733,20 @@ class _ActionCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.check_circle_outline_rounded, color: AppColors.primary),
+          const Icon(
+            Icons.check_circle_outline_rounded,
+            color: AppColors.primary,
+          ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: Text(text, style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: textColor)),
+            child: Text(
+              text,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                height: 1.45,
+                color: textColor,
+              ),
+            ),
           ),
         ],
       ),

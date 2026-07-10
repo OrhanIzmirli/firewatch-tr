@@ -1,9 +1,19 @@
 import 'package:firewatch_tr/models/fire_point.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-FirePoint point({String confidence = 'h', double frp = 31, String brightness = '351'}) => FirePoint(
-  latitude: 39, longitude: 35, brightness: brightness, confidence: confidence,
-  satellite: 'VIIRS', acquisitionDate: '2026-07-10', acquisitionTime: '1200', frp: frp,
+FirePoint point({
+  String confidence = 'h',
+  double frp = 31,
+  String brightness = '351',
+}) => FirePoint(
+  latitude: 39,
+  longitude: 35,
+  brightness: brightness,
+  confidence: confidence,
+  satellite: 'VIIRS',
+  acquisitionDate: '2026-07-10',
+  acquisitionTime: '1200',
+  frp: frp,
 );
 
 void main() {
@@ -12,5 +22,11 @@ void main() {
     expect(point(frp: 30).isProbableFire, isFalse);
     expect(point(brightness: '350').isProbableFire, isFalse);
     expect(point(confidence: 'n').isProbableFire, isFalse);
+  });
+
+  test('supports MODIS numeric confidence values', () {
+    expect(point(confidence: '90').riskTier, 'high');
+    expect(point(confidence: '50').riskTier, 'medium');
+    expect(point(confidence: '10').riskTier, 'low');
   });
 }

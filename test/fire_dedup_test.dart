@@ -72,6 +72,18 @@ void main() {
     expect(result.first.confidence, 'h');
   });
 
+  test('understands MODIS numeric confidence when merging', () {
+    final fires = [
+      _point(lat: 39.0, lng: 35.0, confidence: '20', brightness: '390'),
+      _point(lat: 39.0001, lng: 35.0, confidence: '90', brightness: '310'),
+    ];
+
+    final result = FireApiService.deduplicateFires(fires);
+
+    expect(result, hasLength(1));
+    expect(result.first.confidence, '90');
+  });
+
   test('breaks ties by higher brightness when confidence is equal', () {
     final fires = [
       _point(lat: 39.0, lng: 35.0, confidence: 'n', brightness: '300'),

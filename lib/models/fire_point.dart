@@ -345,6 +345,12 @@ class FirePoint {
   /// Canonical (non-localized) risk tier, used for filtering/coloring logic.
   String get riskTier {
     final c = confidence.toLowerCase().trim();
+    final numeric = int.tryParse(c);
+    if (numeric != null) {
+      if (numeric >= 80) return 'high';
+      if (numeric >= 30) return 'medium';
+      return 'low';
+    }
     if (c.contains('high') || c == 'h') return 'high';
     if (c.contains('nominal') || c == 'n') return 'medium';
     return 'low';

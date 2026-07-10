@@ -77,25 +77,35 @@ class FireApiService {
   }
 
   Future<List<FirePoint>> fetchTurkeyFires() async {
-    final url =
-        'https://firms.modaps.eosdis.nasa.gov/api/area/csv/$apiKey/VIIRS_SNPP_NRT/$turkeyArea/1';
+    Future<List<List<dynamic>>> fetchRows(String product, int days) async {
+      final url =
+          'https://firms.modaps.eosdis.nasa.gov/api/area/csv/$apiKey/$product/$turkeyArea/$days';
+      final response = await _dio.get<String>(url);
+      final raw = response.data;
+      if (raw == null || raw.trim().isEmpty) return const [];
+      return const CsvToListConverter(
+        eol: '\n',
+        shouldParseNumbers: false,
+      ).convert(raw);
+    }
 
-    final response = await _dio.get<String>(url);
-
-    final raw = response.data;
-    if (raw == null || raw.trim().isEmpty) return [];
-
-    final rows = const CsvToListConverter(
-      eol: '\n',
-      shouldParseNumbers: false,
-    ).convert(raw);
+    // NASA products are populated at different times during the day. SNPP
+    // can legitimately return a header-only response while MODIS already has
+    // current detections. Fall through across products before using a 48-hour
+    // VIIRS window, so a temporary feed gap never leaves the map empty.
+    var rows = await fetchRows('VIIRS_SNPP_NRT', 1);
+    if (rows.length <= 1) rows = await fetchRows('MODIS_NRT', 1);
+    if (rows.length <= 1) rows = await fetchRows('VIIRS_SNPP_NRT', 2);
 
     if (rows.length <= 1) return [];
 
     final header = rows.first.map((e) => e.toString()).toList();
     final latIndex = header.indexOf('latitude');
     final lngIndex = header.indexOf('longitude');
-    final brightIndex = header.indexOf('bright_ti4');
+    final viirsBrightnessIndex = header.indexOf('bright_ti4');
+    final brightIndex = viirsBrightnessIndex >= 0
+        ? viirsBrightnessIndex
+        : header.indexOf('brightness');
     final confIndex = header.indexOf('confidence');
     // 'satellite' is a platform code (e.g. "N" for Suomi NPP) — not
     // meaningful to show directly. 'instrument' ("VIIRS"/"MODIS") is what
@@ -173,14 +183,23 @@ class FireApiService {
 
   static int _confidenceRank(String confidence) {
     final c = confidence.toLowerCase().trim();
+    final numeric = int.tryParse(c);
+    if (numeric != null) {
+      if (numeric >= 80) return 2;
+      if (numeric >= 30) return 1;
+      return 0;
+    }
     if (c.contains('high') || c == 'h') return 2;
     if (c.contains('nominal') || c == 'n') return 1;
     return 0;
   }
 
   static List<FirePoint> deduplicateFires(List<FirePoint> fires) {
-    final sorted = [...fires]..sort((a, b) {
-        final rankCompare = _confidenceRank(b.confidence).compareTo(_confidenceRank(a.confidence));
+    final sorted = [...fires]
+      ..sort((a, b) {
+        final rankCompare = _confidenceRank(
+          b.confidence,
+        ).compareTo(_confidenceRank(a.confidence));
         if (rankCompare != 0) return rankCompare;
         final aBright = double.tryParse(a.brightness) ?? 0;
         final bBright = double.tryParse(b.brightness) ?? 0;
@@ -193,14 +212,18 @@ class FireApiService {
       for (var i = 0; i < accepted.length; i++) {
         final existing = accepted[i];
         final distanceMeters = Geolocator.distanceBetween(
-          candidate.latitude, candidate.longitude, existing.latitude, existing.longitude,
+          candidate.latitude,
+          candidate.longitude,
+          existing.latitude,
+          existing.longitude,
         );
         if (distanceMeters > _duplicateRadiusMeters) continue;
 
         final candidateTime = candidate.detectionDateTimeUtc;
         final existingTime = existing.detectionDateTimeUtc;
         if (candidateTime == null || existingTime == null) continue;
-        if (candidateTime.difference(existingTime).abs() > _duplicateWindow) continue;
+        if (candidateTime.difference(existingTime).abs() > _duplicateWindow)
+          continue;
 
         matchIndex = i;
         break;
@@ -210,11 +233,15 @@ class FireApiService {
         accepted.add(candidate);
       } else {
         final existing = accepted[matchIndex];
-        final alreadyMerged = existing.satellite == candidate.satellite ||
+        final alreadyMerged =
+            existing.satellite == candidate.satellite ||
             existing.mergedSatellites.contains(candidate.satellite);
         if (!alreadyMerged) {
           accepted[matchIndex] = existing.copyWith(
-            mergedSatellites: [...existing.mergedSatellites, candidate.satellite],
+            mergedSatellites: [
+              ...existing.mergedSatellites,
+              candidate.satellite,
+            ],
           );
         }
       }
@@ -246,10 +273,12 @@ class FireApiService {
     final keys = representativeByKey.keys.toList();
     for (var i = 0; i < keys.length; i += concurrency) {
       final batchKeys = keys.skip(i).take(concurrency);
-      final results = await Future.wait(batchKeys.map((key) async {
-        final p = representativeByKey[key]!;
-        return MapEntry(key, await getNearestCity(p.latitude, p.longitude));
-      }));
+      final results = await Future.wait(
+        batchKeys.map((key) async {
+          final p = representativeByKey[key]!;
+          return MapEntry(key, await getNearestCity(p.latitude, p.longitude));
+        }),
+      );
       for (final entry in results) {
         cityInfoByKey[entry.key] = entry.value;
       }

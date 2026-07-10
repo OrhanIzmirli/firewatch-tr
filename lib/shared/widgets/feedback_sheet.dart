@@ -32,6 +32,12 @@ class _FeedbackSheetState extends State<_FeedbackSheet> {
 
   Future<void> submit() async {
     final l10n = AppLocalizations.of(context)!;
+    if (rating < 1) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.feedbackRatingRequired)));
+      return;
+    }
     if (message.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -52,12 +58,15 @@ class _FeedbackSheetState extends State<_FeedbackSheet> {
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.feedbackSuccess)));
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.feedbackError)));
+      }
     } finally {
-      if (mounted) setState(() => sending = false);
+      if (mounted) {
+        setState(() => sending = false);
+      }
     }
   }
 

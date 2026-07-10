@@ -64,7 +64,7 @@
   "onboardingDesc3": "Review risk levels, see recommended actions, and act quickly when needed.",
 
   "homeLiveSummary": "Live Status Summary",
-  "homeHeaderTitle": "Turkey Wildfire Tracking",
+  "homeHeaderTitle": "Turkey Thermal Anomaly Tracking",
   "homeHeaderSubtitle": "Track active events, see risk levels, and quickly reach the safety guide.",
   "homeNasaLiveData": "NASA FIRMS • Live Data",
   "homeOutsideTurkeyLocation": "Outside Turkey",
@@ -76,14 +76,14 @@
   "homeSafety": "Safety",
   "homeOverview": "Overview",
   "homeOverviewSubtitle": "NASA FIRMS live data",
-  "homeOverviewUniqueCount": "{count} unique fire locations detected",
+  "homeOverviewUniqueCount": "{count} unique thermal anomaly locations detected",
   "@homeOverviewUniqueCount": {
     "placeholders": { "count": { "type": "int" } }
   },
   "homeTotalPoints": "Total Points",
   "homeHighRisk": "High Risk",
   "homeNominal": "Nominal",
-  "homeOverviewActiveFiresTitle": "Active Fire Points",
+  "homeOverviewActiveFiresTitle": "Recent Thermal Anomalies",
   "homeOverviewActiveFiresSubtitle": "Detected in last 24 hours",
   "homeOverviewHighestRiskTitle": "Highest Risk Region",
   "homeOverviewHighestRiskValue": "{region} - {score} pts",
@@ -91,12 +91,12 @@
     "placeholders": { "region": { "type": "String" }, "score": { "type": "int" } }
   },
   "homeOverviewHighestRiskSubtitle": "Highest risk in Turkey right now",
-  "homeOverviewNearbyTitle": "Nearby Fire Alert",
-  "homeOverviewNearbyValueWithLocation": "{count} fires within 100km",
+  "homeOverviewNearbyTitle": "Nearby Thermal Detections",
+  "homeOverviewNearbyValueWithLocation": "{count} detections within 100km",
   "@homeOverviewNearbyValueWithLocation": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "homeOverviewNearbyValueNationwide": "{count} fires nationwide",
+  "homeOverviewNearbyValueNationwide": "{count} detections nationwide",
   "@homeOverviewNearbyValueNationwide": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -125,7 +125,7 @@
   "homeFilterHighRisk": "High Risk",
   "homeFilterMediumRisk": "Medium Risk",
   "homeSearchHint": "Search city or region...",
-  "homeNoActiveFires": "No active fire points found.",
+  "homeNoActiveFires": "No recent thermal anomalies found.",
   "homeFireRegionTitle": "{region} Region",
   "@homeFireRegionTitle": {
     "placeholders": { "region": { "type": "String" } }
@@ -137,16 +137,16 @@
   "homeAreaInsufficientRes": "Insufficient satellite resolution",
 
   "mapFetchError": "Could not fetch fire data.",
-  "mapTitle": "Fire Map",
+  "mapTitle": "Thermal Anomaly Map",
   "mapLiveMap": "Live Map",
-  "mapConfidenceFilterActive": "Showing only high/nominal confidence fires",
+  "mapConfidenceFilterActive": "Showing only high/nominal confidence detections",
   "mapConfidenceFilterClear": "Clear",
-  "mapHeaderTitle": "Turkey-wide Wildfire View",
+  "mapHeaderTitle": "Turkey-wide Thermal Anomaly View",
   "mapHeaderSubtitle": "Show active thermal points on the map using NASA FIRMS data.",
   "mapArea": "Map Area",
   "mapAreaSubtitle": "NASA FIRMS live marker view",
   "mapGoToMe": "Go to Me",
-  "mapNearbyFires": "Fires Near Me",
+  "mapNearbyFires": "Thermal Detections Near Me",
   "mapNearbyFiresSubtitle": "Live detections closest to your location",
   "mapReport": "Report",
   "mapKmAway": "{distance} km away",
@@ -154,7 +154,7 @@
     "placeholders": { "distance": { "type": "String" } }
   },
 
-  "fireDetailTitle": "Fire Details",
+  "fireDetailTitle": "Detection Details",
   "fireDetailLastUpdate": "Last update: {time}",
   "@fireDetailLastUpdate": {
     "placeholders": { "time": { "type": "String" } }
@@ -194,7 +194,7 @@
   "notificationsScanNow": "Scan Now",
   "notificationsStartMonitoring": "Start Auto Monitoring",
   "notificationsStopMonitoring": "Stop Auto Monitoring",
-  "notificationsNearbyLiveFires": "Nearby Live Fires",
+  "notificationsNearbyLiveFires": "Nearby Thermal Detections",
   "notificationsNearbyLiveFiresSubtitle": "Points within 50 km of your location",
   "notificationsDistanceAndTime": "{distance} km away • {timeAgo}",
   "@notificationsDistanceAndTime": {
@@ -216,7 +216,7 @@
   "@notificationsUnreadCount": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "notificationsNoHighRisk": "No high-risk fire points right now.",
+  "notificationsNoHighRisk": "No high-confidence thermal anomalies right now.",
   "notificationsHighRiskDetectionTitle": "High-Risk Thermal Detection",
   "notificationsHighRiskDetectionBody": "{temp}K heat detected in the {region} region. High likelihood of an active fire.",
   "@notificationsHighRiskDetectionBody": {
@@ -238,7 +238,7 @@
   "watchlistEmptyTitle": "No saved events yet",
   "watchlistEmptySubtitle": "You can add one using the Save button on the fire details screen.",
   "watchlistSavedPoints": "Saved Points",
-  "watchlistSavedPointsSubtitle": "{count} fire points being tracked",
+  "watchlistSavedPointsSubtitle": "{count} thermal detections being tracked",
   "@watchlistSavedPointsSubtitle": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -650,8 +650,8 @@
   "fireRecommendedActionMedium": "Keep track of developments and avoid getting close to the area unnecessarily.",
   "fireRecommendedActionLow": "No urgent action needed right now — keep an eye on the area.",
 
-  "fireStatusActive": "Active Fire",
-  "fireStatusLikelyActive": "Likely Active",
+  "fireStatusActive": "Probable Fire",
+  "fireStatusLikelyActive": "High Thermal Anomaly",
   "fireStatusMonitoring": "Monitoring",
   "fireStatusHistorical": "Historical Detection",
 
@@ -659,7 +659,7 @@
   "@fireEventRegionTitle": {
     "placeholders": { "city": { "type": "String" } }
   },
-  "fireEventLiveDetectionTitle": "Live Fire Detection",
+  "fireEventLiveDetectionTitle": "Live Thermal Detection",
   "fireEventStatusActive": "Active",
   "fireEventStatusMonitoring": "Monitoring",
   "fireEventStatusControlled": "Under Control",
@@ -687,7 +687,7 @@
   "windDirectionSW": "Southwest",
   "windDirectionW": "West",
   "windDirectionNW": "Northwest",
-  "fireDetailFireRadiativePower": "Fire Power",
+  "fireDetailFireRadiativePower": "Fire Radiative Power (FRP)",
   "fireDetailFrpValue": "{frp} MW ({intensity})",
   "@fireDetailFrpValue": {
     "placeholders": {
@@ -815,12 +815,12 @@
   "monitorStatusLocationServiceOff": "Location service is off. Please turn it on.",
   "monitorStatusLocationDenied": "Location permission denied.",
   "monitorStatusFetchingData": "Fetching NASA FIRMS data...",
-  "monitorStatusNoActiveFires": "No active fire data found right now.",
-  "monitorStatusNoNearbyFires": "✅ No live fire detections within 50 km. ({count} points scanned)",
+  "monitorStatusNoActiveFires": "No thermal anomaly data found right now.",
+  "monitorStatusNoNearbyFires": "✅ No thermal detections within 50 km. ({count} points scanned)",
   "@monitorStatusNoNearbyFires": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "monitorStatusNearbyFiresFound": "⚠️ {count} fire points found within 50 km!",
+  "monitorStatusNearbyFiresFound": "⚠️ {count} thermal detections found within 50 km!",
   "@monitorStatusNearbyFiresFound": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -831,8 +831,8 @@
     "placeholders": { "error": { "type": "String" } }
   },
 
-  "notifNearbyFireTitle": "Fire detected nearby",
-  "notifNearbyFireBody": "{count} fire points found within {distance}.",
+  "notifNearbyFireTitle": "Thermal anomaly detected nearby",
+  "notifNearbyFireBody": "{count} thermal detections found within {distance}.",
   "@notifNearbyFireBody": {
     "placeholders": {
       "distance": { "type": "String" },
@@ -875,15 +875,15 @@
   "trustAspectInterpretTitle": "How to interpret it",
   "trustAspectActionTitle": "What should I do?",
 
-  "trustHomeMeaning": "Fire counts on this screen are active thermal detections from the last 24 hours, not confirmed wildfires — some may be agricultural burns or industrial heat sources.",
+  "trustHomeMeaning": "Counts are satellite thermal anomalies from the last 24 hours, not confirmed wildfires. Some may be agricultural burns, industrial heat, or hot surfaces.",
   "trustHomeSource": "Data comes from NASA FIRMS (Fire Information for Resource Management System), combining VIIRS and MODIS satellite passes, refreshed every 3 hours.",
-  "trustHomeInterpret": "A high fire count in a region doesn't always mean high danger — check the Risk tab for weather-adjusted risk scores before drawing conclusions.",
-  "trustHomeAction": "Tap any fire card for full details, or add it to your Watchlist to track updates. If you're near an active fire, check Notifications for real-time alerts.",
+  "trustHomeInterpret": "Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.",
+  "trustHomeAction": "Tap a detection for confidence, FRP, and limitations. If you see smoke or flames, follow official emergency guidance and report what you observe.",
 
-  "trustMapMeaning": "Each marker is a single satellite hotspot detection, not necessarily an active fire — the confidence level shown in fire details indicates how reliable the detection is.",
+  "trustMapMeaning": "Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.",
   "trustMapSource": "Fire data sourced from NASA FIRMS (VIIRS & MODIS satellites). Secondary verification via EFFIS (Copernicus Emergency Management Service) will be added when their API is restored.",
-  "trustMapInterpret": "Clustered numbers mean multiple detections are close together — zoom in to see individual points. Tighter clusters often indicate a larger, ongoing fire.",
-  "trustMapAction": "See a fire in person that isn't on the map? Use the Report button to alert others. Tap \"Nearby Fires\" to see what's close to your current location.",
+  "trustMapInterpret": "Clusters only mean multiple heat detections are close together. They do not by themselves confirm the cause or size of a fire.",
+  "trustMapAction": "Tap a marker to review confidence and FRP. If you personally observe a fire, use Report and follow official emergency instructions.",
 
   "trustRiskMeaning": "The risk score (0-100) estimates wildfire likelihood by combining temperature, humidity, wind speed, and dryness — it is a forecast, not a guarantee.",
   "trustRiskSource": "Weather data is pulled from live meteorological feeds; fire counts factor in recent NASA FIRMS detections for each region.",
@@ -895,15 +895,15 @@
   "trustNewsInterpret": "A \"Breaking\" badge means the article was published very recently — always check the publish time, as wildfire situations can change quickly.",
   "trustNewsAction": "Use the Translate button to read non-English articles, or tap \"Related Fires\" on a story to jump directly to that location on the map.",
 
-  "trustAlertsMeaning": "Alerts notify you when a satellite detects a fire within 50km of your last known location — they are automated and based on detection data, not verified reports.",
+  "trustAlertsMeaning": "Alerts notify you when a satellite detects a thermal anomaly within 50 km. They are automated, not verified incident reports.",
   "trustAlertsSource": "Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device's last known location.",
-  "trustAlertsInterpret": "\"High confidence\" alerts are more reliable than \"nominal\" ones — check the risk reason text on each card for the specific factors driving that alert.",
+  "trustAlertsInterpret": "Confidence describes confidence in a heat anomaly, not certainty that it is a fire. Check FRP and brightness together.",
   "trustAlertsAction": "Grant notification permission and start Auto Monitoring to get alerts even when the app is closed. Use \"Scan Now\" anytime to manually check your surroundings.",
   "newsReadFullArticle": "Read Full Article",
 
-  "smartIntensityIntense": "An intense, high-severity fire was detected near {location}.",
+  "smartIntensityIntense": "An intense thermal anomaly was detected near {location}.",
   "@smartIntensityIntense": { "placeholders": { "location": { "type": "String" } } },
-  "smartIntensityHigh": "A high-intensity, active fire was detected near {location}.",
+  "smartIntensityHigh": "A high-intensity thermal anomaly was detected near {location}.",
   "@smartIntensityHigh": { "placeholders": { "location": { "type": "String" } } },
   "smartIntensityModerate": "Moderate thermal activity was detected near {location}.",
   "@smartIntensityModerate": { "placeholders": { "location": { "type": "String" } } },
@@ -923,8 +923,8 @@
   "smartAreaMedium": "Estimated fire area is medium-sized (~{hectares} hectares).",
   "@smartAreaMedium": { "placeholders": { "hectares": { "type": "int" } } },
 
-  "smartConfidenceHigh": "NASA's satellite is highly confident this is a real fire.",
-  "smartConfidenceMedium": "Likely a fire — verification is recommended.",
+  "smartConfidenceHigh": "NASA has high confidence this is a real thermal anomaly; its cause is not confirmed.",
+  "smartConfidenceMedium": "NASA reports nominal confidence in this thermal anomaly; verification is recommended.",
   "smartConfidenceLow": "A possible thermal anomaly — could be industrial heat or reflection, verification needed.",
 
   "smartSpreadDangerous": "Low humidity and strong winds in the region create dangerous spread conditions.",
@@ -946,13 +946,13 @@
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
   "tooltipTempTitle": "Temperature",
-  "tooltipTempBody": "Satellite-measured surface temperature. Normal ground: 25-35°C. 50°C+ is a heat anomaly. 100°C+ indicates an active fire.",
+  "tooltipTempBody": "Satellite-measured brightness temperature. High values indicate a strong heat source but do not alone confirm a fire.",
   "tooltipConfidenceTitle": "What Does Confidence Mean?",
   "tooltipSatelliteTitle": "What Does Satellite Mean?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.",
   "tooltipSatelliteModisBody": "MODIS: Terra/Aqua satellite, provides wider coverage.",
-  "tooltipSatelliteMergedBody": "This fire was independently confirmed by more than one satellite instrument within the same time and location window — higher confidence than a single detection.",
-  "fireCardMultiSourceBadge": "Multi-source confirmed",
+  "tooltipSatelliteMergedBody": "This anomaly was detected by multiple satellite instruments in the same time and location window. This strengthens the detection, but does not confirm its cause.",
+  "fireCardMultiSourceBadge": "Multi-source detection",
 
   "reportPanelDuplicateLocationBlocked": "A report has already been sent from this location. Please wait for authorities to respond.",
   "reportPanelDailyLimitReached": "You've reached today's report limit (max 5 per day). Please try again tomorrow.",
@@ -1023,6 +1023,6 @@
   "feedbackBug": "Bug Report", "feedbackFeature": "Feature Request", "feedbackGeneral": "General Feedback",
   "feedbackMessage": "Message", "feedbackEmail": "Email (optional)", "feedbackSubmit": "Send",
   "feedbackSuccess": "Thank you! Your feedback was sent.", "feedbackError": "Feedback could not be sent. Please try again.",
-  "feedbackMessageRequired": "Please enter a message.", "ratingPromptTitle": "Enjoying FireWatch TR?",
+  "feedbackMessageRequired": "Please enter a message.", "feedbackRatingRequired": "Please select a rating from 1 to 5.", "ratingPromptTitle": "Enjoying FireWatch TR?",
   "ratingPromptMessage": "You have been using the app for a few days. Would you like to share your feedback?", "ratingPromptLater": "Later"
 }

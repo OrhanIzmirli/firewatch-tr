@@ -276,7 +276,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 runSpacing: AppSpacing.sm,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.local_fire_department_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                  StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
                   StatusChip(
                     label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
                     color: fireStatusColor(point.smartStatus),
@@ -804,7 +804,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 runSpacing: AppSpacing.xs,
                                 alignment: WrapAlignment.end,
                                 children: [
-                                  StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                                  StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
                                   StatusChip(
                                     label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
                                     color: fireStatusColor(point.smartStatus),

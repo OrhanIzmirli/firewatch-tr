@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeaderTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye Yangın Takibi'**
+  /// **'Türkiye Termal Anomali Takibi'**
   String get homeHeaderTitle;
 
   /// No description provided for @homeHeaderSubtitle.
@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewUniqueCount.
   ///
   /// In tr, this message translates to:
-  /// **'{count} benzersiz yangın noktası tespit edildi'**
+  /// **'{count} benzersiz termal anomali konumu tespit edildi'**
   String homeOverviewUniqueCount(int count);
 
   /// No description provided for @homeTotalPoints.
@@ -467,7 +467,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewActiveFiresTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif Yangın Noktaları'**
+  /// **'Güncel Termal Anomaliler'**
   String get homeOverviewActiveFiresTitle;
 
   /// No description provided for @homeOverviewActiveFiresSubtitle.
@@ -497,19 +497,19 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewNearbyTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakın Yangın Uyarısı'**
+  /// **'Yakındaki Termal Tespitler'**
   String get homeOverviewNearbyTitle;
 
   /// No description provided for @homeOverviewNearbyValueWithLocation.
   ///
   /// In tr, this message translates to:
-  /// **'{count} yangın 100km içinde'**
+  /// **'100 km içinde {count} tespit'**
   String homeOverviewNearbyValueWithLocation(int count);
 
   /// No description provided for @homeOverviewNearbyValueNationwide.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye genelinde {count} yangın'**
+  /// **'Türkiye genelinde {count} tespit'**
   String homeOverviewNearbyValueNationwide(int count);
 
   /// No description provided for @homeOverviewNearbySubtitleLocated.
@@ -611,7 +611,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNoActiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif yangın noktası bulunamadı.'**
+  /// **'Güncel termal anomali bulunamadı.'**
   String get homeNoActiveFires;
 
   /// No description provided for @homeFireRegionTitle.
@@ -659,7 +659,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın Haritası'**
+  /// **'Termal Anomali Haritası'**
   String get mapTitle;
 
   /// No description provided for @mapLiveMap.
@@ -671,7 +671,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapConfidenceFilterActive.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor'**
+  /// **'Yalnızca yüksek/nominal güvenilirlikli tespitler gösteriliyor'**
   String get mapConfidenceFilterActive;
 
   /// No description provided for @mapConfidenceFilterClear.
@@ -683,7 +683,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapHeaderTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye Geneli Yangın Görünümü'**
+  /// **'Türkiye Geneli Termal Anomali Görünümü'**
   String get mapHeaderTitle;
 
   /// No description provided for @mapHeaderSubtitle.
@@ -713,7 +713,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapNearbyFires.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınımdaki Yangınlar'**
+  /// **'Yakınımdaki Termal Tespitler'**
   String get mapNearbyFires;
 
   /// No description provided for @mapNearbyFiresSubtitle.
@@ -737,7 +737,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireDetailTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın Detayı'**
+  /// **'Tespit Detayı'**
   String get fireDetailTitle;
 
   /// No description provided for @fireDetailLastUpdate.
@@ -935,7 +935,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsNearbyLiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Yakındaki Canlı Yangınlar'**
+  /// **'Yakındaki Termal Tespitler'**
   String get notificationsNearbyLiveFires;
 
   /// No description provided for @notificationsNearbyLiveFiresSubtitle.
@@ -977,7 +977,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsNoHighRisk.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an yüksek riskli yangın noktası bulunmuyor.'**
+  /// **'Şu an yüksek güvenilirlikli termal anomali bulunmuyor.'**
   String get notificationsNoHighRisk;
 
   /// No description provided for @notificationsHighRiskDetectionTitle.
@@ -1049,7 +1049,7 @@ abstract class AppLocalizations {
   /// No description provided for @watchlistSavedPointsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'{count} yangın noktası takipte'**
+  /// **'{count} termal tespit takipte'**
   String watchlistSavedPointsSubtitle(int count);
 
   /// No description provided for @watchlistSyncingTitle.
@@ -2884,13 +2884,13 @@ abstract class AppLocalizations {
   /// No description provided for @fireStatusActive.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif Yangın'**
+  /// **'Muhtemel Yangın'**
   String get fireStatusActive;
 
   /// No description provided for @fireStatusLikelyActive.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemelen Aktif'**
+  /// **'Yüksek Isı Anomalisi'**
   String get fireStatusLikelyActive;
 
   /// No description provided for @fireStatusMonitoring.
@@ -2914,7 +2914,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireEventLiveDetectionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Yangın Tespiti'**
+  /// **'Canlı Termal Tespit'**
   String get fireEventLiveDetectionTitle;
 
   /// No description provided for @fireEventStatusActive.
@@ -3028,7 +3028,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireDetailFireRadiativePower.
   ///
   /// In tr, this message translates to:
-  /// **'Ateş Gücü'**
+  /// **'Yangın Işıma Gücü (FRP)'**
   String get fireDetailFireRadiativePower;
 
   /// No description provided for @fireDetailFrpValue.
@@ -3425,19 +3425,19 @@ abstract class AppLocalizations {
   /// No description provided for @monitorStatusNoActiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an aktif yangın verisi bulunamadı.'**
+  /// **'Şu an termal anomali verisi bulunamadı.'**
   String get monitorStatusNoActiveFires;
 
   /// No description provided for @monitorStatusNoNearbyFires.
   ///
   /// In tr, this message translates to:
-  /// **'✅ 50 km içinde canlı yangın tespiti yok. ({count} nokta tarandı)'**
+  /// **'✅ 50 km içinde termal tespit yok. ({count} nokta tarandı)'**
   String monitorStatusNoNearbyFires(int count);
 
   /// No description provided for @monitorStatusNearbyFiresFound.
   ///
   /// In tr, this message translates to:
-  /// **'⚠️ 50 km içinde {count} yangın noktası bulundu!'**
+  /// **'⚠️ 50 km içinde {count} termal tespit bulundu!'**
   String monitorStatusNearbyFiresFound(int count);
 
   /// No description provided for @monitorStatusTimeout.
@@ -3461,13 +3461,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifNearbyFireTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınında yangın tespiti var'**
+  /// **'Yakınında termal anomali tespit edildi'**
   String get notifNearbyFireTitle;
 
   /// No description provided for @notifNearbyFireBody.
   ///
   /// In tr, this message translates to:
-  /// **'{distance} içinde {count} yangın noktası bulundu.'**
+  /// **'{distance} içinde {count} termal tespit bulundu.'**
   String notifNearbyFireBody(String distance, int count);
 
   /// No description provided for @notifTestBody.
@@ -3647,7 +3647,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Bu ekrandaki yangın sayıları, son 24 saatte tespit edilen aktif ısı anomalileridir; doğrulanmış orman yangını değildir — bazıları tarımsal yakma veya endüstriyel ısı kaynakları olabilir.'**
+  /// **'Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.'**
   String get trustHomeMeaning;
 
   /// No description provided for @trustHomeSource.
@@ -3659,19 +3659,19 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Bir bölgedeki yüksek yangın sayısı her zaman yüksek tehlike anlamına gelmez — sonuca varmadan önce hava durumuna göre ayarlanmış risk puanları için Risk sekmesini kontrol edin.'**
+  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.'**
   String get trustHomeInterpret;
 
   /// No description provided for @trustHomeAction.
   ///
   /// In tr, this message translates to:
-  /// **'Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler\'i kontrol edin.'**
+  /// **'Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.'**
   String get trustHomeAction;
 
   /// No description provided for @trustMapMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.'**
+  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
   String get trustMapMeaning;
 
   /// No description provided for @trustMapSource.
@@ -3683,13 +3683,13 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.'**
+  /// **'Kümeler yalnızca birbirine yakın birden fazla ısı tespiti olduğunu gösterir; yangının nedenini veya büyüklüğünü doğrulamaz.'**
   String get trustMapInterpret;
 
   /// No description provided for @trustMapAction.
   ///
   /// In tr, this message translates to:
-  /// **'Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.'**
+  /// **'Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et\'i kullanın ve resmi talimatları izleyin.'**
   String get trustMapAction;
 
   /// No description provided for @trustRiskMeaning.
@@ -3743,7 +3743,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Uyarılar, uydu son bilinen konumunuzun 50 km içinde bir yangın tespit ettiğinde sizi bilgilendirir — bunlar otomatiktir ve doğrulanmış raporlara değil tespit verilerine dayanır.'**
+  /// **'Uyarılar, uydu 50 km içinde termal anomali tespit ettiğinde bildirim gönderir. Bunlar otomatik tespitlerdir, doğrulanmış olay raporları değildir.'**
   String get trustAlertsMeaning;
 
   /// No description provided for @trustAlertsSource.
@@ -3755,7 +3755,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'\"Yüksek güven\" uyarıları \"nominal\" olanlardan daha güvenilirdir — o uyarıyı tetikleyen belirli faktörler için her karttaki risk nedeni metnini kontrol edin.'**
+  /// **'Güvenilirlik ısı anomalisine duyulan güveni anlatır; yangın kesinliği değildir. FRP ve parlaklığı birlikte değerlendirin.'**
   String get trustAlertsInterpret;
 
   /// No description provided for @trustAlertsAction.
@@ -3773,13 +3773,13 @@ abstract class AppLocalizations {
   /// No description provided for @smartIntensityIntense.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında yoğun ve şiddetli bir yangın tespit edildi.'**
+  /// **'{location} yakınında yoğun bir termal anomali tespit edildi.'**
   String smartIntensityIntense(String location);
 
   /// No description provided for @smartIntensityHigh.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.'**
+  /// **'{location} yakınında yüksek yoğunluklu bir termal anomali tespit edildi.'**
   String smartIntensityHigh(String location);
 
   /// No description provided for @smartIntensityModerate.
@@ -3851,7 +3851,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartConfidenceMedium.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemelen bir yangın, doğrulama öneriliyor.'**
+  /// **'NASA bu termal anomaliyi nominal güvenilirlikte bildiriyor; doğrulama önerilir.'**
   String get smartConfidenceMedium;
 
   /// No description provided for @smartConfidenceLow.
@@ -3911,7 +3911,7 @@ abstract class AppLocalizations {
   /// No description provided for @tooltipTempBody.
   ///
   /// In tr, this message translates to:
-  /// **'Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.'**
+  /// **'Uydu tarafından ölçülen parlaklık sıcaklığıdır. Yüksek değer güçlü bir ısı kaynağıdır ancak tek başına yangını doğrulamaz.'**
   String get tooltipTempBody;
 
   /// No description provided for @tooltipConfidenceTitle.
@@ -3941,13 +3941,13 @@ abstract class AppLocalizations {
   /// No description provided for @tooltipSatelliteMergedBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.'**
+  /// **'Bu anomali aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından tespit edildi. Tespiti güçlendirir ancak nedenini doğrulamaz.'**
   String get tooltipSatelliteMergedBody;
 
   /// No description provided for @fireCardMultiSourceBadge.
   ///
   /// In tr, this message translates to:
-  /// **'Çoklu kaynakla doğrulandı'**
+  /// **'Çoklu kaynak tespiti'**
   String get fireCardMultiSourceBadge;
 
   /// No description provided for @reportPanelDuplicateLocationBlocked.
@@ -4339,6 +4339,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Lütfen bir mesaj yazın.'**
   String get feedbackMessageRequired;
+
+  /// No description provided for @feedbackRatingRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen 1 ile 5 arasında bir puan seçin.'**
+  String get feedbackRatingRequired;
 
   /// No description provided for @ratingPromptTitle.
   ///

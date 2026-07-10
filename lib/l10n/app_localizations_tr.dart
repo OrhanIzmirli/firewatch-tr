@@ -162,7 +162,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeLiveSummary => 'Canlı Durum Özeti';
 
   @override
-  String get homeHeaderTitle => 'Türkiye Yangın Takibi';
+  String get homeHeaderTitle => 'Türkiye Termal Anomali Takibi';
 
   @override
   String get homeHeaderSubtitle =>
@@ -193,7 +193,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String homeOverviewUniqueCount(int count) {
-    return '$count benzersiz yangın noktası tespit edildi';
+    return '$count benzersiz termal anomali konumu tespit edildi';
   }
 
   @override
@@ -206,7 +206,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeNominal => 'Normal';
 
   @override
-  String get homeOverviewActiveFiresTitle => 'Aktif Yangın Noktaları';
+  String get homeOverviewActiveFiresTitle => 'Güncel Termal Anomaliler';
 
   @override
   String get homeOverviewActiveFiresSubtitle => 'Son 24 saatte tespit edildi';
@@ -224,16 +224,16 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an Türkiye\'deki en yüksek risk';
 
   @override
-  String get homeOverviewNearbyTitle => 'Yakın Yangın Uyarısı';
+  String get homeOverviewNearbyTitle => 'Yakındaki Termal Tespitler';
 
   @override
   String homeOverviewNearbyValueWithLocation(int count) {
-    return '$count yangın 100km içinde';
+    return '100 km içinde $count tespit';
   }
 
   @override
   String homeOverviewNearbyValueNationwide(int count) {
-    return 'Türkiye genelinde $count yangın';
+    return 'Türkiye genelinde $count tespit';
   }
 
   @override
@@ -292,7 +292,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeSearchHint => 'Şehir veya bölge ara...';
 
   @override
-  String get homeNoActiveFires => 'Aktif yangın noktası bulunamadı.';
+  String get homeNoActiveFires => 'Güncel termal anomali bulunamadı.';
 
   @override
   String homeFireRegionTitle(String region) {
@@ -318,20 +318,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapFetchError => 'Yangın verileri alınamadı.';
 
   @override
-  String get mapTitle => 'Yangın Haritası';
+  String get mapTitle => 'Termal Anomali Haritası';
 
   @override
   String get mapLiveMap => 'Canlı Harita';
 
   @override
   String get mapConfidenceFilterActive =>
-      'Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor';
+      'Yalnızca yüksek/nominal güvenilirlikli tespitler gösteriliyor';
 
   @override
   String get mapConfidenceFilterClear => 'Temizle';
 
   @override
-  String get mapHeaderTitle => 'Türkiye Geneli Yangın Görünümü';
+  String get mapHeaderTitle => 'Türkiye Geneli Termal Anomali Görünümü';
 
   @override
   String get mapHeaderSubtitle =>
@@ -347,7 +347,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapGoToMe => 'Bana Git';
 
   @override
-  String get mapNearbyFires => 'Yakınımdaki Yangınlar';
+  String get mapNearbyFires => 'Yakınımdaki Termal Tespitler';
 
   @override
   String get mapNearbyFiresSubtitle => 'Konumuna en yakın canlı tespitler';
@@ -361,7 +361,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get fireDetailTitle => 'Yangın Detayı';
+  String get fireDetailTitle => 'Tespit Detayı';
 
   @override
   String fireDetailLastUpdate(String time) {
@@ -467,7 +467,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationsStopMonitoring => 'Otomatik Taramayı Durdur';
 
   @override
-  String get notificationsNearbyLiveFires => 'Yakındaki Canlı Yangınlar';
+  String get notificationsNearbyLiveFires => 'Yakındaki Termal Tespitler';
 
   @override
   String get notificationsNearbyLiveFiresSubtitle =>
@@ -498,7 +498,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsNoHighRisk =>
-      'Şu an yüksek riskli yangın noktası bulunmuyor.';
+      'Şu an yüksek güvenilirlikli termal anomali bulunmuyor.';
 
   @override
   String get notificationsHighRiskDetectionTitle =>
@@ -542,7 +542,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String watchlistSavedPointsSubtitle(int count) {
-    return '$count yangın noktası takipte';
+    return '$count termal tespit takipte';
   }
 
   @override
@@ -1592,10 +1592,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
 
   @override
-  String get fireStatusActive => 'Aktif Yangın';
+  String get fireStatusActive => 'Muhtemel Yangın';
 
   @override
-  String get fireStatusLikelyActive => 'Muhtemelen Aktif';
+  String get fireStatusLikelyActive => 'Yüksek Isı Anomalisi';
 
   @override
   String get fireStatusMonitoring => 'İzleniyor';
@@ -1609,7 +1609,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get fireEventLiveDetectionTitle => 'Canlı Yangın Tespiti';
+  String get fireEventLiveDetectionTitle => 'Canlı Termal Tespit';
 
   @override
   String get fireEventStatusActive => 'Aktif';
@@ -1670,7 +1670,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get windDirectionNW => 'Kuzeybatı';
 
   @override
-  String get fireDetailFireRadiativePower => 'Ateş Gücü';
+  String get fireDetailFireRadiativePower => 'Yangın Işıma Gücü (FRP)';
 
   @override
   String fireDetailFrpValue(String frp, String intensity) {
@@ -1906,16 +1906,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get monitorStatusNoActiveFires =>
-      'Şu an aktif yangın verisi bulunamadı.';
+      'Şu an termal anomali verisi bulunamadı.';
 
   @override
   String monitorStatusNoNearbyFires(int count) {
-    return '✅ 50 km içinde canlı yangın tespiti yok. ($count nokta tarandı)';
+    return '✅ 50 km içinde termal tespit yok. ($count nokta tarandı)';
   }
 
   @override
   String monitorStatusNearbyFiresFound(int count) {
-    return '⚠️ 50 km içinde $count yangın noktası bulundu!';
+    return '⚠️ 50 km içinde $count termal tespit bulundu!';
   }
 
   @override
@@ -1932,11 +1932,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get notifNearbyFireTitle => 'Yakınında yangın tespiti var';
+  String get notifNearbyFireTitle => 'Yakınında termal anomali tespit edildi';
 
   @override
   String notifNearbyFireBody(String distance, int count) {
-    return '$distance içinde $count yangın noktası bulundu.';
+    return '$distance içinde $count termal tespit bulundu.';
   }
 
   @override
@@ -2039,7 +2039,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeMeaning =>
-      'Bu ekrandaki yangın sayıları, son 24 saatte tespit edilen aktif ısı anomalileridir; doğrulanmış orman yangını değildir — bazıları tarımsal yakma veya endüstriyel ısı kaynakları olabilir.';
+      'Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.';
 
   @override
   String get trustHomeSource =>
@@ -2047,15 +2047,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'Bir bölgedeki yüksek yangın sayısı her zaman yüksek tehlike anlamına gelmez — sonuca varmadan önce hava durumuna göre ayarlanmış risk puanları için Risk sekmesini kontrol edin.';
+      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.';
 
   @override
   String get trustHomeAction =>
-      'Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler\'i kontrol edin.';
+      'Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.';
 
   @override
   String get trustMapMeaning =>
-      'Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.';
+      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
 
   @override
   String get trustMapSource =>
@@ -2063,11 +2063,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapInterpret =>
-      'Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.';
+      'Kümeler yalnızca birbirine yakın birden fazla ısı tespiti olduğunu gösterir; yangının nedenini veya büyüklüğünü doğrulamaz.';
 
   @override
   String get trustMapAction =>
-      'Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.';
+      'Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et\'i kullanın ve resmi talimatları izleyin.';
 
   @override
   String get trustRiskMeaning =>
@@ -2103,7 +2103,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsMeaning =>
-      'Uyarılar, uydu son bilinen konumunuzun 50 km içinde bir yangın tespit ettiğinde sizi bilgilendirir — bunlar otomatiktir ve doğrulanmış raporlara değil tespit verilerine dayanır.';
+      'Uyarılar, uydu 50 km içinde termal anomali tespit ettiğinde bildirim gönderir. Bunlar otomatik tespitlerdir, doğrulanmış olay raporları değildir.';
 
   @override
   String get trustAlertsSource =>
@@ -2111,7 +2111,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsInterpret =>
-      '\"Yüksek güven\" uyarıları \"nominal\" olanlardan daha güvenilirdir — o uyarıyı tetikleyen belirli faktörler için her karttaki risk nedeni metnini kontrol edin.';
+      'Güvenilirlik ısı anomalisine duyulan güveni anlatır; yangın kesinliği değildir. FRP ve parlaklığı birlikte değerlendirin.';
 
   @override
   String get trustAlertsAction =>
@@ -2122,12 +2122,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String smartIntensityIntense(String location) {
-    return '$location yakınında yoğun ve şiddetli bir yangın tespit edildi.';
+    return '$location yakınında yoğun bir termal anomali tespit edildi.';
   }
 
   @override
   String smartIntensityHigh(String location) {
-    return '$location yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.';
+    return '$location yakınında yüksek yoğunluklu bir termal anomali tespit edildi.';
   }
 
   @override
@@ -2179,7 +2179,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get smartConfidenceMedium =>
-      'Muhtemelen bir yangın, doğrulama öneriliyor.';
+      'NASA bu termal anomaliyi nominal güvenilirlikte bildiriyor; doğrulama önerilir.';
 
   @override
   String get smartConfidenceLow =>
@@ -2221,7 +2221,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tooltipTempBody =>
-      'Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.';
+      'Uydu tarafından ölçülen parlaklık sıcaklığıdır. Yüksek değer güçlü bir ısı kaynağıdır ancak tek başına yangını doğrulamaz.';
 
   @override
   String get tooltipConfidenceTitle => 'Güven Seviyesi Ne Anlama Gelir?';
@@ -2239,10 +2239,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tooltipSatelliteMergedBody =>
-      'Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.';
+      'Bu anomali aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından tespit edildi. Tespiti güçlendirir ancak nedenini doğrulamaz.';
 
   @override
-  String get fireCardMultiSourceBadge => 'Çoklu kaynakla doğrulandı';
+  String get fireCardMultiSourceBadge => 'Çoklu kaynak tespiti';
 
   @override
   String get reportPanelDuplicateLocationBlocked =>
@@ -2469,6 +2469,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get feedbackMessageRequired => 'Lütfen bir mesaj yazın.';
+
+  @override
+  String get feedbackRatingRequired =>
+      'Lütfen 1 ile 5 arasında bir puan seçin.';
 
   @override
   String get ratingPromptTitle => 'FireWatch TR\'yi beğendiniz mi?';

@@ -251,7 +251,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                     style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor),
                                   ),
                                 ),
-                                StatusChip(label: point.riskLevelLabel(l10n), icon: Icons.warning_amber_rounded, color: AppColors.forRiskTier(point.riskTier)),
+                                StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
                               ],
                             ),
                             const SizedBox(height: AppSpacing.xs),

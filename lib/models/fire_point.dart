@@ -374,7 +374,7 @@ class FirePoint {
     final hours = DateTime.now().toUtc().difference(detectedAt).inHours;
     if (hours < 0 || hours >= 12) return FireStatus.historical;
 
-    if (hours < 1 && riskTier == 'high' && frp > 50) return FireStatus.active;
+    if (hours < 1 && isProbableFire) return FireStatus.active;
     if (hours < 3 && riskTier == 'high') return FireStatus.likelyActive;
     if (riskTier == 'medium') return FireStatus.monitoring;
     return FireStatus.historical;

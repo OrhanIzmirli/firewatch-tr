@@ -162,7 +162,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLiveSummary => 'Live Status Summary';
 
   @override
-  String get homeHeaderTitle => 'Turkey Wildfire Tracking';
+  String get homeHeaderTitle => 'Turkey Thermal Anomaly Tracking';
 
   @override
   String get homeHeaderSubtitle =>
@@ -193,7 +193,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeOverviewUniqueCount(int count) {
-    return '$count unique fire locations detected';
+    return '$count unique thermal anomaly locations detected';
   }
 
   @override
@@ -206,7 +206,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNominal => 'Nominal';
 
   @override
-  String get homeOverviewActiveFiresTitle => 'Active Fire Points';
+  String get homeOverviewActiveFiresTitle => 'Recent Thermal Anomalies';
 
   @override
   String get homeOverviewActiveFiresSubtitle => 'Detected in last 24 hours';
@@ -224,16 +224,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Highest risk in Turkey right now';
 
   @override
-  String get homeOverviewNearbyTitle => 'Nearby Fire Alert';
+  String get homeOverviewNearbyTitle => 'Nearby Thermal Detections';
 
   @override
   String homeOverviewNearbyValueWithLocation(int count) {
-    return '$count fires within 100km';
+    return '$count detections within 100km';
   }
 
   @override
   String homeOverviewNearbyValueNationwide(int count) {
-    return '$count fires nationwide';
+    return '$count detections nationwide';
   }
 
   @override
@@ -292,7 +292,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSearchHint => 'Search city or region...';
 
   @override
-  String get homeNoActiveFires => 'No active fire points found.';
+  String get homeNoActiveFires => 'No recent thermal anomalies found.';
 
   @override
   String homeFireRegionTitle(String region) {
@@ -318,20 +318,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapFetchError => 'Could not fetch fire data.';
 
   @override
-  String get mapTitle => 'Fire Map';
+  String get mapTitle => 'Thermal Anomaly Map';
 
   @override
   String get mapLiveMap => 'Live Map';
 
   @override
   String get mapConfidenceFilterActive =>
-      'Showing only high/nominal confidence fires';
+      'Showing only high/nominal confidence detections';
 
   @override
   String get mapConfidenceFilterClear => 'Clear';
 
   @override
-  String get mapHeaderTitle => 'Turkey-wide Wildfire View';
+  String get mapHeaderTitle => 'Turkey-wide Thermal Anomaly View';
 
   @override
   String get mapHeaderSubtitle =>
@@ -347,7 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapGoToMe => 'Go to Me';
 
   @override
-  String get mapNearbyFires => 'Fires Near Me';
+  String get mapNearbyFires => 'Thermal Detections Near Me';
 
   @override
   String get mapNearbyFiresSubtitle =>
@@ -362,7 +362,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get fireDetailTitle => 'Fire Details';
+  String get fireDetailTitle => 'Detection Details';
 
   @override
   String fireDetailLastUpdate(String time) {
@@ -469,7 +469,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsStopMonitoring => 'Stop Auto Monitoring';
 
   @override
-  String get notificationsNearbyLiveFires => 'Nearby Live Fires';
+  String get notificationsNearbyLiveFires => 'Nearby Thermal Detections';
 
   @override
   String get notificationsNearbyLiveFiresSubtitle =>
@@ -499,7 +499,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notificationsNoHighRisk => 'No high-risk fire points right now.';
+  String get notificationsNoHighRisk =>
+      'No high-confidence thermal anomalies right now.';
 
   @override
   String get notificationsHighRiskDetectionTitle =>
@@ -543,7 +544,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String watchlistSavedPointsSubtitle(int count) {
-    return '$count fire points being tracked';
+    return '$count thermal detections being tracked';
   }
 
   @override
@@ -1595,10 +1596,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'No urgent action needed right now — keep an eye on the area.';
 
   @override
-  String get fireStatusActive => 'Active Fire';
+  String get fireStatusActive => 'Probable Fire';
 
   @override
-  String get fireStatusLikelyActive => 'Likely Active';
+  String get fireStatusLikelyActive => 'High Thermal Anomaly';
 
   @override
   String get fireStatusMonitoring => 'Monitoring';
@@ -1612,7 +1613,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get fireEventLiveDetectionTitle => 'Live Fire Detection';
+  String get fireEventLiveDetectionTitle => 'Live Thermal Detection';
 
   @override
   String get fireEventStatusActive => 'Active';
@@ -1673,7 +1674,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get windDirectionNW => 'Northwest';
 
   @override
-  String get fireDetailFireRadiativePower => 'Fire Power';
+  String get fireDetailFireRadiativePower => 'Fire Radiative Power (FRP)';
 
   @override
   String fireDetailFrpValue(String frp, String intensity) {
@@ -1911,16 +1912,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get monitorStatusNoActiveFires =>
-      'No active fire data found right now.';
+      'No thermal anomaly data found right now.';
 
   @override
   String monitorStatusNoNearbyFires(int count) {
-    return '✅ No live fire detections within 50 km. ($count points scanned)';
+    return '✅ No thermal detections within 50 km. ($count points scanned)';
   }
 
   @override
   String monitorStatusNearbyFiresFound(int count) {
-    return '⚠️ $count fire points found within 50 km!';
+    return '⚠️ $count thermal detections found within 50 km!';
   }
 
   @override
@@ -1937,11 +1938,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notifNearbyFireTitle => 'Fire detected nearby';
+  String get notifNearbyFireTitle => 'Thermal anomaly detected nearby';
 
   @override
   String notifNearbyFireBody(String distance, int count) {
-    return '$count fire points found within $distance.';
+    return '$count thermal detections found within $distance.';
   }
 
   @override
@@ -2043,7 +2044,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeMeaning =>
-      'Fire counts on this screen are active thermal detections from the last 24 hours, not confirmed wildfires — some may be agricultural burns or industrial heat sources.';
+      'Counts are satellite thermal anomalies from the last 24 hours, not confirmed wildfires. Some may be agricultural burns, industrial heat, or hot surfaces.';
 
   @override
   String get trustHomeSource =>
@@ -2051,15 +2052,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'A high fire count in a region doesn\'t always mean high danger — check the Risk tab for weather-adjusted risk scores before drawing conclusions.';
+      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.';
 
   @override
   String get trustHomeAction =>
-      'Tap any fire card for full details, or add it to your Watchlist to track updates. If you\'re near an active fire, check Notifications for real-time alerts.';
+      'Tap a detection for confidence, FRP, and limitations. If you see smoke or flames, follow official emergency guidance and report what you observe.';
 
   @override
   String get trustMapMeaning =>
-      'Each marker is a single satellite hotspot detection, not necessarily an active fire — the confidence level shown in fire details indicates how reliable the detection is.';
+      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.';
 
   @override
   String get trustMapSource =>
@@ -2067,11 +2068,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustMapInterpret =>
-      'Clustered numbers mean multiple detections are close together — zoom in to see individual points. Tighter clusters often indicate a larger, ongoing fire.';
+      'Clusters only mean multiple heat detections are close together. They do not by themselves confirm the cause or size of a fire.';
 
   @override
   String get trustMapAction =>
-      'See a fire in person that isn\'t on the map? Use the Report button to alert others. Tap \"Nearby Fires\" to see what\'s close to your current location.';
+      'Tap a marker to review confidence and FRP. If you personally observe a fire, use Report and follow official emergency instructions.';
 
   @override
   String get trustRiskMeaning =>
@@ -2107,7 +2108,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsMeaning =>
-      'Alerts notify you when a satellite detects a fire within 50km of your last known location — they are automated and based on detection data, not verified reports.';
+      'Alerts notify you when a satellite detects a thermal anomaly within 50 km. They are automated, not verified incident reports.';
 
   @override
   String get trustAlertsSource =>
@@ -2115,7 +2116,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsInterpret =>
-      '\"High confidence\" alerts are more reliable than \"nominal\" ones — check the risk reason text on each card for the specific factors driving that alert.';
+      'Confidence describes confidence in a heat anomaly, not certainty that it is a fire. Check FRP and brightness together.';
 
   @override
   String get trustAlertsAction =>
@@ -2126,12 +2127,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String smartIntensityIntense(String location) {
-    return 'An intense, high-severity fire was detected near $location.';
+    return 'An intense thermal anomaly was detected near $location.';
   }
 
   @override
   String smartIntensityHigh(String location) {
-    return 'A high-intensity, active fire was detected near $location.';
+    return 'A high-intensity thermal anomaly was detected near $location.';
   }
 
   @override
@@ -2179,11 +2180,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartConfidenceHigh =>
-      'NASA\'s satellite is highly confident this is a real fire.';
+      'NASA has high confidence this is a real thermal anomaly; its cause is not confirmed.';
 
   @override
   String get smartConfidenceMedium =>
-      'Likely a fire — verification is recommended.';
+      'NASA reports nominal confidence in this thermal anomaly; verification is recommended.';
 
   @override
   String get smartConfidenceLow =>
@@ -2225,7 +2226,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tooltipTempBody =>
-      'Satellite-measured surface temperature. Normal ground: 25-35°C. 50°C+ is a heat anomaly. 100°C+ indicates an active fire.';
+      'Satellite-measured brightness temperature. High values indicate a strong heat source but do not alone confirm a fire.';
 
   @override
   String get tooltipConfidenceTitle => 'What Does Confidence Mean?';
@@ -2243,10 +2244,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tooltipSatelliteMergedBody =>
-      'This fire was independently confirmed by more than one satellite instrument within the same time and location window — higher confidence than a single detection.';
+      'This anomaly was detected by multiple satellite instruments in the same time and location window. This strengthens the detection, but does not confirm its cause.';
 
   @override
-  String get fireCardMultiSourceBadge => 'Multi-source confirmed';
+  String get fireCardMultiSourceBadge => 'Multi-source detection';
 
   @override
   String get reportPanelDuplicateLocationBlocked =>
@@ -2472,6 +2473,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feedbackMessageRequired => 'Please enter a message.';
+
+  @override
+  String get feedbackRatingRequired => 'Please select a rating from 1 to 5.';
 
   @override
   String get ratingPromptTitle => 'Enjoying FireWatch TR?';

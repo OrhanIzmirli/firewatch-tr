@@ -323,9 +323,9 @@ class _MapScreenState extends State<MapScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     StatusChip(
-                      label: point.riskLevelLabel(l10n),
-                      icon: Icons.local_fire_department_rounded,
-                      color: AppColors.forRiskTier(point.riskTier),
+                      label: point.detectionTitle(l10n),
+                      icon: Icons.satellite_alt_rounded,
+                      color: point.detectionColor,
                     ),
                     StatusChip(
                       label:

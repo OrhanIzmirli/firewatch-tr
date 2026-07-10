@@ -64,7 +64,7 @@
   "onboardingDesc3": "Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.",
 
   "homeLiveSummary": "Canlı Durum Özeti",
-  "homeHeaderTitle": "Türkiye Yangın Takibi",
+  "homeHeaderTitle": "Türkiye Termal Anomali Takibi",
   "homeHeaderSubtitle": "Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.",
   "homeNasaLiveData": "NASA FIRMS • Canlı Veri",
   "homeOutsideTurkeyLocation": "Yurt dışı konumu",
@@ -76,14 +76,14 @@
   "homeSafety": "Güvenlik",
   "homeOverview": "Genel Bakış",
   "homeOverviewSubtitle": "NASA FIRMS anlık verisi",
-  "homeOverviewUniqueCount": "{count} benzersiz yangın noktası tespit edildi",
+  "homeOverviewUniqueCount": "{count} benzersiz termal anomali konumu tespit edildi",
   "@homeOverviewUniqueCount": {
     "placeholders": { "count": { "type": "int" } }
   },
   "homeTotalPoints": "Toplam Nokta",
   "homeHighRisk": "Yüksek Risk",
   "homeNominal": "Normal",
-  "homeOverviewActiveFiresTitle": "Aktif Yangın Noktaları",
+  "homeOverviewActiveFiresTitle": "Güncel Termal Anomaliler",
   "homeOverviewActiveFiresSubtitle": "Son 24 saatte tespit edildi",
   "homeOverviewHighestRiskTitle": "En Yüksek Riskli Bölge",
   "homeOverviewHighestRiskValue": "{region} - {score} puan",
@@ -91,12 +91,12 @@
     "placeholders": { "region": { "type": "String" }, "score": { "type": "int" } }
   },
   "homeOverviewHighestRiskSubtitle": "Şu an Türkiye'deki en yüksek risk",
-  "homeOverviewNearbyTitle": "Yakın Yangın Uyarısı",
-  "homeOverviewNearbyValueWithLocation": "{count} yangın 100km içinde",
+  "homeOverviewNearbyTitle": "Yakındaki Termal Tespitler",
+  "homeOverviewNearbyValueWithLocation": "100 km içinde {count} tespit",
   "@homeOverviewNearbyValueWithLocation": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "homeOverviewNearbyValueNationwide": "Türkiye genelinde {count} yangın",
+  "homeOverviewNearbyValueNationwide": "Türkiye genelinde {count} tespit",
   "@homeOverviewNearbyValueNationwide": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -125,7 +125,7 @@
   "homeFilterHighRisk": "Yüksek Risk",
   "homeFilterMediumRisk": "Orta Risk",
   "homeSearchHint": "Şehir veya bölge ara...",
-  "homeNoActiveFires": "Aktif yangın noktası bulunamadı.",
+  "homeNoActiveFires": "Güncel termal anomali bulunamadı.",
   "homeFireRegionTitle": "{region} Bölgesi",
   "@homeFireRegionTitle": {
     "placeholders": { "region": { "type": "String" } }
@@ -137,16 +137,16 @@
   "homeAreaInsufficientRes": "Uydu çözünürlüğü yetersiz",
 
   "mapFetchError": "Yangın verileri alınamadı.",
-  "mapTitle": "Yangın Haritası",
+  "mapTitle": "Termal Anomali Haritası",
   "mapLiveMap": "Canlı Harita",
-  "mapConfidenceFilterActive": "Yalnızca yüksek/nominal güvenli yangınlar gösteriliyor",
+  "mapConfidenceFilterActive": "Yalnızca yüksek/nominal güvenilirlikli tespitler gösteriliyor",
   "mapConfidenceFilterClear": "Temizle",
-  "mapHeaderTitle": "Türkiye Geneli Yangın Görünümü",
+  "mapHeaderTitle": "Türkiye Geneli Termal Anomali Görünümü",
   "mapHeaderSubtitle": "NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.",
   "mapArea": "Harita Alanı",
   "mapAreaSubtitle": "NASA FIRMS canlı marker görünümü",
   "mapGoToMe": "Bana Git",
-  "mapNearbyFires": "Yakınımdaki Yangınlar",
+  "mapNearbyFires": "Yakınımdaki Termal Tespitler",
   "mapNearbyFiresSubtitle": "Konumuna en yakın canlı tespitler",
   "mapReport": "Raporla",
   "mapKmAway": "{distance} km uzaklıkta",
@@ -154,7 +154,7 @@
     "placeholders": { "distance": { "type": "String" } }
   },
 
-  "fireDetailTitle": "Yangın Detayı",
+  "fireDetailTitle": "Tespit Detayı",
   "fireDetailLastUpdate": "Son güncelleme: {time}",
   "@fireDetailLastUpdate": {
     "placeholders": { "time": { "type": "String" } }
@@ -194,7 +194,7 @@
   "notificationsScanNow": "Şimdi Tara",
   "notificationsStartMonitoring": "Otomatik Taramayı Başlat",
   "notificationsStopMonitoring": "Otomatik Taramayı Durdur",
-  "notificationsNearbyLiveFires": "Yakındaki Canlı Yangınlar",
+  "notificationsNearbyLiveFires": "Yakındaki Termal Tespitler",
   "notificationsNearbyLiveFiresSubtitle": "Konumuna 50 km içinde bulunan noktalar",
   "notificationsDistanceAndTime": "{distance} km uzaklıkta • {timeAgo}",
   "@notificationsDistanceAndTime": {
@@ -216,7 +216,7 @@
   "@notificationsUnreadCount": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "notificationsNoHighRisk": "Şu an yüksek riskli yangın noktası bulunmuyor.",
+  "notificationsNoHighRisk": "Şu an yüksek güvenilirlikli termal anomali bulunmuyor.",
   "notificationsHighRiskDetectionTitle": "Yüksek Riskli Termal Tespit",
   "notificationsHighRiskDetectionBody": "{region} bölgesinde {temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.",
   "@notificationsHighRiskDetectionBody": {
@@ -238,7 +238,7 @@
   "watchlistEmptyTitle": "Henüz kaydedilmiş olay yok",
   "watchlistEmptySubtitle": "Yangın detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsin.",
   "watchlistSavedPoints": "Kaydedilen Noktalar",
-  "watchlistSavedPointsSubtitle": "{count} yangın noktası takipte",
+  "watchlistSavedPointsSubtitle": "{count} termal tespit takipte",
   "@watchlistSavedPointsSubtitle": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -650,8 +650,8 @@
   "fireRecommendedActionMedium": "Gelişmeleri takip et, bölgeye gereksiz yaklaşma.",
   "fireRecommendedActionLow": "Şu an acil aksiyon gerekmiyor, bölgeyi takip et.",
 
-  "fireStatusActive": "Aktif Yangın",
-  "fireStatusLikelyActive": "Muhtemelen Aktif",
+  "fireStatusActive": "Muhtemel Yangın",
+  "fireStatusLikelyActive": "Yüksek Isı Anomalisi",
   "fireStatusMonitoring": "İzleniyor",
   "fireStatusHistorical": "Geçmiş Tespit",
 
@@ -659,7 +659,7 @@
   "@fireEventRegionTitle": {
     "placeholders": { "city": { "type": "String" } }
   },
-  "fireEventLiveDetectionTitle": "Canlı Yangın Tespiti",
+  "fireEventLiveDetectionTitle": "Canlı Termal Tespit",
   "fireEventStatusActive": "Aktif",
   "fireEventStatusMonitoring": "İzleniyor",
   "fireEventStatusControlled": "Kontrol Altında",
@@ -687,7 +687,7 @@
   "windDirectionSW": "Güneybatı",
   "windDirectionW": "Batı",
   "windDirectionNW": "Kuzeybatı",
-  "fireDetailFireRadiativePower": "Ateş Gücü",
+  "fireDetailFireRadiativePower": "Yangın Işıma Gücü (FRP)",
   "fireDetailFrpValue": "{frp} MW ({intensity})",
   "@fireDetailFrpValue": {
     "placeholders": {
@@ -815,12 +815,12 @@
   "monitorStatusLocationServiceOff": "Konum servisi kapalı. Lütfen konumu açın.",
   "monitorStatusLocationDenied": "Konum izni verilmedi.",
   "monitorStatusFetchingData": "NASA FIRMS verisi çekiliyor...",
-  "monitorStatusNoActiveFires": "Şu an aktif yangın verisi bulunamadı.",
-  "monitorStatusNoNearbyFires": "✅ 50 km içinde canlı yangın tespiti yok. ({count} nokta tarandı)",
+  "monitorStatusNoActiveFires": "Şu an termal anomali verisi bulunamadı.",
+  "monitorStatusNoNearbyFires": "✅ 50 km içinde termal tespit yok. ({count} nokta tarandı)",
   "@monitorStatusNoNearbyFires": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "monitorStatusNearbyFiresFound": "⚠️ 50 km içinde {count} yangın noktası bulundu!",
+  "monitorStatusNearbyFiresFound": "⚠️ 50 km içinde {count} termal tespit bulundu!",
   "@monitorStatusNearbyFiresFound": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -831,8 +831,8 @@
     "placeholders": { "error": { "type": "String" } }
   },
 
-  "notifNearbyFireTitle": "Yakınında yangın tespiti var",
-  "notifNearbyFireBody": "{distance} içinde {count} yangın noktası bulundu.",
+  "notifNearbyFireTitle": "Yakınında termal anomali tespit edildi",
+  "notifNearbyFireBody": "{distance} içinde {count} termal tespit bulundu.",
   "@notifNearbyFireBody": {
     "placeholders": {
       "distance": { "type": "String" },
@@ -875,15 +875,15 @@
   "trustAspectInterpretTitle": "Nasıl yorumlanır",
   "trustAspectActionTitle": "Ne yapmalıyım?",
 
-  "trustHomeMeaning": "Bu ekrandaki yangın sayıları, son 24 saatte tespit edilen aktif ısı anomalileridir; doğrulanmış orman yangını değildir — bazıları tarımsal yakma veya endüstriyel ısı kaynakları olabilir.",
+  "trustHomeMeaning": "Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.",
   "trustHomeSource": "Veriler NASA FIRMS'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.",
-  "trustHomeInterpret": "Bir bölgedeki yüksek yangın sayısı her zaman yüksek tehlike anlamına gelmez — sonuca varmadan önce hava durumuna göre ayarlanmış risk puanları için Risk sekmesini kontrol edin.",
-  "trustHomeAction": "Tam detayları görmek için herhangi bir yangın kartına dokunun veya güncellemeleri takip etmek için İzleme Listenize ekleyin. Aktif bir yangına yakınsanız gerçek zamanlı uyarılar için Bildirimler'i kontrol edin.",
+  "trustHomeInterpret": "Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.",
+  "trustHomeAction": "Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.",
 
-  "trustMapMeaning": "Her işaretçi tek bir uydu sıcak nokta tespitidir, mutlaka aktif bir yangın anlamına gelmez — yangın detaylarında gösterilen güven düzeyi tespitin ne kadar güvenilir olduğunu gösterir.",
+  "trustMapMeaning": "Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.",
   "trustMapSource": "Yangın verileri NASA FIRMS'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.",
-  "trustMapInterpret": "Kümelenmiş sayılar birbirine yakın birden fazla tespit olduğu anlamına gelir — tek tek noktaları görmek için yakınlaştırın. Sıkı kümeler genellikle daha büyük, devam eden bir yangına işaret eder.",
-  "trustMapAction": "Haritada olmayan bir yangını yerinde mi gördünüz? Diğerlerini uyarmak için Rapor Et düğmesini kullanın. Mevcut konumunuza yakın olanları görmek için \"Yakındaki Yangınlar\"a dokunun.",
+  "trustMapInterpret": "Kümeler yalnızca birbirine yakın birden fazla ısı tespiti olduğunu gösterir; yangının nedenini veya büyüklüğünü doğrulamaz.",
+  "trustMapAction": "Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et'i kullanın ve resmi talimatları izleyin.",
 
   "trustRiskMeaning": "Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.",
   "trustRiskSource": "Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.",
@@ -895,15 +895,15 @@
   "trustNewsInterpret": "\"Son Dakika\" rozeti, makalenin çok yakın zamanda yayınlandığı anlamına gelir — orman yangını durumları hızla değişebileceğinden yayın saatini her zaman kontrol edin.",
   "trustNewsAction": "İngilizce olmayan makaleleri okumak için Çevir düğmesini kullanın veya bir haberdeki \"İlgili Yangınlar\"a dokunarak doğrudan o konuma haritada gidin.",
 
-  "trustAlertsMeaning": "Uyarılar, uydu son bilinen konumunuzun 50 km içinde bir yangın tespit ettiğinde sizi bilgilendirir — bunlar otomatiktir ve doğrulanmış raporlara değil tespit verilerine dayanır.",
+  "trustAlertsMeaning": "Uyarılar, uydu 50 km içinde termal anomali tespit ettiğinde bildirim gönderir. Bunlar otomatik tespitlerdir, doğrulanmış olay raporları değildir.",
   "trustAlertsSource": "Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla karşılaştırır.",
-  "trustAlertsInterpret": "\"Yüksek güven\" uyarıları \"nominal\" olanlardan daha güvenilirdir — o uyarıyı tetikleyen belirli faktörler için her karttaki risk nedeni metnini kontrol edin.",
+  "trustAlertsInterpret": "Güvenilirlik ısı anomalisine duyulan güveni anlatır; yangın kesinliği değildir. FRP ve parlaklığı birlikte değerlendirin.",
   "trustAlertsAction": "Uygulama kapalıyken bile uyarı almak için bildirim izni verin ve Otomatik İzlemeyi başlatın. Çevrenizi manuel olarak kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.",
   "newsReadFullArticle": "Haberin Tamamını Oku",
 
-  "smartIntensityIntense": "{location} yakınında yoğun ve şiddetli bir yangın tespit edildi.",
+  "smartIntensityIntense": "{location} yakınında yoğun bir termal anomali tespit edildi.",
   "@smartIntensityIntense": { "placeholders": { "location": { "type": "String" } } },
-  "smartIntensityHigh": "{location} yakınında yüksek yoğunluklu, aktif bir yangın tespit edildi.",
+  "smartIntensityHigh": "{location} yakınında yüksek yoğunluklu bir termal anomali tespit edildi.",
   "@smartIntensityHigh": { "placeholders": { "location": { "type": "String" } } },
   "smartIntensityModerate": "{location} yakınında orta düzeyde termal aktivite tespit edildi.",
   "@smartIntensityModerate": { "placeholders": { "location": { "type": "String" } } },
@@ -924,7 +924,7 @@
   "@smartAreaMedium": { "placeholders": { "hectares": { "type": "int" } } },
 
   "smartConfidenceHigh": "NASA uydusu bu tespitten yüksek düzeyde emin.",
-  "smartConfidenceMedium": "Muhtemelen bir yangın, doğrulama öneriliyor.",
+  "smartConfidenceMedium": "NASA bu termal anomaliyi nominal güvenilirlikte bildiriyor; doğrulama önerilir.",
   "smartConfidenceLow": "Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.",
 
   "smartSpreadDangerous": "Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.",
@@ -946,13 +946,13 @@
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
   "tooltipTempTitle": "Sıcaklık",
-  "tooltipTempBody": "Uydu yüzey sıcaklığı. Normal zemin: 25-35°C. 50°C+ ısı anomalisi. 100°C+ aktif yangın.",
+  "tooltipTempBody": "Uydu tarafından ölçülen parlaklık sıcaklığıdır. Yüksek değer güçlü bir ısı kaynağıdır ancak tek başına yangını doğrulamaz.",
   "tooltipConfidenceTitle": "Güven Seviyesi Ne Anlama Gelir?",
   "tooltipSatelliteTitle": "Uydu Ne Anlama Gelir?",
   "tooltipSatelliteViirsBody": "VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.",
   "tooltipSatelliteModisBody": "MODIS: Terra/Aqua uydusu, daha geniş bir kapsama alanı sağlar.",
-  "tooltipSatelliteMergedBody": "Bu yangın, aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından bağımsız olarak doğrulandı — tek bir tespitten daha güvenilirdir.",
-  "fireCardMultiSourceBadge": "Çoklu kaynakla doğrulandı",
+  "tooltipSatelliteMergedBody": "Bu anomali aynı zaman ve konum aralığında birden fazla uydu cihazı tarafından tespit edildi. Tespiti güçlendirir ancak nedenini doğrulamaz.",
+  "fireCardMultiSourceBadge": "Çoklu kaynak tespiti",
 
   "reportPanelDuplicateLocationBlocked": "Bu konumdan zaten rapor gönderildi. Lütfen yetkililer ulaşana kadar bekleyin.",
   "reportPanelDailyLimitReached": "Bugün için rapor gönderme limitine ulaştınız (günde en fazla 5). Lütfen yarın tekrar deneyin.",
@@ -1021,7 +1021,7 @@
   "feedbackBug": "Hata Bildirimi", "feedbackFeature": "Özellik İsteği", "feedbackGeneral": "Genel Geri Bildirim",
   "feedbackMessage": "Mesaj", "feedbackEmail": "E-posta (isteğe bağlı)", "feedbackSubmit": "Gönder",
   "feedbackSuccess": "Teşekkürler! Geri bildiriminiz gönderildi.", "feedbackError": "Geri bildirim gönderilemedi. Lütfen tekrar deneyin.",
-  "feedbackMessageRequired": "Lütfen bir mesaj yazın.", "ratingPromptTitle": "FireWatch TR'yi beğendiniz mi?",
+  "feedbackMessageRequired": "Lütfen bir mesaj yazın.", "feedbackRatingRequired": "Lütfen 1 ile 5 arasında bir puan seçin.", "ratingPromptTitle": "FireWatch TR'yi beğendiniz mi?",
   "ratingPromptMessage": "Uygulamayı birkaç gündür kullanıyorsunuz. Görüşlerinizi paylaşmak ister misiniz?", "ratingPromptLater": "Daha sonra",
   "coachMarkWatchlistTapTitle": "Detayı Gör",
   "coachMarkWatchlistTapDesc": "Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin."

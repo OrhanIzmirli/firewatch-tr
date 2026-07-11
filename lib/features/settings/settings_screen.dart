@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../core/config/api_config.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -287,6 +289,56 @@ class SettingsScreen extends ConsumerWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
+            SectionHeader(
+                  title: l10n.settingsLegal,
+                  icon: Icons.gavel_rounded,
+                )
+                .animate(delay: 200.ms)
+                .fadeIn(duration: 280.ms)
+                .slideX(begin: -0.03, end: 0),
+
+            const SizedBox(height: AppSpacing.md),
+
+            GlassPanel(
+                  child: Column(
+                    children: [
+                      _LegalLinkTile(
+                        icon: Icons.privacy_tip_outlined,
+                        label: l10n.settingsPrivacyPolicy,
+                        onTap: () => _openLegalUrl(
+                          context,
+                          '${ApiConfig.backendBaseUrl}/privacy',
+                          l10n,
+                        ),
+                      ),
+                      Divider(
+                        height: 24,
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.06)
+                            : Colors.black.withValues(alpha: 0.05),
+                      ),
+                      _LegalLinkTile(
+                        icon: Icons.description_outlined,
+                        label: l10n.settingsTermsOfService,
+                        onTap: () => _openLegalUrl(
+                          context,
+                          '${ApiConfig.backendBaseUrl}/terms',
+                          l10n,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                .animate(delay: 230.ms)
+                .fadeIn(duration: 320.ms)
+                .slideY(begin: 0.08, end: 0)
+                .scale(
+                  begin: const Offset(0.98, 0.98),
+                  end: const Offset(1, 1),
+                ),
+
+            const SizedBox(height: AppSpacing.xxl),
+
             GlassPanel(
                   child: Row(
                     children: [
@@ -334,6 +386,80 @@ class SettingsScreen extends ConsumerWidget {
                   begin: const Offset(0.98, 0.98),
                   end: const Offset(1, 1),
                 ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _openLegalUrl(
+  BuildContext context,
+  String url,
+  AppLocalizations l10n,
+) async {
+  final uri = Uri.tryParse(url);
+  final launched =
+      uri != null && await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!launched && context.mounted) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.settingsLinkOpenFailed)));
+  }
+}
+
+class _LegalLinkTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _LegalLinkTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor =
+        Theme.of(context).textTheme.titleMedium?.color ??
+        (isDark ? AppColors.white : const Color(0xFF0F172A));
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: AppColors.primary, size: 20),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: titleColor,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.open_in_new_rounded,
+              size: 18,
+              color: isDark
+                  ? AppColors.white.withValues(alpha: 0.4)
+                  : Colors.black.withValues(alpha: 0.32),
+            ),
           ],
         ),
       ),
@@ -488,7 +614,7 @@ class _RefreshIntervalTile extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               DropdownButtonFormField<String>(
-                    value: value,
+                    initialValue: value,
                     isExpanded: true,
                     items: [
                       DropdownMenuItem(

@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/risk_display.dart';
@@ -118,7 +119,7 @@ class _RiskScreenState extends State<RiskScreen> {
     if (mounted) setState(() { _loading = true; _isSlowLoading = false; });
     try {
       final response = await raceWithCacheFallback(
-        fetch: _dio.get('https://firewatch-tr-backend.onrender.com/api/risk/summary'),
+        fetch: _dio.get('${ApiConfig.apiBaseUrl}/risk/summary'),
         timeout: const Duration(seconds: 12),
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {

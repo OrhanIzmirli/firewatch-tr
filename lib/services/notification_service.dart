@@ -60,7 +60,6 @@ class NotificationService {
 
     final token = await _fcm.getToken();
     if (token != null && token.isNotEmpty) {
-      if (kDebugMode) print('FCM Token: $token');
       await _renderApi.subscribeToNotifications(token);
     }
 

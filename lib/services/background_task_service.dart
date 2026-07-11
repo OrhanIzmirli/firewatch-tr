@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'fire_monitoring_service.dart';
@@ -24,9 +25,24 @@ void backgroundTaskCallbackDispatcher() {
   });
 }
 
+/// Registers/cancels the periodic background fire check. Only ever called
+/// after the user has explicitly opted in and granted
+/// ACCESS_BACKGROUND_LOCATION — never at app startup unconditionally.
 class BackgroundTaskService {
   BackgroundTaskService._();
   static final BackgroundTaskService instance = BackgroundTaskService._();
+
+  static const String prefsKey = 'background_monitoring_enabled';
+
+  Future<bool> isEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(prefsKey) ?? false;
+  }
+
+  Future<void> setEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(prefsKey, value);
+  }
 
   Future<void> initialize() async {
     await Workmanager().initialize(backgroundTaskCallbackDispatcher);
@@ -37,5 +53,9 @@ class BackgroundTaskService {
       existingWorkPolicy: ExistingWorkPolicy.keep,
       constraints: Constraints(networkType: NetworkType.connected),
     );
+  }
+
+  Future<void> stop() async {
+    await Workmanager().cancelByUniqueName(backgroundFireCheckTask);
   }
 }

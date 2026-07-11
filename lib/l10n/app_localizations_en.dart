@@ -435,7 +435,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsToolsSubtitle =>
-      'Grant permission, run a test, simulate a fire alert';
+      'Manage permission and automatic thermal-anomaly monitoring';
 
   @override
   String get notificationsPermissionGranted => 'Permission Granted';
@@ -457,9 +457,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsSendTest => 'Send Test Notification';
 
   @override
-  String get notificationsSendDemoFire => 'Send Demo Fire Alert';
-
-  @override
   String get notificationsScanNow => 'Scan Now';
 
   @override
@@ -467,6 +464,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsStopMonitoring => 'Stop Auto Monitoring';
+
+  @override
+  String get notificationsBackgroundTitle => 'Background Monitoring';
+
+  @override
+  String get notificationsBackgroundSubtitle =>
+      'Check for fires every 15 minutes even when the app is closed';
+
+  @override
+  String get notificationsEnableBackground => 'Enable Background Monitoring';
+
+  @override
+  String get notificationsDisableBackground => 'Disable Background Monitoring';
+
+  @override
+  String get backgroundLocationDialogTitle => 'Background Location Permission';
+
+  @override
+  String get backgroundLocationDialogBody =>
+      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
+
+  @override
+  String get backgroundLocationDialogConfirm => 'Continue';
+
+  @override
+  String get backgroundLocationPermissionDenied =>
+      'Background location permission was not granted. Background monitoring could not be enabled.';
+
+  @override
+  String get backgroundMonitoringEnabled => 'Background monitoring enabled.';
+
+  @override
+  String get backgroundMonitoringDisabled => 'Background monitoring disabled.';
 
   @override
   String get notificationsNearbyLiveFires => 'Nearby Thermal Detections';
@@ -956,7 +986,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsInfoVersion => 'Version';
 
   @override
-  String get settingsInfoVersionValue => 'v1.0.0 demo';
+  String get settingsInfoVersionValue => 'v1.0.0';
 
   @override
   String get settingsInfoPlatform => 'Platform';
@@ -973,6 +1003,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsFooterNote =>
       'Your preferences are stored on your device and applied automatically each time you open the app.';
+
+  @override
+  String get settingsLegal => 'Legal';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsTermsOfService => 'Terms of Service';
+
+  @override
+  String get settingsLinkOpenFailed =>
+      'Couldn\'t open the link. Please try again.';
 
   @override
   String get riskTitle => 'Risk Analysis';
@@ -1729,14 +1772,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notificationsDemoAlertTitle => 'Critical Fire Alert';
-
-  @override
-  String notificationsDemoAlertBody(String region) {
-    return 'High-risk thermal activity detected in the $region region.';
-  }
-
-  @override
   String get settingsRefreshInterval5Min => '5 min';
 
   @override
@@ -2120,7 +2155,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsAction =>
-      'Grant notification permission and start Auto Monitoring to get alerts even when the app is closed. Use \"Scan Now\" anytime to manually check your surroundings.';
+      'Grant notification permission and start Auto Monitoring while using the app. Use \"Scan Now\" anytime to manually check your surroundings.';
 
   @override
   String get newsReadFullArticle => 'Read Full Article';
@@ -2340,7 +2375,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkNotifMonitoringDesc =>
-      'Start auto monitoring so nearby fires are periodically checked even when the app is closed.';
+      'Start auto monitoring to periodically check nearby thermal detections while the app is open.';
 
   @override
   String get coachMarkNotifAlertsTitle => 'Alert Cards';

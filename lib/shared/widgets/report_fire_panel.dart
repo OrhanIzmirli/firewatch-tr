@@ -12,6 +12,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/report_spam_guard.dart';
@@ -69,7 +70,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
   _Stage _stage = _Stage.form;
   Map<String, dynamic>? _result;
 
-  static const String _backendUrl = 'https://firewatch-tr-backend.onrender.com';
+  static const String _backendUrl = ApiConfig.backendBaseUrl;
 
   @override
   void dispose() {

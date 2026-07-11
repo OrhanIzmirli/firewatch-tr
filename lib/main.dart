@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'core/theme/app_theme.dart';
+import 'core/config/api_config.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
@@ -17,13 +19,16 @@ import 'services/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kReleaseMode && !ApiConfig.backendBaseUrl.startsWith('https://')) {
+    throw StateError('Release builds require an HTTPS backend URL.');
+  }
 
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (e, st) {
-    debugPrint('Firebase.initializeApp failed: $e\n$st');
+    if (kDebugMode) debugPrint('Firebase.initializeApp failed: $e\n$st');
   }
 
   // Fire-and-forget: enriches fire descriptions once loaded, but must not
@@ -34,19 +39,29 @@ Future<void> main() async {
     try {
       await NotificationService.instance.initialize();
     } catch (e, st) {
-      debugPrint('NotificationService.initialize failed: $e\n$st');
+      if (kDebugMode) debugPrint('NotificationService.initialize failed: $e\n$st');
     }
     try {
       await FireMonitoringService.instance.initialize();
     } catch (e, st) {
-      debugPrint('FireMonitoringService.initialize failed: $e\n$st');
+      if (kDebugMode) debugPrint('FireMonitoringService.initialize failed: $e\n$st');
     }
-    if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
-      try {
-        await BackgroundTaskService.instance.initialize();
-      } catch (e, st) {
-        debugPrint('BackgroundTaskService.initialize failed: $e\n$st');
+    try {
+      // Re-arm background monitoring silently on relaunch, but only if the
+      // user previously opted in AND the OS permission is still granted —
+      // never request it here. If the user revoked it via system settings,
+      // clear the stale flag instead of leaving it dangling.
+      final backgroundTask = BackgroundTaskService.instance;
+      if (await backgroundTask.isEnabled()) {
+        final status = await Permission.locationAlways.status;
+        if (status.isGranted) {
+          await backgroundTask.initialize();
+        } else {
+          await backgroundTask.setEnabled(false);
+        }
       }
+    } catch (e, st) {
+      if (kDebugMode) debugPrint('BackgroundTaskService re-arm failed: $e\n$st');
     }
   }
 

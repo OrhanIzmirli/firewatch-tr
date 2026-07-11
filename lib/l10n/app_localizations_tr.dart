@@ -434,7 +434,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsToolsSubtitle =>
-      'İzin ver, test et, yangın bildirimi simüle et';
+      'İzinleri ve otomatik termal anomali takibini yönet';
 
   @override
   String get notificationsPermissionGranted => 'İzin Var';
@@ -455,9 +455,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationsSendTest => 'Test Bildirimi Gönder';
 
   @override
-  String get notificationsSendDemoFire => 'Demo Yangın Bildirimi Gönder';
-
-  @override
   String get notificationsScanNow => 'Şimdi Tara';
 
   @override
@@ -465,6 +462,39 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsStopMonitoring => 'Otomatik Taramayı Durdur';
+
+  @override
+  String get notificationsBackgroundTitle => 'Arka Planda Takip';
+
+  @override
+  String get notificationsBackgroundSubtitle =>
+      'Uygulama kapalıyken bile 15 dakikada bir yangın kontrolü yapılsın';
+
+  @override
+  String get notificationsEnableBackground => 'Arka Plan Takibini Aç';
+
+  @override
+  String get notificationsDisableBackground => 'Arka Plan Takibini Kapat';
+
+  @override
+  String get backgroundLocationDialogTitle => 'Arka Plan Konum İzni';
+
+  @override
+  String get backgroundLocationDialogBody =>
+      'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.';
+
+  @override
+  String get backgroundLocationDialogConfirm => 'Devam Et';
+
+  @override
+  String get backgroundLocationPermissionDenied =>
+      'Arka plan konum izni verilmedi. Arka plan takibi açılamadı.';
+
+  @override
+  String get backgroundMonitoringEnabled => 'Arka plan takibi açıldı.';
+
+  @override
+  String get backgroundMonitoringDisabled => 'Arka plan takibi kapatıldı.';
 
   @override
   String get notificationsNearbyLiveFires => 'Yakındaki Termal Tespitler';
@@ -952,7 +982,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsInfoVersion => 'Sürüm';
 
   @override
-  String get settingsInfoVersionValue => 'v1.0.0 demo';
+  String get settingsInfoVersionValue => 'v1.0.0';
 
   @override
   String get settingsInfoPlatform => 'Platform';
@@ -969,6 +999,19 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get settingsFooterNote =>
       'Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.';
+
+  @override
+  String get settingsLegal => 'Yasal';
+
+  @override
+  String get settingsPrivacyPolicy => 'Gizlilik Politikası';
+
+  @override
+  String get settingsTermsOfService => 'Kullanım Koşulları';
+
+  @override
+  String get settingsLinkOpenFailed =>
+      'Bağlantı açılamadı. Lütfen tekrar deneyin.';
 
   @override
   String get riskTitle => 'Risk Analizi';
@@ -1725,14 +1768,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get notificationsDemoAlertTitle => 'Kritik Yangın Uyarısı';
-
-  @override
-  String notificationsDemoAlertBody(String region) {
-    return '$region bölgesinde yüksek riskli termal aktivite tespit edildi.';
-  }
-
-  @override
   String get settingsRefreshInterval5Min => '5 dk';
 
   @override
@@ -2115,7 +2150,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsAction =>
-      'Uygulama kapalıyken bile uyarı almak için bildirim izni verin ve Otomatik İzlemeyi başlatın. Çevrenizi manuel olarak kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.';
+      'Bildirim izni verin ve uygulamayı kullanırken Otomatik İzlemeyi başlatın. Çevrenizi manuel kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.';
 
   @override
   String get newsReadFullArticle => 'Haberin Tamamını Oku';
@@ -2335,7 +2370,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkNotifMonitoringDesc =>
-      'Otomatik taramayı başlatarak uygulama kapalıyken bile periyodik olarak yakın çevrende kontrol yapılmasını sağla.';
+      'Uygulama açıkken yakındaki termal tespitleri düzenli kontrol etmek için otomatik izlemeyi başlat.';
 
   @override
   String get coachMarkNotifAlertsTitle => 'Uyarı Kartları';

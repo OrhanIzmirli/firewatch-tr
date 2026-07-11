@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../models/news_item.dart';
+import '../core/config/api_config.dart';
 
 class NewsService {
   NewsService();
 
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://firewatch-tr-backend.onrender.com/api',
+      baseUrl: ApiConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
     ),
@@ -57,7 +59,7 @@ class NewsService {
 
       return null;
     } catch (e) {
-      print('Error fetching news by id: $e');
+      if (kDebugMode) debugPrint('Error fetching news by id: $e');
       return null;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
@@ -114,7 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (mounted) setState(() => _riskLoading = true);
     try {
       final response = await raceWithCacheFallback(
-        fetch: _dio.get('https://firewatch-tr-backend.onrender.com/api/risk/summary'),
+        fetch: _dio.get('${ApiConfig.apiBaseUrl}/risk/summary'),
         timeout: const Duration(seconds: 12),
         cacheKey: _riskCacheKey,
         onSlowFallback: (cached) {
@@ -167,7 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       await OfflineCacheService.instance.save(_newsCacheKey, news.map((n) => n.toJson()).toList());
       if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsOffline = false; _newsSlowLoading = false; });
     } catch (e, stack) {
-      debugPrint('ERROR _loadNews: $e\n$stack');
+      if (kDebugMode) debugPrint('ERROR _loadNews: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_newsCacheKey);
       if (mounted) {
         setState(() {
@@ -210,7 +212,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         _firesSlowLoading = false;
       });
     } catch (e, stack) {
-      debugPrint('ERROR _loadFires: $e\n$stack');
+      if (kDebugMode) debugPrint('ERROR _loadFires: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_firesCacheKey);
       if (mounted) {
         setState(() {

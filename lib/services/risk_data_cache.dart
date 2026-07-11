@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../core/config/api_config.dart';
 
 /// Caches /api/risk/summary in memory so fire descriptions can cheaply
 /// cross-reference a region's current risk conditions without every call
@@ -31,7 +32,7 @@ class RiskDataCache {
   Future<void> _fetch() async {
     try {
       final response = await _dio.get(
-        'https://firewatch-tr-backend.onrender.com/api/risk/summary',
+        '${ApiConfig.apiBaseUrl}/risk/summary',
       );
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;

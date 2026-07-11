@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ReportBlockReason { none, duplicateLocation, dailyLimit }
@@ -25,10 +25,19 @@ class ReportSpamGuard {
   static const _duplicateCooldown = Duration(hours: 2);
   static const _dailyLimit = 5;
   static const _dailyWindow = Duration(hours: 24);
+  static const _storage = FlutterSecureStorage();
 
   Future<List<Map<String, dynamic>>> _loadHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_historyKey);
+    var raw = await _storage.read(key: _historyKey);
+    // One-time migration from the pre-encryption release.
+    if (raw == null) {
+      final prefs = await SharedPreferences.getInstance();
+      raw = prefs.getString(_historyKey);
+      if (raw != null) {
+        await _storage.write(key: _historyKey, value: raw);
+        await prefs.remove(_historyKey);
+      }
+    }
     if (raw == null) return [];
     try {
       final decoded = jsonDecode(raw) as List;
@@ -39,8 +48,7 @@ class ReportSpamGuard {
   }
 
   Future<void> _saveHistory(List<Map<String, dynamic>> history) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_historyKey, jsonEncode(history));
+    await _storage.write(key: _historyKey, value: jsonEncode(history));
   }
 
   /// Checks whether a report from [lat]/[lng] right now would be blocked,
@@ -49,7 +57,6 @@ class ReportSpamGuard {
   Future<ReportSpamCheck> checkBeforeSubmit(double lat, double lng) async {
     final now = DateTime.now();
     final history = await _loadHistory();
-    debugPrint('[ReportSpamGuard] checkBeforeSubmit lat=$lat lng=$lng — ${history.length} stored entries');
 
     // Prune anything outside the daily window while we're at it — keeps
     // the stored list from growing forever.
@@ -67,19 +74,15 @@ class ReportSpamGuard {
       final entryLng = (entry['lng'] as num?)?.toDouble();
       if (entryLat == null || entryLng == null) continue;
       final distance = Geolocator.distanceBetween(lat, lng, entryLat, entryLng);
-      debugPrint('[ReportSpamGuard] compare vs entry ($entryLat, $entryLng) age=${age.inMinutes}min distance=${distance.toStringAsFixed(1)}m');
       if (distance <= _duplicateRadiusMeters) {
-        debugPrint('[ReportSpamGuard] BLOCKED — duplicate location within ${_duplicateRadiusMeters}m and ${_duplicateCooldown.inHours}h');
         return const ReportSpamCheck(ReportBlockReason.duplicateLocation);
       }
     }
 
     if (recent.length >= _dailyLimit) {
-      debugPrint('[ReportSpamGuard] BLOCKED — daily limit reached (${recent.length}/$_dailyLimit)');
       return const ReportSpamCheck(ReportBlockReason.dailyLimit);
     }
 
-    debugPrint('[ReportSpamGuard] ALLOWED — no duplicate or limit hit');
     return const ReportSpamCheck(ReportBlockReason.none);
   }
 
@@ -103,7 +106,6 @@ class ReportSpamGuard {
       'timestamp': now.toIso8601String(),
     });
 
-    debugPrint('[ReportSpamGuard] recordReport lat=$lat lng=$lng — history now ${recent.length} entries');
     await _saveHistory(recent);
   }
 }

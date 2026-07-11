@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
+import '../../services/background_task_service.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
@@ -35,6 +39,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool _permissionGranted = false;
   bool _fireLoading = true;
   bool _isOffline = false;
+  bool _backgroundMonitoringEnabled = false;
   DateTime? _cachedAt;
 
   List<FirePoint> _highRiskFires = [];
@@ -47,6 +52,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _loadFires().then((_) => _maybeShowNotifCoachMarks());
+    _loadBackgroundMonitoringState();
+  }
+
+  Future<void> _loadBackgroundMonitoringState() async {
+    final enabled = await BackgroundTaskService.instance.isEnabled();
+    if (mounted) setState(() => _backgroundMonitoringEnabled = enabled);
   }
 
   void _maybeShowNotifCoachMarks() {
@@ -156,23 +167,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _isBusy = false);
   }
 
-  Future<void> _sendDemoFireNotification() async {
-    setState(() => _isBusy = true);
-    if (_highRiskFires.isNotEmpty) {
-      final l10n = AppLocalizations.of(context)!;
-      final fire = _highRiskFires.first;
-      await NotificationService.instance.showFireEventAlert(
-        fireId: '${fire.latitude}_${fire.longitude}',
-        title: l10n.notificationsDemoAlertTitle,
-        body: l10n.notificationsDemoAlertBody(fire.regionDisplayName(l10n)),
-      );
-    } else {
-      await NotificationService.instance.showTestNotification();
-    }
-    if (!mounted) return;
-    setState(() => _isBusy = false);
-  }
-
   Future<void> _checkNearbyFireRisk() async {
     setState(() => _isBusy = true);
     await _monitor.checkNow(triggerNotification: true);
@@ -192,6 +186,82 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     await _monitor.stopMonitoring();
     if (!mounted) return;
     setState(() => _isBusy = false);
+  }
+
+  Future<void> _toggleBackgroundMonitoring(bool enable) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (!enable) {
+      setState(() => _isBusy = true);
+      await BackgroundTaskService.instance.stop();
+      await BackgroundTaskService.instance.setEnabled(false);
+      if (!mounted) return;
+      setState(() {
+        _backgroundMonitoringEnabled = false;
+        _isBusy = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.backgroundMonitoringDisabled)),
+      );
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.backgroundLocationDialogTitle),
+        content: Text(l10n.backgroundLocationDialogBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.backgroundLocationDialogConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isBusy = true);
+
+    // Android requires foreground location before background location can
+    // be granted — request it first if not already available.
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    var granted = false;
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      final backgroundStatus = await Permission.locationAlways.request();
+      granted = backgroundStatus.isGranted;
+    }
+
+    if (granted) {
+      await BackgroundTaskService.instance.initialize();
+      await BackgroundTaskService.instance.setEnabled(true);
+    } else {
+      await BackgroundTaskService.instance.setEnabled(false);
+    }
+
+    if (!mounted) return;
+    setState(() {
+      _backgroundMonitoringEnabled = granted;
+      _isBusy = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          granted
+              ? l10n.backgroundMonitoringEnabled
+              : l10n.backgroundLocationPermissionDenied,
+        ),
+      ),
+    );
   }
 
   @override
@@ -300,6 +370,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   label: Text(l10n.notificationsRequestPermission),
                                 ),
                               ),
+                              if (kDebugMode) ...[
                               const SizedBox(height: AppSpacing.md),
                               SizedBox(
                                 width: double.infinity,
@@ -309,15 +380,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   label: Text(l10n.notificationsSendTest),
                                 ),
                               ),
-                              const SizedBox(height: AppSpacing.md),
-                              SizedBox(
-                                width: double.infinity,
-                                child: OutlinedButton.icon(
-                                  onPressed: _isBusy ? null : _sendDemoFireNotification,
-                                  icon: const Icon(Icons.local_fire_department_rounded),
-                                  label: Text(l10n.notificationsSendDemoFire),
-                                ),
-                              ),
+                              ],
                               const SizedBox(height: AppSpacing.md),
                               SizedBox(
                                 width: double.infinity,
@@ -346,6 +409,27 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   icon: const Icon(Icons.stop_circle_rounded),
                                   label: Text(l10n.notificationsStopMonitoring),
                                 ),
+                              ),
+                              const Divider(height: AppSpacing.xxl),
+                              Text(l10n.notificationsBackgroundTitle,
+                                  style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
+                              const SizedBox(height: 4),
+                              Text(l10n.notificationsBackgroundSubtitle,
+                                  style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                              const SizedBox(height: AppSpacing.md),
+                              SizedBox(
+                                width: double.infinity,
+                                child: _backgroundMonitoringEnabled
+                                    ? OutlinedButton.icon(
+                                        onPressed: _isBusy ? null : () => _toggleBackgroundMonitoring(false),
+                                        icon: const Icon(Icons.cloud_off_rounded),
+                                        label: Text(l10n.notificationsDisableBackground),
+                                      )
+                                    : FilledButton.icon(
+                                        onPressed: _isBusy ? null : () => _toggleBackgroundMonitoring(true),
+                                        icon: const Icon(Icons.cloud_sync_rounded),
+                                        label: Text(l10n.notificationsEnableBackground),
+                                      ),
                               ),
                             ],
                           ),

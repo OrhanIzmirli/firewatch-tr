@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +65,7 @@ Future<void> maybeShowScreenCoachMarks(
 }) async {
   final prefs = await SharedPreferences.getInstance();
   final alreadySeen = prefs.getBool(prefsKey) ?? false;
-  debugPrint('[CoachMarks] "$prefsKey" alreadySeen=$alreadySeen');
+  if (kDebugMode) debugPrint('[CoachMarks] "$prefsKey" alreadySeen=$alreadySeen');
   if (alreadySeen) return;
   if (!context.mounted) return;
   if (steps.isEmpty) return;
@@ -78,7 +79,7 @@ Future<void> maybeShowScreenCoachMarks(
   // abandon the overlay without ever persisting "seen", and the tour would
   // reappear on the next visit even though the user already saw it once.
   await prefs.setBool(prefsKey, true);
-  debugPrint('[CoachMarks] "$prefsKey" marked as seen, showing tour now (${steps.length} steps)');
+  if (kDebugMode) debugPrint('[CoachMarks] "$prefsKey" marked as seen, showing tour now (${steps.length} steps)');
 
   final l10n = AppLocalizations.of(context)!;
   final overlay = Overlay.of(context, rootOverlay: true);

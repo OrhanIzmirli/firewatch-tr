@@ -869,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsToolsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'İzin ver, test et, yangın bildirimi simüle et'**
+  /// **'İzinleri ve otomatik termal anomali takibini yönet'**
   String get notificationsToolsSubtitle;
 
   /// No description provided for @notificationsPermissionGranted.
@@ -908,12 +908,6 @@ abstract class AppLocalizations {
   /// **'Test Bildirimi Gönder'**
   String get notificationsSendTest;
 
-  /// No description provided for @notificationsSendDemoFire.
-  ///
-  /// In tr, this message translates to:
-  /// **'Demo Yangın Bildirimi Gönder'**
-  String get notificationsSendDemoFire;
-
   /// No description provided for @notificationsScanNow.
   ///
   /// In tr, this message translates to:
@@ -931,6 +925,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Otomatik Taramayı Durdur'**
   String get notificationsStopMonitoring;
+
+  /// No description provided for @notificationsBackgroundTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka Planda Takip'**
+  String get notificationsBackgroundTitle;
+
+  /// No description provided for @notificationsBackgroundSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama kapalıyken bile 15 dakikada bir yangın kontrolü yapılsın'**
+  String get notificationsBackgroundSubtitle;
+
+  /// No description provided for @notificationsEnableBackground.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka Plan Takibini Aç'**
+  String get notificationsEnableBackground;
+
+  /// No description provided for @notificationsDisableBackground.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka Plan Takibini Kapat'**
+  String get notificationsDisableBackground;
+
+  /// No description provided for @backgroundLocationDialogTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka Plan Konum İzni'**
+  String get backgroundLocationDialogTitle;
+
+  /// No description provided for @backgroundLocationDialogBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.'**
+  String get backgroundLocationDialogBody;
+
+  /// No description provided for @backgroundLocationDialogConfirm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get backgroundLocationDialogConfirm;
+
+  /// No description provided for @backgroundLocationPermissionDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka plan konum izni verilmedi. Arka plan takibi açılamadı.'**
+  String get backgroundLocationPermissionDenied;
+
+  /// No description provided for @backgroundMonitoringEnabled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka plan takibi açıldı.'**
+  String get backgroundMonitoringEnabled;
+
+  /// No description provided for @backgroundMonitoringDisabled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arka plan takibi kapatıldı.'**
+  String get backgroundMonitoringDisabled;
 
   /// No description provided for @notificationsNearbyLiveFires.
   ///
@@ -1775,7 +1829,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsInfoVersionValue.
   ///
   /// In tr, this message translates to:
-  /// **'v1.0.0 demo'**
+  /// **'v1.0.0'**
   String get settingsInfoVersionValue;
 
   /// No description provided for @settingsInfoPlatform.
@@ -1807,6 +1861,30 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.'**
   String get settingsFooterNote;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yasal'**
+  String get settingsLegal;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizlilik Politikası'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @settingsTermsOfService.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanım Koşulları'**
+  String get settingsTermsOfService;
+
+  /// No description provided for @settingsLinkOpenFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı açılamadı. Lütfen tekrar deneyin.'**
+  String get settingsLinkOpenFailed;
 
   /// No description provided for @riskTitle.
   ///
@@ -3104,18 +3182,6 @@ abstract class AppLocalizations {
     String description,
   );
 
-  /// No description provided for @notificationsDemoAlertTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Kritik Yangın Uyarısı'**
-  String get notificationsDemoAlertTitle;
-
-  /// No description provided for @notificationsDemoAlertBody.
-  ///
-  /// In tr, this message translates to:
-  /// **'{region} bölgesinde yüksek riskli termal aktivite tespit edildi.'**
-  String notificationsDemoAlertBody(String region);
-
   /// No description provided for @settingsRefreshInterval5Min.
   ///
   /// In tr, this message translates to:
@@ -3761,7 +3827,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsAction.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama kapalıyken bile uyarı almak için bildirim izni verin ve Otomatik İzlemeyi başlatın. Çevrenizi manuel olarak kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.'**
+  /// **'Bildirim izni verin ve uygulamayı kullanırken Otomatik İzlemeyi başlatın. Çevrenizi manuel kontrol etmek için istediğiniz zaman \"Şimdi Tara\"yı kullanın.'**
   String get trustAlertsAction;
 
   /// No description provided for @newsReadFullArticle.
@@ -4103,7 +4169,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifMonitoringDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Otomatik taramayı başlatarak uygulama kapalıyken bile periyodik olarak yakın çevrende kontrol yapılmasını sağla.'**
+  /// **'Uygulama açıkken yakındaki termal tespitleri düzenli kontrol etmek için otomatik izlemeyi başlat.'**
   String get coachMarkNotifMonitoringDesc;
 
   /// No description provided for @coachMarkNotifAlertsTitle.

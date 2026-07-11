@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- No domain-config overrides: every domain falls through to this
+         base-config, which forbids cleartext (HTTP) entirely and trusts
+         only the OS's system CA store — matches usesCleartextTraffic=false
+         in the manifest, made explicit so it survives even if that
+         attribute is ever removed. -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

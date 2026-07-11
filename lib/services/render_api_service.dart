@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import '../core/config/api_config.dart';
 
 class RenderApiService {
   RenderApiService();
 
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://firewatch-tr-backend.onrender.com/api',
+      baseUrl: ApiConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 20),
     ),
@@ -35,7 +37,7 @@ class RenderApiService {
 
       return [];
     } catch (e) {
-      print('Error fetching news: $e');
+      if (kDebugMode) debugPrint('Error fetching news: $e');
       return [];
     }
   }
@@ -52,7 +54,7 @@ class RenderApiService {
 
       return null;
     } catch (e) {
-      print('Error fetching news by id: $e');
+      if (kDebugMode) debugPrint('Error fetching news by id: $e');
       return null;
     }
   }
@@ -70,7 +72,7 @@ class RenderApiService {
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
-      print('Error subscribing to notifications: $e');
+      if (kDebugMode) debugPrint('Error subscribing to notifications: $e');
       return false;
     }
   }
@@ -88,7 +90,7 @@ class RenderApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Error sending location: $e');
+      if (kDebugMode) debugPrint('Error sending location: $e');
       return false;
     }
   }
@@ -99,7 +101,7 @@ class RenderApiService {
       final response = await _dio.get('/health');
       return response.statusCode == 200;
     } catch (e) {
-      print('Health check failed: $e');
+      if (kDebugMode) debugPrint('Health check failed: $e');
       return false;
     }
   }

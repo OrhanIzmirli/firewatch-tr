@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
+import '../core/config/api_config.dart';
 
 /// Result of a nearest-city lookup. [outsideTurkey] is true when the
 /// coordinate fell outside Turkey's bounding box — the backend refuses to
@@ -32,9 +33,7 @@ class FireApiService {
     ),
   );
 
-  static const String apiKey = '2fe2d1a21d4de517b1e877a27e308c6f';
-  static const String turkeyArea = '25,35,45,43';
-  static const String _backendUrl = 'https://firewatch-tr-backend.onrender.com';
+  static const String _backendUrl = ApiConfig.backendBaseUrl;
 
   static bool _isOnLand(double lat, double lng) {
     if (lat < 35.8 || lat > 42.1) return false;
@@ -77,25 +76,16 @@ class FireApiService {
   }
 
   Future<List<FirePoint>> fetchTurkeyFires() async {
-    Future<List<List<dynamic>>> fetchRows(String product, int days) async {
-      final url =
-          'https://firms.modaps.eosdis.nasa.gov/api/area/csv/$apiKey/$product/$turkeyArea/$days';
-      final response = await _dio.get<String>(url);
-      final raw = response.data;
-      if (raw == null || raw.trim().isEmpty) return const [];
-      return const CsvToListConverter(
-        eol: '\n',
-        shouldParseNumbers: false,
-      ).convert(raw);
-    }
-
-    // NASA products are populated at different times during the day. SNPP
-    // can legitimately return a header-only response while MODIS already has
-    // current detections. Fall through across products before using a 48-hour
-    // VIIRS window, so a temporary feed gap never leaves the map empty.
-    var rows = await fetchRows('VIIRS_SNPP_NRT', 1);
-    if (rows.length <= 1) rows = await fetchRows('MODIS_NRT', 1);
-    if (rows.length <= 1) rows = await fetchRows('VIIRS_SNPP_NRT', 2);
+    // NASA credentials stay on the backend. The backend selects the first
+    // currently populated VIIRS/MODIS product and returns the original CSV;
+    // no generated or mock detections are ever substituted.
+    final response = await _dio.get<String>('$_backendUrl/api/thermal');
+    final raw = response.data;
+    if (raw == null || raw.trim().isEmpty) return [];
+    final rows = const CsvToListConverter(
+      eol: '\n',
+      shouldParseNumbers: false,
+    ).convert(raw);
 
     if (rows.length <= 1) return [];
 

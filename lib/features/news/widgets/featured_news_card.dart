@@ -6,10 +6,12 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/utils/news_content_analysis.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/news_item.dart';
+import '../../../services/news_translation_service.dart';
 import '../../../shared/widgets/glass_panel.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../../../shared/widgets/status_chip.dart';
 
-class FeaturedNewsCard extends StatelessWidget {
+class FeaturedNewsCard extends StatefulWidget {
   final NewsItem item;
   final VoidCallback? onTap;
 
@@ -20,6 +22,72 @@ class FeaturedNewsCard extends StatelessWidget {
   });
 
   @override
+  State<FeaturedNewsCard> createState() => _FeaturedNewsCardState();
+}
+
+class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
+  bool _translating = false;
+  String? _translatedTitle;
+  String? _translatedSummary;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _maybeAutoTranslate();
+  }
+
+  @override
+  void didUpdateWidget(covariant FeaturedNewsCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.item.id != widget.item.id) {
+      _translatedTitle = null;
+      _translatedSummary = null;
+      _maybeAutoTranslate();
+    }
+  }
+
+  Future<void> _maybeAutoTranslate() async {
+    if (Localizations.localeOf(context).languageCode != 'en') return;
+    if (_translatedTitle != null || _translating) return;
+
+    final service = NewsTranslationService.instance;
+    final cachedTitle = await service.getCached(widget.item.id, 'title');
+    final cachedSummary = await service.getCached(widget.item.id, 'summary');
+    if (cachedTitle != null) {
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = cachedTitle;
+        _translatedSummary = cachedSummary;
+      });
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() => _translating = true);
+    try {
+      final title = await service.translate(
+        articleId: widget.item.id,
+        field: 'title',
+        text: widget.item.title,
+      );
+      final summary = await service.translate(
+        articleId: widget.item.id,
+        field: 'summary',
+        text: widget.item.summary,
+      );
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = title;
+        _translatedSummary = summary;
+      });
+    } catch (_) {
+      // Falls back to showing the original Turkish text below.
+    } finally {
+      if (mounted) setState(() => _translating = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -28,16 +96,20 @@ class FeaturedNewsCard extends StatelessWidget {
     final summaryColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.64);
-    final fullText = '${item.title} ${item.summary}';
+    final fullText = '${widget.item.title} ${widget.item.summary}';
     final category = classifyNewsCategory(fullText);
     final riskLevel = classifyNewsRiskLevel(fullText);
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
-    final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
+    final timeAgo = formatNewsTimeAgo(l10n, widget.item.publishedAt);
+
+    final displayTitle = _translatedTitle ?? widget.item.title;
+    final displaySummary = _translatedSummary ?? widget.item.summary;
+    final showTranslatedCaption = isEnglish && _translatedTitle != null;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
         child: Ink(
           decoration: BoxDecoration(
@@ -53,7 +125,7 @@ class FeaturedNewsCard extends StatelessWidget {
                   runSpacing: AppSpacing.sm,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    if (item.isBreaking)
+                    if (widget.item.isBreaking)
                       StatusChip(
                         label: l10n.newsBreakingBadge,
                         icon: Icons.bolt_rounded,
@@ -90,34 +162,69 @@ class FeaturedNewsCard extends StatelessWidget {
                   curve: Curves.easeOutBack,
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                RichText(
-                  text: TextSpan(
-                    children: highlightFireKeywords(
-                      item.title,
-                      GoogleFonts.inter(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        height: 1.15,
-                        color: titleColor,
-                      ),
-                      GoogleFonts.inter(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        height: 1.15,
-                        color: AppColors.primary,
+                if (_translating)
+                  ShimmerWrap(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SkeletonBox(width: double.infinity, height: 22),
+                        const SizedBox(height: 8),
+                        SkeletonBox(width: MediaQuery.of(context).size.width * 0.5, height: 22),
+                      ],
+                    ),
+                  )
+                else
+                  RichText(
+                    text: TextSpan(
+                      children: highlightFireKeywords(
+                        displayTitle,
+                        GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          height: 1.15,
+                          color: titleColor,
+                        ),
+                        GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          height: 1.15,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  item.summary,
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    height: 1.5,
-                    color: summaryColor,
+                if (showTranslatedCaption) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.newsTranslatedCaption,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.primary.withValues(alpha: 0.8),
+                    ),
                   ),
-                ),
+                ],
+                const SizedBox(height: AppSpacing.md),
+                if (_translating)
+                  ShimmerWrap(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SkeletonBox(width: double.infinity, height: 14),
+                        const SizedBox(height: 6),
+                        const SkeletonBox(width: double.infinity, height: 14),
+                      ],
+                    ),
+                  )
+                else
+                  Text(
+                    displaySummary,
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: summaryColor,
+                    ),
+                  ),
                 const SizedBox(height: AppSpacing.lg),
                 Row(
                   children: [
@@ -131,7 +238,7 @@ class FeaturedNewsCard extends StatelessWidget {
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
-                        '${item.source} • ${item.relatedRegion}',
+                        '${widget.item.source} • ${widget.item.relatedRegion}',
                         style: GoogleFonts.inter(
                           fontSize: 13,
                           color: isDark
@@ -150,27 +257,6 @@ class FeaturedNewsCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (isEnglish) ...[
-                  const SizedBox(height: AppSpacing.md),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                      height: 48,
-                      child: OutlinedButton.icon(
-                        onPressed: onTap,
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
-                        ),
-                        icon: const Icon(Icons.translate_rounded, size: 16),
-                        label: Text(
-                          l10n.newsTranslateCardButton,
-                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ],
             ),
           ),

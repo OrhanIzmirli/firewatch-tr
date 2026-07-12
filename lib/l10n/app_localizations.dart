@@ -3290,6 +3290,12 @@ abstract class AppLocalizations {
   /// **'Çeviri başarısız oldu.'**
   String get newsTranslationFailed;
 
+  /// No description provided for @newsTranslatedCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'🌐 Türkçeden çevrildi • Tam çeviri için dokun'**
+  String get newsTranslatedCaption;
+
   /// No description provided for @coachMarksGotIt.
   ///
   /// In tr, this message translates to:
@@ -4328,6 +4334,42 @@ abstract class AppLocalizations {
   /// **'Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.'**
   String get detectionLimitations;
 
+  /// No description provided for @mapLegendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita Lejantı'**
+  String get mapLegendTitle;
+
+  /// No description provided for @legendProbableFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔴 Muhtemel Yangın'**
+  String get legendProbableFire;
+
+  /// No description provided for @legendHighThermal.
+  ///
+  /// In tr, this message translates to:
+  /// **'🟠 Yüksek Isı Anomalisi'**
+  String get legendHighThermal;
+
+  /// No description provided for @legendThermalDetection.
+  ///
+  /// In tr, this message translates to:
+  /// **'🟡 Termal Tespit'**
+  String get legendThermalDetection;
+
+  /// No description provided for @legendLowConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'⚪ Düşük Güvenilirlik'**
+  String get legendLowConfidence;
+
+  /// No description provided for @mapMarkerDisclaimer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita NASA uydu termal tespitlerini gösterir. 🔴 işaretler aktif yangın olabilir.'**
+  String get mapMarkerDisclaimer;
+
   /// No description provided for @feedbackSend.
   ///
   /// In tr, this message translates to:
@@ -4429,6 +4471,60 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Daha sonra'**
   String get ratingPromptLater;
+
+  /// No description provided for @feedbackReportBug.
+  ///
+  /// In tr, this message translates to:
+  /// **'🐛 Hata Bildir'**
+  String get feedbackReportBug;
+
+  /// No description provided for @feedbackSendFeedback.
+  ///
+  /// In tr, this message translates to:
+  /// **'💬 Geri Bildirim'**
+  String get feedbackSendFeedback;
+
+  /// No description provided for @feedbackBlockedMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri bildiriminiz alındı. Yeni geri bildirim için {days} gün bekleyin.'**
+  String feedbackBlockedMessage(int days);
+
+  /// No description provided for @bugReportTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hata Bildir'**
+  String get bugReportTitle;
+
+  /// No description provided for @bugReportIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Neyin yanlış gittiğini anlat — doğrudan ekibe iletilir.'**
+  String get bugReportIntro;
+
+  /// No description provided for @bugReportWhatHappened.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne oldu?'**
+  String get bugReportWhatHappened;
+
+  /// No description provided for @bugReportWhatExpected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bunun yerine ne bekliyordunuz?'**
+  String get bugReportWhatExpected;
+
+  /// No description provided for @bugReportDeviceInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cihaz bilgisi (otomatik eklenir)'**
+  String get bugReportDeviceInfo;
+
+  /// No description provided for @bugReportWhatHappenedRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen ne olduğunu açıklayın.'**
+  String get bugReportWhatHappenedRequired;
 
   /// No description provided for @coachMarkWatchlistTapTitle.
   ///

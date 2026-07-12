@@ -1825,6 +1825,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsTranslationFailed => 'Çeviri başarısız oldu.';
 
   @override
+  String get newsTranslatedCaption =>
+      '🌐 Türkçeden çevrildi • Tam çeviri için dokun';
+
+  @override
   String get coachMarksGotIt => 'Anladım';
 
   @override
@@ -2466,6 +2470,25 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.';
 
   @override
+  String get mapLegendTitle => 'Harita Lejantı';
+
+  @override
+  String get legendProbableFire => '🔴 Muhtemel Yangın';
+
+  @override
+  String get legendHighThermal => '🟠 Yüksek Isı Anomalisi';
+
+  @override
+  String get legendThermalDetection => '🟡 Termal Tespit';
+
+  @override
+  String get legendLowConfidence => '⚪ Düşük Güvenilirlik';
+
+  @override
+  String get mapMarkerDisclaimer =>
+      'Harita NASA uydu termal tespitlerini gösterir. 🔴 işaretler aktif yangın olabilir.';
+
+  @override
   String get feedbackSend => 'Geri Bildirim Gönder';
 
   @override
@@ -2518,6 +2541,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ratingPromptLater => 'Daha sonra';
+
+  @override
+  String get feedbackReportBug => '🐛 Hata Bildir';
+
+  @override
+  String get feedbackSendFeedback => '💬 Geri Bildirim';
+
+  @override
+  String feedbackBlockedMessage(int days) {
+    return 'Geri bildiriminiz alındı. Yeni geri bildirim için $days gün bekleyin.';
+  }
+
+  @override
+  String get bugReportTitle => 'Hata Bildir';
+
+  @override
+  String get bugReportIntro =>
+      'Neyin yanlış gittiğini anlat — doğrudan ekibe iletilir.';
+
+  @override
+  String get bugReportWhatHappened => 'Ne oldu?';
+
+  @override
+  String get bugReportWhatExpected => 'Bunun yerine ne bekliyordunuz?';
+
+  @override
+  String get bugReportDeviceInfo => 'Cihaz bilgisi (otomatik eklenir)';
+
+  @override
+  String get bugReportWhatHappenedRequired => 'Lütfen ne olduğunu açıklayın.';
 
   @override
   String get coachMarkWatchlistTapTitle => 'Detayı Gör';

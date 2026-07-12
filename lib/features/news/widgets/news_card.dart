@@ -6,10 +6,12 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/utils/news_content_analysis.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/news_item.dart';
+import '../../../services/news_translation_service.dart';
 import '../../../shared/widgets/glass_panel.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../../../shared/widgets/status_chip.dart';
 
-class NewsCard extends StatelessWidget {
+class NewsCard extends StatefulWidget {
   final NewsItem item;
   final VoidCallback? onTap;
 
@@ -18,6 +20,72 @@ class NewsCard extends StatelessWidget {
     required this.item,
     this.onTap,
   });
+
+  @override
+  State<NewsCard> createState() => _NewsCardState();
+}
+
+class _NewsCardState extends State<NewsCard> {
+  bool _translating = false;
+  String? _translatedTitle;
+  String? _translatedSummary;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _maybeAutoTranslate();
+  }
+
+  @override
+  void didUpdateWidget(covariant NewsCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.item.id != widget.item.id) {
+      _translatedTitle = null;
+      _translatedSummary = null;
+      _maybeAutoTranslate();
+    }
+  }
+
+  Future<void> _maybeAutoTranslate() async {
+    if (Localizations.localeOf(context).languageCode != 'en') return;
+    if (_translatedTitle != null || _translating) return;
+
+    final service = NewsTranslationService.instance;
+    final cachedTitle = await service.getCached(widget.item.id, 'title');
+    final cachedSummary = await service.getCached(widget.item.id, 'summary');
+    if (cachedTitle != null) {
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = cachedTitle;
+        _translatedSummary = cachedSummary;
+      });
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() => _translating = true);
+    try {
+      final title = await service.translate(
+        articleId: widget.item.id,
+        field: 'title',
+        text: widget.item.title,
+      );
+      final summary = await service.translate(
+        articleId: widget.item.id,
+        field: 'summary',
+        text: widget.item.summary,
+      );
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = title;
+        _translatedSummary = summary;
+      });
+    } catch (_) {
+      // Falls back to showing the original Turkish text below.
+    } finally {
+      if (mounted) setState(() => _translating = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +103,21 @@ class NewsCard extends StatelessWidget {
         ? AppColors.white.withValues(alpha: 0.42)
         : Colors.black.withValues(alpha: 0.3);
 
-    final fullText = '${item.title} ${item.summary}';
+    final fullText = '${widget.item.title} ${widget.item.summary}';
     final category = classifyNewsCategory(fullText);
     final riskLevel = classifyNewsRiskLevel(fullText);
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
-    final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
-    final wordCount = newsWordCount(item);
+    final timeAgo = formatNewsTimeAgo(l10n, widget.item.publishedAt);
+    final wordCount = newsWordCount(widget.item);
+
+    final displayTitle = _translatedTitle ?? widget.item.title;
+    final displaySummary = _translatedSummary ?? widget.item.summary;
+    final showTranslatedCaption = isEnglish && _translatedTitle != null;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
         child: Ink(
           decoration: BoxDecoration(
@@ -93,7 +165,7 @@ class NewsCard extends StatelessWidget {
                             label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
                             color: newsRiskLevelColor(riskLevel),
                           ),
-                          if (item.isBreaking)
+                          if (widget.item.isBreaking)
                             StatusChip(
                               label: l10n.newsBreakingBadge,
                               icon: Icons.bolt_rounded,
@@ -101,42 +173,77 @@ class NewsCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),
-                      RichText(
-                        text: TextSpan(
-                          children: highlightFireKeywords(
-                            item.title,
-                            GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              height: 1.2,
-                              color: titleColor,
-                            ),
-                            GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              height: 1.2,
-                              color: AppColors.primary,
+                      if (_translating)
+                        ShimmerWrap(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SkeletonBox(width: double.infinity, height: 16),
+                              const SizedBox(height: 6),
+                              SkeletonBox(width: MediaQuery.of(context).size.width * 0.5, height: 16),
+                            ],
+                          ),
+                        )
+                      else
+                        RichText(
+                          text: TextSpan(
+                            children: highlightFireKeywords(
+                              displayTitle,
+                              GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                height: 1.2,
+                                color: titleColor,
+                              ),
+                              GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                height: 1.2,
+                                color: AppColors.primary,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(
-                        item.summary,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(
-                          fontSize: 13,
-                          height: 1.45,
-                          color: summaryColor,
+                      if (showTranslatedCaption) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          l10n.newsTranslatedCaption,
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.primary.withValues(alpha: 0.8),
+                          ),
                         ),
-                      ),
+                      ],
+                      const SizedBox(height: AppSpacing.sm),
+                      if (_translating)
+                        ShimmerWrap(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SkeletonBox(width: double.infinity, height: 12),
+                              const SizedBox(height: 6),
+                              const SkeletonBox(width: double.infinity, height: 12),
+                            ],
+                          ),
+                        )
+                      else
+                        Text(
+                          displaySummary,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            height: 1.45,
+                            color: summaryColor,
+                          ),
+                        ),
                       const SizedBox(height: AppSpacing.md),
                       Row(
                         children: [
                           Expanded(
                             child: Text(
-                              '${item.source} • $timeAgo',
+                              '${widget.item.source} • $timeAgo',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: metaColor,
@@ -156,27 +263,6 @@ class NewsCard extends StatelessWidget {
                           ],
                         ],
                       ),
-                      if (isEnglish) ...[
-                        const SizedBox(height: AppSpacing.sm),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: SizedBox(
-                            height: 48,
-                            child: OutlinedButton.icon(
-                              onPressed: onTap,
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 14),
-                                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
-                              ),
-                              icon: const Icon(Icons.translate_rounded, size: 16),
-                              label: Text(
-                                l10n.newsTranslateCardButton,
-                                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ],
                   ),
                 ),

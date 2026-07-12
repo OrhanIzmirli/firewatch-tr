@@ -88,10 +88,19 @@ class SettingsScreen extends ConsumerWidget {
 
             SizedBox(
               width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => showBugReportSheet(context),
+                icon: const Icon(Icons.bug_report_outlined),
+                label: Text(l10n.feedbackReportBug),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            SizedBox(
+              width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () => showFeedbackSheet(context),
                 icon: const Icon(Icons.rate_review_outlined),
-                label: Text(l10n.feedbackSend),
+                label: Text(l10n.feedbackSendFeedback),
               ),
             ),
 

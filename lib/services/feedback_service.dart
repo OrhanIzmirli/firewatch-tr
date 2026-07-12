@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../core/config/api_config.dart';
@@ -32,4 +34,21 @@ class FeedbackService {
       },
     );
   }
+
+  /// Bug reports don't collect a star rating in the UI (it's a simplified
+  /// form) — a fixed neutral value is sent since the backend requires one.
+  Future<void> submitBugReport({
+    required String whatHappened,
+    required String whatExpected,
+  }) async {
+    final deviceInfo = deviceInfoSummary();
+    final body = StringBuffer()
+      ..writeln('What happened: ${whatHappened.trim()}')
+      ..writeln('What I expected: ${whatExpected.trim()}')
+      ..write('Device: $deviceInfo');
+    await submit(rating: 3, category: 'bug', message: body.toString());
+  }
+
+  String deviceInfoSummary() =>
+      '${Platform.operatingSystem} ${Platform.operatingSystemVersion}';
 }

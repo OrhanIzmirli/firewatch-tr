@@ -1829,6 +1829,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newsTranslationFailed => 'Translation failed.';
 
   @override
+  String get newsTranslatedCaption =>
+      '🌐 Translated from Turkish • Tap for full translation';
+
+  @override
   String get coachMarksGotIt => 'Got it';
 
   @override
@@ -2471,6 +2475,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cloud, smoke, satellite resolution and non-fire heat sources can cause missed or misleading detections. Use official emergency information and direct observation for safety decisions.';
 
   @override
+  String get mapLegendTitle => 'Map Legend';
+
+  @override
+  String get legendProbableFire => '🔴 Probable Fire';
+
+  @override
+  String get legendHighThermal => '🟠 High Thermal Anomaly';
+
+  @override
+  String get legendThermalDetection => '🟡 Thermal Detection';
+
+  @override
+  String get legendLowConfidence => '⚪ Low Confidence';
+
+  @override
+  String get mapMarkerDisclaimer =>
+      'The map shows NASA satellite thermal detections. 🔴 markers may indicate an active fire.';
+
+  @override
   String get feedbackSend => 'Send Feedback';
 
   @override
@@ -2521,6 +2544,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ratingPromptLater => 'Later';
+
+  @override
+  String get feedbackReportBug => '🐛 Report a Bug';
+
+  @override
+  String get feedbackSendFeedback => '💬 Send Feedback';
+
+  @override
+  String feedbackBlockedMessage(int days) {
+    return 'Your feedback was received. Please wait $days days before submitting again.';
+  }
+
+  @override
+  String get bugReportTitle => 'Report a Bug';
+
+  @override
+  String get bugReportIntro =>
+      'Tell us what went wrong — this goes straight to the team.';
+
+  @override
+  String get bugReportWhatHappened => 'What happened?';
+
+  @override
+  String get bugReportWhatExpected => 'What did you expect instead?';
+
+  @override
+  String get bugReportDeviceInfo => 'Device info (attached automatically)';
+
+  @override
+  String get bugReportWhatHappenedRequired => 'Please describe what happened.';
 
   @override
   String get coachMarkWatchlistTapTitle => 'View Details';

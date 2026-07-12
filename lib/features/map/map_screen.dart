@@ -54,8 +54,10 @@ class _MapScreenState extends State<MapScreen> {
   String? _errorMessage;
   bool _isOffline = false;
   bool _isSlowLoading = false;
+  bool _isLegendOpen = false;
   DateTime? _cachedAt;
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
+  double _currentZoom = 5.6;
 
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
@@ -69,6 +71,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.focusLat != null) _currentZoom = 13;
     _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -78,6 +81,12 @@ class _MapScreenState extends State<MapScreen> {
         });
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 
   Future<void> _bootstrapMapData() async {
@@ -257,6 +266,56 @@ class _MapScreenState extends State<MapScreen> {
 
   Color _markerColor(FirePoint point) => point.detectionColor;
 
+  /// Base marker diameter by detection tier — probable fires read as the
+  /// largest/most urgent, low-confidence detections shrink to a barely-there
+  /// dot so the map isn't visually dominated by noise-tier points.
+  double _baseMarkerSize(FirePoint point) {
+    if (point.isProbableFire) return 40;
+    switch (point.riskTier) {
+      case 'high':
+        return 28;
+      case 'medium':
+        return 16;
+      default:
+        return 9;
+    }
+  }
+
+  /// Scales marker size with the current zoom level so markers stay
+  /// proportionate to the map instead of a fixed screen size regardless of
+  /// how far in/out the user is — clamped to keep tiny/huge zooms sane.
+  double _markerSize(FirePoint point) {
+    final zoomScale = (_currentZoom / 6.0).clamp(0.55, 2.4);
+    return _baseMarkerSize(point) * zoomScale;
+  }
+
+  /// High-tier detections keep the recognizable flame icon (large/medium);
+  /// medium/low-confidence detections render as plain dots so they read as
+  /// clearly less urgent rather than competing visually with real fires.
+  Widget _buildMarkerIcon(FirePoint point) {
+    final size = _markerSize(point);
+    final color = _markerColor(point);
+    if (point.isProbableFire || point.riskTier == 'high') {
+      return Icon(Icons.local_fire_department_rounded, color: color, size: size)
+          .animate(onPlay: (c) => c.repeat(reverse: true))
+          .scale(
+            begin: const Offset(0.94, 0.94),
+            end: const Offset(1.06, 1.06),
+            duration: 1400.ms,
+            curve: Curves.easeInOut,
+          );
+    }
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white.withValues(alpha: 0.7), width: 1),
+      ),
+    );
+  }
+
   bool _isLowConfidence(FirePoint p) {
     final c = p.confidence.toLowerCase();
     return !(c.contains('high') ||
@@ -317,16 +376,47 @@ class _MapScreenState extends State<MapScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.md,
+                  ),
+                  decoration: BoxDecoration(
+                    color: point.detectionColor.withValues(
+                      alpha: isDark ? 0.18 : 0.12,
+                    ),
+                    borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                    border: Border.all(
+                      color: point.detectionColor.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.satellite_alt_rounded,
+                        color: point.detectionColor,
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: Text(
+                          point.detectionTitle(l10n),
+                          style: GoogleFonts.inter(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                            color: point.detectionColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
                 Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    StatusChip(
-                      label: point.detectionTitle(l10n),
-                      icon: Icons.satellite_alt_rounded,
-                      color: point.detectionColor,
-                    ),
                     StatusChip(
                       label:
                           '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
@@ -643,6 +733,14 @@ class _MapScreenState extends State<MapScreen> {
                                     maxZoom: 16,
                                     onTap: (_, __) =>
                                         setState(() => _selectedPoint = null),
+                                    onPositionChanged: (camera, hasGesture) {
+                                      if ((camera.zoom - _currentZoom).abs() >
+                                          0.2) {
+                                        setState(
+                                          () => _currentZoom = camera.zoom,
+                                        );
+                                      }
+                                    },
                                   ),
                                   children: [
                                     TileLayer(
@@ -698,41 +796,19 @@ class _MapScreenState extends State<MapScreen> {
                                         markers: _visibleFirePoints.map((
                                           point,
                                         ) {
-                                          final color = _markerColor(point);
                                           return Marker(
                                             point: LatLng(
                                               point.latitude,
                                               point.longitude,
                                             ),
-                                            width: 40,
-                                            height: 40,
+                                            width: 48,
+                                            height: 48,
                                             child: GestureDetector(
                                               onTap: () =>
                                                   _openFireBottomSheet(point),
-                                              child:
-                                                  Icon(
-                                                        Icons
-                                                            .local_fire_department_rounded,
-                                                        color: color,
-                                                        size: 30,
-                                                      )
-                                                      .animate(
-                                                        onPlay: (c) => c.repeat(
-                                                          reverse: true,
-                                                        ),
-                                                      )
-                                                      .scale(
-                                                        begin: const Offset(
-                                                          0.94,
-                                                          0.94,
-                                                        ),
-                                                        end: const Offset(
-                                                          1.06,
-                                                          1.06,
-                                                        ),
-                                                        duration: 1400.ms,
-                                                        curve: Curves.easeInOut,
-                                                      ),
+                                              child: Center(
+                                                child: _buildMarkerIcon(point),
+                                              ),
                                             ),
                                           );
                                         }).toList(),
@@ -888,6 +964,102 @@ class _MapScreenState extends State<MapScreen> {
                                           .fadeIn(duration: 280.ms)
                                           .slideY(begin: 0.2, end: 0),
                                 ),
+                                Positioned(
+                                  left: 12,
+                                  bottom: 12,
+                                  child: GlassPanel(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 12,
+                                    ),
+                                    radius: 16,
+                                    child: InkWell(
+                                      onTap: () => setState(
+                                        () => _isLegendOpen = !_isLegendOpen,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.info_outline_rounded,
+                                            size: 18,
+                                            color: AppColors.primary,
+                                          ),
+                                          const SizedBox(width: AppSpacing.sm),
+                                          Text(
+                                            l10n.mapLegendTitle,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: titleColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (_isLegendOpen)
+                                  Positioned(
+                                    left: 12,
+                                    right: 12,
+                                    bottom: 66,
+                                    child:
+                                        GlassPanel(
+                                              padding: const EdgeInsets.all(
+                                                AppSpacing.lg,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    l10n.legendProbableFire,
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: titleColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    l10n.legendHighThermal,
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: titleColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    l10n.legendThermalDetection,
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: titleColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    l10n.legendLowConfidence,
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: titleColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                            .animate()
+                                            .fadeIn(duration: 180.ms)
+                                            .slideY(begin: 0.08, end: 0),
+                                  ),
                               ],
                             ),
                           ),
@@ -900,6 +1072,21 @@ class _MapScreenState extends State<MapScreen> {
                         end: const Offset(1, 1),
                       )
                       .slideY(begin: 0.05, end: 0),
+
+                  const SizedBox(height: AppSpacing.sm),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                    ),
+                    child: Text(
+                      l10n.mapMarkerDisclaimer,
+                      style: GoogleFonts.inter(
+                        fontSize: 11.5,
+                        height: 1.4,
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(height: AppSpacing.xxl),
 

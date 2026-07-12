@@ -101,12 +101,23 @@ class RenderApiService {
     }
   }
 
-  // Konum güncellemeden yalnızca is_active bayrağını aç/kapat.
-  Future<bool> setNotificationActive(String token, bool isActive) async {
+  // is_active bayrağını aç/kapat — konum verildiyse onu da günceller
+  // (verilmezse mevcut konum backend'de korunur).
+  Future<bool> setNotificationActive(
+    String token,
+    bool isActive, {
+    double? latitude,
+    double? longitude,
+  }) async {
     try {
       final response = await _dio.patch(
         '/notify/subscribe',
-        data: {'token': token, 'is_active': isActive},
+        data: {
+          'token': token,
+          'is_active': isActive,
+          if (latitude != null) 'latitude': latitude,
+          if (longitude != null) 'longitude': longitude,
+        },
       );
 
       return response.statusCode == 200;

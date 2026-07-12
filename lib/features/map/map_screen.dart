@@ -264,20 +264,33 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  Color _markerColor(FirePoint point) => point.detectionColor;
-
-  /// Base marker diameter by detection tier — probable fires read as the
-  /// largest/most urgent, low-confidence detections shrink to a barely-there
-  /// dot so the map isn't visually dominated by noise-tier points.
-  double _baseMarkerSize(FirePoint point) {
-    if (point.isProbableFire) return 40;
+  /// Marker color by tier — literal Material colors per spec, independent
+  /// of FirePoint.detectionColor (which still drives the bottom sheet/cards
+  /// elsewhere and is deliberately left alone).
+  Color _markerColor(FirePoint point) {
+    if (point.isProbableFire) return Colors.red;
     switch (point.riskTier) {
       case 'high':
-        return 28;
+        return Colors.orange;
       case 'medium':
-        return 16;
+        return Colors.amber;
       default:
-        return 9;
+        return Colors.grey;
+    }
+  }
+
+  /// Base marker size by tier (at the reference zoom level) — probable
+  /// fires read as the largest/most urgent, low-confidence detections
+  /// shrink so the map isn't visually dominated by noise-tier points.
+  double _baseMarkerSize(FirePoint point) {
+    if (point.isProbableFire) return 32;
+    switch (point.riskTier) {
+      case 'high':
+        return 26;
+      case 'medium':
+        return 20;
+      default:
+        return 16;
     }
   }
 
@@ -289,31 +302,22 @@ class _MapScreenState extends State<MapScreen> {
     return _baseMarkerSize(point) * zoomScale;
   }
 
-  /// High-tier detections keep the recognizable flame icon (large/medium);
-  /// medium/low-confidence detections render as plain dots so they read as
-  /// clearly less urgent rather than competing visually with real fires.
+  /// Every tier renders as the same fire-department icon, just a different
+  /// color/size — only high-confidence tiers (probable fire + high thermal
+  /// anomaly) pulse, so the animation itself signals urgency.
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
+    final icon = Icon(Icons.local_fire_department_rounded, color: color, size: size);
     if (point.isProbableFire || point.riskTier == 'high') {
-      return Icon(Icons.local_fire_department_rounded, color: color, size: size)
-          .animate(onPlay: (c) => c.repeat(reverse: true))
-          .scale(
+      return icon.animate(onPlay: (c) => c.repeat(reverse: true)).scale(
             begin: const Offset(0.94, 0.94),
             end: const Offset(1.06, 1.06),
             duration: 1400.ms,
             curve: Curves.easeInOut,
           );
     }
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.7), width: 1),
-      ),
-    );
+    return icon;
   }
 
   bool _isLowConfidence(FirePoint p) {

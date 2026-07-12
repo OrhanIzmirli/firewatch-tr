@@ -19,3 +19,21 @@ Future<T> raceWithCacheFallback<T>({
     return fetch;
   });
 }
+
+/// Calls [fetch] and, if it throws, calls it a second time before giving up.
+/// Covers one-off hiccups (e.g. a cold-starting backend instance) so a
+/// single failed attempt doesn't immediately flip a screen into offline
+/// mode.
+Future<T> retryOnce<T>(Future<T> Function() fetch) async {
+  try {
+    return await fetch();
+  } catch (_) {
+    return await fetch();
+  }
+}
+
+/// Whether cached data saved at [savedAt] is recent enough to show without
+/// an offline banner.
+bool isCacheFresh(DateTime savedAt, {Duration within = const Duration(minutes: 30)}) {
+  return DateTime.now().difference(savedAt) < within;
+}

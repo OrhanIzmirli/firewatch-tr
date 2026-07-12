@@ -39,8 +39,10 @@ class _RiskScreenState extends State<RiskScreen> {
 
   final Dio _dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      // Generous enough to survive a Render free-tier cold start (can take
+      // 10-30s to wake) without throwing a false "offline" failure.
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     ),
   );
   final FireApiService _fireApiService = FireApiService();
@@ -119,7 +121,7 @@ class _RiskScreenState extends State<RiskScreen> {
     if (mounted) setState(() { _loading = true; _isSlowLoading = false; });
     try {
       final response = await raceWithCacheFallback(
-        fetch: _dio.get('${ApiConfig.apiBaseUrl}/risk/summary'),
+        fetch: retryOnce(() => _dio.get('${ApiConfig.apiBaseUrl}/risk/summary')),
         timeout: const Duration(seconds: 12),
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
@@ -152,7 +154,9 @@ class _RiskScreenState extends State<RiskScreen> {
             final (data, savedAt) = cached;
             _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
             _cachedAt = savedAt;
-            _isOffline = true;
+            // Fresh cache (<30min) is shown silently; only stale cache
+            // paired with a real fetch failure warrants the banner.
+            _isOffline = !isCacheFresh(savedAt);
           }
           _isSlowLoading = false;
           _loading = false;

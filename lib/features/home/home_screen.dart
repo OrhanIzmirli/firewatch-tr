@@ -50,8 +50,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final FireApiService _fireApiService = FireApiService();
   final Dio _dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      // Generous enough to survive a Render free-tier cold start (can take
+      // 10-30s to wake) without throwing a false "offline" failure.
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     ),
   );
 
@@ -116,7 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (mounted) setState(() => _riskLoading = true);
     try {
       final response = await raceWithCacheFallback(
-        fetch: _dio.get('${ApiConfig.apiBaseUrl}/risk/summary'),
+        fetch: retryOnce(() => _dio.get('${ApiConfig.apiBaseUrl}/risk/summary')),
         timeout: const Duration(seconds: 12),
         cacheKey: _riskCacheKey,
         onSlowFallback: (cached) {
@@ -152,7 +154,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (mounted) setState(() { _newsLoading = true; _newsSlowLoading = false; });
     try {
       final news = await raceWithCacheFallback(
-        fetch: _newsService.fetchNewsFromRender(limit: 3),
+        fetch: retryOnce(() => _newsService.fetchNewsFromRender(limit: 3)),
         timeout: const Duration(seconds: 12),
         cacheKey: _newsCacheKey,
         onSlowFallback: (cached) {
@@ -177,7 +179,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final (data, savedAt) = cached;
             _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
             _newsCachedAt = savedAt;
-            _newsOffline = true;
+            // Fresh cache (<30min) is shown silently; only stale cache
+            // paired with a real fetch failure warrants the banner.
+            _newsOffline = !isCacheFresh(savedAt);
           }
           _newsSlowLoading = false;
           _newsLoading = false;
@@ -190,7 +194,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (mounted) setState(() { _fireLoading = true; _firesSlowLoading = false; });
     try {
       final allPoints = await raceWithCacheFallback(
-        fetch: _fireApiService.fetchTurkeyFiresWithCities(),
+        fetch: retryOnce(() => _fireApiService.fetchTurkeyFiresWithCities()),
         timeout: const Duration(seconds: 12),
         cacheKey: _firesCacheKey,
         onSlowFallback: (cached) {
@@ -220,7 +224,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final (data, savedAt) = cached;
             _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
             _firesCachedAt = savedAt;
-            _firesOffline = true;
+            // Fresh cache (<30min) is shown silently; only stale cache
+            // paired with a real fetch failure warrants the banner.
+            _firesOffline = !isCacheFresh(savedAt);
           }
           _firesSlowLoading = false;
           _fireLoading = false;

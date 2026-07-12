@@ -153,7 +153,7 @@ class _MapScreenState extends State<MapScreen> {
     });
     try {
       final firePoints = await raceWithCacheFallback(
-        fetch: _fireApiService.fetchTurkeyFiresWithCities(),
+        fetch: retryOnce(() => _fireApiService.fetchTurkeyFiresWithCities()),
         timeout: const Duration(seconds: 12),
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
@@ -198,7 +198,9 @@ class _MapScreenState extends State<MapScreen> {
           _firePoints = points;
           _nearbyFirePoints = _buildNearbyList(points);
           _cachedAt = savedAt;
-          _isOffline = true;
+          // Fresh cache (<30min) is shown silently; only stale cache
+          // paired with a real fetch failure warrants the banner.
+          _isOffline = !isCacheFresh(savedAt);
           _isSlowLoading = false;
           _isLoading = false;
         });
@@ -264,29 +266,29 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  /// Marker color by tier — literal Material colors per spec, independent
-  /// of FirePoint.detectionColor (which still drives the bottom sheet/cards
+  /// Marker color by NASA confidence tier only — high: danger (red),
+  /// nominal: warning (orange), low: primary — independent of
+  /// FirePoint.detectionColor (which still drives the bottom sheet/cards
   /// elsewhere and is deliberately left alone).
   Color _markerColor(FirePoint point) {
-    if (point.isProbableFire) return Colors.red;
     switch (point.riskTier) {
       case 'high':
-        return Colors.orange;
+        return AppColors.danger;
       case 'medium':
-        return Colors.amber;
+        return AppColors.warning;
       default:
-        return Colors.grey;
+        return AppColors.primary;
     }
   }
 
-  /// Base marker size by tier (at the reference zoom level) — probable
-  /// fires read as the largest/most urgent, low-confidence detections
-  /// shrink so the map isn't visually dominated by noise-tier points.
+  /// Base marker size by confidence tier (at the reference zoom level) —
+  /// high-confidence detections read as the largest/most urgent,
+  /// low-confidence detections shrink so the map isn't visually dominated
+  /// by noise-tier points.
   double _baseMarkerSize(FirePoint point) {
-    if (point.isProbableFire) return 32;
     switch (point.riskTier) {
       case 'high':
-        return 26;
+        return 28;
       case 'medium':
         return 20;
       default:
@@ -303,13 +305,13 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   /// Every tier renders as the same fire-department icon, just a different
-  /// color/size — only high-confidence tiers (probable fire + high thermal
-  /// anomaly) pulse, so the animation itself signals urgency.
+  /// color/size — only the high-confidence tier pulses, so the animation
+  /// itself signals urgency.
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
     final icon = Icon(Icons.local_fire_department_rounded, color: color, size: size);
-    if (point.isProbableFire || point.riskTier == 'high') {
+    if (point.riskTier == 'high') {
       return icon.animate(onPlay: (c) => c.repeat(reverse: true)).scale(
             begin: const Offset(0.94, 0.94),
             end: const Offset(1.06, 1.06),
@@ -1116,7 +1118,7 @@ class _MapScreenState extends State<MapScreen> {
                           : bright.toStringAsFixed(1);
 
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
                         child:
                             GlassPanel(
                                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -1125,7 +1127,11 @@ class _MapScreenState extends State<MapScreen> {
                                     borderRadius: BorderRadius.circular(
                                       AppSpacing.largeCardRadius,
                                     ),
-                                    child: Column(
+                                    child: ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                        minHeight: 80,
+                                      ),
+                                      child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -1310,6 +1316,7 @@ class _MapScreenState extends State<MapScreen> {
                                           ),
                                         ),
                                       ],
+                                    ),
                                     ),
                                   ),
                                 )

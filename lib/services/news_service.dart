@@ -9,8 +9,10 @@ class NewsService {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: ApiConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      // Generous enough to survive a Render free-tier cold start (can take
+      // 10-30s to wake) without throwing a false "offline" failure.
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     ),
   );
 

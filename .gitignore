@@ -3,3 +3,8 @@ build/
 *.iml
 .dart_tool/
 .idea/
+
+# Signing — never commit the release keystore or its credentials
+android/key.properties
+*.jks
+*.keystore

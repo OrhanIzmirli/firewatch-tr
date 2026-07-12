@@ -59,20 +59,59 @@ class RenderApiService {
     }
   }
 
-  // PUSH NOTIFICATION TOKEN KAYDET
-  Future<bool> subscribeToNotifications(String token) async {
+  // PUSH NOTIFICATION TOKEN KAYDET (isteğe bağlı konum ile — bölgesel
+  // uyarıların hedeflenebilmesi için backend'de fcm_tokens.latitude/
+  // longitude alanlarını doldurur)
+  Future<bool> subscribeToNotifications(
+    String token, {
+    double? latitude,
+    double? longitude,
+  }) async {
     try {
       final response = await _dio.post(
         '/notify/subscribe',
         data: {
           'token': token,
           'device_info': 'FireWatch TR App',
+          if (latitude != null) 'latitude': latitude,
+          if (longitude != null) 'longitude': longitude,
         },
       );
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       if (kDebugMode) debugPrint('Error subscribing to notifications: $e');
+      return false;
+    }
+  }
+
+  // PUSH NOTIFICATION TOKEN'I PASİFLEŞTİR (eski POST /unsubscribe — hâlâ
+  // destekleniyor, bkz. setNotificationActive için PATCH tabanlı alternatif)
+  Future<bool> unsubscribeFromNotifications(String token) async {
+    try {
+      final response = await _dio.post(
+        '/notify/unsubscribe',
+        data: {'token': token},
+      );
+
+      return response.statusCode == 200;
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error unsubscribing from notifications: $e');
+      return false;
+    }
+  }
+
+  // Konum güncellemeden yalnızca is_active bayrağını aç/kapat.
+  Future<bool> setNotificationActive(String token, bool isActive) async {
+    try {
+      final response = await _dio.patch(
+        '/notify/subscribe',
+        data: {'token': token, 'is_active': isActive},
+      );
+
+      return response.statusCode == 200;
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error updating notification status: $e');
       return false;
     }
   }

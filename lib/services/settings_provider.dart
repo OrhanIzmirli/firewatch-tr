@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'notification_service.dart';
 
 class SettingsState {
   final bool pushNotificationsEnabled;
@@ -73,6 +77,10 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = state.copyWith(pushNotificationsEnabled: value);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_pushNotificationsKey, value);
+    // Best-effort: keep the backend's is_active flag in sync so automatic
+    // region/critical alerts stop reaching this device the moment the user
+    // opts out, without blocking the UI toggle on network round-trip.
+    unawaited(NotificationService.instance.setPushEnabled(value));
   }
 
   Future<void> toggleNearbyAlerts(bool value) async {

@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
@@ -39,7 +40,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool _permissionGranted = false;
   bool _fireLoading = true;
   bool _isOffline = false;
-  bool _backgroundMonitoringEnabled = false;
   DateTime? _cachedAt;
 
   List<FirePoint> _highRiskFires = [];
@@ -52,12 +52,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _loadFires().then((_) => _maybeShowNotifCoachMarks());
-    _loadBackgroundMonitoringState();
-  }
-
-  Future<void> _loadBackgroundMonitoringState() async {
-    final enabled = await BackgroundTaskService.instance.isEnabled();
-    if (mounted) setState(() => _backgroundMonitoringEnabled = enabled);
   }
 
   void _maybeShowNotifCoachMarks() {
@@ -174,39 +168,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _isBusy = false);
   }
 
+  static const _notificationsEnabledKey = 'notifications_enabled';
+
+  /// Single entry point for "Otomatik Taramayı Başlat": requests foreground
+  /// location, then (with the required rationale dialog first) background
+  /// location, registers the WorkManager periodic task if background was
+  /// granted, starts the foreground scan loop regardless, and tells the
+  /// backend this device wants alerts — with a fresh position so
+  /// region-targeted server pushes have somewhere to match against.
   Future<void> _startAutoMonitoring() async {
-    setState(() => _isBusy = true);
-    await _monitor.startMonitoring();
-    if (!mounted) return;
-    setState(() => _isBusy = false);
-  }
-
-  Future<void> _stopAutoMonitoring() async {
-    setState(() => _isBusy = true);
-    await _monitor.stopMonitoring();
-    if (!mounted) return;
-    setState(() => _isBusy = false);
-  }
-
-  Future<void> _toggleBackgroundMonitoring(bool enable) async {
     final l10n = AppLocalizations.of(context)!;
+    setState(() => _isBusy = true);
 
-    if (!enable) {
-      setState(() => _isBusy = true);
-      await BackgroundTaskService.instance.stop();
-      await BackgroundTaskService.instance.setEnabled(false);
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       if (!mounted) return;
-      setState(() {
-        _backgroundMonitoringEnabled = false;
-        _isBusy = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.backgroundMonitoringDisabled)),
-      );
+      setState(() => _isBusy = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.monitorStatusLocationDenied)));
       return;
     }
+    if (!mounted) return;
 
-    final confirmed = await showDialog<bool>(
+    final wantsBackground = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.backgroundLocationDialogTitle),
@@ -223,45 +212,67 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
       ),
     );
-    if (confirmed != true || !mounted) return;
 
-    setState(() => _isBusy = true);
-
-    // Android requires foreground location before background location can
-    // be granted — request it first if not already available.
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    var granted = false;
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
+    var backgroundGranted = false;
+    if (wantsBackground == true) {
       final backgroundStatus = await Permission.locationAlways.request();
-      granted = backgroundStatus.isGranted;
+      backgroundGranted = backgroundStatus.isGranted;
     }
 
-    if (granted) {
+    if (backgroundGranted) {
       await BackgroundTaskService.instance.initialize();
       await BackgroundTaskService.instance.setEnabled(true);
-    } else {
-      await BackgroundTaskService.instance.setEnabled(false);
     }
 
+    await _monitor.startMonitoring();
+
+    Position? position;
+    try {
+      position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+    } catch (_) {
+      // Best-effort — subscription still proceeds without a location; the
+      // device just won't be eligible for region-targeted server alerts.
+    }
+    await NotificationService.instance.updateSubscription(
+      active: true,
+      latitude: position?.latitude,
+      longitude: position?.longitude,
+    );
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_notificationsEnabledKey, true);
+
     if (!mounted) return;
-    setState(() {
-      _backgroundMonitoringEnabled = granted;
-      _isBusy = false;
-    });
+    setState(() => _isBusy = false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          granted
+          backgroundGranted
               ? l10n.backgroundMonitoringEnabled
-              : l10n.backgroundLocationPermissionDenied,
+              : l10n.monitorStatusStarted,
         ),
       ),
     );
+  }
+
+  Future<void> _stopAutoMonitoring() async {
+    setState(() => _isBusy = true);
+
+    await _monitor.stopMonitoring();
+    await BackgroundTaskService.instance.stop();
+    await BackgroundTaskService.instance.setEnabled(false);
+    await NotificationService.instance.updateSubscription(active: false);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_notificationsEnabledKey, false);
+
+    if (!mounted) return;
+    setState(() => _isBusy = false);
   }
 
   @override
@@ -409,27 +420,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   icon: const Icon(Icons.stop_circle_rounded),
                                   label: Text(l10n.notificationsStopMonitoring),
                                 ),
-                              ),
-                              const Divider(height: AppSpacing.xxl),
-                              Text(l10n.notificationsBackgroundTitle,
-                                  style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
-                              const SizedBox(height: 4),
-                              Text(l10n.notificationsBackgroundSubtitle,
-                                  style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
-                              const SizedBox(height: AppSpacing.md),
-                              SizedBox(
-                                width: double.infinity,
-                                child: _backgroundMonitoringEnabled
-                                    ? OutlinedButton.icon(
-                                        onPressed: _isBusy ? null : () => _toggleBackgroundMonitoring(false),
-                                        icon: const Icon(Icons.cloud_off_rounded),
-                                        label: Text(l10n.notificationsDisableBackground),
-                                      )
-                                    : FilledButton.icon(
-                                        onPressed: _isBusy ? null : () => _toggleBackgroundMonitoring(true),
-                                        icon: const Icon(Icons.cloud_sync_rounded),
-                                        label: Text(l10n.notificationsEnableBackground),
-                                      ),
                               ),
                             ],
                           ),

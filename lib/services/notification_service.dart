@@ -135,6 +135,38 @@ class NotificationService {
     return granted ?? true;
   }
 
+  /// Keeps the backend's fcm_tokens.is_active in sync with the user's Push
+  /// Notifications setting — so automatic risk/critical alerts only ever
+  /// reach devices that currently want them, not just ones that once did.
+  /// Used by the plain Settings toggle, which has no location on hand —
+  /// see [updateSubscription] for the full-registration path used when
+  /// starting monitoring (which does have a fresh position).
+  Future<void> setPushEnabled(bool enabled) async {
+    await updateSubscription(active: enabled);
+  }
+
+  /// Full subscription update: when enabling, re-registers the token with
+  /// the given location (so backend region-targeted alerts have somewhere
+  /// to match against); when disabling, just flips is_active off without
+  /// touching location.
+  Future<void> updateSubscription({
+    required bool active,
+    double? latitude,
+    double? longitude,
+  }) async {
+    final token = await _fcm.getToken();
+    if (token == null || token.isEmpty) return;
+    if (active) {
+      await _renderApi.subscribeToNotifications(
+        token,
+        latitude: latitude,
+        longitude: longitude,
+      );
+    } else {
+      await _renderApi.setNotificationActive(token, false);
+    }
+  }
+
   Future<void> showTestNotification() async {
     final l10n = await currentAppLocalizations();
     await _plugin.show(

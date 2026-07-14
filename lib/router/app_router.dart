@@ -46,7 +46,14 @@ class AppRouter {
       ),
       GoRoute(
         path: '/app',
-        builder: (context, state) {
+        // NoTransitionPage: these routes only ever swap between the same
+        // MainShellScreen at a different tab index (via context.go, never
+        // push), so there's no "previous screen" to animate away from.
+        // An animated MaterialPage transition would otherwise keep the
+        // outgoing and incoming MainShellScreen briefly mounted together,
+        // which is enough for their bottom-nav icons' static GlobalKeys
+        // (CoachMarkKeys.mapNavIcon/alertsNavIcon) to collide.
+        pageBuilder: (context, state) {
           final tab = state.uri.queryParameters['tab'];
           int initialIndex = 0;
           switch (tab) {
@@ -56,18 +63,20 @@ class AppRouter {
             case 'settings': initialIndex = 4; break;
             default: initialIndex = 0;
           }
-          return MainShellScreen(initialIndex: initialIndex);
+          return NoTransitionPage(child: MainShellScreen(initialIndex: initialIndex));
         },
       ),
       GoRoute(
         path: '/map',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
-          return MainShellScreen(
-            initialIndex: 1,
-            mapFocusLat: extra?['lat'] as double?,
-            mapFocusLng: extra?['lng'] as double?,
-            mapConfidenceFilter: extra?['confidenceFilter'] as bool? ?? false,
+          return NoTransitionPage(
+            child: MainShellScreen(
+              initialIndex: 1,
+              mapFocusLat: extra?['lat'] as double?,
+              mapFocusLng: extra?['lng'] as double?,
+              mapConfidenceFilter: extra?['confidenceFilter'] as bool? ?? false,
+            ),
           );
         },
       ),

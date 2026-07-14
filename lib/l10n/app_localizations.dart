@@ -407,8 +407,20 @@ abstract class AppLocalizations {
   /// No description provided for @homeOutsideTurkeyLocation.
   ///
   /// In tr, this message translates to:
-  /// **'Yurt dışı konumu'**
+  /// **'Yurt dışı konumu 🌍'**
   String get homeOutsideTurkeyLocation;
+
+  /// No description provided for @homeLocationUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alınamadı 📍'**
+  String get homeLocationUnavailable;
+
+  /// No description provided for @homeLocationEmulatorTest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Emülatör konumu 📱'**
+  String get homeLocationEmulatorTest;
 
   /// No description provided for @homeRiskAnalysis.
   ///

@@ -67,7 +67,9 @@
   "homeHeaderTitle": "Türkiye Termal Anomali Takibi",
   "homeHeaderSubtitle": "Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.",
   "homeNasaLiveData": "NASA FIRMS • Canlı Veri",
-  "homeOutsideTurkeyLocation": "Yurt dışı konumu",
+  "homeOutsideTurkeyLocation": "Yurt dışı konumu 🌍",
+  "homeLocationUnavailable": "Konum alınamadı 📍",
+  "homeLocationEmulatorTest": "Emülatör konumu 📱",
   "homeRiskAnalysis": "Risk Analizi",
   "homeSaved": "Kaydedilenler ({count})",
   "@homeSaved": {

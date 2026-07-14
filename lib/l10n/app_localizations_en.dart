@@ -172,7 +172,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNasaLiveData => 'NASA FIRMS • Live Data';
 
   @override
-  String get homeOutsideTurkeyLocation => 'Outside Turkey';
+  String get homeOutsideTurkeyLocation => 'Outside Turkey 🌍';
+
+  @override
+  String get homeLocationUnavailable => 'Location unavailable 📍';
+
+  @override
+  String get homeLocationEmulatorTest => 'Emulator test location 📱';
 
   @override
   String get homeRiskAnalysis => 'Risk Analysis';

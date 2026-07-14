@@ -172,7 +172,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeNasaLiveData => 'NASA FIRMS • Canlı Veri';
 
   @override
-  String get homeOutsideTurkeyLocation => 'Yurt dışı konumu';
+  String get homeOutsideTurkeyLocation => 'Yurt dışı konumu 🌍';
+
+  @override
+  String get homeLocationUnavailable => 'Konum alınamadı 📍';
+
+  @override
+  String get homeLocationEmulatorTest => 'Emülatör konumu 📱';
 
   @override
   String get homeRiskAnalysis => 'Risk Analizi';

@@ -67,7 +67,9 @@
   "homeHeaderTitle": "Turkey Thermal Anomaly Tracking",
   "homeHeaderSubtitle": "Track active events, see risk levels, and quickly reach the safety guide.",
   "homeNasaLiveData": "NASA FIRMS • Live Data",
-  "homeOutsideTurkeyLocation": "Outside Turkey",
+  "homeOutsideTurkeyLocation": "Outside Turkey 🌍",
+  "homeLocationUnavailable": "Location unavailable 📍",
+  "homeLocationEmulatorTest": "Emulator test location 📱",
   "homeRiskAnalysis": "Risk Analysis",
   "homeSaved": "Saved ({count})",
   "@homeSaved": {

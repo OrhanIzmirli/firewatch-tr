@@ -62,7 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Position? _userPosition;
   String? _myCity;
   double? _myDistanceKm;
-  bool _myOutsideTurkey = false;
+  _LocationStatus _locationStatus = _LocationStatus.pending;
   // Canonical (non-localized) quick filter: 'high' | 'medium' | 'ege' | 'akdeniz' | 'marmara' | 'karadeniz'
   String? _quickFilter;
   bool _newsLoading = true;
@@ -82,30 +82,80 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await Future.wait([_loadNews(), _loadFires(), _loadRiskSummary()]);
   }
 
+  // Stock Android emulator AVDs used for local testing report a fixed mock
+  // GPS fix (İzmir) rather than a real location. Flagging it explicitly
+  // stops testers from mistaking "the emulator's hardcoded fix" for "the
+  // real-device city lookup is broken".
+  static const double _emulatorTestLat = 38.42;
+  static const double _emulatorTestLng = 27.14;
+
+  // Same bounding box used to decide whether a resolved location should
+  // attempt a Turkish city lookup at all.
+  static bool _isInsideTurkeyBbox(double lat, double lng) =>
+      lat >= 35.8 && lat <= 42.2 && lng >= 25.6 && lng <= 44.8;
+
   /// Best-effort location fetch for the "Nearby Fire Alert" overview card —
-  /// silently does nothing if permission is denied or location is
-  /// unavailable, since that card has a region-wide fallback.
+  /// silently falls back to the region-wide count on failure, but still
+  /// records _locationStatus so the header can show why (unavailable vs.
+  /// outside Turkey vs. emulator test fix) instead of just hiding the row.
   Future<void> _loadUserPosition() async {
     try {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) return;
+      if (!serviceEnabled) {
+        if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
+        return;
+      }
       var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
+        return;
+      }
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
       );
-      if (mounted) setState(() => _userPosition = position);
+      if (!mounted) return;
+      debugPrint('[Location] Fresh GPS fix: lat=${position.latitude}, lng=${position.longitude}');
+      setState(() => _userPosition = position);
+
+      final isEmulatorTestLocation =
+          (position.latitude - _emulatorTestLat).abs() < 0.01 &&
+          (position.longitude - _emulatorTestLng).abs() < 0.01;
+      if (isEmulatorTestLocation) {
+        debugPrint('[Location] Matches known emulator test fix (İzmir) — not a real device location.');
+        setState(() {
+          _locationStatus = _LocationStatus.emulatorTest;
+          _myCity = null;
+          _myDistanceKm = null;
+        });
+        return;
+      }
+
+      if (!_isInsideTurkeyBbox(position.latitude, position.longitude)) {
+        setState(() {
+          _locationStatus = _LocationStatus.outsideTurkey;
+          _myCity = null;
+          _myDistanceKm = null;
+        });
+        return;
+      }
 
       final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
       if (!mounted) return;
       setState(() {
-        _myOutsideTurkey = cityInfo.outsideTurkey;
-        _myCity = cityInfo.outsideTurkey ? null : cityInfo.city;
-        _myDistanceKm = cityInfo.outsideTurkey ? null : cityInfo.distanceKm;
+        if (cityInfo.outsideTurkey) {
+          _locationStatus = _LocationStatus.outsideTurkey;
+          _myCity = null;
+          _myDistanceKm = null;
+        } else {
+          _locationStatus = _LocationStatus.resolved;
+          _myCity = cityInfo.city;
+          _myDistanceKm = cityInfo.distanceKm;
+        }
       });
     } catch (_) {
       // No location — nearby-fire card falls back to the Turkey-wide count.
+      if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
     }
   }
 
@@ -463,25 +513,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor)),
                     ],
                   ),
-                  if (_myOutsideTurkey || _myCity != null) ...[
+                  if (_locationStatus != _LocationStatus.pending) ...[
                     const SizedBox(height: AppSpacing.sm),
                     Row(
                       children: [
                         Icon(
-                          _myOutsideTurkey ? Icons.public_off_rounded : Icons.location_on_rounded,
+                          switch (_locationStatus) {
+                            _LocationStatus.outsideTurkey => Icons.public_off_rounded,
+                            _LocationStatus.unavailable => Icons.location_off_rounded,
+                            _LocationStatus.emulatorTest => Icons.phone_android_rounded,
+                            _LocationStatus.resolved || _LocationStatus.pending => Icons.location_on_rounded,
+                          },
                           size: 18,
                           color: tertiaryTextColor,
                         ),
                         const SizedBox(width: AppSpacing.sm),
                         Expanded(
                           child: Text(
-                            _myOutsideTurkey ? l10n.homeOutsideTurkeyLocation : _myCity!,
+                            switch (_locationStatus) {
+                              _LocationStatus.outsideTurkey => l10n.homeOutsideTurkeyLocation,
+                              _LocationStatus.unavailable => l10n.homeLocationUnavailable,
+                              _LocationStatus.emulatorTest => l10n.homeLocationEmulatorTest,
+                              _LocationStatus.resolved || _LocationStatus.pending => _myCity ?? '',
+                            },
                             style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: primaryTextColor),
                           ),
                         ),
                       ],
                     ),
-                    if (!_myOutsideTurkey && _myDistanceKm != null)
+                    if (_locationStatus == _LocationStatus.resolved && _myDistanceKm != null)
                       Padding(
                         padding: const EdgeInsets.only(left: 26, top: 2),
                         child: Text(
@@ -860,6 +920,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
+/// Classifies the device's resolved GPS fix for display: still figuring it
+/// out, no fix could be obtained at all, a fix outside Turkey, the fixed
+/// mock-location Android emulators report, or a genuine resolved Turkish
+/// city.
+enum _LocationStatus { pending, unavailable, outsideTurkey, emulatorTest, resolved }
 
 class _FilterChip extends StatelessWidget {
   final String label;

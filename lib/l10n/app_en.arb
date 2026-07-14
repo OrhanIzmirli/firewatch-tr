@@ -1025,7 +1025,6 @@
   "mapLegendTitle": "Map Legend",
   "legendProbableFire": "🔴 Probable Fire",
   "legendHighThermal": "🟠 High Thermal Anomaly",
-  "legendThermalDetection": "🟡 Thermal Detection",
   "legendLowConfidence": "⚪ Low Confidence",
   "mapMarkerDisclaimer": "The map shows NASA satellite thermal detections. 🔴 markers may indicate an active fire.",
   "feedbackSend": "Send Feedback", "feedbackTitle": "Send Feedback", "feedbackRating": "Rating", "feedbackCategory": "Category",

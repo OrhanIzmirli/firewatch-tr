@@ -1030,16 +1030,6 @@ class _MapScreenState extends State<MapScreen> {
                                                   ),
                                                   const SizedBox(height: 6),
                                                   Text(
-                                                    l10n.legendThermalDetection,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: titleColor,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
                                                     l10n.legendLowConfidence,
                                                     style: GoogleFonts.inter(
                                                       fontSize: 13,

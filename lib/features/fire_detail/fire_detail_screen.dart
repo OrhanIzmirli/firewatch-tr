@@ -174,7 +174,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
   }
 
   void _openInAppMap() {
-    context.push('/map');
+    context.go('/map');
   }
 
   Future<void> _shareFireEvent() async {

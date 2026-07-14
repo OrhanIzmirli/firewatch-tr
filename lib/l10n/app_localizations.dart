@@ -4346,12 +4346,6 @@ abstract class AppLocalizations {
   /// **'🟠 Yüksek Isı Anomalisi'**
   String get legendHighThermal;
 
-  /// No description provided for @legendThermalDetection.
-  ///
-  /// In tr, this message translates to:
-  /// **'🟡 Termal Tespit'**
-  String get legendThermalDetection;
-
   /// No description provided for @legendLowConfidence.
   ///
   /// In tr, this message translates to:

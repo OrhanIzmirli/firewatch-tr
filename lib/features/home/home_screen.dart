@@ -321,7 +321,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: OutlinedButton.icon(
                       onPressed: () {
                         Navigator.pop(context);
-                        context.push('/map', extra: {'lat': point.latitude, 'lng': point.longitude});
+                        context.go('/map', extra: {'lat': point.latitude, 'lng': point.longitude});
                       },
                       icon: const Icon(Icons.map_rounded),
                       label: Text(l10n.commonViewOnMap),
@@ -372,10 +372,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final query = _searchController.text.trim().toLowerCase();
 
     // ── Overview card 1: active (non-low-confidence) fire points ──
-    final activeFireCount = _firePoints.where((p) {
-      final c = p.confidence.toLowerCase();
-      return c.contains('high') || c == 'h' || c.contains('nominal') || c == 'n';
-    }).length;
+    // Uses FirePoint.riskTier (not a local confidence parse) so it handles
+    // both VIIRS text confidence ("high"/"nominal") and MODIS numeric
+    // confidence (e.g. "79") the same way markers/badges do elsewhere.
+    final activeFireCount = _firePoints.where((p) => p.riskTier != 'low').length;
     final activeFireColor = activeFireCount > 10
         ? AppColors.danger
         : activeFireCount > 5
@@ -576,7 +576,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     icon: Icons.local_fire_department_rounded,
                     color: activeFireColor,
                     delay: 0.ms,
-                    onTap: () => context.push('/map', extra: {'confidenceFilter': true}),
+                    onTap: () => context.go('/map', extra: {'confidenceFilter': true}),
                   ),
                   SmartOverviewCard(
                     title: l10n.homeOverviewHighestRiskTitle,
@@ -606,8 +606,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     color: nearbyColor,
                     delay: 120.ms,
                     onTap: position == null
-                        ? () => context.push('/map')
-                        : () => context.push('/map', extra: {'lat': position.latitude, 'lng': position.longitude}),
+                        ? () => context.go('/map')
+                        : () => context.go('/map', extra: {'lat': position.latitude, 'lng': position.longitude}),
                   ),
                   SmartOverviewCard(
                     title: l10n.homeOverviewNewsTitle,
@@ -616,7 +616,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     icon: Icons.newspaper_rounded,
                     color: AppColors.primary,
                     delay: 180.ms,
-                    onTap: () => context.push('/app?tab=news'),
+                    onTap: () => context.go('/app?tab=news'),
                   ),
                 ],
               ),
@@ -682,7 +682,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               trailing: SizedBox(
                 height: 48,
                 child: InkWell(
-                  onTap: () => context.push('/map'),
+                  onTap: () => context.go('/map'),
                   borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
                   child: Center(
                     child: Container(

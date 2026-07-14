@@ -2474,9 +2474,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get legendHighThermal => '🟠 Yüksek Isı Anomalisi';
 
   @override
-  String get legendThermalDetection => '🟡 Termal Tespit';
-
-  @override
   String get legendLowConfidence => '⚪ Düşük Güvenilirlik';
 
   @override

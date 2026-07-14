@@ -1023,7 +1023,6 @@
   "mapLegendTitle": "Harita Lejantı",
   "legendProbableFire": "🔴 Muhtemel Yangın",
   "legendHighThermal": "🟠 Yüksek Isı Anomalisi",
-  "legendThermalDetection": "🟡 Termal Tespit",
   "legendLowConfidence": "⚪ Düşük Güvenilirlik",
   "mapMarkerDisclaimer": "Harita NASA uydu termal tespitlerini gösterir. 🔴 işaretler aktif yangın olabilir.",
   "feedbackSend": "Geri Bildirim Gönder", "feedbackTitle": "Geri Bildirim Gönder", "feedbackRating": "Puan", "feedbackCategory": "Kategori",

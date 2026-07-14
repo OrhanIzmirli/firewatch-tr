@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,37 +37,47 @@ Future<void> main() async {
   // block the splash screen on a network call.
   RiskDataCache.instance.warmUp();
 
-  if (!kIsWeb) {
-    try {
-      await NotificationService.instance.initialize();
-    } catch (e, st) {
-      if (kDebugMode) debugPrint('NotificationService.initialize failed: $e\n$st');
-    }
-    try {
-      await FireMonitoringService.instance.initialize();
-    } catch (e, st) {
-      if (kDebugMode) debugPrint('FireMonitoringService.initialize failed: $e\n$st');
-    }
-    try {
-      // Re-arm background monitoring silently on relaunch, but only if the
-      // user previously opted in AND the OS permission is still granted —
-      // never request it here. If the user revoked it via system settings,
-      // clear the stale flag instead of leaving it dangling.
-      final backgroundTask = BackgroundTaskService.instance;
-      if (await backgroundTask.isEnabled()) {
-        final status = await Permission.locationAlways.status;
-        if (status.isGranted) {
-          await backgroundTask.initialize();
-        } else {
-          await backgroundTask.setEnabled(false);
-        }
-      }
-    } catch (e, st) {
-      if (kDebugMode) debugPrint('BackgroundTaskService re-arm failed: $e\n$st');
-    }
-  }
-
   runApp(const ProviderScope(child: FireWatchApp()));
+
+  // Deliberately started after runApp() rather than awaited before it —
+  // these are all either network-dependent (notification permission
+  // request + FCM token registration) or otherwise non-critical for the
+  // first frame, so there's no reason to make the splash screen wait on
+  // them. Firebase itself is already initialized by this point (awaited
+  // above), which is all these services need to be safe to construct.
+  if (!kIsWeb) {
+    unawaited(_initializeBackgroundServices());
+  }
+}
+
+Future<void> _initializeBackgroundServices() async {
+  try {
+    await NotificationService.instance.initialize();
+  } catch (e, st) {
+    if (kDebugMode) debugPrint('NotificationService.initialize failed: $e\n$st');
+  }
+  try {
+    await FireMonitoringService.instance.initialize();
+  } catch (e, st) {
+    if (kDebugMode) debugPrint('FireMonitoringService.initialize failed: $e\n$st');
+  }
+  try {
+    // Re-arm background monitoring silently on relaunch, but only if the
+    // user previously opted in AND the OS permission is still granted —
+    // never request it here. If the user revoked it via system settings,
+    // clear the stale flag instead of leaving it dangling.
+    final backgroundTask = BackgroundTaskService.instance;
+    if (await backgroundTask.isEnabled()) {
+      final status = await Permission.locationAlways.status;
+      if (status.isGranted) {
+        await backgroundTask.initialize();
+      } else {
+        await backgroundTask.setEnabled(false);
+      }
+    }
+  } catch (e, st) {
+    if (kDebugMode) debugPrint('BackgroundTaskService re-arm failed: $e\n$st');
+  }
 }
 
 class FireWatchApp extends ConsumerWidget {

@@ -785,21 +785,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Expanded(
                                 child: Text(
                                   point.regionDisplayName(l10n),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              Wrap(
-                                spacing: AppSpacing.xs,
-                                runSpacing: AppSpacing.xs,
-                                alignment: WrapAlignment.end,
-                                children: [
-                                  StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
-                                  StatusChip(
-                                    label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
-                                    color: fireStatusColor(point.smartStatus),
-                                  ),
-                                ],
+                              Flexible(
+                                child: Wrap(
+                                  spacing: AppSpacing.xs,
+                                  runSpacing: AppSpacing.xs,
+                                  alignment: WrapAlignment.end,
+                                  children: [
+                                    StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
+                                    StatusChip(
+                                      label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                                      color: fireStatusColor(point.smartStatus),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

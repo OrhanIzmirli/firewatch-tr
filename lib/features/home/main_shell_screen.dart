@@ -122,11 +122,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
     return ValueListenableBuilder<List>(
       valueListenable: FireMonitoringService.instance.nearbyMatchesNotifier,
       builder: (context, nearbyMatches, _) {
+        final l10n = AppLocalizations.of(context)!;
         final destinations = [
-          const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home),
+            label: l10n.navHome,
           ),
           NavigationDestination(
             icon: KeyedSubtree(
@@ -134,12 +135,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
               child: const Icon(Icons.map_outlined),
             ),
             selectedIcon: const Icon(Icons.map),
-            label: 'Map',
+            label: l10n.navMap,
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.newspaper_outlined),
-            selectedIcon: Icon(Icons.newspaper),
-            label: 'News',
+          NavigationDestination(
+            icon: const Icon(Icons.newspaper_outlined),
+            selectedIcon: const Icon(Icons.newspaper),
+            label: l10n.navNews,
           ),
           NavigationDestination(
             icon: _alertsIcon(
@@ -148,12 +149,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
               key: CoachMarkKeys.alertsNavIcon,
             ),
             selectedIcon: _alertsIcon(true, nearbyMatches.length),
-            label: 'Alerts',
+            label: l10n.navAlerts,
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+          NavigationDestination(
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings),
+            label: l10n.navSettings,
           ),
         ];
 

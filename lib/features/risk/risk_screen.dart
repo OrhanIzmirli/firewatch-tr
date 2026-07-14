@@ -135,11 +135,13 @@ class _RiskScreenState extends State<RiskScreen> {
         final data = response.data['data'] as List;
         final regions = data.map((e) => Map<String, dynamic>.from(e)).toList();
         await OfflineCacheService.instance.save(_cacheKey, regions);
-        if (mounted) setState(() {
+        if (mounted) {
+          setState(() {
           _regions = regions;
           _loading = false;
           _isSlowLoading = false;
         });
+        }
       }
     } catch (e) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
@@ -244,16 +246,27 @@ class _RiskScreenState extends State<RiskScreen> {
     final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
 
     final parts = <String>[];
-    if (temp >= 35) parts.add(l10n.riskNoteHighTemp(temp.toInt()));
-    else if (temp >= 25) parts.add(l10n.riskNoteMildTemp(temp.toInt()));
-    else parts.add(l10n.riskNoteCoolTemp(temp.toInt()));
+    if (temp >= 35) {
+      parts.add(l10n.riskNoteHighTemp(temp.toInt()));
+    } else if (temp >= 25) {
+      parts.add(l10n.riskNoteMildTemp(temp.toInt()));
+    } else {
+      parts.add(l10n.riskNoteCoolTemp(temp.toInt()));
+    }
 
-    if (hum <= 30) parts.add(l10n.riskNoteLowHumidity(hum.toInt()));
-    else if (hum <= 50) parts.add(l10n.riskNoteMediumHumidity(hum.toInt()));
-    else parts.add(l10n.riskNoteHighHumidity(hum.toInt()));
+    if (hum <= 30) {
+      parts.add(l10n.riskNoteLowHumidity(hum.toInt()));
+    } else if (hum <= 50) {
+      parts.add(l10n.riskNoteMediumHumidity(hum.toInt()));
+    } else {
+      parts.add(l10n.riskNoteHighHumidity(hum.toInt()));
+    }
 
-    if (wind >= 30) parts.add(l10n.riskNoteStrongWind(wind.toInt()));
-    else if (wind >= 15) parts.add(l10n.riskNoteMediumWind(wind.toInt()));
+    if (wind >= 30) {
+      parts.add(l10n.riskNoteStrongWind(wind.toInt()));
+    } else if (wind >= 15) {
+      parts.add(l10n.riskNoteMediumWind(wind.toInt()));
+    }
 
     return parts.join(' • ');
   }
@@ -720,7 +733,8 @@ class _RiskScreenState extends State<RiskScreen> {
 
                     const SizedBox(height: AppSpacing.md),
 
-                    GlassPanel(
+                    RepaintBoundary(
+                      child: GlassPanel(
                       key: CoachMarkKeys.riskChart,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -830,6 +844,7 @@ class _RiskScreenState extends State<RiskScreen> {
                             }).toList(),
                           ),
                         ],
+                      ),
                       ),
                     ).animate(delay: 180.ms).fadeIn(duration: 380.ms).scale(
                           begin: const Offset(0.98, 0.98),

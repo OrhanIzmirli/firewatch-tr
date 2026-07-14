@@ -12,6 +12,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get appName => 'FireWatch TR';
 
   @override
+  String get navHome => 'Ana Sayfa';
+
+  @override
+  String get navMap => 'Harita';
+
+  @override
+  String get navNews => 'Haberler';
+
+  @override
+  String get navAlerts => 'Uyarılar';
+
+  @override
+  String get navSettings => 'Ayarlar';
+
+  @override
   String get commonDetail => 'Detay';
 
   @override

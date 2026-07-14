@@ -4,7 +4,12 @@ import '../models/news_item.dart';
 import '../core/config/api_config.dart';
 
 class NewsService {
-  NewsService();
+  // Same rationale as FireApiService: no per-instance state, so share one
+  // instance (and Dio/HTTP client) across every call site instead of each
+  // screen creating its own.
+  factory NewsService() => _instance;
+  NewsService._internal();
+  static final NewsService _instance = NewsService._internal();
 
   final Dio _dio = Dio(
     BaseOptions(
@@ -29,7 +34,7 @@ class NewsService {
     final response = await _dio.get(
       '/news',
       queryParameters: {
-        if (category != null) 'category': category,
+        'category': ?category,
         'limit': limit,
         'offset': offset,
       },

@@ -112,14 +112,14 @@ class SkeletonMetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
         color: Colors.black.withValues(alpha: 0.02),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SkeletonBox(width: 42, height: 42, borderRadius: BorderRadius.all(Radius.circular(12))),
-          const Spacer(),
-          const SkeletonBox(width: 60, height: 20),
-          const SizedBox(height: 8),
-          const SkeletonBox(width: 80, height: 12),
+          SkeletonBox(width: 42, height: 42, borderRadius: BorderRadius.all(Radius.circular(12))),
+          Spacer(),
+          SkeletonBox(width: 60, height: 20),
+          SizedBox(height: 8),
+          SkeletonBox(width: 80, height: 12),
         ],
       ),
     );

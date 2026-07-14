@@ -207,17 +207,22 @@ class FirePoint {
 
   static String? _bboxRegionKey(double lat, double lng) {
     if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
-    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5)
+    if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) {
       return 'akdeniz';
-    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0)
+    }
+    if (lng >= 26.0 && lng <= 32.0 && lat >= 39.5 && lat <= 42.0) {
       return 'marmara';
+    }
     if (lat >= 40.5 && lat <= 42.2) return 'karadeniz';
-    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0)
+    if (lng >= 30.0 && lng <= 37.5 && lat >= 38.0 && lat <= 41.0) {
       return 'ic_anadolu';
-    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0)
+    }
+    if (lng >= 37.5 && lng <= 44.8 && lat >= 38.0 && lat <= 42.0) {
       return 'dogu_anadolu';
-    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5)
+    }
+    if (lng >= 36.0 && lng <= 44.8 && lat >= 36.0 && lat <= 38.5) {
       return 'guneydogu_anadolu';
+    }
     return null;
   }
 
@@ -274,8 +279,9 @@ class FirePoint {
     if (city.isNotEmpty) {
       if (_urbanCities.any(city.contains)) return FireLocationType.urban;
       if (_forestCities.any(city.contains)) return FireLocationType.forest;
-      if (_agriculturalCities.any(city.contains))
+      if (_agriculturalCities.any(city.contains)) {
         return FireLocationType.agricultural;
+      }
     }
     if (longitude >= 26.0 &&
         longitude <= 30.0 &&
@@ -291,8 +297,9 @@ class FirePoint {
   /// the coordinate-based fallback is translated.
   String regionDisplayName(AppLocalizations l10n) {
     if (cityName != null && cityName!.isNotEmpty) return cityName!;
-    if (nearestRegion != null && nearestRegion!.isNotEmpty)
+    if (nearestRegion != null && nearestRegion!.isNotEmpty) {
       return nearestRegion!;
+    }
 
     switch (regionKey) {
       case 'ege':
@@ -320,8 +327,9 @@ class FirePoint {
   /// of the app's display language. Not for display — use
   /// [regionDisplayName] for that.
   String get canonicalRegionNameTr {
-    if (nearestRegion != null && nearestRegion!.isNotEmpty)
+    if (nearestRegion != null && nearestRegion!.isNotEmpty) {
       return nearestRegion!;
+    }
     switch (regionKey ?? _bboxRegionKey(latitude, longitude)) {
       case 'ege':
         return 'Ege';
@@ -519,8 +527,9 @@ class FirePoint {
         minute == null ||
         year == null ||
         month == null ||
-        day == null)
+        day == null) {
       return null;
+    }
     return DateTime.utc(year, month, day, hour, minute);
   }
 

@@ -24,7 +24,13 @@ class NearestCityResult {
 }
 
 class FireApiService {
-  FireApiService();
+  // Every call site does `FireApiService()` expecting a fresh-looking
+  // instance, but there's no per-instance state worth duplicating — this
+  // factory transparently hands back one shared instance (and Dio/HTTP
+  // client) instead of each of the ~8 call sites paying for its own.
+  factory FireApiService() => _instance;
+  FireApiService._internal();
+  static final FireApiService _instance = FireApiService._internal();
 
   final Dio _dio = Dio(
     BaseOptions(
@@ -214,8 +220,9 @@ class FireApiService {
         final candidateTime = candidate.detectionDateTimeUtc;
         final existingTime = existing.detectionDateTimeUtc;
         if (candidateTime == null || existingTime == null) continue;
-        if (candidateTime.difference(existingTime).abs() > _duplicateWindow)
+        if (candidateTime.difference(existingTime).abs() > _duplicateWindow) {
           continue;
+        }
 
         matchIndex = i;
         break;

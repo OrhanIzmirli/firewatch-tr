@@ -40,7 +40,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool _fireLoading = true;
 
   List<FirePoint> _highRiskFires = [];
-  List<FirePoint> _allFires = [];
 
   final FireApiService _fireApiService = FireApiService();
   FireMonitoringService get _monitor => FireMonitoringService.instance;
@@ -91,14 +90,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     try {
       final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
-      if (mounted) setState(() {
-        _allFires = fires;
-        _highRiskFires = fires
-            .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
-            .take(10)
-            .toList();
-        _fireLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _highRiskFires = fires
+              .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
+              .take(10)
+              .toList();
+          _fireLoading = false;
+        });
+      }
     } catch (_) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (mounted) {
@@ -106,7 +106,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (cached != null) {
             final (data, _) = cached;
             final fires = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-            _allFires = fires;
             _highRiskFires = fires
                 .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
                 .take(10)

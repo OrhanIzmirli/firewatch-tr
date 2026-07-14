@@ -88,6 +88,12 @@ class _SplashScreenState extends State<SplashScreen> {
                         'assets/icon/app_icon.png',
                         width: 96,
                         height: 96,
+                        // Source is 512x512; decoding straight to display
+                        // size (with headroom for high-DPI screens) avoids
+                        // holding a full 512x512 bitmap in memory just to
+                        // show a 96x96 icon.
+                        cacheWidth: 192,
+                        cacheHeight: 192,
                         fit: BoxFit.cover,
                       ),
                     ),

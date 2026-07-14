@@ -79,6 +79,7 @@ Future<void> maybeShowScreenCoachMarks(
   // abandon the overlay without ever persisting "seen", and the tour would
   // reappear on the next visit even though the user already saw it once.
   await prefs.setBool(prefsKey, true);
+  if (!context.mounted) return;
   if (kDebugMode) debugPrint('[CoachMarks] "$prefsKey" marked as seen, showing tour now (${steps.length} steps)');
 
   final l10n = AppLocalizations.of(context)!;

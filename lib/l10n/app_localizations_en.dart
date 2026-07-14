@@ -12,6 +12,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'FireWatch TR';
 
   @override
+  String get navHome => 'Home';
+
+  @override
+  String get navMap => 'Map';
+
+  @override
+  String get navNews => 'News';
+
+  @override
+  String get navAlerts => 'Alerts';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
   String get commonDetail => 'Details';
 
   @override

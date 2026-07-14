@@ -58,7 +58,6 @@ class _MapScreenState extends State<MapScreen> {
 
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
-  FirePoint? _selectedPoint;
 
   final MapController _mapController = MapController();
   final FireApiService _fireApiService = FireApiService();
@@ -73,8 +72,9 @@ class _MapScreenState extends State<MapScreen> {
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted)
+          if (mounted) {
             _mapController.move(LatLng(widget.focusLat!, widget.focusLng!), 13);
+          }
         });
       });
     }
@@ -131,11 +131,13 @@ class _MapScreenState extends State<MapScreen> {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) return;
       var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied)
+      if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
+      }
       if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever)
+          permission == LocationPermission.deniedForever) {
         return;
+      }
       final position = await Geolocator.getCurrentPosition();
       if (!mounted) return;
       setState(() => _userPosition = position);
@@ -342,7 +344,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _openFireBottomSheet(FirePoint point) {
-    setState(() => _selectedPoint = point);
     final timeAgo = _timeAgo(
       context,
       point.acquisitionDate,
@@ -715,7 +716,8 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                             child: Stack(
                               children: [
-                                FlutterMap(
+                                RepaintBoundary(
+                                  child: FlutterMap(
                                   mapController: _mapController,
                                   options: MapOptions(
                                     initialCenter: widget.focusLat != null
@@ -729,8 +731,6 @@ class _MapScreenState extends State<MapScreen> {
                                         : 5.6,
                                     minZoom: 4,
                                     maxZoom: 16,
-                                    onTap: (_, __) =>
-                                        setState(() => _selectedPoint = null),
                                     onPositionChanged: (camera, hasGesture) {
                                       if ((camera.zoom - _currentZoom).abs() >
                                           0.2) {
@@ -829,6 +829,7 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                     ),
                                   ],
+                                  ),
                                 ),
                                 if (_isLoading)
                                   Positioned.fill(

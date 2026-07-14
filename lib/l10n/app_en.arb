@@ -3,6 +3,12 @@
 
   "appName": "FireWatch TR",
 
+  "navHome": "Home",
+  "navMap": "Map",
+  "navNews": "News",
+  "navAlerts": "Alerts",
+  "navSettings": "Settings",
+
   "commonDetail": "Details",
   "commonRefresh": "Refresh",
   "commonViewOnMap": "View on Map",

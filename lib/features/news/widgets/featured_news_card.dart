@@ -206,13 +206,13 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                 ],
                 const SizedBox(height: AppSpacing.md),
                 if (_translating)
-                  ShimmerWrap(
+                  const ShimmerWrap(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SkeletonBox(width: double.infinity, height: 14),
-                        const SizedBox(height: 6),
-                        const SkeletonBox(width: double.infinity, height: 14),
+                        SkeletonBox(width: double.infinity, height: 14),
+                        SizedBox(height: 6),
+                        SkeletonBox(width: double.infinity, height: 14),
                       ],
                     ),
                   )

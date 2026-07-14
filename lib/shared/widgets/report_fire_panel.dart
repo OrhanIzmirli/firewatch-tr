@@ -242,7 +242,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
               : l10n.reportPanelFireReport,
           'description': description,
           'reporter_name': reporterName,
-          if (photosBase64 != null) 'photos': photosBase64,
+          'photos': ?photosBase64,
         },
         onSendProgress: (sent, total) {
           if (total > 0 && mounted) {
@@ -568,38 +568,12 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                     const SizedBox(height: AppSpacing.sm),
                     SizedBox(
                       height: 72,
-                      child: ListView(
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        children: [
-                          for (final photo in _photos)
-                            Padding(
-                              padding: const EdgeInsets.only(right: AppSpacing.sm),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.file(File(photo.path), width: 72, height: 72, fit: BoxFit.cover),
-                                  ),
-                                  Positioned(
-                                    top: -6,
-                                    right: -6,
-                                    child: SizedBox(
-                                      width: 28,
-                                      height: 28,
-                                      child: IconButton(
-                                        padding: EdgeInsets.zero,
-                                        tooltip: l10n.reportPanelRemovePhoto,
-                                        icon: const Icon(Icons.cancel_rounded, size: 20),
-                                        color: AppColors.danger,
-                                        onPressed: () => setState(() => _photos.remove(photo)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          if (_photos.length < _maxPhotos)
-                            SizedBox(
+                        itemCount: _photos.length + (_photos.length < _maxPhotos ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == _photos.length) {
+                            return SizedBox(
                               width: 72,
                               height: 72,
                               child: OutlinedButton(
@@ -607,8 +581,40 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                                 style: OutlinedButton.styleFrom(padding: EdgeInsets.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                                 child: const Icon(Icons.add_a_photo_rounded),
                               ),
+                            );
+                          }
+                          final photo = _photos[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(right: AppSpacing.sm),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  // Camera/gallery photos are typically several
+                                  // megapixels; decode straight to thumbnail
+                                  // size instead of holding the full-resolution
+                                  // bitmap in memory for a 72x72 preview.
+                                  child: Image.file(File(photo.path), width: 72, height: 72, fit: BoxFit.cover, cacheWidth: 144, cacheHeight: 144),
+                                ),
+                                Positioned(
+                                  top: -6,
+                                  right: -6,
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 28,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      tooltip: l10n.reportPanelRemovePhoto,
+                                      icon: const Icon(Icons.cancel_rounded, size: 20),
+                                      color: AppColors.danger,
+                                      onPressed: () => setState(() => _photos.remove(photo)),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ],

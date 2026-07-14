@@ -18,7 +18,7 @@ void main() {
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(body: Container(key: targetKey, width: 10, height: 10)),
+        home: Scaffold(body: SizedBox(key: targetKey, width: 10, height: 10)),
       ),
     );
     await tester.pumpAndSettle();

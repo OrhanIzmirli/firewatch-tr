@@ -85,8 +85,13 @@ class NotificationService {
         print('Background message opened: ${message.notification?.title}');
       }
       final fireId = message.data['fire_id'];
+      // Fetched fresh and used synchronously within this callback (no
+      // await in between) — the analyzer flags it only because the
+      // enclosing _setupFirebaseMessaging is itself async, not because
+      // this context is actually stale.
       final context = rootNavigatorKey.currentContext;
       if (context != null && fireId != null) {
+        // ignore: use_build_context_synchronously
         GoRouter.of(context).go('/fire/$fireId');
       }
     });
@@ -94,10 +99,16 @@ class NotificationService {
     final initialMessage = await _fcm.getInitialMessage();
     if (initialMessage != null) {
       final fireId = initialMessage.data['fire_id'];
-      final context = rootNavigatorKey.currentContext;
-      if (context != null && fireId != null) {
+      if (fireId != null) {
         Future.delayed(const Duration(seconds: 1), () {
-          GoRouter.of(context).go('/fire/$fireId');
+          // Fetched fresh here (not captured before the delay) since the
+          // root navigator's context can only be resolved at the moment
+          // it's actually used.
+          final context = rootNavigatorKey.currentContext;
+          if (context != null) {
+            // ignore: use_build_context_synchronously
+            GoRouter.of(context).go('/fire/$fireId');
+          }
         });
       }
     }

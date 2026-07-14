@@ -23,7 +23,7 @@ class RenderApiService {
       final response = await _dio.get(
         '/news',
         queryParameters: {
-          if (category != null) 'category': category,
+          'category': ?category,
           'limit': limit,
           'offset': offset,
         },
@@ -73,8 +73,8 @@ class RenderApiService {
         data: {
           'token': token,
           'device_info': 'FireWatch TR App',
-          if (latitude != null) 'latitude': latitude,
-          if (longitude != null) 'longitude': longitude,
+          'latitude': ?latitude,
+          'longitude': ?longitude,
         },
       );
 
@@ -115,8 +115,8 @@ class RenderApiService {
         data: {
           'token': token,
           'is_active': isActive,
-          if (latitude != null) 'latitude': latitude,
-          if (longitude != null) 'longitude': longitude,
+          'latitude': ?latitude,
+          'longitude': ?longitude,
         },
       );
 

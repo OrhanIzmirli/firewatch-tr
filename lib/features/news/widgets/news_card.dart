@@ -217,13 +217,13 @@ class _NewsCardState extends State<NewsCard> {
                       ],
                       const SizedBox(height: AppSpacing.sm),
                       if (_translating)
-                        ShimmerWrap(
+                        const ShimmerWrap(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SkeletonBox(width: double.infinity, height: 12),
-                              const SizedBox(height: 6),
-                              const SkeletonBox(width: double.infinity, height: 12),
+                              SkeletonBox(width: double.infinity, height: 12),
+                              SizedBox(height: 6),
+                              SkeletonBox(width: double.infinity, height: 12),
                             ],
                           ),
                         )

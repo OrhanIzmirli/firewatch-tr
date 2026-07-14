@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
+import '../../services/news_translation_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -45,6 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   static const _riskCacheKey = 'home_risk';
 
   final TextEditingController _searchController = TextEditingController();
+  Timer? _searchDebounce;
   final NewsService _newsService = NewsService();
   final FireApiService _fireApiService = FireApiService();
   final Dio _dio = Dio(
@@ -248,11 +252,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
       );
       await OfflineCacheService.instance.save(_firesCacheKey, allPoints.map((p) => p.toJson()).toList());
-      if (mounted) setState(() {
+      if (mounted) {
+        setState(() {
         _firePoints = allPoints;
         _fireLoading = false;
         _firesSlowLoading = false;
       });
+      }
     } catch (e, stack) {
       if (kDebugMode) debugPrint('ERROR _loadFires: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_firesCacheKey);
@@ -296,10 +302,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : Colors.black.withValues(alpha: 0.66);
 
     String alanTahmini;
-    if (bright >= 370) alanTahmini = l10n.homeAreaOver100Ha;
-    else if (bright >= 330) alanTahmini = l10n.homeArea10to100Ha;
-    else if (bright >= 300) alanTahmini = l10n.homeAreaUnder10Ha;
-    else alanTahmini = l10n.homeAreaInsufficientRes;
+    if (bright >= 370) {
+      alanTahmini = l10n.homeAreaOver100Ha;
+    } else if (bright >= 330) {
+      alanTahmini = l10n.homeArea10to100Ha;
+    } else if (bright >= 300) {
+      alanTahmini = l10n.homeAreaUnder10Ha;
+    } else {
+      alanTahmini = l10n.homeAreaInsufficientRes;
+    }
 
     showModalBottomSheet(
       context: context,
@@ -399,8 +410,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 300), () {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -771,7 +790,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _FilterChip(label: l10n.commonAll, selected: _quickFilter == null && query.isEmpty, onTap: () { _searchController.clear(); setState(() => _quickFilter = null); }),
+                  _FilterChip(label: l10n.commonAll, selected: _quickFilter == null && query.isEmpty, onTap: () { _searchDebounce?.cancel(); _searchController.clear(); setState(() => _quickFilter = null); }),
                   const SizedBox(width: 8),
                   _FilterChip(label: l10n.homeFilterHighRisk, selected: _quickFilter == 'high', onTap: () { setState(() => _quickFilter = _quickFilter == 'high' ? null : 'high'); }),
                   const SizedBox(width: 8),
@@ -793,12 +812,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: TextField(
                 controller: _searchController,
-                onChanged: (_) => setState(() {}),
+                onChanged: (_) => _onSearchChanged(),
                 decoration: InputDecoration(
                   hintText: l10n.homeSearchHint,
                   prefixIcon: const Icon(Icons.search_rounded),
                   suffixIcon: query.isNotEmpty
-                      ? IconButton(onPressed: () { _searchController.clear(); setState(() {}); }, icon: const Icon(Icons.close_rounded))
+                      ? IconButton(onPressed: () { _searchDebounce?.cancel(); _searchController.clear(); setState(() {}); }, icon: const Icon(Icons.close_rounded))
                       : null,
                 ),
               ),
@@ -898,7 +917,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         color: point.isMerged ? AppColors.success : tertiaryTextColor)),
                               ),
                               const SizedBox(width: 12),
-                              Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
+                              const Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
                               Text(l10n.commonDetail, style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
                             ],
                           ),
@@ -991,14 +1010,85 @@ class _PreviewRow extends StatelessWidget {
   }
 }
 
-class _HomeNewsPreviewCard extends StatelessWidget {
+class _HomeNewsPreviewCard extends StatefulWidget {
   final NewsItem item;
   final VoidCallback onTap;
 
   const _HomeNewsPreviewCard({required this.item, required this.onTap});
 
   @override
+  State<_HomeNewsPreviewCard> createState() => _HomeNewsPreviewCardState();
+}
+
+class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
+  bool _translating = false;
+  String? _translatedTitle;
+  String? _translatedSummary;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _maybeAutoTranslate();
+  }
+
+  @override
+  void didUpdateWidget(covariant _HomeNewsPreviewCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.item.id != widget.item.id) {
+      _translatedTitle = null;
+      _translatedSummary = null;
+      _maybeAutoTranslate();
+    }
+  }
+
+  // Mirrors NewsCard's auto-translate logic (features/news/widgets/news_card.dart)
+  // so home screen previews get the same English-mode translation instead of
+  // showing raw Turkish text.
+  Future<void> _maybeAutoTranslate() async {
+    if (Localizations.localeOf(context).languageCode != 'en') return;
+    if (_translatedTitle != null || _translating) return;
+
+    final service = NewsTranslationService.instance;
+    final cachedTitle = await service.getCached(widget.item.id, 'title');
+    final cachedSummary = await service.getCached(widget.item.id, 'summary');
+    if (cachedTitle != null) {
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = cachedTitle;
+        _translatedSummary = cachedSummary;
+      });
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() => _translating = true);
+    try {
+      final title = await service.translate(
+        articleId: widget.item.id,
+        field: 'title',
+        text: widget.item.title,
+      );
+      final summary = await service.translate(
+        articleId: widget.item.id,
+        field: 'summary',
+        text: widget.item.summary,
+      );
+      if (!mounted) return;
+      setState(() {
+        _translatedTitle = title;
+        _translatedSummary = summary;
+      });
+    } catch (_) {
+      // Falls back to showing the original Turkish text below.
+    } finally {
+      if (mounted) setState(() => _translating = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
+    final onTap = widget.onTap;
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
@@ -1018,6 +1108,8 @@ class _HomeNewsPreviewCard extends StatelessWidget {
     final riskLevel = classifyNewsRiskLevel(fullText);
     final timeAgo = formatNewsTimeAgo(l10n, item.publishedAt);
     final wordCount = newsWordCount(item);
+    final displayTitle = _translatedTitle ?? item.title;
+    final displaySummary = _translatedSummary ?? item.summary;
 
     return Material(
       color: Colors.transparent,
@@ -1056,11 +1148,28 @@ class _HomeNewsPreviewCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),
-                      Text(item.title,
-                          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, height: 1.2, color: titleColor)),
+                      if (_translating)
+                        const ShimmerWrap(
+                          child: SkeletonBox(width: double.infinity, height: 15),
+                        )
+                      else
+                        Text(displayTitle,
+                            style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, height: 1.2, color: titleColor)),
                       const SizedBox(height: AppSpacing.sm),
-                      Text(item.summary, maxLines: 2, overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: summaryColor)),
+                      if (_translating)
+                        const ShimmerWrap(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SkeletonBox(width: double.infinity, height: 12),
+                              SizedBox(height: 6),
+                              SkeletonBox(width: double.infinity, height: 12),
+                            ],
+                          ),
+                        )
+                      else
+                        Text(displaySummary, maxLines: 2, overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: summaryColor)),
                       const SizedBox(height: AppSpacing.md),
                       Row(
                         children: [

@@ -104,6 +104,36 @@ abstract class AppLocalizations {
   /// **'FireWatch TR'**
   String get appName;
 
+  /// No description provided for @navHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Sayfa'**
+  String get navHome;
+
+  /// No description provided for @navMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita'**
+  String get navMap;
+
+  /// No description provided for @navNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberler'**
+  String get navNews;
+
+  /// No description provided for @navAlerts.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyarılar'**
+  String get navAlerts;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar'**
+  String get navSettings;
+
   /// No description provided for @commonDetail.
   ///
   /// In tr, this message translates to:

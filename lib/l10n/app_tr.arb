@@ -3,6 +3,12 @@
 
   "appName": "FireWatch TR",
 
+  "navHome": "Ana Sayfa",
+  "navMap": "Harita",
+  "navNews": "Haberler",
+  "navAlerts": "Uyarılar",
+  "navSettings": "Ayarlar",
+
   "commonDetail": "Detay",
   "commonRefresh": "Yenile",
   "commonViewOnMap": "Haritada Gör",

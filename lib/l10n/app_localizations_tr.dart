@@ -1493,11 +1493,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String offlineBannerLabel(String time) {
-    return 'Çevrimdışı mod • Son güncelleme: $time';
-  }
-
-  @override
   String get slowLoadingBannerLabel =>
       'Yavaş yükleniyor — önbellek verisi gösteriliyor';
 

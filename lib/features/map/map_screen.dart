@@ -19,7 +19,6 @@ import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
@@ -52,10 +51,8 @@ class _MapScreenState extends State<MapScreen> {
   bool _isReportOpen = false;
   bool _isLoading = true;
   String? _errorMessage;
-  bool _isOffline = false;
   bool _isSlowLoading = false;
   bool _isLegendOpen = false;
-  DateTime? _cachedAt;
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   double _currentZoom = 5.6;
 
@@ -158,14 +155,13 @@ class _MapScreenState extends State<MapScreen> {
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
           if (!mounted) return;
-          final (data, savedAt) = cached;
+          final (data, _) = cached;
           final points = (data as List)
               .map((e) => FirePoint.fromJson(e as Map<String, dynamic>))
               .toList();
           setState(() {
             _firePoints = points;
             _nearbyFirePoints = _buildNearbyList(points);
-            _cachedAt = savedAt;
             _isSlowLoading = true;
             _isLoading = false;
           });
@@ -183,24 +179,19 @@ class _MapScreenState extends State<MapScreen> {
         _firePoints = allPoints;
         _nearbyFirePoints = nearby;
         _isLoading = false;
-        _isOffline = false;
         _isSlowLoading = false;
       });
     } catch (_) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (!mounted) return;
       if (cached != null) {
-        final (data, savedAt) = cached;
+        final (data, _) = cached;
         final points = (data as List)
             .map((e) => FirePoint.fromJson(e as Map<String, dynamic>))
             .toList();
         setState(() {
           _firePoints = points;
           _nearbyFirePoints = _buildNearbyList(points);
-          _cachedAt = savedAt;
-          // Fresh cache (<30min) is shown silently; only stale cache
-          // paired with a real fetch failure warrants the banner.
-          _isOffline = !isCacheFresh(savedAt);
           _isSlowLoading = false;
           _isLoading = false;
         });
@@ -267,7 +258,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   /// Marker color by NASA confidence tier only — high: danger (red),
-  /// nominal: warning (orange), low: primary — independent of
+  /// nominal: warning (orange), low: grey — independent of
   /// FirePoint.detectionColor (which still drives the bottom sheet/cards
   /// elsewhere and is deliberately left alone).
   Color _markerColor(FirePoint point) {
@@ -277,7 +268,7 @@ class _MapScreenState extends State<MapScreen> {
       case 'medium':
         return AppColors.warning;
       default:
-        return AppColors.primary;
+        return Colors.grey;
     }
   }
 
@@ -290,7 +281,7 @@ class _MapScreenState extends State<MapScreen> {
       case 'high':
         return 28;
       case 'medium':
-        return 20;
+        return 22;
       default:
         return 16;
     }
@@ -590,8 +581,6 @@ class _MapScreenState extends State<MapScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_isOffline && _cachedAt != null)
-                    OfflineBanner(lastUpdated: _cachedAt!),
                   if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                         child: Column(
@@ -1169,6 +1158,9 @@ class _MapScreenState extends State<MapScreen> {
                                                               .regionDisplayName(
                                                                 l10n,
                                                               ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: GoogleFonts.inter(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -1186,6 +1178,9 @@ class _MapScreenState extends State<MapScreen> {
                                                             timeAgo,
                                                           )
                                                         : timeAgo,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: GoogleFonts.inter(
                                                       fontSize: 13,
                                                       color: secondaryTextColor,
@@ -1256,6 +1251,9 @@ class _MapScreenState extends State<MapScreen> {
                                                   const SizedBox(width: 4),
                                                   Text(
                                                     '$tempC°C',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: GoogleFonts.inter(
                                                       fontSize: 12,
                                                       color: secondaryTextColor,
@@ -1306,6 +1304,7 @@ class _MapScreenState extends State<MapScreen> {
                                                         color:
                                                             secondaryTextColor,
                                                       ),
+                                                      maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     ),

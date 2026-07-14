@@ -24,7 +24,6 @@ import '../../services/watchlist_provider.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
@@ -69,12 +68,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _newsLoading = true;
   bool _fireLoading = true;
   bool _riskLoading = true;
-  bool _newsOffline = false;
-  bool _firesOffline = false;
   bool _newsSlowLoading = false;
   bool _firesSlowLoading = false;
-  DateTime? _newsCachedAt;
-  DateTime? _firesCachedAt;
 
   @override
   void initState() {
@@ -159,29 +154,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         cacheKey: _newsCacheKey,
         onSlowFallback: (cached) {
           if (!mounted) return;
-          final (data, savedAt) = cached;
+          final (data, _) = cached;
           setState(() {
             _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
-            _newsCachedAt = savedAt;
             _newsSlowLoading = true;
             _newsLoading = false;
           });
         },
       );
       await OfflineCacheService.instance.save(_newsCacheKey, news.map((n) => n.toJson()).toList());
-      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsOffline = false; _newsSlowLoading = false; });
+      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsSlowLoading = false; });
     } catch (e, stack) {
       if (kDebugMode) debugPrint('ERROR _loadNews: $e\n$stack');
       final cached = await OfflineCacheService.instance.load(_newsCacheKey);
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, savedAt) = cached;
+            final (data, _) = cached;
             _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
-            _newsCachedAt = savedAt;
-            // Fresh cache (<30min) is shown silently; only stale cache
-            // paired with a real fetch failure warrants the banner.
-            _newsOffline = !isCacheFresh(savedAt);
           }
           _newsSlowLoading = false;
           _newsLoading = false;
@@ -199,10 +189,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         cacheKey: _firesCacheKey,
         onSlowFallback: (cached) {
           if (!mounted) return;
-          final (data, savedAt) = cached;
+          final (data, _) = cached;
           setState(() {
             _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-            _firesCachedAt = savedAt;
             _firesSlowLoading = true;
             _fireLoading = false;
           });
@@ -212,7 +201,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (mounted) setState(() {
         _firePoints = allPoints;
         _fireLoading = false;
-        _firesOffline = false;
         _firesSlowLoading = false;
       });
     } catch (e, stack) {
@@ -221,12 +209,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, savedAt) = cached;
+            final (data, _) = cached;
             _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-            _firesCachedAt = savedAt;
-            // Fresh cache (<30min) is shown silently; only stale cache
-            // paired with a real fetch failure warrants the banner.
-            _firesOffline = !isCacheFresh(savedAt);
           }
           _firesSlowLoading = false;
           _fireLoading = false;
@@ -456,7 +440,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_firesOffline && _firesCachedAt != null) OfflineBanner(lastUpdated: _firesCachedAt!),
             if (_firesSlowLoading) const SlowLoadingBanner(),
             // ── Header ──────────────────────────────────────
             GlassPanel(
@@ -664,7 +647,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
 
-            if (_newsOffline && _newsCachedAt != null) OfflineBanner(lastUpdated: _newsCachedAt!),
             if (_newsSlowLoading) const SlowLoadingBanner(),
             if (_newsLoading)
               const SkeletonListLoader(count: 2)

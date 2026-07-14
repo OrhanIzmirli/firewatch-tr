@@ -20,7 +20,6 @@ import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -39,8 +38,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool _isBusy = false;
   bool _permissionGranted = false;
   bool _fireLoading = true;
-  bool _isOffline = false;
-  DateTime? _cachedAt;
 
   List<FirePoint> _highRiskFires = [];
   List<FirePoint> _allFires = [];
@@ -101,22 +98,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             .take(10)
             .toList();
         _fireLoading = false;
-        _isOffline = false;
       });
     } catch (_) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, savedAt) = cached;
+            final (data, _) = cached;
             final fires = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
             _allFires = fires;
             _highRiskFires = fires
                 .where((p) => p.confidence.toLowerCase() == 'high' || p.confidence.toLowerCase() == 'h')
                 .take(10)
                 .toList();
-            _cachedAt = savedAt;
-            _isOffline = true;
           }
           _fireLoading = false;
         });
@@ -312,7 +306,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                         // ── Header ───────────────────────────────
                         GlassPanel(
                           child: Column(

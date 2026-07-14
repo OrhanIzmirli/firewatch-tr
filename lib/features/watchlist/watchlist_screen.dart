@@ -14,7 +14,6 @@ import '../../services/watchlist_provider.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
@@ -32,8 +31,6 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
   final FireApiService _fireApiService = FireApiService();
   List<FirePoint> _allFires = [];
   bool _loading = true;
-  bool _isOffline = false;
-  DateTime? _cachedAt;
 
   @override
   void initState() {
@@ -81,16 +78,14 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
     try {
       final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
-      if (mounted) setState(() { _allFires = fires; _loading = false; _isOffline = false; });
+      if (mounted) setState(() { _allFires = fires; _loading = false; });
     } catch (_) {
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, savedAt) = cached;
+            final (data, _) = cached;
             _allFires = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-            _cachedAt = savedAt;
-            _isOffline = true;
           }
           _loading = false;
         });
@@ -139,7 +134,6 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
             GlassPanel(
               key: CoachMarkKeys.watchlistHeader,
               child: Column(

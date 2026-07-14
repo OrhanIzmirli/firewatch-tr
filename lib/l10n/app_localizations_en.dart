@@ -1498,11 +1498,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String offlineBannerLabel(String time) {
-    return 'Offline mode • Last updated: $time';
-  }
-
-  @override
   String get slowLoadingBannerLabel => 'Loading slowly — showing cached data';
 
   @override

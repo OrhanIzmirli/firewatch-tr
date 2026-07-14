@@ -14,7 +14,6 @@ import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
@@ -48,9 +47,7 @@ class _RiskScreenState extends State<RiskScreen> {
   final FireApiService _fireApiService = FireApiService();
   List<Map<String, dynamic>> _regions = [];
   bool _loading = true;
-  bool _isOffline = false;
   bool _isSlowLoading = false;
-  DateTime? _cachedAt;
 
   bool _showMyLocation = false;
   bool _myLocationLoading = false;
@@ -126,10 +123,9 @@ class _RiskScreenState extends State<RiskScreen> {
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
           if (!mounted) return;
-          final (data, savedAt) = cached;
+          final (data, _) = cached;
           setState(() {
             _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-            _cachedAt = savedAt;
             _isSlowLoading = true;
             _loading = false;
           });
@@ -142,7 +138,6 @@ class _RiskScreenState extends State<RiskScreen> {
         if (mounted) setState(() {
           _regions = regions;
           _loading = false;
-          _isOffline = false;
           _isSlowLoading = false;
         });
       }
@@ -151,12 +146,8 @@ class _RiskScreenState extends State<RiskScreen> {
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, savedAt) = cached;
+            final (data, _) = cached;
             _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-            _cachedAt = savedAt;
-            // Fresh cache (<30min) is shown silently; only stale cache
-            // paired with a real fetch failure warrants the banner.
-            _isOffline = !isCacheFresh(savedAt);
           }
           _isSlowLoading = false;
           _loading = false;
@@ -521,7 +512,6 @@ class _RiskScreenState extends State<RiskScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
                   if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                     key: CoachMarkKeys.riskScoreCard,

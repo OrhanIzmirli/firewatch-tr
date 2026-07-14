@@ -16,7 +16,6 @@ import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/english_translation_banner.dart';
 import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/offline_banner.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
@@ -54,8 +53,6 @@ class _NewsScreenState extends State<NewsScreen> {
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
-  bool _isOffline = false;
-  DateTime? _cachedAt;
   String? _errorMessage;
 
   @override
@@ -218,18 +215,15 @@ class _NewsScreenState extends State<NewsScreen> {
       setState(() {
         _allNews = news;
         _isLoading = false;
-        _isOffline = false;
         _hasMore = news.length >= _pageSize;
       });
     } catch (e) {
       if (!mounted) return;
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (cached != null) {
-        final (data, savedAt) = cached;
+        final (data, _) = cached;
         setState(() {
           _allNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
-          _cachedAt = savedAt;
-          _isOffline = true;
           _isLoading = false;
           _hasMore = false;
         });
@@ -354,7 +348,6 @@ class _NewsScreenState extends State<NewsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_isOffline && _cachedAt != null) OfflineBanner(lastUpdated: _cachedAt!),
             // ── Header ────────────────────────────────────────
             GlassPanel(
               child: Column(

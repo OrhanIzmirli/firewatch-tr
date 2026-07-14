@@ -6,9 +6,8 @@ import '../../l10n/app_localizations.dart';
 
 /// Shown when a live fetch is taking longer than expected — cached data is
 /// displayed as a placeholder while the real request keeps running in the
-/// background. Distinct from [OfflineBanner]: this is not a failure, just
-/// a slow network, so it uses a neutral/informational tone rather than a
-/// warning one.
+/// background. This is not a failure, just a slow network, so it uses a
+/// neutral/informational tone rather than a warning one.
 class SlowLoadingBanner extends StatelessWidget {
   const SlowLoadingBanner({super.key});
 

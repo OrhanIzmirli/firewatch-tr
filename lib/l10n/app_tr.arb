@@ -605,11 +605,6 @@
       "status": { "type": "String" }
     }
   },
-
-  "offlineBannerLabel": "Çevrimdışı mod • Son güncelleme: {time}",
-  "@offlineBannerLabel": {
-    "placeholders": { "time": { "type": "String" } }
-  },
   "slowLoadingBannerLabel": "Yavaş yükleniyor — önbellek verisi gösteriliyor",
   "errorStateTitle": "Bir şeyler ters gitti",
   "errorStateGeneric": "Veriler yüklenemedi. Lütfen tekrar deneyin.",

@@ -181,7 +181,9 @@ class _MapScreenState extends State<MapScreen> {
         _isLoading = false;
         _isSlowLoading = false;
       });
-    } catch (_) {
+      debugPrint('Fire points count: ${_firePoints.length} (visible: ${_visibleFirePoints.length}, confidenceFilterActive: $_confidenceFilterActive)');
+    } catch (e) {
+      debugPrint('Fire points fetch FAILED: $e');
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (!mounted) return;
       if (cached != null) {
@@ -195,12 +197,14 @@ class _MapScreenState extends State<MapScreen> {
           _isSlowLoading = false;
           _isLoading = false;
         });
+        debugPrint('Fire points count (from cache): ${_firePoints.length}');
       } else {
         setState(() {
           _errorMessage = AppLocalizations.of(context)!.mapFetchError;
           _isSlowLoading = false;
           _isLoading = false;
         });
+        debugPrint('Fire points count: 0 (no cache available)');
       }
     }
   }
@@ -313,13 +317,12 @@ class _MapScreenState extends State<MapScreen> {
     return icon;
   }
 
-  bool _isLowConfidence(FirePoint p) {
-    final c = p.confidence.toLowerCase();
-    return !(c.contains('high') ||
-        c == 'h' ||
-        c.contains('nominal') ||
-        c == 'n');
-  }
+  // Uses FirePoint.riskTier (not a local confidence parse) so it handles
+  // both VIIRS text confidence ("high"/"nominal") and MODIS numeric
+  // confidence (e.g. "79") the same way markers/badges do elsewhere —
+  // a duplicated text-only parser here previously misclassified all
+  // MODIS numeric-confidence points as low, filtering out every marker.
+  bool _isLowConfidence(FirePoint p) => p.riskTier == 'low';
 
   List<FirePoint> get _visibleFirePoints => _confidenceFilterActive
       ? _firePoints.where((p) => !_isLowConfidence(p)).toList()

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
@@ -56,10 +57,24 @@ class _RiskScreenState extends State<RiskScreen> {
   String? _myRegionRaw;
   double? _myDistanceKm;
 
+  // Awaited by _loadMyLocation() so a "My Location" tap that lands before
+  // the Turkey-wide region fetch finishes doesn't wrongly conclude
+  // 'region_not_found' against a still-empty _regions list.
+  late Future<void> _riskDataLoadFuture;
+
+  // Same bounding box / mock-fix detection home_screen.dart uses, so both
+  // screens classify a given GPS fix identically instead of risk_screen
+  // relying solely on the backend's own outsideTurkey classification.
+  static const double _emulatorTestLat = 38.42;
+  static const double _emulatorTestLng = 27.14;
+
+  static bool _isInsideTurkeyBbox(double lat, double lng) =>
+      lat >= 35.8 && lat <= 42.2 && lng >= 25.6 && lng <= 44.8;
+
   @override
   void initState() {
     super.initState();
-    _loadRiskData().then((_) {
+    _riskDataLoadFuture = _loadRiskData().then((_) {
       _maybeShowRiskCoachMarks();
       _maybeShowHighlightedRegion();
     });
@@ -115,7 +130,9 @@ class _RiskScreenState extends State<RiskScreen> {
   }
 
   Future<void> _loadRiskData() async {
-    if (mounted) setState(() { _loading = true; _isSlowLoading = false; });
+    if (mounted) {
+      setState(() { _loading = true; _isSlowLoading = false; });
+    }
     try {
       final response = await raceWithCacheFallback(
         fetch: retryOnce(() => _dio.get('${ApiConfig.apiBaseUrl}/risk/summary')),
@@ -167,6 +184,7 @@ class _RiskScreenState extends State<RiskScreen> {
     try {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
+        if (!mounted) return;
         setState(() {
           _myLocationLoading = false;
           _myLocationError = 'service_off';
@@ -179,6 +197,7 @@ class _RiskScreenState extends State<RiskScreen> {
         permission = await Geolocator.requestPermission();
       }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
         setState(() {
           _myLocationLoading = false;
           _myLocationError = 'permission_denied';
@@ -192,8 +211,18 @@ class _RiskScreenState extends State<RiskScreen> {
           timeLimit: Duration(seconds: 10),
         ),
       );
+      if (!mounted) return;
 
-      final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
+      final isEmulatorTestLocation =
+          (position.latitude - _emulatorTestLat).abs() < 0.01 &&
+          (position.longitude - _emulatorTestLng).abs() < 0.01;
+
+      NearestCityResult cityInfo;
+      if (!isEmulatorTestLocation && !_isInsideTurkeyBbox(position.latitude, position.longitude)) {
+        cityInfo = const NearestCityResult(outsideTurkey: true);
+      } else {
+        cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
+      }
 
       if (!mounted) return;
       if (cityInfo.outsideTurkey) {
@@ -207,6 +236,15 @@ class _RiskScreenState extends State<RiskScreen> {
         return;
       }
 
+      // Wait for the Turkey-wide region fetch if it hasn't finished yet —
+      // otherwise _regions is still empty and every region legitimately
+      // "doesn't match", permanently sticking on 'region_not_found' even
+      // after _regions populates (nothing re-runs this check afterwards).
+      if (_regions.isEmpty) {
+        await _riskDataLoadFuture;
+        if (!mounted) return;
+      }
+
       final regionRaw = cityInfo.region;
       final matches = _regions.any((r) => r['region'] == regionRaw);
       setState(() {
@@ -216,7 +254,8 @@ class _RiskScreenState extends State<RiskScreen> {
         _myLocationLoading = false;
         _myLocationError = matches ? null : 'region_not_found';
       });
-    } catch (_) {
+    } catch (e, stack) {
+      if (kDebugMode) debugPrint('ERROR _loadMyLocation: $e\n$stack');
       if (!mounted) return;
       setState(() {
         _myLocationLoading = false;

@@ -12,9 +12,14 @@ import 'turkish_text.dart';
 /// keyword like "sel" (flood) from lighting up inside "Selçuk" or a name
 /// like "Abdullah" from tripping an unrelated "abd" check — the same class
 /// of false positive the backend news filter hit and fixed earlier.
+final Map<String, RegExp> _keywordPatternCache = {};
+
 bool _containsKeyword(String foldedText, String phrase) {
-  final foldedPhrase = foldTurkish(phrase);
-  return RegExp(r'\b' + RegExp.escape(foldedPhrase) + r'\b').hasMatch(foldedText);
+  final pattern = _keywordPatternCache.putIfAbsent(
+    phrase,
+    () => RegExp(r'\b' + RegExp.escape(foldTurkish(phrase)) + r'\b'),
+  );
+  return pattern.hasMatch(foldedText);
 }
 
 // ── Fire-keyword highlighting (article titles) ───────────────────────────
@@ -113,7 +118,9 @@ NewsContentCategory classifyNewsCategory(String fullText) {
   final folded = foldTurkish(fullText);
   bool has(String phrase) => _containsKeyword(folded, phrase);
 
-  if (has('tahliye') || has('evacuation')) return NewsContentCategory.evacuation;
+  if (has('tahliye') || has('evacuation')) {
+    return NewsContentCategory.evacuation;
+  }
   if (has('itfaiye') || has('söndürme')) return NewsContentCategory.response;
   if (has('uyarı') || has('risk')) return NewsContentCategory.warning;
   if (has('can kaybı') || has('ölü')) return NewsContentCategory.emergency;
@@ -161,11 +168,13 @@ String formatNewsTimeAgo(AppLocalizations l10n, String publishedAt) {
   return l10n.timeAgoDays(diff.inDays);
 }
 
+final RegExp _whitespacePattern = RegExp(r'\s+');
+
 /// Approximate word count of the article body (full paragraphs when
 /// available, otherwise the summary) — null when there's no text to count.
 int? newsWordCount(NewsItem item) {
   final text = item.paragraphs.isNotEmpty ? item.paragraphs.join(' ') : item.summary;
   final trimmed = text.trim();
   if (trimmed.isEmpty) return null;
-  return trimmed.split(RegExp(r'\s+')).length;
+  return trimmed.split(_whitespacePattern).length;
 }

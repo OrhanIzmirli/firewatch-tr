@@ -127,21 +127,36 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _loadUserLocation() async {
+    final position = await _fetchFreshPosition();
+    if (position == null || !mounted) return;
+    setState(() => _userPosition = position);
+  }
+
+  /// Same permission/service checks and LocationSettings used by
+  /// home_screen.dart / risk_screen.dart, so a fresh fix is requested here
+  /// too instead of reusing whatever _userPosition was set to when the map
+  /// first loaded.
+  Future<Position?> _fetchFreshPosition() async {
     try {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) return;
+      if (!serviceEnabled) return null;
       var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        return;
+        return null;
       }
-      final position = await Geolocator.getCurrentPosition();
-      if (!mounted) return;
-      setState(() => _userPosition = position);
-    } catch (_) {}
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> _loadFirePoints() async {
@@ -335,10 +350,14 @@ class _MapScreenState extends State<MapScreen> {
     _openFireBottomSheet(point);
   }
 
-  void _centerOnUser() {
-    if (_userPosition == null) return;
+  Future<void> _centerOnUser() async {
+    final fresh = await _fetchFreshPosition();
+    if (!mounted) return;
+    final position = fresh ?? _userPosition;
+    if (position == null) return;
+    if (fresh != null) setState(() => _userPosition = fresh);
     _mapController.move(
-      LatLng(_userPosition!.latitude, _userPosition!.longitude),
+      LatLng(position.latitude, position.longitude),
       8,
     );
   }
@@ -918,8 +937,14 @@ class _MapScreenState extends State<MapScreen> {
                                               const SizedBox(
                                                 height: AppSpacing.sm,
                                               ),
-                                              if (_userPosition != null)
-                                                GlassPanel(
+                                              // Always shown (not gated on
+                                              // _userPosition) — the silent
+                                              // bootstrap fetch in initState
+                                              // can race the permission
+                                              // dialog and come back null;
+                                              // tapping this is what
+                                              // (re)fetches a fresh fix now.
+                                              GlassPanel(
                                                   padding:
                                                       const EdgeInsets.symmetric(
                                                         horizontal: 14,

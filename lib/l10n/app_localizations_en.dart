@@ -2594,4 +2594,67 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get coachMarkWatchlistTapDesc =>
       'Tap a saved fire to see its current status and full details.';
+
+  @override
+  String get notificationScopeTitle => 'Alert Scope';
+
+  @override
+  String get notificationScopeSubtitle =>
+      'Choose which fires you want to be alerted about.';
+
+  @override
+  String get notificationScopeAll => 'All of Türkiye';
+
+  @override
+  String get notificationScopeAllDesc =>
+      'Receive fire alerts from anywhere in the country.';
+
+  @override
+  String get notificationScopeRegion => 'My region only';
+
+  @override
+  String get notificationScopeRegionDesc =>
+      'Only fires in the geographic region you pick.';
+
+  @override
+  String get notificationScopeCity => 'My province only';
+
+  @override
+  String get notificationScopeCityDesc =>
+      'Only fires in the province you pick.';
+
+  @override
+  String get notificationScopeRegionLabel => 'Region';
+
+  @override
+  String get notificationScopeCityLabel => 'Province';
+
+  @override
+  String get notificationScopeSelectRegion => 'Select a region';
+
+  @override
+  String get notificationScopeSelectCity => 'Select a province';
+
+  @override
+  String notificationScopeDetected(String name) {
+    return 'Detected from your location: $name';
+  }
+
+  @override
+  String get notificationScopeDetecting => 'Detecting your location...';
+
+  @override
+  String get notificationScopeSaved => 'Alert scope updated.';
+
+  @override
+  String get notificationScopeSaveFailed =>
+      'Could not save your scope. Check your connection.';
+
+  @override
+  String get notificationScopeCitiesUnavailable =>
+      'Province list could not be loaded.';
+
+  @override
+  String get notificationScopeNarrowWarning =>
+      'Narrowing the scope means you will not be alerted about fires outside the area you picked.';
 }

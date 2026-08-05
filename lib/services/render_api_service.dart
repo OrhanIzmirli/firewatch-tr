@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../core/config/api_config.dart';
+import '../models/alert_scope.dart';
 
 class RenderApiService {
   RenderApiService();
@@ -66,6 +67,9 @@ class RenderApiService {
     String token, {
     double? latitude,
     double? longitude,
+    AlertScope? alertScope,
+    String? regionKey,
+    int? cityId,
   }) async {
     try {
       final response = await _dio.post(
@@ -75,6 +79,11 @@ class RenderApiService {
           'device_info': 'FireWatch TR App',
           'latitude': ?latitude,
           'longitude': ?longitude,
+          // Omitted entirely when null so the backend leaves whatever scope is
+          // already stored alone, instead of resetting it to 'all'.
+          'alert_scope': ?alertScope?.wireValue,
+          'region_key': ?regionKey,
+          'city_id': ?cityId,
         },
       );
 
@@ -108,6 +117,9 @@ class RenderApiService {
     bool isActive, {
     double? latitude,
     double? longitude,
+    AlertScope? alertScope,
+    String? regionKey,
+    int? cityId,
   }) async {
     try {
       final response = await _dio.patch(
@@ -117,6 +129,9 @@ class RenderApiService {
           'is_active': isActive,
           'latitude': ?latitude,
           'longitude': ?longitude,
+          'alert_scope': ?alertScope?.wireValue,
+          'region_key': ?regionKey,
+          'city_id': ?cityId,
         },
       );
 
@@ -124,6 +139,24 @@ class RenderApiService {
     } catch (e) {
       if (kDebugMode) debugPrint('Error updating notification status: $e');
       return false;
+    }
+  }
+
+  /// The 81 provinces, used to populate the notification scope picker.
+  /// Returns an empty list on failure — the caller falls back to region-level
+  /// selection rather than blocking the whole settings screen.
+  Future<List<TurkeyCity>> fetchCities() async {
+    try {
+      final response = await _dio.get('/notify/cities');
+      final data = response.data['data'];
+      if (data is! List) return const [];
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(TurkeyCity.fromJson)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error fetching cities: $e');
+      return const [];
     }
   }
 

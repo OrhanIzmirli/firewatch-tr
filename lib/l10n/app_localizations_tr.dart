@@ -2591,4 +2591,65 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get coachMarkWatchlistTapDesc =>
       'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.';
+
+  @override
+  String get notificationScopeTitle => 'Bildirim Kapsamı';
+
+  @override
+  String get notificationScopeSubtitle =>
+      'Hangi yangınlar için uyarı almak istediğini seç.';
+
+  @override
+  String get notificationScopeAll => 'Tüm Türkiye';
+
+  @override
+  String get notificationScopeAllDesc =>
+      'Ülke genelindeki tüm yangın uyarılarını al.';
+
+  @override
+  String get notificationScopeRegion => 'Sadece bölgem';
+
+  @override
+  String get notificationScopeRegionDesc =>
+      'Yalnızca seçtiğin coğrafi bölgedeki yangınlar.';
+
+  @override
+  String get notificationScopeCity => 'Sadece ilim';
+
+  @override
+  String get notificationScopeCityDesc => 'Yalnızca seçtiğin ildeki yangınlar.';
+
+  @override
+  String get notificationScopeRegionLabel => 'Bölge';
+
+  @override
+  String get notificationScopeCityLabel => 'İl';
+
+  @override
+  String get notificationScopeSelectRegion => 'Bölge seç';
+
+  @override
+  String get notificationScopeSelectCity => 'İl seç';
+
+  @override
+  String notificationScopeDetected(String name) {
+    return 'Konumundan algılandı: $name';
+  }
+
+  @override
+  String get notificationScopeDetecting => 'Konumun belirleniyor...';
+
+  @override
+  String get notificationScopeSaved => 'Bildirim kapsamı güncellendi.';
+
+  @override
+  String get notificationScopeSaveFailed =>
+      'Kapsam kaydedilemedi. İnternet bağlantını kontrol et.';
+
+  @override
+  String get notificationScopeCitiesUnavailable => 'İl listesi yüklenemedi.';
+
+  @override
+  String get notificationScopeNarrowWarning =>
+      'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.';
 }

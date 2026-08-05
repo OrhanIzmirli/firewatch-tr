@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 
 import '../l10n/l10n_lookup.dart';
+import '../models/alert_scope.dart';
 import '../router/app_router.dart';
 import 'render_api_service.dart';
 
@@ -176,6 +177,35 @@ class NotificationService {
     } else {
       await _renderApi.setNotificationActive(token, false);
     }
+  }
+
+  /// Pushes the user's alert-scope choice to the backend so targeted fire
+  /// alerts respect it. Uses PATCH (which only updates an existing row) and
+  /// falls back to a full subscribe when the token isn't registered yet —
+  /// e.g. the user picked a scope before ever enabling notifications.
+  Future<bool> updateAlertScope({
+    required AlertScope scope,
+    String? regionKey,
+    int? cityId,
+  }) async {
+    final token = await _fcm.getToken();
+    if (token == null || token.isEmpty) return false;
+
+    final patched = await _renderApi.setNotificationActive(
+      token,
+      true,
+      alertScope: scope,
+      regionKey: regionKey,
+      cityId: cityId,
+    );
+    if (patched) return true;
+
+    return _renderApi.subscribeToNotifications(
+      token,
+      alertScope: scope,
+      regionKey: regionKey,
+      cityId: cityId,
+    );
   }
 
   Future<void> showTestNotification() async {

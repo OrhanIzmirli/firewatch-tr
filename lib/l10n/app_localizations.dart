@@ -4567,6 +4567,114 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.'**
   String get coachMarkWatchlistTapDesc;
+
+  /// No description provided for @notificationScopeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim Kapsamı'**
+  String get notificationScopeTitle;
+
+  /// No description provided for @notificationScopeSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi yangınlar için uyarı almak istediğini seç.'**
+  String get notificationScopeSubtitle;
+
+  /// No description provided for @notificationScopeAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm Türkiye'**
+  String get notificationScopeAll;
+
+  /// No description provided for @notificationScopeAllDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ülke genelindeki tüm yangın uyarılarını al.'**
+  String get notificationScopeAllDesc;
+
+  /// No description provided for @notificationScopeRegion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sadece bölgem'**
+  String get notificationScopeRegion;
+
+  /// No description provided for @notificationScopeRegionDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca seçtiğin coğrafi bölgedeki yangınlar.'**
+  String get notificationScopeRegionDesc;
+
+  /// No description provided for @notificationScopeCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sadece ilim'**
+  String get notificationScopeCity;
+
+  /// No description provided for @notificationScopeCityDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca seçtiğin ildeki yangınlar.'**
+  String get notificationScopeCityDesc;
+
+  /// No description provided for @notificationScopeRegionLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölge'**
+  String get notificationScopeRegionLabel;
+
+  /// No description provided for @notificationScopeCityLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl'**
+  String get notificationScopeCityLabel;
+
+  /// No description provided for @notificationScopeSelectRegion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölge seç'**
+  String get notificationScopeSelectRegion;
+
+  /// No description provided for @notificationScopeSelectCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl seç'**
+  String get notificationScopeSelectCity;
+
+  /// No description provided for @notificationScopeDetected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumundan algılandı: {name}'**
+  String notificationScopeDetected(String name);
+
+  /// No description provided for @notificationScopeDetecting.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumun belirleniyor...'**
+  String get notificationScopeDetecting;
+
+  /// No description provided for @notificationScopeSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim kapsamı güncellendi.'**
+  String get notificationScopeSaved;
+
+  /// No description provided for @notificationScopeSaveFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kapsam kaydedilemedi. İnternet bağlantını kontrol et.'**
+  String get notificationScopeSaveFailed;
+
+  /// No description provided for @notificationScopeCitiesUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl listesi yüklenemedi.'**
+  String get notificationScopeCitiesUnavailable;
+
+  /// No description provided for @notificationScopeNarrowWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.'**
+  String get notificationScopeNarrowWarning;
 }
 
 class _AppLocalizationsDelegate

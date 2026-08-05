@@ -226,6 +226,13 @@ class FirePoint {
     return null;
   }
 
+  /// Public accessor for the bbox region mapping, so callers that only have a
+  /// coordinate (e.g. the notification scope picker) resolve the region key
+  /// through the exact same boxes fire points do — and therefore agree with
+  /// the backend's src/utils/regions.ts port.
+  static String? regionKeyForCoordinates(double lat, double lng) =>
+      _bboxRegionKey(lat, lng);
+
   /// Canonical (non-localized) region key derived from coordinates, used only
   /// as a bbox fallback when the backend hasn't supplied a city/region name.
   /// Null when [cityName] or [nearestRegion] is available (those are proper

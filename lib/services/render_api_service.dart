@@ -142,6 +142,29 @@ class RenderApiService {
     }
   }
 
+  /// Asks the backend which province/region a coordinate falls in.
+  ///
+  /// The client deliberately does NOT work this out locally: FirePoint's
+  /// bounding boxes disagree with the province table (they put Konya,
+  /// Karaman, Nigde and Aksaray in Akdeniz and Burdur in Ege), and the server
+  /// alerts on the province table's regions. Deriving it here would put a
+  /// device in a different region than the alerts meant for it.
+  Future<ResolvedLocation?> resolveLocation(double lat, double lng) async {
+    try {
+      final response = await _dio.get(
+        '/fires/nearest-city',
+        queryParameters: {'lat': lat, 'lng': lng},
+      );
+      final data = response.data['data'];
+      if (data is! Map<String, dynamic>) return null;
+      if (data['outsideTurkey'] == true) return null;
+      return ResolvedLocation.fromJson(data);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error resolving location: $e');
+      return null;
+    }
+  }
+
   /// The 81 provinces, used to populate the notification scope picker.
   /// Returns an empty list on failure — the caller falls back to region-level
   /// selection rather than blocking the whole settings screen.

@@ -205,6 +205,20 @@ class FirePoint {
   String get mergedSatelliteLabel =>
       [satellite, ...mergedSatellites].join(' + ');
 
+  // KNOWN LIMITATION — deliberately not fixed here.
+  //
+  // These boxes disagree with the official province-to-region mapping:
+  // Konya, Karaman, Nigde and Aksaray resolve to 'akdeniz' but belong to
+  // Ic Anadolu, and Burdur resolves to 'ege' but belongs to Akdeniz. The
+  // cause is that the boxes overlap and are tested in order, so a province
+  // south of lat 38 is claimed by 'akdeniz' before 'ic_anadolu' is reached.
+  //
+  // Notification scoping no longer depends on this: the device's region is
+  // resolved server-side from turkey_cities.region (see
+  // alert_scope_provider.dart and the backend's locationService). This
+  // function is still used to label and filter fire points in the shipped
+  // app, so changing it would alter live behaviour and is tracked as its own
+  // piece of work.
   static String? _bboxRegionKey(double lat, double lng) {
     if (lng >= 26.0 && lng <= 30.5 && lat >= 36.5 && lat <= 39.5) return 'ege';
     if (lng >= 29.5 && lng <= 37.0 && lat >= 36.0 && lat <= 38.5) {
@@ -225,13 +239,6 @@ class FirePoint {
     }
     return null;
   }
-
-  /// Public accessor for the bbox region mapping, so callers that only have a
-  /// coordinate (e.g. the notification scope picker) resolve the region key
-  /// through the exact same boxes fire points do — and therefore agree with
-  /// the backend's src/utils/regions.ts port.
-  static String? regionKeyForCoordinates(double lat, double lng) =>
-      _bboxRegionKey(lat, lng);
 
   /// Canonical (non-localized) region key derived from coordinates, used only
   /// as a bbox fallback when the backend hasn't supplied a city/region name.

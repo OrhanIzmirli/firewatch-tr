@@ -81,3 +81,28 @@ class TurkeyCity {
     );
   }
 }
+
+/// What the backend says a coordinate resolves to. This is the authoritative
+/// answer — the client never derives a region key of its own for alerting.
+class ResolvedLocation {
+  final int? cityId;
+  final String? cityName;
+  final String? regionKey;
+  final String? regionName;
+
+  const ResolvedLocation({
+    this.cityId,
+    this.cityName,
+    this.regionKey,
+    this.regionName,
+  });
+
+  factory ResolvedLocation.fromJson(Map<String, dynamic> json) {
+    return ResolvedLocation(
+      cityId: (json['city_id'] as num?)?.toInt(),
+      cityName: json['city'] as String?,
+      regionKey: json['region_key'] as String?,
+      regionName: json['region'] as String?,
+    );
+  }
+}

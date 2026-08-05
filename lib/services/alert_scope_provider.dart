@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/alert_scope.dart';
-import '../models/fire_point.dart';
 import 'notification_service.dart';
 import 'render_api_service.dart';
 
@@ -106,13 +105,11 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
     final cities = await _api.fetchCities();
     if (!mounted) return;
     state = state.copyWith(cities: cities, citiesFailed: cities.isEmpty);
-    // A city id restored from disk can now be resolved to a name; if the
-    // suggestion arrived first it may also need re-resolving.
-    await _resolveSuggestedCity();
   }
 
-  /// Reads the device position and derives the region/city it falls in, using
-  /// the same bounding boxes the backend uses so both agree on the key.
+  /// Reads the device position and asks the backend which province and region
+  /// it falls in. The answer is a suggestion only — it is never applied to the
+  /// user's scope without an explicit tap.
   Future<void> detectFromLocation() async {
     state = state.copyWith(isDetectingLocation: true);
     try {
@@ -129,41 +126,32 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
         ),
       );
       if (!mounted) return;
-      _lastLat = position.latitude;
-      _lastLng = position.longitude;
-      state = state.copyWith(
-        suggestedRegionKey: FirePoint.regionKeyForCoordinates(
-          position.latitude,
-          position.longitude,
-        ),
+
+      // The region is resolved by the backend from turkey_cities, never
+      // locally: FirePoint's bounding boxes place Konya, Karaman, Nigde and
+      // Aksaray in Akdeniz and Burdur in Ege, while the server alerts on the
+      // province table's regions. A locally-derived key would subscribe the
+      // device to a region the alerts for its own location never carry.
+      final resolved = await _api.resolveLocation(
+        position.latitude,
+        position.longitude,
       );
-      await _resolveSuggestedCity();
+      if (!mounted || resolved == null) return;
+      state = state.copyWith(
+        suggestedRegionKey: resolved.regionKey,
+        suggestedCity: resolved.cityId == null
+            ? null
+            : TurkeyCity(
+                id: resolved.cityId!,
+                name: resolved.cityName ?? '',
+                regionKey: resolved.regionKey,
+              ),
+      );
     } catch (e) {
       if (kDebugMode) debugPrint('Alert scope location detection failed: $e');
     } finally {
       if (mounted) state = state.copyWith(isDetectingLocation: false);
     }
-  }
-
-  double? _lastLat;
-  double? _lastLng;
-
-  /// Picks the nearest province to the detected position out of the loaded
-  /// city list. Needs both the position and the list, so it is retried
-  /// whenever either arrives.
-  Future<void> _resolveSuggestedCity() async {
-    if (!mounted) return;
-    final lat = _lastLat;
-    final lng = _lastLng;
-    if (lat == null || lng == null || state.cities.isEmpty) return;
-
-    final region = state.suggestedRegionKey;
-    final candidates = region == null
-        ? state.cities
-        : state.cities.where((c) => c.regionKey == region).toList();
-    if (candidates.isEmpty) return;
-
-    state = state.copyWith(suggestedCity: candidates.first);
   }
 
   Future<void> setScope(

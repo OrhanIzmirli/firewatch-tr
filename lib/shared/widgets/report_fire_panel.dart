@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -443,10 +444,30 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             options: MapOptions(
                               initialCenter: LatLng(_latitude!, _longitude!),
                               initialZoom: 14,
+                              // OSM has no tiles past z19, so without a cap the
+                              // camera runs to z22 and shows a heavily upscaled,
+                              // unreadable blur. z19 is both OSM's last native
+                              // level and flutter_map's default maxNativeZoom,
+                              // so capping here keeps tiles sharp while giving
+                              // the most precision for placing the fire pin.
+                              minZoom: 5,
+                              maxZoom: 19,
                               onTap: (_, point) => _onMapAdjust(point),
                             ),
                             children: [
-                              TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.firewatchtr.app'),
+                              TileLayer(
+                                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
+                                evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+                                errorTileCallback: (tile, error, stack) {
+                                  if (kDebugMode) {
+                                    debugPrint(
+                                      'Report map tile failed z=${tile.coordinates.z} '
+                                      'x=${tile.coordinates.x} y=${tile.coordinates.y}: $error',
+                                    );
+                                  }
+                                },
+                              ),
                               MarkerLayer(markers: [
                                 Marker(
                                   point: LatLng(_latitude!, _longitude!),

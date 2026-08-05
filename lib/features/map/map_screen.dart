@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -62,6 +65,14 @@ class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
   final FireApiService _fireApiService = FireApiService();
 
+  /// Drives [TileLayer.reset]. Tiles that failed to load are never re-requested
+  /// on their own, so without an explicit reset a connectivity blip leaves the
+  /// map permanently grey until the app is restarted. Pushing an event here
+  /// clears the tile manager and reloads everything in view.
+  final StreamController<void> _tileResetController =
+      StreamController<void>.broadcast();
+  late final Stream<void> _tileResetStream = _tileResetController.stream;
+
   Position? _userPosition;
 
   @override
@@ -82,8 +93,17 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void dispose() {
+    _tileResetController.close();
     _mapController.dispose();
     super.dispose();
+  }
+
+  /// What the on-map "Refresh" button does: re-fetch the fire points *and*
+  /// force the tile layer to retry anything that failed, so a user who hit a
+  /// dead network has a way back without restarting the app.
+  Future<void> _refreshMap() async {
+    if (!_tileResetController.isClosed) _tileResetController.add(null);
+    await _loadFirePoints();
   }
 
   Future<void> _bootstrapMapData() async {
@@ -596,7 +616,7 @@ class _MapScreenState extends State<MapScreen> {
       body: Stack(
         children: [
           RefreshIndicator(
-            onRefresh: _loadFirePoints,
+            onRefresh: _refreshMap,
             color: AppColors.primary,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -764,7 +784,27 @@ class _MapScreenState extends State<MapScreen> {
                                       urlTemplate:
                                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                       userAgentPackageName:
-                                          'com.firewatchtr.app',
+                                          'com.oguzh.firewatch.firewatch_tr',
+                                      // A tile that fails (typically a brief
+                                      // connectivity drop) is otherwise kept
+                                      // forever in the tile manager and never
+                                      // re-requested, leaving permanently grey
+                                      // squares. This evicts the off-screen
+                                      // ones; the reset stream below is what
+                                      // recovers the ones still on screen.
+                                      evictErrorTileStrategy:
+                                          EvictErrorTileStrategy.notVisible,
+                                      reset: _tileResetStream,
+                                      errorTileCallback: (tile, error, stack) {
+                                        if (kDebugMode) {
+                                          debugPrint(
+                                            'Map tile failed '
+                                            'z=${tile.coordinates.z} '
+                                            'x=${tile.coordinates.x} '
+                                            'y=${tile.coordinates.y}: $error',
+                                          );
+                                        }
+                                      },
                                     ),
                                     MarkerLayer(
                                       markers: _userPosition != null
@@ -905,7 +945,7 @@ class _MapScreenState extends State<MapScreen> {
                                                     ),
                                                 radius: 16,
                                                 child: InkWell(
-                                                  onTap: _loadFirePoints,
+                                                  onTap: _refreshMap,
                                                   child: Row(
                                                     mainAxisSize:
                                                         MainAxisSize.min,

@@ -769,7 +769,11 @@ class _MapScreenState extends State<MapScreen> {
                                         ? 13
                                         : 5.6,
                                     minZoom: 4,
-                                    maxZoom: 16,
+                                    // z16 only gets you to neighbourhood level,
+                                    // which isn't enough to place a fire; 18 is
+                                    // street level and still within OSM's z19
+                                    // native limit, so tiles stay sharp.
+                                    maxZoom: 18,
                                     onPositionChanged: (camera, hasGesture) {
                                       if ((camera.zoom - _currentZoom).abs() >
                                           0.2) {

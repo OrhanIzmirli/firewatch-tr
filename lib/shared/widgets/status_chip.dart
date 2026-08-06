@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import 'color_dot.dart';
 
 class StatusChip extends StatelessWidget {
   final String label;
@@ -12,12 +13,19 @@ class StatusChip extends StatelessWidget {
   /// chip that conveys severity/status, e.g. from a canonical risk tier.
   final Color? color;
 
+  /// Shows a small colour dot before the label. Replaces the coloured emoji
+  /// these chips used to be prefixed with: same signal, but it takes the
+  /// chip's own colour and scales with the chip instead of being a font glyph
+  /// that renders differently on every device.
+  final bool showDot;
+
   const StatusChip({
     super.key,
     required this.label,
     this.icon,
     this.padding,
     this.color,
+    this.showDot = false,
   });
 
   Color _colorForLabel() {
@@ -83,6 +91,9 @@ class StatusChip extends StatelessWidget {
               end: const Offset(1, 1),
               curve: Curves.easeOutBack,
             ),
+            const SizedBox(width: AppSpacing.sm),
+          ] else if (showDot) ...[
+            ColorDot(color: chipColor, size: 9),
             const SizedBox(width: AppSpacing.sm),
           ],
           Flexible(

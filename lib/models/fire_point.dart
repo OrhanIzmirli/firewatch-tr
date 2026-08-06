@@ -13,19 +13,6 @@ enum FireLocationType { forest, coastal, agricultural, urban, generic }
 /// a `low` confidence detection is always [historical] regardless of age.
 enum FireStatus { active, likelyActive, monitoring, historical }
 
-String fireStatusEmoji(FireStatus status) {
-  switch (status) {
-    case FireStatus.active:
-      return '🔴';
-    case FireStatus.likelyActive:
-      return '🟠';
-    case FireStatus.monitoring:
-      return '🟡';
-    case FireStatus.historical:
-      return '⚫';
-  }
-}
-
 String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
   switch (status) {
     case FireStatus.active:

@@ -5,7 +5,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Small ℹ️ icon that shows a short explanatory dialog on tap. Used next to
+/// Small info icon that shows a short explanatory dialog on tap. Used next to
 /// technical readings (Kelvin temperature, confidence, satellite) that
 /// aren't self-explanatory to a general audience.
 class InfoIconButton extends StatelessWidget {

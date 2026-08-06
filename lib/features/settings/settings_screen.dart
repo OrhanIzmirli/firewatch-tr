@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_provider.dart';
 import '../../services/settings_provider.dart';
@@ -215,7 +216,7 @@ class SettingsScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       _LanguageOptionTile(
-                        flag: '🇹🇷',
+                        code: 'TR',
                         label: l10n.settingsLanguageTurkish,
                         selected: locale.languageCode == 'tr',
                         onTap: () =>
@@ -228,7 +229,7 @@ class SettingsScreen extends ConsumerWidget {
                             : Colors.black.withValues(alpha: 0.05),
                       ),
                       _LanguageOptionTile(
-                        flag: '🇬🇧',
+                        code: 'EN',
                         label: l10n.settingsLanguageEnglish,
                         selected: locale.languageCode == 'en',
                         onTap: () =>
@@ -705,13 +706,13 @@ class _InfoLine extends StatelessWidget {
 }
 
 class _LanguageOptionTile extends StatelessWidget {
-  final String flag;
+  final String code;
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
   const _LanguageOptionTile({
-    required this.flag,
+    required this.code,
     required this.label,
     required this.selected,
     required this.onTap,
@@ -733,7 +734,7 @@ class _LanguageOptionTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
-              Text(flag, style: const TextStyle(fontSize: 24)),
+              LanguageBadge(code: code, size: 30),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Text(

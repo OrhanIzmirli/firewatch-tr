@@ -472,7 +472,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
                                                   style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
                                               StatusChip(
-                                                label: '${fireStatusEmoji(fire.smartStatus)} ${fireStatusLabel(l10n, fire.smartStatus)}',
+                                                label: fireStatusLabel(l10n, fire.smartStatus),
+                                                showDot: true,
                                                 color: fireStatusColor(fire.smartStatus),
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                               ),
@@ -586,7 +587,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 children: [
                                                   StatusChip(label: fire.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: fire.detectionColor),
                                                   StatusChip(
-                                                    label: '${fireStatusEmoji(fire.smartStatus)} ${fireStatusLabel(l10n, fire.smartStatus)}',
+                                                    label: fireStatusLabel(l10n, fire.smartStatus),
+                                                    showDot: true,
                                                     color: fireStatusColor(fire.smartStatus),
                                                   ),
                                                   Text(

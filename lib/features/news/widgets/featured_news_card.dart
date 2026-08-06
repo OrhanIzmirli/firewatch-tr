@@ -135,7 +135,8 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                       icon: newsCategoryIcon(category),
                     ),
                     StatusChip(
-                      label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                      label: newsRiskLevelLabel(l10n, riskLevel),
+                      showDot: true,
                       color: newsRiskLevelColor(riskLevel),
                     ),
                   ],

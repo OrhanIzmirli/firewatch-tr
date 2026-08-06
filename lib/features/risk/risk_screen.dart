@@ -711,7 +711,7 @@ class _RiskScreenState extends State<RiskScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisSpacing: AppSpacing.md,
                       mainAxisSpacing: AppSpacing.md,
-                      childAspectRatio: 0.95,
+                      childAspectRatio: 0.86,
                       children: [
                         SmartOverviewCard(
                           title: l10n.riskOverviewHighestTitle,

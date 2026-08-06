@@ -72,20 +72,36 @@ class SmartOverviewCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.md),
+              // Two lines each, and a long value steps down a size rather
+              // than truncating. A card reading "13 detection…" or "Nearby
+              // Thermal Det…" has spent its width on an ellipsis; these
+              // strings fit if they are allowed to wrap.
               Text(
                 value,
-                maxLines: 1,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: valueColor),
+                style: GoogleFonts.inter(
+                    fontSize: value.length > 22
+                        ? 15
+                        : value.length > 14
+                            ? 17
+                            : 20,
+                    height: 1.15,
+                    fontWeight: FontWeight.w800,
+                    color: valueColor),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 title,
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: titleColor),
+                style: GoogleFonts.inter(
+                    fontSize: 13,
+                    height: 1.2,
+                    fontWeight: FontWeight.w700,
+                    color: titleColor),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 subtitle,
                 maxLines: 2,

@@ -187,13 +187,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNasaLiveData => 'NASA FIRMS • Live Data';
 
   @override
-  String get homeOutsideTurkeyLocation => 'Outside Turkey 🌍';
+  String get homeOutsideTurkeyLocation => 'Outside Turkey';
 
   @override
-  String get homeLocationUnavailable => 'Location unavailable 📍';
+  String get homeLocationUnavailable => 'Location unavailable';
 
   @override
-  String get homeLocationEmulatorTest => 'Emulator test location 📱';
+  String get homeLocationEmulatorTest => 'Emulator test location';
 
   @override
   String get homeRiskAnalysis => 'Risk Analysis';
@@ -342,6 +342,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapTitle => 'Thermal Anomaly Map';
 
   @override
+  String get mapTitleEvents => 'Fire Map';
+
+  @override
+  String get mapTitleDetections => 'Thermal Detection Map';
+
+  @override
   String get mapLiveMap => 'Live Map';
 
   @override
@@ -352,11 +358,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapConfidenceFilterClear => 'Clear';
 
   @override
-  String get mapHeaderTitle => 'Turkey-wide Thermal Anomaly View';
+  String get mapHeaderTitle => 'Nationwide Fire View';
 
   @override
   String get mapHeaderSubtitle =>
-      'Show active thermal points on the map using NASA FIRMS data.';
+      'NASA FIRMS satellite data. Events and raw detections.';
 
   @override
   String get mapArea => 'Map Area';
@@ -609,14 +615,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String emergencyShareLocationText(String url, String lat, String lng) {
-    return '🔥 Emergency - My Location:\n$url\n\nLat: $lat\nLng: $lng\n\nShared via FireWatch TR.';
+    return 'Emergency - My Location:\n$url\n\nLat: $lat\nLng: $lng\n\nShared via FireWatch TR.';
   }
 
   @override
   String get emergencyShareLocationSubject => 'Emergency Location Share';
 
   @override
-  String get emergencyShareFallbackText => '🔥 Emergency notice - FireWatch TR';
+  String get emergencyShareFallbackText => 'Emergency notice - FireWatch TR';
 
   @override
   String get emergencyTitle => 'Emergency';
@@ -1292,7 +1298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newsEnglishBannerText =>
-      '🌐 Tap any article to translate it to English';
+      'Tap any article to translate it to English';
 
   @override
   String get newsTranslateCardButton => 'Translate';
@@ -1359,7 +1365,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportPanelFireReport => 'Fire report';
 
   @override
-  String get reportPanelVerifiedTitle => '✅ Report Verified';
+  String get reportPanelVerifiedTitle => 'Report Verified';
 
   @override
   String get reportPanelReceivedTitle => '⏳ Report Received';
@@ -1681,7 +1687,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fireEventStatusMonitoring => 'Monitoring';
 
   @override
-  String get fireEventStatusControlled => 'Under Control';
+  String get fireEventStatusControlled => 'Low confidence';
 
   @override
   String get fireEventSpreadHigh => 'High — active monitoring required';
@@ -1784,7 +1790,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String risk,
     String description,
   ) {
-    return '🔥 Fire Alert\n\n📍 $title\n📌 $city / $district\n\n🚨 Status: $status\n⚠️ Risk: $risk\n\n📝 $description\n\nTracked with FireWatch TR.';
+    return 'Fire Alert\n\n$title\n$city / $district\n\nStatus: $status\nRisk: $risk\n\n$description\n\nTracked with FireWatch TR.';
   }
 
   @override
@@ -1846,7 +1852,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newsTranslatedCaption =>
-      '🌐 Translated from Turkish • Tap for full translation';
+      'Translated from Turkish • Tap for full translation';
 
   @override
   String get coachMarksGotIt => 'Got it';
@@ -1971,12 +1977,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String monitorStatusNoNearbyFires(int count) {
-    return '✅ No thermal detections within 50 km. ($count points scanned)';
+    return 'No thermal detections within 50 km. ($count points scanned)';
   }
 
   @override
   String monitorStatusNearbyFiresFound(int count) {
-    return '⚠️ $count thermal detections found within 50 km!';
+    return '$count thermal detections found within 50 km!';
   }
 
   @override
@@ -2273,7 +2279,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String smartTimeHistorical(int days) {
-    return 'An older detection from $days days ago — may already be extinguished.';
+    return 'An older detection from $days days ago; its current state is unknown.';
   }
 
   @override
@@ -2409,7 +2415,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkRiskScoreDesc =>
-      'This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the ℹ️ button to see exactly how.';
+      'This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the info button to see exactly how.';
 
   @override
   String get coachMarkRiskChartTitle => 'Regional Distribution';
@@ -2430,7 +2436,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkRiskInfoDesc =>
-      'The ℹ️ button explains the risk score formula, data sources, and how often it updates.';
+      'The info button explains the risk score formula, data sources, and how often it updates.';
 
   @override
   String get coachMarkWatchlistPurposeTitle => 'What\'s the Watchlist For?';
@@ -2454,16 +2460,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use the Clear button in the top corner to remove all saved points at once.';
 
   @override
-  String get detectionProbableFire => '🔥 Probable Fire';
+  String get detectionProbableFire => 'Probable Fire';
 
   @override
-  String get detectionHighThermalAnomaly => '⚠️ High Thermal Anomaly';
+  String get detectionHighThermalAnomaly => 'High Thermal Anomaly';
 
   @override
-  String get detectionThermalDetection => '📡 Thermal Detection';
+  String get detectionThermalDetection => 'Thermal Detection';
 
   @override
-  String get detectionLowConfidence => '❓ Low Confidence Detection';
+  String get detectionLowConfidence => 'Low Confidence Detection';
 
   @override
   String get thermalAnomalyDisclaimer =>
@@ -2494,17 +2500,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapLegendTitle => 'Map Legend';
 
   @override
-  String get legendProbableFire => '🔴 Probable Fire';
+  String get legendProbableFire => 'Probable Fire';
 
   @override
-  String get legendHighThermal => '🟠 High Thermal Anomaly';
+  String get legendHighThermal => 'High Thermal Anomaly';
 
   @override
-  String get legendLowConfidence => '⚪ Low Confidence';
+  String get legendLowConfidence => 'Low Confidence';
 
   @override
-  String get mapMarkerDisclaimer =>
-      'The map shows NASA satellite thermal detections. 🔴 markers may indicate an active fire.';
+  String get mapMarkerDisclaimerBefore =>
+      'The map shows NASA satellite thermal detections.';
+
+  @override
+  String get mapMarkerDisclaimerAfter => 'markers may indicate an active fire.';
 
   @override
   String get feedbackSend => 'Send Feedback';
@@ -2559,10 +2568,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ratingPromptLater => 'Later';
 
   @override
-  String get feedbackReportBug => '🐛 Report a Bug';
+  String get feedbackReportBug => 'Report a Bug';
 
   @override
-  String get feedbackSendFeedback => '💬 Send Feedback';
+  String get feedbackSendFeedback => 'Send Feedback';
 
   @override
   String feedbackBlockedMessage(int days) {

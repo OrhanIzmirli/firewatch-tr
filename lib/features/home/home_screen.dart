@@ -139,7 +139,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           physics: const NeverScrollableScrollPhysics(),
           crossAxisSpacing: AppSpacing.md,
           mainAxisSpacing: AppSpacing.md,
-          childAspectRatio: 0.95,
+          childAspectRatio: 0.86,
           children: [
             SmartOverviewCard(
               title: l10n.homeLast24hActiveTitle,
@@ -436,7 +436,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
                   StatusChip(
-                    label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                    label: fireStatusLabel(l10n, point.smartStatus),
+                    showDot: true,
                     color: fireStatusColor(point.smartStatus),
                   ),
                   InfoIconButton(
@@ -751,7 +752,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: AppSpacing.md,
                 mainAxisSpacing: AppSpacing.md,
-                childAspectRatio: 0.95,
+                childAspectRatio: 0.86,
                 children: [
                   SmartOverviewCard(
                     title: l10n.homeOverviewActiveFiresTitle,
@@ -998,7 +999,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   children: [
                                     StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
                                     StatusChip(
-                                      label: '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                                      label: fireStatusLabel(l10n, point.smartStatus),
+                                      showDot: true,
                                       color: fireStatusColor(point.smartStatus),
                                     ),
                                   ],
@@ -1261,7 +1263,8 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
                         children: [
                           StatusChip(label: newsCategoryLabel(l10n, category), icon: newsCategoryIcon(category)),
                           StatusChip(
-                            label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                            label: newsRiskLevelLabel(l10n, riskLevel),
+                            showDot: true,
                             color: newsRiskLevelColor(riskLevel),
                           ),
                           if (item.isBreaking) StatusChip(label: l10n.newsBreakingBadge, icon: Icons.bolt_rounded),

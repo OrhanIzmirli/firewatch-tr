@@ -19,6 +19,7 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
+import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/featured_news_card.dart';
@@ -83,14 +84,23 @@ class _NewsScreenState extends State<NewsScreen> {
     }
   }
 
-  String _filterEmoji(_NewsFilterKind kind) {
+  /// The four risk filters are distinguished by colour, so they get a dot.
+  /// "All" and "My region" are not risk levels and would be lying if they
+  /// carried one, so they get an icon instead.
+  Widget? _filterLeading(_NewsFilterKind kind) {
     switch (kind) {
-      case _NewsFilterKind.all: return '🗞️';
-      case _NewsFilterKind.critical: return newsRiskLevelEmoji(NewsRiskLevel.critical);
-      case _NewsFilterKind.active: return newsRiskLevelEmoji(NewsRiskLevel.active);
-      case _NewsFilterKind.monitoring: return newsRiskLevelEmoji(NewsRiskLevel.monitoring);
-      case _NewsFilterKind.info: return newsRiskLevelEmoji(NewsRiskLevel.info);
-      case _NewsFilterKind.myRegion: return '📍';
+      case _NewsFilterKind.all:
+        return const Icon(Icons.list_rounded, size: 15, color: AppColors.primary);
+      case _NewsFilterKind.myRegion:
+        return const Icon(Icons.place_rounded, size: 15, color: AppColors.primary);
+      case _NewsFilterKind.critical:
+        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.critical), size: 9);
+      case _NewsFilterKind.active:
+        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.active), size: 9);
+      case _NewsFilterKind.monitoring:
+        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.monitoring), size: 9);
+      case _NewsFilterKind.info:
+        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.info), size: 9);
     }
   }
 
@@ -269,6 +279,7 @@ class _NewsScreenState extends State<NewsScreen> {
     required bool isSelected,
     required VoidCallback onTap,
     required bool isDark,
+    Widget? leading,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -294,17 +305,23 @@ class _NewsScreenState extends State<NewsScreen> {
                         : Colors.black.withValues(alpha: 0.08)),
               ),
             ),
-            child: Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: isSelected
-                    ? AppColors.primary
-                    : (isDark
-                        ? AppColors.white.withValues(alpha: 0.78)
-                        : Colors.black.withValues(alpha: 0.72)),
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leading != null) ...[leading, const SizedBox(width: 7)],
+                Text(
+                  label,
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: isSelected
+                        ? AppColors.primary
+                        : (isDark
+                            ? AppColors.white.withValues(alpha: 0.78)
+                            : Colors.black.withValues(alpha: 0.72)),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -466,7 +483,8 @@ class _NewsScreenState extends State<NewsScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: _buildFilterChip(
-                      label: '${_filterEmoji(kind)} ${_filterLabel(l10n, kind)}',
+                      label: _filterLabel(l10n, kind),
+                      leading: _filterLeading(kind),
                       isSelected: _selectedFilter == kind,
                       isDark: isDark,
                       onTap: () {

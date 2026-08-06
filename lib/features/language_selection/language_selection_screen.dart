@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../shared/widgets/language_badge.dart';
 import '../../services/locale_provider.dart';
 
 /// Shown once, before onboarding, on first launch only. Intentionally
@@ -80,14 +81,14 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
                   ),
                   const SizedBox(height: AppSpacing.xxxl),
                   _LanguageCard(
-                    flag: '🇹🇷',
+                    code: 'TR',
                     label: 'Türkçe',
                     enabled: !_busy,
                     onTap: () => _selectLanguage('tr'),
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   _LanguageCard(
-                    flag: '🇬🇧',
+                    code: 'EN',
                     label: 'English',
                     enabled: !_busy,
                     onTap: () => _selectLanguage('en'),
@@ -103,13 +104,13 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
 }
 
 class _LanguageCard extends StatelessWidget {
-  final String flag;
+  final String code;
   final String label;
   final bool enabled;
   final VoidCallback onTap;
 
   const _LanguageCard({
-    required this.flag,
+    required this.code,
     required this.label,
     required this.enabled,
     required this.onTap,
@@ -132,7 +133,7 @@ class _LanguageCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Text(flag, style: const TextStyle(fontSize: 32)),
+              LanguageBadge(code: code, size: 40),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Text(

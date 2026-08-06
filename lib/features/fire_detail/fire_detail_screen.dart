@@ -22,6 +22,7 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
+import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/status_chip.dart';
 
 enum _RelatedNewsTier { region, city, generic }
@@ -254,9 +255,9 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          fireStatusEmoji(fire.smartStatus),
-                          style: const TextStyle(fontSize: 20),
+                        ColorDot(
+                          color: fireStatusColor(fire.smartStatus),
+                          size: 14,
                         ),
                         const SizedBox(width: AppSpacing.sm),
                         Text(

@@ -81,15 +81,6 @@ NewsRiskLevel classifyNewsRiskLevel(String fullText) {
   return NewsRiskLevel.info;
 }
 
-String newsRiskLevelEmoji(NewsRiskLevel level) {
-  switch (level) {
-    case NewsRiskLevel.critical: return '🔴';
-    case NewsRiskLevel.active: return '🟠';
-    case NewsRiskLevel.monitoring: return '🟡';
-    case NewsRiskLevel.info: return '🔵';
-  }
-}
-
 String newsRiskLevelLabel(AppLocalizations l10n, NewsRiskLevel level) {
   switch (level) {
     case NewsRiskLevel.critical: return l10n.newsRiskCritical;

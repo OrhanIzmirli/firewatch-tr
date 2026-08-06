@@ -73,9 +73,9 @@
   "homeHeaderTitle": "Turkey Thermal Anomaly Tracking",
   "homeHeaderSubtitle": "Track active events, see risk levels, and quickly reach the safety guide.",
   "homeNasaLiveData": "NASA FIRMS • Live Data",
-  "homeOutsideTurkeyLocation": "Outside Turkey 🌍",
-  "homeLocationUnavailable": "Location unavailable 📍",
-  "homeLocationEmulatorTest": "Emulator test location 📱",
+  "homeOutsideTurkeyLocation": "Outside Turkey",
+  "homeLocationUnavailable": "Location unavailable",
+  "homeLocationEmulatorTest": "Emulator test location",
   "homeRiskAnalysis": "Risk Analysis",
   "homeSaved": "Saved ({count})",
   "@homeSaved": {
@@ -146,11 +146,13 @@
 
   "mapFetchError": "Could not fetch fire data.",
   "mapTitle": "Thermal Anomaly Map",
+  "mapTitleEvents": "Fire Map",
+  "mapTitleDetections": "Thermal Detection Map",
   "mapLiveMap": "Live Map",
   "mapConfidenceFilterActive": "Showing only high/nominal confidence detections",
   "mapConfidenceFilterClear": "Clear",
-  "mapHeaderTitle": "Turkey-wide Thermal Anomaly View",
-  "mapHeaderSubtitle": "Show active thermal points on the map using NASA FIRMS data.",
+  "mapHeaderTitle": "Nationwide Fire View",
+  "mapHeaderSubtitle": "NASA FIRMS satellite data. Events and raw detections.",
   "mapArea": "Map Area",
   "mapAreaSubtitle": "NASA FIRMS live marker view",
   "mapGoToMe": "Go to Me",
@@ -265,7 +267,7 @@
   },
   "watchlistSyncingSubtitle": "NASA data may be refreshing. Saved points can change with satellite updates.",
 
-  "emergencyShareLocationText": "🔥 Emergency - My Location:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nShared via FireWatch TR.",
+  "emergencyShareLocationText": "Emergency - My Location:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nShared via FireWatch TR.",
   "@emergencyShareLocationText": {
     "placeholders": {
       "url": { "type": "String" },
@@ -274,7 +276,7 @@
     }
   },
   "emergencyShareLocationSubject": "Emergency Location Share",
-  "emergencyShareFallbackText": "🔥 Emergency notice - FireWatch TR",
+  "emergencyShareFallbackText": "Emergency notice - FireWatch TR",
   "emergencyTitle": "Emergency",
   "emergencyPrepCenter": "Emergency Prep Center",
   "emergencyQuickToolsTitle": "Quick Response Tools",
@@ -516,7 +518,7 @@
   "newsRiskMonitoring": "MONITORING",
   "newsRiskInfo": "INFO",
   "newsBreakingBadge": "Breaking",
-  "newsEnglishBannerText": "🌐 Tap any article to translate it to English",
+  "newsEnglishBannerText": "Tap any article to translate it to English",
   "newsTranslateCardButton": "Translate",
   "newsContentFiltersTitle": "Status Filters",
   "newsContentFiltersSubtitle": "Filter by what's happening",
@@ -548,7 +550,7 @@
     "placeholders": { "city": { "type": "String" } }
   },
   "reportPanelFireReport": "Fire report",
-  "reportPanelVerifiedTitle": "✅ Report Verified",
+  "reportPanelVerifiedTitle": "Report Verified",
   "reportPanelReceivedTitle": "⏳ Report Received",
   "reportPanelCityLabel": "City: {city}",
   "@reportPanelCityLabel": {
@@ -678,7 +680,7 @@
   "fireEventLiveDetectionTitle": "Live Thermal Detection",
   "fireEventStatusActive": "Active",
   "fireEventStatusMonitoring": "Monitoring",
-  "fireEventStatusControlled": "Under Control",
+  "fireEventStatusControlled": "Low confidence",
   "fireEventSpreadHigh": "High — active monitoring required",
   "fireEventSpreadMedium": "Medium — monitor carefully",
   "fireEventSpreadLow": "Low",
@@ -736,7 +738,7 @@
     "placeholders": { "datetime": { "type": "String" } }
   },
 
-  "fireDetailShareText": "🔥 Fire Alert\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Status: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nTracked with FireWatch TR.",
+  "fireDetailShareText": "Fire Alert\n\n{title}\n{city} / {district}\n\nStatus: {status}\nRisk: {risk}\n\n{description}\n\nTracked with FireWatch TR.",
   "@fireDetailShareText": {
     "placeholders": {
       "title": { "type": "String" },
@@ -771,7 +773,7 @@
   "newsTranslated": "Translated",
   "newsShowOriginal": "Show Original",
   "newsTranslationFailed": "Translation failed.",
-  "newsTranslatedCaption": "🌐 Translated from Turkish • Tap for full translation",
+  "newsTranslatedCaption": "Translated from Turkish • Tap for full translation",
 
   "coachMarksGotIt": "Got it",
   "coachMarksSkip": "Skip tutorial",
@@ -827,11 +829,11 @@
   "monitorStatusLocationDenied": "Location permission denied.",
   "monitorStatusFetchingData": "Fetching NASA FIRMS data...",
   "monitorStatusNoActiveFires": "No thermal anomaly data found right now.",
-  "monitorStatusNoNearbyFires": "✅ No thermal detections within 50 km. ({count} points scanned)",
+  "monitorStatusNoNearbyFires": "No thermal detections within 50 km. ({count} points scanned)",
   "@monitorStatusNoNearbyFires": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "monitorStatusNearbyFiresFound": "⚠️ {count} thermal detections found within 50 km!",
+  "monitorStatusNearbyFiresFound": "{count} thermal detections found within 50 km!",
   "@monitorStatusNearbyFiresFound": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -953,7 +955,7 @@
   },
   "smartTimeOlder": "Detected {hours} hours ago — current status unknown.",
   "@smartTimeOlder": { "placeholders": { "hours": { "type": "int" } } },
-  "smartTimeHistorical": "An older detection from {days} days ago — may already be extinguished.",
+  "smartTimeHistorical": "An older detection from {days} days ago; its current state is unknown.",
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
   "tooltipTempTitle": "Temperature",
@@ -1002,13 +1004,13 @@
   "coachMarkNotifAlertsDesc": "High-risk detections are listed here — tap a card to see the full details.",
 
   "coachMarkRiskScoreTitle": "Risk Score",
-  "coachMarkRiskScoreDesc": "This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the ℹ️ button to see exactly how.",
+  "coachMarkRiskScoreDesc": "This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the info button to see exactly how.",
   "coachMarkRiskChartTitle": "Regional Distribution",
   "coachMarkRiskChartDesc": "Tap a region's bar to see that region's detailed risk breakdown.",
   "coachMarkRiskMyLocationTabTitle": "My Location",
   "coachMarkRiskMyLocationTabDesc": "Switch to this tab to compare your own region's risk against the Turkey average.",
   "coachMarkRiskInfoTitle": "Data Sources",
-  "coachMarkRiskInfoDesc": "The ℹ️ button explains the risk score formula, data sources, and how often it updates.",
+  "coachMarkRiskInfoDesc": "The info button explains the risk score formula, data sources, and how often it updates.",
 
   "coachMarkWatchlistPurposeTitle": "What's the Watchlist For?",
   "coachMarkWatchlistPurposeDesc": "Keep the fire points you want to follow all in one place here.",
@@ -1018,10 +1020,10 @@
   "coachMarkWatchlistClearDesc": "Use the Clear button in the top corner to remove all saved points at once.",
   "coachMarkWatchlistTapTitle": "View Details",
   "coachMarkWatchlistTapDesc": "Tap a saved fire to see its current status and full details.",
-  "detectionProbableFire": "🔥 Probable Fire",
-  "detectionHighThermalAnomaly": "⚠️ High Thermal Anomaly",
-  "detectionThermalDetection": "📡 Thermal Detection",
-  "detectionLowConfidence": "❓ Low Confidence Detection",
+  "detectionProbableFire": "Probable Fire",
+  "detectionHighThermalAnomaly": "High Thermal Anomaly",
+  "detectionThermalDetection": "Thermal Detection",
+  "detectionLowConfidence": "Low Confidence Detection",
   "thermalAnomalyDisclaimer": "NASA satellite detects thermal anomalies. High-confidence detections may indicate active fires, but industrial heat sources can also be detected.",
   "detectionAboutTitle": "What is this detection?",
   "detectionAboutViirs": "NASA VIIRS measures infrared heat at the Earth's surface. It identifies thermal anomalies, not confirmed fires.",
@@ -1031,18 +1033,19 @@
   "@detectionFrpExplanation": {"placeholders":{"frp":{"type":"String"}}},
   "detectionLimitations": "Cloud, smoke, satellite resolution and non-fire heat sources can cause missed or misleading detections. Use official emergency information and direct observation for safety decisions.",
   "mapLegendTitle": "Map Legend",
-  "legendProbableFire": "🔴 Probable Fire",
-  "legendHighThermal": "🟠 High Thermal Anomaly",
-  "legendLowConfidence": "⚪ Low Confidence",
-  "mapMarkerDisclaimer": "The map shows NASA satellite thermal detections. 🔴 markers may indicate an active fire.",
+  "legendProbableFire": "Probable Fire",
+  "legendHighThermal": "High Thermal Anomaly",
+  "legendLowConfidence": "Low Confidence",
+  "mapMarkerDisclaimerBefore": "The map shows NASA satellite thermal detections.",
+  "mapMarkerDisclaimerAfter": "markers may indicate an active fire.",
   "feedbackSend": "Send Feedback", "feedbackTitle": "Send Feedback", "feedbackRating": "Rating", "feedbackCategory": "Category",
   "feedbackBug": "Bug Report", "feedbackFeature": "Feature Request", "feedbackGeneral": "General Feedback",
   "feedbackMessage": "Message", "feedbackEmail": "Email (optional)", "feedbackSubmit": "Send",
   "feedbackSuccess": "Thank you! Your feedback was sent.", "feedbackError": "Feedback could not be sent. Please try again.",
   "feedbackMessageRequired": "Please enter a message.", "feedbackRatingRequired": "Please select a rating from 1 to 5.", "ratingPromptTitle": "Enjoying FireWatch TR?",
   "ratingPromptMessage": "You have been using the app for a few days. Would you like to share your feedback?", "ratingPromptLater": "Later",
-  "feedbackReportBug": "🐛 Report a Bug",
-  "feedbackSendFeedback": "💬 Send Feedback",
+  "feedbackReportBug": "Report a Bug",
+  "feedbackSendFeedback": "Send Feedback",
   "feedbackBlockedMessage": "Your feedback was received. Please wait {days} days before submitting again.",
   "@feedbackBlockedMessage": {"placeholders":{"days":{"type":"int"}}},
   "bugReportTitle": "Report a Bug",

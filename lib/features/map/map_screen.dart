@@ -24,6 +24,7 @@ import '../../services/fire_mapper.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
+import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/report_fire_panel.dart';
@@ -64,7 +65,6 @@ class _MapScreenState extends State<MapScreen> {
   static const _cacheKey = 'map_fires';
   static const _filterPrefKey = 'map_incident_filter';
 
-  bool _isReportOpen = false;
   bool _isLoading = true;
   String? _errorMessage;
   bool _isSlowLoading = false;
@@ -90,6 +90,14 @@ class _MapScreenState extends State<MapScreen> {
   /// everything by default buries the ones that matter under a fortnight of
   /// history. The rest stay one tap away.
   IncidentFilter _incidentFilter = IncidentFilter.active;
+
+  /// How much of the screen the info sheet takes when it is resting. Enough
+  /// for the title, the one-line description and the Report button, and no
+  /// more — the rest of the screen belongs to the map.
+  static const double _sheetCollapsedFraction = 0.25;
+
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
   final MapController _mapController = MapController();
   final FireApiService _fireApiService = FireApiService();
@@ -129,6 +137,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _tileResetController.close();
+    _sheetController.dispose();
     _mapController.dispose();
     super.dispose();
   }
@@ -287,7 +296,9 @@ class _MapScreenState extends State<MapScreen> {
         _isLoading = false;
         _isSlowLoading = false;
       });
-      debugPrint('Fire points count: ${_firePoints.length} (visible: ${_visibleFirePoints.length}, confidenceFilterActive: $_confidenceFilterActive)');
+      debugPrint(
+        'Fire points count: ${_firePoints.length} (visible: ${_visibleFirePoints.length}, confidenceFilterActive: $_confidenceFilterActive)',
+      );
     } catch (e) {
       debugPrint('Fire points fetch FAILED: $e');
       final cached = await OfflineCacheService.instance.load(_cacheKey);
@@ -361,10 +372,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _openReportPanel() {
-    setState(() => _isReportOpen = true);
-    showReportFirePanel(context).then((_) {
-      if (mounted) setState(() => _isReportOpen = false);
-    });
+    showReportFirePanel(context);
   }
 
   /// Marker color by NASA confidence tier only — high: danger (red),
@@ -411,9 +419,15 @@ class _MapScreenState extends State<MapScreen> {
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
-    final icon = Icon(Icons.local_fire_department_rounded, color: color, size: size);
+    final icon = Icon(
+      Icons.local_fire_department_rounded,
+      color: color,
+      size: size,
+    );
     if (point.riskTier == 'high') {
-      return icon.animate(onPlay: (c) => c.repeat(reverse: true)).scale(
+      return icon
+          .animate(onPlay: (c) => c.repeat(reverse: true))
+          .scale(
             begin: const Offset(0.94, 0.94),
             end: const Offset(1.06, 1.06),
             duration: 1400.ms,
@@ -570,10 +584,7 @@ class _MapScreenState extends State<MapScreen> {
     final position = fresh ?? _userPosition;
     if (position == null) return;
     if (fresh != null) setState(() => _userPosition = fresh);
-    _mapController.move(
-      LatLng(position.latitude, position.longitude),
-      8,
-    );
+    _mapController.move(LatLng(position.latitude, position.longitude), 8);
   }
 
   void _openFireBottomSheet(FirePoint point) {
@@ -652,8 +663,8 @@ class _MapScreenState extends State<MapScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     StatusChip(
-                      label:
-                          '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
+                      label: fireStatusLabel(l10n, point.smartStatus),
+                      showDot: true,
                       color: fireStatusColor(point.smartStatus),
                     ),
                     InfoIconButton(
@@ -803,955 +814,922 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          l10n.mapTitle,
+          _screenTitle(l10n),
           style: GoogleFonts.inter(fontWeight: FontWeight.w700),
         ),
       ),
-      body: Stack(
-        children: [
-          RefreshIndicator(
-            onRefresh: _refreshMap,
-            color: AppColors.primary,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_isSlowLoading) const SlowLoadingBanner(),
-                  GlassPanel(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            StatusChip(
-                              label: l10n.mapLiveMap,
-                              icon: Icons.map_rounded,
-                            ),
-                            const SizedBox(height: AppSpacing.lg),
-                            Text(
-                              l10n.mapHeaderTitle,
-                              style: GoogleFonts.inter(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w800,
-                                color: titleColor,
-                              ),
-                            ),
-                            const SizedBox(height: AppSpacing.sm),
-                            Text(
-                              l10n.mapHeaderSubtitle,
-                              style: GoogleFonts.inter(
-                                fontSize: 15,
-                                height: 1.45,
-                                color: secondaryTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                      .animate()
-                      .fadeIn(duration: 450.ms)
-                      .scale(
-                        begin: const Offset(0.97, 0.97),
-                        end: const Offset(1, 1),
-                        curve: Curves.easeOutCubic,
-                      )
-                      .slideY(begin: 0.06, end: 0),
+      // The map is the screen, not a card on it. Everything that explains the
+      // map -- what a detection is, what to do about one, what is near you --
+      // now lives in the sheet below, one drag away instead of one scroll
+      // above. Before this, opening the Map tab showed two help accordions
+      // and a section heading, and the map itself started below the fold.
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // The sheet's fraction is of the body, not of the screen. Measuring
+          // it here rather than from MediaQuery is what keeps the on-map
+          // controls sitting just above the sheet instead of floating a
+          // status bar and an app bar's worth of space too high.
+          final sheetHeight = constraints.maxHeight * _sheetCollapsedFraction;
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: _buildMapSurface(l10n, titleColor, sheetHeight),
+              ),
+              if (_isSlowLoading)
+                const Positioned(
+                  left: AppSpacing.lg,
+                  right: AppSpacing.lg,
+                  top: AppSpacing.lg,
+                  child: SlowLoadingBanner(),
+                ),
+              DraggableScrollableSheet(
+                controller: _sheetController,
+                initialChildSize: _sheetCollapsedFraction,
+                minChildSize: _sheetCollapsedFraction,
+                maxChildSize: 0.92,
+                snap: true,
+                snapSizes: const [_sheetCollapsedFraction, 0.55, 0.92],
+                builder: (context, scrollController) => _buildInfoSheet(
+                  scrollController,
+                  l10n,
+                  titleColor,
+                  secondaryTextColor,
+                  isDark,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
-                  if (_confidenceFilterActive) ...[
-                    const SizedBox(height: AppSpacing.md),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.md,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.danger.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.pillRadius,
+  /// Title follows the layer in view. "Thermal Anomaly Map" described the raw
+  /// pixel layer, which is no longer the primary one.
+  String _screenTitle(AppLocalizations l10n) =>
+      _showIncidents ? l10n.mapTitleEvents : l10n.mapTitleDetections;
+
+  /// The full-bleed map plus everything that floats on it. The inset keeps the
+  /// on-map controls clear of the collapsed sheet.
+  Widget _buildMapSurface(
+    AppLocalizations l10n,
+    Color titleColor,
+    double bottomInset,
+  ) {
+    return Stack(
+      children: [
+        RepaintBoundary(
+          child: FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: widget.focusLat != null
+                  ? LatLng(widget.focusLat!, widget.focusLng!)
+                  // Biased south of Turkey's true centre: the map now runs
+                  // full-bleed and its lower quarter sits behind the info
+                  // sheet, so centring on 39N put a third of the country
+                  // under the sheet and filled the visible half with the
+                  // Black Sea.
+                  : const LatLng(38.2, 35.0),
+              initialZoom: widget.focusLat != null ? 13 : 5.6,
+              minZoom: 4,
+              // z16 only gets you to neighbourhood level,
+              // which isn't enough to place a fire; 18 is
+              // street level and still within OSM's z19
+              // native limit, so tiles stay sharp.
+              maxZoom: 18,
+              onPositionChanged: (camera, hasGesture) {
+                if ((camera.zoom - _currentZoom).abs() > 0.2) {
+                  setState(() => _currentZoom = camera.zoom);
+                }
+              },
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
+                // A tile that fails (typically a brief
+                // connectivity drop) is otherwise kept
+                // forever in the tile manager and never
+                // re-requested, leaving permanently grey
+                // squares. This evicts the off-screen
+                // ones; the reset stream below is what
+                // recovers the ones still on screen.
+                evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+                reset: _tileResetStream,
+                errorTileCallback: (tile, error, stack) {
+                  if (kDebugMode) {
+                    debugPrint(
+                      'Map tile failed '
+                      'z=${tile.coordinates.z} '
+                      'x=${tile.coordinates.x} '
+                      'y=${tile.coordinates.y}: $error',
+                    );
+                  }
+                },
+              ),
+              MarkerLayer(
+                markers: _userPosition != null
+                    ? [
+                        Marker(
+                          point: LatLng(
+                            _userPosition!.latitude,
+                            _userPosition!.longitude,
+                          ),
+                          width: 54,
+                          height: 54,
+                          child: const Icon(
+                            Icons.my_location_rounded,
+                            size: 34,
+                            color: Colors.blue,
+                          ),
                         ),
-                        border: Border.all(
-                          color: AppColors.danger.withValues(alpha: 0.28),
+                      ]
+                    : [],
+              ),
+              if (widget.focusLat != null && widget.focusLng != null)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: LatLng(widget.focusLat!, widget.focusLng!),
+                      width: 60,
+                      height: 60,
+                      child: const Icon(
+                        Icons.local_fire_department_rounded,
+                        color: AppColors.danger,
+                        size: 44,
+                      ),
+                    ),
+                  ],
+                ),
+              if (_showIncidents)
+                MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    maxClusterRadius: 72,
+                    size: const Size(52, 52),
+                    computeSize: (markers) {
+                      final d = _clusterDiameter(markers.length);
+                      return Size(d, d);
+                    },
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(40),
+                    markers: _visibleIncidents.map((incident) {
+                      final key = ValueKey<String>('incident-${incident.id}');
+                      _incidentByMarkerKey[key] = incident;
+                      return Marker(
+                        key: key,
+                        point: LatLng(incident.latitude, incident.longitude),
+                        width: 48,
+                        height: 48,
+                        child: GestureDetector(
+                          onTap: () => IncidentSheet.show(
+                            context,
+                            incident: incident,
+                            cityName: _cityNameFor(incident),
+                          ),
+                          child: Center(child: _buildIncidentMarker(incident)),
+                        ),
+                      );
+                    }).toList(),
+                    builder: (context, markers) =>
+                        _buildIncidentCluster(markers),
+                  ),
+                )
+              else
+                MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    maxClusterRadius: 45,
+                    size: const Size(40, 40),
+                    alignment: Alignment.center,
+                    markers: _visibleFirePoints.map((point) {
+                      return Marker(
+                        point: LatLng(point.latitude, point.longitude),
+                        width: 48,
+                        height: 48,
+                        child: GestureDetector(
+                          onTap: () => _openFireBottomSheet(point),
+                          child: Center(child: _buildMarkerIcon(point)),
+                        ),
+                      );
+                    }).toList(),
+                    builder: (context, markers) => Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          markers.length.toString(),
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (_isLoading)
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withValues(alpha: 0.12),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+          ),
+        if (_incidents.isNotEmpty)
+          Positioned(
+            left: 12,
+            top: 12,
+            right: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GlassPanel(
+                  padding: const EdgeInsets.all(4),
+                  radius: AppSpacing.pillRadius,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _LayerChip(
+                        label: l10n.incidentToggleShow,
+                        icon: Icons.local_fire_department_rounded,
+                        selected: _showIncidents,
+                        onTap: () => setState(() => _showIncidents = true),
+                      ),
+                      _LayerChip(
+                        label: l10n.incidentToggleDetections,
+                        icon: Icons.grain_rounded,
+                        selected: !_showIncidents,
+                        onTap: () => setState(() => _showIncidents = false),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_showIncidents) ...[
+                  const SizedBox(height: 6),
+                  // Scrollable because "Tespiti sona
+                  // ermiş" is a long label and the
+                  // honest label is worth more than a
+                  // row that never scrolls.
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: GlassPanel(
+                      padding: const EdgeInsets.all(3),
+                      radius: AppSpacing.pillRadius,
                       child: Row(
-                        children: [
-                          const Icon(
-                            Icons.filter_alt_rounded,
-                            size: 16,
-                            color: AppColors.danger,
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              l10n.mapConfidenceFilterActive,
-                              style: GoogleFonts.inter(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.danger,
+                        mainAxisSize: MainAxisSize.min,
+                        children: IncidentFilter.values
+                            .map(
+                              (filter) => _FilterChip(
+                                label: filter.label(l10n),
+                                count: _incidentCountFor(filter),
+                                selected: _incidentFilter == filter,
+                                onTap: () => _setIncidentFilter(filter),
                               ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                setState(() => _confidenceFilterActive = false),
-                            behavior: HitTestBehavior.opaque,
-                            child: SizedBox(
-                              height: 48,
-                              child: Center(
-                                child: Text(
-                                  l10n.mapConfidenceFilterClear,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.danger,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                            )
+                            .toList(),
                       ),
                     ),
-                  ],
-
-                  const SizedBox(height: AppSpacing.md),
-                  TrustInfoCardGroup(
-                    meaning: l10n.trustMapMeaning,
-                    source: l10n.trustMapSource,
-                    interpret: l10n.trustMapInterpret,
-                    action: l10n.trustMapAction,
                   ),
+                ],
+              ],
+            ),
+          ),
 
-                  const SizedBox(height: AppSpacing.md),
-                  TrustInfoCard(
-                    title: l10n.detectionAboutTitle,
-                    icon: Icons.info_outline,
-                    text: l10n.thermalAnomalyDisclaimer,
+        if (_errorMessage != null)
+          Positioned(
+            left: 12,
+            right: 12,
+            top: 12,
+            child: GlassPanel(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.warning,
                   ),
-
-                  const SizedBox(height: AppSpacing.xxl),
-                  SectionHeader(
-                    title: l10n.mapArea,
-                    subtitle: l10n.mapAreaSubtitle,
-                    icon: Icons.public_rounded,
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-
-                  GlassPanel(
-                        key: CoachMarkKeys.mapArea,
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        child: SizedBox(
-                          height: 380,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.largeCardRadius,
-                            ),
-                            child: Stack(
-                              children: [
-                                RepaintBoundary(
-                                  child: FlutterMap(
-                                  mapController: _mapController,
-                                  options: MapOptions(
-                                    initialCenter: widget.focusLat != null
-                                        ? LatLng(
-                                            widget.focusLat!,
-                                            widget.focusLng!,
-                                          )
-                                        : const LatLng(39.0, 35.0),
-                                    initialZoom: widget.focusLat != null
-                                        ? 13
-                                        : 5.6,
-                                    minZoom: 4,
-                                    // z16 only gets you to neighbourhood level,
-                                    // which isn't enough to place a fire; 18 is
-                                    // street level and still within OSM's z19
-                                    // native limit, so tiles stay sharp.
-                                    maxZoom: 18,
-                                    onPositionChanged: (camera, hasGesture) {
-                                      if ((camera.zoom - _currentZoom).abs() >
-                                          0.2) {
-                                        setState(
-                                          () => _currentZoom = camera.zoom,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  children: [
-                                    TileLayer(
-                                      urlTemplate:
-                                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                      userAgentPackageName:
-                                          'com.oguzh.firewatch.firewatch_tr',
-                                      // A tile that fails (typically a brief
-                                      // connectivity drop) is otherwise kept
-                                      // forever in the tile manager and never
-                                      // re-requested, leaving permanently grey
-                                      // squares. This evicts the off-screen
-                                      // ones; the reset stream below is what
-                                      // recovers the ones still on screen.
-                                      evictErrorTileStrategy:
-                                          EvictErrorTileStrategy.notVisible,
-                                      reset: _tileResetStream,
-                                      errorTileCallback: (tile, error, stack) {
-                                        if (kDebugMode) {
-                                          debugPrint(
-                                            'Map tile failed '
-                                            'z=${tile.coordinates.z} '
-                                            'x=${tile.coordinates.x} '
-                                            'y=${tile.coordinates.y}: $error',
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    MarkerLayer(
-                                      markers: _userPosition != null
-                                          ? [
-                                              Marker(
-                                                point: LatLng(
-                                                  _userPosition!.latitude,
-                                                  _userPosition!.longitude,
-                                                ),
-                                                width: 54,
-                                                height: 54,
-                                                child: const Icon(
-                                                  Icons.my_location_rounded,
-                                                  size: 34,
-                                                  color: Colors.blue,
-                                                ),
-                                              ),
-                                            ]
-                                          : [],
-                                    ),
-                                    if (widget.focusLat != null &&
-                                        widget.focusLng != null)
-                                      MarkerLayer(
-                                        markers: [
-                                          Marker(
-                                            point: LatLng(
-                                              widget.focusLat!,
-                                              widget.focusLng!,
-                                            ),
-                                            width: 60,
-                                            height: 60,
-                                            child: const Icon(
-                                              Icons
-                                                  .local_fire_department_rounded,
-                                              color: AppColors.danger,
-                                              size: 44,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    if (_showIncidents)
-                                      MarkerClusterLayerWidget(
-                                        options: MarkerClusterLayerOptions(
-                                          maxClusterRadius: 72,
-                                          size: const Size(52, 52),
-                                          computeSize: (markers) {
-                                            final d = _clusterDiameter(
-                                              markers.length,
-                                            );
-                                            return Size(d, d);
-                                          },
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.all(40),
-                                          markers: _visibleIncidents.map((
-                                            incident,
-                                          ) {
-                                            final key =
-                                                ValueKey<String>('incident-${incident.id}');
-                                            _incidentByMarkerKey[key] = incident;
-                                            return Marker(
-                                              key: key,
-                                              point: LatLng(
-                                                incident.latitude,
-                                                incident.longitude,
-                                              ),
-                                              width: 48,
-                                              height: 48,
-                                              child: GestureDetector(
-                                                onTap: () => IncidentSheet.show(
-                                                  context,
-                                                  incident: incident,
-                                                  cityName: _cityNameFor(incident),
-                                                ),
-                                                child: Center(
-                                                  child: _buildIncidentMarker(incident),
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          builder: (context, markers) =>
-                                              _buildIncidentCluster(markers),
-                                        ),
-                                      )
-                                    else
-                                    MarkerClusterLayerWidget(
-                                      options: MarkerClusterLayerOptions(
-                                        maxClusterRadius: 45,
-                                        size: const Size(40, 40),
-                                        alignment: Alignment.center,
-                                        markers: _visibleFirePoints.map((
-                                          point,
-                                        ) {
-                                          return Marker(
-                                            point: LatLng(
-                                              point.latitude,
-                                              point.longitude,
-                                            ),
-                                            width: 48,
-                                            height: 48,
-                                            child: GestureDetector(
-                                              onTap: () =>
-                                                  _openFireBottomSheet(point),
-                                              child: Center(
-                                                child: _buildMarkerIcon(point),
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        builder: (context, markers) =>
-                                            Container(
-                                              decoration: const BoxDecoration(
-                                                color: AppColors.primary,
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  markers.length.toString(),
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                  ),
-                                ),
-                                if (_isLoading)
-                                  Positioned.fill(
-                                    child: Container(
-                                      color: Colors.black.withValues(
-                                        alpha: 0.12,
-                                      ),
-                                      child: const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
-                                  ),
-                                if (_incidents.isNotEmpty)
-                                  Positioned(
-                                    left: 12,
-                                    top: 12,
-                                    right: 12,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        GlassPanel(
-                                          padding: const EdgeInsets.all(4),
-                                          radius: AppSpacing.pillRadius,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              _LayerChip(
-                                                label: l10n.incidentToggleShow,
-                                                icon: Icons
-                                                    .local_fire_department_rounded,
-                                                selected: _showIncidents,
-                                                onTap: () => setState(
-                                                  () => _showIncidents = true,
-                                                ),
-                                              ),
-                                              _LayerChip(
-                                                label: l10n
-                                                    .incidentToggleDetections,
-                                                icon: Icons.grain_rounded,
-                                                selected: !_showIncidents,
-                                                onTap: () => setState(
-                                                  () => _showIncidents = false,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        if (_showIncidents) ...[
-                                          const SizedBox(height: 6),
-                                          // Scrollable because "Tespiti sona
-                                          // ermiş" is a long label and the
-                                          // honest label is worth more than a
-                                          // row that never scrolls.
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: GlassPanel(
-                                              padding: const EdgeInsets.all(3),
-                                              radius: AppSpacing.pillRadius,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: IncidentFilter.values
-                                                    .map(
-                                                      (filter) => _FilterChip(
-                                                        label: filter.label(
-                                                          l10n,
-                                                        ),
-                                                        count:
-                                                            _incidentCountFor(
-                                                              filter,
-                                                            ),
-                                                        selected:
-                                                            _incidentFilter ==
-                                                            filter,
-                                                        onTap: () =>
-                                                            _setIncidentFilter(
-                                                              filter,
-                                                            ),
-                                                      ),
-                                                    )
-                                                    .toList(),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-
-                                if (_errorMessage != null)
-                                  Positioned(
-                                    left: 12,
-                                    right: 12,
-                                    top: 12,
-                                    child: GlassPanel(
-                                      padding: const EdgeInsets.all(
-                                        AppSpacing.lg,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.info_outline_rounded,
-                                            color: AppColors.warning,
-                                          ),
-                                          const SizedBox(width: AppSpacing.md),
-                                          Expanded(
-                                            child: Text(
-                                              _errorMessage!,
-                                              style: GoogleFonts.inter(
-                                                fontSize: 13,
-                                                height: 1.45,
-                                                color: titleColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                Positioned(
-                                  right: 12,
-                                  bottom: 12,
-                                  child:
-                                      Column(
-                                            children: [
-                                              GlassPanel(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 14,
-                                                      vertical: 12,
-                                                    ),
-                                                radius: 16,
-                                                child: InkWell(
-                                                  onTap: _refreshMap,
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.refresh_rounded,
-                                                        size: 18,
-                                                        color:
-                                                            AppColors.primary,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: AppSpacing.sm,
-                                                      ),
-                                                      Text(
-                                                        l10n.commonRefresh,
-                                                        style:
-                                                            GoogleFonts.inter(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: titleColor,
-                                                            ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: AppSpacing.sm,
-                                              ),
-                                              // Always shown (not gated on
-                                              // _userPosition) — the silent
-                                              // bootstrap fetch in initState
-                                              // can race the permission
-                                              // dialog and come back null;
-                                              // tapping this is what
-                                              // (re)fetches a fresh fix now.
-                                              GlassPanel(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        horizontal: 14,
-                                                        vertical: 12,
-                                                      ),
-                                                  radius: 16,
-                                                  child: InkWell(
-                                                    onTap: _centerOnUser,
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.near_me_rounded,
-                                                          size: 18,
-                                                          color:
-                                                              AppColors.primary,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: AppSpacing.sm,
-                                                        ),
-                                                        Text(
-                                                          l10n.mapGoToMe,
-                                                          style:
-                                                              GoogleFonts.inter(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                color:
-                                                                    titleColor,
-                                                              ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          )
-                                          .animate(delay: 240.ms)
-                                          .fadeIn(duration: 280.ms)
-                                          .slideY(begin: 0.2, end: 0),
-                                ),
-                                Positioned(
-                                  left: 12,
-                                  bottom: 12,
-                                  child: GlassPanel(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 12,
-                                    ),
-                                    radius: 16,
-                                    child: InkWell(
-                                      onTap: () => setState(
-                                        () => _isLegendOpen = !_isLegendOpen,
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.info_outline_rounded,
-                                            size: 18,
-                                            color: AppColors.primary,
-                                          ),
-                                          const SizedBox(width: AppSpacing.sm),
-                                          Text(
-                                            l10n.mapLegendTitle,
-                                            style: GoogleFonts.inter(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: titleColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (_isLegendOpen)
-                                  Positioned(
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 66,
-                                    child:
-                                        GlassPanel(
-                                              padding: const EdgeInsets.all(
-                                                AppSpacing.lg,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  // One legend at a time. The
-                                                  // two layers use different
-                                                  // symbols for different
-                                                  // things, and stacking both
-                                                  // keys produced six rows
-                                                  // with "low confidence"
-                                                  // appearing twice, meaning
-                                                  // two different things.
-                                                  if (_showIncidents)
-                                                    const IncidentLegend()
-                                                  else ...[
-                                                    Text(
-                                                      l10n.legendProbableFire,
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: titleColor,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 6),
-                                                    Text(
-                                                      l10n.legendHighThermal,
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: titleColor,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 6),
-                                                    Text(
-                                                      l10n.legendLowConfidence,
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: titleColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ],
-                                              ),
-                                            )
-                                            .animate()
-                                            .fadeIn(duration: 180.ms)
-                                            .slideY(begin: 0.08, end: 0),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                      .animate()
-                      .fadeIn(duration: 420.ms, delay: 120.ms)
-                      .scale(
-                        begin: const Offset(0.98, 0.98),
-                        end: const Offset(1, 1),
-                      )
-                      .slideY(begin: 0.05, end: 0),
-
-                  const SizedBox(height: AppSpacing.sm),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                    ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
                     child: Text(
-                      l10n.mapMarkerDisclaimer,
+                      _errorMessage!,
                       style: GoogleFonts.inter(
-                        fontSize: 11.5,
-                        height: 1.4,
-                        color: secondaryTextColor,
+                        fontSize: 13,
+                        height: 1.45,
+                        color: titleColor,
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: AppSpacing.xxl),
-
-                  if (_nearbyFirePoints.isNotEmpty) ...[
-                    SectionHeader(
-                      key: CoachMarkKeys.mapNearbyFiresSection,
-                      title: l10n.mapNearbyFires,
-                      subtitle: l10n.mapNearbyFiresSubtitle,
-                      icon: Icons.near_me_rounded,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    ..._nearbyFirePoints.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final point = entry.value;
-                      final timeAgo = _timeAgo(
-                        context,
-                        point.acquisitionDate,
-                        point.acquisitionTime,
-                      );
-                      final bright = double.tryParse(point.brightness) ?? 0;
-                      final tempC = bright > 200
-                          ? (bright - 273.15).toStringAsFixed(1)
-                          : bright.toStringAsFixed(1);
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-                        child:
-                            GlassPanel(
-                                  padding: const EdgeInsets.all(AppSpacing.lg),
-                                  child: InkWell(
-                                    onTap: () => _focusOnFire(point),
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.largeCardRadius,
-                                    ),
-                                    child: ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        minHeight: 80,
-                                      ),
-                                      child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 44,
-                                              height: 44,
-                                              decoration: BoxDecoration(
-                                                color: _markerColor(
-                                                  point,
-                                                ).withValues(alpha: 0.12),
-                                                borderRadius:
-                                                    BorderRadius.circular(14),
-                                              ),
-                                              child: Icon(
-                                                Icons
-                                                    .local_fire_department_rounded,
-                                                color: _markerColor(point),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: AppSpacing.md,
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  // ── Şehir + Bölge ──────────────────────
-                                                  Text(
-                                                    point.cityName != null
-                                                        ? '${point.cityName} — ${point.nearestRegion ?? point.regionDisplayName(l10n)}'
-                                                        : point
-                                                              .regionDisplayName(
-                                                                l10n,
-                                                              ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      color: titleColor,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    point.distanceKm != null
-                                                        ? l10n.notificationsDistanceAndTime(
-                                                            point.distanceKm!
-                                                                .toStringAsFixed(
-                                                                  1,
-                                                                ),
-                                                            timeAgo,
-                                                          )
-                                                        : timeAgo,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 13,
-                                                      color: secondaryTextColor,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Wrap(
-                                              spacing: AppSpacing.xs,
-                                              runSpacing: AppSpacing.xs,
-                                              alignment: WrapAlignment.end,
-                                              children: [
-                                                StatusChip(
-                                                  label: point.riskLevelLabel(
-                                                    l10n,
-                                                  ),
-                                                  icon: Icons
-                                                      .warning_amber_rounded,
-                                                  color: AppColors.forRiskTier(
-                                                    point.riskTier,
-                                                  ),
-                                                ),
-                                                StatusChip(
-                                                  label:
-                                                      '${fireStatusEmoji(point.smartStatus)} ${fireStatusLabel(l10n, point.smartStatus)}',
-                                                  color: fireStatusColor(
-                                                    point.smartStatus,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: AppSpacing.md),
-                                        Container(
-                                          padding: const EdgeInsets.all(
-                                            AppSpacing.md,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: _markerColor(
-                                              point,
-                                            ).withValues(alpha: 0.06),
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                point.riskReasonText(l10n),
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 13,
-                                                  height: 1.4,
-                                                  color: secondaryTextColor,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 6),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.thermostat_rounded,
-                                                    size: 14,
-                                                    color: secondaryTextColor,
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  Text(
-                                                    '$tempC°C',
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 12,
-                                                      color: secondaryTextColor,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 12),
-                                                  Icon(
-                                                    Icons.satellite_alt_rounded,
-                                                    size: 14,
-                                                    color: point.isMerged
-                                                        ? AppColors.success
-                                                        : secondaryTextColor,
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  Flexible(
-                                                    child: Text(
-                                                      point
-                                                          .mergedSatelliteLabel,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            point.isMerged
-                                                            ? FontWeight.w700
-                                                            : FontWeight.normal,
-                                                        color: point.isMerged
-                                                            ? AppColors.success
-                                                            : secondaryTextColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 12),
-                                                  Icon(
-                                                    Icons.location_on_rounded,
-                                                    size: 14,
-                                                    color: secondaryTextColor,
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  Expanded(
-                                                    child: Text(
-                                                      point.locationLabelText(
-                                                        l10n,
-                                                      ),
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 12,
-                                                        color:
-                                                            secondaryTextColor,
-                                                      ),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    ),
-                                  ),
-                                )
-                                .animate()
-                                .fadeIn(
-                                  duration: 300.ms,
-                                  delay: (180 + (index * 70)).ms,
-                                )
-                                .slideX(begin: 0.03, end: 0)
-                                .scale(
-                                  begin: const Offset(0.98, 0.98),
-                                  end: const Offset(1, 1),
-                                ),
-                      );
-                    }),
-                    const SizedBox(height: AppSpacing.xxl),
-                  ],
-
-                  const SizedBox(height: 110),
                 ],
               ),
             ),
           ),
-        ],
-      ),
-      floatingActionButton: AnimatedSlide(
-        duration: const Duration(milliseconds: 220),
-        offset: _isReportOpen ? const Offset(0, 2) : Offset.zero,
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 180),
-          opacity: _isReportOpen ? 0 : 1,
-          child: IgnorePointer(
-            ignoring: _isReportOpen,
-            child: FloatingActionButton.extended(
-              key: CoachMarkKeys.mapReportFab,
-              onPressed: _openReportPanel,
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-              elevation: 10,
-              icon: const Icon(Icons.edit_location_alt_rounded),
-              label: Text(
-                l10n.mapReport,
-                style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+        Positioned(
+          right: 12,
+          bottom: bottomInset + 12,
+          child:
+              Column(
+                    children: [
+                      GlassPanel(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 12,
+                        ),
+                        radius: 16,
+                        child: InkWell(
+                          onTap: _refreshMap,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.refresh_rounded,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(
+                                l10n.commonRefresh,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: titleColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      // Always shown (not gated on
+                      // _userPosition) — the silent
+                      // bootstrap fetch in initState
+                      // can race the permission
+                      // dialog and come back null;
+                      // tapping this is what
+                      // (re)fetches a fresh fix now.
+                      GlassPanel(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 12,
+                        ),
+                        radius: 16,
+                        child: InkWell(
+                          onTap: _centerOnUser,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.near_me_rounded,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(
+                                l10n.mapGoToMe,
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: titleColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                  .animate(delay: 240.ms)
+                  .fadeIn(duration: 280.ms)
+                  .slideY(begin: 0.2, end: 0),
+        ),
+        Positioned(
+          left: 12,
+          bottom: bottomInset + 12,
+          child: GlassPanel(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            radius: 16,
+            child: InkWell(
+              onTap: () => setState(() => _isLegendOpen = !_isLegendOpen),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    size: 18,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    l10n.mapLegendTitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: titleColor,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
+        ),
+        if (_isLegendOpen)
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: bottomInset + 66,
+            child: GlassPanel(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // One legend at a time. The
+                  // two layers use different
+                  // symbols for different
+                  // things, and stacking both
+                  // keys produced six rows
+                  // with "low confidence"
+                  // appearing twice, meaning
+                  // two different things.
+                  if (_showIncidents)
+                    const IncidentLegend()
+                  else ...[
+                    _LegendRow(
+                      color: AppColors.danger,
+                      label: l10n.legendProbableFire,
+                      textColor: titleColor,
+                    ),
+                    const SizedBox(height: 8),
+                    _LegendRow(
+                      color: AppColors.primary,
+                      label: l10n.legendHighThermal,
+                      textColor: titleColor,
+                    ),
+                    const SizedBox(height: 8),
+                    _LegendRow(
+                      color: const Color(0xFF94A3B8),
+                      label: l10n.legendLowConfidence,
+                      textColor: titleColor,
+                    ),
+                  ],
+                ],
+              ),
+            ).animate().fadeIn(duration: 180.ms).slideY(begin: 0.08, end: 0),
+          ),
+      ],
+    );
+  }
+
+  /// Everything that is not the map. Collapsed it is a title, a one-line
+  /// description and the Report button; dragged up it is the help cards and
+  /// the nearby-detections list that used to sit above the map.
+  Widget _buildInfoSheet(
+    ScrollController scrollController,
+    AppLocalizations l10n,
+    Color titleColor,
+    Color secondaryTextColor,
+    bool isDark,
+  ) {
+    final surface = Theme.of(context).scaffoldBackgroundColor;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppSpacing.largeCardRadius),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.16),
+            blurRadius: 18,
+            offset: const Offset(0, -4),
+          ),
+        ],
+        border: Border(
+          top: BorderSide(
+            color: isDark
+                ? AppColors.white.withValues(alpha: 0.08)
+                : Colors.black.withValues(alpha: 0.06),
+          ),
+        ),
+      ),
+      child: RefreshIndicator(
+        onRefresh: _refreshMap,
+        color: AppColors.primary,
+        child: ListView(
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.sm,
+            AppSpacing.lg,
+            AppSpacing.xxl,
+          ),
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.white.withValues(alpha: 0.22)
+                      : Colors.black.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.mapHeaderTitle,
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: titleColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        l10n.mapHeaderSubtitle,
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          height: 1.35,
+                          color: secondaryTextColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                // Report lives here rather than as a floating button: as a FAB
+                // it sat on top of the section heading below it, and there is
+                // no scroll position at which a fixed FAB does not cover
+                // something in a list this dense.
+                FilledButton.icon(
+                  key: CoachMarkKeys.mapReportFab,
+                  onPressed: _openReportPanel,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: 12,
+                    ),
+                  ),
+                  icon: const Icon(Icons.edit_location_alt_rounded, size: 18),
+                  label: Text(
+                    l10n.mapReport,
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            // The colour is a widget, not a character: the dot is drawn in the
+            // same red the marker uses, so the sentence and the map cannot
+            // drift apart the way a hard-coded emoji did.
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '${l10n.mapMarkerDisclaimerBefore} '),
+                  const WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 4),
+                      child: ColorDot(color: AppColors.danger, size: 9),
+                    ),
+                  ),
+                  TextSpan(text: l10n.mapMarkerDisclaimerAfter),
+                ],
+              ),
+              style: GoogleFonts.inter(
+                fontSize: 11.5,
+                height: 1.45,
+                color: secondaryTextColor,
+              ),
+            ),
+            if (_confidenceFilterActive) ...[
+              const SizedBox(height: AppSpacing.md),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.danger.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                  border: Border.all(
+                    color: AppColors.danger.withValues(alpha: 0.28),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.filter_alt_rounded,
+                      size: 16,
+                      color: AppColors.danger,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        l10n.mapConfidenceFilterActive,
+                        style: GoogleFonts.inter(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.danger,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () =>
+                          setState(() => _confidenceFilterActive = false),
+                      behavior: HitTestBehavior.opaque,
+                      child: SizedBox(
+                        height: 48,
+                        child: Center(
+                          child: Text(
+                            l10n.mapConfidenceFilterClear,
+                            style: GoogleFonts.inter(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.danger,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: AppSpacing.md),
+            TrustInfoCardGroup(
+              meaning: l10n.trustMapMeaning,
+              source: l10n.trustMapSource,
+              interpret: l10n.trustMapInterpret,
+              action: l10n.trustMapAction,
+            ),
+
+            const SizedBox(height: AppSpacing.md),
+            TrustInfoCard(
+              title: l10n.detectionAboutTitle,
+              icon: Icons.info_outline,
+              text: l10n.thermalAnomalyDisclaimer,
+            ),
+
+            const SizedBox(height: AppSpacing.xxl),
+
+            if (_nearbyFirePoints.isNotEmpty) ...[
+              SectionHeader(
+                key: CoachMarkKeys.mapNearbyFiresSection,
+                title: l10n.mapNearbyFires,
+                subtitle: l10n.mapNearbyFiresSubtitle,
+                icon: Icons.near_me_rounded,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              ..._nearbyFirePoints.asMap().entries.map((entry) {
+                final index = entry.key;
+                final point = entry.value;
+                final timeAgo = _timeAgo(
+                  context,
+                  point.acquisitionDate,
+                  point.acquisitionTime,
+                );
+                final bright = double.tryParse(point.brightness) ?? 0;
+                final tempC = bright > 200
+                    ? (bright - 273.15).toStringAsFixed(1)
+                    : bright.toStringAsFixed(1);
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                  child:
+                      GlassPanel(
+                            padding: const EdgeInsets.all(AppSpacing.lg),
+                            child: InkWell(
+                              onTap: () => _focusOnFire(point),
+                              borderRadius: BorderRadius.circular(
+                                AppSpacing.largeCardRadius,
+                              ),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minHeight: 80,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 44,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            color: _markerColor(
+                                              point,
+                                            ).withValues(alpha: 0.12),
+                                            borderRadius: BorderRadius.circular(
+                                              14,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.local_fire_department_rounded,
+                                            color: _markerColor(point),
+                                          ),
+                                        ),
+                                        const SizedBox(width: AppSpacing.md),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // ── Şehir + Bölge ──────────────────────
+                                              // Two lines, because a real
+                                              // Turkish place name plus its
+                                              // region routinely exceeds one:
+                                              // "Afyonkarahisar — İç Anadolu"
+                                              // was rendering as "Afyonkar…".
+                                              Text(
+                                                point.cityName != null
+                                                    ? '${point.cityName} — ${point.nearestRegion ?? point.regionDisplayName(l10n)}'
+                                                    : point.regionDisplayName(
+                                                        l10n,
+                                                      ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 16,
+                                                  height: 1.25,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: titleColor,
+                                                ),
+                                              ),
+                                              Text(
+                                                point.distanceKm != null
+                                                    ? l10n.notificationsDistanceAndTime(
+                                                        point.distanceKm!
+                                                            .toStringAsFixed(1),
+                                                        timeAgo,
+                                                      )
+                                                    : timeAgo,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 13,
+                                                  color: secondaryTextColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: AppSpacing.md),
+                                    // The chips used to share the title's row,
+                                    // where their intrinsic width won and the
+                                    // place name lost. On their own row they
+                                    // take what they need and the name gets
+                                    // the full card width.
+                                    Wrap(
+                                      spacing: AppSpacing.xs,
+                                      runSpacing: AppSpacing.xs,
+                                      children: [
+                                        StatusChip(
+                                          label: point.riskLevelLabel(l10n),
+                                          icon: Icons.warning_amber_rounded,
+                                          color: AppColors.forRiskTier(
+                                            point.riskTier,
+                                          ),
+                                        ),
+                                        StatusChip(
+                                          label: fireStatusLabel(
+                                            l10n,
+                                            point.smartStatus,
+                                          ),
+                                          showDot: true,
+                                          color: fireStatusColor(
+                                            point.smartStatus,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: AppSpacing.md),
+                                    Container(
+                                      padding: const EdgeInsets.all(
+                                        AppSpacing.md,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: _markerColor(
+                                          point,
+                                        ).withValues(alpha: 0.06),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            point.riskReasonText(l10n),
+                                            style: GoogleFonts.inter(
+                                              fontSize: 13,
+                                              height: 1.4,
+                                              color: secondaryTextColor,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.thermostat_rounded,
+                                                size: 14,
+                                                color: secondaryTextColor,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                '$tempC°C',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 12,
+                                                  color: secondaryTextColor,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Icon(
+                                                Icons.satellite_alt_rounded,
+                                                size: 14,
+                                                color: point.isMerged
+                                                    ? AppColors.success
+                                                    : secondaryTextColor,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Flexible(
+                                                child: Text(
+                                                  point.mergedSatelliteLabel,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 12,
+                                                    fontWeight: point.isMerged
+                                                        ? FontWeight.w700
+                                                        : FontWeight.normal,
+                                                    color: point.isMerged
+                                                        ? AppColors.success
+                                                        : secondaryTextColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Icon(
+                                                Icons.location_on_rounded,
+                                                size: 14,
+                                                color: secondaryTextColor,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Expanded(
+                                                child: Text(
+                                                  point.locationLabelText(l10n),
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 12,
+                                                    color: secondaryTextColor,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                          .animate()
+                          .fadeIn(
+                            duration: 300.ms,
+                            delay: (180 + (index * 70)).ms,
+                          )
+                          .slideX(begin: 0.03, end: 0)
+                          .scale(
+                            begin: const Offset(0.98, 0.98),
+                            end: const Offset(1, 1),
+                          ),
+                );
+              }),
+              const SizedBox(height: AppSpacing.xxl),
+            ],
+          ],
         ),
       ),
     );
@@ -1799,6 +1777,40 @@ class _DetailRow extends StatelessWidget {
 /// One half of the layer switch. Deliberately plain: a filled pill when
 /// selected, nothing when not, so the control reads instantly at a glance and
 /// never competes with the map itself.
+/// A key row for the raw-detection layer: the marker's colour as a dot, then
+/// what that colour means. The dot is a widget rather than a coloured emoji
+/// so it matches the marker it explains exactly.
+class _LegendRow extends StatelessWidget {
+  final Color color;
+  final String label;
+  final Color textColor;
+
+  const _LegendRow({
+    required this.color,
+    required this.label,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ColorDot(color: color, size: 11),
+        const SizedBox(width: AppSpacing.sm),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            color: textColor,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// Compact, icon-free sibling of [_LayerChip]. The count sits inside the chip
 /// because "Aktif" alone gives no sense of whether the empty-looking map is
 /// empty because nothing is burning or because the filter is hiding things.

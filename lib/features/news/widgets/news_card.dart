@@ -162,7 +162,8 @@ class _NewsCardState extends State<NewsCard> {
                             icon: newsCategoryIcon(category),
                           ),
                           StatusChip(
-                            label: '${newsRiskLevelEmoji(riskLevel)} ${newsRiskLevelLabel(l10n, riskLevel)}',
+                            label: newsRiskLevelLabel(l10n, riskLevel),
+                            showDot: true,
                             color: newsRiskLevelColor(riskLevel),
                           ),
                           if (widget.item.isBreaking)

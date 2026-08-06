@@ -73,9 +73,9 @@
   "homeHeaderTitle": "Türkiye Termal Anomali Takibi",
   "homeHeaderSubtitle": "Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.",
   "homeNasaLiveData": "NASA FIRMS • Canlı Veri",
-  "homeOutsideTurkeyLocation": "Yurt dışı konumu 🌍",
-  "homeLocationUnavailable": "Konum alınamadı 📍",
-  "homeLocationEmulatorTest": "Emülatör konumu 📱",
+  "homeOutsideTurkeyLocation": "Yurt dışı konumu",
+  "homeLocationUnavailable": "Konum alınamadı",
+  "homeLocationEmulatorTest": "Emülatör konumu",
   "homeRiskAnalysis": "Risk Analizi",
   "homeSaved": "Kaydedilenler ({count})",
   "@homeSaved": {
@@ -146,11 +146,13 @@
 
   "mapFetchError": "Yangın verileri alınamadı.",
   "mapTitle": "Termal Anomali Haritası",
+  "mapTitleEvents": "Yangın Haritası",
+  "mapTitleDetections": "Termal Tespit Haritası",
   "mapLiveMap": "Canlı Harita",
   "mapConfidenceFilterActive": "Yalnızca yüksek/nominal güvenilirlikli tespitler gösteriliyor",
   "mapConfidenceFilterClear": "Temizle",
-  "mapHeaderTitle": "Türkiye Geneli Termal Anomali Görünümü",
-  "mapHeaderSubtitle": "NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.",
+  "mapHeaderTitle": "Türkiye Geneli Yangın Görünümü",
+  "mapHeaderSubtitle": "NASA FIRMS uydu verisi. Olaylar ve ham tespitler.",
   "mapArea": "Harita Alanı",
   "mapAreaSubtitle": "NASA FIRMS canlı marker görünümü",
   "mapGoToMe": "Bana Git",
@@ -265,7 +267,7 @@
   },
   "watchlistSyncingSubtitle": "NASA verisi yenileniyor olabilir. Kaydedilen noktalar uydu güncellemesinde değişebilir.",
 
-  "emergencyShareLocationText": "🔥 Acil Durum - Konumum:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nFireWatch TR ile paylaşıldı.",
+  "emergencyShareLocationText": "Acil Durum - Konumum:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nFireWatch TR ile paylaşıldı.",
   "@emergencyShareLocationText": {
     "placeholders": {
       "url": { "type": "String" },
@@ -274,7 +276,7 @@
     }
   },
   "emergencyShareLocationSubject": "Acil Konum Paylaşımı",
-  "emergencyShareFallbackText": "🔥 Acil Durum bildirimi - FireWatch TR",
+  "emergencyShareFallbackText": "Acil Durum bildirimi - FireWatch TR",
   "emergencyTitle": "Acil Durum",
   "emergencyPrepCenter": "Acil Hazırlık Merkezi",
   "emergencyQuickToolsTitle": "Hızlı Müdahale Araçları",
@@ -516,7 +518,7 @@
   "newsRiskMonitoring": "İZLENİYOR",
   "newsRiskInfo": "BİLGİ",
   "newsBreakingBadge": "Son Dakika",
-  "newsEnglishBannerText": "🌐 Herhangi bir haberi İngilizceye çevirmek için dokunun",
+  "newsEnglishBannerText": "Herhangi bir haberi İngilizceye çevirmek için dokunun",
   "newsTranslateCardButton": "Çevir",
   "newsContentFiltersTitle": "Durum Filtreleri",
   "newsContentFiltersSubtitle": "Neler olduğuna göre filtrele",
@@ -548,7 +550,7 @@
     "placeholders": { "city": { "type": "String" } }
   },
   "reportPanelFireReport": "Yangın bildirimi",
-  "reportPanelVerifiedTitle": "✅ Rapor Doğrulandı",
+  "reportPanelVerifiedTitle": "Rapor Doğrulandı",
   "reportPanelReceivedTitle": "⏳ Rapor Alındı",
   "reportPanelCityLabel": "Şehir: {city}",
   "@reportPanelCityLabel": {
@@ -678,7 +680,7 @@
   "fireEventLiveDetectionTitle": "Canlı Termal Tespit",
   "fireEventStatusActive": "Aktif",
   "fireEventStatusMonitoring": "İzleniyor",
-  "fireEventStatusControlled": "Kontrol Altında",
+  "fireEventStatusControlled": "Düşük güvenilirlik",
   "fireEventSpreadHigh": "Yüksek — aktif izleme gerekli",
   "fireEventSpreadMedium": "Orta — dikkatli takip et",
   "fireEventSpreadLow": "Düşük",
@@ -736,7 +738,7 @@
     "placeholders": { "datetime": { "type": "String" } }
   },
 
-  "fireDetailShareText": "🔥 Yangın Uyarısı\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Durum: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nFireWatch TR ile takip ediliyor.",
+  "fireDetailShareText": "Yangın Uyarısı\n\n{title}\n{city} / {district}\n\nDurum: {status}\nRisk: {risk}\n\n{description}\n\nFireWatch TR ile takip ediliyor.",
   "@fireDetailShareText": {
     "placeholders": {
       "title": { "type": "String" },
@@ -771,7 +773,7 @@
   "newsTranslated": "Çevrildi",
   "newsShowOriginal": "Orijinali Göster",
   "newsTranslationFailed": "Çeviri başarısız oldu.",
-  "newsTranslatedCaption": "🌐 Türkçeden çevrildi • Tam çeviri için dokun",
+  "newsTranslatedCaption": "Türkçeden çevrildi • Tam çeviri için dokun",
 
   "coachMarksGotIt": "Anladım",
   "coachMarksSkip": "Öğreticiyi Atla",
@@ -827,11 +829,11 @@
   "monitorStatusLocationDenied": "Konum izni verilmedi.",
   "monitorStatusFetchingData": "NASA FIRMS verisi çekiliyor...",
   "monitorStatusNoActiveFires": "Şu an termal anomali verisi bulunamadı.",
-  "monitorStatusNoNearbyFires": "✅ 50 km içinde termal tespit yok. ({count} nokta tarandı)",
+  "monitorStatusNoNearbyFires": "50 km içinde termal tespit yok. ({count} nokta tarandı)",
   "@monitorStatusNoNearbyFires": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "monitorStatusNearbyFiresFound": "⚠️ 50 km içinde {count} termal tespit bulundu!",
+  "monitorStatusNearbyFiresFound": "50 km içinde {count} termal tespit bulundu!",
   "@monitorStatusNearbyFiresFound": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -953,7 +955,7 @@
   },
   "smartTimeOlder": "{hours} saat önce tespit edildi, mevcut durumu bilinmiyor.",
   "@smartTimeOlder": { "placeholders": { "hours": { "type": "int" } } },
-  "smartTimeHistorical": "{days} gün önce yapılmış eski bir tespit; söndürülmüş olabilir.",
+  "smartTimeHistorical": "{days} gün önce yapılmış eski bir tespit; güncel durumu bilinmiyor.",
   "@smartTimeHistorical": { "placeholders": { "days": { "type": "int" } } },
 
   "tooltipTempTitle": "Sıcaklık",
@@ -1002,13 +1004,13 @@
   "coachMarkNotifAlertsDesc": "Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsin.",
 
   "coachMarkRiskScoreTitle": "Risk Skoru",
-  "coachMarkRiskScoreDesc": "0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını ℹ️ butonundan öğrenebilirsin.",
+  "coachMarkRiskScoreDesc": "0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsin.",
   "coachMarkRiskChartTitle": "Bölgesel Dağılım",
   "coachMarkRiskChartDesc": "Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsin.",
   "coachMarkRiskMyLocationTabTitle": "Konumum",
   "coachMarkRiskMyLocationTabDesc": "Bu sekmeye geçerek kendi bölgenin riskini Türkiye ortalamasıyla karşılaştır.",
   "coachMarkRiskInfoTitle": "Veri Kaynakları",
-  "coachMarkRiskInfoDesc": "ℹ️ butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.",
+  "coachMarkRiskInfoDesc": "Bilgi butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.",
 
   "coachMarkWatchlistPurposeTitle": "Kaydedilenler Ne İşe Yarar?",
   "coachMarkWatchlistPurposeDesc": "Takip etmek istediğin yangın noktalarını burada bir arada tutabilirsin.",
@@ -1016,10 +1018,10 @@
   "coachMarkWatchlistHowToAddDesc": "Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.",
   "coachMarkWatchlistClearTitle": "Temizle",
   "coachMarkWatchlistClearDesc": "Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.",
-  "detectionProbableFire": "🔥 Muhtemel Yangın",
-  "detectionHighThermalAnomaly": "⚠️ Yüksek Isı Anomalisi",
-  "detectionThermalDetection": "📡 Termal Tespit",
-  "detectionLowConfidence": "❓ Düşük Güvenilirlik",
+  "detectionProbableFire": "Muhtemel Yangın",
+  "detectionHighThermalAnomaly": "Yüksek Isı Anomalisi",
+  "detectionThermalDetection": "Termal Tespit",
+  "detectionLowConfidence": "Düşük Güvenilirlik",
   "thermalAnomalyDisclaimer": "NASA uydusu termal anomalileri tespit eder. Yüksek güvenilirlikli tespitler aktif yangın göstergesi olabilir ancak endüstriyel ısı kaynakları da tespit edilebilir.",
   "detectionAboutTitle": "Bu tespit nedir?",
   "detectionAboutViirs": "NASA VIIRS, Dünya yüzeyindeki kızılötesi ısıyı ölçer. Doğrulanmış yangınları değil, termal anomalileri belirler.",
@@ -1029,18 +1031,19 @@
   "@detectionFrpExplanation": {"placeholders":{"frp":{"type":"String"}}},
   "detectionLimitations": "Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.",
   "mapLegendTitle": "Harita Lejantı",
-  "legendProbableFire": "🔴 Muhtemel Yangın",
-  "legendHighThermal": "🟠 Yüksek Isı Anomalisi",
-  "legendLowConfidence": "⚪ Düşük Güvenilirlik",
-  "mapMarkerDisclaimer": "Harita NASA uydu termal tespitlerini gösterir. 🔴 işaretler aktif yangın olabilir.",
+  "legendProbableFire": "Muhtemel Yangın",
+  "legendHighThermal": "Yüksek Isı Anomalisi",
+  "legendLowConfidence": "Düşük Güvenilirlik",
+  "mapMarkerDisclaimerBefore": "Harita NASA uydu termal tespitlerini gösterir.",
+  "mapMarkerDisclaimerAfter": "işaretler aktif yangın olabilir.",
   "feedbackSend": "Geri Bildirim Gönder", "feedbackTitle": "Geri Bildirim Gönder", "feedbackRating": "Puan", "feedbackCategory": "Kategori",
   "feedbackBug": "Hata Bildirimi", "feedbackFeature": "Özellik İsteği", "feedbackGeneral": "Genel Geri Bildirim",
   "feedbackMessage": "Mesaj", "feedbackEmail": "E-posta (isteğe bağlı)", "feedbackSubmit": "Gönder",
   "feedbackSuccess": "Teşekkürler! Geri bildiriminiz gönderildi.", "feedbackError": "Geri bildirim gönderilemedi. Lütfen tekrar deneyin.",
   "feedbackMessageRequired": "Lütfen bir mesaj yazın.", "feedbackRatingRequired": "Lütfen 1 ile 5 arasında bir puan seçin.", "ratingPromptTitle": "FireWatch TR'yi beğendiniz mi?",
   "ratingPromptMessage": "Uygulamayı birkaç gündür kullanıyorsunuz. Görüşlerinizi paylaşmak ister misiniz?", "ratingPromptLater": "Daha sonra",
-  "feedbackReportBug": "🐛 Hata Bildir",
-  "feedbackSendFeedback": "💬 Geri Bildirim",
+  "feedbackReportBug": "Hata Bildir",
+  "feedbackSendFeedback": "Geri Bildirim",
   "feedbackBlockedMessage": "Geri bildiriminiz alındı. Yeni geri bildirim için {days} gün bekleyin.",
   "@feedbackBlockedMessage": {"placeholders":{"days":{"type":"int"}}},
   "bugReportTitle": "Hata Bildir",

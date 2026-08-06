@@ -437,19 +437,19 @@ abstract class AppLocalizations {
   /// No description provided for @homeOutsideTurkeyLocation.
   ///
   /// In tr, this message translates to:
-  /// **'Yurt dışı konumu 🌍'**
+  /// **'Yurt dışı konumu'**
   String get homeOutsideTurkeyLocation;
 
   /// No description provided for @homeLocationUnavailable.
   ///
   /// In tr, this message translates to:
-  /// **'Konum alınamadı 📍'**
+  /// **'Konum alınamadı'**
   String get homeLocationUnavailable;
 
   /// No description provided for @homeLocationEmulatorTest.
   ///
   /// In tr, this message translates to:
-  /// **'Emülatör konumu 📱'**
+  /// **'Emülatör konumu'**
   String get homeLocationEmulatorTest;
 
   /// No description provided for @homeRiskAnalysis.
@@ -704,6 +704,18 @@ abstract class AppLocalizations {
   /// **'Termal Anomali Haritası'**
   String get mapTitle;
 
+  /// No description provided for @mapTitleEvents.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Haritası'**
+  String get mapTitleEvents;
+
+  /// No description provided for @mapTitleDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Termal Tespit Haritası'**
+  String get mapTitleDetections;
+
   /// No description provided for @mapLiveMap.
   ///
   /// In tr, this message translates to:
@@ -725,13 +737,13 @@ abstract class AppLocalizations {
   /// No description provided for @mapHeaderTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye Geneli Termal Anomali Görünümü'**
+  /// **'Türkiye Geneli Yangın Görünümü'**
   String get mapHeaderTitle;
 
   /// No description provided for @mapHeaderSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS verisiyle aktif termal noktaları harita üzerinde göster.'**
+  /// **'NASA FIRMS uydu verisi. Olaylar ve ham tespitler.'**
   String get mapHeaderSubtitle;
 
   /// No description provided for @mapArea.
@@ -1163,7 +1175,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyShareLocationText.
   ///
   /// In tr, this message translates to:
-  /// **'🔥 Acil Durum - Konumum:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nFireWatch TR ile paylaşıldı.'**
+  /// **'Acil Durum - Konumum:\n{url}\n\nLat: {lat}\nLng: {lng}\n\nFireWatch TR ile paylaşıldı.'**
   String emergencyShareLocationText(String url, String lat, String lng);
 
   /// No description provided for @emergencyShareLocationSubject.
@@ -1175,7 +1187,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyShareFallbackText.
   ///
   /// In tr, this message translates to:
-  /// **'🔥 Acil Durum bildirimi - FireWatch TR'**
+  /// **'Acil Durum bildirimi - FireWatch TR'**
   String get emergencyShareFallbackText;
 
   /// No description provided for @emergencyTitle.
@@ -2387,7 +2399,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsEnglishBannerText.
   ///
   /// In tr, this message translates to:
-  /// **'🌐 Herhangi bir haberi İngilizceye çevirmek için dokunun'**
+  /// **'Herhangi bir haberi İngilizceye çevirmek için dokunun'**
   String get newsEnglishBannerText;
 
   /// No description provided for @newsTranslateCardButton.
@@ -2501,7 +2513,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelVerifiedTitle.
   ///
   /// In tr, this message translates to:
-  /// **'✅ Rapor Doğrulandı'**
+  /// **'Rapor Doğrulandı'**
   String get reportPanelVerifiedTitle;
 
   /// No description provided for @reportPanelReceivedTitle.
@@ -3046,7 +3058,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireEventStatusControlled.
   ///
   /// In tr, this message translates to:
-  /// **'Kontrol Altında'**
+  /// **'Düşük güvenilirlik'**
   String get fireEventStatusControlled;
 
   /// No description provided for @fireEventSpreadHigh.
@@ -3208,7 +3220,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireDetailShareText.
   ///
   /// In tr, this message translates to:
-  /// **'🔥 Yangın Uyarısı\n\n📍 {title}\n📌 {city} / {district}\n\n🚨 Durum: {status}\n⚠️ Risk: {risk}\n\n📝 {description}\n\nFireWatch TR ile takip ediliyor.'**
+  /// **'Yangın Uyarısı\n\n{title}\n{city} / {district}\n\nDurum: {status}\nRisk: {risk}\n\n{description}\n\nFireWatch TR ile takip ediliyor.'**
   String fireDetailShareText(
     String title,
     String city,
@@ -3329,7 +3341,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsTranslatedCaption.
   ///
   /// In tr, this message translates to:
-  /// **'🌐 Türkçeden çevrildi • Tam çeviri için dokun'**
+  /// **'Türkçeden çevrildi • Tam çeviri için dokun'**
   String get newsTranslatedCaption;
 
   /// No description provided for @coachMarksGotIt.
@@ -3539,13 +3551,13 @@ abstract class AppLocalizations {
   /// No description provided for @monitorStatusNoNearbyFires.
   ///
   /// In tr, this message translates to:
-  /// **'✅ 50 km içinde termal tespit yok. ({count} nokta tarandı)'**
+  /// **'50 km içinde termal tespit yok. ({count} nokta tarandı)'**
   String monitorStatusNoNearbyFires(int count);
 
   /// No description provided for @monitorStatusNearbyFiresFound.
   ///
   /// In tr, this message translates to:
-  /// **'⚠️ 50 km içinde {count} termal tespit bulundu!'**
+  /// **'50 km içinde {count} termal tespit bulundu!'**
   String monitorStatusNearbyFiresFound(int count);
 
   /// No description provided for @monitorStatusTimeout.
@@ -4007,7 +4019,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartTimeHistorical.
   ///
   /// In tr, this message translates to:
-  /// **'{days} gün önce yapılmış eski bir tespit; söndürülmüş olabilir.'**
+  /// **'{days} gün önce yapılmış eski bir tespit; güncel durumu bilinmiyor.'**
   String smartTimeHistorical(int days);
 
   /// No description provided for @tooltipTempTitle.
@@ -4235,7 +4247,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskScoreDesc.
   ///
   /// In tr, this message translates to:
-  /// **'0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını ℹ️ butonundan öğrenebilirsin.'**
+  /// **'0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsin.'**
   String get coachMarkRiskScoreDesc;
 
   /// No description provided for @coachMarkRiskChartTitle.
@@ -4271,7 +4283,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskInfoDesc.
   ///
   /// In tr, this message translates to:
-  /// **'ℹ️ butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.'**
+  /// **'Bilgi butonu risk skorunun formülünü, veri kaynaklarını ve güncelleme sıklığını açıklar.'**
   String get coachMarkRiskInfoDesc;
 
   /// No description provided for @coachMarkWatchlistPurposeTitle.
@@ -4313,25 +4325,25 @@ abstract class AppLocalizations {
   /// No description provided for @detectionProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'🔥 Muhtemel Yangın'**
+  /// **'Muhtemel Yangın'**
   String get detectionProbableFire;
 
   /// No description provided for @detectionHighThermalAnomaly.
   ///
   /// In tr, this message translates to:
-  /// **'⚠️ Yüksek Isı Anomalisi'**
+  /// **'Yüksek Isı Anomalisi'**
   String get detectionHighThermalAnomaly;
 
   /// No description provided for @detectionThermalDetection.
   ///
   /// In tr, this message translates to:
-  /// **'📡 Termal Tespit'**
+  /// **'Termal Tespit'**
   String get detectionThermalDetection;
 
   /// No description provided for @detectionLowConfidence.
   ///
   /// In tr, this message translates to:
-  /// **'❓ Düşük Güvenilirlik'**
+  /// **'Düşük Güvenilirlik'**
   String get detectionLowConfidence;
 
   /// No description provided for @thermalAnomalyDisclaimer.
@@ -4379,26 +4391,32 @@ abstract class AppLocalizations {
   /// No description provided for @legendProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'🔴 Muhtemel Yangın'**
+  /// **'Muhtemel Yangın'**
   String get legendProbableFire;
 
   /// No description provided for @legendHighThermal.
   ///
   /// In tr, this message translates to:
-  /// **'🟠 Yüksek Isı Anomalisi'**
+  /// **'Yüksek Isı Anomalisi'**
   String get legendHighThermal;
 
   /// No description provided for @legendLowConfidence.
   ///
   /// In tr, this message translates to:
-  /// **'⚪ Düşük Güvenilirlik'**
+  /// **'Düşük Güvenilirlik'**
   String get legendLowConfidence;
 
-  /// No description provided for @mapMarkerDisclaimer.
+  /// No description provided for @mapMarkerDisclaimerBefore.
   ///
   /// In tr, this message translates to:
-  /// **'Harita NASA uydu termal tespitlerini gösterir. 🔴 işaretler aktif yangın olabilir.'**
-  String get mapMarkerDisclaimer;
+  /// **'Harita NASA uydu termal tespitlerini gösterir.'**
+  String get mapMarkerDisclaimerBefore;
+
+  /// No description provided for @mapMarkerDisclaimerAfter.
+  ///
+  /// In tr, this message translates to:
+  /// **'işaretler aktif yangın olabilir.'**
+  String get mapMarkerDisclaimerAfter;
 
   /// No description provided for @feedbackSend.
   ///
@@ -4505,13 +4523,13 @@ abstract class AppLocalizations {
   /// No description provided for @feedbackReportBug.
   ///
   /// In tr, this message translates to:
-  /// **'🐛 Hata Bildir'**
+  /// **'Hata Bildir'**
   String get feedbackReportBug;
 
   /// No description provided for @feedbackSendFeedback.
   ///
   /// In tr, this message translates to:
-  /// **'💬 Geri Bildirim'**
+  /// **'Geri Bildirim'**
   String get feedbackSendFeedback;
 
   /// No description provided for @feedbackBlockedMessage.

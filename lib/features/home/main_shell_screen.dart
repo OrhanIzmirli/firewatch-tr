@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/fire_incident.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
@@ -17,6 +18,7 @@ class MainShellScreen extends StatefulWidget {
   final double? mapFocusLat;
   final double? mapFocusLng;
   final bool mapConfidenceFilter;
+  final IncidentFilter? mapIncidentFilter;
 
   const MainShellScreen({
     super.key,
@@ -24,6 +26,7 @@ class MainShellScreen extends StatefulWidget {
     this.mapFocusLat,
     this.mapFocusLng,
     this.mapConfidenceFilter = false,
+    this.mapIncidentFilter,
   });
 
   @override
@@ -98,6 +101,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
       focusLat: widget.mapFocusLat,
       focusLng: widget.mapFocusLng,
       initialConfidenceFilter: widget.mapConfidenceFilter,
+      initialIncidentFilter: widget.mapIncidentFilter,
     ),
     const NewsScreen(),
     const NotificationsScreen(),

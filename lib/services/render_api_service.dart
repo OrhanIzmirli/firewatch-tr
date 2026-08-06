@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../core/config/api_config.dart';
 import '../models/alert_scope.dart';
+import '../models/fire_incident.dart';
+import '../models/incident_summary.dart';
 
 class RenderApiService {
   RenderApiService();
@@ -140,6 +142,57 @@ class RenderApiService {
       if (kDebugMode) debugPrint('Error updating notification status: $e');
       return false;
     }
+  }
+
+  /// Clustered fire events. Returns an empty list on any failure so the
+  /// caller keeps the existing raw-detection view rather than showing an
+  /// error — /api/incidents is additive, not a replacement.
+  Future<List<FireIncident>> fetchIncidents({
+    int days = 7,
+    int limit = 200,
+    String? regionKey,
+    int? cityId,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/incidents',
+        queryParameters: {
+          'days': days,
+          'limit': limit,
+          'region_key': ?regionKey,
+          'city_id': ?cityId,
+        },
+      );
+      final data = response.data['data'];
+      if (data is! List) return const [];
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(FireIncident.fromJson)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error fetching incidents: $e');
+      return const [];
+    }
+  }
+
+  /// The last-24-hours event summary for the Home overview.
+  ///
+  /// Falls back to computing the same three numbers from a page of
+  /// /api/incidents when the summary route is missing — an app update can
+  /// ship ahead of a backend deploy, and a Home card that silently vanishes
+  /// is harder to diagnose than one that is merely bounded by the page.
+  Future<IncidentSummary?> fetchIncidentSummary() async {
+    try {
+      final response = await _dio.get('/incidents/summary');
+      final data = response.data['data'];
+      if (data is Map<String, dynamic>) return IncidentSummary.fromJson(data);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error fetching incident summary: $e');
+    }
+
+    final incidents = await fetchIncidents(days: 3, limit: 500);
+    if (incidents.isEmpty) return null;
+    return IncidentSummary.fromIncidents(incidents);
   }
 
   /// Asks the backend which province/region a coordinate falls in.

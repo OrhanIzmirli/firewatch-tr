@@ -15,6 +15,7 @@ import '../features/safety/safety_guide_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/watchlist/watchlist_screen.dart';
 import '../models/fire_event.dart';
+import '../models/fire_incident.dart';
 import '../models/news_item.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -76,6 +77,13 @@ class AppRouter {
               mapFocusLat: extra?['lat'] as double?,
               mapFocusLng: extra?['lng'] as double?,
               mapConfidenceFilter: extra?['confidenceFilter'] as bool? ?? false,
+              // Only overrides the stored choice when the caller asks for a
+              // specific slice; absent means "leave the user's filter alone".
+              mapIncidentFilter: extra?['incidentFilter'] == null
+                  ? null
+                  : IncidentFilterX.fromStorage(
+                      extra!['incidentFilter'] as String?,
+                    ),
             ),
           );
         },

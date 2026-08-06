@@ -2657,4 +2657,172 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationScopeNarrowWarning =>
       'Narrowing the scope means you will not be alerted about fires outside the area you picked.';
+
+  @override
+  String get incidentsSectionTitle => 'Fire Events';
+
+  @override
+  String get incidentsSectionSubtitle =>
+      'Satellite detections grouped into events';
+
+  @override
+  String get incidentStatusActive => 'Active detection';
+
+  @override
+  String get incidentStatusAwaiting => 'Awaiting detection';
+
+  @override
+  String get incidentStatusLowConfidence => 'Low confidence';
+
+  @override
+  String incidentDetectedHoursAgo(String hours) {
+    return 'Detected within the last $hours hours';
+  }
+
+  @override
+  String incidentNoDetectionFor(String hours) {
+    return 'No satellite detection for $hours hours';
+  }
+
+  @override
+  String incidentNoDetectionLowConfidence(String hours) {
+    return 'No satellite detection for $hours hours, low confidence';
+  }
+
+  @override
+  String incidentDurationOngoing(String hours) {
+    return 'Detected over $hours hours';
+  }
+
+  @override
+  String get incidentDurationShort => 'Detected in a single pass';
+
+  @override
+  String incidentEvidence(int detections, int passes) {
+    return '$detections detections, $passes satellite passes';
+  }
+
+  @override
+  String get incidentHeatLabel => 'Heat intensity';
+
+  @override
+  String get incidentHeatLow => 'Low';
+
+  @override
+  String get incidentHeatModerate => 'Moderate';
+
+  @override
+  String get incidentHeatHigh => 'High';
+
+  @override
+  String get incidentHeatVeryHigh => 'Very high';
+
+  @override
+  String get incidentSpreadTitle => 'Spread (estimated)';
+
+  @override
+  String incidentSpreadLine(String direction, String meters) {
+    return '$direction, about $meters metres per hour';
+  }
+
+  @override
+  String get incidentSpreadEstimateNote =>
+      'Derived from how the detection pattern shifted; the fire\'s actual movement may differ.';
+
+  @override
+  String get incidentToggleShow => 'Events';
+
+  @override
+  String get incidentToggleDetections => 'Detections';
+
+  @override
+  String get incidentFilterActive => 'Active';
+
+  @override
+  String get incidentFilterEnded => 'Detection ended';
+
+  @override
+  String get incidentFilterAll => 'All';
+
+  @override
+  String get homeLast24hTitle => 'Last 24 Hours';
+
+  @override
+  String get homeLast24hSubtitle => 'Summary of satellite detections';
+
+  @override
+  String get homeLast24hActiveTitle => 'Active detection';
+
+  @override
+  String homeLast24hActiveSubtitle(int hours) {
+    return 'Seen by a satellite within the last $hours hours';
+  }
+
+  @override
+  String get homeLast24hEndedTitle => 'Detection ended';
+
+  @override
+  String get homeLast24hEndedSubtitle => 'Not a claim that they are out.';
+
+  @override
+  String get homeLast24hLongestTitle => 'Longest running';
+
+  @override
+  String get homeLast24hLongestSubtitle =>
+      'Since first detection, still being detected';
+
+  @override
+  String durationHoursShort(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String durationDaysHours(int days, int hours) {
+    return '$days d $hours h';
+  }
+
+  @override
+  String get incidentsEmpty => 'No grouped fire events in this range.';
+
+  @override
+  String incidentsCount(int count) {
+    return '$count events';
+  }
+
+  @override
+  String get incidentPanelTitle => 'Fire Event';
+
+  @override
+  String get incidentOfficialTitle => 'Official status';
+
+  @override
+  String get incidentSatelliteLimitNote =>
+      'Satellites pass a few times a day and cannot see through cloud or smoke. No detection does not mean the fire is over.';
+
+  @override
+  String get incidentLegendTitle => 'Map legend';
+
+  @override
+  String get compassTowardsNorth => 'towards the north';
+
+  @override
+  String get compassTowardsNorthEast => 'towards the north-east';
+
+  @override
+  String get compassTowardsEast => 'towards the east';
+
+  @override
+  String get compassTowardsSouthEast => 'towards the south-east';
+
+  @override
+  String get compassTowardsSouth => 'towards the south';
+
+  @override
+  String get compassTowardsSouthWest => 'towards the south-west';
+
+  @override
+  String get compassTowardsWest => 'towards the west';
+
+  @override
+  String get compassTowardsNorthWest => 'towards the north-west';
 }

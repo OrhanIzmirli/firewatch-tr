@@ -4675,6 +4675,294 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.'**
   String get notificationScopeNarrowWarning;
+
+  /// No description provided for @incidentsSectionTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Olayları'**
+  String get incidentsSectionTitle;
+
+  /// No description provided for @incidentsSectionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu tespitleri olaylara gruplanmış'**
+  String get incidentsSectionSubtitle;
+
+  /// No description provided for @incidentStatusActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif tespit'**
+  String get incidentStatusActive;
+
+  /// No description provided for @incidentStatusAwaiting.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit bekleniyor'**
+  String get incidentStatusAwaiting;
+
+  /// No description provided for @incidentStatusLowConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük güvenilirlik'**
+  String get incidentStatusLowConfidence;
+
+  /// No description provided for @incidentDetectedHoursAgo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son {hours} saat içinde tespit edildi'**
+  String incidentDetectedHoursAgo(String hours);
+
+  /// No description provided for @incidentNoDetectionFor.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saattir uydu tespiti yok'**
+  String incidentNoDetectionFor(String hours);
+
+  /// No description provided for @incidentNoDetectionLowConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saattir uydu tespiti yok, düşük güvenilirlik'**
+  String incidentNoDetectionLowConfidence(String hours);
+
+  /// No description provided for @incidentDurationOngoing.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saattir tespit ediliyor'**
+  String incidentDurationOngoing(String hours);
+
+  /// No description provided for @incidentDurationShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek geçişte tespit edildi'**
+  String get incidentDurationShort;
+
+  /// No description provided for @incidentEvidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'{detections} tespit, {passes} uydu geçişi'**
+  String incidentEvidence(int detections, int passes);
+
+  /// No description provided for @incidentHeatLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Isı şiddeti'**
+  String get incidentHeatLabel;
+
+  /// No description provided for @incidentHeatLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük'**
+  String get incidentHeatLow;
+
+  /// No description provided for @incidentHeatModerate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta'**
+  String get incidentHeatModerate;
+
+  /// No description provided for @incidentHeatHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek'**
+  String get incidentHeatHigh;
+
+  /// No description provided for @incidentHeatVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok yüksek'**
+  String get incidentHeatVeryHigh;
+
+  /// No description provided for @incidentSpreadTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yayılma (tahmini)'**
+  String get incidentSpreadTitle;
+
+  /// No description provided for @incidentSpreadLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'{direction}, saatte ~{meters} metre'**
+  String incidentSpreadLine(String direction, String meters);
+
+  /// No description provided for @incidentSpreadEstimateNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu tespit deseninin kaymasından hesaplanır; yangının gerçek ilerleyişi farklı olabilir.'**
+  String get incidentSpreadEstimateNote;
+
+  /// No description provided for @incidentToggleShow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olaylar'**
+  String get incidentToggleShow;
+
+  /// No description provided for @incidentToggleDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespitler'**
+  String get incidentToggleDetections;
+
+  /// No description provided for @incidentFilterActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif'**
+  String get incidentFilterActive;
+
+  /// No description provided for @incidentFilterEnded.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespiti sona ermiş'**
+  String get incidentFilterEnded;
+
+  /// No description provided for @incidentFilterAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü'**
+  String get incidentFilterAll;
+
+  /// No description provided for @homeLast24hTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 Saat'**
+  String get homeLast24hTitle;
+
+  /// No description provided for @homeLast24hSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu tespitlerinin özeti'**
+  String get homeLast24hSubtitle;
+
+  /// No description provided for @homeLast24hActiveTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif tespit'**
+  String get homeLast24hActiveTitle;
+
+  /// No description provided for @homeLast24hActiveSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son {hours} saat içinde uydu tarafından görüldü'**
+  String homeLast24hActiveSubtitle(int hours);
+
+  /// No description provided for @homeLast24hEndedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespiti sona eren'**
+  String get homeLast24hEndedTitle;
+
+  /// No description provided for @homeLast24hEndedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Söndüğü anlamına gelmez.'**
+  String get homeLast24hEndedSubtitle;
+
+  /// No description provided for @homeLast24hLongestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En uzun süren'**
+  String get homeLast24hLongestTitle;
+
+  /// No description provided for @homeLast24hLongestSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk tespitten bu yana, halen tespit ediliyor'**
+  String get homeLast24hLongestSubtitle;
+
+  /// No description provided for @durationHoursShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} sa'**
+  String durationHoursShort(int hours);
+
+  /// No description provided for @durationDaysHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} g {hours} sa'**
+  String durationDaysHours(int days, int hours);
+
+  /// No description provided for @incidentsEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu aralıkta gruplanmış yangın olayı yok.'**
+  String get incidentsEmpty;
+
+  /// No description provided for @incidentsCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} olay'**
+  String incidentsCount(int count);
+
+  /// No description provided for @incidentPanelTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın Olayı'**
+  String get incidentPanelTitle;
+
+  /// No description provided for @incidentOfficialTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmî durum'**
+  String get incidentOfficialTitle;
+
+  /// No description provided for @incidentSatelliteLimitNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.'**
+  String get incidentSatelliteLimitNote;
+
+  /// No description provided for @incidentLegendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita göstergesi'**
+  String get incidentLegendTitle;
+
+  /// No description provided for @compassTowardsNorth.
+  ///
+  /// In tr, this message translates to:
+  /// **'kuzeye doğru'**
+  String get compassTowardsNorth;
+
+  /// No description provided for @compassTowardsNorthEast.
+  ///
+  /// In tr, this message translates to:
+  /// **'kuzeydoğuya doğru'**
+  String get compassTowardsNorthEast;
+
+  /// No description provided for @compassTowardsEast.
+  ///
+  /// In tr, this message translates to:
+  /// **'doğuya doğru'**
+  String get compassTowardsEast;
+
+  /// No description provided for @compassTowardsSouthEast.
+  ///
+  /// In tr, this message translates to:
+  /// **'güneydoğuya doğru'**
+  String get compassTowardsSouthEast;
+
+  /// No description provided for @compassTowardsSouth.
+  ///
+  /// In tr, this message translates to:
+  /// **'güneye doğru'**
+  String get compassTowardsSouth;
+
+  /// No description provided for @compassTowardsSouthWest.
+  ///
+  /// In tr, this message translates to:
+  /// **'güneybatıya doğru'**
+  String get compassTowardsSouthWest;
+
+  /// No description provided for @compassTowardsWest.
+  ///
+  /// In tr, this message translates to:
+  /// **'batıya doğru'**
+  String get compassTowardsWest;
+
+  /// No description provided for @compassTowardsNorthWest.
+  ///
+  /// In tr, this message translates to:
+  /// **'kuzeybatıya doğru'**
+  String get compassTowardsNorthWest;
 }
 
 class _AppLocalizationsDelegate

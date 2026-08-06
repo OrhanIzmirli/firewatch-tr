@@ -16,11 +16,14 @@ import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
+import '../../models/incident_summary.dart';
 import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
+import '../../services/render_api_service.dart';
 import '../../services/news_translation_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
@@ -75,6 +78,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _newsSlowLoading = false;
   bool _firesSlowLoading = false;
 
+  final RenderApiService _renderApi = RenderApiService();
+  IncidentSummary? _incidentSummary;
+  bool _incidentSummaryLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -83,7 +90,105 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _loadData() async {
-    await Future.wait([_loadNews(), _loadFires(), _loadRiskSummary()]);
+    await Future.wait([
+      _loadNews(),
+      _loadFires(),
+      _loadRiskSummary(),
+      _loadIncidentSummary(),
+    ]);
+  }
+
+  /// Best-effort. A null summary hides the section rather than showing zeros,
+  /// because "0 active fires" and "we could not reach the server" are very
+  /// different statements to put in front of someone checking for a fire.
+  Future<void> _loadIncidentSummary() async {
+    final summary = await _renderApi.fetchIncidentSummary();
+    if (!mounted) return;
+    setState(() {
+      _incidentSummary = summary;
+      _incidentSummaryLoading = false;
+    });
+  }
+
+  /// Turns a duration in hours into something a person reads at a glance.
+  /// Deliberately coarse — the satellite fixes the resolution at a few passes
+  /// a day, so minutes would be false precision.
+  String _formatDuration(AppLocalizations l10n, double hours) {
+    final total = hours.round();
+    if (total < 24) return l10n.durationHoursShort(total);
+    return l10n.durationDaysHours(total ~/ 24, total % 24);
+  }
+
+  /// The last 24 hours in three cards.
+  ///
+  /// The middle card is the delicate one: it counts events the satellite
+  /// stopped seeing, and its title and subtitle both have to keep saying that
+  /// rather than the shorter, wronger thing. There is no data anywhere in
+  /// this app that says a fire was put out.
+  Widget _buildLast24hSection(AppLocalizations l10n, IncidentSummary summary) {
+    // The client-side fallback has no province to work with. Printing
+    // "Province unknown · 21 h" spends the card's one line on the thing we
+    // do not know; the duration alone is the part that carries meaning.
+    final longestCity = summary.longestActiveCityName;
+
+    return Column(
+      children: [
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisSpacing: AppSpacing.md,
+          mainAxisSpacing: AppSpacing.md,
+          childAspectRatio: 0.95,
+          children: [
+            SmartOverviewCard(
+              title: l10n.homeLast24hActiveTitle,
+              value: summary.activeCount.toString(),
+              subtitle: l10n.homeLast24hActiveSubtitle(
+                summary.recentDetectionHours,
+              ),
+              icon: Icons.local_fire_department_rounded,
+              color: AppColors.danger,
+              delay: 0.ms,
+              onTap: () => context.go(
+                '/map',
+                extra: {'incidentFilter': IncidentFilter.active.storageValue},
+              ),
+            ),
+            SmartOverviewCard(
+              title: l10n.homeLast24hEndedTitle,
+              value: summary.detectionEndedLast24h.toString(),
+              subtitle: l10n.homeLast24hEndedSubtitle,
+              icon: Icons.satellite_alt_rounded,
+              color: AppColors.primary,
+              delay: 60.ms,
+              onTap: () => context.go(
+                '/map',
+                extra: {'incidentFilter': IncidentFilter.ended.storageValue},
+              ),
+            ),
+          ],
+        ),
+        if (summary.hasLongestActive) ...[
+          const SizedBox(height: AppSpacing.md),
+          SmartOverviewCard(
+            title: l10n.homeLast24hLongestTitle,
+            value: [
+              if (longestCity != null && longestCity.isNotEmpty) longestCity,
+              _formatDuration(l10n, summary.longestActiveDurationHours!),
+            ].join(' · '),
+            subtitle: l10n.homeLast24hLongestSubtitle,
+            icon: Icons.hourglass_bottom_rounded,
+            color: AppColors.warning,
+            delay: 120.ms,
+            onTap: () => context.go(
+              '/map',
+              extra: {'incidentFilter': IncidentFilter.active.storageValue},
+            ),
+          ),
+        ],
+      ],
+    );
   }
 
   // Stock Android emulator AVDs used for local testing report a fixed mock
@@ -699,6 +804,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ],
               ),
+
+            // ── Son 24 Saat ──────────────────────────────────
+            if (_incidentSummaryLoading || _incidentSummary != null) ...[
+              const SizedBox(height: AppSpacing.xxl),
+              SectionHeader(
+                title: l10n.homeLast24hTitle,
+                subtitle: l10n.homeLast24hSubtitle,
+                icon: Icons.history_rounded,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              if (_incidentSummaryLoading)
+                const SkeletonMetricGrid(count: 2)
+              else
+                _buildLast24hSection(l10n, _incidentSummary!),
+            ],
 
             const SizedBox(height: AppSpacing.xxxl),
 

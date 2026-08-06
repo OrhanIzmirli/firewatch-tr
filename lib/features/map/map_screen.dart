@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
+import '../../services/render_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -27,6 +31,8 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import 'widgets/incident_legend.dart';
+import 'widgets/incident_sheet.dart';
 
 class MapScreen extends StatefulWidget {
   final double? focusLat;
@@ -37,11 +43,17 @@ class MapScreen extends StatefulWidget {
   /// Points" overview card, which counts the same subset.
   final bool initialConfidenceFilter;
 
+  /// Overrides the stored event filter for this visit only — used when the
+  /// Home summary card sends the user here to look at one specific slice.
+  /// Null means "use whatever the user last chose".
+  final IncidentFilter? initialIncidentFilter;
+
   const MapScreen({
     super.key,
     this.focusLat,
     this.focusLng,
     this.initialConfidenceFilter = false,
+    this.initialIncidentFilter,
   });
 
   @override
@@ -50,6 +62,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   static const _cacheKey = 'map_fires';
+  static const _filterPrefKey = 'map_incident_filter';
 
   bool _isReportOpen = false;
   bool _isLoading = true;
@@ -62,8 +75,25 @@ class _MapScreenState extends State<MapScreen> {
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
 
+  /// Clustered events from /api/incidents. Empty when the endpoint is
+  /// unavailable, which is why the raw-detection layer is kept intact.
+  List<FireIncident> _incidents = [];
+
+  /// Events are the primary layer. The raw detection layer is still one tap
+  /// away — with the thermal window now spanning two days it can carry ~600
+  /// points, most of them historical, and that reads as noise on a country
+  /// map. Grouping them into events is the whole point of showing events.
+  bool _showIncidents = true;
+
+  /// Which events are drawn. Defaults to [IncidentFilter.active] — of ~240
+  /// live events only about ten are currently being detected, so showing
+  /// everything by default buries the ones that matter under a fortnight of
+  /// history. The rest stay one tap away.
+  IncidentFilter _incidentFilter = IncidentFilter.active;
+
   final MapController _mapController = MapController();
   final FireApiService _fireApiService = FireApiService();
+  final RenderApiService _renderApi = RenderApiService();
 
   /// Drives [TileLayer.reset]. Tiles that failed to load are never re-requested
   /// on their own, so without an explicit reset a connectivity blip leaves the
@@ -79,6 +109,11 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     if (widget.focusLat != null) _currentZoom = 13;
+    if (widget.initialIncidentFilter != null) {
+      _incidentFilter = widget.initialIncidentFilter!;
+    } else {
+      _restoreIncidentFilter();
+    }
     _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -104,12 +139,46 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _refreshMap() async {
     if (!_tileResetController.isClosed) _tileResetController.add(null);
     await _loadFirePoints();
+    await _loadIncidents();
   }
 
   Future<void> _bootstrapMapData() async {
     await _loadUserLocation();
     await _loadFirePoints();
+    await _loadIncidents();
   }
+
+  /// Best-effort: a failure or an empty result silently leaves the detection
+  /// view in charge rather than showing an error, so adding events cannot
+  /// regress the map that already worked.
+  Future<void> _loadIncidents() async {
+    final incidents = await _renderApi.fetchIncidents(days: 7, limit: 300);
+    if (!mounted) return;
+    setState(() {
+      _incidents = incidents;
+      if (incidents.isEmpty) _showIncidents = false;
+    });
+  }
+
+  Future<void> _restoreIncidentFilter() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = IncidentFilterX.fromStorage(prefs.getString(_filterPrefKey));
+    if (!mounted || stored == _incidentFilter) return;
+    setState(() => _incidentFilter = stored);
+  }
+
+  Future<void> _setIncidentFilter(IncidentFilter filter) async {
+    if (filter == _incidentFilter) return;
+    setState(() => _incidentFilter = filter);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_filterPrefKey, filter.storageValue);
+  }
+
+  List<FireIncident> get _visibleIncidents =>
+      _incidents.where(_incidentFilter.matches).toList();
+
+  int _incidentCountFor(IncidentFilter filter) =>
+      _incidents.where(filter.matches).length;
 
   void _maybeShowMapCoachMarks() {
     if (!mounted) return;
@@ -360,6 +429,131 @@ class _MapScreenState extends State<MapScreen> {
   // a duplicated text-only parser here previously misclassified all
   // MODIS numeric-confidence points as low, filtering out every marker.
   bool _isLowConfidence(FirePoint p) => p.riskTier == 'low';
+
+  /// Diameter this event should be drawn at right now. The base size comes
+  /// from the category and is scaled by zoom, so a country view stays a map
+  /// with fires on it rather than a field of discs with a map somewhere
+  /// underneath.
+  double _incidentMarkerSize(IncidentStatus status) {
+    return (status.markerSize * (_currentZoom / 7.0)).clamp(
+      status.minMarkerSize,
+      status.maxMarkerSize,
+    );
+  }
+
+  /// One marker per event: a filled disc, ringed in white so it stays legible
+  /// over both the pale steppe and the dark forest of the basemap.
+  ///
+  /// The category icon is only drawn once the disc is big enough to hold it.
+  /// Below roughly 20 px a glyph inside a circle is a smudge, and a smudge
+  /// that pretends to be a symbol is worse than a clean dot — the colour and
+  /// size already carry the category, and the legend and the detail sheet
+  /// carry the icon at a size where it can actually be read.
+  Widget _buildIncidentMarker(FireIncident incident) {
+    final status = incident.status;
+    final size = _incidentMarkerSize(status);
+    final showIcon = size >= 20;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: status.color.withValues(alpha: status.fillOpacity),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.9),
+          width: size >= 18 ? 1.6 : 1.1,
+        ),
+        boxShadow: status == IncidentStatus.activeDetection
+            ? [
+                BoxShadow(
+                  color: AppColors.danger.withValues(alpha: 0.45),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
+      ),
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: showIcon
+            ? Icon(status.icon, color: Colors.white, size: size * 0.56)
+            : null,
+      ),
+    );
+  }
+
+  /// Marker key to event, so the cluster builder can see what it is hiding
+  /// without the marker having to carry the model around.
+  final Map<Key?, FireIncident> _incidentByMarkerKey = {};
+
+  /// The most severe status inside a cluster. A bubble hiding one actively
+  /// burning fire among ninety quiet ones has to read as urgent, not average.
+  IncidentStatus _clusterStatus(List<Marker> markers) {
+    var worst = IncidentStatus.lowConfidence;
+    for (final marker in markers) {
+      final status = _incidentByMarkerKey[marker.key]?.status;
+      if (status == null) continue;
+      if (status.index < worst.index) worst = status;
+    }
+    return worst;
+  }
+
+  /// Cluster bubbles grow with how much they are hiding, sub-linearly so a
+  /// group of ninety is visibly heavier than a group of two without being
+  /// forty-five times the area. A fixed size made "2" and "90" identical,
+  /// which is the one thing a cluster count exists to distinguish.
+  double _clusterDiameter(int count) {
+    final grown = 26 + 9 * (math.log(count.clamp(1, 500)) / math.ln10) * 1.6;
+    return grown.clamp(26.0, 52.0);
+  }
+
+  /// The bubble itself is neutral slate with a status-coloured rim rather than
+  /// a solid status-coloured disc. Filled bubbles turned the whole country
+  /// into one orange mass that the real markers then had to compete with;
+  /// keeping clusters achromatic leaves saturated colour to mean "a fire",
+  /// not "some fires are somewhere near here".
+  Widget _buildIncidentCluster(List<Marker> markers) {
+    final status = _clusterStatus(markers);
+    final size = _clusterDiameter(markers.length);
+    return Center(
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B).withValues(alpha: 0.94),
+          shape: BoxShape.circle,
+          border: Border.all(color: status.color, width: size >= 36 ? 3 : 2.2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.28),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            markers.length.toString(),
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: size >= 40 ? 15 : 12.5,
+              fontWeight: FontWeight.w800,
+              height: 1,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String? _cityNameFor(FireIncident incident) {
+    for (final point in _firePoints) {
+      if (point.cityName == null) continue;
+      final dLat = (point.latitude - incident.latitude).abs();
+      final dLng = (point.longitude - incident.longitude).abs();
+      if (dLat < 0.25 && dLng < 0.25) return point.cityName;
+    }
+    return null;
+  }
 
   List<FirePoint> get _visibleFirePoints => _confidenceFilterActive
       ? _firePoints.where((p) => !_isLowConfidence(p)).toList()
@@ -849,6 +1043,50 @@ class _MapScreenState extends State<MapScreen> {
                                           ),
                                         ],
                                       ),
+                                    if (_showIncidents)
+                                      MarkerClusterLayerWidget(
+                                        options: MarkerClusterLayerOptions(
+                                          maxClusterRadius: 72,
+                                          size: const Size(52, 52),
+                                          computeSize: (markers) {
+                                            final d = _clusterDiameter(
+                                              markers.length,
+                                            );
+                                            return Size(d, d);
+                                          },
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.all(40),
+                                          markers: _visibleIncidents.map((
+                                            incident,
+                                          ) {
+                                            final key =
+                                                ValueKey<String>('incident-${incident.id}');
+                                            _incidentByMarkerKey[key] = incident;
+                                            return Marker(
+                                              key: key,
+                                              point: LatLng(
+                                                incident.latitude,
+                                                incident.longitude,
+                                              ),
+                                              width: 48,
+                                              height: 48,
+                                              child: GestureDetector(
+                                                onTap: () => IncidentSheet.show(
+                                                  context,
+                                                  incident: incident,
+                                                  cityName: _cityNameFor(incident),
+                                                ),
+                                                child: Center(
+                                                  child: _buildIncidentMarker(incident),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          builder: (context, markers) =>
+                                              _buildIncidentCluster(markers),
+                                        ),
+                                      )
+                                    else
                                     MarkerClusterLayerWidget(
                                       options: MarkerClusterLayerOptions(
                                         maxClusterRadius: 45,
@@ -905,6 +1143,83 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                     ),
                                   ),
+                                if (_incidents.isNotEmpty)
+                                  Positioned(
+                                    left: 12,
+                                    top: 12,
+                                    right: 12,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GlassPanel(
+                                          padding: const EdgeInsets.all(4),
+                                          radius: AppSpacing.pillRadius,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              _LayerChip(
+                                                label: l10n.incidentToggleShow,
+                                                icon: Icons
+                                                    .local_fire_department_rounded,
+                                                selected: _showIncidents,
+                                                onTap: () => setState(
+                                                  () => _showIncidents = true,
+                                                ),
+                                              ),
+                                              _LayerChip(
+                                                label: l10n
+                                                    .incidentToggleDetections,
+                                                icon: Icons.grain_rounded,
+                                                selected: !_showIncidents,
+                                                onTap: () => setState(
+                                                  () => _showIncidents = false,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        if (_showIncidents) ...[
+                                          const SizedBox(height: 6),
+                                          // Scrollable because "Tespiti sona
+                                          // ermiş" is a long label and the
+                                          // honest label is worth more than a
+                                          // row that never scrolls.
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: GlassPanel(
+                                              padding: const EdgeInsets.all(3),
+                                              radius: AppSpacing.pillRadius,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: IncidentFilter.values
+                                                    .map(
+                                                      (filter) => _FilterChip(
+                                                        label: filter.label(
+                                                          l10n,
+                                                        ),
+                                                        count:
+                                                            _incidentCountFor(
+                                                              filter,
+                                                            ),
+                                                        selected:
+                                                            _incidentFilter ==
+                                                            filter,
+                                                        onTap: () =>
+                                                            _setIncidentFilter(
+                                                              filter,
+                                                            ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+
                                 if (_errorMessage != null)
                                   Positioned(
                                     left: 12,
@@ -1082,35 +1397,47 @@ class _MapScreenState extends State<MapScreen> {
                                                     CrossAxisAlignment.start,
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  Text(
-                                                    l10n.legendProbableFire,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: titleColor,
+                                                  // One legend at a time. The
+                                                  // two layers use different
+                                                  // symbols for different
+                                                  // things, and stacking both
+                                                  // keys produced six rows
+                                                  // with "low confidence"
+                                                  // appearing twice, meaning
+                                                  // two different things.
+                                                  if (_showIncidents)
+                                                    const IncidentLegend()
+                                                  else ...[
+                                                    Text(
+                                                      l10n.legendProbableFire,
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: titleColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    l10n.legendHighThermal,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: titleColor,
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      l10n.legendHighThermal,
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: titleColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    l10n.legendLowConfidence,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: titleColor,
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      l10n.legendLowConfidence,
+                                                      style: GoogleFonts.inter(
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: titleColor,
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ],
                                               ),
                                             )
@@ -1465,6 +1792,105 @@ class _DetailRow extends StatelessWidget {
         ),
         ?info,
       ],
+    );
+  }
+}
+
+/// One half of the layer switch. Deliberately plain: a filled pill when
+/// selected, nothing when not, so the control reads instantly at a glance and
+/// never competes with the map itself.
+/// Compact, icon-free sibling of [_LayerChip]. The count sits inside the chip
+/// because "Aktif" alone gives no sense of whether the empty-looking map is
+/// empty because nothing is burning or because the filter is hiding things.
+class _FilterChip extends StatelessWidget {
+  final String label;
+  final int count;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FilterChip({
+    required this.label,
+    required this.count,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final idle = isDark
+        ? AppColors.white.withValues(alpha: 0.66)
+        : Colors.black.withValues(alpha: 0.6);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        ),
+        child: Text(
+          '$label · $count',
+          style: GoogleFonts.inter(
+            fontSize: 11.5,
+            fontWeight: FontWeight.w700,
+            color: selected ? Colors.white : idle,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LayerChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _LayerChip({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final idle = isDark
+        ? AppColors.white.withValues(alpha: 0.66)
+        : Colors.black.withValues(alpha: 0.6);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: selected ? Colors.white : idle),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700,
+                color: selected ? Colors.white : idle,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

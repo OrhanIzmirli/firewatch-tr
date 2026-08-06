@@ -2652,4 +2652,171 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get notificationScopeNarrowWarning =>
       'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.';
+
+  @override
+  String get incidentsSectionTitle => 'Yangın Olayları';
+
+  @override
+  String get incidentsSectionSubtitle => 'Uydu tespitleri olaylara gruplanmış';
+
+  @override
+  String get incidentStatusActive => 'Aktif tespit';
+
+  @override
+  String get incidentStatusAwaiting => 'Tespit bekleniyor';
+
+  @override
+  String get incidentStatusLowConfidence => 'Düşük güvenilirlik';
+
+  @override
+  String incidentDetectedHoursAgo(String hours) {
+    return 'Son $hours saat içinde tespit edildi';
+  }
+
+  @override
+  String incidentNoDetectionFor(String hours) {
+    return '$hours saattir uydu tespiti yok';
+  }
+
+  @override
+  String incidentNoDetectionLowConfidence(String hours) {
+    return '$hours saattir uydu tespiti yok, düşük güvenilirlik';
+  }
+
+  @override
+  String incidentDurationOngoing(String hours) {
+    return '$hours saattir tespit ediliyor';
+  }
+
+  @override
+  String get incidentDurationShort => 'Tek geçişte tespit edildi';
+
+  @override
+  String incidentEvidence(int detections, int passes) {
+    return '$detections tespit, $passes uydu geçişi';
+  }
+
+  @override
+  String get incidentHeatLabel => 'Isı şiddeti';
+
+  @override
+  String get incidentHeatLow => 'Düşük';
+
+  @override
+  String get incidentHeatModerate => 'Orta';
+
+  @override
+  String get incidentHeatHigh => 'Yüksek';
+
+  @override
+  String get incidentHeatVeryHigh => 'Çok yüksek';
+
+  @override
+  String get incidentSpreadTitle => 'Yayılma (tahmini)';
+
+  @override
+  String incidentSpreadLine(String direction, String meters) {
+    return '$direction, saatte ~$meters metre';
+  }
+
+  @override
+  String get incidentSpreadEstimateNote =>
+      'Uydu tespit deseninin kaymasından hesaplanır; yangının gerçek ilerleyişi farklı olabilir.';
+
+  @override
+  String get incidentToggleShow => 'Olaylar';
+
+  @override
+  String get incidentToggleDetections => 'Tespitler';
+
+  @override
+  String get incidentFilterActive => 'Aktif';
+
+  @override
+  String get incidentFilterEnded => 'Tespiti sona ermiş';
+
+  @override
+  String get incidentFilterAll => 'Tümü';
+
+  @override
+  String get homeLast24hTitle => 'Son 24 Saat';
+
+  @override
+  String get homeLast24hSubtitle => 'Uydu tespitlerinin özeti';
+
+  @override
+  String get homeLast24hActiveTitle => 'Aktif tespit';
+
+  @override
+  String homeLast24hActiveSubtitle(int hours) {
+    return 'Son $hours saat içinde uydu tarafından görüldü';
+  }
+
+  @override
+  String get homeLast24hEndedTitle => 'Tespiti sona eren';
+
+  @override
+  String get homeLast24hEndedSubtitle => 'Söndüğü anlamına gelmez.';
+
+  @override
+  String get homeLast24hLongestTitle => 'En uzun süren';
+
+  @override
+  String get homeLast24hLongestSubtitle =>
+      'İlk tespitten bu yana, halen tespit ediliyor';
+
+  @override
+  String durationHoursShort(int hours) {
+    return '$hours sa';
+  }
+
+  @override
+  String durationDaysHours(int days, int hours) {
+    return '$days g $hours sa';
+  }
+
+  @override
+  String get incidentsEmpty => 'Bu aralıkta gruplanmış yangın olayı yok.';
+
+  @override
+  String incidentsCount(int count) {
+    return '$count olay';
+  }
+
+  @override
+  String get incidentPanelTitle => 'Yangın Olayı';
+
+  @override
+  String get incidentOfficialTitle => 'Resmî durum';
+
+  @override
+  String get incidentSatelliteLimitNote =>
+      'Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.';
+
+  @override
+  String get incidentLegendTitle => 'Harita göstergesi';
+
+  @override
+  String get compassTowardsNorth => 'kuzeye doğru';
+
+  @override
+  String get compassTowardsNorthEast => 'kuzeydoğuya doğru';
+
+  @override
+  String get compassTowardsEast => 'doğuya doğru';
+
+  @override
+  String get compassTowardsSouthEast => 'güneydoğuya doğru';
+
+  @override
+  String get compassTowardsSouth => 'güneye doğru';
+
+  @override
+  String get compassTowardsSouthWest => 'güneybatıya doğru';
+
+  @override
+  String get compassTowardsWest => 'batıya doğru';
+
+  @override
+  String get compassTowardsNorthWest => 'kuzeybatıya doğru';
 }

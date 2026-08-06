@@ -171,4 +171,38 @@ void main() {
       expect(gappy.looksLikeFixedSource, isFalse);
     });
   });
+
+  group('IncidentSource labels', () {
+    // FIRMS ships platform codes, not names. Every code observed in the live
+    // feed must map to something a reader recognises, or the panel shows
+    // "VIIRS · N20" and the transparency work achieves nothing.
+    test('maps every platform code seen in the live feed', () {
+      const seen = {
+        'N': 'Suomi-NPP',
+        'N20': 'NOAA-20',
+        'N21': 'NOAA-21',
+        'Terra': 'Terra',
+        'Aqua': 'Aqua',
+      };
+      seen.forEach((code, name) {
+        final s = IncidentSource(product: 'VIIRS_SNPP_NRT', satellite: code, count: 1);
+        expect(s.platform, name, reason: 'platform code $code');
+      });
+    });
+
+    test('names the instrument from the product, and survives an unknown one', () {
+      expect(
+        const IncidentSource(product: 'MODIS_NRT', satellite: 'Terra', count: 3).label,
+        'MODIS · Terra',
+      );
+      expect(
+        const IncidentSource(product: 'VIIRS_NOAA21_NRT', satellite: 'N21', count: 2).label,
+        'VIIRS · NOAA-21',
+      );
+      // An unrecognised code must not crash or print "null".
+      final unknown =
+          const IncidentSource(product: 'VIIRS_SNPP_NRT', satellite: null, count: 1);
+      expect(unknown.label, 'VIIRS');
+    });
+  });
 }

@@ -121,6 +121,20 @@ class IncidentSheet extends StatelessWidget {
               _SpreadCard(incident: incident, titleColor: titleColor, bodyColor: bodyColor),
             ],
 
+            // Which instruments actually saw this. The evidence line above
+            // gives a count; this says where the count came from, so
+            // "21 detections" can be checked rather than believed.
+            if (incident.sources.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              _Line(
+                icon: Icons.sensors_rounded,
+                text: incident.sources
+                    .map((s) => '${s.label} (${s.count})')
+                    .join(' · '),
+                color: bodyColor,
+              ),
+            ],
+
             // An observation, not a verdict, and never a reason to hide the
             // event. "May be" is the honest strength of this evidence.
             if (incident.looksLikeFixedSource) ...[

@@ -997,6 +997,51 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsLanguageEnglish => 'English';
 
   @override
+  String get dataSourcesTitle => 'Veri kaynakları';
+
+  @override
+  String get dataSourcesEntry => 'Veri kaynakları';
+
+  @override
+  String get dataSourcesEntrySubtitle =>
+      'Rakamlar nereden geliyor, neyi ifade etmiyor';
+
+  @override
+  String get dataSourcesSatelliteTitle => 'Uydu tespitleri — ölçülen';
+
+  @override
+  String get dataSourcesSatelliteBody =>
+      'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.';
+
+  @override
+  String get dataSourcesGroupingTitle => 'Olaylar — hesaplanan';
+
+  @override
+  String get dataSourcesGroupingBody =>
+      'Aynı yangının pikselleri geçişler boyunca 1,2 km yarıçapta kümelenip tek bir olaya dönüştürülür. Süre, geçiş sayısı ve tepe güç bu gruplamadan gelir. Süre iki günlük veri penceresiyle sınırlıdır; bu yüzden her yerde \"en az\" diye yazılır — bir aydır yanan bir kaynak da yaklaşık bir gün gösterir.';
+
+  @override
+  String get dataSourcesDerivedTitle => 'Türetilen — ölçüm değil';
+
+  @override
+  String get dataSourcesDerivedBody =>
+      'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: yangın o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.';
+
+  @override
+  String get dataSourcesNotKnownTitle => 'Bilinmeyen';
+
+  @override
+  String get dataSourcesNotKnownBody =>
+      'Bir yangının söndüğü, kontrol altına alındığı veya güvenli olduğu uydudan çıkarılamaz. Uydu bulut ve duman altını göremez; tespit olmaması yalnızca uydunun görmediği anlamına gelir. Bu uygulama böyle bir iddiada bulunmaz — yalnızca resmi bir kaynak doğrularsa, kaynağıyla birlikte gösterilir.';
+
+  @override
+  String get dataSourcesWeatherTitle => 'Bölgesel risk — ayrı bir kaynak';
+
+  @override
+  String get dataSourcesWeatherBody =>
+      'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.';
+
+  @override
   String get settingsAppInfo => 'Uygulama Bilgisi';
 
   @override
@@ -1696,7 +1741,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String fireDetailAreaMeasured(int hectares) {
-    return '~$hectares hektar (NASA uydu ölçümü)';
+    return 'Tespit pikseli ~$hectares hektar (yangının kendisi değil)';
   }
 
   @override
@@ -2225,6 +2270,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.';
 
   @override
+  String smartPixelFootprint(int hectares) {
+    return 'Uydu pikseli ~$hectares hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.';
+  }
+
+  @override
   String smartAreaLarge(int hectares) {
     return 'Tahmini yangın alanı geniş (~$hectares hektar).';
   }
@@ -2248,14 +2298,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get smartSpreadDangerous =>
-      'Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.';
+      'Bölgenin güncel risk skoru yüksek (düşük nem, güçlü rüzgar) — bu yangına özel bir ölçüm değil.';
 
   @override
-  String get smartSpreadModerate => 'Bölgedeki yayılma riski orta düzeyde.';
+  String get smartSpreadModerate =>
+      'Bölgenin güncel risk skoru orta düzeyde — bu yangına özel bir ölçüm değil.';
 
   @override
   String get smartSpreadLow =>
-      'Bölgedeki koşullar yayılma için pek uygun değil.';
+      'Bölgenin güncel risk skoru düşük — bu yangına özel bir ölçüm değil.';
 
   @override
   String smartTimeJustNow(String satellite) {

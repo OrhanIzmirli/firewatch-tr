@@ -45,11 +45,14 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
       ? l10n.mapKmAway(point.distanceKm!.toStringAsFixed(1))
       : point.locationLabelText(l10n);
 
-  // Gerçek etkilenen alan — NASA'nın scan × track piksel boyutu alanlarından
-  // (km cinsinden) hesaplanır, brightness tahmini değil.
-  final areaKm2 = point.scanKm * point.trackKm;
-  final hectares = (areaKm2 * 100).round();
-  final affectedArea = areaKm2 > 0
+  // scan x track is the size of the SATELLITE PIXEL, not of the burnt area.
+  // Nothing in FIRMS measures how much ground is on fire; this is the
+  // resolution the detection was made at, and the label says so. It was
+  // previously published as "~N hectares (NASA satellite measurement)",
+  // which attributed to NASA a measurement NASA does not make.
+  final pixelKm2 = point.scanKm * point.trackKm;
+  final hectares = (pixelKm2 * 100).round();
+  final affectedArea = pixelKm2 > 0
       ? l10n.fireDetailAreaMeasured(hectares)
       : l10n.homeAreaInsufficientRes;
 

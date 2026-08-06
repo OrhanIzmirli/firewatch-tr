@@ -12,6 +12,7 @@ import '../features/notification_permission/notification_permission_screen.dart'
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/risk/risk_screen.dart';
 import '../features/safety/safety_guide_screen.dart';
+import '../features/settings/data_sources_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/watchlist/watchlist_screen.dart';
 import '../models/fire_event.dart';
@@ -113,6 +114,10 @@ class AppRouter {
       GoRoute(
         path: '/risk',
         builder: (context, state) => RiskScreen(highlightRegion: state.extra as String?),
+      ),
+      GoRoute(
+        path: '/data-sources',
+        builder: (context, state) => const DataSourcesScreen(),
       ),
       GoRoute(
         path: '/safety-guide',

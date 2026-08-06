@@ -28,6 +28,11 @@ class FireIncident {
   final String? cityName;
   final String? regionKey;
 
+  /// Which FIRMS products and satellites contributed detections, and how
+  /// many each. Empty when the backend predates this field or when the raw
+  /// detections have aged past the 90-day prune.
+  final List<IncidentSource> sources;
+
   /// What the satellite saw. Can never say a fire is out.
   final String satelliteState;
   final double hoursSinceLastDetection;
@@ -63,6 +68,7 @@ class FireIncident {
     this.cityId,
     this.cityName,
     this.regionKey,
+    this.sources = const [],
     this.opticalBurntAreaHa,
     this.opticalSource,
     this.officialState,
@@ -91,6 +97,10 @@ class FireIncident {
       peakConfidenceTier: json['peak_confidence_tier'] as String?,
       cityId: (json['city_id'] as num?)?.toInt(),
       cityName: json['city_name'] as String?,
+      sources: ((json['sources'] as List?) ?? const [])
+          .whereType<Map>()
+          .map((e) => IncidentSource.fromJson(e.cast<String, dynamic>()))
+          .toList(),
       regionKey: json['region_key'] as String?,
       satelliteState: satellite['state'] as String? ?? 'no_recent_detection',
       hoursSinceLastDetection: _toDouble(satellite['hours_since_last_detection']) ?? 0,
@@ -154,6 +164,61 @@ class FireIncident {
       spreadConfidence != 'insufficient' &&
       spreadBearingDeg != null &&
       spreadSpeedMh != null;
+}
+
+/// One instrument's contribution to an incident.
+class IncidentSource {
+  /// FIRMS product identifier, e.g. VIIRS_SNPP_NRT.
+  final String product;
+
+  /// Platform, e.g. N (Suomi-NPP), N20, Terra, Aqua. Null in older rows.
+  final String? satellite;
+
+  final int count;
+
+  const IncidentSource({
+    required this.product,
+    required this.count,
+    this.satellite,
+  });
+
+  factory IncidentSource.fromJson(Map<String, dynamic> json) => IncidentSource(
+        product: json['product'] as String? ?? '',
+        satellite: json['satellite'] as String?,
+        count: (json['count'] as num?)?.toInt() ?? 0,
+      );
+
+  /// Instrument name as a reader recognises it, derived from the product id
+  /// rather than invented: FIRMS names its products after the instrument.
+  String get instrument {
+    final p = product.toUpperCase();
+    if (p.contains('VIIRS')) return 'VIIRS';
+    if (p.contains('MODIS')) return 'MODIS';
+    return product.isEmpty ? '?' : product;
+  }
+
+  /// Platform label, expanded only where FIRMS' own code is unambiguous.
+  String get platform {
+    switch (satellite) {
+      case 'N':
+        return 'Suomi-NPP';
+      case 'N20':
+        return 'NOAA-20';
+      case 'N21':
+        return 'NOAA-21';
+      case 'Terra':
+        return 'Terra';
+      case 'Aqua':
+        return 'Aqua';
+      default:
+        return satellite ?? '';
+    }
+  }
+
+  String get label {
+    final p = platform;
+    return p.isEmpty ? instrument : '$instrument · $p';
+  }
 }
 
 /// The three states a fire event can be shown in.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/api_config.dart';
@@ -245,6 +246,73 @@ class SettingsScreen extends ConsumerWidget {
                   begin: const Offset(0.98, 0.98),
                   end: const Offset(1, 1),
                 ),
+
+            const SizedBox(height: AppSpacing.xxl),
+
+            GlassPanel(
+                  padding: EdgeInsets.zero,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(
+                      AppSpacing.largeCardRadius,
+                    ),
+                    onTap: () => context.push('/data-sources'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.fact_check_outlined,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10n.dataSourcesEntry,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: titleColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  l10n.dataSourcesEntrySubtitle,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12.5,
+                                    height: 1.35,
+                                    color: isDark
+                                        ? AppColors.white.withValues(alpha: 0.6)
+                                        : Colors.black.withValues(alpha: 0.55),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 14,
+                            color: titleColor.withValues(alpha: 0.4),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                .animate(delay: 185.ms)
+                .fadeIn(duration: 280.ms)
+                .slideY(begin: 0.05, end: 0),
 
             const SizedBox(height: AppSpacing.xxl),
 

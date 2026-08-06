@@ -1856,6 +1856,84 @@ abstract class AppLocalizations {
   /// **'English'**
   String get settingsLanguageEnglish;
 
+  /// No description provided for @dataSourcesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri kaynakları'**
+  String get dataSourcesTitle;
+
+  /// No description provided for @dataSourcesEntry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri kaynakları'**
+  String get dataSourcesEntry;
+
+  /// No description provided for @dataSourcesEntrySubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rakamlar nereden geliyor, neyi ifade etmiyor'**
+  String get dataSourcesEntrySubtitle;
+
+  /// No description provided for @dataSourcesSatelliteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu tespitleri — ölçülen'**
+  String get dataSourcesSatelliteTitle;
+
+  /// No description provided for @dataSourcesSatelliteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.'**
+  String get dataSourcesSatelliteBody;
+
+  /// No description provided for @dataSourcesGroupingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olaylar — hesaplanan'**
+  String get dataSourcesGroupingTitle;
+
+  /// No description provided for @dataSourcesGroupingBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı yangının pikselleri geçişler boyunca 1,2 km yarıçapta kümelenip tek bir olaya dönüştürülür. Süre, geçiş sayısı ve tepe güç bu gruplamadan gelir. Süre iki günlük veri penceresiyle sınırlıdır; bu yüzden her yerde \"en az\" diye yazılır — bir aydır yanan bir kaynak da yaklaşık bir gün gösterir.'**
+  String get dataSourcesGroupingBody;
+
+  /// No description provided for @dataSourcesDerivedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türetilen — ölçüm değil'**
+  String get dataSourcesDerivedTitle;
+
+  /// No description provided for @dataSourcesDerivedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: yangın o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.'**
+  String get dataSourcesDerivedBody;
+
+  /// No description provided for @dataSourcesNotKnownTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmeyen'**
+  String get dataSourcesNotKnownTitle;
+
+  /// No description provided for @dataSourcesNotKnownBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir yangının söndüğü, kontrol altına alındığı veya güvenli olduğu uydudan çıkarılamaz. Uydu bulut ve duman altını göremez; tespit olmaması yalnızca uydunun görmediği anlamına gelir. Bu uygulama böyle bir iddiada bulunmaz — yalnızca resmi bir kaynak doğrularsa, kaynağıyla birlikte gösterilir.'**
+  String get dataSourcesNotKnownBody;
+
+  /// No description provided for @dataSourcesWeatherTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel risk — ayrı bir kaynak'**
+  String get dataSourcesWeatherTitle;
+
+  /// No description provided for @dataSourcesWeatherBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.'**
+  String get dataSourcesWeatherBody;
+
   /// No description provided for @settingsAppInfo.
   ///
   /// In tr, this message translates to:
@@ -3082,7 +3160,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireDetailAreaMeasured.
   ///
   /// In tr, this message translates to:
-  /// **'~{hectares} hektar (NASA uydu ölçümü)'**
+  /// **'Tespit pikseli ~{hectares} hektar (yangının kendisi değil)'**
   String fireDetailAreaMeasured(int hectares);
 
   /// No description provided for @fireDetailWindLoading.
@@ -3950,6 +4028,12 @@ abstract class AppLocalizations {
   /// **'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.'**
   String get smartFrpHigh;
 
+  /// No description provided for @smartPixelFootprint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu pikseli ~{hectares} hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.'**
+  String smartPixelFootprint(int hectares);
+
   /// No description provided for @smartAreaLarge.
   ///
   /// In tr, this message translates to:
@@ -3983,19 +4067,19 @@ abstract class AppLocalizations {
   /// No description provided for @smartSpreadDangerous.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgedeki düşük nem ve güçlü rüzgar nedeniyle yayılma riski yüksek.'**
+  /// **'Bölgenin güncel risk skoru yüksek (düşük nem, güçlü rüzgar) — bu yangına özel bir ölçüm değil.'**
   String get smartSpreadDangerous;
 
   /// No description provided for @smartSpreadModerate.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgedeki yayılma riski orta düzeyde.'**
+  /// **'Bölgenin güncel risk skoru orta düzeyde — bu yangına özel bir ölçüm değil.'**
   String get smartSpreadModerate;
 
   /// No description provided for @smartSpreadLow.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgedeki koşullar yayılma için pek uygun değil.'**
+  /// **'Bölgenin güncel risk skoru düşük — bu yangına özel bir ölçüm değil.'**
   String get smartSpreadLow;
 
   /// No description provided for @smartTimeJustNow.

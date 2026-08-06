@@ -458,16 +458,19 @@ class FirePoint {
     }
     sentences.add(buffer.toString());
 
-    // 2. FRP / estimated area — supporting evidence for intensity.
+    // 2. FRP, and the resolution limit — NOT the size of the fire.
     if (frp > 100) {
       sentences.add(l10n.smartFrpHigh);
     }
-    final areaKm2 = scanKm * trackKm;
-    final hectares = (areaKm2 * 100).round();
-    if (areaKm2 > 1.0) {
-      sentences.add(l10n.smartAreaLarge(hectares));
-    } else if (areaKm2 > 0.1) {
-      sentences.add(l10n.smartAreaMedium(hectares));
+    // scan x track is the footprint of the SATELLITE PIXEL, not of the fire.
+    // This used to be published as "estimated fire area is large/medium
+    // (~N hectares)", which was an invention: the number describes the
+    // instrument, and it grows toward the edge of the swath, so an identical
+    // fire reported a larger "area" purely because of viewing geometry. It
+    // is now stated as what it is — the box the fire is somewhere inside.
+    final pixelHectares = (scanKm * trackKm * 100).round();
+    if (pixelHectares > 0) {
+      sentences.add(l10n.smartPixelFootprint(pixelHectares));
     }
 
     // 3. NASA detection confidence.

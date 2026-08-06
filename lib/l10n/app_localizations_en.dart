@@ -1001,6 +1001,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageEnglish => 'English';
 
   @override
+  String get dataSourcesTitle => 'Data sources';
+
+  @override
+  String get dataSourcesEntry => 'Data sources';
+
+  @override
+  String get dataSourcesEntrySubtitle =>
+      'Where the numbers come from, and what they do not mean';
+
+  @override
+  String get dataSourcesSatelliteTitle => 'Satellite detections — measured';
+
+  @override
+  String get dataSourcesSatelliteBody =>
+      'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) and MODIS (Terra, Aqua), passing over several times a day. Each detection is one hot pixel: its position, radiative power (FRP, in megawatts), brightness temperature and NASA\'s own confidence tier are measured values. An event\'s panel lists which product contributed how many detections.';
+
+  @override
+  String get dataSourcesGroupingTitle => 'Events — computed';
+
+  @override
+  String get dataSourcesGroupingBody =>
+      'Pixels of the same fire are clustered within 1.2 km across passes into a single event. Duration, pass count and peak power come from that grouping. Duration is capped by the two-day data window, which is why it is always written as \"at least\" — a source burning for a month still reports about a day.';
+
+  @override
+  String get dataSourcesDerivedTitle => 'Derived — not measured';
+
+  @override
+  String get dataSourcesDerivedBody =>
+      'Spread direction and speed are computed from how the centre of the detection pattern shifted; the fire\'s real movement may differ. \"Detection pixel ~N hectares\" is the satellite\'s resolution, not the burnt area: the fire is somewhere inside that pixel and its real size is unknown. That figure grows with the satellite\'s viewing angle, not with the fire.';
+
+  @override
+  String get dataSourcesNotKnownTitle => 'Not knowable';
+
+  @override
+  String get dataSourcesNotKnownBody =>
+      'Whether a fire is out, contained or safe cannot be derived from satellite data. Satellites cannot see through cloud or smoke, so no detection means only that nothing was seen. This app makes no such claim — it appears only when an official source confirms it, shown with that source.';
+
+  @override
+  String get dataSourcesWeatherTitle => 'Regional risk — a separate source';
+
+  @override
+  String get dataSourcesWeatherBody =>
+      'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave.';
+
+  @override
   String get settingsAppInfo => 'App Information';
 
   @override
@@ -1700,7 +1745,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String fireDetailAreaMeasured(int hectares) {
-    return '~$hectares hectares (NASA satellite measurement)';
+    return 'Detection pixel ~$hectares hectares (not the fire itself)';
   }
 
   @override
@@ -2230,6 +2275,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'A high Fire Radiative Power (FRP) reading indicates significant energy release.';
 
   @override
+  String smartPixelFootprint(int hectares) {
+    return 'The satellite pixel is ~$hectares hectares; the fire is somewhere inside it and its real size is unknown.';
+  }
+
+  @override
   String smartAreaLarge(int hectares) {
     return 'Estimated fire area is large (~$hectares hectares).';
   }
@@ -2253,14 +2303,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartSpreadDangerous =>
-      'Low humidity and strong winds in the region create dangerous spread conditions.';
+      'The region\'s current risk score is high (low humidity, strong wind) — not a measurement of this fire.';
 
   @override
-  String get smartSpreadModerate => 'Spread risk in the region is moderate.';
+  String get smartSpreadModerate =>
+      'The region\'s current risk score is moderate — not a measurement of this fire.';
 
   @override
   String get smartSpreadLow =>
-      'Conditions in the region aren\'t ideal for spread.';
+      'The region\'s current risk score is low — not a measurement of this fire.';
 
   @override
   String smartTimeJustNow(String satellite) {

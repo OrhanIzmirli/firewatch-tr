@@ -144,7 +144,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             SmartOverviewCard(
               title: l10n.homeLast24hActiveTitle,
               value: summary.activeCount.toString(),
-              subtitle: l10n.homeLast24hActiveSubtitle(
+              // Two layers on purpose. The raw count grows through the fire
+              // season and reads as a fire count, but most of it is single
+              // fresh pixels that have not had a second overpass yet. The
+              // map still shows all of them — asymmetric caution holds
+              // there — but a headline number is a different claim.
+              subtitle: l10n.homeLast24hActiveSubtitleLayered(
+                summary.activeSignificantCount,
                 summary.recentDetectionHours,
               ),
               icon: Icons.local_fire_department_rounded,

@@ -200,8 +200,8 @@ void main() {
         'VIIRS · NOAA-21',
       );
       // An unrecognised code must not crash or print "null".
-      final unknown =
-          const IncidentSource(product: 'VIIRS_SNPP_NRT', satellite: null, count: 1);
+      const unknown =
+          IncidentSource(product: 'VIIRS_SNPP_NRT', satellite: null, count: 1);
       expect(unknown.label, 'VIIRS');
     });
   });

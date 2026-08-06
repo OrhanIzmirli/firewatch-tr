@@ -11,6 +11,12 @@ class IncidentSummary {
   final int recentDetectionHours;
 
   final int activeCount;
+
+  /// How many of [activeCount] clear the evidence bar. The two are shown
+  /// together because the larger number alone reads as a count of fires,
+  /// when most of it is single fresh pixels awaiting a second overpass.
+  final int activeSignificantCount;
+
   final int detectionEndedLast24h;
 
   final int? strongestActiveId;
@@ -25,6 +31,7 @@ class IncidentSummary {
   const IncidentSummary({
     required this.recentDetectionHours,
     required this.activeCount,
+    required this.activeSignificantCount,
     required this.detectionEndedLast24h,
     this.strongestActiveId,
     this.strongestActiveCityName,
@@ -41,6 +48,8 @@ class IncidentSummary {
       recentDetectionHours:
           (json['recent_detection_hours'] as num?)?.toInt() ?? 6,
       activeCount: (json['active_count'] as num?)?.toInt() ?? 0,
+      activeSignificantCount:
+          (json['active_significant_count'] as num?)?.toInt() ?? 0,
       detectionEndedLast24h:
           (json['detection_ended_24h'] as num?)?.toInt() ?? 0,
       strongestActiveId: (strongest?['id'] as num?)?.toInt(),
@@ -92,6 +101,8 @@ class IncidentSummary {
     return IncidentSummary(
       recentDetectionHours: recentDetectionHours,
       activeCount: active.length,
+      activeSignificantCount:
+          active.where((i) => i.isSignificant).length,
       detectionEndedLast24h: endedRecently,
       strongestActiveId: strongest?.id,
       strongestActiveMaxFrpMw: strongest?.maxFrpMw,

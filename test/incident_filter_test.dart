@@ -7,6 +7,7 @@ FireIncident incident({
   int overpasses = 1,
   double? frp,
   String? tier = 'nominal',
+  double durationHours = 1,
 }) {
   return FireIncident(
     id: id,
@@ -14,7 +15,7 @@ FireIncident incident({
     longitude: 35,
     satelliteState: state,
     hoursSinceLastDetection: state == 'detected_recently' ? 2 : 30,
-    durationHours: 1,
+    durationHours: durationHours,
     detectionCount: 1,
     overpassCount: overpasses,
     spreadConfidence: 'insufficient',
@@ -117,6 +118,57 @@ void main() {
       // The one that must not reappear: no longer detected and never had
       // more than a single weak pixel behind it.
       expect(IncidentFilter.all.matches(endedThin), isFalse);
+    });
+  });
+
+  group('PersistentSourceHint', () {
+    // It flags; it never filters. These cases only control whether an extra
+    // line of context appears, never whether the event is on the map.
+    test('flags long-lived, weak, every-pass events', () {
+      final flare = incident(
+        id: 20,
+        state: 'detected_recently',
+        overpasses: 10,
+        frp: 4.35,
+        durationHours: 34.5,
+      );
+      expect(flare.looksLikeFixedSource, isTrue);
+    });
+
+    test('does not flag a powerful long-lived fire', () {
+      final bigFire = incident(
+        id: 21,
+        state: 'detected_recently',
+        overpasses: 5,
+        frp: 50.55,
+        tier: 'high',
+        durationHours: 21.1,
+      );
+      expect(bigFire.looksLikeFixedSource, isFalse);
+    });
+
+    test('does not flag a short event however weak', () {
+      final fresh = incident(
+        id: 22,
+        state: 'detected_recently',
+        overpasses: 1,
+        frp: 2,
+        durationHours: 0,
+      );
+      expect(fresh.looksLikeFixedSource, isFalse);
+    });
+
+    test('does not flag a long event with big gaps between passes', () {
+      // Two passes across 34 hours is a fire that cloud kept hiding, not
+      // something visible on every overpass.
+      final gappy = incident(
+        id: 23,
+        state: 'no_recent_detection',
+        overpasses: 2,
+        frp: 5,
+        durationHours: 34.5,
+      );
+      expect(gappy.looksLikeFixedSource, isFalse);
     });
   });
 }

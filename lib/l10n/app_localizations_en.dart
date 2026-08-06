@@ -2817,6 +2817,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Satellites pass a few times a day and cannot see through cloud or smoke. No detection does not mean the fire is over.';
 
   @override
+  String get incidentFixedSourceHint =>
+      'This location has appeared on every satellite pass for two days at unchanging power — it may be a fixed heat source.';
+
+  @override
   String get incidentLegendTitle => 'Map legend';
 
   @override

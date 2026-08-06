@@ -4940,6 +4940,12 @@ abstract class AppLocalizations {
   /// **'Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.'**
   String get incidentSatelliteLimitNote;
 
+  /// No description provided for @incidentFixedSourceHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.'**
+  String get incidentFixedSourceHint;
+
   /// No description provided for @incidentLegendTitle.
   ///
   /// In tr, this message translates to:

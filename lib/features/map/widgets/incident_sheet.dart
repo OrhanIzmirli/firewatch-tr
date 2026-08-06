@@ -121,6 +121,36 @@ class IncidentSheet extends StatelessWidget {
               _SpreadCard(incident: incident, titleColor: titleColor, bodyColor: bodyColor),
             ],
 
+            // An observation, not a verdict, and never a reason to hide the
+            // event. "May be" is the honest strength of this evidence.
+            if (incident.looksLikeFixedSource) ...[
+              const SizedBox(height: AppSpacing.xl),
+              GlassPanel(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.factory_outlined,
+                      size: 18,
+                      color: bodyColor,
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Text(
+                        l10n.incidentFixedSourceHint,
+                        style: GoogleFonts.inter(
+                          fontSize: 12.5,
+                          height: 1.5,
+                          color: bodyColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
             // Reads official.state but never invents it. Today this is always
             // null, so the section simply does not render.
             if (incident.hasOfficialStatus) ...[

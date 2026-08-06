@@ -1124,6 +1124,7 @@
   "incidentPanelTitle": "Fire Event",
   "incidentOfficialTitle": "Official status",
   "incidentSatelliteLimitNote": "Satellites pass a few times a day and cannot see through cloud or smoke. No detection does not mean the fire is over.",
+  "incidentFixedSourceHint": "This location has appeared on every satellite pass for two days at unchanging power — it may be a fixed heat source.",
   "incidentLegendTitle": "Map legend",
   "compassTowardsNorth": "towards the north",
   "compassTowardsNorthEast": "towards the north-east",

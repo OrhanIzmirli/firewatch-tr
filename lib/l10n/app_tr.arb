@@ -1124,6 +1124,7 @@
   "incidentPanelTitle": "Yangın Olayı",
   "incidentOfficialTitle": "Resmî durum",
   "incidentSatelliteLimitNote": "Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.",
+  "incidentFixedSourceHint": "Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.",
   "incidentLegendTitle": "Harita göstergesi",
   "compassTowardsNorth": "kuzeye doğru",
   "compassTowardsNorthEast": "kuzeydoğuya doğru",

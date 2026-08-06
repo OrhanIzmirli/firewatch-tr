@@ -126,6 +126,20 @@ class FireIncident {
   /// Whether this event cleared the evidence bar in [IncidentSignificance].
   bool get isSignificant => IncidentSignificance.isMet(this);
 
+  /// Whether this event looks more like a fixed heat source than a fire.
+  ///
+  /// This flags; it never hides. Labelling a real fire "industrial" and
+  /// removing it is worse than showing a flare stack, so the map keeps
+  /// everything and the detail panel adds an observation the reader can
+  /// weigh. The wording is deliberately "may be", because that is the
+  /// strength of the evidence.
+  ///
+  /// Caveat recorded in [persistentSourceHint]: duration is censored by the
+  /// ingest window, so this cannot distinguish "burned for a day" from
+  /// "burns permanently". Once the cluster job records distinct_days_seen
+  /// and FRP variance, this getter should be rewritten to use those instead.
+  bool get looksLikeFixedSource => PersistentSourceHint.isMet(this);
+
   /// True only when a named official source confirmed a state. Never inferred.
   bool get hasOfficialStatus => officialState != null && officialState!.isNotEmpty;
 
@@ -203,6 +217,45 @@ abstract final class IncidentSignificance {
       incident.overpassCount >= minOverpasses &&
       (incident.maxFrpMw ?? 0) >= minFrpMw &&
       incident.peakConfidenceTier != excludedConfidenceTier;
+}
+
+/// When the panel offers "this may be a fixed heat source" as an observation.
+///
+/// It is an observation, not a filter. Nothing here removes an event from the
+/// map: calling a real fire industrial and hiding it fails in the direction
+/// that gets people hurt, so where the evidence is ambiguous the event is
+/// shown and the ambiguity is stated.
+///
+/// Measured on 262 live incidents: 38 are long-lived and weak, only 3 are
+/// long-lived and powerful, so the two populations barely overlap on power.
+///
+/// KNOWN LIMITATION. The ingest window is two days, so duration is censored:
+/// the longest event in the entire feed is 34.5 h and the values pile up at
+/// 24.0 h (x19) and 24.8 h (x9). A gas flare burning for a month and a
+/// wildfire burning for three days both report ~24-34 h. "Duration >= 20 h"
+/// therefore means "seen on two different days" and can never mean more,
+/// which is why this only ever produces a hint and why the real answer is
+/// distinct_days_seen and FRP variance once the cluster job records them.
+abstract final class PersistentSourceHint {
+  /// Long enough to have been seen across two ingest days.
+  static const double minDurationHours = 20;
+
+  /// Fires this old that are still only putting out single-digit megawatts
+  /// are not behaving like fires.
+  static const double maxFrpMw = 10;
+
+  /// Overpasses per hour of duration: seen at least once every eight hours,
+  /// with no long gap where cloud or smoke hid it. A real fire is usually
+  /// missed on some passes.
+  static const double minOverpassesPerHour = 0.125;
+
+  static bool isMet(FireIncident incident) {
+    if (incident.durationHours < minDurationHours) return false;
+    if ((incident.maxFrpMw ?? 0) >= maxFrpMw) return false;
+    if (incident.durationHours <= 0) return false;
+    return incident.overpassCount / incident.durationHours >=
+        minOverpassesPerHour;
+  }
 }
 
 /// Which slice of events the map draws.

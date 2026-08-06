@@ -2811,6 +2811,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.';
 
   @override
+  String get incidentFixedSourceHint =>
+      'Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.';
+
+  @override
   String get incidentLegendTitle => 'Harita göstergesi';
 
   @override

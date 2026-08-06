@@ -2694,7 +2694,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String incidentDurationOngoing(String hours) {
-    return '$hours saattir tespit ediliyor';
+    return 'En az $hours saattir tespit ediliyor';
   }
 
   @override
@@ -2781,6 +2781,23 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get homeLast24hLongestSubtitle =>
       'İlk tespitten bu yana, halen tespit ediliyor';
+
+  @override
+  String get homeLast24hStrongestTitle => 'En şiddetli yangın';
+
+  @override
+  String homeLast24hStrongestPower(int mw) {
+    return '$mw MW';
+  }
+
+  @override
+  String get homeLast24hStrongestSubtitle =>
+      'Şu an en yüksek ısı gücü, halen tespit ediliyor';
+
+  @override
+  String homeLast24hStrongestSubtitleWithDuration(String duration) {
+    return 'En az $duration, halen tespit ediliyor';
+  }
 
   @override
   String durationHoursShort(int hours) {

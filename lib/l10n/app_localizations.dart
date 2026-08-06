@@ -4745,7 +4745,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentDurationOngoing.
   ///
   /// In tr, this message translates to:
-  /// **'{hours} saattir tespit ediliyor'**
+  /// **'En az {hours} saattir tespit ediliyor'**
   String incidentDurationOngoing(String hours);
 
   /// No description provided for @incidentDurationShort.
@@ -4897,6 +4897,30 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'İlk tespitten bu yana, halen tespit ediliyor'**
   String get homeLast24hLongestSubtitle;
+
+  /// No description provided for @homeLast24hStrongestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En şiddetli yangın'**
+  String get homeLast24hStrongestTitle;
+
+  /// No description provided for @homeLast24hStrongestPower.
+  ///
+  /// In tr, this message translates to:
+  /// **'{mw} MW'**
+  String homeLast24hStrongestPower(int mw);
+
+  /// No description provided for @homeLast24hStrongestSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an en yüksek ısı gücü, halen tespit ediliyor'**
+  String get homeLast24hStrongestSubtitle;
+
+  /// No description provided for @homeLast24hStrongestSubtitleWithDuration.
+  ///
+  /// In tr, this message translates to:
+  /// **'En az {duration}, halen tespit ediliyor'**
+  String homeLast24hStrongestSubtitleWithDuration(String duration);
 
   /// No description provided for @durationHoursShort.
   ///

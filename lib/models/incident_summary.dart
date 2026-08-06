@@ -13,32 +13,41 @@ class IncidentSummary {
   final int activeCount;
   final int detectionEndedLast24h;
 
-  final int? longestActiveId;
-  final String? longestActiveCityName;
-  final double? longestActiveDurationHours;
+  final int? strongestActiveId;
+  final String? strongestActiveCityName;
+  final double? strongestActiveMaxFrpMw;
+
+  /// A LOWER BOUND, not a measurement. The ingest window is two days, so an
+  /// incident burning for a month still reports about a day: the number says
+  /// "at least this long" and the UI must phrase it that way.
+  final double? strongestActiveDurationHoursAtLeast;
 
   const IncidentSummary({
     required this.recentDetectionHours,
     required this.activeCount,
     required this.detectionEndedLast24h,
-    this.longestActiveId,
-    this.longestActiveCityName,
-    this.longestActiveDurationHours,
+    this.strongestActiveId,
+    this.strongestActiveCityName,
+    this.strongestActiveMaxFrpMw,
+    this.strongestActiveDurationHoursAtLeast,
   });
 
-  bool get hasLongestActive => longestActiveDurationHours != null;
+  bool get hasStrongestActive => strongestActiveMaxFrpMw != null;
 
   factory IncidentSummary.fromJson(Map<String, dynamic> json) {
-    final longest = (json['longest_active'] as Map?)?.cast<String, dynamic>();
+    final strongest =
+        (json['strongest_active'] as Map?)?.cast<String, dynamic>();
     return IncidentSummary(
       recentDetectionHours:
           (json['recent_detection_hours'] as num?)?.toInt() ?? 6,
       activeCount: (json['active_count'] as num?)?.toInt() ?? 0,
       detectionEndedLast24h:
           (json['detection_ended_24h'] as num?)?.toInt() ?? 0,
-      longestActiveId: (longest?['id'] as num?)?.toInt(),
-      longestActiveCityName: longest?['city_name'] as String?,
-      longestActiveDurationHours: _toDouble(longest?['duration_hours']),
+      strongestActiveId: (strongest?['id'] as num?)?.toInt(),
+      strongestActiveCityName: strongest?['city_name'] as String?,
+      strongestActiveMaxFrpMw: _toDouble(strongest?['max_frp_mw']),
+      strongestActiveDurationHoursAtLeast:
+          _toDouble(strongest?['duration_hours_at_least']),
     );
   }
 
@@ -67,15 +76,16 @@ class IncidentSummary {
         )
         .length;
 
-    // The evidence bar applies to the longest-running card as well. Duration
-    // alone selects for whatever never stops, and the thing that never stops
-    // is a fixed industrial source, not a fire — a wildfire eventually goes
-    // out and loses this contest by definition.
-    FireIncident? longest;
+    // Ranked by radiative power, not duration. Duration is censored by the
+    // ingest window, so ranking on it selects for whatever is closest to the
+    // window edge — which is whatever never stops, i.e. a fixed industrial
+    // source rather than a fire.
+    FireIncident? strongest;
     for (final incident in active) {
       if (!incident.isSignificant) continue;
-      if (longest == null || incident.durationHours > longest.durationHours) {
-        longest = incident;
+      if (strongest == null ||
+          (incident.maxFrpMw ?? 0) > (strongest.maxFrpMw ?? 0)) {
+        strongest = incident;
       }
     }
 
@@ -83,8 +93,9 @@ class IncidentSummary {
       recentDetectionHours: recentDetectionHours,
       activeCount: active.length,
       detectionEndedLast24h: endedRecently,
-      longestActiveId: longest?.id,
-      longestActiveDurationHours: longest?.durationHours,
+      strongestActiveId: strongest?.id,
+      strongestActiveMaxFrpMw: strongest?.maxFrpMw,
+      strongestActiveDurationHoursAtLeast: strongest?.durationHours,
     );
   }
 

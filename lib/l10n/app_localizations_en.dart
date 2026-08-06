@@ -2700,7 +2700,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String incidentDurationOngoing(String hours) {
-    return 'Detected over $hours hours';
+    return 'Detected for at least $hours hours';
   }
 
   @override
@@ -2787,6 +2787,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeLast24hLongestSubtitle =>
       'Since first detection, still being detected';
+
+  @override
+  String get homeLast24hStrongestTitle => 'Most intense fire';
+
+  @override
+  String homeLast24hStrongestPower(int mw) {
+    return '$mw MW';
+  }
+
+  @override
+  String get homeLast24hStrongestSubtitle =>
+      'Highest heat output right now, still being detected';
+
+  @override
+  String homeLast24hStrongestSubtitleWithDuration(String duration) {
+    return 'At least $duration, still being detected';
+  }
 
   @override
   String durationHoursShort(int hours) {

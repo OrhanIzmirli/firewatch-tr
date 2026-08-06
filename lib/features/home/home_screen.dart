@@ -127,9 +127,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   /// this app that says a fire was put out.
   Widget _buildLast24hSection(AppLocalizations l10n, IncidentSummary summary) {
     // The client-side fallback has no province to work with. Printing
-    // "Province unknown · 21 h" spends the card's one line on the thing we
-    // do not know; the duration alone is the part that carries meaning.
-    final longestCity = summary.longestActiveCityName;
+    // "Province unknown · 50 MW" spends the card's one line on the thing we
+    // do not know; the power alone is the part that carries meaning.
+    final strongestCity = summary.strongestActiveCityName;
 
     return Column(
       children: [
@@ -169,17 +169,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ],
         ),
-        if (summary.hasLongestActive) ...[
+        if (summary.hasStrongestActive) ...[
           const SizedBox(height: AppSpacing.md),
           SmartOverviewCard(
-            title: l10n.homeLast24hLongestTitle,
+            title: l10n.homeLast24hStrongestTitle,
             value: [
-              if (longestCity != null && longestCity.isNotEmpty) longestCity,
-              _formatDuration(l10n, summary.longestActiveDurationHours!),
+              if (strongestCity != null && strongestCity.isNotEmpty)
+                strongestCity,
+              l10n.homeLast24hStrongestPower(
+                summary.strongestActiveMaxFrpMw!.round(),
+              ),
             ].join(' · '),
-            subtitle: l10n.homeLast24hLongestSubtitle,
-            icon: Icons.hourglass_bottom_rounded,
-            color: AppColors.warning,
+            // Duration goes in the subtitle as a floor, never as a headline.
+            subtitle: summary.strongestActiveDurationHoursAtLeast == null
+                ? l10n.homeLast24hStrongestSubtitle
+                : l10n.homeLast24hStrongestSubtitleWithDuration(
+                    _formatDuration(
+                      l10n,
+                      summary.strongestActiveDurationHoursAtLeast!,
+                    ),
+                  ),
+            icon: Icons.whatshot_rounded,
+            color: AppColors.danger,
             delay: 120.ms,
             onTap: () => context.go(
               '/map',

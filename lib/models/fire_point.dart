@@ -508,7 +508,10 @@ class FirePoint {
         sentences.add(l10n.smartTimeJustNow(mergedSatelliteLabel));
       } else if (diff.inHours < 3) {
         sentences.add(l10n.smartTimeRecent(diff.inHours, mergedSatelliteLabel));
-      } else if (diff.inHours < 12) {
+      } else if (diff.inHours < 24) {
+        // Was < 12, which sent everything from 12 to 23 hours old into the
+        // day-counting branch, where inDays truncates to zero: detections
+        // half a day old announced themselves as "0 days ago".
         sentences.add(l10n.smartTimeOlder(diff.inHours));
       } else {
         sentences.add(l10n.smartTimeHistorical(diff.inDays));

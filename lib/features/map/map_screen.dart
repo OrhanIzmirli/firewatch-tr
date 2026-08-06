@@ -515,44 +515,95 @@ class _MapScreenState extends State<MapScreen> {
   /// group of ninety is visibly heavier than a group of two without being
   /// forty-five times the area. A fixed size made "2" and "90" identical,
   /// which is the one thing a cluster count exists to distinguish.
-  double _clusterDiameter(int count) {
-    final grown = 26 + 9 * (math.log(count.clamp(1, 500)) / math.ln10) * 1.6;
-    return grown.clamp(26.0, 52.0);
+  /// Cluster size is driven by what is inside first and how much of it second.
+  ///
+  /// A bubble holding one burning fire is bigger than a bubble holding thirty
+  /// quiet ones, because that is the order a person needs to read them in.
+  /// Count still grows the bubble, but only within its tier's band.
+  double _clusterDiameter(int count, [IncidentStatus? status]) {
+    final tier = status ?? IncidentStatus.awaitingConfirmation;
+    final growth = (math.log(count.clamp(1, 500)) / math.ln10) * 10;
+    switch (tier) {
+      case IncidentStatus.activeDetection:
+        return (44 + growth).clamp(44.0, 62.0);
+      case IncidentStatus.awaitingConfirmation:
+        return (32 + growth).clamp(32.0, 46.0);
+      case IncidentStatus.lowConfidence:
+        return (22 + growth * 0.6).clamp(22.0, 30.0);
+    }
   }
 
-  /// The bubble itself is neutral slate with a status-coloured rim rather than
-  /// a solid status-coloured disc. Filled bubbles turned the whole country
-  /// into one orange mass that the real markers then had to compete with;
-  /// keeping clusters achromatic leaves saturated colour to mean "a fire",
-  /// not "some fires are somewhere near here".
+  /// The bubble says WHAT before it says HOW MANY.
+  ///
+  /// Previously every cluster was the same dark disc with a number, so a
+  /// bubble hiding one fire that is burning right now and a bubble hiding
+  /// thirty-one week-old single-pixel detections were indistinguishable —
+  /// which is the one thing this bubble exists to distinguish. Now a cluster
+  /// containing an actively detected fire is a red disc with a flame and the
+  /// count beneath it; one holding only fires that are no longer being seen
+  /// is neutral grey; one holding only thin evidence is small and faded.
   Widget _buildIncidentCluster(List<Marker> markers) {
     final status = _clusterStatus(markers);
-    final size = _clusterDiameter(markers.length);
+    final count = markers.length;
+    final size = _clusterDiameter(count, status);
+    final hasActive = status == IncidentStatus.activeDetection;
+
+    final Color fill;
+    final double fillAlpha;
+    switch (status) {
+      case IncidentStatus.activeDetection:
+        fill = AppColors.danger;
+        fillAlpha = 1;
+      case IncidentStatus.awaitingConfirmation:
+        fill = const Color(0xFF475569);
+        fillAlpha = 0.95;
+      case IncidentStatus.lowConfidence:
+        fill = const Color(0xFF94A3B8);
+        fillAlpha = 0.6;
+    }
+
     return Center(
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: const Color(0xFF1E293B).withValues(alpha: 0.94),
+          color: fill.withValues(alpha: fillAlpha),
           shape: BoxShape.circle,
-          border: Border.all(color: status.color, width: size >= 36 ? 3 : 2.2),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: hasActive ? 0.95 : 0.75),
+            width: hasActive ? 2.5 : 1.8,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.28),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+              color: hasActive
+                  ? AppColors.danger.withValues(alpha: 0.5)
+                  : Colors.black.withValues(alpha: 0.26),
+              blurRadius: hasActive ? 12 : 6,
+              spreadRadius: hasActive ? 1 : 0,
+              offset: hasActive ? Offset.zero : const Offset(0, 2),
             ),
           ],
         ),
         child: Center(
-          child: Text(
-            markers.length.toString(),
-            style: GoogleFonts.inter(
-              color: Colors.white,
-              fontSize: size >= 40 ? 15 : 12.5,
-              fontWeight: FontWeight.w800,
-              height: 1,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (hasActive)
+                Icon(
+                  Icons.local_fire_department_rounded,
+                  color: Colors.white,
+                  size: size * 0.38,
+                ),
+              Text(
+                count.toString(),
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: hasActive ? size * 0.26 : size * 0.36,
+                  fontWeight: FontWeight.w800,
+                  height: 1.05,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -967,7 +1018,10 @@ class _MapScreenState extends State<MapScreen> {
                     maxClusterRadius: 72,
                     size: const Size(52, 52),
                     computeSize: (markers) {
-                      final d = _clusterDiameter(markers.length);
+                      final d = _clusterDiameter(
+                        markers.length,
+                        _clusterStatus(markers),
+                      );
                       return Size(d, d);
                     },
                     alignment: Alignment.center,
@@ -1046,33 +1100,35 @@ class _MapScreenState extends State<MapScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GlassPanel(
-                  padding: const EdgeInsets.all(4),
-                  radius: AppSpacing.pillRadius,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _LayerChip(
-                        label: l10n.incidentToggleShow,
-                        icon: Icons.local_fire_department_rounded,
-                        selected: _showIncidents,
-                        onTap: () => setState(() => _showIncidents = true),
-                      ),
-                      _LayerChip(
-                        label: l10n.incidentToggleDetections,
-                        icon: Icons.grain_rounded,
-                        selected: !_showIncidents,
-                        onTap: () => setState(() => _showIncidents = false),
-                      ),
-                    ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: GlassPanel(
+                    padding: const EdgeInsets.all(4),
+                    radius: AppSpacing.pillRadius,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _LayerChip(
+                          label: l10n.incidentToggleShow,
+                          icon: Icons.local_fire_department_rounded,
+                          selected: _showIncidents,
+                          onTap: () => setState(() => _showIncidents = true),
+                        ),
+                        _LayerChip(
+                          label: l10n.incidentToggleDetections,
+                          icon: Icons.grain_rounded,
+                          selected: !_showIncidents,
+                          onTap: () => setState(() => _showIncidents = false),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 if (_showIncidents) ...[
                   const SizedBox(height: 6),
-                  // Scrollable because "Tespiti sona
-                  // ermiş" is a long label and the
-                  // honest label is worth more than a
-                  // row that never scrolls.
+                  // Scrollable because the honest filter label is longer than
+                  // a convenient one and is worth more than a row that never
+                  // scrolls.
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: GlassPanel(
@@ -1094,6 +1150,27 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ),
                 ],
+                // One line saying what the chosen layer actually contains.
+                // "Detections" told the user nothing: the word describes how
+                // the data was produced, not what they are looking at.
+                const SizedBox(height: 6),
+                GlassPanel(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 7,
+                  ),
+                  radius: 12,
+                  child: Text(
+                    _showIncidents
+                        ? l10n.incidentLayerCaptionEvents
+                        : l10n.incidentLayerCaptionDetections,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      height: 1.3,
+                      color: titleColor.withValues(alpha: 0.78),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -123,6 +123,9 @@ class FireIncident {
         : IncidentStatus.awaitingConfirmation;
   }
 
+  /// Whether this event cleared the evidence bar in [IncidentSignificance].
+  bool get isSignificant => IncidentSignificance.isMet(this);
+
   /// True only when a named official source confirmed a state. Never inferred.
   bool get hasOfficialStatus => officialState != null && officialState!.isNotEmpty;
 
@@ -152,6 +155,34 @@ enum IncidentStatus {
   lowConfidence,
 }
 
+/// The single place the "is this worth showing as a past fire" bar is defined.
+///
+/// Of the 237 live events, 149 were seen on exactly one satellite pass and
+/// never again. A single pass cannot distinguish a fire from a sun-glinted
+/// roof, a flare stack or a warm quarry, and listing all 227 no-longer-seen
+/// events made the map unreadable while saying nothing. Requiring two passes,
+/// 10 MW and better than FIRMS' lowest confidence tier leaves 13.
+///
+/// The numbers live here and nowhere else. Duplicating them into a filter, a
+/// summary endpoint and a marker builder is how three surfaces end up
+/// disagreeing about how many fires there were.
+abstract final class IncidentSignificance {
+  /// One pass is a pixel; two is a thing that was still there next time.
+  static const int minOverpasses = 2;
+
+  /// Fire radiative power. Below ~10 MW a VIIRS pixel is as likely to be an
+  /// industrial heat source as a wildfire.
+  static const double minFrpMw = 10;
+
+  /// FIRMS' own lowest confidence tier is excluded outright.
+  static const String excludedConfidenceTier = 'low';
+
+  static bool isMet(FireIncident incident) =>
+      incident.overpassCount >= minOverpasses &&
+      (incident.maxFrpMw ?? 0) >= minFrpMw &&
+      incident.peakConfidenceTier != excludedConfidenceTier;
+}
+
 /// Which slice of events the map draws.
 ///
 /// [ended] means "no satellite has seen it for a while" and nothing more.
@@ -170,14 +201,23 @@ extension IncidentFilterX on IncidentFilter {
     );
   }
 
+  /// Note the asymmetry: [active] keeps everything currently being detected,
+  /// however thin the evidence, because a weak signal happening *now* is
+  /// exactly the thing a person opening this app wants to see. The evidence
+  /// bar only applies once nothing is being detected any more, where a
+  /// one-pixel event is no longer a warning, just clutter.
+  ///
+  /// Nothing is deleted by this. Everything below the bar is still on the
+  /// possible-fire-points layer, one tap away.
   bool matches(FireIncident incident) {
+    final isActive = incident.status == IncidentStatus.activeDetection;
     switch (this) {
       case IncidentFilter.active:
-        return incident.status == IncidentStatus.activeDetection;
+        return isActive;
       case IncidentFilter.ended:
-        return incident.status != IncidentStatus.activeDetection;
+        return !isActive && incident.isSignificant;
       case IncidentFilter.all:
-        return true;
+        return isActive || incident.isSignificant;
     }
   }
 

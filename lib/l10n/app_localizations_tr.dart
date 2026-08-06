@@ -2684,12 +2684,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String incidentNoDetectionFor(String hours) {
-    return '$hours saattir uydu tespiti yok';
+    return 'Yangın tespit edildi, $hours saattir görülmüyor';
   }
 
   @override
   String incidentNoDetectionLowConfidence(String hours) {
-    return '$hours saattir uydu tespiti yok, düşük güvenilirlik';
+    return 'Yangın tespit edildi, $hours saattir görülmüyor (düşük güvenilirlik)';
   }
 
   @override
@@ -2733,16 +2733,24 @@ class AppLocalizationsTr extends AppLocalizations {
       'Uydu tespit deseninin kaymasından hesaplanır; yangının gerçek ilerleyişi farklı olabilir.';
 
   @override
-  String get incidentToggleShow => 'Olaylar';
+  String get incidentToggleShow => 'Yangın olayları';
 
   @override
-  String get incidentToggleDetections => 'Tespitler';
+  String get incidentToggleDetections => 'Olası yangın noktaları';
+
+  @override
+  String get incidentLayerCaptionDetections =>
+      'Uydunun tek tek gördüğü sıcak noktalar; her biri yangın olmayabilir.';
+
+  @override
+  String get incidentLayerCaptionEvents =>
+      'Aynı yangına ait tespitler tek bir olayda birleştirildi.';
 
   @override
   String get incidentFilterActive => 'Aktif';
 
   @override
-  String get incidentFilterEnded => 'Tespiti sona ermiş';
+  String get incidentFilterEnded => 'Artık görülmüyor';
 
   @override
   String get incidentFilterAll => 'Tümü';

@@ -2690,12 +2690,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String incidentNoDetectionFor(String hours) {
-    return 'No satellite detection for $hours hours';
+    return 'Fire detected, not seen for $hours hours';
   }
 
   @override
   String incidentNoDetectionLowConfidence(String hours) {
-    return 'No satellite detection for $hours hours, low confidence';
+    return 'Fire detected, not seen for $hours hours (low confidence)';
   }
 
   @override
@@ -2739,16 +2739,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Derived from how the detection pattern shifted; the fire\'s actual movement may differ.';
 
   @override
-  String get incidentToggleShow => 'Events';
+  String get incidentToggleShow => 'Fire events';
 
   @override
-  String get incidentToggleDetections => 'Detections';
+  String get incidentToggleDetections => 'Possible fire points';
+
+  @override
+  String get incidentLayerCaptionDetections =>
+      'Individual hot spots the satellite saw; not every one is a fire.';
+
+  @override
+  String get incidentLayerCaptionEvents =>
+      'Detections of the same fire grouped into a single event.';
 
   @override
   String get incidentFilterActive => 'Active';
 
   @override
-  String get incidentFilterEnded => 'Detection ended';
+  String get incidentFilterEnded => 'No longer seen';
 
   @override
   String get incidentFilterAll => 'All';

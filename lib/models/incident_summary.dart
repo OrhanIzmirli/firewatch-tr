@@ -55,10 +55,14 @@ class IncidentSummary {
         .where((i) => i.status == IncidentStatus.activeDetection)
         .toList();
 
+    // Same evidence bar the map's "no longer seen" filter uses. Without it
+    // this counted 194 while the map showed 13, and one of the two numbers
+    // would have been read as the number of fires that stopped burning.
     final endedRecently = incidents
         .where(
           (i) =>
               i.status != IncidentStatus.activeDetection &&
+              i.isSignificant &&
               i.hoursSinceLastDetection <= recentDetectionHours + 24,
         )
         .length;

@@ -4733,13 +4733,13 @@ abstract class AppLocalizations {
   /// No description provided for @incidentNoDetectionFor.
   ///
   /// In tr, this message translates to:
-  /// **'{hours} saattir uydu tespiti yok'**
+  /// **'Yangın tespit edildi, {hours} saattir görülmüyor'**
   String incidentNoDetectionFor(String hours);
 
   /// No description provided for @incidentNoDetectionLowConfidence.
   ///
   /// In tr, this message translates to:
-  /// **'{hours} saattir uydu tespiti yok, düşük güvenilirlik'**
+  /// **'Yangın tespit edildi, {hours} saattir görülmüyor (düşük güvenilirlik)'**
   String incidentNoDetectionLowConfidence(String hours);
 
   /// No description provided for @incidentDurationOngoing.
@@ -4811,14 +4811,26 @@ abstract class AppLocalizations {
   /// No description provided for @incidentToggleShow.
   ///
   /// In tr, this message translates to:
-  /// **'Olaylar'**
+  /// **'Yangın olayları'**
   String get incidentToggleShow;
 
   /// No description provided for @incidentToggleDetections.
   ///
   /// In tr, this message translates to:
-  /// **'Tespitler'**
+  /// **'Olası yangın noktaları'**
   String get incidentToggleDetections;
+
+  /// No description provided for @incidentLayerCaptionDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydunun tek tek gördüğü sıcak noktalar; her biri yangın olmayabilir.'**
+  String get incidentLayerCaptionDetections;
+
+  /// No description provided for @incidentLayerCaptionEvents.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı yangına ait tespitler tek bir olayda birleştirildi.'**
+  String get incidentLayerCaptionEvents;
 
   /// No description provided for @incidentFilterActive.
   ///
@@ -4829,7 +4841,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentFilterEnded.
   ///
   /// In tr, this message translates to:
-  /// **'Tespiti sona ermiş'**
+  /// **'Artık görülmüyor'**
   String get incidentFilterEnded;
 
   /// No description provided for @incidentFilterAll.

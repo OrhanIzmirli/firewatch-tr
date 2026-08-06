@@ -67,8 +67,13 @@ class IncidentSummary {
         )
         .length;
 
+    // The evidence bar applies to the longest-running card as well. Duration
+    // alone selects for whatever never stops, and the thing that never stops
+    // is a fixed industrial source, not a fire — a wildfire eventually goes
+    // out and loses this contest by definition.
     FireIncident? longest;
     for (final incident in active) {
+      if (!incident.isSignificant) continue;
       if (longest == null || incident.durationHours > longest.durationHours) {
         longest = incident;
       }

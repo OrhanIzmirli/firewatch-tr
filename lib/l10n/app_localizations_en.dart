@@ -2790,6 +2790,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Derived from how the detection pattern shifted; the fire\'s actual movement may differ.';
 
   @override
+  String get incidentTrendWeakening => 'Heat intensity is decreasing';
+
+  @override
+  String get incidentTrendIntensifying => 'Heat intensity is increasing';
+
+  @override
+  String get incidentTrendStable => 'Heat intensity is not changing';
+
+  @override
+  String get incidentTrendNote =>
+      'Based on the heat the satellite measures. Whether anyone is fighting the fire cannot be told from this data.';
+
+  @override
   String get incidentToggleShow => 'Fire events';
 
   @override
@@ -2824,6 +2837,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Seen by a satellite within the last $hours hours';
+  }
+
+  @override
+  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
+    return '$strong with strong evidence; seen by satellite in the last $hours h';
   }
 
   @override

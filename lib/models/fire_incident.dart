@@ -47,6 +47,28 @@ class FireIncident {
   final String? officialSource;
   final String? officialSourceUrl;
 
+  /// How the radiated heat is changing: 'intensifying', 'stable',
+  /// 'weakening', or null when the evidence does not support a direction.
+  ///
+  /// 'weakening' means less heat is being radiated and NOTHING else. It is
+  /// not evidence that anyone is fighting the fire — a satellite cannot see
+  /// a crew, a helicopter or a firebreak — and no string in this app may
+  /// suggest otherwise.
+  final String? frpTrend;
+
+  /// Later-half mean FRP divided by earlier-half mean.
+  final double? frpTrendRatio;
+  final int? frpTrendPasses;
+
+  /// Largest/smallest pixel area across the passes compared. The backend only
+  /// publishes a trend when this stayed below 1.5; carried here so the number
+  /// behind the claim is inspectable.
+  final double? frpGeometryRatio;
+
+  final int? distinctDaysSeen;
+  final double? frpMean;
+  final double? frpStddev;
+
   final double? spreadBearingDeg;
   final double? spreadSpeedMh;
   final String spreadConfidence;
@@ -74,6 +96,13 @@ class FireIncident {
     this.officialState,
     this.officialSource,
     this.officialSourceUrl,
+    this.frpTrend,
+    this.frpTrendRatio,
+    this.frpTrendPasses,
+    this.frpGeometryRatio,
+    this.distinctDaysSeen,
+    this.frpMean,
+    this.frpStddev,
     this.spreadBearingDeg,
     this.spreadSpeedMh,
   });
@@ -83,6 +112,9 @@ class FireIncident {
     final optical = (json['optical'] as Map?)?.cast<String, dynamic>() ?? const {};
     final official = (json['official'] as Map?)?.cast<String, dynamic>() ?? const {};
     final spread = (json['spread'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final trend = (json['trend'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final persistence =
+        (json['persistence'] as Map?)?.cast<String, dynamic>() ?? const {};
 
     return FireIncident(
       id: (json['id'] as num).toInt(),
@@ -109,6 +141,13 @@ class FireIncident {
       officialState: official['state'] as String?,
       officialSource: official['source'] as String?,
       officialSourceUrl: official['source_url'] as String?,
+      frpTrend: trend['direction'] as String?,
+      frpTrendRatio: _toDouble(trend['ratio']),
+      frpTrendPasses: (trend['passes'] as num?)?.toInt(),
+      frpGeometryRatio: _toDouble(trend['geometry_ratio']),
+      distinctDaysSeen: (persistence['distinct_days_seen'] as num?)?.toInt(),
+      frpMean: _toDouble(persistence['frp_mean']),
+      frpStddev: _toDouble(persistence['frp_stddev']),
       spreadBearingDeg: _toDouble(spread['bearing_deg']),
       spreadSpeedMh: _toDouble(spread['speed_m_per_hour']),
       spreadConfidence: spread['confidence'] as String? ?? 'insufficient',
@@ -158,6 +197,10 @@ class FireIncident {
 
   /// True only when a named official source confirmed a state. Never inferred.
   bool get hasOfficialStatus => officialState != null && officialState!.isNotEmpty;
+
+  /// A trend is shown only when the backend published one; it withholds
+  /// rather than guesses, so there is nothing to re-check here.
+  bool get hasTrend => frpTrend != null && frpTrend!.isNotEmpty;
 
   /// Spread is published only when the backend judged the evidence sufficient.
   bool get hasSpread =>

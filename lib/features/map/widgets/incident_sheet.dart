@@ -121,6 +121,18 @@ class IncidentSheet extends StatelessWidget {
               _SpreadCard(incident: incident, titleColor: titleColor, bodyColor: bodyColor),
             ],
 
+            // Direction of change in radiated heat. Absent unless the
+            // backend published one, and the caveat underneath is not
+            // optional: the satellite measures heat, not firefighting.
+            if (incident.hasTrend) ...[
+              const SizedBox(height: AppSpacing.xl),
+              _TrendCard(
+                incident: incident,
+                titleColor: titleColor,
+                bodyColor: bodyColor,
+              ),
+            ],
+
             // Which instruments actually saw this. The evidence line above
             // gives a count; this says where the count came from, so
             // "21 detections" can be checked rather than believed.
@@ -366,6 +378,75 @@ class _HeatMeter extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// "Heat intensity is decreasing" — and a line saying what that is not.
+class _TrendCard extends StatelessWidget {
+  final FireIncident incident;
+  final Color titleColor;
+  final Color bodyColor;
+
+  const _TrendCard({
+    required this.incident,
+    required this.titleColor,
+    required this.bodyColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final (IconData icon, Color color, String text) = switch (incident.frpTrend) {
+      'weakening' => (
+          Icons.trending_down_rounded,
+          AppColors.success,
+          l10n.incidentTrendWeakening,
+        ),
+      'intensifying' => (
+          Icons.trending_up_rounded,
+          AppColors.danger,
+          l10n.incidentTrendIntensifying,
+        ),
+      _ => (
+          Icons.trending_flat_rounded,
+          AppColors.warning,
+          l10n.incidentTrendStable,
+        ),
+    };
+
+    return GlassPanel(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 20, color: color),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Text(
+                  text,
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: titleColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            l10n.incidentTrendNote,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              height: 1.5,
+              color: bodyColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

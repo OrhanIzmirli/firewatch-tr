@@ -4892,6 +4892,30 @@ abstract class AppLocalizations {
   /// **'Uydu tespit deseninin kaymasından hesaplanır; yangının gerçek ilerleyişi farklı olabilir.'**
   String get incidentSpreadEstimateNote;
 
+  /// No description provided for @incidentTrendWeakening.
+  ///
+  /// In tr, this message translates to:
+  /// **'Isı şiddeti azalıyor'**
+  String get incidentTrendWeakening;
+
+  /// No description provided for @incidentTrendIntensifying.
+  ///
+  /// In tr, this message translates to:
+  /// **'Isı şiddeti artıyor'**
+  String get incidentTrendIntensifying;
+
+  /// No description provided for @incidentTrendStable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Isı şiddeti değişmiyor'**
+  String get incidentTrendStable;
+
+  /// No description provided for @incidentTrendNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydunun ölçtüğü ısı yayımına göre. Söndürme çalışması olup olmadığı bu veriden anlaşılmaz.'**
+  String get incidentTrendNote;
+
   /// No description provided for @incidentToggleShow.
   ///
   /// In tr, this message translates to:
@@ -4957,6 +4981,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Son {hours} saat içinde uydu tarafından görüldü'**
   String homeLast24hActiveSubtitle(int hours);
+
+  /// No description provided for @homeLast24hActiveSubtitleLayered.
+  ///
+  /// In tr, this message translates to:
+  /// **'{strong} tanesi güçlü kanıtlı; son {hours} saatte uyduyla görüldü'**
+  String homeLast24hActiveSubtitleLayered(int strong, int hours);
 
   /// No description provided for @homeLast24hEndedTitle.
   ///

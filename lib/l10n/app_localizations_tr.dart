@@ -2784,6 +2784,19 @@ class AppLocalizationsTr extends AppLocalizations {
       'Uydu tespit deseninin kaymasından hesaplanır; yangının gerçek ilerleyişi farklı olabilir.';
 
   @override
+  String get incidentTrendWeakening => 'Isı şiddeti azalıyor';
+
+  @override
+  String get incidentTrendIntensifying => 'Isı şiddeti artıyor';
+
+  @override
+  String get incidentTrendStable => 'Isı şiddeti değişmiyor';
+
+  @override
+  String get incidentTrendNote =>
+      'Uydunun ölçtüğü ısı yayımına göre. Söndürme çalışması olup olmadığı bu veriden anlaşılmaz.';
+
+  @override
   String get incidentToggleShow => 'Yangın olayları';
 
   @override
@@ -2818,6 +2831,11 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Son $hours saat içinde uydu tarafından görüldü';
+  }
+
+  @override
+  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
+    return '$strong tanesi güçlü kanıtlı; son $hours saatte uyduyla görüldü';
   }
 
   @override

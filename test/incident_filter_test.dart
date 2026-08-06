@@ -25,9 +25,15 @@ FireIncident incident({
 
 void main() {
   group('IncidentSignificance', () {
+    test('the bar is exactly two passes, 8 MW and not the lowest tier', () {
+      expect(IncidentSignificance.minOverpasses, 2);
+      expect(IncidentSignificance.minFrpMw, 8);
+      expect(IncidentSignificance.excludedConfidenceTier, 'low');
+    });
+
     test('needs all three of passes, power and confidence', () {
       expect(
-        incident(id: 1, state: 'x', overpasses: 2, frp: 10, tier: 'nominal')
+        incident(id: 1, state: 'x', overpasses: 2, frp: 8, tier: 'nominal')
             .isSignificant,
         isTrue,
       );
@@ -39,9 +45,16 @@ void main() {
       );
       // Below the power floor, whatever the pass count.
       expect(
-        incident(id: 3, state: 'x', overpasses: 9, frp: 9.99, tier: 'high')
+        incident(id: 3, state: 'x', overpasses: 9, frp: 7.99, tier: 'high')
             .isSignificant,
         isFalse,
+      );
+      // The live event the floor was lowered for: nine passes, 9.17 MW.
+      // At a 10 MW bar the best-observed fire in the data was excluded.
+      expect(
+        incident(id: 6, state: 'x', overpasses: 9, frp: 9.17, tier: 'nominal')
+            .isSignificant,
+        isTrue,
       );
       // FIRMS' own lowest tier is excluded outright.
       expect(

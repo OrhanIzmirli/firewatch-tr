@@ -160,19 +160,41 @@ enum IncidentStatus {
 /// Of the 237 live events, 149 were seen on exactly one satellite pass and
 /// never again. A single pass cannot distinguish a fire from a sun-glinted
 /// roof, a flare stack or a warm quarry, and listing all 227 no-longer-seen
-/// events made the map unreadable while saying nothing. Requiring two passes,
-/// 10 MW and better than FIRMS' lowest confidence tier leaves 13.
+/// events made the map unreadable while saying nothing. The bar below leaves
+/// 17, of which 15 are no longer being seen.
 ///
-/// The numbers live here and nowhere else. Duplicating them into a filter, a
-/// summary endpoint and a marker builder is how three surfaces end up
-/// disagreeing about how many fires there were.
+/// The numbers live here and nowhere else on the client. Duplicating them
+/// into a filter, a summary and a marker builder is how three surfaces end up
+/// disagreeing about how many fires there were. The backend's summary query
+/// mirrors them and says so; if these move, that moves too.
 abstract final class IncidentSignificance {
   /// One pass is a pixel; two is a thing that was still there next time.
   static const int minOverpasses = 2;
 
-  /// Fire radiative power. Below ~10 MW a VIIRS pixel is as likely to be an
-  /// industrial heat source as a wildfire.
-  static const double minFrpMw = 10;
+  /// Fire radiative power.
+  ///
+  /// 8 MW rather than 10: at 10 the best-observed event in the live data —
+  /// nine overpasses, thirty-two detections, twenty-one hours — was excluded
+  /// by 0.83 MW.
+  ///
+  /// Raising the overpass count instead was measured and rejected. Requiring
+  /// four passes admits 55 events, and most of the 41 it adds share one
+  /// signature: ~24 hours of continuous burning at 1-4 MW, visible on every
+  /// single pass. That is not a wildfire, it is a fixed source that never
+  /// goes out — gas flares over the south-eastern oil fields. Listing those
+  /// as fires would be worse than missing a real one, because they would
+  /// never leave the list.
+  ///
+  /// Movement does not separate them either: all 29 of the persistent
+  /// low-power events carry spread data, because spread is derived from
+  /// centroid drift and any multi-detection cluster drifts on pixel geometry
+  /// alone. Spread is therefore NOT a significance criterion.
+  ///
+  /// The real answer is persistence by location — the same coordinates
+  /// showing heat every day for weeks is infrastructure, not a fire — and
+  /// that needs a few more weeks of fire_detections history than exists
+  /// today. 8 MW is the practical bar until then.
+  static const double minFrpMw = 8;
 
   /// FIRMS' own lowest confidence tier is excluded outright.
   static const String excludedConfidenceTier = 'low';

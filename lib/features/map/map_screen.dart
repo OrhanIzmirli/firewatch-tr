@@ -416,25 +416,40 @@ class _MapScreenState extends State<MapScreen> {
   /// Every tier renders as the same fire-department icon, just a different
   /// color/size — only the high-confidence tier pulses, so the animation
   /// itself signals urgency.
+  /// A raw detection: a plain disc, never a flame.
+  ///
+  /// A thermal detection is one hot pixel. It might be a fire, and it might
+  /// equally be a factory, a flare stack or sun off a greenhouse roof — the
+  /// layer is called "possible fire points" for that reason. Drawing a flame
+  /// on it asserts the very thing the layer cannot establish, and drawing 600
+  /// of them asserted it 600 times.
+  ///
+  /// The flame now belongs only to the events layer, where detections have
+  /// been grouped and weighed. There is no pulse either: a pulsing marker
+  /// reads as "live, urgent, happening now", which a single pixel of unknown
+  /// provenance has not earned.
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
-    final icon = Icon(
-      Icons.local_fire_department_rounded,
-      color: color,
-      size: size,
+    return Container(
+      width: size * 0.62,
+      height: size * 0.62,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.85),
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.9),
+          width: 1.4,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.22),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
     );
-    if (point.riskTier == 'high') {
-      return icon
-          .animate(onPlay: (c) => c.repeat(reverse: true))
-          .scale(
-            begin: const Offset(0.94, 0.94),
-            end: const Offset(1.06, 1.06),
-            duration: 1400.ms,
-            curve: Curves.easeInOut,
-          );
-    }
-    return icon;
   }
 
   // Uses FirePoint.riskTier (not a local confidence parse) so it handles

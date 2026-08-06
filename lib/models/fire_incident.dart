@@ -22,6 +22,10 @@ class FireIncident {
   final double? maxFrpMw;
   final String? peakConfidenceTier;
   final int? cityId;
+
+  /// Province name resolved server-side. Null on an older backend, in
+  /// which case the map falls back to matching a nearby raw detection.
+  final String? cityName;
   final String? regionKey;
 
   /// What the satellite saw. Can never say a fire is out.
@@ -57,6 +61,7 @@ class FireIncident {
     this.maxFrpMw,
     this.peakConfidenceTier,
     this.cityId,
+    this.cityName,
     this.regionKey,
     this.opticalBurntAreaHa,
     this.opticalSource,
@@ -85,6 +90,7 @@ class FireIncident {
       maxFrpMw: _toDouble(json['max_frp_mw']),
       peakConfidenceTier: json['peak_confidence_tier'] as String?,
       cityId: (json['city_id'] as num?)?.toInt(),
+      cityName: json['city_name'] as String?,
       regionKey: json['region_key'] as String?,
       satelliteState: satellite['state'] as String? ?? 'no_recent_detection',
       hoursSinceLastDetection: _toDouble(satellite['hours_since_last_detection']) ?? 0,

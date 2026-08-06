@@ -122,6 +122,9 @@ class _MapScreenState extends State<MapScreen> {
     } else {
       _restoreIncidentFilter();
     }
+    // The nearby-detections list lives inside the sheet and is built from the
+    // raw feed, so opening the sheet is the other thing that needs it.
+    _sheetController.addListener(_onSheetMoved);
     _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -137,6 +140,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _tileResetController.close();
+    _sheetController.removeListener(_onSheetMoved);
     _sheetController.dispose();
     _mapController.dispose();
     super.dispose();
@@ -147,14 +151,41 @@ class _MapScreenState extends State<MapScreen> {
   /// dead network has a way back without restarting the app.
   Future<void> _refreshMap() async {
     if (!_tileResetController.isClosed) _tileResetController.add(null);
-    await _loadFirePoints();
     await _loadIncidents();
+    if (_firePointsRequested) await _loadFirePoints();
+  }
+
+  void _onSheetMoved() {
+    if (_firePointsRequested || !_sheetController.isAttached) return;
+    if (_sheetController.size <= _sheetCollapsedFraction + 0.02) return;
+    _firePointsRequested = true;
+    _loadFirePoints();
   }
 
   Future<void> _bootstrapMapData() async {
     await _loadUserLocation();
-    await _loadFirePoints();
     await _loadIncidents();
+    // The events layer is what opens. Fetching the raw feed as well meant
+    // every visit paid for ~600 CSV rows nobody was looking at, on a backend
+    // that scales to zero and charges a cold start for the privilege. It is
+    // fetched the first time the detections layer is actually selected.
+    if (!_showIncidents) {
+      _firePointsRequested = true;
+      await _loadFirePoints();
+    }
+  }
+
+  /// True once the raw feed has been fetched, so switching layers back and
+  /// forth does not re-fetch it.
+  bool _firePointsRequested = false;
+
+  /// Switches layer, pulling the raw feed in on first use.
+  void _setLayer({required bool showIncidents}) {
+    setState(() => _showIncidents = showIncidents);
+    if (!showIncidents && !_firePointsRequested) {
+      _firePointsRequested = true;
+      _loadFirePoints();
+    }
   }
 
   /// Best-effort: a failure or an empty result silently leaves the detection
@@ -163,10 +194,17 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _loadIncidents() async {
     final incidents = await _renderApi.fetchIncidents(days: 7, limit: 300);
     if (!mounted) return;
+    final fellBack = incidents.isEmpty && _showIncidents;
     setState(() {
       _incidents = incidents;
       if (incidents.isEmpty) _showIncidents = false;
     });
+    // Falling back to the detection layer is the one path that selects it
+    // without a tap, so it has to trigger the same lazy fetch.
+    if (fellBack && !_firePointsRequested) {
+      _firePointsRequested = true;
+      await _loadFirePoints();
+    }
   }
 
   Future<void> _restoreIncidentFilter() async {
@@ -625,7 +663,15 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  /// The province label for an incident.
+  ///
+  /// Server-resolved when the backend provides it. The proximity fallback
+  /// below only runs against raw detections that happen to be loaded, so it
+  /// silently produced nothing whenever the thermal feed was not fetched —
+  /// which is now the normal case on the events layer.
   String? _cityNameFor(FireIncident incident) {
+    final resolved = incident.cityName;
+    if (resolved != null && resolved.isNotEmpty) return resolved;
     for (final point in _firePoints) {
       if (point.cityName == null) continue;
       final dLat = (point.latitude - incident.latitude).abs();
@@ -1127,13 +1173,13 @@ class _MapScreenState extends State<MapScreen> {
                           label: l10n.incidentToggleShow,
                           icon: Icons.local_fire_department_rounded,
                           selected: _showIncidents,
-                          onTap: () => setState(() => _showIncidents = true),
+                          onTap: () => _setLayer(showIncidents: true),
                         ),
                         _LayerChip(
                           label: l10n.incidentToggleDetections,
                           icon: Icons.grain_rounded,
                           selected: !_showIncidents,
-                          onTap: () => setState(() => _showIncidents = false),
+                          onTap: () => _setLayer(showIncidents: false),
                         ),
                       ],
                     ),

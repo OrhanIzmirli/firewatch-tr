@@ -62,6 +62,7 @@ flutter:
   assets:
     - assets/images/forest-fire.jpg
     - assets/icon/app_icon.png
+    - assets/data/turkey_places.json
 
 flutter_launcher_icons:
   android: true

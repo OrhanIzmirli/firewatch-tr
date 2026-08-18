@@ -3,7 +3,31 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 
+/// Instrument look: IBM Plex Sans for prose, IBM Plex Mono for readings,
+/// flat surfaces separated by 1px borders instead of shadows (which a dark
+/// theme cannot show anyway — they only blur), and a stepped type scale of
+/// 12 / 14 / 16 / 20 / 26 / 34 with no in-between sizes.
 class AppTheme {
+  // Light-mode neutrals, on the same warm axis as the dark set.
+  static const Color _lightBackground = Color(0xFFF6F3EE);
+  static const Color _lightSurface = Color(0xFFFDFBF8);
+  static const Color _lightBorder = Color(0xFFE4DDD2);
+  static const Color _lightText = Color(0xFF1C1814);
+  static const Color _lightTextMuted = Color(0xFF5C554D);
+
+  /// Numeric readouts. Tabular figures keep every digit the same width, so a
+  /// live counter does not jitter as its value changes.
+  static TextStyle mono({
+    double size = 14,
+    FontWeight weight = FontWeight.w400,
+    Color? color,
+  }) => GoogleFonts.ibmPlexMono(
+    fontSize: size,
+    fontWeight: weight,
+    color: color,
+    fontFeatures: const [FontFeature.tabularFigures()],
+  );
+
   static ThemeData get darkTheme {
     final base = ThemeData(
       brightness: Brightness.dark,
@@ -18,75 +42,95 @@ class AppTheme {
     );
 
     return base.copyWith(
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        headlineLarge: GoogleFonts.inter(
-          color: AppColors.white,
-          fontWeight: FontWeight.w800,
-        ),
-        headlineMedium: GoogleFonts.inter(
-          color: AppColors.white,
-          fontWeight: FontWeight.w800,
-        ),
-        titleLarge: GoogleFonts.inter(
-          color: AppColors.white,
-          fontWeight: FontWeight.w800,
-        ),
-        titleMedium: GoogleFonts.inter(
-          color: AppColors.white,
+      textTheme: GoogleFonts.ibmPlexSansTextTheme(base.textTheme).copyWith(
+        headlineLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 34,
+          color: AppColors.textPrimary,
           fontWeight: FontWeight.w700,
         ),
-        bodyLarge: GoogleFonts.inter(
-          color: AppColors.white,
+        headlineMedium: GoogleFonts.ibmPlexSans(
+          fontSize: 26,
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
         ),
-        bodyMedium: GoogleFonts.inter(
-          color: AppColors.white,
+        titleLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 20,
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
+        ),
+        titleMedium: GoogleFonts.ibmPlexSans(
+          fontSize: 16,
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+        bodyLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 16,
+          color: AppColors.textPrimary,
+        ),
+        bodyMedium: GoogleFonts.ibmPlexSans(
+          fontSize: 14,
+          color: AppColors.textPrimary,
+        ),
+        bodySmall: GoogleFonts.ibmPlexSans(
+          fontSize: 12,
+          color: AppColors.textMuted,
+        ),
+        labelLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 14,
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w600,
         ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surfaceAlt,
-        foregroundColor: AppColors.white,
+        foregroundColor: AppColors.textPrimary,
         centerTitle: true,
         elevation: 0,
-        titleTextStyle: GoogleFonts.inter(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        titleTextStyle: GoogleFonts.ibmPlexSans(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: AppColors.white,
+          color: AppColors.textPrimary,
         ),
       ),
-      dividerColor: AppColors.white.withValues(alpha: 0.08),
-      iconTheme: const IconThemeData(
-        color: AppColors.white,
+      cardTheme: const CardThemeData(
+        color: AppColors.surface,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(AppSpacing.cardRadius),
+          ),
+          side: BorderSide(color: AppColors.border),
+        ),
       ),
+      dividerColor: AppColors.border,
+      iconTheme: const IconThemeData(color: AppColors.textPrimary),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.white.withValues(alpha: 0.04),
-        hintStyle: GoogleFonts.inter(
-          color: AppColors.white.withValues(alpha: 0.5),
+        fillColor: AppColors.surfaceRaised,
+        hintStyle: GoogleFonts.ibmPlexSans(
+          color: AppColors.textFaint,
           fontSize: 14,
         ),
-        prefixIconColor: AppColors.white.withValues(alpha: 0.7),
-        suffixIconColor: AppColors.white.withValues(alpha: 0.7),
+        prefixIconColor: AppColors.textMuted,
+        suffixIconColor: AppColors.textMuted,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: BorderSide(
-            color: AppColors.white.withValues(alpha: 0.08),
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: BorderSide(
-            color: AppColors.white.withValues(alpha: 0.08),
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -94,20 +138,16 @@ class AppTheme {
         indicatorColor: AppColors.primary.withValues(alpha: 0.18),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
-          return GoogleFonts.inter(
+          return GoogleFonts.ibmPlexSans(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected
-                ? AppColors.primary
-                : AppColors.white.withValues(alpha: 0.72),
+            color: isSelected ? AppColors.primary : AppColors.textMuted,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected
-                ? AppColors.primary
-                : AppColors.white.withValues(alpha: 0.72),
+            color: isSelected ? AppColors.primary : AppColors.textMuted,
           );
         }),
       ),
@@ -117,39 +157,38 @@ class AppTheme {
           foregroundColor: AppColors.white,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w700,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.white,
-          side: BorderSide(
-            color: AppColors.white.withValues(alpha: 0.14),
-          ),
+          foregroundColor: AppColors.textPrimary,
+          side: const BorderSide(color: AppColors.border),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w600,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.surface,
-        contentTextStyle: GoogleFonts.inter(
-          color: AppColors.white,
+        backgroundColor: AppColors.surfaceRaised,
+        contentTextStyle: GoogleFonts.ibmPlexSans(
+          color: AppColors.textPrimary,
           fontSize: 14,
         ),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          side: const BorderSide(color: AppColors.border),
         ),
       ),
       switchTheme: SwitchThemeData(
@@ -157,7 +196,7 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
-          return AppColors.white.withValues(alpha: 0.9);
+          return AppColors.textPrimary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -176,106 +215,116 @@ class AppTheme {
     final base = ThemeData(
       brightness: Brightness.light,
       useMaterial3: true,
-      scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+      scaffoldBackgroundColor: _lightBackground,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.light,
         primary: AppColors.primary,
-        surface: Colors.white,
+        surface: _lightSurface,
       ),
     );
 
     return base.copyWith(
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        headlineLarge: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
-          fontWeight: FontWeight.w800,
-        ),
-        headlineMedium: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
-          fontWeight: FontWeight.w800,
-        ),
-        titleLarge: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
-          fontWeight: FontWeight.w800,
-        ),
-        titleMedium: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
+      textTheme: GoogleFonts.ibmPlexSansTextTheme(base.textTheme).copyWith(
+        headlineLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 34,
+          color: _lightText,
           fontWeight: FontWeight.w700,
         ),
-        bodyLarge: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
+        headlineMedium: GoogleFonts.ibmPlexSans(
+          fontSize: 26,
+          color: _lightText,
+          fontWeight: FontWeight.w700,
         ),
-        bodyMedium: GoogleFonts.inter(
-          color: const Color(0xFF1E293B),
+        titleLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 20,
+          color: _lightText,
+          fontWeight: FontWeight.w700,
+        ),
+        titleMedium: GoogleFonts.ibmPlexSans(
+          fontSize: 16,
+          color: _lightText,
+          fontWeight: FontWeight.w600,
+        ),
+        bodyLarge: GoogleFonts.ibmPlexSans(fontSize: 16, color: _lightText),
+        bodyMedium: GoogleFonts.ibmPlexSans(fontSize: 14, color: _lightText),
+        bodySmall: GoogleFonts.ibmPlexSans(
+          fontSize: 12,
+          color: _lightTextMuted,
+        ),
+        labelLarge: GoogleFonts.ibmPlexSans(
+          fontSize: 14,
+          color: _lightText,
+          fontWeight: FontWeight.w600,
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF0F172A),
+        backgroundColor: _lightSurface,
+        foregroundColor: _lightText,
         centerTitle: true,
         elevation: 0,
-        titleTextStyle: GoogleFonts.inter(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        titleTextStyle: GoogleFonts.ibmPlexSans(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF0F172A),
+          color: _lightText,
         ),
       ),
-      dividerColor: Colors.black.withValues(alpha: 0.06),
-      iconTheme: const IconThemeData(
-        color: Color(0xFF0F172A),
+      cardTheme: const CardThemeData(
+        color: _lightSurface,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(AppSpacing.cardRadius),
+          ),
+          side: BorderSide(color: _lightBorder),
+        ),
       ),
+      dividerColor: _lightBorder,
+      iconTheme: const IconThemeData(color: _lightText),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.black.withValues(alpha: 0.03),
-        hintStyle: GoogleFonts.inter(
-          color: Colors.black.withValues(alpha: 0.45),
+        fillColor: _lightSurface,
+        hintStyle: GoogleFonts.ibmPlexSans(
+          color: _lightTextMuted,
           fontSize: 14,
         ),
-        prefixIconColor: Colors.black.withValues(alpha: 0.65),
-        suffixIconColor: Colors.black.withValues(alpha: 0.65),
+        prefixIconColor: _lightTextMuted,
+        suffixIconColor: _lightTextMuted,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: BorderSide(
-            color: Colors.black.withValues(alpha: 0.08),
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: _lightBorder),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: BorderSide(
-            color: Colors.black.withValues(alpha: 0.08),
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: _lightBorder),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: _lightSurface,
         indicatorColor: AppColors.primary.withValues(alpha: 0.14),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
-          return GoogleFonts.inter(
+          return GoogleFonts.ibmPlexSans(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected
-                ? AppColors.primary
-                : Colors.black.withValues(alpha: 0.72),
+            color: isSelected ? AppColors.primary : _lightTextMuted,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final isSelected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: isSelected
-                ? AppColors.primary
-                : Colors.black.withValues(alpha: 0.72),
+            color: isSelected ? AppColors.primary : _lightTextMuted,
           );
         }),
       ),
@@ -285,39 +334,38 @@ class AppTheme {
           foregroundColor: AppColors.white,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w700,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF0F172A),
-          side: BorderSide(
-            color: Colors.black.withValues(alpha: 0.12),
-          ),
+          foregroundColor: _lightText,
+          side: const BorderSide(color: _lightBorder),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
-          textStyle: GoogleFonts.inter(
+          textStyle: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w600,
-            fontSize: 15,
+            fontSize: 14,
           ),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: Colors.white,
-        contentTextStyle: GoogleFonts.inter(
-          color: const Color(0xFF0F172A),
+        backgroundColor: _lightSurface,
+        contentTextStyle: GoogleFonts.ibmPlexSans(
+          color: _lightText,
           fontSize: 14,
         ),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          side: const BorderSide(color: _lightBorder),
         ),
       ),
       switchTheme: SwitchThemeData(

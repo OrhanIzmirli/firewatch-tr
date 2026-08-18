@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
@@ -20,6 +21,8 @@ import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
+import '../../models/saved_place.dart';
+import '../../services/saved_places_provider.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/render_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -36,8 +39,9 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
 import 'widgets/incident_sheet.dart';
+import 'widgets/saved_places_sheet.dart';
 
-class MapScreen extends StatefulWidget {
+class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
   final double? focusLng;
 
@@ -60,10 +64,10 @@ class MapScreen extends StatefulWidget {
   });
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   static const _cacheKey = 'map_fires';
   static const _filterPrefKey = 'map_incident_filter';
 
@@ -75,6 +79,14 @@ class _MapScreenState extends State<MapScreen> {
   /// to float separately — the merged legend, the FWI day picker, opacity and
   /// attribution — and starts closed: the map is the product, not the panel.
   bool _isLayersPanelOpen = false;
+
+  /// True while the user is placing a pin: the next map tap saves a place
+  /// instead of doing nothing. Entered from the places sheet only.
+  bool _pinDropMode = false;
+
+  /// Whether the camera is currently zoomed to a saved place, which is what
+  /// makes the one-tap "all of Türkiye" reset appear in the bottom bar.
+  bool _isPlaceFocused = false;
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   double _currentZoom = 5.6;
 
@@ -213,6 +225,84 @@ class _MapScreenState extends State<MapScreen> {
 
   void _toggleRiskLayer() {
     setState(() => _showRiskLayer = !_showRiskLayer);
+  }
+
+  void _openPlacesSheet() {
+    final l10n = AppLocalizations.of(context)!;
+    SavedPlacesSheet.show(
+      context,
+      dateParam: _fwiDateParam,
+      dayLabel: _riskDayLabel(l10n, _riskDayOffset),
+      incidents: _incidents,
+      onFocusPlace: (place) => _focusPlaces([place]),
+      onShowAll: _focusPlaces,
+      onStartPinDrop: () => setState(() => _pinDropMode = true),
+    );
+  }
+
+  /// Zooms to the box covering every given place — one place zooms to that
+  /// place, "show all" zooms to the union.
+  void _focusPlaces(List<SavedPlace> places) {
+    if (places.isEmpty) return;
+    var west = places.first.west;
+    var south = places.first.south;
+    var east = places.first.east;
+    var north = places.first.north;
+    for (final p in places.skip(1)) {
+      west = math.min(west, p.west);
+      south = math.min(south, p.south);
+      east = math.max(east, p.east);
+      north = math.max(north, p.north);
+    }
+    _mapController.fitCamera(
+      CameraFit.bounds(
+        bounds: LatLngBounds(LatLng(south, west), LatLng(north, east)),
+        // Clear of the top chip row and the collapsed sheet.
+        padding: const EdgeInsets.fromLTRB(40, 90, 40, 180),
+      ),
+    );
+    setState(() => _isPlaceFocused = true);
+  }
+
+  void _resetTurkeyView() {
+    _mapController.move(const LatLng(38.2, 35.0), 5.6);
+    setState(() => _isPlaceFocused = false);
+  }
+
+  /// The tap that lands while pin-drop mode is armed: name it, save it,
+  /// return to the places sheet so the new entry is visibly there.
+  Future<void> _handlePinDrop(LatLng point) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _pinDropMode = false);
+    final controller = TextEditingController(text: l10n.placesPinDefaultName);
+    final name = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.placesPinNameTitle),
+        content: TextField(controller: controller, autofocus: true),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: Text(l10n.commonSave),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (name == null || name.isEmpty || !mounted) return;
+    await ref.read(savedPlacesProvider.notifier).add(
+          SavedPlace.pin(
+            id: 'pin-${DateTime.now().millisecondsSinceEpoch}',
+            name: name,
+            lat: point.latitude,
+            lng: point.longitude,
+          ),
+        );
+    if (mounted) _openPlacesSheet();
   }
 
   /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
@@ -1114,6 +1204,9 @@ class _MapScreenState extends State<MapScreen> {
                   setState(() => _currentZoom = camera.zoom);
                 }
               },
+              onTap: (tapPosition, point) {
+                if (_pinDropMode) _handlePinDrop(point);
+              },
             ),
             children: [
               TileLayer(
@@ -1182,6 +1275,28 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                       ]
                     : [],
+              ),
+              // Saved pins stay visible: unlike a province, a dropped pin
+              // has no border on the basemap, so without a marker "zoom to
+              // my pin" would land on anonymous terrain.
+              MarkerLayer(
+                markers: [
+                  for (final place in ref.watch(savedPlacesProvider))
+                    if (place.kind == SavedPlaceKind.pin)
+                      Marker(
+                        point: LatLng(place.lat, place.lng),
+                        width: 36,
+                        height: 36,
+                        child: const Icon(
+                          Icons.push_pin_rounded,
+                          size: 26,
+                          color: AppColors.info,
+                          shadows: [
+                            Shadow(color: Colors.white, blurRadius: 4),
+                          ],
+                        ),
+                      ),
+                ],
               ),
               if (widget.focusLat != null && widget.focusLng != null)
                 MarkerLayer(
@@ -1324,6 +1439,44 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
+              if (_pinDropMode) ...[
+                const SizedBox(height: 6),
+                GlassPanel(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.sm,
+                  ),
+                  radius: AppSpacing.cardRadius,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.push_pin_rounded,
+                        size: 16,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Text(
+                        l10n.placesDropPinHint,
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                          color: titleColor,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      InkWell(
+                        onTap: () => setState(() => _pinDropMode = false),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 16,
+                          color: titleColor.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               if (_errorMessage != null) ...[
                 const SizedBox(height: 6),
                 GlassPanel(
@@ -1375,6 +1528,11 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ),
                 _MapIconAction(
+                  icon: Icons.bookmark_rounded,
+                  tooltip: l10n.placesButton,
+                  onTap: _openPlacesSheet,
+                ),
+                _MapIconAction(
                   icon: Icons.refresh_rounded,
                   tooltip: l10n.commonRefresh,
                   onTap: _refreshMap,
@@ -1384,6 +1542,12 @@ class _MapScreenState extends State<MapScreen> {
                   tooltip: l10n.mapGoToMe,
                   onTap: _centerOnUser,
                 ),
+                if (_isPlaceFocused)
+                  _MapIconAction(
+                    icon: Icons.zoom_out_map_rounded,
+                    tooltip: l10n.placesResetView,
+                    onTap: _resetTurkeyView,
+                  ),
               ],
             ),
           ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideY(begin: 0.2, end: 0),

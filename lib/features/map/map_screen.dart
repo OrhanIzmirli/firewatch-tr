@@ -522,6 +522,25 @@ class _MapScreenState extends State<MapScreen> {
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
+    // Over the FWI raster the tier colours stop working: a red disc on the
+    // red "very high" band is invisible. The risk-on variant is a near-black
+    // disc with a white ring — the ring carries the edge on the dark FWI
+    // bands, the disc on the light ones — and the tier colour moves to a
+    // centre dot, where it reads against the dark disc instead of the map.
+    if (_showRiskLayer) {
+      return Container(
+        width: size * 0.62,
+        height: size * 0.62,
+        decoration: BoxDecoration(
+          color: AppColors.background.withValues(alpha: 0.92),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Center(
+          child: ColorDot(color: color, size: size * 0.26),
+        ),
+      );
+    }
     return Container(
       width: size * 0.62,
       height: size * 0.62,
@@ -573,6 +592,27 @@ class _MapScreenState extends State<MapScreen> {
     final status = incident.status;
     final size = _incidentMarkerSize(status);
     final showIcon = size >= 20;
+    // Same contrast problem as the raw detections: a danger-red event disc
+    // disappears on the FWI raster's red and maroon bands. With the risk
+    // layer on, the disc goes near-black with a solid white ring and the
+    // status colour moves to the glyph (or a centre dot when too small for
+    // one), which stays readable on all six FWI class colours.
+    if (_showRiskLayer) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.background.withValues(alpha: 0.92),
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: showIcon
+              ? Icon(status.icon, color: status.color, size: size * 0.56)
+              : Center(child: ColorDot(color: status.color, size: size * 0.3)),
+        ),
+      );
+    }
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -668,27 +708,38 @@ class _MapScreenState extends State<MapScreen> {
         fillAlpha = 0.6;
     }
 
+    // High-contrast variant over the FWI raster: dark bubble, solid white
+    // ring, and the status colour on the glyph instead of the fill — same
+    // reasoning as the single markers.
+    final onRisk = _showRiskLayer;
+
     return Center(
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: fill.withValues(alpha: fillAlpha),
+          color: onRisk
+              ? AppColors.background.withValues(alpha: 0.92)
+              : fill.withValues(alpha: fillAlpha),
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white.withValues(alpha: hasActive ? 0.95 : 0.75),
-            width: hasActive ? 2.5 : 1.8,
+            color: onRisk
+                ? Colors.white
+                : Colors.white.withValues(alpha: hasActive ? 0.95 : 0.75),
+            width: onRisk ? 2 : (hasActive ? 2.5 : 1.8),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: hasActive
-                  ? AppColors.danger.withValues(alpha: 0.5)
-                  : Colors.black.withValues(alpha: 0.26),
-              blurRadius: hasActive ? 12 : 6,
-              spreadRadius: hasActive ? 1 : 0,
-              offset: hasActive ? Offset.zero : const Offset(0, 2),
-            ),
-          ],
+          boxShadow: onRisk
+              ? null
+              : [
+                  BoxShadow(
+                    color: hasActive
+                        ? AppColors.danger.withValues(alpha: 0.5)
+                        : Colors.black.withValues(alpha: 0.26),
+                    blurRadius: hasActive ? 12 : 6,
+                    spreadRadius: hasActive ? 1 : 0,
+                    offset: hasActive ? Offset.zero : const Offset(0, 2),
+                  ),
+                ],
         ),
         child: Center(
           child: Column(
@@ -697,7 +748,7 @@ class _MapScreenState extends State<MapScreen> {
               if (hasActive)
                 Icon(
                   Icons.local_fire_department_rounded,
-                  color: Colors.white,
+                  color: onRisk ? AppColors.danger : Colors.white,
                   size: size * 0.38,
                 ),
               Text(
@@ -1204,9 +1255,16 @@ class _MapScreenState extends State<MapScreen> {
                       );
                     }).toList(),
                     builder: (context, markers) => Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
+                      decoration: BoxDecoration(
+                        // Dark + ringed over the FWI raster, like the
+                        // single markers: orange-on-orange is invisible.
+                        color: _showRiskLayer
+                            ? AppColors.background.withValues(alpha: 0.92)
+                            : AppColors.primary,
                         shape: BoxShape.circle,
+                        border: _showRiskLayer
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
                       ),
                       child: Center(
                         child: Text(

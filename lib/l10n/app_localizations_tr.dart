@@ -2831,6 +2831,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskLayerToggle => 'Risk (FWI)';
 
   @override
+  String get incidentToggleShowShort => 'Olaylar';
+
+  @override
+  String get incidentToggleDetectionsShort => 'Noktalar';
+
+  @override
+  String get mapLayersButton => 'Katmanlar';
+
+  @override
   String get riskLegendTitle => 'Yangın tehlikesi (FWI)';
 
   @override

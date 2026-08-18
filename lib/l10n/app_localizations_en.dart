@@ -2836,6 +2836,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskLayerToggle => 'Risk (FWI)';
 
   @override
+  String get incidentToggleShowShort => 'Events';
+
+  @override
+  String get incidentToggleDetectionsShort => 'Points';
+
+  @override
+  String get mapLayersButton => 'Layers';
+
+  @override
   String get riskLegendTitle => 'Fire danger (FWI)';
 
   @override

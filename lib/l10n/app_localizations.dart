@@ -4976,6 +4976,24 @@ abstract class AppLocalizations {
   /// **'Risk (FWI)'**
   String get riskLayerToggle;
 
+  /// No description provided for @incidentToggleShowShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olaylar'**
+  String get incidentToggleShowShort;
+
+  /// No description provided for @incidentToggleDetectionsShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Noktalar'**
+  String get incidentToggleDetectionsShort;
+
+  /// No description provided for @mapLayersButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Katmanlar'**
+  String get mapLayersButton;
+
   /// No description provided for @riskLegendTitle.
   ///
   /// In tr, this message translates to:

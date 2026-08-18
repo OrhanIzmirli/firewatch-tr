@@ -70,7 +70,11 @@ class _MapScreenState extends State<MapScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   bool _isSlowLoading = false;
-  bool _isLegendOpen = false;
+
+  /// The one collapsible surface over the map. It holds everything that used
+  /// to float separately — the merged legend, the FWI day picker, opacity and
+  /// attribution — and starts closed: the map is the product, not the panel.
+  bool _isLayersPanelOpen = false;
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   double _currentZoom = 5.6;
 
@@ -110,12 +114,10 @@ class _MapScreenState extends State<MapScreen> {
   /// Days the forecast-day picker offers, today included.
   static const int _riskForecastDays = 4;
 
-  bool _isRiskLegendOpen = true;
-
   /// How much of the screen the info sheet takes when it is resting. Enough
-  /// for the title, the one-line description and the Report button, and no
-  /// more — the rest of the screen belongs to the map.
-  static const double _sheetCollapsedFraction = 0.25;
+  /// for the title line and the Report button, and no more — the filters,
+  /// captions and help text open on a drag. The map owns the rest.
+  static const double _sheetCollapsedFraction = 0.17;
 
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -210,12 +212,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _toggleRiskLayer() {
-    setState(() {
-      _showRiskLayer = !_showRiskLayer;
-      // Reopen the legend on every activation: the colours mean nothing
-      // without the key, and the user may have closed it days ago.
-      if (_showRiskLayer) _isRiskLegendOpen = true;
-    });
+    setState(() => _showRiskLayer = !_showRiskLayer);
   }
 
   /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
@@ -1288,288 +1285,149 @@ class _MapScreenState extends State<MapScreen> {
               child: const Center(child: CircularProgressIndicator()),
             ),
           ),
-        if (_incidents.isNotEmpty)
-          Positioned(
-            left: 12,
-            top: 12,
-            right: 12,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: GlassPanel(
-                    padding: const EdgeInsets.all(4),
-                    radius: AppSpacing.pillRadius,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _LayerChip(
-                          label: l10n.incidentToggleShow,
-                          icon: Icons.local_fire_department_rounded,
-                          selected: _showIncidents,
-                          onTap: () => _setLayer(showIncidents: true),
-                        ),
-                        _LayerChip(
-                          label: l10n.incidentToggleDetections,
-                          icon: Icons.grain_rounded,
-                          selected: !_showIncidents,
-                          onTap: () => _setLayer(showIncidents: false),
-                        ),
-                        _LayerChip(
-                          label: l10n.riskLayerToggle,
-                          icon: Icons.thermostat_rounded,
-                          selected: _showRiskLayer,
-                          onTap: _toggleRiskLayer,
-                        ),
-                      ],
-                    ),
+        // The one permanent surface at the top: which layers are on. The
+        // filters and captions that used to stack here live in the sheet
+        // now, and the FWI controls live in the layers panel. The error
+        // banner shares this column so it can never cover the chips.
+        Positioned(
+          left: 12,
+          top: 12,
+          right: 12,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_incidents.isNotEmpty)
+                GlassPanel(
+                  padding: const EdgeInsets.all(4),
+                  radius: AppSpacing.pillRadius,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _LayerChip(
+                        label: l10n.incidentToggleShowShort,
+                        icon: Icons.local_fire_department_rounded,
+                        selected: _showIncidents,
+                        onTap: () => _setLayer(showIncidents: true),
+                      ),
+                      _LayerChip(
+                        label: l10n.incidentToggleDetectionsShort,
+                        icon: Icons.grain_rounded,
+                        selected: !_showIncidents,
+                        onTap: () => _setLayer(showIncidents: false),
+                      ),
+                      _LayerChip(
+                        label: l10n.riskLayerToggle,
+                        icon: Icons.thermostat_rounded,
+                        selected: _showRiskLayer,
+                        onTap: _toggleRiskLayer,
+                      ),
+                    ],
                   ),
                 ),
-                if (_showIncidents) ...[
-                  const SizedBox(height: 6),
-                  // Scrollable because the honest filter label is longer than
-                  // a convenient one and is worth more than a row that never
-                  // scrolls.
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: GlassPanel(
-                      padding: const EdgeInsets.all(3),
-                      radius: AppSpacing.pillRadius,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: IncidentFilter.values
-                            .map(
-                              (filter) => _FilterChip(
-                                label: filter.label(l10n),
-                                count: _incidentCountFor(filter),
-                                selected: _incidentFilter == filter,
-                                onTap: () => _setIncidentFilter(filter),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                ],
-                // One line saying what the chosen layer actually contains.
-                // "Detections" told the user nothing: the word describes how
-                // the data was produced, not what they are looking at.
+              if (_errorMessage != null) ...[
                 const SizedBox(height: 6),
                 GlassPanel(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 7,
-                  ),
-                  radius: AppSpacing.cardRadius,
-                  child: Text(
-                    _showIncidents
-                        ? l10n.incidentLayerCaptionEvents
-                        : l10n.incidentLayerCaptionDetections,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 11,
-                      height: 1.3,
-                      color: titleColor.withValues(alpha: 0.78),
-                    ),
-                  ),
-                ),
-                if (_showRiskLayer) ...[
-                  const SizedBox(height: 6),
-                  _buildRiskControls(l10n, titleColor),
-                ],
-              ],
-            ),
-          ),
-
-        if (_errorMessage != null)
-          Positioned(
-            left: 12,
-            right: 12,
-            top: 12,
-            child: GlassPanel(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
-                    color: AppColors.warning,
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Text(
-                      _errorMessage!,
-                      style: GoogleFonts.ibmPlexSans(
-                        fontSize: 13,
-                        height: 1.45,
-                        color: titleColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        Positioned(
-          right: 12,
-          bottom: bottomInset + 12,
-          child:
-              Column(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: Row(
                     children: [
-                      GlassPanel(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 12,
-                        ),
-                        radius: AppSpacing.largeCardRadius,
-                        child: InkWell(
-                          onTap: _refreshMap,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.refresh_rounded,
-                                size: 18,
-                                color: AppColors.primary,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(
-                                l10n.commonRefresh,
-                                style: GoogleFonts.ibmPlexSans(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: titleColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        color: AppColors.warning,
                       ),
-                      const SizedBox(height: AppSpacing.sm),
-                      // Always shown (not gated on
-                      // _userPosition) — the silent
-                      // bootstrap fetch in initState
-                      // can race the permission
-                      // dialog and come back null;
-                      // tapping this is what
-                      // (re)fetches a fresh fix now.
-                      GlassPanel(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 12,
-                        ),
-                        radius: AppSpacing.largeCardRadius,
-                        child: InkWell(
-                          onTap: _centerOnUser,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.near_me_rounded,
-                                size: 18,
-                                color: AppColors.primary,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(
-                                l10n.mapGoToMe,
-                                style: GoogleFonts.ibmPlexSans(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: titleColor,
-                                ),
-                              ),
-                            ],
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: GoogleFonts.ibmPlexSans(
+                            fontSize: 13,
+                            height: 1.45,
+                            color: titleColor,
                           ),
                         ),
                       ),
                     ],
-                  )
-                  .animate(delay: 240.ms)
-                  .fadeIn(duration: 280.ms)
-                  .slideY(begin: 0.2, end: 0),
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
+        // The one permanent surface at the bottom: the layers-panel toggle
+        // plus refresh and go-to-me as icon actions, in a single bar. Go-to
+        // -me stays visible even without a fix — the silent bootstrap fetch
+        // can race the permission dialog, and tapping this is what
+        // (re)fetches a fresh one.
         Positioned(
           left: 12,
           bottom: bottomInset + 12,
           child: GlassPanel(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            radius: AppSpacing.largeCardRadius,
-            child: InkWell(
-              onTap: () => setState(() => _isLegendOpen = !_isLegendOpen),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
-                    size: 18,
-                    color: AppColors.primary,
+            padding: const EdgeInsets.all(4),
+            radius: AppSpacing.pillRadius,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _LayerChip(
+                  label: l10n.mapLayersButton,
+                  icon: Icons.layers_rounded,
+                  selected: _isLayersPanelOpen,
+                  onTap: () => setState(
+                    () => _isLayersPanelOpen = !_isLayersPanelOpen,
                   ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Text(
-                    l10n.mapLegendTitle,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: titleColor,
-                    ),
-                  ),
-                ],
+                ),
+                _MapIconAction(
+                  icon: Icons.refresh_rounded,
+                  tooltip: l10n.commonRefresh,
+                  onTap: _refreshMap,
+                ),
+                _MapIconAction(
+                  icon: Icons.near_me_rounded,
+                  tooltip: l10n.mapGoToMe,
+                  onTap: _centerOnUser,
+                ),
+              ],
+            ),
+          ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideY(begin: 0.2, end: 0),
+        ),
+        // Attribution is a legal requirement, not a UI element: bare text on
+        // the map edge, no box. The halo keeps it readable over any of the
+        // six FWI band colours. Repeated inside the layers panel.
+        if (_showRiskLayer)
+          Positioned(
+            right: 12,
+            bottom: bottomInset + 18,
+            child: IgnorePointer(
+              child: Text(
+                l10n.riskAttribution,
+                style: GoogleFonts.ibmPlexSans(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  shadows: const [
+                    Shadow(color: Colors.black87, blurRadius: 3),
+                    Shadow(color: Colors.black54, blurRadius: 1),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        if (_isLegendOpen)
+        if (_isLayersPanelOpen)
           Positioned(
             left: 12,
-            right: 12,
-            bottom: bottomInset + 66,
-            child: GlassPanel(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // One legend at a time. The
-                  // two layers use different
-                  // symbols for different
-                  // things, and stacking both
-                  // keys produced six rows
-                  // with "low confidence"
-                  // appearing twice, meaning
-                  // two different things.
-                  if (_showIncidents)
-                    const IncidentLegend()
-                  else ...[
-                    _LegendRow(
-                      color: AppColors.danger,
-                      label: l10n.legendProbableFire,
-                      textColor: titleColor,
-                    ),
-                    const SizedBox(height: 8),
-                    _LegendRow(
-                      color: AppColors.primary,
-                      label: l10n.legendHighThermal,
-                      textColor: titleColor,
-                    ),
-                    const SizedBox(height: 8),
-                    _LegendRow(
-                      color: AppColors.textMuted,
-                      label: l10n.legendLowConfidence,
-                      textColor: titleColor,
-                    ),
-                  ],
-                ],
-              ),
-            ).animate().fadeIn(duration: 180.ms).slideY(begin: 0.08, end: 0),
+            bottom: bottomInset + 64,
+            child: _buildLayersPanel(l10n, titleColor)
+                .animate()
+                .fadeIn(duration: 180.ms)
+                .slideY(begin: 0.08, end: 0),
           ),
       ],
     );
   }
 
-  /// Everything the FWI overlay needs while it is on: the forecast-day
-  /// picker, the closable legend with the opacity slider, and the CC BY 4.0
-  /// attribution — a legal requirement, so it stays even with the legend
-  /// closed.
-  Widget _buildRiskControls(AppLocalizations l10n, Color titleColor) {
+  /// The layers panel: the merged legend for whatever is currently on, plus
+  /// the FWI forecast-day picker, opacity slider and attribution while the
+  /// risk layer is active. One collapsible panel instead of the two legends
+  /// and three floating boxes it replaced.
+  Widget _buildLayersPanel(AppLocalizations l10n, Color titleColor) {
     final classLabels = _riskClassLabels(l10n);
     // The official EFFIS class colours, very low → extreme, defined once in
     // [AppColors] so the legend cannot drift from the raster.
@@ -1581,159 +1439,170 @@ class _MapScreenState extends State<MapScreen> {
       AppColors.fwiVeryHigh,
       AppColors.fwiExtreme,
     ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: GlassPanel(
-            padding: const EdgeInsets.all(3),
-            radius: AppSpacing.pillRadius,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var offset = 0; offset < _riskForecastDays; offset++)
-                  _DayChip(
-                    label: _riskDayLabel(l10n, offset),
-                    selected: _riskDayOffset == offset,
-                    onTap: () => setState(() => _riskDayOffset = offset),
-                  ),
-              ],
-            ),
-          ),
+    final sectionStyle = GoogleFonts.ibmPlexSans(
+      fontSize: 12,
+      fontWeight: FontWeight.w700,
+      color: titleColor,
+    );
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 420),
+      child: GlassPanel(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
         ),
-        const SizedBox(height: 6),
-        if (_isRiskLegendOpen)
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 250),
-            child: GlassPanel(
-              padding: const EdgeInsets.fromLTRB(12, 8, 8, 10),
-              radius: AppSpacing.cardRadius,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n.riskLegendTitle,
-                          style: GoogleFonts.ibmPlexSans(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w800,
-                            color: titleColor,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: l10n.riskLegendHide,
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        iconSize: 16,
-                        onPressed: () =>
-                            setState(() => _isRiskLegendOpen = false),
-                        icon: Icon(
-                          Icons.close_rounded,
-                          color: titleColor.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  for (var i = 0; i < fwiColors.length; i++) ...[
-                    _LegendRow(
-                      color: fwiColors[i],
-                      label: classLabels[i],
-                      textColor: titleColor,
-                    ),
-                    if (i < fwiColors.length - 1) const SizedBox(height: 5),
-                  ],
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        l10n.riskOpacityLabel,
-                        style: GoogleFonts.ibmPlexSans(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: titleColor.withValues(alpha: 0.78),
-                        ),
-                      ),
-                      Expanded(
-                        child: SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            trackHeight: 2,
-                            thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 7,
-                            ),
-                            overlayShape: const RoundSliderOverlayShape(
-                              overlayRadius: 14,
-                            ),
-                          ),
-                          child: Slider(
-                            value: _riskOpacity,
-                            min: 0.2,
-                            max: 1.0,
-                            onChanged: (value) =>
-                                setState(() => _riskOpacity = value),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    l10n.riskLegendNote,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 10,
-                      height: 1.35,
-                      color: titleColor.withValues(alpha: 0.66),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        else
-          GlassPanel(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            radius: AppSpacing.cardRadius,
-            child: InkWell(
-              onTap: () => setState(() => _isRiskLegendOpen = true),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+        radius: AppSpacing.largeCardRadius,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
                 children: [
                   const Icon(
-                    Icons.legend_toggle,
-                    size: 14,
+                    Icons.layers_rounded,
+                    size: 16,
                     color: AppColors.primary,
                   ),
                   const SizedBox(width: 6),
-                  Text(
-                    l10n.riskLegendTitle,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: titleColor,
+                  Expanded(
+                    child: Text(
+                      l10n.mapLayersButton,
+                      style: GoogleFonts.ibmPlexSans(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: titleColor,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: l10n.riskLegendHide,
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    iconSize: 16,
+                    onPressed: () =>
+                        setState(() => _isLayersPanelOpen = false),
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: titleColor.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-        const SizedBox(height: 6),
-        GlassPanel(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          radius: AppSpacing.controlRadius,
-          child: Text(
-            l10n.riskAttribution,
-            style: GoogleFonts.ibmPlexSans(
-              fontSize: 9.5,
-              color: titleColor.withValues(alpha: 0.72),
-            ),
+              if (_showRiskLayer) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(l10n.riskLegendTitle, style: sectionStyle),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 2,
+                  runSpacing: 2,
+                  children: [
+                    for (var offset = 0; offset < _riskForecastDays; offset++)
+                      _DayChip(
+                        label: _riskDayLabel(l10n, offset),
+                        selected: _riskDayOffset == offset,
+                        onTap: () => setState(() => _riskDayOffset = offset),
+                      ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      l10n.riskOpacityLabel,
+                      style: GoogleFonts.ibmPlexSans(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: titleColor.withValues(alpha: 0.78),
+                      ),
+                    ),
+                    Expanded(
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          trackHeight: 2,
+                          thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 7,
+                          ),
+                          overlayShape: const RoundSliderOverlayShape(
+                            overlayRadius: 14,
+                          ),
+                        ),
+                        child: Slider(
+                          value: _riskOpacity,
+                          min: 0.2,
+                          max: 1.0,
+                          onChanged: (value) =>
+                              setState(() => _riskOpacity = value),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                for (var i = 0; i < fwiColors.length; i++) ...[
+                  _LegendRow(
+                    color: fwiColors[i],
+                    label: classLabels[i],
+                    textColor: titleColor,
+                  ),
+                  if (i < fwiColors.length - 1) const SizedBox(height: 5),
+                ],
+                const SizedBox(height: 6),
+                Text(
+                  l10n.riskLegendNote,
+                  style: GoogleFonts.ibmPlexSans(
+                    fontSize: 10,
+                    height: 1.35,
+                    color: titleColor.withValues(alpha: 0.66),
+                  ),
+                ),
+                Divider(
+                  height: AppSpacing.lg,
+                  color: titleColor.withValues(alpha: 0.12),
+                ),
+              ] else
+                const SizedBox(height: AppSpacing.sm),
+              // The marker key for whichever fire layer is on. One legend at
+              // a time — stacking both produced "low confidence" twice,
+              // meaning two different things.
+              Text(l10n.mapLegendTitle, style: sectionStyle),
+              const SizedBox(height: 6),
+              if (_showIncidents)
+                const IncidentLegend()
+              else ...[
+                _LegendRow(
+                  color: AppColors.danger,
+                  label: l10n.legendProbableFire,
+                  textColor: titleColor,
+                ),
+                const SizedBox(height: 8),
+                _LegendRow(
+                  color: AppColors.primary,
+                  label: l10n.legendHighThermal,
+                  textColor: titleColor,
+                ),
+                const SizedBox(height: 8),
+                _LegendRow(
+                  color: AppColors.textMuted,
+                  label: l10n.legendLowConfidence,
+                  textColor: titleColor,
+                ),
+              ],
+              if (_showRiskLayer) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  l10n.riskAttribution,
+                  style: GoogleFonts.ibmPlexSans(
+                    fontSize: 9.5,
+                    color: titleColor.withValues(alpha: 0.72),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -1846,6 +1715,44 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: AppSpacing.md),
+            // What the chosen layer contains, and which slice of it is
+            // drawn. Both moved down from the map surface: the caption is
+            // read once, the filter is adjusted occasionally, and neither
+            // earns a permanent box over the map.
+            Text(
+              _showIncidents
+                  ? l10n.incidentLayerCaptionEvents
+                  : l10n.incidentLayerCaptionDetections,
+              style: GoogleFonts.ibmPlexSans(
+                fontSize: 12,
+                height: 1.4,
+                color: secondaryTextColor,
+              ),
+            ),
+            if (_showIncidents && _incidents.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: GlassPanel(
+                  padding: const EdgeInsets.all(3),
+                  radius: AppSpacing.pillRadius,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: IncidentFilter.values
+                        .map(
+                          (filter) => _FilterChip(
+                            label: filter.label(l10n),
+                            count: _incidentCountFor(filter),
+                            selected: _incidentFilter == filter,
+                            onTap: () => _setIncidentFilter(filter),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: AppSpacing.md),
             // The colour is a widget, not a character: the dot is drawn in the
             // same red the marker uses, so the sentence and the map cannot
@@ -2323,6 +2230,36 @@ class _FilterChip extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Icon-only action in the bottom bar. A [_LayerChip] without the label:
+/// refresh and go-to-me are verbs the icon already carries, and two labelled
+/// buttons were most of what made the old bottom row two panels tall.
+class _MapIconAction extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _MapIconAction({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Icon(icon, size: 18, color: AppColors.primary),
         ),
       ),
     );

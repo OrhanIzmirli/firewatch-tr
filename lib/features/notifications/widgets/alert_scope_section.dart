@@ -8,6 +8,7 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/alert_scope.dart';
 import '../../../services/alert_scope_provider.dart';
+import '../../../services/saved_places_provider.dart';
 import '../../../shared/widgets/glass_panel.dart';
 import '../../../shared/widgets/section_header.dart';
 
@@ -149,6 +150,32 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
                             _apply(AlertScope.city, cityId: value);
                           },
                   ),
+              ],
+              _divider(isDark),
+              _ScopeOptionTile(
+                icon: Icons.bookmark_rounded,
+                title: l10n.notificationScopePlaces,
+                subtitle: l10n.notificationScopePlacesDesc,
+                selected: state.scope == AlertScope.places,
+                enabled: !_saving,
+                onTap: () => _apply(AlertScope.places),
+              ),
+              if (state.scope == AlertScope.places) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  // Honest about the mechanics: this scope runs on the
+                  // device's own scans until the backend learns 'places'.
+                  ref.watch(savedPlacesProvider).isEmpty
+                      ? l10n.notificationScopePlacesEmpty
+                      : l10n.notificationScopePlacesNote(
+                          ref.watch(savedPlacesProvider).length,
+                        ),
+                  style: GoogleFonts.ibmPlexSans(
+                    fontSize: 12.5,
+                    height: 1.45,
+                    color: subtitleColor,
+                  ),
+                ),
               ],
               if (state.scope != AlertScope.all) ...[
                 const SizedBox(height: AppSpacing.md),

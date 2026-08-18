@@ -170,6 +170,12 @@ abstract class AppLocalizations {
   /// **'Vazgeç'**
   String get commonCancel;
 
+  /// No description provided for @commonSave.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydet'**
+  String get commonSave;
+
   /// No description provided for @commonLoading.
   ///
   /// In tr, this message translates to:
@@ -4993,6 +4999,156 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Katmanlar'**
   String get mapLayersButton;
+
+  /// No description provided for @placesButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerlerim'**
+  String get placesButton;
+
+  /// No description provided for @placesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı Yerler'**
+  String get placesTitle;
+
+  /// No description provided for @placesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harita bu yerlere yakınlaşır; istersen bildirim kapsamın da bu yerlere daralır.'**
+  String get placesSubtitle;
+
+  /// No description provided for @placesEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz kayıtlı yer yok. İl veya ilçe ara, ya da haritaya iğne bırak.'**
+  String get placesEmpty;
+
+  /// No description provided for @placesSearchHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl veya ilçe ara'**
+  String get placesSearchHint;
+
+  /// No description provided for @placesDropPin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritaya iğne bırak'**
+  String get placesDropPin;
+
+  /// No description provided for @placesDropPinHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydetmek istediğin noktaya dokun'**
+  String get placesDropPinHint;
+
+  /// No description provided for @placesPinNameTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yere bir ad ver'**
+  String get placesPinNameTitle;
+
+  /// No description provided for @placesPinDefaultName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı nokta'**
+  String get placesPinDefaultName;
+
+  /// No description provided for @placesShowAllPlaces.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hepsini göster'**
+  String get placesShowAllPlaces;
+
+  /// No description provided for @placesResetView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm Türkiye'**
+  String get placesResetView;
+
+  /// No description provided for @placesRemove.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeri sil'**
+  String get placesRemove;
+
+  /// No description provided for @placesRiskUnknown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk alınamadı'**
+  String get placesRiskUnknown;
+
+  /// No description provided for @placesRiskNoData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri yok'**
+  String get placesRiskNoData;
+
+  /// No description provided for @placesRiskLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'FWI tehlikesi · {day}'**
+  String placesRiskLine(String day);
+
+  /// No description provided for @placesActiveDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} aktif tespit'**
+  String placesActiveDetections(int count);
+
+  /// No description provided for @placesNoActiveDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif tespit yok'**
+  String get placesNoActiveDetections;
+
+  /// No description provided for @placesLastDetection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son tespit ~{hours} saat önce'**
+  String placesLastDetection(String hours);
+
+  /// No description provided for @placesResolutionNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'FWI sınıfı ~10 km çözünürlüklü bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.'**
+  String get placesResolutionNote;
+
+  /// No description provided for @notificationScopePlaces.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı yerlerim'**
+  String get notificationScopePlaces;
+
+  /// No description provided for @notificationScopePlacesDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca harita ekranında kaydettiğin il, ilçe ve noktaların çevresindeki yangınlar.'**
+  String get notificationScopePlacesDesc;
+
+  /// No description provided for @notificationScopePlacesEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsin.'**
+  String get notificationScopePlacesEmpty;
+
+  /// No description provided for @notificationScopePlacesNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğin il/bölge kapsamını kullanmaya devam eder.'**
+  String notificationScopePlacesNote(int count);
+
+  /// No description provided for @notifPlacesFireTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı yerinde yangın tespiti'**
+  String get notifPlacesFireTitle;
+
+  /// No description provided for @notifPlacesFireBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı yerlerinin çevresinde {count} termal tespit var. Harita ekranından kontrol et.'**
+  String notifPlacesFireBody(int count);
 
   /// No description provided for @riskLegendTitle.
   ///

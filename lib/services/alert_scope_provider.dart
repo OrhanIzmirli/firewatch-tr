@@ -80,7 +80,7 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
     _bootstrap();
   }
 
-  static const _scopeKey = 'alert_scope';
+  static const _scopeKey = kAlertScopePrefsKey;
   static const _regionKey = 'alert_scope_region';
   static const _cityIdKey = 'alert_scope_city_id';
 
@@ -196,6 +196,11 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
   Future<bool> syncToBackend() async {
     if (state.scope == AlertScope.region && state.regionKey == null) return false;
     if (state.scope == AlertScope.city && state.cityId == null) return false;
+
+    // The backend's fcm_tokens.alert_scope does not accept 'places' yet;
+    // this scope is enforced by the device's own monitoring scans. Nothing
+    // to push, and nothing failed — the caller should not warn.
+    if (state.scope == AlertScope.places) return true;
 
     return NotificationService.instance.updateAlertScope(
       scope: state.scope,

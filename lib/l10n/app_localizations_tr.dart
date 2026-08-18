@@ -45,6 +45,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get commonCancel => 'Vazgeç';
 
   @override
+  String get commonSave => 'Kaydet';
+
+  @override
   String get commonLoading => 'Yükleniyor...';
 
   @override
@@ -2838,6 +2841,96 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mapLayersButton => 'Katmanlar';
+
+  @override
+  String get placesButton => 'Yerlerim';
+
+  @override
+  String get placesTitle => 'Kayıtlı Yerler';
+
+  @override
+  String get placesSubtitle =>
+      'Harita bu yerlere yakınlaşır; istersen bildirim kapsamın da bu yerlere daralır.';
+
+  @override
+  String get placesEmpty =>
+      'Henüz kayıtlı yer yok. İl veya ilçe ara, ya da haritaya iğne bırak.';
+
+  @override
+  String get placesSearchHint => 'İl veya ilçe ara';
+
+  @override
+  String get placesDropPin => 'Haritaya iğne bırak';
+
+  @override
+  String get placesDropPinHint => 'Kaydetmek istediğin noktaya dokun';
+
+  @override
+  String get placesPinNameTitle => 'Yere bir ad ver';
+
+  @override
+  String get placesPinDefaultName => 'Kayıtlı nokta';
+
+  @override
+  String get placesShowAllPlaces => 'Hepsini göster';
+
+  @override
+  String get placesResetView => 'Tüm Türkiye';
+
+  @override
+  String get placesRemove => 'Yeri sil';
+
+  @override
+  String get placesRiskUnknown => 'Risk alınamadı';
+
+  @override
+  String get placesRiskNoData => 'Veri yok';
+
+  @override
+  String placesRiskLine(String day) {
+    return 'FWI tehlikesi · $day';
+  }
+
+  @override
+  String placesActiveDetections(int count) {
+    return '$count aktif tespit';
+  }
+
+  @override
+  String get placesNoActiveDetections => 'Aktif tespit yok';
+
+  @override
+  String placesLastDetection(String hours) {
+    return 'Son tespit ~$hours saat önce';
+  }
+
+  @override
+  String get placesResolutionNote =>
+      'FWI sınıfı ~10 km çözünürlüklü bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.';
+
+  @override
+  String get notificationScopePlaces => 'Kayıtlı yerlerim';
+
+  @override
+  String get notificationScopePlacesDesc =>
+      'Yalnızca harita ekranında kaydettiğin il, ilçe ve noktaların çevresindeki yangınlar.';
+
+  @override
+  String get notificationScopePlacesEmpty =>
+      'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsin.';
+
+  @override
+  String notificationScopePlacesNote(int count) {
+    return '$count kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğin il/bölge kapsamını kullanmaya devam eder.';
+  }
+
+  @override
+  String get notifPlacesFireTitle => 'Kayıtlı yerinde yangın tespiti';
+
+  @override
+  String notifPlacesFireBody(int count) {
+    return 'Kayıtlı yerlerinin çevresinde $count termal tespit var. Harita ekranından kontrol et.';
+  }
 
   @override
   String get riskLegendTitle => 'Yangın tehlikesi (FWI)';

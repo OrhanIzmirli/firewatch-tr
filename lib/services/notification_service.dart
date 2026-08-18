@@ -233,6 +233,19 @@ class NotificationService {
     );
   }
 
+  /// Local alert for detections inside the user's saved places — the
+  /// device-side arm of AlertScope.places.
+  Future<void> showSavedPlacesFireAlert({required int count}) async {
+    final l10n = await currentAppLocalizations();
+    await _plugin.show(
+      2002,
+      l10n.notifPlacesFireTitle,
+      l10n.notifPlacesFireBody(count),
+      _notificationDetails(),
+      payload: 'alerts_tab',
+    );
+  }
+
   Future<void> showFireEventAlert({
     required String fireId,
     required String title,

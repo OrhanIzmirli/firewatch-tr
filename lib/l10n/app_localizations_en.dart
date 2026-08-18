@@ -45,6 +45,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonSave => 'Save';
+
+  @override
   String get commonLoading => 'Loading...';
 
   @override
@@ -2843,6 +2846,96 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapLayersButton => 'Layers';
+
+  @override
+  String get placesButton => 'My Places';
+
+  @override
+  String get placesTitle => 'Saved Places';
+
+  @override
+  String get placesSubtitle =>
+      'The map zooms to these places; they can also narrow your alert scope.';
+
+  @override
+  String get placesEmpty =>
+      'No saved places yet. Search for a province or district, or drop a pin on the map.';
+
+  @override
+  String get placesSearchHint => 'Search province or district';
+
+  @override
+  String get placesDropPin => 'Drop a pin on the map';
+
+  @override
+  String get placesDropPinHint => 'Tap the point you want to save';
+
+  @override
+  String get placesPinNameTitle => 'Name this place';
+
+  @override
+  String get placesPinDefaultName => 'Saved point';
+
+  @override
+  String get placesShowAllPlaces => 'Show all';
+
+  @override
+  String get placesResetView => 'All of Türkiye';
+
+  @override
+  String get placesRemove => 'Remove place';
+
+  @override
+  String get placesRiskUnknown => 'Risk unavailable';
+
+  @override
+  String get placesRiskNoData => 'No data';
+
+  @override
+  String placesRiskLine(String day) {
+    return 'FWI danger · $day';
+  }
+
+  @override
+  String placesActiveDetections(int count) {
+    return '$count active detections';
+  }
+
+  @override
+  String get placesNoActiveDetections => 'No active detections';
+
+  @override
+  String placesLastDetection(String hours) {
+    return 'Last detection ~$hours h ago';
+  }
+
+  @override
+  String get placesResolutionNote =>
+      'The FWI class is a regional forecast at ~10 km resolution; it is meaningful at province and district scale and does not resolve at neighbourhood scale. Two nearby places showing the same class is the data\'s resolution, not an error.';
+
+  @override
+  String get notificationScopePlaces => 'My saved places';
+
+  @override
+  String get notificationScopePlacesDesc =>
+      'Only fires around the provinces, districts and points you saved on the map screen.';
+
+  @override
+  String get notificationScopePlacesEmpty =>
+      'No saved places yet. You can add some from My Places on the map screen.';
+
+  @override
+  String notificationScopePlacesNote(int count) {
+    return '$count saved places are watched. For now this scope is enforced by this device\'s own scans; server notifications keep using the last region/province scope you chose.';
+  }
+
+  @override
+  String get notifPlacesFireTitle => 'Fire detection at a saved place';
+
+  @override
+  String notifPlacesFireBody(int count) {
+    return 'There are $count thermal detections around your saved places. Check the map screen.';
+  }
 
   @override
   String get riskLegendTitle => 'Fire danger (FWI)';

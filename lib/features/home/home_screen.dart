@@ -419,7 +419,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -553,7 +553,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final primaryTextColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.75)
         : Colors.black.withValues(alpha: 0.68);
@@ -1106,7 +1106,7 @@ class _FilterChip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
             ),
             child: Text(label,
                 style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w600,
@@ -1234,7 +1234,7 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final summaryColor = isDark
         ? AppColors.white.withValues(alpha: 0.7)
         : Colors.black.withValues(alpha: 0.64);
@@ -1269,7 +1269,7 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
                   width: 50, height: 50,
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                   ),
                   child: Icon(newsCategoryIcon(category), color: AppColors.primary, size: 24),
                 ),

@@ -108,7 +108,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);

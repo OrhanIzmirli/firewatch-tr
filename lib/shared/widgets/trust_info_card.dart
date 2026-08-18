@@ -34,7 +34,9 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 10),
         decoration: BoxDecoration(
           color: AppColors.primary.withValues(alpha: isDark ? 0.08 : 0.06),
-          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+          // A full-width expandable row is not a chip: pill corners promise
+          // "selectable", card corners promise "opens". This one opens.
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,9 +46,15 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
                 Icon(widget.icon, size: 15, color: AppColors.primary),
                 const SizedBox(width: 6),
                 Expanded(
+                  // Accent on the icon only — orange text next to an orange
+                  // icon spends the accent twice on the same row.
                   child: Text(
                     widget.title ?? l10n.trustCardLabel,
-                    style: GoogleFonts.ibmPlexSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                    style: GoogleFonts.ibmPlexSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: isDark ? AppColors.textPrimary : AppColors.lightText,
+                    ),
                   ),
                 ),
                 AnimatedRotation(

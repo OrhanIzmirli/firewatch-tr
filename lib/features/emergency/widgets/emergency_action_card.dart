@@ -44,7 +44,7 @@ class EmergencyActionCard extends StatelessWidget {
                   height: 46,
                   decoration: BoxDecoration(
                     color: accent.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                   ),
                   child: Icon(
                     icon,

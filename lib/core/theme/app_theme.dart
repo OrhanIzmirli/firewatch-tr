@@ -8,12 +8,13 @@ import '../constants/app_spacing.dart';
 /// theme cannot show anyway — they only blur), and a stepped type scale of
 /// 12 / 14 / 16 / 20 / 26 / 34 with no in-between sizes.
 class AppTheme {
-  // Light-mode neutrals, on the same warm axis as the dark set.
-  static const Color _lightBackground = Color(0xFFF6F3EE);
-  static const Color _lightSurface = Color(0xFFFDFBF8);
-  static const Color _lightBorder = Color(0xFFE4DDD2);
-  static const Color _lightText = Color(0xFF1C1814);
-  static const Color _lightTextMuted = Color(0xFF5C554D);
+  // Light-mode neutrals live in [AppColors] so screens can reference the
+  // same values in their `isDark ? … : …` pairs.
+  static const Color _lightBackground = AppColors.lightBackground;
+  static const Color _lightSurface = AppColors.lightSurface;
+  static const Color _lightBorder = AppColors.lightBorder;
+  static const Color _lightText = AppColors.lightText;
+  static const Color _lightTextMuted = AppColors.lightTextMuted;
 
   /// Numeric readouts. Tabular figures keep every digit the same width, so a
   /// live counter does not jitter as its value changes.

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/feedback_rate_limiter.dart';
 import '../../services/feedback_service.dart';
@@ -307,7 +308,7 @@ class _BugReportSheetState extends State<_BugReportSheet> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: subtitleColor.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
               ),
               child: Row(
                 children: [

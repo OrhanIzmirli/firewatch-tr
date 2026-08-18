@@ -27,6 +27,21 @@ class AppColors {
 
   static const Color white = Colors.white;
 
+  // Black scrim steps for the full-bleed image screens (splash, onboarding,
+  // permission intros): light at the top, heavy where the text sits.
+  static const Color scrimLight = Color(0x66000000);
+  static const Color scrimMedium = Color(0x99000000);
+  static const Color scrimHeavy = Color(0xCC000000);
+
+  // Light-mode neutrals, on the same warm axis. Screens use these as the
+  // light half of `isDark ? … : …` pairs; AppTheme builds the light theme
+  // from the same values so the two can never drift.
+  static const Color lightBackground = Color(0xFFF6F3EE);
+  static const Color lightSurface = Color(0xFFFDFBF8);
+  static const Color lightBorder = Color(0xFFE4DDD2);
+  static const Color lightText = Color(0xFF1C1814);
+  static const Color lightTextMuted = Color(0xFF5C554D);
+
   /// The official Copernicus EFFIS Fire Weather Index class colours, exactly
   /// as the WMS raster paints them — any legend drawn from these can never
   /// drift from the heat-map layer. Order: very low → extreme.

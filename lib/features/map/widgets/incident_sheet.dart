@@ -40,7 +40,7 @@ class IncidentSheet extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final status = incident.status;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final bodyColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.66);

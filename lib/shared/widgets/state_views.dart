@@ -21,7 +21,7 @@ class EmptyStateView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.6)
         : Colors.black.withValues(alpha: 0.52);
@@ -71,7 +71,7 @@ class ErrorStateView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),

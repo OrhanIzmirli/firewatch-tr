@@ -320,7 +320,7 @@ class _RiskScreenState extends State<RiskScreen> {
       builder: (sheetContext) {
         final theme = Theme.of(sheetContext);
         final isDark = theme.brightness == Brightness.dark;
-        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : AppColors.lightText);
         final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.74) : Colors.black.withValues(alpha: 0.66);
         final mutedTextColor = isDark ? AppColors.white.withValues(alpha: 0.58) : Colors.black.withValues(alpha: 0.5);
 
@@ -393,7 +393,7 @@ class _RiskScreenState extends State<RiskScreen> {
       builder: (sheetContext) {
         final theme = Theme.of(sheetContext);
         final isDark = theme.brightness == Brightness.dark;
-        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+        final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : AppColors.lightText);
         final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.72) : Colors.black.withValues(alpha: 0.62);
 
         return Padding(
@@ -501,7 +501,7 @@ class _RiskScreenState extends State<RiskScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -802,7 +802,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                 decoration: isMine
                                     ? BoxDecoration(
                                         color: AppColors.primary.withValues(alpha: 0.08),
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                                       )
                                     : null,
                                 children: [
@@ -839,7 +839,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                                         color: isDark
                                                             ? AppColors.white.withValues(alpha: 0.06)
                                                             : Colors.black.withValues(alpha: 0.05),
-                                                        borderRadius: BorderRadius.circular(6),
+                                                        borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
                                                       ),
                                                     ),
                                                   ),
@@ -850,7 +850,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                                     child: DecoratedBox(
                                                       decoration: BoxDecoration(
                                                         color: barColor,
-                                                        borderRadius: BorderRadius.circular(6),
+                                                        borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
                                                       ),
                                                     ),
                                                   ),
@@ -1045,7 +1045,7 @@ class _MyLocationSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : const Color(0xFF0F172A));
+    final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.74) : Colors.black.withValues(alpha: 0.66);
 
     if (loading) {
@@ -1329,7 +1329,7 @@ class _ComparisonRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final mutedColor = isDark ? AppColors.white.withValues(alpha: 0.58) : Colors.black.withValues(alpha: 0.5);
 
     final diff = regionValue - avgValue;
@@ -1418,9 +1418,9 @@ class _RiskMetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final valueColor = Theme.of(context).textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.58)
         : Colors.black.withValues(alpha: 0.5);
@@ -1435,7 +1435,7 @@ class _RiskMetricCard extends StatelessWidget {
             height: 42,
             decoration: BoxDecoration(
               color: accent.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
             ),
             child: Icon(icon, color: accent, size: 22),
           ),
@@ -1481,7 +1481,7 @@ class _RegionRiskCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final noteColor = isDark
         ? AppColors.white.withValues(alpha: 0.58)
         : Colors.black.withValues(alpha: 0.5);
@@ -1547,7 +1547,7 @@ class _ProgressFactorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final labelColor = isDark
         ? AppColors.white.withValues(alpha: 0.62)
         : Colors.black.withValues(alpha: 0.56);

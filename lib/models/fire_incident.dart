@@ -430,7 +430,7 @@ extension IncidentStatusStyle on IncidentStatus {
       case IncidentStatus.awaitingConfirmation:
         return AppColors.primary;
       case IncidentStatus.lowConfidence:
-        return const Color(0xFF94A3B8);
+        return AppColors.textMuted;
     }
   }
 

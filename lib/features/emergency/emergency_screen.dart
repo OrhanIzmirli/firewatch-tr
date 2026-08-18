@@ -59,7 +59,7 @@ class EmergencyScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -299,7 +299,7 @@ class _ChecklistCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.66)
         : Colors.black.withValues(alpha: 0.58);

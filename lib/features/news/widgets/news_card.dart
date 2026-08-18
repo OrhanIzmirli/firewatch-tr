@@ -92,7 +92,7 @@ class _NewsCardState extends State<NewsCard> {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final summaryColor = isDark
         ? AppColors.white.withValues(alpha: 0.7)
         : Colors.black.withValues(alpha: 0.62);
@@ -133,7 +133,7 @@ class _NewsCardState extends State<NewsCard> {
                   height: 52,
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                   ),
                   child: Icon(
                     newsCategoryIcon(category),

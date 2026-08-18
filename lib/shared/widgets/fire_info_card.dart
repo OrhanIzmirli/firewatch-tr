@@ -26,7 +26,7 @@ class FireInfoCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.64);

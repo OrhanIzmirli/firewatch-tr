@@ -61,7 +61,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
     final state = ref.watch(alertScopeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.64)
         : Colors.black.withValues(alpha: 0.58);
@@ -239,14 +239,14 @@ class _ScopeOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.64)
         : Colors.black.withValues(alpha: 0.58);
 
     return InkWell(
       onTap: enabled ? onTap : null,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
@@ -259,7 +259,7 @@ class _ScopeOptionTile extends StatelessWidget {
                 color: AppColors.primary.withValues(
                   alpha: selected ? 0.20 : 0.12,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
               ),
               child: Icon(icon, color: AppColors.primary, size: 20),
             ),

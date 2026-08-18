@@ -276,7 +276,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.64);
@@ -444,7 +444,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       width: 46, height: 46,
                                       decoration: BoxDecoration(
                                         color: AppColors.danger.withValues(alpha: 0.12),
-                                        borderRadius: BorderRadius.circular(14),
+                                        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                                       ),
                                       child: const Icon(Icons.local_fire_department_rounded, color: AppColors.danger),
                                     ),
@@ -545,7 +545,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           width: 46, height: 46,
                                           decoration: BoxDecoration(
                                             color: AppColors.danger.withValues(alpha: 0.12),
-                                            borderRadius: BorderRadius.circular(14),
+                                            borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                                           ),
                                           child: const Icon(Icons.local_fire_department_rounded, color: AppColors.danger, size: 22),
                                         ),

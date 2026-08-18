@@ -23,7 +23,7 @@ class SkeletonBox extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: isDark ? Colors.white : Colors.black,
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
+        borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.controlRadius),
       ),
     );
   }
@@ -63,7 +63,7 @@ class SkeletonListCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SkeletonBox(width: 46, height: 46, borderRadius: BorderRadius.all(Radius.circular(14))),
+            const SkeletonBox(width: 46, height: 46, borderRadius: BorderRadius.all(Radius.circular(AppSpacing.largeCardRadius))),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
@@ -115,7 +115,7 @@ class SkeletonMetricCard extends StatelessWidget {
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SkeletonBox(width: 42, height: 42, borderRadius: BorderRadius.all(Radius.circular(12))),
+          SkeletonBox(width: 42, height: 42, borderRadius: BorderRadius.all(Radius.circular(AppSpacing.cardRadius))),
           Spacer(),
           SkeletonBox(width: 60, height: 20),
           SizedBox(height: 8),

@@ -22,7 +22,7 @@ class DataSourcesScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor =
         Theme.of(context).textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final bodyColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.68);

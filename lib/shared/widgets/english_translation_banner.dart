@@ -20,7 +20,7 @@ class EnglishTranslationBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.info.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
         border: Border.all(color: AppColors.info.withValues(alpha: 0.24)),
       ),
       child: Row(

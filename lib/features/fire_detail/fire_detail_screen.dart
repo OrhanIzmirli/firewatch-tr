@@ -205,7 +205,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
     final titleColor =
         theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -641,7 +641,7 @@ class _MetricCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final valueColor =
         theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final labelColor = isDark
         ? AppColors.white.withValues(alpha: 0.7)
         : Colors.black.withValues(alpha: 0.58);
@@ -691,7 +691,7 @@ class _InfoRow extends StatelessWidget {
         : Colors.black.withValues(alpha: 0.58);
     final valueColor =
         theme.textTheme.bodyLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     return GlassPanel(
       padding: const EdgeInsets.all(AppSpacing.lg),

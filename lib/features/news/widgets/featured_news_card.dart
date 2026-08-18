@@ -92,7 +92,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor = Theme.of(context).textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final summaryColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.64);
@@ -147,7 +147,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                   height: 58,
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                   ),
                   child: Icon(
                     newsCategoryIcon(category),

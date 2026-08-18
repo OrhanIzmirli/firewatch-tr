@@ -31,7 +31,7 @@ class SettingsScreen extends ConsumerWidget {
 
     final titleColor =
         theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -265,7 +265,7 @@ class SettingsScreen extends ConsumerWidget {
                             height: 40,
                             decoration: BoxDecoration(
                               color: AppColors.primary.withValues(alpha: 0.14),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
                             ),
                             child: const Icon(
                               Icons.fact_check_outlined,
@@ -502,11 +502,11 @@ class _LegalLinkTile extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor =
         Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 48),
         child: Row(
@@ -516,7 +516,7 @@ class _LegalLinkTile extends StatelessWidget {
               height: 42,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
               ),
               child: Icon(icon, color: AppColors.primary, size: 20),
             ),
@@ -565,7 +565,7 @@ class _SettingsSwitchTile extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor =
         Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.64)
         : Colors.black.withValues(alpha: 0.58);
@@ -578,7 +578,7 @@ class _SettingsSwitchTile extends StatelessWidget {
               height: 42,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
               ),
               child: Icon(icon, color: AppColors.primary, size: 20),
             )
@@ -640,7 +640,7 @@ class _RefreshIntervalTile extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor =
         Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.64)
         : Colors.black.withValues(alpha: 0.58);
@@ -653,7 +653,7 @@ class _RefreshIntervalTile extends StatelessWidget {
               height: 42,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
               ),
               child: const Icon(
                 Icons.sync_rounded,
@@ -744,7 +744,7 @@ class _InfoLine extends StatelessWidget {
         : Colors.black.withValues(alpha: 0.5);
     final valueColor =
         Theme.of(context).textTheme.bodyLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     return Row(
           children: [
@@ -791,11 +791,11 @@ class _LanguageOptionTile extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final titleColor =
         Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 48),
         child: Padding(

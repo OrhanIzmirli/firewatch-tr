@@ -323,8 +323,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
             decoration: BoxDecoration(
               color: isDark ? AppColors.surface : Colors.white,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                topRight: Radius.circular(28),
+                topLeft: Radius.circular(AppSpacing.largeCardRadius),
+                topRight: Radius.circular(AppSpacing.largeCardRadius),
               ),
             ),
             child: SafeArea(
@@ -335,7 +335,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                   Container(
                     width: 40,
                     height: 4,
-                    decoration: BoxDecoration(color: dividerColor, borderRadius: BorderRadius.circular(2)),
+                    decoration: BoxDecoration(color: dividerColor, borderRadius: BorderRadius.circular(AppSpacing.pillRadius)),
                   ),
                   Expanded(
                     child: _stage == _Stage.form
@@ -356,7 +356,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
     final theme = Theme.of(context);
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.62);
@@ -409,7 +409,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                         padding: const EdgeInsets.all(AppSpacing.md),
                         decoration: BoxDecoration(
                           color: AppColors.success.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                         ),
                         child: Row(
                           children: [
@@ -441,7 +441,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                     if (_latitude != null) ...[
                       const SizedBox(height: AppSpacing.md),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                         child: SizedBox(
                           height: 160,
                           child: FlutterMap(
@@ -603,7 +603,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                               height: 72,
                               child: OutlinedButton(
                                 onPressed: _showPhotoSourceSheet,
-                                style: OutlinedButton.styleFrom(padding: EdgeInsets.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                                style: OutlinedButton.styleFrom(padding: EdgeInsets.zero, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.cardRadius))),
                                 child: const Icon(Icons.add_a_photo_rounded),
                               ),
                             );
@@ -614,7 +614,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             child: Stack(
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                                   // Camera/gallery photos are typically several
                                   // megapixels; decode straight to thumbnail
                                   // size instead of holding the full-resolution
@@ -693,7 +693,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 ),
                 const SizedBox(height: 6),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
                   child: LinearProgressIndicator(
                     value: _isEncodingPhotos ? null : _uploadProgress,
                     minHeight: 6,
@@ -735,7 +735,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.72)
         : Colors.black.withValues(alpha: 0.62);

@@ -75,7 +75,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0x66000000), Color(0x99000000), Color(0xCC000000)],
+                  colors: [AppColors.scrimLight, AppColors.scrimMedium, AppColors.scrimHeavy],
                 ),
               ),
             ).animate().fadeIn(duration: 600.ms),

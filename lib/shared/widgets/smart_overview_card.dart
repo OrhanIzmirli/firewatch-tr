@@ -36,7 +36,7 @@ class SmartOverviewCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final valueColor = theme.textTheme.headlineSmall?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final titleColor = isDark
         ? AppColors.white.withValues(alpha: 0.78)
         : Colors.black.withValues(alpha: 0.68);
@@ -62,7 +62,7 @@ class SmartOverviewCard extends StatelessWidget {
                     height: 40,
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
                     ),
                     child: Icon(icon, color: color, size: 20),
                   ),

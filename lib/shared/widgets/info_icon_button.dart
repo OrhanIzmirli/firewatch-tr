@@ -26,7 +26,7 @@ class InfoIconButton extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
-        final titleColor = isDark ? AppColors.white : const Color(0xFF0F172A);
+        final titleColor = isDark ? AppColors.white : AppColors.lightText;
         final bodyColor = isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68);
 
         return AlertDialog(

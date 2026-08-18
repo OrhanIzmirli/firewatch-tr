@@ -253,7 +253,7 @@ Future<void> maybeShowScreenCoachMarks(
                                   style: GoogleFonts.ibmPlexSans(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
-                                    color: isDark ? AppColors.white : const Color(0xFF0F172A),
+                                    color: isDark ? AppColors.white : AppColors.lightText,
                                   ),
                                 ),
                                 const SizedBox(height: 6),
@@ -312,12 +312,12 @@ class _SpotlightPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final overlayPath = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
-    final holePath = Path()..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(16)));
+    final holePath = Path()..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(AppSpacing.largeCardRadius)));
     final combined = Path.combine(PathOperation.difference, overlayPath, holePath);
 
     canvas.drawPath(combined, Paint()..color = Colors.black.withValues(alpha: 0.68));
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, const Radius.circular(16)),
+      RRect.fromRectAndRadius(rect, const Radius.circular(AppSpacing.largeCardRadius)),
       Paint()
         ..color = AppColors.primary
         ..style = PaintingStyle.stroke

@@ -661,10 +661,10 @@ class _MapScreenState extends State<MapScreen> {
         fill = AppColors.danger;
         fillAlpha = 1;
       case IncidentStatus.awaitingConfirmation:
-        fill = const Color(0xFF475569);
+        fill = AppColors.textFaint;
         fillAlpha = 0.95;
       case IncidentStatus.lowConfidence:
-        fill = const Color(0xFF94A3B8);
+        fill = AppColors.textMuted;
         fillAlpha = 0.6;
     }
 
@@ -772,7 +772,7 @@ class _MapScreenState extends State<MapScreen> {
         final isDark = theme.brightness == Brightness.dark;
         final titleColor =
             theme.textTheme.titleLarge?.color ??
-            (isDark ? AppColors.white : const Color(0xFF0F172A));
+            (isDark ? AppColors.white : AppColors.lightText);
         final secondaryTextColor = isDark
             ? AppColors.white.withValues(alpha: 0.72)
             : Colors.black.withValues(alpha: 0.62);
@@ -970,7 +970,7 @@ class _MapScreenState extends State<MapScreen> {
     final isDark = theme.brightness == Brightness.dark;
     final titleColor =
         theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.64);
@@ -1303,7 +1303,7 @@ class _MapScreenState extends State<MapScreen> {
                     horizontal: 10,
                     vertical: 7,
                   ),
-                  radius: 12,
+                  radius: AppSpacing.cardRadius,
                   child: Text(
                     _showIncidents
                         ? l10n.incidentLayerCaptionEvents
@@ -1362,7 +1362,7 @@ class _MapScreenState extends State<MapScreen> {
                           horizontal: 14,
                           vertical: 12,
                         ),
-                        radius: 16,
+                        radius: AppSpacing.largeCardRadius,
                         child: InkWell(
                           onTap: _refreshMap,
                           child: Row(
@@ -1399,7 +1399,7 @@ class _MapScreenState extends State<MapScreen> {
                           horizontal: 14,
                           vertical: 12,
                         ),
-                        radius: 16,
+                        radius: AppSpacing.largeCardRadius,
                         child: InkWell(
                           onTap: _centerOnUser,
                           child: Row(
@@ -1434,7 +1434,7 @@ class _MapScreenState extends State<MapScreen> {
           bottom: bottomInset + 12,
           child: GlassPanel(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            radius: 16,
+            radius: AppSpacing.largeCardRadius,
             child: InkWell(
               onTap: () => setState(() => _isLegendOpen = !_isLegendOpen),
               child: Row(
@@ -1494,7 +1494,7 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                     const SizedBox(height: 8),
                     _LegendRow(
-                      color: const Color(0xFF94A3B8),
+                      color: AppColors.textMuted,
                       label: l10n.legendLowConfidence,
                       textColor: titleColor,
                     ),
@@ -1550,7 +1550,7 @@ class _MapScreenState extends State<MapScreen> {
             constraints: const BoxConstraints(maxWidth: 250),
             child: GlassPanel(
               padding: const EdgeInsets.fromLTRB(12, 8, 8, 10),
-              radius: 12,
+              radius: AppSpacing.cardRadius,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -1639,7 +1639,7 @@ class _MapScreenState extends State<MapScreen> {
         else
           GlassPanel(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-            radius: 12,
+            radius: AppSpacing.cardRadius,
             child: InkWell(
               onTap: () => setState(() => _isRiskLegendOpen = true),
               child: Row(
@@ -1666,7 +1666,7 @@ class _MapScreenState extends State<MapScreen> {
         const SizedBox(height: 6),
         GlassPanel(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          radius: 8,
+          radius: AppSpacing.controlRadius,
           child: Text(
             l10n.riskAttribution,
             style: GoogleFonts.ibmPlexSans(
@@ -1733,7 +1733,7 @@ class _MapScreenState extends State<MapScreen> {
                   color: isDark
                       ? AppColors.white.withValues(alpha: 0.22)
                       : Colors.black.withValues(alpha: 0.16),
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
                 ),
               ),
             ),
@@ -2025,7 +2025,7 @@ class _MapScreenState extends State<MapScreen> {
                                         color: _markerColor(
                                           point,
                                         ).withValues(alpha: 0.06),
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                                       ),
                                       child: Column(
                                         crossAxisAlignment:

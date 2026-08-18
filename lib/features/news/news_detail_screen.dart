@@ -115,7 +115,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -177,7 +177,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     height: 60,
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                     ),
                     child: Icon(
                       newsCategoryIcon(category),
@@ -419,7 +419,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     height: 46,
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                     ),
                     child: const Icon(
                       Icons.public_rounded,

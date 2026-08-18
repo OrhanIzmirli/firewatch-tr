@@ -27,7 +27,7 @@ class SectionHeader extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : const Color(0xFF0F172A));
+        (isDark ? AppColors.white : AppColors.lightText);
 
     final subtitleColor = isDark
         ? AppColors.white.withValues(alpha: 0.66)
@@ -44,7 +44,7 @@ class SectionHeader extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
             ),
             child: IconTheme(
               data: const IconThemeData(

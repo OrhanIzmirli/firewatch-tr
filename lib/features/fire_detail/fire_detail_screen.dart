@@ -317,7 +317,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             SectionHeader(
               title: l10n.fireDetailKeyMetrics,
-              icon: Icons.analytics_rounded,
+              icon: const Icon(Icons.analytics_rounded),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -351,7 +351,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             SectionHeader(
               title: l10n.fireDetailEventInfo,
-              icon: Icons.info_outline_rounded,
+              icon: const Icon(Icons.info_outline_rounded),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -395,7 +395,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
             const SizedBox(height: AppSpacing.xxl),
             SectionHeader(
               title: l10n.detectionAboutTitle,
-              icon: Icons.satellite_alt_outlined,
+              icon: const Icon(Icons.satellite_alt_outlined),
             ),
             const SizedBox(height: AppSpacing.md),
             _ActionCard(text: l10n.detectionAboutViirs),
@@ -414,7 +414,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             SectionHeader(
               title: l10n.fireDetailRecommendedActions,
-              icon: Icons.checklist_rounded,
+              icon: const Icon(Icons.checklist_rounded),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -483,7 +483,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
 
             SectionHeader(
               title: l10n.fireDetailRelatedNews,
-              icon: Icons.article,
+              icon: const Icon(Icons.article),
             ),
             const SizedBox(height: AppSpacing.md),
 

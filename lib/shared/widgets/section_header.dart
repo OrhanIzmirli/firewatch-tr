@@ -7,7 +7,11 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget? trailing;
-  final IconData? icon;
+
+  /// A widget, not an [IconData], so both Material's [Icon] and
+  /// font_awesome's [FaIcon] fit — v11 of font_awesome no longer hands out
+  /// [IconData]. Size and colour are applied here via [IconTheme].
+  final Widget? icon;
 
   const SectionHeader({
     super.key,
@@ -37,14 +41,17 @@ class SectionHeader extends StatelessWidget {
           Container(
             width: 38,
             height: 38,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              size: 18,
-              color: AppColors.primary,
+            child: IconTheme(
+              data: const IconThemeData(
+                size: 18,
+                color: AppColors.primary,
+              ),
+              child: icon!,
             ),
           ),
           const SizedBox(width: AppSpacing.md),

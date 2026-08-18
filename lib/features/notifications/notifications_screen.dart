@@ -346,7 +346,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         SectionHeader(
                           title: l10n.notificationsTools,
                           subtitle: l10n.notificationsToolsSubtitle,
-                          icon: Icons.tune_rounded,
+                          icon: const Icon(Icons.tune_rounded),
                         ),
                         const SizedBox(height: AppSpacing.md),
 
@@ -429,7 +429,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           SectionHeader(
                             title: l10n.notificationsNearbyLiveFires,
                             subtitle: l10n.notificationsNearbyLiveFiresSubtitle,
-                            icon: Icons.local_fire_department_rounded,
+                            icon: const Icon(Icons.local_fire_department_rounded),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           ...nearbyMatches.asMap().entries.map((entry) {
@@ -496,7 +496,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           key: CoachMarkKeys.notifAlertCards,
                           title: l10n.notificationsRecentAlerts,
                           subtitle: _fireLoading ? l10n.commonLoading : l10n.notificationsHighRiskCount(_highRiskFires.length),
-                          icon: Icons.bolt_rounded,
+                          icon: const Icon(Icons.bolt_rounded),
                           trailing: _highRiskFires.isNotEmpty
                               ? Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

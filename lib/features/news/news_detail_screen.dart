@@ -305,7 +305,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             SectionHeader(
               title: l10n.newsDetailHighlightsTitle,
               subtitle: l10n.newsDetailHighlightsSubtitle,
-              icon: Icons.stars_rounded,
+              icon: const Icon(Icons.stars_rounded),
             )
                 .animate(delay: 90.ms)
                 .fadeIn(duration: 280.ms)
@@ -360,7 +360,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             SectionHeader(
               title: l10n.newsDetailFullContentTitle,
               subtitle: l10n.newsDetailFullContentSubtitle,
-              icon: Icons.menu_book_rounded,
+              icon: const Icon(Icons.menu_book_rounded),
             )
                 .animate(delay: 150.ms)
                 .fadeIn(duration: 280.ms)
@@ -403,7 +403,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             SectionHeader(
               title: l10n.newsDetailRelatedRegionTitle,
               subtitle: l10n.newsDetailRelatedRegionSubtitle,
-              icon: Icons.place_rounded,
+              icon: const Icon(Icons.place_rounded),
             )
                 .animate(delay: 220.ms)
                 .fadeIn(duration: 280.ms)

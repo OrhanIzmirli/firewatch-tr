@@ -1630,7 +1630,7 @@ class _MapScreenState extends State<MapScreen> {
                 key: CoachMarkKeys.mapNearbyFiresSection,
                 title: l10n.mapNearbyFires,
                 subtitle: l10n.mapNearbyFiresSubtitle,
-                icon: Icons.near_me_rounded,
+                icon: const Icon(Icons.near_me_rounded),
               ),
               const SizedBox(height: AppSpacing.md),
               ..._nearbyFirePoints.asMap().entries.map((entry) {

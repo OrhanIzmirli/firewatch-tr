@@ -111,7 +111,7 @@ class SettingsScreen extends ConsumerWidget {
             SectionHeader(
                   title: l10n.settingsNotifications,
                   subtitle: l10n.settingsNotificationsSubtitle,
-                  icon: Icons.notifications_active_rounded,
+                  icon: const Icon(Icons.notifications_active_rounded),
                 )
                 .animate(delay: 90.ms)
                 .fadeIn(duration: 280.ms)
@@ -158,7 +158,7 @@ class SettingsScreen extends ConsumerWidget {
             SectionHeader(
                   title: l10n.settingsAppBehavior,
                   subtitle: l10n.settingsAppBehaviorSubtitle,
-                  icon: Icons.settings_suggest_rounded,
+                  icon: const Icon(Icons.settings_suggest_rounded),
                 )
                 .animate(delay: 140.ms)
                 .fadeIn(duration: 280.ms)
@@ -205,7 +205,7 @@ class SettingsScreen extends ConsumerWidget {
             SectionHeader(
                   title: l10n.settingsLanguage,
                   subtitle: l10n.settingsLanguageSubtitle,
-                  icon: Icons.language_rounded,
+                  icon: const Icon(Icons.language_rounded),
                 )
                 .animate(delay: 175.ms)
                 .fadeIn(duration: 280.ms)
@@ -319,7 +319,7 @@ class SettingsScreen extends ConsumerWidget {
             SectionHeader(
                   title: l10n.settingsAppInfo,
                   subtitle: l10n.settingsAppInfoSubtitle,
-                  icon: Icons.info_outline_rounded,
+                  icon: const Icon(Icons.info_outline_rounded),
                 )
                 .animate(delay: 190.ms)
                 .fadeIn(duration: 280.ms)
@@ -369,7 +369,7 @@ class SettingsScreen extends ConsumerWidget {
 
             SectionHeader(
                   title: l10n.settingsLegal,
-                  icon: Icons.gavel_rounded,
+                  icon: const Icon(Icons.gavel_rounded),
                 )
                 .animate(delay: 200.ms)
                 .fadeIn(duration: 280.ms)

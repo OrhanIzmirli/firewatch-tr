@@ -123,7 +123,7 @@ class EmergencyScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.emergencyQuickActions,
               subtitle: l10n.emergencyQuickActionsSubtitle,
-              icon: Icons.flash_on_rounded,
+              icon: const Icon(Icons.flash_on_rounded),
             ).animate(delay: 90.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
@@ -176,7 +176,7 @@ class EmergencyScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.emergencyContactLines,
               subtitle: l10n.emergencyContactLinesSubtitle,
-              icon: Icons.phone_in_talk_rounded,
+              icon: const Icon(Icons.phone_in_talk_rounded),
             ).animate(delay: 130.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
@@ -216,7 +216,7 @@ class EmergencyScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.emergencyBag,
               subtitle: l10n.emergencyBagSubtitle,
-              icon: Icons.backpack_rounded,
+              icon: const Icon(Icons.backpack_rounded),
             ).animate(delay: 170.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
@@ -244,7 +244,7 @@ class EmergencyScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.emergencyCommNote,
               subtitle: l10n.emergencyCommNoteSubtitle,
-              icon: Icons.sticky_note_2_rounded,
+              icon: const Icon(Icons.sticky_note_2_rounded),
             ).animate(delay: 210.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),

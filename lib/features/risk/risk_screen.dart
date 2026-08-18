@@ -673,7 +673,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   SectionHeader(
                     title: l10n.riskKeyIndicators,
                     subtitle: l10n.riskTurkeyAverage,
-                    icon: Icons.dashboard_rounded,
+                    icon: const Icon(Icons.dashboard_rounded),
                   ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
@@ -767,7 +767,7 @@ class _RiskScreenState extends State<RiskScreen> {
                     SectionHeader(
                       title: l10n.riskRegionalDistribution,
                       subtitle: l10n.riskRegionalDistributionSubtitle,
-                      icon: Icons.show_chart_rounded,
+                      icon: const Icon(Icons.show_chart_rounded),
                     ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
                     const SizedBox(height: AppSpacing.md),
@@ -896,7 +896,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   SectionHeader(
                     title: l10n.riskRegionDetails,
                     subtitle: l10n.riskRegionDetailsSubtitle,
-                    icon: Icons.public_rounded,
+                    icon: const Icon(Icons.public_rounded),
                   ).animate(delay: 200.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
@@ -928,7 +928,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   SectionHeader(
                     title: l10n.riskEnvironmentalFactors,
                     subtitle: l10n.riskTurkeyAverage,
-                    icon: Icons.eco_outlined,
+                    icon: const Icon(Icons.eco_outlined),
                   ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
@@ -1168,7 +1168,7 @@ class _MyLocationSection extends StatelessWidget {
         SectionHeader(
           title: l10n.riskMyLocationMetricsTitle,
           subtitle: city ?? '',
-          icon: Icons.dashboard_rounded,
+          icon: const Icon(Icons.dashboard_rounded),
         ),
         const SizedBox(height: AppSpacing.md),
 
@@ -1236,7 +1236,7 @@ class _MyLocationSection extends StatelessWidget {
         SectionHeader(
           title: l10n.riskComparisonTitle,
           subtitle: l10n.riskTurkeyAverage,
-          icon: Icons.compare_arrows_rounded,
+          icon: const Icon(Icons.compare_arrows_rounded),
         ),
         const SizedBox(height: AppSpacing.md),
 

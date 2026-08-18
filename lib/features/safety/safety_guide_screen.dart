@@ -81,7 +81,7 @@ class SafetyGuideScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.safetyGuideQuickActions,
               subtitle: l10n.safetyGuideQuickActionsSubtitle,
-              icon: Icons.flash_on_rounded,
+              icon: const Icon(Icons.flash_on_rounded),
             )
                 .animate(delay: 80.ms)
                 .fadeIn(duration: 280.ms)
@@ -133,7 +133,7 @@ class SafetyGuideScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.safetyGuideChecklist,
               subtitle: l10n.safetyGuideChecklistSubtitle,
-              icon: Icons.checklist_rounded,
+              icon: const Icon(Icons.checklist_rounded),
             )
                 .animate(delay: 130.ms)
                 .fadeIn(duration: 280.ms)
@@ -170,7 +170,7 @@ class SafetyGuideScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.safetyGuideDetailedGuide,
               subtitle: l10n.safetyGuideDetailedGuideSubtitle,
-              icon: Icons.menu_book_rounded,
+              icon: const Icon(Icons.menu_book_rounded),
             )
                 .animate(delay: 180.ms)
                 .fadeIn(duration: 280.ms)
@@ -231,7 +231,7 @@ class SafetyGuideScreen extends StatelessWidget {
             SectionHeader(
               title: l10n.safetyGuideEmergencyNumbers,
               subtitle: l10n.safetyGuideEmergencyNumbersSubtitle,
-              icon: Icons.phone_in_talk_rounded,
+              icon: const Icon(Icons.phone_in_talk_rounded),
             )
                 .animate(delay: 230.ms)
                 .fadeIn(duration: 280.ms)

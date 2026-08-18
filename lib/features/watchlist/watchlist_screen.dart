@@ -188,7 +188,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                 key: CoachMarkKeys.watchlistList,
                 title: l10n.watchlistSavedPoints,
                 subtitle: l10n.watchlistSavedPointsSubtitle(savedIds.length),
-                icon: Icons.local_fire_department_rounded,
+                icon: const Icon(Icons.local_fire_department_rounded),
               ).animate(delay: 100.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
               const SizedBox(height: AppSpacing.md),
 

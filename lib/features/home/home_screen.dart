@@ -756,7 +756,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             SectionHeader(
               title: l10n.homeOverview,
               subtitle: _fireLoading ? l10n.homeOverviewSubtitle : l10n.homeOverviewUniqueCount(_firePoints.length),
-              icon: Icons.dashboard_customize_rounded,
+              icon: const Icon(Icons.dashboard_customize_rounded),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -829,7 +829,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               SectionHeader(
                 title: l10n.homeLast24hTitle,
                 subtitle: l10n.homeLast24hSubtitle,
-                icon: Icons.history_rounded,
+                icon: const Icon(Icons.history_rounded),
               ),
               const SizedBox(height: AppSpacing.md),
               if (_incidentSummaryLoading)
@@ -844,7 +844,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             SectionHeader(
               title: l10n.homeLatestNews,
               subtitle: l10n.homeLatestNewsSubtitle,
-              icon: Icons.newspaper_rounded,
+              icon: const Icon(Icons.newspaper_rounded),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
@@ -895,7 +895,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             SectionHeader(
               title: l10n.homeActiveThermalPoints,
               subtitle: l10n.homeActiveThermalSubtitle,
-              icon: FontAwesomeIcons.fireFlameCurved,
+              icon: const FaIcon(FontAwesomeIcons.fireFlameCurved),
               trailing: SizedBox(
                 height: 48,
                 child: InkWell(

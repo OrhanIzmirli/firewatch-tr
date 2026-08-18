@@ -416,7 +416,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 key: CoachMarkKeys.newsFeatured,
                 title: l10n.newsFeatured,
                 subtitle: l10n.newsFeaturedSubtitle,
-                icon: Icons.bolt_rounded,
+                icon: const Icon(Icons.bolt_rounded),
               ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
               const SizedBox(height: AppSpacing.md),
@@ -433,7 +433,7 @@ class _NewsScreenState extends State<NewsScreen> {
             SectionHeader(
               title: l10n.newsCategories,
               subtitle: l10n.newsCategoriesSubtitle,
-              icon: Icons.tune_rounded,
+              icon: const Icon(Icons.tune_rounded),
             ).animate(delay: 120.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
@@ -468,7 +468,7 @@ class _NewsScreenState extends State<NewsScreen> {
             SectionHeader(
               title: l10n.newsContentFiltersTitle,
               subtitle: l10n.newsContentFiltersSubtitle,
-              icon: Icons.filter_alt_rounded,
+              icon: const Icon(Icons.filter_alt_rounded),
             ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),
@@ -507,7 +507,7 @@ class _NewsScreenState extends State<NewsScreen> {
               subtitle: _isLoading
                   ? l10n.commonLoading
                   : l10n.newsRecordsFound(filteredItems.length),
-              icon: Icons.article_rounded,
+              icon: const Icon(Icons.article_rounded),
             ).animate(delay: 160.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 
             const SizedBox(height: AppSpacing.md),

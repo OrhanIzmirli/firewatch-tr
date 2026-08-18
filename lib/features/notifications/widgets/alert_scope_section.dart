@@ -72,7 +72,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
         SectionHeader(
           title: l10n.notificationScopeTitle,
           subtitle: l10n.notificationScopeSubtitle,
-          icon: Icons.travel_explore_rounded,
+          icon: const Icon(Icons.travel_explore_rounded),
         ),
         const SizedBox(height: AppSpacing.md),
         GlassPanel(

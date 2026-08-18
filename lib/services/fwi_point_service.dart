@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:dio/dio.dart';
@@ -94,8 +95,20 @@ class FwiPointService {
           'TIME': date,
         },
       );
-      final bytes = response.data as List<int>;
-      final rgba = await _centerPixel(Uint8List.fromList(bytes));
+      // dio's byte responses arrive as Uint8List on IO but can surface as a
+      // plain List or a ByteBuffer on web — normalise before decoding.
+      final dynamic body = response.data;
+      final Uint8List png;
+      if (body is Uint8List) {
+        png = body;
+      } else if (body is ByteBuffer) {
+        png = body.asUint8List();
+      } else if (body is List<int>) {
+        png = Uint8List.fromList(body);
+      } else {
+        return null;
+      }
+      final rgba = await _centerPixel(png);
       if (rgba == null) return null;
 
       final FwiPointSample sample;
@@ -139,12 +152,27 @@ class FwiPointService {
       final codec = await ui.instantiateImageCodec(png);
       final frame = await codec.getNextFrame();
       final image = frame.image;
-      final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      // Raw pixel export support varies by renderer (skwasm in particular);
+      // try the premultiplied format first and fall back per format.
+      ByteData? data;
+      for (final format in [
+        ui.ImageByteFormat.rawRgba,
+        ui.ImageByteFormat.rawStraightRgba,
+        ui.ImageByteFormat.rawUnmodified,
+      ]) {
+        try {
+          data = await image.toByteData(format: format);
+        } catch (e) {
+          if (kDebugMode) debugPrint('FWI toByteData($format) failed: $e');
+        }
+        if (data != null) break;
+      }
+      final w = image.width;
+      final h = image.height;
       image.dispose();
       if (data == null) return null;
-      final w = image.width;
       final cx = w ~/ 2;
-      final cy = image.height ~/ 2;
+      final cy = h ~/ 2;
       final offset = (cy * w + cx) * 4;
       if (data.lengthInBytes < offset + 4) return null;
       return [
@@ -153,7 +181,8 @@ class FwiPointService {
         data.getUint8(offset + 2),
         data.getUint8(offset + 3),
       ];
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('FWI pixel decode failed: $e');
       return null;
     }
   }

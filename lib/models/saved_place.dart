@@ -36,8 +36,8 @@ class SavedPlace {
 
   LatLng get center => LatLng(lat, lng);
 
-  /// A pin has no administrative area, so its box is a ~10 km viewing window
-  /// — deliberately the same order of size as one FWI raster cell.
+  /// A pin has no administrative area, so its box is a ~10 km viewing
+  /// window — enough to frame the point without pretending it has borders.
   factory SavedPlace.pin({
     required String id,
     required String name,

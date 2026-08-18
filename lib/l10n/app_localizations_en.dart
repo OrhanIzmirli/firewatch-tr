@@ -1053,7 +1053,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesFwiBody =>
-      'The risk layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from MeteoFrance\'s ~10 km weather forecast model and provides a 4-day forecast (today plus 3 days ahead). It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0).';
+      'The risk layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model and provides a forecast of up to 10 days, today included (9 days ahead); the last day can stay empty until the day\'s model run is published. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0).';
 
   @override
   String get settingsAppInfo => 'App Information';
@@ -2911,7 +2911,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get placesResolutionNote =>
-      'The FWI class is a regional forecast at ~10 km resolution; it is meaningful at province and district scale and does not resolve at neighbourhood scale. Two nearby places showing the same class is the data\'s resolution, not an error.';
+      'The FWI class is a regional forecast from ECMWF\'s global weather model; it is meaningful at province and district scale and does not resolve at neighbourhood scale. Two nearby places showing the same class is the data\'s resolution, not an error.';
 
   @override
   String get notificationScopePlaces => 'My saved places';

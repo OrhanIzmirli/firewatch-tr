@@ -19,9 +19,9 @@ import '../../../shared/widgets/glass_panel.dart';
 /// FWI danger class for the selected forecast day plus the active detections
 /// inside the place's box.
 ///
-/// The resolution caveat at the bottom is not decoration: the FWI value is a
-/// ~10 km regional forecast, so villages a few kilometres apart will — and
-/// should — show the same class.
+/// The resolution caveat at the bottom is not decoration: the FWI value is
+/// a regional forecast from ECMWF's global model, so villages a few
+/// kilometres apart will — and should — show the same class.
 class SavedPlacesSheet extends ConsumerStatefulWidget {
   /// WMS TIME value the analysis samples (YYYY-MM-DD).
   final String dateParam;

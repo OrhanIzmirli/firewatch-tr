@@ -1050,7 +1050,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesFwiBody =>
-      'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri MeteoFrance\'ın ~10 km çözünürlüklü hava tahmini modelinden gelir ve bugün dahil 4 günlük (3 gün ileriye) tahmin sunar. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).';
+      'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir ve bugün dahil 10 güne kadar (9 gün ileriye) tahmin sunar; günün model koşusu yayımlanana dek son gün boş kalabilir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).';
 
   @override
   String get settingsAppInfo => 'Uygulama Bilgisi';
@@ -2906,7 +2906,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get placesResolutionNote =>
-      'FWI sınıfı ~10 km çözünürlüklü bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.';
+      'FWI sınıfı, ECMWF\'nin küresel hava modelinden gelen bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.';
 
   @override
   String get notificationScopePlaces => 'Kayıtlı yerlerim';

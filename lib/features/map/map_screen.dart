@@ -118,13 +118,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// danger classes stay clearly distinguishable.
   double _riskOpacity = 0.55;
 
-  /// 0 = today … 3 = today+3. The `mf010.fwi` layer is MeteoFrance's 10 km
-  /// model, which only forecasts 3 days ahead — later dates return an empty
-  /// (fully transparent) image, so offering them would show a blank layer.
+  /// 0 = today … 9 = today+9. The `ecmwf.fwi` layer on EFFIS's global GWIS
+  /// service (ECMWF model, worldwide coverage — unlike the old regional
+  /// `mf010.fwi`, it does not stop at ~43°E and leave Van and Hakkari blank)
+  /// serves a 10-day forecast, today included. The last day can come up
+  /// empty until the day's model run is published; the transparent-image
+  /// defence below covers that window.
   int _riskDayOffset = 0;
 
-  /// Days the forecast-day picker offers, today included.
-  static const int _riskForecastDays = 4;
+  /// Days the forecast-day picker offers, today included — the verified
+  /// horizon of ecmwf.fwi.
+  static const int _riskForecastDays = 10;
 
   /// How much of the screen the info sheet takes when it is resting. Enough
   /// for the title line and the Report button, and no more — the filters,
@@ -314,7 +318,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   String _riskDayLabel(AppLocalizations l10n, int offset) {
     if (offset == 0) return l10n.riskDayToday;
     if (offset == 1) return l10n.riskDayTomorrow;
-    return DateFormat.EEEE(
+    // Weekday + day of month: a 10-day picker wraps past one week, so a
+    // bare weekday name would appear twice meaning two different dates.
+    return DateFormat(
+      'EEE d',
       Localizations.localeOf(context).toString(),
     ).format(DateTime.now().add(Duration(days: offset)));
   }
@@ -1251,8 +1258,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     key: ValueKey('fwi-$_fwiDateParam'),
                     wmsOptions: WMSTileLayerOptions(
                       baseUrl:
-                          'https://maps.effis.emergency.copernicus.eu/effis?',
-                      layers: const ['mf010.fwi'],
+                          'https://maps.effis.emergency.copernicus.eu/gwis?',
+                      layers: const ['ecmwf.fwi'],
                       format: 'image/png',
                       version: '1.1.1',
                       transparent: true,

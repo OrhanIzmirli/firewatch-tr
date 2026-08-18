@@ -21,12 +21,12 @@ class FwiPointSample {
 /// Reads the FWI danger class at a single coordinate by fetching a 3×3 px
 /// GetMap image around it and reading the centre pixel.
 ///
-/// This is the only per-point query the EFFIS server supports here:
-/// GetFeatureInfo is disabled for mf010.fwi (returns LayerNotDefined), so
-/// the class has to come from the rendered colour. The six legend colours
-/// are exact server output; resampling can still blend edges, so an
-/// off-palette pixel is snapped to the nearest of the six rather than
-/// invented into an intermediate class.
+/// This is the only per-point query the server supports here: the
+/// `ecmwf.fwi` layer is declared queryable="0" in the GWIS capabilities, so
+/// GetFeatureInfo is off and the class has to come from the rendered
+/// colour. The six legend colours are exact server output; resampling can
+/// still blend edges, so an off-palette pixel is snapped to the nearest of
+/// the six rather than invented into an intermediate class.
 class FwiPointService {
   FwiPointService._();
 
@@ -40,7 +40,11 @@ class FwiPointService {
     ),
   );
 
-  static const _cachePrefsKey = 'fwi_point_cache_v1';
+  // v2: the source switched from the regional mf010.fwi to the global
+  // ecmwf.fwi, whose values differ for the same day and place — v1 entries
+  // must never answer for the new model, so the old key is dropped on load.
+  static const _cachePrefsKey = 'fwi_point_cache_v2';
+  static const _legacyCachePrefsKey = 'fwi_point_cache_v1';
 
   /// The exact palette, index-aligned with the legend and with
   /// AppColors.fwi* (very low → extreme).
@@ -71,19 +75,19 @@ class FwiPointService {
     if (cached != null) return cached;
 
     try {
-      // 0.06° ≈ 6 km: comfortably inside one ~10 km model cell, so the 3×3
-      // request reads the cell under the point, not a neighbourhood average.
+      // A small window around the point, so the 3×3 request reads the model
+      // cell under it rather than a neighbourhood average.
       const half = 0.03;
       final bbox =
           '${(lng - half).toStringAsFixed(4)},${(lat - half).toStringAsFixed(4)},'
           '${(lng + half).toStringAsFixed(4)},${(lat + half).toStringAsFixed(4)}';
       final response = await _dio.get(
-        'https://maps.effis.emergency.copernicus.eu/effis',
+        'https://maps.effis.emergency.copernicus.eu/gwis',
         queryParameters: {
           'SERVICE': 'WMS',
           'VERSION': '1.1.1',
           'REQUEST': 'GetMap',
-          'LAYERS': 'mf010.fwi',
+          'LAYERS': 'ecmwf.fwi',
           // Empty but mandatory: the server errors when STYLES is absent.
           'STYLES': '',
           'FORMAT': 'image/png',
@@ -199,6 +203,10 @@ class FwiPointService {
   Future<Map<String, int>> _loadPersisted() async {
     if (_persisted != null) return _persisted!;
     final prefs = await SharedPreferences.getInstance();
+    // Old-model entries: invalid for ecmwf.fwi, delete rather than migrate.
+    if (prefs.containsKey(_legacyCachePrefsKey)) {
+      await prefs.remove(_legacyCachePrefsKey);
+    }
     final raw = prefs.getString(_cachePrefsKey);
     if (raw == null) return _persisted = {};
     try {

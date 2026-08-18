@@ -1934,6 +1934,18 @@ abstract class AppLocalizations {
   /// **'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.'**
   String get dataSourcesWeatherBody;
 
+  /// No description provided for @dataSourcesFwiTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın tehlikesi haritası (FWI) — ayrı bir kaynak'**
+  String get dataSourcesFwiTitle;
+
+  /// No description provided for @dataSourcesFwiBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri MeteoFrance\'ın ~10 km çözünürlüklü hava tahmini modelinden gelir ve bugün dahil 4 günlük (3 gün ileriye) tahmin sunar. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).'**
+  String get dataSourcesFwiBody;
+
   /// No description provided for @settingsAppInfo.
   ///
   /// In tr, this message translates to:
@@ -4957,6 +4969,90 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tümü'**
   String get incidentFilterAll;
+
+  /// No description provided for @riskLayerToggle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk (FWI)'**
+  String get riskLayerToggle;
+
+  /// No description provided for @riskLegendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın tehlikesi (FWI)'**
+  String get riskLegendTitle;
+
+  /// No description provided for @riskLegendNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hava koşullarından hesaplanan bölgesel tehlike tahmini; uydu tespiti değildir.'**
+  String get riskLegendNote;
+
+  /// No description provided for @riskLegendHide.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lejantı gizle'**
+  String get riskLegendHide;
+
+  /// No description provided for @riskClassVeryLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok düşük'**
+  String get riskClassVeryLow;
+
+  /// No description provided for @riskClassLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük'**
+  String get riskClassLow;
+
+  /// No description provided for @riskClassModerate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta'**
+  String get riskClassModerate;
+
+  /// No description provided for @riskClassHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek'**
+  String get riskClassHigh;
+
+  /// No description provided for @riskClassVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok yüksek'**
+  String get riskClassVeryHigh;
+
+  /// No description provided for @riskClassExtreme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aşırı'**
+  String get riskClassExtreme;
+
+  /// No description provided for @riskOpacityLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Opaklık'**
+  String get riskOpacityLabel;
+
+  /// No description provided for @riskDayToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get riskDayToday;
+
+  /// No description provided for @riskDayTomorrow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarın'**
+  String get riskDayTomorrow;
+
+  /// No description provided for @riskAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'© European Union, Copernicus EFFIS'**
+  String get riskAttribution;
 
   /// No description provided for @homeLast24hTitle.
   ///

@@ -1042,6 +1042,14 @@ class AppLocalizationsTr extends AppLocalizations {
       'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.';
 
   @override
+  String get dataSourcesFwiTitle =>
+      'Yangın tehlikesi haritası (FWI) — ayrı bir kaynak';
+
+  @override
+  String get dataSourcesFwiBody =>
+      'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri MeteoFrance\'ın ~10 km çözünürlüklü hava tahmini modelinden gelir ve bugün dahil 4 günlük (3 gün ileriye) tahmin sunar. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).';
+
+  @override
   String get settingsAppInfo => 'Uygulama Bilgisi';
 
   @override
@@ -2818,6 +2826,49 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get incidentFilterAll => 'Tümü';
+
+  @override
+  String get riskLayerToggle => 'Risk (FWI)';
+
+  @override
+  String get riskLegendTitle => 'Yangın tehlikesi (FWI)';
+
+  @override
+  String get riskLegendNote =>
+      'Hava koşullarından hesaplanan bölgesel tehlike tahmini; uydu tespiti değildir.';
+
+  @override
+  String get riskLegendHide => 'Lejantı gizle';
+
+  @override
+  String get riskClassVeryLow => 'Çok düşük';
+
+  @override
+  String get riskClassLow => 'Düşük';
+
+  @override
+  String get riskClassModerate => 'Orta';
+
+  @override
+  String get riskClassHigh => 'Yüksek';
+
+  @override
+  String get riskClassVeryHigh => 'Çok yüksek';
+
+  @override
+  String get riskClassExtreme => 'Aşırı';
+
+  @override
+  String get riskOpacityLabel => 'Opaklık';
+
+  @override
+  String get riskDayToday => 'Bugün';
+
+  @override
+  String get riskDayTomorrow => 'Yarın';
+
+  @override
+  String get riskAttribution => '© European Union, Copernicus EFFIS';
 
   @override
   String get homeLast24hTitle => 'Son 24 Saat';

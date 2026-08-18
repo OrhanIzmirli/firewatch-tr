@@ -1046,6 +1046,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave.';
 
   @override
+  String get dataSourcesFwiTitle => 'Fire danger map (FWI) — a separate source';
+
+  @override
+  String get dataSourcesFwiBody =>
+      'The risk layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from MeteoFrance\'s ~10 km weather forecast model and provides a 4-day forecast (today plus 3 days ahead). It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0).';
+
+  @override
   String get settingsAppInfo => 'App Information';
 
   @override
@@ -2824,6 +2831,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get incidentFilterAll => 'All';
+
+  @override
+  String get riskLayerToggle => 'Risk (FWI)';
+
+  @override
+  String get riskLegendTitle => 'Fire danger (FWI)';
+
+  @override
+  String get riskLegendNote =>
+      'A regional danger forecast computed from weather; not a satellite detection.';
+
+  @override
+  String get riskLegendHide => 'Hide legend';
+
+  @override
+  String get riskClassVeryLow => 'Very low';
+
+  @override
+  String get riskClassLow => 'Low';
+
+  @override
+  String get riskClassModerate => 'Moderate';
+
+  @override
+  String get riskClassHigh => 'High';
+
+  @override
+  String get riskClassVeryHigh => 'Very high';
+
+  @override
+  String get riskClassExtreme => 'Extreme';
+
+  @override
+  String get riskOpacityLabel => 'Opacity';
+
+  @override
+  String get riskDayToday => 'Today';
+
+  @override
+  String get riskDayTomorrow => 'Tomorrow';
+
+  @override
+  String get riskAttribution => '© European Union, Copernicus EFFIS';
 
   @override
   String get homeLast24hTitle => 'Last 24 Hours';

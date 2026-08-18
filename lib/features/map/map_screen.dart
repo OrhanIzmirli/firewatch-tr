@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -90,6 +91,25 @@ class _MapScreenState extends State<MapScreen> {
   /// everything by default buries the ones that matter under a fortnight of
   /// history. The rest stay one tap away.
   IncidentFilter _incidentFilter = IncidentFilter.active;
+
+  /// The EFFIS fire-danger (FWI) raster. An on/off overlay, not a third
+  /// position of the events/detections choice: a danger *forecast* composes
+  /// with either fire layer and must never read as a detection itself.
+  bool _showRiskLayer = false;
+
+  /// Overlay opacity. 0.55 keeps the base map readable underneath while the
+  /// danger classes stay clearly distinguishable.
+  double _riskOpacity = 0.55;
+
+  /// 0 = today … 3 = today+3. The `mf010.fwi` layer is MeteoFrance's 10 km
+  /// model, which only forecasts 3 days ahead — later dates return an empty
+  /// (fully transparent) image, so offering them would show a blank layer.
+  int _riskDayOffset = 0;
+
+  /// Days the forecast-day picker offers, today included.
+  static const int _riskForecastDays = 4;
+
+  bool _isRiskLegendOpen = true;
 
   /// How much of the screen the info sheet takes when it is resting. Enough
   /// for the title, the one-line description and the Report button, and no
@@ -187,6 +207,38 @@ class _MapScreenState extends State<MapScreen> {
       _loadFirePoints();
     }
   }
+
+  void _toggleRiskLayer() {
+    setState(() {
+      _showRiskLayer = !_showRiskLayer;
+      // Reopen the legend on every activation: the colours mean nothing
+      // without the key, and the user may have closed it days ago.
+      if (_showRiskLayer) _isRiskLegendOpen = true;
+    });
+  }
+
+  /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
+  /// mandatory: without it EFFIS answers HTTP 200 with a fully transparent
+  /// image — the layer looks on and shows nothing, silently.
+  String get _fwiDateParam => DateFormat('yyyy-MM-dd')
+      .format(DateTime.now().add(Duration(days: _riskDayOffset)));
+
+  String _riskDayLabel(AppLocalizations l10n, int offset) {
+    if (offset == 0) return l10n.riskDayToday;
+    if (offset == 1) return l10n.riskDayTomorrow;
+    return DateFormat.EEEE(
+      Localizations.localeOf(context).toString(),
+    ).format(DateTime.now().add(Duration(days: offset)));
+  }
+
+  List<String> _riskClassLabels(AppLocalizations l10n) => [
+    l10n.riskClassVeryLow,
+    l10n.riskClassLow,
+    l10n.riskClassModerate,
+    l10n.riskClassHigh,
+    l10n.riskClassVeryHigh,
+    l10n.riskClassExtreme,
+  ];
 
   /// Best-effort: a failure or an empty result silently leaves the detection
   /// view in charge rather than showing an error, so adding events cannot
@@ -1039,6 +1091,31 @@ class _MapScreenState extends State<MapScreen> {
                   }
                 },
               ),
+              // The FWI raster sits between the base map and the markers:
+              // danger paints the ground, detections stay on top. Built only
+              // while the risk toggle is on, so no WMS request ever leaves
+              // the device with the layer off.
+              if (_showRiskLayer)
+                Opacity(
+                  opacity: _riskOpacity,
+                  child: TileLayer(
+                    // TileLayer does not watch wmsOptions for changes, so a
+                    // new date has to replace the layer outright or stale
+                    // tiles would survive the switch.
+                    key: ValueKey('fwi-$_fwiDateParam'),
+                    wmsOptions: WMSTileLayerOptions(
+                      baseUrl:
+                          'https://maps.effis.emergency.copernicus.eu/effis?',
+                      layers: const ['mf010.fwi'],
+                      format: 'image/png',
+                      version: '1.1.1',
+                      transparent: true,
+                      otherParameters: {'TIME': _fwiDateParam},
+                    ),
+                    userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
+                    evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+                  ),
+                ),
               MarkerLayer(
                 markers: _userPosition != null
                     ? [
@@ -1181,6 +1258,12 @@ class _MapScreenState extends State<MapScreen> {
                           selected: !_showIncidents,
                           onTap: () => _setLayer(showIncidents: false),
                         ),
+                        _LayerChip(
+                          label: l10n.riskLayerToggle,
+                          icon: Icons.thermostat_rounded,
+                          selected: _showRiskLayer,
+                          onTap: _toggleRiskLayer,
+                        ),
                       ],
                     ),
                   ),
@@ -1232,6 +1315,10 @@ class _MapScreenState extends State<MapScreen> {
                     ),
                   ),
                 ),
+                if (_showRiskLayer) ...[
+                  const SizedBox(height: 6),
+                  _buildRiskControls(l10n, titleColor),
+                ],
               ],
             ),
           ),
@@ -1416,6 +1503,178 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ).animate().fadeIn(duration: 180.ms).slideY(begin: 0.08, end: 0),
           ),
+      ],
+    );
+  }
+
+  /// Everything the FWI overlay needs while it is on: the forecast-day
+  /// picker, the closable legend with the opacity slider, and the CC BY 4.0
+  /// attribution — a legal requirement, so it stays even with the legend
+  /// closed.
+  Widget _buildRiskControls(AppLocalizations l10n, Color titleColor) {
+    final classLabels = _riskClassLabels(l10n);
+    // The official EFFIS class colours, very low → extreme, defined once in
+    // [AppColors] so the legend cannot drift from the raster.
+    const fwiColors = [
+      AppColors.fwiVeryLow,
+      AppColors.fwiLow,
+      AppColors.fwiModerate,
+      AppColors.fwiHigh,
+      AppColors.fwiVeryHigh,
+      AppColors.fwiExtreme,
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: GlassPanel(
+            padding: const EdgeInsets.all(3),
+            radius: AppSpacing.pillRadius,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var offset = 0; offset < _riskForecastDays; offset++)
+                  _DayChip(
+                    label: _riskDayLabel(l10n, offset),
+                    selected: _riskDayOffset == offset,
+                    onTap: () => setState(() => _riskDayOffset = offset),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        if (_isRiskLegendOpen)
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 250),
+            child: GlassPanel(
+              padding: const EdgeInsets.fromLTRB(12, 8, 8, 10),
+              radius: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.riskLegendTitle,
+                          style: GoogleFonts.inter(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                            color: titleColor,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: l10n.riskLegendHide,
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        iconSize: 16,
+                        onPressed: () =>
+                            setState(() => _isRiskLegendOpen = false),
+                        icon: Icon(
+                          Icons.close_rounded,
+                          color: titleColor.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  for (var i = 0; i < fwiColors.length; i++) ...[
+                    _LegendRow(
+                      color: fwiColors[i],
+                      label: classLabels[i],
+                      textColor: titleColor,
+                    ),
+                    if (i < fwiColors.length - 1) const SizedBox(height: 5),
+                  ],
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        l10n.riskOpacityLabel,
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: titleColor.withValues(alpha: 0.78),
+                        ),
+                      ),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 2,
+                            thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 7,
+                            ),
+                            overlayShape: const RoundSliderOverlayShape(
+                              overlayRadius: 14,
+                            ),
+                          ),
+                          child: Slider(
+                            value: _riskOpacity,
+                            min: 0.2,
+                            max: 1.0,
+                            onChanged: (value) =>
+                                setState(() => _riskOpacity = value),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    l10n.riskLegendNote,
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      height: 1.35,
+                      color: titleColor.withValues(alpha: 0.66),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          GlassPanel(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            radius: 12,
+            child: InkWell(
+              onTap: () => setState(() => _isRiskLegendOpen = true),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.legend_toggle,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    l10n.riskLegendTitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: titleColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        const SizedBox(height: 6),
+        GlassPanel(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          radius: 8,
+          child: Text(
+            l10n.riskAttribution,
+            style: GoogleFonts.inter(
+              fontSize: 9.5,
+              color: titleColor.withValues(alpha: 0.72),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -1984,6 +2243,49 @@ class _FilterChip extends StatelessWidget {
         ),
         child: Text(
           '$label · $count',
+          style: GoogleFonts.inter(
+            fontSize: 11.5,
+            fontWeight: FontWeight.w700,
+            color: selected ? Colors.white : idle,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Sibling of [_FilterChip] for the FWI forecast-day picker: same compact
+/// pill, no count — a forecast day has nothing to count.
+class _DayChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _DayChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final idle = isDark
+        ? AppColors.white.withValues(alpha: 0.66)
+        : Colors.black.withValues(alpha: 0.6);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        ),
+        child: Text(
+          label,
           style: GoogleFonts.inter(
             fontSize: 11.5,
             fontWeight: FontWeight.w700,

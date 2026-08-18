@@ -338,6 +338,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     setState(() {
       _incidents = incidents;
       if (incidents.isEmpty) _showIncidents = false;
+      // The loading veil was only ever cleared by the raw-detection fetch,
+      // which the events layer never triggers — so on the default layer it
+      // sat over the map forever, dimming it and eating every gesture.
+      // Events arriving is this layer's "loaded".
+      if (incidents.isNotEmpty) _isLoading = false;
     });
     // Falling back to the detection layer is the one path that selects it
     // without a tap, so it has to trigger the same lazy fetch.
@@ -1394,10 +1399,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ),
         ),
         if (_isLoading)
+          // A translucent veil, not a barrier: the map stays usable while
+          // data loads.
           Positioned.fill(
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.12),
-              child: const Center(child: CircularProgressIndicator()),
+            child: IgnorePointer(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.12),
+                child: const Center(child: CircularProgressIndicator()),
+              ),
             ),
           ),
         // The one permanent surface at the top: which layers are on. The

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/fire_incident.dart';
 import '../../../shared/widgets/glass_panel.dart';
@@ -165,7 +166,7 @@ class IncidentSheet extends StatelessWidget {
                     Expanded(
                       child: Text(
                         l10n.incidentFixedSourceHint,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 12.5,
                           height: 1.5,
                           color: bodyColor,
@@ -195,7 +196,7 @@ class IncidentSheet extends StatelessWidget {
                   Expanded(
                     child: Text(
                       l10n.incidentSatelliteLimitNote,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                         fontSize: 12.5, height: 1.5, color: bodyColor,
                       ),
                     ),
@@ -259,7 +260,7 @@ class _StatusHeader extends StatelessWidget {
             children: [
               Text(
                 l10n.incidentPanelTitle,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 12.5,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.4,
@@ -269,7 +270,7 @@ class _StatusHeader extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 status.label(l10n),
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 19,
                   fontWeight: FontWeight.w800,
                   color: status.color,
@@ -306,7 +307,7 @@ class _Line extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: emphasis ? 16 : 14,
               fontWeight: emphasis ? FontWeight.w700 : FontWeight.w500,
               height: 1.45,
@@ -354,15 +355,23 @@ class _HeatMeter extends StatelessWidget {
             const SizedBox(width: AppSpacing.md),
             Text(
               l10n.incidentHeatLabel,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 13, fontWeight: FontWeight.w600, color: bodyColor,
               ),
             ),
             const Spacer(),
             Text(
-              '$label  ·  ${frpMw.toStringAsFixed(frpMw < 10 ? 1 : 0)} MW',
-              style: GoogleFonts.inter(
+              '$label  ·  ',
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 13, fontWeight: FontWeight.w700, color: color,
+              ),
+            ),
+            // The MW reading is a live measurement — mono with tabular
+            // figures so it does not jitter between refreshes.
+            Text(
+              '${frpMw.toStringAsFixed(frpMw < 10 ? 1 : 0)} MW',
+              style: AppTheme.mono(
+                size: 13, weight: FontWeight.w700, color: color,
               ),
             ),
           ],
@@ -427,7 +436,7 @@ class _TrendCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   text,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     color: titleColor,
@@ -439,7 +448,7 @@ class _TrendCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             l10n.incidentTrendNote,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 12,
               height: 1.5,
               color: bodyColor,
@@ -489,7 +498,7 @@ class _SpreadCard extends StatelessWidget {
               const SizedBox(width: AppSpacing.md),
               Text(
                 l10n.incidentSpreadTitle,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 14, fontWeight: FontWeight.w700, color: titleColor,
                 ),
               ),
@@ -501,7 +510,7 @@ class _SpreadCard extends StatelessWidget {
               compassDirection(l10n, bearing),
               speed.round().toString(),
             ),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 15, fontWeight: FontWeight.w600, height: 1.4,
               color: titleColor,
             ),
@@ -509,7 +518,7 @@ class _SpreadCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             l10n.incidentSpreadEstimateNote,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 12, height: 1.5, color: bodyColor,
             ),
           ),
@@ -546,7 +555,7 @@ class _OfficialCard extends StatelessWidget {
               const SizedBox(width: AppSpacing.md),
               Text(
                 l10n.incidentOfficialTitle,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 14, fontWeight: FontWeight.w700, color: titleColor,
                 ),
               ),
@@ -557,7 +566,7 @@ class _OfficialCard extends StatelessWidget {
             [incident.officialState, incident.officialSource]
                 .whereType<String>()
                 .join('  ·  '),
-            style: GoogleFonts.inter(fontSize: 14, color: bodyColor),
+            style: GoogleFonts.ibmPlexSans(fontSize: 14, color: bodyColor),
           ),
         ],
       ),

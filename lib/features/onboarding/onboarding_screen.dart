@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onPressed: _finishOnboarding,
                         child: Text(
                           l10n.onboardingSkip,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             color: AppColors.white.withValues(alpha: 0.82),
                             fontWeight: FontWeight.w600,
                           ),
@@ -158,7 +158,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Text(
                               pageItem.title,
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.ibmPlexSans(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.white,
@@ -171,7 +171,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               child: Text(
                                 pageItem.description,
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.ibmPlexSans(
                                   fontSize: 16,
                                   height: 1.5,
                                   color:
@@ -220,7 +220,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       child: Text(
                         isLastPage ? l10n.onboardingContinue : l10n.onboardingNext,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),

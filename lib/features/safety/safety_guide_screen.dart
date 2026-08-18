@@ -27,7 +27,7 @@ class SafetyGuideScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           l10n.safetyGuideTitle,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -49,7 +49,7 @@ class SafetyGuideScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     l10n.safetyGuideCenterTitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 30,
                       fontWeight: FontWeight.w800,
                       color: titleColor,
@@ -58,7 +58,7 @@ class SafetyGuideScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     l10n.safetyGuideCenterSubtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       height: 1.45,
                       color: secondaryTextColor,
@@ -311,7 +311,7 @@ class _QuickActionCard extends StatelessWidget {
           const Spacer(),
           Text(
             title,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 15,
               fontWeight: FontWeight.w800,
               color: titleColor,
@@ -320,7 +320,7 @@ class _QuickActionCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             subtitle,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 12,
               height: 1.35,
               color: subtitleColor,
@@ -384,7 +384,7 @@ class _ChecklistTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: titleColor,
@@ -393,7 +393,7 @@ class _ChecklistTile extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 13,
                     height: 1.4,
                     color: descriptionColor,
@@ -477,7 +477,7 @@ class _GuideAccordionState extends State<_GuideAccordion> {
                 Expanded(
                   child: Text(
                     widget.title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: titleColor,
@@ -523,7 +523,7 @@ class _GuideAccordionState extends State<_GuideAccordion> {
                         Expanded(
                           child: Text(
                             point,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.ibmPlexSans(
                               fontSize: 13,
                               height: 1.45,
                               color: pointColor,
@@ -596,7 +596,7 @@ class _EmergencyNumberCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     color: titleColor,
@@ -605,7 +605,7 @@ class _EmergencyNumberCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 13,
                     color: subtitleColor,
                   ),
@@ -618,7 +618,7 @@ class _EmergencyNumberCard extends StatelessWidget {
             child: Text(
               number,
               textAlign: TextAlign.right,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primary,

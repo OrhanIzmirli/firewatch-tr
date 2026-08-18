@@ -28,7 +28,7 @@ class EnglishTranslationBanner extends StatelessWidget {
           Expanded(
             child: Text(
               l10n.newsEnglishBannerText,
-              style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.info),
+              style: GoogleFonts.ibmPlexSans(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.info),
             ),
           ),
           const SizedBox(width: AppSpacing.sm),

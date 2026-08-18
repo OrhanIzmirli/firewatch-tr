@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
@@ -330,7 +331,7 @@ class _RiskScreenState extends State<RiskScreen> {
                 children: [
                   Icon(icon, size: 16, color: AppColors.primary),
                   const SizedBox(width: AppSpacing.sm),
-                  Expanded(child: Text(text, style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor))),
+                  Expanded(child: Text(text, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor))),
                 ],
               ),
             );
@@ -345,10 +346,10 @@ class _RiskScreenState extends State<RiskScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(l10n.riskInfoTitle,
-                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor)),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.riskInfoFormulaTitle,
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   formulaLine(Icons.thermostat_rounded, l10n.riskInfoFormulaTemp),
                   formulaLine(Icons.water_drop_outlined, l10n.riskInfoFormulaHumidity),
@@ -356,16 +357,16 @@ class _RiskScreenState extends State<RiskScreen> {
                   formulaLine(Icons.local_fire_department_rounded, l10n.riskInfoFormulaFireCount),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.riskInfoSourcesTitle,
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                   const SizedBox(height: 6),
                   Text(l10n.riskInfoSourcesBody,
-                      style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor)),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.riskInfoUpdateFrequencyTitle,
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                   const SizedBox(height: 6),
                   Text(l10n.riskInfoUpdateFrequencyBody,
-                      style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: mutedTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: mutedTextColor)),
                 ],
               ),
             ),
@@ -407,17 +408,17 @@ class _RiskScreenState extends State<RiskScreen> {
                   children: [
                     Expanded(
                       child: Text(displayRegionName(l10n, region['region']),
-                          style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor)),
+                          style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor)),
                     ),
                     StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(l10n.riskScoreOutOf100(score),
-                    style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
                 const SizedBox(height: AppSpacing.sm),
                 Text(_riskNote(l10n, region),
-                    style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
                 _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor),
                 const SizedBox(height: 8),
@@ -531,7 +532,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.riskTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.riskTitle, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
             key: CoachMarkKeys.riskInfoButton,
@@ -574,7 +575,7 @@ class _RiskScreenState extends State<RiskScreen> {
                         StatusChip(label: l10n.riskLiveView, icon: Icons.auto_graph_rounded),
                         const SizedBox(height: AppSpacing.lg),
                         Text(l10n.riskSummaryTitle,
-                            style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
                         if (lastCalculated != null) ...[
                           const SizedBox(height: 6),
                           Row(
@@ -583,14 +584,14 @@ class _RiskScreenState extends State<RiskScreen> {
                               const SizedBox(width: 4),
                               Text(
                                 l10n.fireDetailLastUpdate('${lastCalculated.day.toString().padLeft(2, '0')}.${lastCalculated.month.toString().padLeft(2, '0')}.${lastCalculated.year} ${lastCalculated.hour.toString().padLeft(2, '0')}:${lastCalculated.minute.toString().padLeft(2, '0')}'),
-                                style: GoogleFonts.inter(fontSize: 12, color: mutedTextColor),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 12, color: mutedTextColor),
                               ),
                             ],
                           ),
                         ],
                         const SizedBox(height: AppSpacing.sm),
                         Text(l10n.riskSummarySubtitle,
-                            style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                         const SizedBox(height: AppSpacing.lg),
                         Row(
                           children: [
@@ -601,7 +602,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                 topRegion != null
                                     ? l10n.riskHighestRisk(displayRegionName(l10n, topRegion['region']), topRegion['general_risk_score'])
                                     : l10n.riskDataLoading,
-                                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -782,10 +783,10 @@ class _RiskScreenState extends State<RiskScreen> {
                             children: [
                               Expanded(
                                 child: Text(l10n.riskScore,
-                                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
+                                    style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
                               ),
                               Text(l10n.riskChartTapHint,
-                                  style: GoogleFonts.inter(fontSize: 11, color: mutedTextColor)),
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 11, color: mutedTextColor)),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.lg),
@@ -811,7 +812,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
                                       child: Text(
                                         displayRegionName(l10n, region['region']),
-                                        style: GoogleFonts.inter(
+                                        style: GoogleFonts.ibmPlexSans(
                                           fontSize: 13,
                                           fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
                                           color: isMine
@@ -867,9 +868,9 @@ class _RiskScreenState extends State<RiskScreen> {
                                             child: Text(
                                               '$score',
                                               textAlign: TextAlign.right,
-                                              style: GoogleFonts.inter(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w800,
+                                              style: AppTheme.mono(
+                                                size: 13,
+                                                weight: FontWeight.w700,
                                                 color: barColor,
                                               ),
                                             ),
@@ -996,7 +997,7 @@ class _TabToggleButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
         ),
         child: Text(label,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: selected ? Colors.white : AppColors.primary,
@@ -1055,7 +1056,7 @@ class _MyLocationSection extends StatelessWidget {
             const CircularProgressIndicator(color: AppColors.primary),
             const SizedBox(height: AppSpacing.md),
             Text(l10n.riskMyLocationGettingLocation,
-                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
           ],
         ),
       );
@@ -1080,7 +1081,7 @@ class _MyLocationSection extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(message, textAlign: TextAlign.center,
-                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
             const SizedBox(height: AppSpacing.lg),
             FilledButton.icon(
               onPressed: onRetry,
@@ -1096,7 +1097,7 @@ class _MyLocationSection extends StatelessWidget {
     if (data == null) {
       return GlassPanel(
         padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Text(l10n.riskDataLoading, style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+        child: Text(l10n.riskDataLoading, style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
       );
     }
 
@@ -1130,7 +1131,7 @@ class _MyLocationSection extends StatelessWidget {
                     Expanded(
                       child: Text(
                         l10n.riskMyLocationYourRegion(city ?? '', displayRegionName(l10n, data['region'])),
-                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor),
                       ),
                     ),
                     StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
@@ -1144,20 +1145,20 @@ class _MyLocationSection extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         l10n.riskMyLocationPostgisDistance(distanceKm!.toStringAsFixed(1)),
-                        style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
                       ),
                     ],
                   ),
                 ],
                 const SizedBox(height: AppSpacing.md),
                 Text(l10n.riskScoreOutOf100(score),
-                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: color)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: color)),
                 const SizedBox(height: 4),
                 Text(l10n.riskMyLocationRankLabel(rank),
-                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
                 const SizedBox(height: 4),
                 Text(l10n.riskMyLocationVsAverage(diffStr),
-                    style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
               ],
             ),
           ),
@@ -1354,20 +1355,20 @@ class _ComparisonRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           flex: 2,
-          child: Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: titleColor)),
+          child: Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: titleColor)),
         ),
         Expanded(
           flex: 3,
           child: Text(
             '${fmt(regionValue)} vs ${fmt(avgValue)}',
             textAlign: TextAlign.right,
-            style: GoogleFonts.inter(fontSize: 12, color: mutedColor),
+            style: AppTheme.mono(size: 12, color: mutedColor),
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
         Icon(arrowIcon, size: 16, color: riskColor),
         const SizedBox(width: 2),
-        Text(riskLabel, style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: riskColor)),
+        Text(riskLabel, style: GoogleFonts.ibmPlexSans(fontSize: 11, fontWeight: FontWeight.w700, color: riskColor)),
       ],
     );
   }
@@ -1387,8 +1388,10 @@ class _DetailMetricRow extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: color),
         const SizedBox(width: AppSpacing.sm),
-        Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
-        Expanded(child: Text(value, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color))),
+        Text('$label: ', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: color)),
+        // Weather readouts are mono with tabular figures so the digits hold
+        // their width between refreshes.
+        Expanded(child: Text(value, style: AppTheme.mono(size: 13, weight: FontWeight.w600, color: color))),
       ],
     );
   }
@@ -1438,13 +1441,13 @@ class _RiskMetricCard extends StatelessWidget {
           ),
           const Spacer(),
           Text(value,
-              style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: valueColor)),
+              style: AppTheme.mono(size: 24, weight: FontWeight.w700, color: valueColor)),
           const SizedBox(height: AppSpacing.xs),
           Text(title,
-              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+              style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
           const SizedBox(height: 2),
           Text(subtitle,
-              style: GoogleFonts.inter(fontSize: 12, color: subtitleColor)),
+              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: subtitleColor)),
         ],
       ),
     ).animate(delay: delay).fadeIn(duration: 300.ms).slideY(begin: 0.12, end: 0).scale(
@@ -1492,7 +1495,7 @@ class _RegionRiskCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(region,
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor)),
               ),
               const SizedBox(width: AppSpacing.sm),
               StatusChip(label: risk, icon: Icons.warning_amber_rounded, color: accent),
@@ -1512,10 +1515,10 @@ class _RegionRiskCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(l10n.riskScoreOutOf100(score),
-              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: accent)),
+              style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: accent)),
           const SizedBox(height: 4),
           Text(note,
-              style: GoogleFonts.inter(fontSize: 12, height: 1.35, color: noteColor)),
+              style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.35, color: noteColor)),
         ],
       ),
     ).animate(delay: delay).fadeIn(duration: 280.ms).slideX(begin: 0.03, end: 0).scale(
@@ -1558,10 +1561,10 @@ class _ProgressFactorCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(title,
-                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
               ),
               Text('${(value * 100).toInt()}%',
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+                  style: AppTheme.mono(size: 14, weight: FontWeight.w700, color: color)),
             ],
           ),
           const SizedBox(height: AppSpacing.md),
@@ -1577,7 +1580,7 @@ class _ProgressFactorCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-          Text(label, style: GoogleFonts.inter(fontSize: 13, color: labelColor)),
+          Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: labelColor)),
         ],
       ),
     ).animate(delay: delay).fadeIn(duration: 280.ms).slideY(begin: 0.12, end: 0).scale(

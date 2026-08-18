@@ -28,7 +28,7 @@ class LanguageBadge extends StatelessWidget {
       ),
       child: Text(
         code.toUpperCase(),
-        style: GoogleFonts.inter(
+        style: GoogleFonts.ibmPlexSans(
           fontSize: size * 0.42,
           fontWeight: FontWeight.w800,
           color: AppColors.primary,

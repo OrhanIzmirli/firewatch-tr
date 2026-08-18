@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
@@ -701,12 +702,11 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               Text(
                 count.toString(),
-                style: GoogleFonts.inter(
+                style: AppTheme.mono(
+                  size: hasActive ? size * 0.26 : size * 0.36,
+                  weight: FontWeight.w700,
                   color: Colors.white,
-                  fontSize: hasActive ? size * 0.26 : size * 0.36,
-                  fontWeight: FontWeight.w800,
-                  height: 1.05,
-                ),
+                ).copyWith(height: 1.05),
               ),
             ],
           ),
@@ -810,7 +810,7 @@ class _MapScreenState extends State<MapScreen> {
                       Expanded(
                         child: Text(
                           point.detectionTitle(l10n),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
                             color: point.detectionColor,
@@ -847,7 +847,7 @@ class _MapScreenState extends State<MapScreen> {
                   point.cityName != null
                       ? '${point.cityName} (${point.nearestRegion ?? point.regionDisplayName(l10n)})'
                       : point.regionDisplayName(l10n),
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: titleColor,
@@ -856,7 +856,7 @@ class _MapScreenState extends State<MapScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   point.riskReasonText(l10n),
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 14,
                     height: 1.45,
                     color: secondaryTextColor,
@@ -916,7 +916,7 @@ class _MapScreenState extends State<MapScreen> {
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Text(
                     point.recommendedActionText(l10n),
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 14,
                       height: 1.45,
                       color: titleColor,
@@ -979,7 +979,7 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         title: Text(
           _screenTitle(l10n),
-          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
       ),
       // The map is the screen, not a card on it. Everything that explains the
@@ -1211,9 +1211,9 @@ class _MapScreenState extends State<MapScreen> {
                       child: Center(
                         child: Text(
                           markers.length.toString(),
-                          style: GoogleFonts.inter(
+                          style: AppTheme.mono(
+                            weight: FontWeight.w700,
                             color: Colors.white,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -1308,7 +1308,7 @@ class _MapScreenState extends State<MapScreen> {
                     _showIncidents
                         ? l10n.incidentLayerCaptionEvents
                         : l10n.incidentLayerCaptionDetections,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 11,
                       height: 1.3,
                       color: titleColor.withValues(alpha: 0.78),
@@ -1340,7 +1340,7 @@ class _MapScreenState extends State<MapScreen> {
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                         fontSize: 13,
                         height: 1.45,
                         color: titleColor,
@@ -1376,7 +1376,7 @@ class _MapScreenState extends State<MapScreen> {
                               const SizedBox(width: AppSpacing.sm),
                               Text(
                                 l10n.commonRefresh,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.ibmPlexSans(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: titleColor,
@@ -1413,7 +1413,7 @@ class _MapScreenState extends State<MapScreen> {
                               const SizedBox(width: AppSpacing.sm),
                               Text(
                                 l10n.mapGoToMe,
-                                style: GoogleFonts.inter(
+                                style: GoogleFonts.ibmPlexSans(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: titleColor,
@@ -1448,7 +1448,7 @@ class _MapScreenState extends State<MapScreen> {
                   const SizedBox(width: AppSpacing.sm),
                   Text(
                     l10n.mapLegendTitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: titleColor,
@@ -1560,7 +1560,7 @@ class _MapScreenState extends State<MapScreen> {
                       Expanded(
                         child: Text(
                           l10n.riskLegendTitle,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w800,
                             color: titleColor,
@@ -1596,7 +1596,7 @@ class _MapScreenState extends State<MapScreen> {
                     children: [
                       Text(
                         l10n.riskOpacityLabel,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: titleColor.withValues(alpha: 0.78),
@@ -1626,7 +1626,7 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   Text(
                     l10n.riskLegendNote,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 10,
                       height: 1.35,
                       color: titleColor.withValues(alpha: 0.66),
@@ -1653,7 +1653,7 @@ class _MapScreenState extends State<MapScreen> {
                   const SizedBox(width: 6),
                   Text(
                     l10n.riskLegendTitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: titleColor,
@@ -1669,7 +1669,7 @@ class _MapScreenState extends State<MapScreen> {
           radius: 8,
           child: Text(
             l10n.riskAttribution,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 9.5,
               color: titleColor.withValues(alpha: 0.72),
             ),
@@ -1746,7 +1746,7 @@ class _MapScreenState extends State<MapScreen> {
                     children: [
                       Text(
                         l10n.mapHeaderTitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: titleColor,
@@ -1755,7 +1755,7 @@ class _MapScreenState extends State<MapScreen> {
                       const SizedBox(height: 2),
                       Text(
                         l10n.mapHeaderSubtitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 13,
                           height: 1.35,
                           color: secondaryTextColor,
@@ -1783,7 +1783,7 @@ class _MapScreenState extends State<MapScreen> {
                   icon: const Icon(Icons.edit_location_alt_rounded, size: 18),
                   label: Text(
                     l10n.mapReport,
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+                    style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -1806,7 +1806,7 @@ class _MapScreenState extends State<MapScreen> {
                   TextSpan(text: l10n.mapMarkerDisclaimerAfter),
                 ],
               ),
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 11.5,
                 height: 1.45,
                 color: secondaryTextColor,
@@ -1837,7 +1837,7 @@ class _MapScreenState extends State<MapScreen> {
                     Expanded(
                       child: Text(
                         l10n.mapConfidenceFilterActive,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
                           color: AppColors.danger,
@@ -1853,7 +1853,7 @@ class _MapScreenState extends State<MapScreen> {
                         child: Center(
                           child: Text(
                             l10n.mapConfidenceFilterClear,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.ibmPlexSans(
                               fontSize: 12.5,
                               fontWeight: FontWeight.w800,
                               color: AppColors.danger,
@@ -1960,7 +1960,7 @@ class _MapScreenState extends State<MapScreen> {
                                                       ),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.inter(
+                                                style: GoogleFonts.ibmPlexSans(
                                                   fontSize: 16,
                                                   height: 1.25,
                                                   fontWeight: FontWeight.w800,
@@ -1977,7 +1977,7 @@ class _MapScreenState extends State<MapScreen> {
                                                     : timeAgo,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.inter(
+                                                style: GoogleFonts.ibmPlexSans(
                                                   fontSize: 13,
                                                   color: secondaryTextColor,
                                                 ),
@@ -2033,7 +2033,7 @@ class _MapScreenState extends State<MapScreen> {
                                         children: [
                                           Text(
                                             point.riskReasonText(l10n),
-                                            style: GoogleFonts.inter(
+                                            style: GoogleFonts.ibmPlexSans(
                                               fontSize: 13,
                                               height: 1.4,
                                               color: secondaryTextColor,
@@ -2052,7 +2052,7 @@ class _MapScreenState extends State<MapScreen> {
                                                 '$tempC°C',
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.inter(
+                                                style: GoogleFonts.ibmPlexSans(
                                                   fontSize: 12,
                                                   color: secondaryTextColor,
                                                 ),
@@ -2072,7 +2072,7 @@ class _MapScreenState extends State<MapScreen> {
                                                   maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
-                                                  style: GoogleFonts.inter(
+                                                  style: GoogleFonts.ibmPlexSans(
                                                     fontSize: 12,
                                                     fontWeight: point.isMerged
                                                         ? FontWeight.w700
@@ -2093,7 +2093,7 @@ class _MapScreenState extends State<MapScreen> {
                                               Expanded(
                                                 child: Text(
                                                   point.locationLabelText(l10n),
-                                                  style: GoogleFonts.inter(
+                                                  style: GoogleFonts.ibmPlexSans(
                                                     fontSize: 12,
                                                     color: secondaryTextColor,
                                                   ),
@@ -2154,13 +2154,15 @@ class _DetailRow extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: color),
         const SizedBox(width: AppSpacing.sm),
-        Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
+        Text('$label: ', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: color)),
         Expanded(
           child: Text(
             value,
-            style: GoogleFonts.inter(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+            // Readout values are mono with tabular figures: a temperature or
+            // distance that refreshes must not jitter as its digits change.
+            style: AppTheme.mono(
+              size: 13,
+              weight: FontWeight.w600,
               color: color,
             ),
           ),
@@ -2197,7 +2199,7 @@ class _LegendRow extends StatelessWidget {
         const SizedBox(width: AppSpacing.sm),
         Text(
           label,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.ibmPlexSans(
             fontSize: 13,
             fontWeight: FontWeight.w700,
             color: textColor,
@@ -2241,13 +2243,28 @@ class _FilterChip extends StatelessWidget {
           color: selected ? AppColors.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
         ),
-        child: Text(
-          '$label · $count',
-          style: GoogleFonts.inter(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w700,
-            color: selected ? Colors.white : idle,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '$label · ',
+              style: GoogleFonts.ibmPlexSans(
+                fontSize: 11.5,
+                fontWeight: FontWeight.w700,
+                color: selected ? Colors.white : idle,
+              ),
+            ),
+            // The count refreshes with the data; tabular figures keep the
+            // chip from changing width digit by digit.
+            Text(
+              count.toString(),
+              style: AppTheme.mono(
+                size: 11.5,
+                weight: FontWeight.w700,
+                color: selected ? Colors.white : idle,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -2286,7 +2303,7 @@ class _DayChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.ibmPlexSans(
             fontSize: 11.5,
             fontWeight: FontWeight.w700,
             color: selected ? Colors.white : idle,
@@ -2334,7 +2351,7 @@ class _LayerChip extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w700,
                 color: selected ? Colors.white : idle,

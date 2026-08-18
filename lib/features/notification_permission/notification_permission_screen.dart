@@ -118,7 +118,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                   Text(
                     l10n.notifPermTitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.white),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.white),
                   ).animate().fadeIn(duration: 360.ms, delay: 180.ms).slideY(begin: 0.12, end: 0),
 
                   const SizedBox(height: AppSpacing.md),
@@ -126,7 +126,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                   Text(
                     l10n.notifPermSubtitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(fontSize: 16, height: 1.5, color: AppColors.white.withValues(alpha: 0.82)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 16, height: 1.5, color: AppColors.white.withValues(alpha: 0.82)),
                   ).animate().fadeIn(duration: 360.ms, delay: 250.ms).slideY(begin: 0.12, end: 0),
 
                   const SizedBox(height: AppSpacing.xxl),
@@ -146,7 +146,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                         Expanded(
                           child: Text(
                             l10n.notifPermNote,
-                            style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: AppColors.white.withValues(alpha: 0.78)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: AppColors.white.withValues(alpha: 0.78)),
                           ),
                         ),
                       ],
@@ -168,7 +168,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                       ),
                       child: Text(
                         _message!,
-                        style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: AppColors.white.withValues(alpha: 0.84)),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: AppColors.white.withValues(alpha: 0.84)),
                       ),
                     ).animate().fadeIn(duration: 260.ms).slideY(begin: 0.08, end: 0),
                   ],
@@ -193,7 +193,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                             )
                           : Text(
                               l10n.notifPermEnable,
-                              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w700),
                             ),
                     ),
                   ).animate(delay: 420.ms).fadeIn(duration: 300.ms).slideY(begin: 0.18, end: 0).scale(
@@ -215,7 +215,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                       ),
                       child: Text(
                         l10n.notifPermSkip,
-                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ).animate(delay: 500.ms).fadeIn(duration: 300.ms).slideY(begin: 0.18, end: 0).scale(

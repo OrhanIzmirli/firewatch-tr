@@ -245,12 +245,12 @@ Future<void> maybeShowScreenCoachMarks(
                               children: [
                                 Text(
                                   l10n.coachMarksStepCount(index + 1, steps.length),
-                                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
                                   step.title,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.ibmPlexSans(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: isDark ? AppColors.white : const Color(0xFF0F172A),
@@ -259,7 +259,7 @@ Future<void> maybeShowScreenCoachMarks(
                                 const SizedBox(height: 6),
                                 Text(
                                   step.description,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.ibmPlexSans(
                                     fontSize: 14,
                                     height: 1.45,
                                     color: isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68),
@@ -276,7 +276,7 @@ Future<void> maybeShowScreenCoachMarks(
                                 height: 48,
                                 child: TextButton(
                                   onPressed: finish,
-                                  child: Text(l10n.coachMarksSkip, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                                  child: Text(l10n.coachMarksSkip, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600)),
                                 ),
                               ),
                               SizedBox(

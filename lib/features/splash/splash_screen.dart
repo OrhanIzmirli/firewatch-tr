@@ -101,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     Text(
                       l10n.appName,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -111,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     Text(
                       l10n.splashTagline,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                         fontSize: 15,
                         color: Colors.white.withValues(alpha: 0.82),
                       ),

@@ -36,7 +36,7 @@ class IncidentLegend extends StatelessWidget {
                 const SizedBox(width: AppSpacing.sm),
                 Text(
                   status.label(l10n),
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: labelColor,

@@ -137,7 +137,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
       appBar: AppBar(
         title: Text(
           l10n.newsDetailTitle,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.ibmPlexSans(
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -190,13 +190,13 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     text: TextSpan(
                       children: highlightFireKeywords(
                         displayTitle,
-                        GoogleFonts.inter(
+                        GoogleFonts.ibmPlexSans(
                           fontSize: 28,
                           fontWeight: FontWeight.w800,
                           height: 1.15,
                           color: titleColor,
                         ),
-                        GoogleFonts.inter(
+                        GoogleFonts.ibmPlexSans(
                           fontSize: 28,
                           fontWeight: FontWeight.w800,
                           height: 1.15,
@@ -208,7 +208,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   const SizedBox(height: AppSpacing.md),
                   Text(
                     displaySummary,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       height: 1.5,
                       color: secondaryTextColor,
@@ -227,7 +227,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           Text(l10n.newsTranslating,
-                              style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
                         ],
                       )
                     else
@@ -249,7 +249,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                           ),
                           if (_translationFailed)
                             Text(l10n.newsTranslationFailed,
-                                style: GoogleFonts.inter(fontSize: 12, color: AppColors.danger)),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.danger)),
                         ],
                       ),
                   ],
@@ -259,7 +259,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       Expanded(
                         child: Text(
                           '${newsItem.source} • ${formatNewsTimeAgo(l10n, newsItem.publishedAt)}',
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 13,
                             color: metaColor,
                           ),
@@ -269,7 +269,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                         const SizedBox(width: AppSpacing.sm),
                         Text(
                           l10n.newsWordCount(newsWordCount(newsItem)!),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: AppColors.primary,
@@ -332,7 +332,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       Expanded(
                         child: Text(
                           point,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 14,
                             height: 1.45,
                             color: paragraphColor,
@@ -378,7 +378,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Text(
                     paragraph,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 14,
                       height: 1.6,
                       color: paragraphColor,
@@ -433,7 +433,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                       children: [
                         Text(
                           newsItem.relatedRegion,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: titleColor,
@@ -442,7 +442,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                         const SizedBox(height: 4),
                         Text(
                           l10n.newsDetailRelatedRegionNote,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 13,
                             height: 1.45,
                             color: secondaryTextColor,

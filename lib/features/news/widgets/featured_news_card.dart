@@ -179,13 +179,13 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                     text: TextSpan(
                       children: highlightFireKeywords(
                         displayTitle,
-                        GoogleFonts.inter(
+                        GoogleFonts.ibmPlexSans(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           height: 1.15,
                           color: titleColor,
                         ),
-                        GoogleFonts.inter(
+                        GoogleFonts.ibmPlexSans(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           height: 1.15,
@@ -198,7 +198,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                   const SizedBox(height: 6),
                   Text(
                     l10n.newsTranslatedCaption,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 12,
                       fontStyle: FontStyle.italic,
                       color: AppColors.primary.withValues(alpha: 0.8),
@@ -220,7 +220,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                 else
                   Text(
                     displaySummary,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 14,
                       height: 1.5,
                       color: summaryColor,
@@ -240,7 +240,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                     Expanded(
                       child: Text(
                         '${widget.item.source} • ${widget.item.relatedRegion}',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 13,
                           color: isDark
                               ? AppColors.white.withValues(alpha: 0.64)
@@ -250,7 +250,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                     ),
                     Text(
                       timeAgo,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: AppColors.primary,

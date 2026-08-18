@@ -311,7 +311,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 if (leading != null) ...[leading, const SizedBox(width: 7)],
                 Text(
                   label,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: isSelected
@@ -346,7 +346,7 @@ class _NewsScreenState extends State<NewsScreen> {
       appBar: AppBar(
         title: Text(
           l10n.newsTitle,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
         actions: [
           IconButton(
@@ -377,7 +377,7 @@ class _NewsScreenState extends State<NewsScreen> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     l10n.newsCenterTitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: titleColor,
@@ -386,7 +386,7 @@ class _NewsScreenState extends State<NewsScreen> {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     l10n.newsCenterSubtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       height: 1.45,
                       color: secondaryTextColor,

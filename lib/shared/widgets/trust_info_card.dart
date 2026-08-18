@@ -46,7 +46,7 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
                 Expanded(
                   child: Text(
                     widget.title ?? l10n.trustCardLabel,
-                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
                   ),
                 ),
                 AnimatedRotation(
@@ -63,7 +63,7 @@ class _TrustInfoCardState extends State<TrustInfoCard> {
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   widget.text,
-                  style: GoogleFonts.inter(fontSize: 12, height: 1.4, color: textColor),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.4, color: textColor),
                 ),
               ),
               secondChild: const SizedBox.shrink(),

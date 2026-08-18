@@ -62,7 +62,7 @@ class EmergencyContactCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                         ),
@@ -70,7 +70,7 @@ class EmergencyContactCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 13,
                           color: AppColors.white.withValues(alpha: 0.64),
                         ),
@@ -82,7 +82,7 @@ class EmergencyContactCard extends StatelessWidget {
                 Text(
                   number,
                   textAlign: TextAlign.right,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: accent,

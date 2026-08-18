@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/theme/app_theme.dart';
 import '../../models/fire_incident.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -115,7 +116,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
     final child = unreadCount <= 0
         ? icon
         : Badge(
-            label: Text(unreadCount > 9 ? '9+' : '$unreadCount'),
+            // A live counter: tabular figures so the badge width is stable
+            // while the count changes.
+            label: Text(
+              unreadCount > 9 ? '9+' : '$unreadCount',
+              style: AppTheme.mono(size: 11, weight: FontWeight.w600),
+            ),
             child: icon,
           );
     return key == null ? child : KeyedSubtree(key: key, child: child);

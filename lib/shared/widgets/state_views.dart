@@ -43,14 +43,14 @@ class EmptyStateView extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
+            style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 6),
             Text(
               subtitle!,
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: subtitleColor),
+              style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: subtitleColor),
             ),
           ],
         ],
@@ -89,13 +89,13 @@ class ErrorStateView extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Text(
             l10n.errorStateTitle,
-            style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
+            style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
           ),
           const SizedBox(height: 6),
           Text(
             message ?? l10n.errorStateGeneric,
             textAlign: TextAlign.center,
-            style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: titleColor.withValues(alpha: 0.7)),
+            style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: titleColor.withValues(alpha: 0.7)),
           ),
           const SizedBox(height: AppSpacing.md),
           FilledButton.icon(

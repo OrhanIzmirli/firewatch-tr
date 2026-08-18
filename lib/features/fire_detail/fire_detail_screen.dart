@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/utils/turkish_text.dart';
 import '../../core/utils/wind_direction.dart';
 import '../../l10n/app_localizations.dart';
@@ -216,7 +217,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
       appBar: AppBar(
         title: Text(
           l10n.fireDetailTitle,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
       ),
       body: SingleChildScrollView(
@@ -262,7 +263,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         const SizedBox(width: AppSpacing.sm),
                         Text(
                           fireStatusLabel(l10n, fire.smartStatus),
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: fireStatusColor(fire.smartStatus),
@@ -274,7 +275,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   const SizedBox(height: AppSpacing.lg),
                   Text(
                     fire.title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: titleColor,
@@ -283,7 +284,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     fire.description,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       height: 1.45,
                       color: secondaryTextColor,
@@ -302,7 +303,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         l10n.fireDetailLastUpdate(
                           _formatUpdatedAt(context, fire.updatedAt),
                         ),
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 14,
                           color: tertiaryTextColor,
                         ),
@@ -461,7 +462,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         nowSaved
                             ? l10n.fireDetailAddedToWatchlist
                             : l10n.fireDetailRemovedFromWatchlist,
-                        style: GoogleFonts.inter(),
+                        style: GoogleFonts.ibmPlexSans(),
                       ),
                     ),
                   );
@@ -498,7 +499,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   return GlassPanel(
                     child: Text(
                       l10n.fireDetailNoNewsFound,
-                      style: GoogleFonts.inter(color: secondaryTextColor),
+                      style: GoogleFonts.ibmPlexSans(color: secondaryTextColor),
                     ),
                   );
                 }
@@ -507,7 +508,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                   return GlassPanel(
                     child: Text(
                       l10n.fireDetailNoNewsFound,
-                      style: GoogleFonts.inter(color: secondaryTextColor),
+                      style: GoogleFonts.ibmPlexSans(color: secondaryTextColor),
                     ),
                   );
                 }
@@ -519,7 +520,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                         tier == _RelatedNewsTier.city
                             ? l10n.fireDetailRelatedToCity(fire.city)
                             : l10n.fireDetailRegionalNews,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
@@ -575,7 +576,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                                 else ...[
                                   Text(
                                     displayTitle,
-                                    style: GoogleFonts.inter(
+                                    style: GoogleFonts.ibmPlexSans(
                                       fontWeight: FontWeight.w800,
                                       color: titleColor,
                                     ),
@@ -583,7 +584,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                                   const SizedBox(height: 6),
                                   Text(
                                     displaySummary,
-                                    style: GoogleFonts.inter(
+                                    style: GoogleFonts.ibmPlexSans(
                                       fontSize: 13,
                                       color: secondaryTextColor,
                                     ),
@@ -595,7 +596,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                                     Expanded(
                                       child: Text(
                                         item.source,
-                                        style: GoogleFonts.inter(
+                                        style: GoogleFonts.ibmPlexSans(
                                           fontSize: 11,
                                           color: AppColors.primary,
                                         ),
@@ -649,11 +650,13 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Metric readouts (FRP, area) are mono with tabular figures so the
+          // digits hold their width when the value refreshes.
           Text(
             value,
-            style: GoogleFonts.inter(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
+            style: AppTheme.mono(
+              size: 20,
+              weight: FontWeight.w700,
               color: valueColor,
             ),
           ),
@@ -662,7 +665,7 @@ class _MetricCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: GoogleFonts.inter(fontSize: 13, color: labelColor),
+                style: GoogleFonts.ibmPlexSans(fontSize: 13, color: labelColor),
               ),
               ?info,
             ],
@@ -697,14 +700,14 @@ class _InfoRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.inter(fontSize: 15, color: labelColor),
+            style: GoogleFonts.ibmPlexSans(fontSize: 15, color: labelColor),
           ),
           const SizedBox(width: AppSpacing.md),
           Flexible(
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: valueColor,
@@ -742,7 +745,7 @@ class _ActionCard extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 14,
                 height: 1.45,
                 color: textColor,

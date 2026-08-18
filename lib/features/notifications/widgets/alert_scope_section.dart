@@ -131,7 +131,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
                 if (state.citiesFailed)
                   Text(
                     l10n.notificationScopeCitiesUnavailable,
-                    style: GoogleFonts.inter(fontSize: 13, color: AppColors.warning),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 13, color: AppColors.warning),
                   )
                 else
                   _Picker<int>(
@@ -161,7 +161,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
                     Expanded(
                       child: Text(
                         l10n.notificationScopeNarrowWarning,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 12.5,
                           height: 1.45,
                           color: subtitleColor,
@@ -176,7 +176,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
                 state.isDetectingLocation
                     ? l10n.notificationScopeDetecting
                     : _suggestionLine(l10n, state),
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 12.5,
                   color: subtitleColor,
                   fontStyle: FontStyle.italic,
@@ -193,7 +193,7 @@ class _AlertScopeSectionState extends ConsumerState<AlertScopeSection> {
             padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Text(
               '…',
-              style: GoogleFonts.inter(fontSize: 12, color: titleColor),
+              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: titleColor),
             ),
           ),
       ],
@@ -270,7 +270,7 @@ class _ScopeOptionTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: titleColor,
@@ -279,7 +279,7 @@ class _ScopeOptionTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 13,
                       height: 1.4,
                       color: subtitleColor,
@@ -330,7 +330,7 @@ class _Picker<T> extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.ibmPlexSans(
             fontSize: 12.5,
             fontWeight: FontWeight.w600,
             color: subtitleColor,

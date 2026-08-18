@@ -30,7 +30,7 @@ class InfoIconButton extends StatelessWidget {
         final bodyColor = isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68);
 
         return AlertDialog(
-          title: Text(title, style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: titleColor)),
+          title: Text(title, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w800, color: titleColor)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class InfoIconButton extends StatelessWidget {
               for (final line in bodyLines)
                 Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                  child: Text(line, style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: bodyColor)),
+                  child: Text(line, style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: bodyColor)),
                 ),
             ],
           ),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_point.dart';
 import '../../services/fire_api_service.dart';
@@ -114,14 +115,14 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.watchlistTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.watchlistTitle, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           if (savedIds.isNotEmpty)
             TextButton(
               key: CoachMarkKeys.watchlistClearButton,
               onPressed: () => ref.read(watchlistProvider.notifier).clear(),
               child: Text(l10n.watchlistClear,
-                  style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                  style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w700)),
             ).animate().fadeIn(duration: 240.ms).slideX(begin: 0.2, end: 0),
         ],
       ),
@@ -145,10 +146,10 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.watchlistHeading,
-                      style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(l10n.watchlistHeadingSubtitle,
-                      style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                 ],
               ),
             ).animate().fadeIn(duration: 450.ms).scale(
@@ -173,12 +174,12 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                     const SizedBox(height: AppSpacing.lg),
                     Text(l10n.watchlistEmptyTitle,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor))
+                        style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor))
                         .animate(delay: 100.ms).fadeIn(duration: 260.ms).slideY(begin: 0.1, end: 0),
                     const SizedBox(height: AppSpacing.sm),
                     Text(l10n.watchlistEmptySubtitle,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor))
+                        style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor))
                         .animate(delay: 170.ms).fadeIn(duration: 260.ms).slideY(begin: 0.1, end: 0),
                   ],
                 ),
@@ -201,13 +202,13 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                       Text(
                         l10n.watchlistSyncingTitle(savedIds.length),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         l10n.watchlistSyncingSubtitle,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: secondaryTextColor),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor),
                       ),
                       const SizedBox(height: AppSpacing.md),
                       OutlinedButton.icon(
@@ -242,7 +243,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                     point.cityName != null
                                         ? '${point.cityName} — ${point.nearestRegion ?? point.regionDisplayName(l10n)}'
                                         : point.regionDisplayName(l10n),
-                                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor),
+                                    style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor),
                                   ),
                                 ),
                                 StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
@@ -250,17 +251,17 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                             ),
                             const SizedBox(height: AppSpacing.xs),
                             Text('${point.formattedDate} • ${point.formattedTime} UTC',
-                                style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor.withValues(alpha: 0.7))),
+                                style: AppTheme.mono(size: 12, color: secondaryTextColor.withValues(alpha: 0.7))),
                             const SizedBox(height: AppSpacing.sm),
                             Text(point.riskReasonText(l10n),
                                 maxLines: 2, overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor)),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: secondaryTextColor)),
                             const SizedBox(height: AppSpacing.sm),
                             Row(
                               children: [
                                 Icon(Icons.thermostat_rounded, size: 13, color: secondaryTextColor),
                                 const SizedBox(width: 4),
-                                Text('$tempC°C', style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                Text('$tempC°C', style: AppTheme.mono(size: 12, color: secondaryTextColor)),
                                 const SizedBox(width: 12),
                                 Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : secondaryTextColor),
                                 const SizedBox(width: 4),
@@ -268,7 +269,7 @@ class _WatchlistScreenState extends ConsumerState<WatchlistScreen> {
                                   child: Text(point.mergedSatelliteLabel,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.inter(
+                                      style: GoogleFonts.ibmPlexSans(
                                           fontSize: 12,
                                           fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
                                           color: point.isMerged ? AppColors.success : secondaryTextColor)),

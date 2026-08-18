@@ -50,7 +50,7 @@ class FilterChipRow extends StatelessWidget {
             ),
             child: Text(
               option,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.ibmPlexSans(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: isSelected

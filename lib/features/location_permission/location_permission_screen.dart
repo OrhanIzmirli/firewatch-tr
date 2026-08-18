@@ -169,7 +169,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                   Text(
                     l10n.locPermTitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: AppColors.white,
@@ -184,7 +184,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                   Text(
                     l10n.locPermSubtitle,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                       fontSize: 16,
                       height: 1.5,
                       color: AppColors.white.withValues(alpha: 0.82),
@@ -215,7 +215,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                         Expanded(
                           child: Text(
                             l10n.locPermNote,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.ibmPlexSans(
                               fontSize: 14,
                               height: 1.45,
                               color: AppColors.white.withValues(alpha: 0.78),
@@ -249,7 +249,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                       ),
                       child: Text(
                         _message!,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 14,
                           height: 1.45,
                           color: AppColors.white.withValues(alpha: 0.84),
@@ -288,7 +288,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                       )
                           : Text(
                         l10n.locPermEnable,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -323,7 +323,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                       ),
                       child: Text(
                         l10n.locPermSkip,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

@@ -71,13 +71,13 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
                   Text(
                     'Dil seçin',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.white),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 26, fontWeight: FontWeight.bold, color: AppColors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Choose your language',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(fontSize: 16, color: AppColors.white.withValues(alpha: 0.78)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 16, color: AppColors.white.withValues(alpha: 0.78)),
                   ),
                   const SizedBox(height: AppSpacing.xxxl),
                   _LanguageCard(
@@ -138,7 +138,7 @@ class _LanguageCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.white),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.white),
                 ),
               ),
               const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.white, size: 18),

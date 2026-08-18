@@ -67,7 +67,7 @@ class EmergencyScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.emergencyTitle,
-            style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+            style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -85,14 +85,14 @@ class EmergencyScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.emergencyQuickToolsTitle,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                           fontSize: 30,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     l10n.emergencyQuickToolsSubtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                         fontSize: 15, height: 1.45, color: secondaryTextColor),
                   ),
                   const SizedBox(height: AppSpacing.lg),
@@ -104,7 +104,7 @@ class EmergencyScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           l10n.emergencyStayReadyNote,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                               fontSize: 13, color: secondaryTextColor),
                         ),
                       ),
@@ -254,20 +254,20 @@ class EmergencyScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(l10n.emergencyStep1,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(l10n.emergencyStep2,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.ibmPlexSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
                           color: titleColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     l10n.emergencyStep3,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                         color: titleColor),
@@ -325,13 +325,13 @@ class _ChecklistCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                         color: titleColor)),
                 const SizedBox(height: 4),
                 Text(subtitle,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.ibmPlexSans(
                         fontSize: 13, height: 1.45, color: subtitleColor)),
               ],
             ),

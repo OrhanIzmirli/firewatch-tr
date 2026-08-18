@@ -283,7 +283,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.notificationsTitle, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.notificationsTitle, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadFires),
         ],
@@ -319,10 +319,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               ),
                               const SizedBox(height: AppSpacing.lg),
                               Text(l10n.notificationsFeedTitle,
-                                  style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 28, fontWeight: FontWeight.w800, color: titleColor)),
                               const SizedBox(height: AppSpacing.sm),
                               Text(l10n.notificationsFeedSubtitle,
-                                  style: GoogleFonts.inter(fontSize: 15, height: 1.45, color: secondaryTextColor)),
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.45, color: secondaryTextColor)),
                             ],
                           ),
                         ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.06, end: 0),
@@ -368,7 +368,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 ],
                               ),
                               const SizedBox(height: AppSpacing.md),
-                              Text(statusText, style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                              Text(statusText, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
                               const SizedBox(height: AppSpacing.lg),
                               SizedBox(
                                 width: double.infinity,
@@ -454,15 +454,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(fire.regionDisplayName(l10n),
-                                              style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
+                                              style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
                                           const SizedBox(height: 4),
                                           Text(l10n.notificationsDistanceAndTime(fire.distanceKm?.toStringAsFixed(1) ?? '-', _timeAgo(context, fire.acquisitionDate, fire.acquisitionTime)),
-                                              style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 6),
                                           Text(fire.riskReasonText(l10n),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                                              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
                                           const SizedBox(height: 4),
                                           Wrap(
                                             spacing: AppSpacing.xs,
@@ -470,7 +470,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             crossAxisAlignment: WrapCrossAlignment.center,
                                             children: [
                                               Text(l10n.notificationsRiskLabel(fire.riskLevelLabel(l10n)),
-                                                  style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
+                                                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w700)),
                                               StatusChip(
                                                 label: fireStatusLabel(l10n, fire.smartStatus),
                                                 showDot: true,
@@ -506,7 +506,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   ),
                                   child: Text(
                                     l10n.notificationsUnreadCount(_highRiskFires.length),
-                                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
+                                    style: GoogleFonts.ibmPlexSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary),
                                   ),
                                 )
                               : null,
@@ -518,7 +518,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         else if (_highRiskFires.isEmpty)
                           GlassPanel(
                             child: Text(l10n.notificationsNoHighRisk,
-                                style: GoogleFonts.inter(fontSize: 14, color: secondaryTextColor)),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
                           )
                         else
                           ..._highRiskFires.asMap().entries.map((entry) {
@@ -559,7 +559,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                   Expanded(
                                                     child: Text(
                                                       fire.detectionTitle(l10n),
-                                                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800),
+                                                      style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w800),
                                                     ),
                                                   ),
                                                   Container(
@@ -577,7 +577,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 fire.riskReasonText(l10n),
                                                 maxLines: 3,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.inter(fontSize: 13, height: 1.42, color: secondaryTextColor),
+                                                style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.42, color: secondaryTextColor),
                                               ),
                                               const SizedBox(height: AppSpacing.md),
                                               Wrap(
@@ -593,7 +593,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                   ),
                                                   Text(
                                                     '$timeAgo • ${fire.mergedSatelliteLabel}',
-                                                    style: GoogleFonts.inter(fontSize: 12,
+                                                    style: GoogleFonts.ibmPlexSans(fontSize: 12,
                                                         color: isDark
                                                             ? AppColors.white.withValues(alpha: 0.5)
                                                             : Colors.black.withValues(alpha: 0.45)),

@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
@@ -467,12 +468,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: AppSpacing.lg),
               Text(
                 l10n.homeFireRegionTitle(point.regionDisplayName(l10n)),
-                style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
+                style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
                 point.riskReasonText(l10n),
-                style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor),
+                style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor),
               ),
               const SizedBox(height: AppSpacing.lg),
               _PreviewRow(
@@ -618,7 +619,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appName, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
+        title: Text(l10n.appName, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],
@@ -642,17 +643,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   StatusChip(label: l10n.homeLiveSummary, icon: Icons.bolt_rounded),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.homeHeaderTitle,
-                      style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: primaryTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 30, fontWeight: FontWeight.w800, color: primaryTextColor)),
                   const SizedBox(height: AppSpacing.sm),
                   Text(l10n.homeHeaderSubtitle,
-                      style: GoogleFonts.inter(fontSize: 16, height: 1.45, color: secondaryTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 16, height: 1.45, color: secondaryTextColor)),
                   const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
                       Icon(Icons.access_time_rounded, size: 18, color: tertiaryTextColor),
                       const SizedBox(width: AppSpacing.sm),
                       Text(l10n.homeNasaLiveData,
-                          style: GoogleFonts.inter(fontSize: 14, color: tertiaryTextColor)),
+                          style: GoogleFonts.ibmPlexSans(fontSize: 14, color: tertiaryTextColor)),
                     ],
                   ),
                   if (_locationStatus != _LocationStatus.pending) ...[
@@ -678,7 +679,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               _LocationStatus.emulatorTest => l10n.homeLocationEmulatorTest,
                               _LocationStatus.resolved || _LocationStatus.pending => _myCity ?? '',
                             },
-                            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: primaryTextColor),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: primaryTextColor),
                           ),
                         ),
                       ],
@@ -688,7 +689,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         padding: const EdgeInsets.only(left: 26, top: 2),
                         child: Text(
                           l10n.riskMyLocationPostgisDistance(_myDistanceKm!.toStringAsFixed(1)),
-                          style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor),
+                          style: GoogleFonts.ibmPlexSans(fontSize: 12, color: tertiaryTextColor),
                         ),
                       ),
                   ],
@@ -857,7 +858,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const Icon(Icons.bolt_rounded, size: 16, color: AppColors.primary),
                     const SizedBox(width: AppSpacing.sm),
                     Text(l10n.homeBreakingCount(_topNews.where((e) => e.isBreaking).length),
-                        style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                        style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w800)),
                   ],
                 ),
               ),
@@ -913,7 +914,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           const Icon(Icons.map_rounded, size: 16, color: AppColors.primary),
                           const SizedBox(width: AppSpacing.sm),
-                          Text(l10n.homeMap, style: GoogleFonts.inter(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                          Text(l10n.homeMap, style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w800)),
                         ],
                       ),
                     ),
@@ -1004,7 +1005,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   point.regionDisplayName(l10n),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.sm),
@@ -1028,12 +1029,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           const SizedBox(height: AppSpacing.xs),
                           Text(
                             '${point.formattedDate} • ${point.formattedTime} UTC',
-                            style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor),
+                            style: AppTheme.mono(size: 12, color: tertiaryTextColor),
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           Text(
                             point.riskReasonText(l10n),
-                            style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: secondaryTextColor),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -1042,7 +1043,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             children: [
                               Icon(Icons.thermostat_rounded, size: 13, color: tertiaryTextColor),
                               const SizedBox(width: 4),
-                              Text('$tempC°C', style: GoogleFonts.inter(fontSize: 12, color: tertiaryTextColor)),
+                              Text('$tempC°C', style: AppTheme.mono(size: 12, color: tertiaryTextColor)),
                               const SizedBox(width: 12),
                               Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : tertiaryTextColor),
                               const SizedBox(width: 4),
@@ -1050,14 +1051,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Text(point.mergedSatelliteLabel,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.inter(
+                                    style: GoogleFonts.ibmPlexSans(
                                         fontSize: 12,
                                         fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
                                         color: point.isMerged ? AppColors.success : tertiaryTextColor)),
                               ),
                               const SizedBox(width: 12),
                               const Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
-                              Text(l10n.commonDetail, style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
+                              Text(l10n.commonDetail, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ],
@@ -1108,7 +1109,7 @@ class _FilterChip extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(label,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600,
+                style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w600,
                     color: selected ? Colors.white : AppColors.primary)),
           ),
         ),
@@ -1137,10 +1138,12 @@ class _PreviewRow extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: valueColor ?? color),
         const SizedBox(width: 6),
-        Text('$label: ', style: GoogleFonts.inter(fontSize: 13, color: color)),
+        Text('$label: ', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: color)),
         Expanded(
+          // Readout values are mono with tabular figures so refreshing
+          // digits (temperature, coordinates) never jitter.
           child: Text(value,
-              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: valueColor ?? color),
+              style: AppTheme.mono(size: 13, weight: FontWeight.w600, color: valueColor ?? color),
               overflow: TextOverflow.ellipsis),
         ),
         ?info,
@@ -1294,7 +1297,7 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
                         )
                       else
                         Text(displayTitle,
-                            style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, height: 1.2, color: titleColor)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w800, height: 1.2, color: titleColor)),
                       const SizedBox(height: AppSpacing.sm),
                       if (_translating)
                         const ShimmerWrap(
@@ -1309,16 +1312,16 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
                         )
                       else
                         Text(displaySummary, maxLines: 2, overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.inter(fontSize: 13, height: 1.45, color: summaryColor)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: summaryColor)),
                       const SizedBox(height: AppSpacing.md),
                       Row(
                         children: [
                           Expanded(child: Text('${item.source} • $timeAgo',
-                              style: GoogleFonts.inter(fontSize: 12, color: metaColor))),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: metaColor))),
                           if (wordCount != null) ...[
                             const SizedBox(width: AppSpacing.sm),
                             Text(l10n.newsWordCount(wordCount),
-                                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
                           ],
                         ],
                       ),

@@ -55,7 +55,7 @@ class FireInfoCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         title,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 17,
                           fontWeight: FontWeight.w800,
                           color: titleColor,
@@ -83,7 +83,7 @@ class FireInfoCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   subtitle,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 14,
                     height: 1.4,
                     color: subtitleColor,

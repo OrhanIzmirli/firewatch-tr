@@ -31,7 +31,7 @@ class DataSourcesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           l10n.dataSourcesTitle,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
       ),
       body: ListView(
@@ -120,7 +120,7 @@ class _Section extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     color: titleColor,
@@ -132,7 +132,7 @@ class _Section extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Text(
             body,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.ibmPlexSans(
               fontSize: 13,
               height: 1.55,
               color: bodyColor,

@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/report_spam_guard.dart';
 import 'glass_panel.dart';
@@ -295,7 +296,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
   void _showSnack(String msg) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg, style: GoogleFonts.inter())),
+      SnackBar(content: Text(msg, style: GoogleFonts.ibmPlexSans())),
     );
   }
 
@@ -389,10 +390,10 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
             padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, AppSpacing.xl),
             children: [
               Text(l10n.reportPanelTitle,
-                  style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: titleColor)),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 24, fontWeight: FontWeight.w800, color: titleColor)),
               const SizedBox(height: AppSpacing.sm),
               Text(l10n.reportPanelSubtitle,
-                  style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor)),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor)),
               const SizedBox(height: AppSpacing.xl),
 
               // ── Konum + harita önizleme ──────────────────────────
@@ -401,7 +402,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.reportPanelLocation, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: fieldLabelColor)),
+                    Text(l10n.reportPanelLocation, style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: fieldLabelColor)),
                     const SizedBox(height: AppSpacing.sm),
                     if (_latitude != null)
                       Container(
@@ -420,11 +421,14 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                                 children: [
                                   Text(
                                     _detectedCity != null ? '$_detectedCity, $_detectedRegion' : l10n.reportPanelLocationObtained,
-                                    style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor),
+                                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor),
                                   ),
+                                  // Coordinates are a readout — mono with
+                                  // tabular figures so a GPS refresh does not
+                                  // make the line jitter.
                                   Text(
                                     '${_latitude!.toStringAsFixed(4)}, ${_longitude!.toStringAsFixed(4)}',
-                                    style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
+                                    style: AppTheme.mono(size: 12, color: secondaryTextColor),
                                   ),
                                 ],
                               ),
@@ -433,7 +437,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                         ),
                       )
                     else
-                      Text(l10n.reportPanelNoLocationYet, style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                      Text(l10n.reportPanelNoLocationYet, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
                     if (_latitude != null) ...[
                       const SizedBox(height: AppSpacing.md),
                       ClipRRect(
@@ -481,7 +485,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Text(l10n.reportPanelMapAdjustHint, style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                      Text(l10n.reportPanelMapAdjustHint, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
                     ],
                     const SizedBox(height: AppSpacing.md),
                     SizedBox(
@@ -509,9 +513,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                   value: _isAnonymous,
                   onChanged: (v) => setState(() => _isAnonymous = v),
                   title: Text(l10n.reportPanelAnonymousToggle,
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
+                      style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
                   subtitle: Text(l10n.reportPanelAnonymousToggleSubtitle,
-                      style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                      style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
                 ),
               ).animate(delay: 160.ms).fadeIn(duration: 260.ms).slideY(begin: 0.06, end: 0),
 
@@ -585,7 +589,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.reportPanelPhotosHint, style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor)),
+                    Text(l10n.reportPanelPhotosHint, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
                     const SizedBox(height: AppSpacing.sm),
                     SizedBox(
                       height: 72,
@@ -657,7 +661,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                       value: _smokeVisible,
                       onChanged: (v) => setState(() => _smokeVisible = v),
                       title: Text(l10n.reportPanelSmokeSwitch,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
+                          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
                     ),
                     Divider(color: dividerColor),
                     SwitchListTile(
@@ -665,7 +669,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                       value: _windStrong,
                       onChanged: (v) => setState(() => _windStrong = v),
                       title: Text(l10n.reportPanelWindSwitch,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
+                          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
                     ),
                     Divider(color: dividerColor),
                     SwitchListTile(
@@ -673,7 +677,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                       value: _nearSettlement,
                       onChanged: (v) => setState(() => _nearSettlement = v),
                       title: Text(l10n.reportPanelSettlementSwitch,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
+                          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
                     ),
                   ],
                 ),
@@ -685,7 +689,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                   _isEncodingPhotos || _uploadProgress == null
                       ? l10n.reportPanelUploadingPhotos
                       : '${l10n.reportPanelUploadingPhotos} ${(_uploadProgress! * 100).round()}%',
-                  style: GoogleFonts.inter(fontSize: 12, color: secondaryTextColor),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
                 ),
                 const SizedBox(height: 6),
                 ClipRRect(
@@ -778,13 +782,13 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         Text(
           verified ? l10n.reportPanelSuccessVerifiedTitle : l10n.reportPanelSuccessReceivedTitle,
           textAlign: TextAlign.center,
-          style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
+          style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
         ).animate(delay: 100.ms).fadeIn(duration: 260.ms).slideY(begin: 0.08, end: 0),
         const SizedBox(height: AppSpacing.sm),
         Text(
           verified ? l10n.reportPanelSuccessVerifiedBody : l10n.reportPanelSuccessReceivedBody,
           textAlign: TextAlign.center,
-          style: GoogleFonts.inter(fontSize: 14, height: 1.45, color: secondaryTextColor),
+          style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor),
         ).animate(delay: 140.ms).fadeIn(duration: 260.ms).slideY(begin: 0.08, end: 0),
         const SizedBox(height: AppSpacing.xl),
         GlassPanel(
@@ -792,18 +796,18 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(l10n.reportPanelReportIdLabel(id), style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: titleColor)),
+              Text(l10n.reportPanelReportIdLabel(id), style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
               const SizedBox(height: 6),
-              Text('$city, $region', style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+              Text('$city, $region', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
               if (createdAtLabel.isNotEmpty) ...[
                 const SizedBox(height: 6),
-                Text(l10n.reportPanelReportedAtLabel(createdAtLabel), style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor)),
+                Text(l10n.reportPanelReportedAtLabel(createdAtLabel), style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
               ],
               if ((result['photo_count'] as int? ?? 0) > 0) ...[
                 const SizedBox(height: 6),
                 Text(
                   l10n.reportPanelPhotosUploaded(result['photo_count'] as int),
-                  style: GoogleFonts.inter(fontSize: 13, color: secondaryTextColor),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor),
                 ),
               ],
             ],
@@ -812,7 +816,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         const SizedBox(height: AppSpacing.lg),
         Text(
           verified ? l10n.reportPanelResponseTimeVerified : l10n.reportPanelResponseTimeReceived,
-          style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: secondaryTextColor),
+          style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: secondaryTextColor),
         ).animate(delay: 240.ms).fadeIn(duration: 280.ms),
         const SizedBox(height: AppSpacing.xl),
         Row(
@@ -859,7 +863,7 @@ class _PanelField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: labelColor)),
+        Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: labelColor)),
         const SizedBox(height: AppSpacing.sm),
         child,
       ],

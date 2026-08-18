@@ -190,13 +190,13 @@ class _NewsCardState extends State<NewsCard> {
                           text: TextSpan(
                             children: highlightFireKeywords(
                               displayTitle,
-                              GoogleFonts.inter(
+                              GoogleFonts.ibmPlexSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 height: 1.2,
                                 color: titleColor,
                               ),
-                              GoogleFonts.inter(
+                              GoogleFonts.ibmPlexSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 height: 1.2,
@@ -209,7 +209,7 @@ class _NewsCardState extends State<NewsCard> {
                         const SizedBox(height: 4),
                         Text(
                           l10n.newsTranslatedCaption,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 11,
                             fontStyle: FontStyle.italic,
                             color: AppColors.primary.withValues(alpha: 0.8),
@@ -233,7 +233,7 @@ class _NewsCardState extends State<NewsCard> {
                           displaySummary,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.ibmPlexSans(
                             fontSize: 13,
                             height: 1.45,
                             color: summaryColor,
@@ -245,7 +245,7 @@ class _NewsCardState extends State<NewsCard> {
                           Expanded(
                             child: Text(
                               '${widget.item.source} • $timeAgo',
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.ibmPlexSans(
                                 fontSize: 12,
                                 color: metaColor,
                               ),
@@ -255,7 +255,7 @@ class _NewsCardState extends State<NewsCard> {
                             const SizedBox(width: AppSpacing.sm),
                             Text(
                               l10n.newsWordCount(wordCount),
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.ibmPlexSans(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.primary,

@@ -40,7 +40,7 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           l10n.settingsTitle,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+          style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
       ),
       body: SingleChildScrollView(
@@ -59,7 +59,7 @@ class SettingsScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.lg),
                       Text(
                         l10n.settingsAppSettings,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 28,
                           fontWeight: FontWeight.w800,
                           color: titleColor,
@@ -68,7 +68,7 @@ class SettingsScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         l10n.settingsAppSettingsSubtitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 15,
                           height: 1.45,
                           color: secondaryTextColor,
@@ -280,7 +280,7 @@ class SettingsScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   l10n.dataSourcesEntry,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.ibmPlexSans(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                     color: titleColor,
@@ -289,7 +289,7 @@ class SettingsScreen extends ConsumerWidget {
                                 const SizedBox(height: 2),
                                 Text(
                                   l10n.dataSourcesEntrySubtitle,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.ibmPlexSans(
                                     fontSize: 12.5,
                                     height: 1.35,
                                     color: isDark
@@ -444,7 +444,7 @@ class SettingsScreen extends ConsumerWidget {
                         child:
                             Text(
                                   l10n.settingsFooterNote,
-                                  style: GoogleFonts.inter(
+                                  style: GoogleFonts.ibmPlexSans(
                                     fontSize: 13,
                                     height: 1.45,
                                     color: secondaryTextColor,
@@ -524,7 +524,7 @@ class _LegalLinkTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: titleColor,
@@ -597,7 +597,7 @@ class _SettingsSwitchTile extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: titleColor,
@@ -606,7 +606,7 @@ class _SettingsSwitchTile extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.ibmPlexSans(
                           fontSize: 13,
                           height: 1.4,
                           color: subtitleColor,
@@ -675,7 +675,7 @@ class _RefreshIntervalTile extends StatelessWidget {
             children: [
               Text(
                 l10n.settingsRefreshInterval,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: titleColor,
@@ -684,7 +684,7 @@ class _RefreshIntervalTile extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 l10n.settingsRefreshIntervalSubtitle,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 13,
                   height: 1.4,
                   color: subtitleColor,
@@ -752,13 +752,13 @@ class _InfoLine extends StatelessWidget {
               width: 90,
               child: Text(
                 label,
-                style: GoogleFonts.inter(fontSize: 13, color: labelColor),
+                style: GoogleFonts.ibmPlexSans(fontSize: 13, color: labelColor),
               ),
             ),
             Expanded(
               child: Text(
                 value,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: valueColor,
@@ -807,7 +807,7 @@ class _LanguageOptionTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: titleColor,

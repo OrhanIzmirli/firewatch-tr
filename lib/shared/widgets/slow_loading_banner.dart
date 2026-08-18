@@ -33,7 +33,7 @@ class SlowLoadingBanner extends StatelessWidget {
           Expanded(
             child: Text(
               l10n.slowLoadingBannerLabel,
-              style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.primary),
+              style: GoogleFonts.ibmPlexSans(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.primary),
             ),
           ),
         ],

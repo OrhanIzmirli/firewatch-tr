@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import '../../core/theme/app_theme.dart';
 import 'glass_panel.dart';
 
 /// A data-driven, color-coded, tappable overview card — used on the Home
@@ -76,26 +77,29 @@ class SmartOverviewCard extends StatelessWidget {
               // than truncating. A card reading "13 detection…" or "Nearby
               // Thermal Det…" has spent its width on an ellipsis; these
               // strings fit if they are allowed to wrap.
+              // The value is a live readout (counts, MW, distances) that
+              // refreshes with the data — mono with tabular figures so the
+              // digits never jitter as they change.
               Text(
                 value,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
-                    fontSize: value.length > 22
-                        ? 15
-                        : value.length > 14
-                            ? 17
-                            : 20,
-                    height: 1.15,
-                    fontWeight: FontWeight.w800,
-                    color: valueColor),
+                style: AppTheme.mono(
+                  size: value.length > 22
+                      ? 15
+                      : value.length > 14
+                          ? 17
+                          : 20,
+                  weight: FontWeight.w700,
+                  color: valueColor,
+                ).copyWith(height: 1.15),
               ),
               const SizedBox(height: 3),
               Text(
                 title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                     fontSize: 13,
                     height: 1.2,
                     fontWeight: FontWeight.w700,
@@ -106,7 +110,7 @@ class SmartOverviewCard extends StatelessWidget {
                 subtitle,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(fontSize: 11, height: 1.3, color: subtitleColor),
+                style: GoogleFonts.ibmPlexSans(fontSize: 11, height: 1.3, color: subtitleColor),
               ),
             ],
           ),

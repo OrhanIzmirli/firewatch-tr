@@ -62,7 +62,7 @@ class SectionHeader extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.ibmPlexSans(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
                   color: titleColor,
@@ -72,7 +72,7 @@ class SectionHeader extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Text(
                   subtitle!,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.ibmPlexSans(
                     fontSize: 14,
                     height: 1.4,
                     color: subtitleColor,

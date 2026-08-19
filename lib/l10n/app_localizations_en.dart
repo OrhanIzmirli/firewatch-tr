@@ -1049,6 +1049,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave.';
 
   @override
+  String get dataSourcesPlacesTitle =>
+      'Place data — province and district boundaries';
+
+  @override
+  String get dataSourcesPlacesBody =>
+      'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data.';
+
+  @override
   String get dataSourcesFwiTitle => 'Fire danger map (FWI) — a separate source';
 
   @override
@@ -2973,6 +2981,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskDayTomorrow => 'Tomorrow';
+
+  @override
+  String get riskDayNotPublished =>
+      'This day\'s forecast has not been published yet. It opens once the daily model run arrives.';
 
   @override
   String get riskAttribution => '© European Union, Copernicus EFFIS';

@@ -1940,6 +1940,18 @@ abstract class AppLocalizations {
   /// **'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.'**
   String get dataSourcesWeatherBody;
 
+  /// No description provided for @dataSourcesPlacesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yer verisi — il ve ilçe sınırları'**
+  String get dataSourcesPlacesTitle;
+
+  /// No description provided for @dataSourcesPlacesBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.'**
+  String get dataSourcesPlacesBody;
+
   /// No description provided for @dataSourcesFwiTitle.
   ///
   /// In tr, this message translates to:
@@ -5221,6 +5233,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Yarın'**
   String get riskDayTomorrow;
+
+  /// No description provided for @riskDayNotPublished.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu günün tahmini henüz yayımlanmadı. Günlük model koşusu geldiğinde açılır.'**
+  String get riskDayNotPublished;
 
   /// No description provided for @riskAttribution.
   ///

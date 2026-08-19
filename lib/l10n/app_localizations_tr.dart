@@ -1045,6 +1045,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.';
 
   @override
+  String get dataSourcesPlacesTitle => 'Yer verisi — il ve ilçe sınırları';
+
+  @override
+  String get dataSourcesPlacesBody =>
+      'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.';
+
+  @override
   String get dataSourcesFwiTitle =>
       'Yangın tehlikesi haritası (FWI) — ayrı bir kaynak';
 
@@ -2968,6 +2975,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskDayTomorrow => 'Yarın';
+
+  @override
+  String get riskDayNotPublished =>
+      'Bu günün tahmini henüz yayımlanmadı. Günlük model koşusu geldiğinde açılır.';
 
   @override
   String get riskAttribution => '© European Union, Copernicus EFFIS';

@@ -2,7 +2,7 @@
 description: "A wildfire tracking mobile app for Turkey."
 publish_to: 'none'
 
-version: 1.0.3+4
+version: 1.1.0+5
 
 environment:
   sdk: ^3.11.4

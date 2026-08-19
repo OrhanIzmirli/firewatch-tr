@@ -22,6 +22,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
 import '../../models/saved_place.dart';
+import '../../services/fwi_point_service.dart';
 import '../../services/saved_places_provider.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/render_api_service.dart';
@@ -229,6 +230,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   void _toggleRiskLayer() {
     setState(() => _showRiskLayer = !_showRiskLayer);
+    if (_showRiskLayer) _probeForecastDays();
   }
 
   void _openPlacesSheet() {
@@ -312,8 +314,38 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
   /// mandatory: without it EFFIS answers HTTP 200 with a fully transparent
   /// image — the layer looks on and shows nothing, silently.
-  String get _fwiDateParam => DateFormat('yyyy-MM-dd')
-      .format(DateTime.now().add(Duration(days: _riskDayOffset)));
+  String get _fwiDateParam => _fwiDateParamFor(_riskDayOffset);
+
+  String _fwiDateParamFor(int offset) => DateFormat(
+    'yyyy-MM-dd',
+  ).format(DateTime.now().add(Duration(days: offset)));
+
+  /// Which forecast days the server has actually published, keyed by date.
+  /// Missing means "not probed yet" and is treated as published — the tap
+  /// gate must never block on ignorance, only on observed emptiness.
+  final Map<String, bool> _fwiDayPublished = {};
+
+  /// Probes each picker day with a one-pixel sample over central Anatolia
+  /// (always land, always inside coverage when the day is published). An
+  /// unpublished day renders fully transparent, which is otherwise
+  /// indistinguishable from an "on" layer — the user would just see an
+  /// empty map and no reason.
+  Future<void> _probeForecastDays() async {
+    for (var offset = 0; offset < _riskForecastDays; offset++) {
+      final date = _fwiDateParamFor(offset);
+      // "Published" is final for the day; "unpublished" is re-probed, since
+      // it flips the moment the daily run lands.
+      if (_fwiDayPublished[date] == true) continue;
+      final sample = await FwiPointService.instance.sample(
+        lat: 39.5,
+        lng: 34.5,
+        date: date,
+      );
+      // Network failure is "unknown", not "unpublished" — don't block.
+      if (sample == null || !mounted) continue;
+      setState(() => _fwiDayPublished[date] = sample.hasData);
+    }
+  }
 
   String _riskDayLabel(AppLocalizations l10n, int offset) {
     if (offset == 0) return l10n.riskDayToday;
@@ -1539,9 +1571,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   label: l10n.mapLayersButton,
                   icon: Icons.layers_rounded,
                   selected: _isLayersPanelOpen,
-                  onTap: () => setState(
-                    () => _isLayersPanelOpen = !_isLayersPanelOpen,
-                  ),
+                  onTap: () {
+                    setState(
+                      () => _isLayersPanelOpen = !_isLayersPanelOpen,
+                    );
+                    // Refresh which days are published every time the panel
+                    // opens — an unpublished day flips when the run lands.
+                    if (_isLayersPanelOpen && _showRiskLayer) {
+                      _probeForecastDays();
+                    }
+                  },
                 ),
                 _MapIconAction(
                   icon: Icons.bookmark_rounded,
@@ -1684,7 +1723,24 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       _DayChip(
                         label: _riskDayLabel(l10n, offset),
                         selected: _riskDayOffset == offset,
-                        onTap: () => setState(() => _riskDayOffset = offset),
+                        // Dimmed but still tappable: a dead-looking chip
+                        // with no reason teaches nothing. The tap explains
+                        // instead of selecting, so nobody lands on the
+                        // blank layer an unpublished day renders as.
+                        dimmed: _fwiDayPublished[_fwiDateParamFor(offset)] ==
+                            false,
+                        onTap: () {
+                          if (_fwiDayPublished[_fwiDateParamFor(offset)] ==
+                              false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(l10n.riskDayNotPublished),
+                              ),
+                            );
+                            return;
+                          }
+                          setState(() => _riskDayOffset = offset);
+                        },
                       ),
                   ],
                 ),
@@ -2451,11 +2507,16 @@ class _MapIconAction extends StatelessWidget {
 class _DayChip extends StatelessWidget {
   final String label;
   final bool selected;
+
+  /// The forecast for this day has not been published yet: drawn faded, and
+  /// the caller's onTap explains instead of selecting.
+  final bool dimmed;
   final VoidCallback onTap;
 
   const _DayChip({
     required this.label,
     required this.selected,
+    this.dimmed = false,
     required this.onTap,
   });
 
@@ -2463,8 +2524,8 @@ class _DayChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final idle = isDark
-        ? AppColors.white.withValues(alpha: 0.66)
-        : Colors.black.withValues(alpha: 0.6);
+        ? AppColors.white.withValues(alpha: dimmed ? 0.28 : 0.66)
+        : Colors.black.withValues(alpha: dimmed ? 0.25 : 0.6);
 
     return InkWell(
       borderRadius: BorderRadius.circular(AppSpacing.pillRadius),

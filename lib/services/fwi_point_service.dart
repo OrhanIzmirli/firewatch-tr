@@ -63,6 +63,13 @@ class FwiPointService {
   static String _key(String date, double lat, double lng) =>
       '${date}_${lat.toStringAsFixed(2)}_${lng.toStringAsFixed(2)}';
 
+  static String _todayKey() {
+    final now = DateTime.now();
+    return '${now.year.toString().padLeft(4, '0')}-'
+        '${now.month.toString().padLeft(2, '0')}-'
+        '${now.day.toString().padLeft(2, '0')}';
+  }
+
   /// Samples the FWI class at ([lat], [lng]) for [date] (YYYY-MM-DD).
   /// Returns null on network failure — unknown, distinct from "no data".
   Future<FwiPointSample?> sample({
@@ -121,8 +128,15 @@ class FwiPointService {
       } else {
         sample = FwiPointSample(_nearestClass(rgba[0], rgba[1], rgba[2]));
       }
-      _memory[key] = sample;
-      await _writePersisted(key, sample, date);
+      // "No data" for a FUTURE day is provisional: the day flips to
+      // published when the daily model run lands, so caching that emptiness
+      // (even for the session) would hide the flip until restart. Real
+      // classes and past/today emptiness are stable and cache normally.
+      final provisional = !sample.hasData && date.compareTo(_todayKey()) > 0;
+      if (!provisional) {
+        _memory[key] = sample;
+        await _writePersisted(key, sample, date);
+      }
       return sample;
     } catch (e) {
       if (kDebugMode) debugPrint('FWI point sample failed: $e');

@@ -20,6 +20,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
 import '../../models/incident_summary.dart';
+import '../../models/persistent_heat_source.dart';
 import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -397,6 +398,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     }
   }
+
+  /// A raw detection within 2 km of a fixed heat source the backend has
+  /// labelled (steelworks, refinery, flare). Drawn grey and named as such,
+  /// never as a fire — and never hidden.
+  bool _isFixedSourcePoint(FirePoint p) =>
+      p.nearPersistentSource ||
+      PersistentHeatSource.coversPoint(
+        _incidentSummary?.persistentHeatSources ?? const [],
+        p.latitude,
+        p.longitude,
+      );
 
   bool _matchesQuickFilter(FirePoint p) {
     final filter = _quickFilter;
@@ -1027,12 +1039,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   runSpacing: AppSpacing.xs,
                                   alignment: WrapAlignment.end,
                                   children: [
-                                    StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
-                                    StatusChip(
-                                      label: fireStatusLabel(l10n, point.smartStatus),
-                                      showDot: true,
-                                      color: fireStatusColor(point.smartStatus),
-                                    ),
+                                    if (_isFixedSourcePoint(point))
+                                      StatusChip(
+                                        label: l10n.homeFixedHeatSourceChip,
+                                        icon: Icons.factory_outlined,
+                                        color: AppColors.textFaint,
+                                      )
+                                    else ...[
+                                      StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
+                                      StatusChip(
+                                        label: fireStatusLabel(l10n, point.smartStatus),
+                                        showDot: true,
+                                        color: fireStatusColor(point.smartStatus),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),

@@ -20,6 +20,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
+import '../../models/persistent_heat_source.dart';
 import '../../models/fire_point.dart';
 import '../../models/saved_place.dart';
 import '../../services/fwi_point_service.dart';
@@ -97,6 +98,30 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// Clustered events from /api/incidents. Empty when the endpoint is
   /// unavailable, which is why the raw-detection layer is kept intact.
   List<FireIncident> _incidents = [];
+
+  /// Fixed heat sources from the incident summary, fetched with the raw
+  /// detections so their pixels can be drawn grey even when the events
+  /// layer failed to load. Unioned with the labelled incidents in
+  /// [_persistentSources].
+  List<PersistentHeatSource> _summaryPersistentSources = const [];
+
+  List<PersistentHeatSource> get _persistentSources => [
+        for (final i in _incidents)
+          if (i.isPersistentHeatSource)
+            PersistentHeatSource(
+              id: i.id,
+              latitude: i.latitude,
+              longitude: i.longitude,
+              cityName: i.cityName,
+              distinctDaysSeen: i.distinctDaysSeen,
+            ),
+        ..._summaryPersistentSources,
+      ];
+
+  /// A raw detection sitting on a labelled fixed source (2 km).
+  bool _isFixedSourcePoint(FirePoint point) =>
+      point.nearPersistentSource ||
+      PersistentHeatSource.coversPoint(_persistentSources, point.latitude, point.longitude);
 
   /// Events are the primary layer. The raw detection layer is still one tap
   /// away — with the thermal window now spanning two days it can carry ~600
@@ -480,6 +505,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   Future<void> _loadFirePoints() async {
+    // Best-effort, in parallel with the feed: the summary carries the fixed
+    // heat sources so their pixels are drawn grey on this layer too.
+    _renderApi.fetchIncidentSummary().then((summary) {
+      if (!mounted || summary == null) return;
+      setState(() => _summaryPersistentSources = summary.persistentHeatSources);
+    });
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -602,6 +633,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// FirePoint.detectionColor (which still drives the bottom sheet/cards
   /// elsewhere and is deliberately left alone).
   Color _markerColor(FirePoint point) {
+    // A pixel on a steelworks is not a fire of any confidence tier.
+    if (_isFixedSourcePoint(point)) return AppColors.textFaint;
     switch (point.riskTier) {
       case 'high':
         return AppColors.danger;
@@ -807,6 +840,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         return (32 + growth).clamp(32.0, 46.0);
       case IncidentStatus.lowConfidence:
         return (22 + growth * 0.6).clamp(22.0, 30.0);
+      case IncidentStatus.persistentHeatSource:
+        return (22 + growth * 0.6).clamp(22.0, 30.0);
     }
   }
 
@@ -837,6 +872,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       case IncidentStatus.lowConfidence:
         fill = AppColors.textMuted;
         fillAlpha = 0.6;
+      case IncidentStatus.persistentHeatSource:
+        fill = AppColors.textFaint;
+        fillAlpha = 0.8;
     }
 
     // High-contrast variant over the FWI raster: dark bubble, solid white

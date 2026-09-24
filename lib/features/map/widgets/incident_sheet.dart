@@ -165,7 +165,11 @@ class IncidentSheet extends StatelessWidget {
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Text(
-                        l10n.incidentFixedSourceHint,
+                        incident.isPersistentHeatSource
+                            ? l10n.incidentPersistentHeatSourceNote(
+                                incident.distinctDaysSeen ?? 7,
+                              )
+                            : l10n.incidentFixedSourceHint,
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 12.5,
                           height: 1.5,
@@ -226,6 +230,8 @@ class IncidentSheet extends StatelessWidget {
         return l10n.incidentNoDetectionFor(hours);
       case IncidentStatus.lowConfidence:
         return l10n.incidentNoDetectionLowConfidence(hours);
+      case IncidentStatus.persistentHeatSource:
+        return l10n.incidentDetectedHoursAgo(hours);
     }
   }
 

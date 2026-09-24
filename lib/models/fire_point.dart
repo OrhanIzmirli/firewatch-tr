@@ -66,6 +66,11 @@ class FirePoint {
   /// Empty when this point wasn't merged with anything.
   final List<String> mergedSatellites;
 
+  /// True when this pixel sits within 2 km of an incident the backend has
+  /// labelled a fixed heat source (steelworks, refinery, flare). Set by the
+  /// screens from the incident summary; never derived from the pixel itself.
+  final bool nearPersistentSource;
+
   const FirePoint({
     required this.latitude,
     required this.longitude,
@@ -81,6 +86,7 @@ class FirePoint {
     this.scanKm = 0,
     this.trackKm = 0,
     this.mergedSatellites = const [],
+    this.nearPersistentSource = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -98,6 +104,7 @@ class FirePoint {
     'scanKm': scanKm,
     'trackKm': trackKm,
     'mergedSatellites': mergedSatellites,
+    'nearPersistentSource': nearPersistentSource,
   };
 
   factory FirePoint.fromJson(Map<String, dynamic> json) => FirePoint(
@@ -120,6 +127,7 @@ class FirePoint {
             ?.map((e) => e.toString())
             .toList() ??
         const [],
+    nearPersistentSource: json['nearPersistentSource'] as bool? ?? false,
   );
 
   FirePoint copyWith({
@@ -137,6 +145,7 @@ class FirePoint {
     double? scanKm,
     double? trackKm,
     List<String>? mergedSatellites,
+    bool? nearPersistentSource,
   }) {
     return FirePoint(
       latitude: latitude ?? this.latitude,
@@ -153,6 +162,7 @@ class FirePoint {
       scanKm: scanKm ?? this.scanKm,
       trackKm: trackKm ?? this.trackKm,
       mergedSatellites: mergedSatellites ?? this.mergedSatellites,
+      nearPersistentSource: nearPersistentSource ?? this.nearPersistentSource,
     );
   }
 

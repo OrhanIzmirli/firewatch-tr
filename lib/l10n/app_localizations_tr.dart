@@ -3065,6 +3065,17 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.';
 
   @override
+  String get incidentStatusPersistentHeatSource => 'Sabit ısı kaynağı';
+
+  @override
+  String incidentPersistentHeatSourceNote(int days) {
+    return '$days gündür düşük ve değişmeyen güçte ısı yayıyor: demir-çelik tesisi, rafineri veya gaz bacası gibi sabit bir kaynak. Aktif yangın sayılmaz. Bu, herhangi bir yangının söndüğü anlamına gelmez.';
+  }
+
+  @override
+  String get homeFixedHeatSourceChip => 'Sabit ısı kaynağı';
+
+  @override
   String get incidentLegendTitle => 'Harita göstergesi';
 
   @override

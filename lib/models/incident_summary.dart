@@ -1,4 +1,5 @@
 import 'fire_incident.dart';
+import 'persistent_heat_source.dart';
 
 /// The last 24 hours of fire events in three numbers, for the Home overview.
 ///
@@ -28,6 +29,12 @@ class IncidentSummary {
   /// "at least this long" and the UI must phrase it that way.
   final double? strongestActiveDurationHoursAtLeast;
 
+  /// Fixed heat sources currently radiating, left OUT of [activeCount] by
+  /// the backend and listed here so the client can grey out the raw
+  /// detections sitting on them. Empty on a backend before migration 011.
+  final int persistentHeatSourcesActive;
+  final List<PersistentHeatSource> persistentHeatSources;
+
   const IncidentSummary({
     required this.recentDetectionHours,
     required this.activeCount,
@@ -37,6 +44,8 @@ class IncidentSummary {
     this.strongestActiveCityName,
     this.strongestActiveMaxFrpMw,
     this.strongestActiveDurationHoursAtLeast,
+    this.persistentHeatSourcesActive = 0,
+    this.persistentHeatSources = const [],
   });
 
   bool get hasStrongestActive => strongestActiveMaxFrpMw != null;
@@ -57,6 +66,12 @@ class IncidentSummary {
       strongestActiveMaxFrpMw: _toDouble(strongest?['max_frp_mw']),
       strongestActiveDurationHoursAtLeast:
           _toDouble(strongest?['duration_hours_at_least']),
+      persistentHeatSourcesActive:
+          (json['persistent_heat_sources_active'] as num?)?.toInt() ?? 0,
+      persistentHeatSources: ((json['persistent_heat_sources'] as List?) ?? const [])
+          .whereType<Map>()
+          .map((e) => PersistentHeatSource.fromJson(e.cast<String, dynamic>()))
+          .toList(),
     );
   }
 
@@ -107,6 +122,20 @@ class IncidentSummary {
       strongestActiveId: strongest?.id,
       strongestActiveMaxFrpMw: strongest?.maxFrpMw,
       strongestActiveDurationHoursAtLeast: strongest?.durationHours,
+      persistentHeatSourcesActive: incidents
+          .where((i) => i.isPersistentHeatSource && i.hoursSinceLastDetection <= recentDetectionHours)
+          .length,
+      persistentHeatSources: [
+        for (final i in incidents)
+          if (i.isPersistentHeatSource)
+            PersistentHeatSource(
+              id: i.id,
+              latitude: i.latitude,
+              longitude: i.longitude,
+              cityName: i.cityName,
+              distinctDaysSeen: i.distinctDaysSeen,
+            ),
+      ],
     );
   }
 

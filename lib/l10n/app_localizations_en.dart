@@ -3071,6 +3071,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'This location has appeared on every satellite pass for two days at unchanging power — it may be a fixed heat source.';
 
   @override
+  String get incidentStatusPersistentHeatSource => 'Fixed heat source';
+
+  @override
+  String incidentPersistentHeatSourceNote(int days) {
+    return 'Radiating low, unchanging heat for $days days: a fixed source such as a steelworks, refinery or gas flare. Not counted as an active fire. This does not mean any fire is out.';
+  }
+
+  @override
+  String get homeFixedHeatSourceChip => 'Fixed heat source';
+
+  @override
   String get incidentLegendTitle => 'Map legend';
 
   @override

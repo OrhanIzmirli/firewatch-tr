@@ -5372,6 +5372,24 @@ abstract class AppLocalizations {
   /// **'Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.'**
   String get incidentFixedSourceHint;
 
+  /// No description provided for @incidentStatusPersistentHeatSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sabit ısı kaynağı'**
+  String get incidentStatusPersistentHeatSource;
+
+  /// No description provided for @incidentPersistentHeatSourceNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gündür düşük ve değişmeyen güçte ısı yayıyor: demir-çelik tesisi, rafineri veya gaz bacası gibi sabit bir kaynak. Aktif yangın sayılmaz. Bu, herhangi bir yangının söndüğü anlamına gelmez.'**
+  String incidentPersistentHeatSourceNote(int days);
+
+  /// No description provided for @homeFixedHeatSourceChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sabit ısı kaynağı'**
+  String get homeFixedHeatSourceChip;
+
   /// No description provided for @incidentLegendTitle.
   ///
   /// In tr, this message translates to:

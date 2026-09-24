@@ -73,6 +73,18 @@ class FireIncident {
   final double? spreadSpeedMh;
   final String spreadConfidence;
 
+  /// Backend label from migration 011: 'persistent_heat_source' when the
+  /// cluster job found this heat coming from something that does not go
+  /// out (seen on ≥7 distinct days at low, unchanging power). Null means
+  /// "a fire, as far as the evidence goes". It never means a fire is over.
+  final String? heatSourceClass;
+  final String? heatSourceReason;
+  final DateTime? heatSourceFlaggedAt;
+
+  /// Whether the backend sent a `heat_source` object at all. On an older
+  /// backend the client falls back to its own duration heuristic.
+  final bool heatSourceKnown;
+
   const FireIncident({
     required this.id,
     required this.latitude,
@@ -105,6 +117,10 @@ class FireIncident {
     this.frpStddev,
     this.spreadBearingDeg,
     this.spreadSpeedMh,
+    this.heatSourceClass,
+    this.heatSourceReason,
+    this.heatSourceFlaggedAt,
+    this.heatSourceKnown = false,
   });
 
   factory FireIncident.fromJson(Map<String, dynamic> json) {
@@ -115,6 +131,7 @@ class FireIncident {
     final trend = (json['trend'] as Map?)?.cast<String, dynamic>() ?? const {};
     final persistence =
         (json['persistence'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final heatSource = (json['heat_source'] as Map?)?.cast<String, dynamic>();
 
     return FireIncident(
       id: (json['id'] as num).toInt(),
@@ -151,6 +168,10 @@ class FireIncident {
       spreadBearingDeg: _toDouble(spread['bearing_deg']),
       spreadSpeedMh: _toDouble(spread['speed_m_per_hour']),
       spreadConfidence: spread['confidence'] as String? ?? 'insufficient',
+      heatSourceClass: heatSource?['class'] as String?,
+      heatSourceReason: heatSource?['reason'] as String?,
+      heatSourceFlaggedAt: _parseDate(heatSource?['flagged_at']),
+      heatSourceKnown: heatSource != null,
     );
   }
 
@@ -172,6 +193,9 @@ class FireIncident {
   /// the 237 live events into "probably nothing", which is both wrong and the
   /// kind of wrong that makes a real fire easy to miss.
   IncidentStatus get status {
+    // A labelled fixed source is its own category whatever the satellite
+    // saw last: it is being detected, and it is not a fire.
+    if (isPersistentHeatSource) return IncidentStatus.persistentHeatSource;
     if (satelliteState == 'detected_recently') return IncidentStatus.activeDetection;
     return peakConfidenceTier == 'low'
         ? IncidentStatus.lowConfidence
@@ -193,7 +217,13 @@ class FireIncident {
   /// ingest window, so this cannot distinguish "burned for a day" from
   /// "burns permanently". Once the cluster job records distinct_days_seen
   /// and FRP variance, this getter should be rewritten to use those instead.
-  bool get looksLikeFixedSource => PersistentSourceHint.isMet(this);
+  bool get looksLikeFixedSource =>
+      heatSourceKnown ? isPersistentHeatSource : PersistentSourceHint.isMet(this);
+
+  /// The backend's verdict (migration 011). Unlike [looksLikeFixedSource]
+  /// this is never a guess: seven or more distinct days of low, unchanging
+  /// power, recomputed every cluster run.
+  bool get isPersistentHeatSource => heatSourceClass == 'persistent_heat_source';
 
   /// True only when a named official source confirmed a state. Never inferred.
   bool get hasOfficialStatus => officialState != null && officialState!.isNotEmpty;
@@ -281,6 +311,13 @@ enum IncidentStatus {
 
   /// Not seen recently and only ever low-confidence detections.
   lowConfidence,
+
+  /// The backend has labelled this a fixed heat source: a steelworks, a
+  /// refinery, a flare — seen on seven or more separate days at low,
+  /// unchanging power. Drawn grey and counted apart, never as a fire.
+  /// Deliberately LAST: a cluster bubble takes its most severe member, and
+  /// a plant must never outrank a fire.
+  persistentHeatSource,
 }
 
 /// The single place the "is this worth showing as a past fire" bar is defined.
@@ -400,6 +437,10 @@ extension IncidentFilterX on IncidentFilter {
   /// possible-fire-points layer, one tap away.
   bool matches(FireIncident incident) {
     final isActive = incident.status == IncidentStatus.activeDetection;
+    // A fixed source is being detected right now, so it belongs with the
+    // active layer (drawn grey), never in "no longer seen", and always in
+    // "all". Labelled, not hidden.
+    if (incident.isPersistentHeatSource) return this != IncidentFilter.ended;
     switch (this) {
       case IncidentFilter.active:
         return isActive;
@@ -431,6 +472,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return AppColors.primary;
       case IncidentStatus.lowConfidence:
         return AppColors.textMuted;
+      case IncidentStatus.persistentHeatSource:
+        return AppColors.textFaint;
     }
   }
 
@@ -445,6 +488,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return Icons.warning_amber_rounded;
       case IncidentStatus.lowConfidence:
         return Icons.blur_on_rounded;
+      case IncidentStatus.persistentHeatSource:
+        return Icons.factory_outlined;
     }
   }
 
@@ -463,6 +508,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return 17;
       case IncidentStatus.lowConfidence:
         return 11;
+      case IncidentStatus.persistentHeatSource:
+        return 15;
     }
   }
 
@@ -474,6 +521,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return 12;
       case IncidentStatus.lowConfidence:
         return 8;
+      case IncidentStatus.persistentHeatSource:
+        return 11;
     }
   }
 
@@ -484,6 +533,8 @@ extension IncidentStatusStyle on IncidentStatus {
       case IncidentStatus.awaitingConfirmation:
         return 24;
       case IncidentStatus.lowConfidence:
+        return 22;
+      case IncidentStatus.persistentHeatSource:
         return 22;
     }
   }
@@ -498,6 +549,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return 0.88;
       case IncidentStatus.lowConfidence:
         return 0.62;
+      case IncidentStatus.persistentHeatSource:
+        return 0.8;
     }
   }
 
@@ -509,6 +562,8 @@ extension IncidentStatusStyle on IncidentStatus {
         return l10n.incidentStatusAwaiting;
       case IncidentStatus.lowConfidence:
         return l10n.incidentStatusLowConfidence;
+      case IncidentStatus.persistentHeatSource:
+        return l10n.incidentStatusPersistentHeatSource;
     }
   }
 }

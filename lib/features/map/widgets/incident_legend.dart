@@ -6,11 +6,12 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/fire_incident.dart';
 
-/// Compact key for the three event categories.
+/// Compact key for the event categories.
 ///
-/// Kept to three rows and no more: the map has one job, and a legend that
-/// needs reading twice has already failed. There is deliberately no fourth
-/// "extinguished" row — that state cannot be derived from satellite data.
+/// Kept short: the map has one job, and a legend that needs reading twice
+/// has already failed. The grey "fixed heat source" row is the only one
+/// that is not a fire category; there is deliberately no "extinguished"
+/// row — that state cannot be derived from satellite data.
 class IncidentLegend extends StatelessWidget {
   const IncidentLegend({super.key});
 

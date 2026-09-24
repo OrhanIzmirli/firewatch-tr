@@ -248,13 +248,61 @@ class FireApiService {
     return accepted;
   }
 
+  /// Resolves the nearest city for many coordinates in one round trip.
+  ///
+  /// POST /api/fires/nearest-city/batch takes up to 400 pairs and answers
+  /// them with a single LATERAL KNN query; the per-item shape is identical
+  /// to the single endpoint. A failure here returns null for the whole
+  /// chunk rather than falling back to one request per point: on a bad day
+  /// that is one failed request instead of sixty, and the points still
+  /// render with their bounding-box region label.
+  Future<List<NearestCityResult?>?> getNearestCities(
+    List<({double lat, double lng})> coords,
+  ) async {
+    if (coords.isEmpty) return const [];
+    try {
+      final response = await _dio.post(
+        '$_backendUrl/api/fires/nearest-city/batch',
+        data: {
+          'coords': [
+            for (final c in coords) {'lat': c.lat, 'lng': c.lng},
+          ],
+        },
+      );
+      final data = response.data?['data'];
+      if (response.statusCode != 200 || data is! List) return null;
+      if (data.length != coords.length) return null;
+      return data.map<NearestCityResult?>((item) {
+        if (item is! Map) return null;
+        if (item['outsideTurkey'] == true) {
+          return const NearestCityResult(outsideTurkey: true);
+        }
+        final city = item['city'];
+        final region = item['region'];
+        if (city is! String || region is! String) return null;
+        return NearestCityResult(
+          outsideTurkey: false,
+          city: city,
+          region: region,
+          distanceKm: (item['distance_km'] as num?)?.toDouble(),
+        );
+      }).toList();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// The batch endpoint's hard ceiling per request.
+  static const int _nearestCityBatchSize = 400;
+
   /// Enriches every fire point with its nearest city/region via PostGIS.
   ///
   /// Points are grouped by rounded coordinate (~1km) first, since fires
-  /// cluster tightly and would resolve to the same nearest city anyway —
-  /// this cuts a list of 100+ points down to a much smaller number of
-  /// actual lookups. Those lookups run with bounded concurrency so we
-  /// don't fire 100+ simultaneous requests at the (free-tier) backend.
+  /// cluster tightly and would resolve to the same nearest city anyway.
+  /// The distinct coordinates then go to the batch endpoint in chunks of
+  /// 400 — one or two requests for the whole country, where this used to
+  /// issue one GET per group (60+ on a normal day) and, on a free-tier
+  /// backend, could take longer than the map's own timeout.
   Future<List<FirePoint>> fetchTurkeyFiresWithCities() async {
     final fires = await fetchTurkeyFires();
     if (fires.isEmpty) return fires;
@@ -267,19 +315,24 @@ class FireApiService {
       representativeByKey.putIfAbsent(keyFor(p), () => p);
     }
 
-    const concurrency = 10;
-    final cityInfoByKey = <String, NearestCityResult>{};
     final keys = representativeByKey.keys.toList();
-    for (var i = 0; i < keys.length; i += concurrency) {
-      final batchKeys = keys.skip(i).take(concurrency);
-      final results = await Future.wait(
-        batchKeys.map((key) async {
-          final p = representativeByKey[key]!;
-          return MapEntry(key, await getNearestCity(p.latitude, p.longitude));
-        }),
+    final cityInfoByKey = <String, NearestCityResult>{};
+    for (var i = 0; i < keys.length; i += _nearestCityBatchSize) {
+      final chunkKeys = keys.sublist(
+        i,
+        (i + _nearestCityBatchSize).clamp(0, keys.length),
       );
-      for (final entry in results) {
-        cityInfoByKey[entry.key] = entry.value;
+      final results = await getNearestCities([
+        for (final key in chunkKeys)
+          (
+            lat: representativeByKey[key]!.latitude,
+            lng: representativeByKey[key]!.longitude,
+          ),
+      ]);
+      if (results == null) continue; // this chunk keeps its bbox labels
+      for (var k = 0; k < chunkKeys.length; k++) {
+        final info = results[k];
+        if (info != null) cityInfoByKey[chunkKeys[k]] = info;
       }
     }
 

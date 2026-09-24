@@ -10,6 +10,7 @@ import '../../../services/news_translation_service.dart';
 import '../../../shared/widgets/glass_panel.dart';
 import '../../../shared/widgets/skeleton_loader.dart';
 import '../../../shared/widgets/status_chip.dart';
+import '../../../shared/widgets/news_source_mark.dart';
 
 class FeaturedNewsCard extends StatefulWidget {
   final NewsItem item;
@@ -120,6 +121,20 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (widget.item.imageUrl.isNotEmpty) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Image.network(
+                        widget.item.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                ],
                 Wrap(
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
@@ -142,18 +157,10 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                Container(
-                  width: 58,
-                  height: 58,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                  ),
-                  child: Icon(
-                    newsCategoryIcon(category),
-                    color: AppColors.primary,
-                    size: 28,
-                  ),
+                NewsSourceMark(
+                  source: widget.item.source,
+                  logoUrl: widget.item.sourceLogoUrl,
+                  size: 58,
                 )
                     .animate()
                     .fadeIn(duration: 260.ms)

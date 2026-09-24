@@ -2434,10 +2434,14 @@ class _FilterChip extends StatelessWidget {
         ? AppColors.white.withValues(alpha: 0.66)
         : Colors.black.withValues(alpha: 0.6);
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-      onTap: onTap,
-      child: AnimatedContainer(
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+        onTap: onTap,
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
         decoration: BoxDecoration(
@@ -2466,6 +2470,7 @@ class _FilterChip extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

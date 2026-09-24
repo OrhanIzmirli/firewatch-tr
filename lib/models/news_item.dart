@@ -3,6 +3,8 @@ class NewsItem {
   final String title;
   final String source;
   final String sourceUrl;
+  final String imageUrl;
+  final String sourceLogoUrl;
   final String publishedAt;
   final String summary;
   final String category;
@@ -17,6 +19,8 @@ class NewsItem {
     required this.title,
     required this.source,
     required this.sourceUrl,
+    this.imageUrl = '',
+    this.sourceLogoUrl = '',
     required this.publishedAt,
     required this.summary,
     required this.category,
@@ -32,6 +36,8 @@ class NewsItem {
         'title': title,
         'source': source,
         'source_url': sourceUrl,
+        'image_url': imageUrl,
+        'source_logo_url': sourceLogoUrl,
         'published_at': publishedAt,
         'summary': summary,
         'category': category,
@@ -48,6 +54,8 @@ class NewsItem {
       title: json['title'] ?? '',
       source: json['source'] ?? 'Bilinmiyor',
       sourceUrl: json['source_url'] ?? '',
+      imageUrl: (json['image_url'] ?? json['imageUrl'] ?? json['thumbnail'] ?? '').toString(),
+      sourceLogoUrl: (json['source_logo_url'] ?? json['sourceLogoUrl'] ?? '').toString(),
       publishedAt: json['published_at'] ?? '',
       summary: json['summary'] ?? '',
       category: json['category'] ?? 'News',

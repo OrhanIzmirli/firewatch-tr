@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
@@ -529,6 +530,9 @@ class _RiskScreenState extends State<RiskScreen> {
         lastCalculated = parsed;
       }
     }
+    final rankedRegions = [..._regions]
+      ..sort((a, b) => (b['general_risk_score'] as int)
+          .compareTo(a['general_risk_score'] as int));
 
     return Scaffold(
       appBar: AppBar(
@@ -902,7 +906,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.md),
 
-                  ..._regions.asMap().entries.map((entry) {
+                  ...rankedRegions.asMap().entries.map((entry) {
                     final idx = entry.key;
                     final region = entry.value;
                     final score = region['general_risk_score'] as int;
@@ -913,6 +917,7 @@ class _RiskScreenState extends State<RiskScreen> {
                         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
                         onTap: () => _showRegionDetail(context, region),
                         child: _RegionRiskCard(
+                          rank: idx + 1,
                           region: displayRegionName(l10n, region['region']),
                           risk: riskLevelLabel(l10n, level),
                           rawLevel: level,
@@ -923,6 +928,51 @@ class _RiskScreenState extends State<RiskScreen> {
                       ),
                     );
                   }),
+
+                  const SizedBox(height: AppSpacing.xxxl),
+
+                  InkWell(
+                    onTap: () => context.push('/restoration'),
+                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+                    child: GlassPanel(
+                      padding: const EdgeInsets.all(AppSpacing.xl),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+                            ),
+                            child: const Icon(Icons.forest_rounded, color: AppColors.primary),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Localizations.localeOf(context).languageCode == 'tr'
+                                      ? 'Yangın kayıpları ve restorasyon'
+                                      : 'Fire loss & restoration',
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  Localizations.localeOf(context).languageCode == 'tr'
+                                      ? 'Aylık yanan alan verilerini zaman içinde takip edin'
+                                      : 'Follow monthly burned-area data over time',
+                                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: mutedTextColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
+                        ],
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(height: AppSpacing.xxxl),
 
@@ -1458,6 +1508,7 @@ class _RiskMetricCard extends StatelessWidget {
 }
 
 class _RegionRiskCard extends StatelessWidget {
+  final int rank;
   final String region;
   final String risk;
   final String rawLevel;
@@ -1466,6 +1517,7 @@ class _RegionRiskCard extends StatelessWidget {
   final Duration delay;
 
   const _RegionRiskCard({
+    required this.rank,
     required this.region,
     required this.risk,
     required this.rawLevel,
@@ -1493,6 +1545,16 @@ class _RegionRiskCard extends StatelessWidget {
         children: [
           Row(
             children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                ),
+                child: Text('#$rank',
+                    style: AppTheme.mono(size: 12, weight: FontWeight.w700, color: accent)),
+              ),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(region,
                     style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor)),

@@ -744,6 +744,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ).slideY(begin: 0.08, end: 0),
 
             const SizedBox(height: AppSpacing.md),
+            _DailyBriefCard(
+              highestRiskRegion: highestRiskRegion == null
+                  ? null
+                  : displayRegionName(l10n, highestRiskRegion['region'] as String),
+              highestRiskScore: highestRiskRegion?['general_risk_score'] as int?,
+              nearbyCount: nearbyCount,
+              activeFireCount: activeFireCount,
+              onOpenMap: () => context.go('/map'),
+              onOpenRisk: () => context.push('/risk'),
+            ),
+
+            const SizedBox(height: AppSpacing.md),
             TrustInfoCardGroup(
               meaning: l10n.trustHomeMeaning,
               source: l10n.trustHomeSource,
@@ -1148,6 +1160,115 @@ class _PreviewRow extends StatelessWidget {
         ),
         ?info,
       ],
+    );
+  }
+}
+
+class _DailyBriefCard extends StatelessWidget {
+  final String? highestRiskRegion;
+  final int? highestRiskScore;
+  final int? nearbyCount;
+  final int activeFireCount;
+  final VoidCallback onOpenMap;
+  final VoidCallback onOpenRisk;
+
+  const _DailyBriefCard({
+    required this.highestRiskRegion,
+    required this.highestRiskScore,
+    required this.nearbyCount,
+    required this.activeFireCount,
+    required this.onOpenMap,
+    required this.onOpenRisk,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isTr = Localizations.localeOf(context).languageCode == 'tr';
+    final score = highestRiskScore;
+    final accent = score == null
+        ? AppColors.primary
+        : score >= 75
+            ? AppColors.danger
+            : score >= 50
+                ? AppColors.warning
+                : AppColors.success;
+    final riskSentence = highestRiskRegion == null || score == null
+        ? (isTr ? 'Bölgesel risk verisi yükleniyor.' : 'Regional risk data is loading.')
+        : isTr
+            ? 'En yüksek bölgesel risk $highestRiskRegion bölgesinde: $score/100.'
+            : 'The highest regional risk is in $highestRiskRegion: $score/100.';
+    final nearbySentence = nearbyCount == null
+        ? (isTr
+            ? '$activeFireCount önemli uydu tespiti Türkiye genelinde izleniyor.'
+            : '$activeFireCount notable satellite detections are being monitored nationwide.')
+        : nearbyCount == 0
+            ? (isTr
+                ? '100 km çevrende önemli bir tespit görünmüyor.'
+                : 'No notable detection is visible within 100 km.')
+            : (isTr
+                ? '100 km çevrende $nearbyCount tespit var; haritadan ayrıntıları kontrol et.'
+                : '$nearbyCount detections are within 100 km; check the map for details.');
+
+    return GlassPanel(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
+                ),
+                child: Icon(Icons.wb_sunny_outlined, color: accent, size: 21),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isTr ? 'Bugün ne bilmeliyim?' : 'What should I know today?',
+                      style: GoogleFonts.ibmPlexSans(fontSize: 17, fontWeight: FontWeight.w800),
+                    ),
+                    Text(
+                      isTr ? 'Kısa durum özeti' : 'Quick situation brief',
+                      style: GoogleFonts.ibmPlexSans(fontSize: 11, color: AppColors.textMuted),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Text(riskSentence, style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 6),
+          Text(nearbySentence, style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: AppColors.textMuted)),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onOpenRisk,
+                  icon: const Icon(Icons.auto_graph_rounded, size: 18),
+                  label: Text(isTr ? 'Riski incele' : 'View risk'),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: onOpenMap,
+                  icon: const Icon(Icons.map_outlined, size: 18),
+                  label: Text(isTr ? 'Haritayı aç' : 'Open map'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

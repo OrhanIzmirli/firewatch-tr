@@ -10,6 +10,7 @@ import '../../../services/news_translation_service.dart';
 import '../../../shared/widgets/glass_panel.dart';
 import '../../../shared/widgets/skeleton_loader.dart';
 import '../../../shared/widgets/status_chip.dart';
+import '../../../shared/widgets/news_source_mark.dart';
 
 class NewsCard extends StatefulWidget {
   final NewsItem item;
@@ -128,18 +129,10 @@ class _NewsCardState extends State<NewsCard> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                  ),
-                  child: Icon(
-                    newsCategoryIcon(category),
-                    color: AppColors.primary,
-                    size: 24,
-                  ),
+                NewsSourceMark(
+                  source: widget.item.source,
+                  logoUrl: widget.item.sourceLogoUrl,
+                  size: 52,
                 )
                     .animate()
                     .fadeIn(duration: 220.ms)
@@ -244,7 +237,7 @@ class _NewsCardState extends State<NewsCard> {
                         children: [
                           Expanded(
                             child: Text(
-                              '${widget.item.source} • $timeAgo',
+                              '${widget.item.source.toUpperCase()}  •  $timeAgo',
                               style: GoogleFonts.ibmPlexSans(
                                 fontSize: 12,
                                 color: metaColor,

@@ -11,6 +11,7 @@ import '../features/news/news_detail_screen.dart';
 import '../features/notification_permission/notification_permission_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/risk/risk_screen.dart';
+import '../features/restoration/restoration_screen.dart';
 import '../features/safety/safety_guide_screen.dart';
 import '../features/settings/data_sources_screen.dart';
 import '../features/splash/splash_screen.dart';
@@ -114,6 +115,10 @@ class AppRouter {
       GoRoute(
         path: '/risk',
         builder: (context, state) => RiskScreen(highlightRegion: state.extra as String?),
+      ),
+      GoRoute(
+        path: '/restoration',
+        builder: (context, state) => const RestorationScreen(),
       ),
       GoRoute(
         path: '/data-sources',

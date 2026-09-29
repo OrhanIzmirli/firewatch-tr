@@ -5443,6 +5443,36 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'kuzeybatıya doğru'**
   String get compassTowardsNorthWest;
+
+  /// No description provided for @riskHeatPill.
+  ///
+  /// In tr, this message translates to:
+  /// **'{place} · {score}/100 · {level}'**
+  String riskHeatPill(String place, int score, String level);
+
+  /// No description provided for @riskHeatTurkeyWide.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye geneli'**
+  String get riskHeatTurkeyWide;
+
+  /// No description provided for @riskHeatLevelVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok yüksek'**
+  String get riskHeatLevelVeryHigh;
+
+  /// No description provided for @riskHeatUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk verisi şu an alınamıyor'**
+  String get riskHeatUnavailable;
+
+  /// No description provided for @riskHeatMapSemantics.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru {score}/100, {level}.'**
+  String riskHeatMapSemantics(int score, String level);
 }
 
 class _AppLocalizationsDelegate

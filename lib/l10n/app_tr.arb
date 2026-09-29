@@ -1217,5 +1217,16 @@
   "compassTowardsSouth": "güneye doğru",
   "compassTowardsSouthWest": "güneybatıya doğru",
   "compassTowardsWest": "batıya doğru",
-  "compassTowardsNorthWest": "kuzeybatıya doğru"
+  "compassTowardsNorthWest": "kuzeybatıya doğru",
+  "riskHeatPill": "{place} · {score}/100 · {level}",
+  "@riskHeatPill": {
+    "placeholders": { "place": { "type": "String" }, "score": { "type": "int" }, "level": { "type": "String" } }
+  },
+  "riskHeatTurkeyWide": "Türkiye geneli",
+  "riskHeatLevelVeryHigh": "Çok yüksek",
+  "riskHeatUnavailable": "Risk verisi şu an alınamıyor",
+  "riskHeatMapSemantics": "Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru {score}/100, {level}.",
+  "@riskHeatMapSemantics": {
+    "placeholders": { "score": { "type": "int" }, "level": { "type": "String" } }
+  }
 }

@@ -1217,5 +1217,16 @@
   "compassTowardsSouth": "towards the south",
   "compassTowardsSouthWest": "towards the south-west",
   "compassTowardsWest": "towards the west",
-  "compassTowardsNorthWest": "towards the north-west"
+  "compassTowardsNorthWest": "towards the north-west",
+  "riskHeatPill": "{place} · {score}/100 · {level}",
+  "@riskHeatPill": {
+    "placeholders": { "place": { "type": "String" }, "score": { "type": "int" }, "level": { "type": "String" } }
+  },
+  "riskHeatTurkeyWide": "All of Türkiye",
+  "riskHeatLevelVeryHigh": "Very high",
+  "riskHeatUnavailable": "Risk data is unavailable right now",
+  "riskHeatMapSemantics": "Türkiye wildfire risk heat map. Nationwide risk score {score}/100, {level}.",
+  "@riskHeatMapSemantics": {
+    "placeholders": { "score": { "type": "int" }, "level": { "type": "String" } }
+  }
 }

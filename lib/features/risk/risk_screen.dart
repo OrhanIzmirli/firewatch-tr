@@ -23,6 +23,7 @@ import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import 'widgets/turkey_risk_heatmap.dart';
 
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
@@ -436,6 +437,19 @@ class _RiskScreenState extends State<RiskScreen> {
     );
   }
 
+  /// Region key → score for the heat map. Rows with a missing or
+  /// unparseable score are left out rather than drawn as zero.
+  Map<String, double> get _heatmapScores {
+    final scores = <String, double>{};
+    for (final r in _regions) {
+      final key = r['region']?.toString();
+      final raw = r['general_risk_score'];
+      final score = raw is num ? raw.toDouble() : double.tryParse('$raw');
+      if (key != null && score != null) scores[key] = score;
+    }
+    return scores;
+  }
+
   Map<String, dynamic>? get _highestRisk {
     if (_regions.isEmpty) return null;
     return _regions.reduce((a, b) =>
@@ -569,6 +583,24 @@ class _RiskScreenState extends State<RiskScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  TurkeyRiskHeatmap(regionScores: _heatmapScores)
+                      .animate()
+                      .fadeIn(duration: 400.ms),
+                  if (_regions.isEmpty) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Row(
+                      children: [
+                        Icon(Icons.cloud_off_rounded, size: 14, color: mutedTextColor),
+                        const SizedBox(width: 6),
+                        Text(
+                          l10n.riskHeatUnavailable,
+                          style: GoogleFonts.ibmPlexSans(fontSize: 12, color: mutedTextColor),
+                        ),
+                      ],
+                    ),
+                  ],
+                  // TODO adım 2: 7 bölge interaktif illüstrasyonu buraya gelecek
+                  const SizedBox(height: AppSpacing.lg),
                   if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                     key: CoachMarkKeys.riskScoreCard,

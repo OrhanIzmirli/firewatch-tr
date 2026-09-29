@@ -3101,4 +3101,23 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get compassTowardsNorthWest => 'kuzeybatıya doğru';
+
+  @override
+  String riskHeatPill(String place, int score, String level) {
+    return '$place · $score/100 · $level';
+  }
+
+  @override
+  String get riskHeatTurkeyWide => 'Türkiye geneli';
+
+  @override
+  String get riskHeatLevelVeryHigh => 'Çok yüksek';
+
+  @override
+  String get riskHeatUnavailable => 'Risk verisi şu an alınamıyor';
+
+  @override
+  String riskHeatMapSemantics(int score, String level) {
+    return 'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru $score/100, $level.';
+  }
 }

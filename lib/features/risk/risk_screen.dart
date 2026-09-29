@@ -23,6 +23,7 @@ import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import 'widgets/risk_summary_card.dart';
 
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
@@ -80,6 +81,79 @@ class _RiskScreenState extends State<RiskScreen> {
       _maybeShowRiskCoachMarks();
       _maybeShowHighlightedRegion();
     });
+    _prefillMyLocationIfAllowed();
+  }
+
+  /// The summary card names the user's own region when it can. Only runs
+  /// when location is already on and permitted: opening this screen must
+  /// never pop a permission prompt (the My Location tab still asks when
+  /// tapped). Fills the same state that tab uses, so the tab opens ready.
+  Future<void> _prefillMyLocationIfAllowed() async {
+    try {
+      if (!await Geolocator.isLocationServiceEnabled()) return;
+      final permission = await Geolocator.checkPermission();
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
+        return;
+      }
+      if (!mounted || _myCity != null || _myLocationLoading) return;
+      await _loadMyLocation();
+    } catch (e) {
+      if (kDebugMode) debugPrint('Risk summary location prefill skipped: $e');
+    }
+  }
+
+  static double _num(Object? v) => v is num ? v.toDouble() : double.tryParse('$v') ?? 0;
+
+  Map<String, dynamic>? _regionByKey(String? key) {
+    if (key == null) return null;
+    for (final r in _regions) {
+      if (r['region'] == key) return r;
+    }
+    return null;
+  }
+
+  /// Data for the summary card: the region the user arrived with from
+  /// Home, else their own region, else the Turkey-wide average. Null when
+  /// there is no risk data at all (API down and nothing cached).
+  RiskSummaryData? _summaryCardData(AppLocalizations l10n) {
+    if (_regions.isEmpty) return null;
+    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
+
+    RiskSummaryData forRegion(Map<String, dynamic> r, String sourceLabel) {
+      final name = displayRegionName(l10n, '${r['region']}');
+      final score = _num(r['general_risk_score']).round();
+      return RiskSummaryData(
+        placeName: name,
+        placeInSentence: isTurkish ? turkishLocative(name) : name,
+        sourceLabel: sourceLabel,
+        score: score,
+        tier: riskTierFor(apiLevel: r['risk_level']?.toString(), score: score),
+        temperature: _num(r['temperature']),
+        humidity: _num(r['humidity']),
+        windSpeed: _num(r['wind_speed']),
+      );
+    }
+
+    final selected = _regionByKey(widget.highlightRegion);
+    if (selected != null) {
+      return forRegion(selected, l10n.riskHeroSourceSelected);
+    }
+    final mine = _myRegionData;
+    if (mine != null && _myCity != null) {
+      return forRegion(mine, l10n.riskHeroSourceLocation(_myCity!));
+    }
+    final avg = _avgRisk.round();
+    return RiskSummaryData(
+      placeName: l10n.riskHeroTurkeyName,
+      placeInSentence: l10n.riskHeroTurkeyPlace,
+      sourceLabel: l10n.riskTurkeyAverage,
+      score: avg,
+      tier: riskTierForScore(avg),
+      temperature: _avgTemp,
+      humidity: _avgHumidity,
+      windSpeed: _avgWind,
+    );
   }
 
   void _maybeShowHighlightedRegion() {
@@ -569,6 +643,11 @@ class _RiskScreenState extends State<RiskScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  RiskSummaryCard(data: _summaryCardData(l10n))
+                      .animate()
+                      .fadeIn(duration: 400.ms)
+                      .slideY(begin: 0.04, end: 0),
+                  const SizedBox(height: AppSpacing.lg),
                   if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                     key: CoachMarkKeys.riskScoreCard,

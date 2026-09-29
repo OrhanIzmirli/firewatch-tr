@@ -1217,5 +1217,43 @@
   "compassTowardsSouth": "towards the south",
   "compassTowardsSouthWest": "towards the south-west",
   "compassTowardsWest": "towards the west",
-  "compassTowardsNorthWest": "towards the north-west"
+  "compassTowardsNorthWest": "towards the north-west",
+  "riskHeroEyebrow": "Today's wildfire risk",
+  "riskHeroLevelLow": "low",
+  "riskHeroLevelMedium": "moderate",
+  "riskHeroLevelHigh": "high",
+  "riskHeroLevelVeryHigh": "very high",
+  "riskHeroSentence": "Today the wildfire risk in {place} is {level} because {reason}.",
+  "@riskHeroSentence": {
+    "placeholders": { "place": { "type": "String" }, "level": { "type": "String" }, "reason": { "type": "String" } }
+  },
+  "riskHeroTurkeyName": "All of Türkiye",
+  "riskHeroTurkeyPlace": "Türkiye",
+  "riskHeroSourceLocation": "Based on your location · {city}",
+  "@riskHeroSourceLocation": {
+    "placeholders": { "city": { "type": "String" } }
+  },
+  "riskHeroSourceSelected": "Selected region",
+  "riskHeroReasonHotDry": "it is both hot and dry ({temp}°C, {humidity}% humidity)",
+  "@riskHeroReasonHotDry": {
+    "placeholders": { "temp": { "type": "int" }, "humidity": { "type": "int" } }
+  },
+  "riskHeroReasonHeat": "it is hot ({temp}°C)",
+  "@riskHeroReasonHeat": {
+    "placeholders": { "temp": { "type": "int" } }
+  },
+  "riskHeroReasonDry": "the air is dry ({humidity}% humidity)",
+  "@riskHeroReasonDry": {
+    "placeholders": { "humidity": { "type": "int" } }
+  },
+  "riskHeroReasonWind": "the wind helps fire spread ({wind} km/h)",
+  "@riskHeroReasonWind": {
+    "placeholders": { "wind": { "type": "int" } }
+  },
+  "riskHeroReasonCalm": "the weather is mild ({temp}°C, {humidity}% humidity, wind {wind} km/h)",
+  "@riskHeroReasonCalm": {
+    "placeholders": { "temp": { "type": "int" }, "humidity": { "type": "int" }, "wind": { "type": "int" } }
+  },
+  "riskHeroUnavailableTitle": "Risk data is unavailable right now",
+  "riskHeroUnavailableBody": "Pull down to refresh once the connection is back."
 }

@@ -5443,6 +5443,108 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'kuzeybatıya doğru'**
   String get compassTowardsNorthWest;
+
+  /// No description provided for @riskHeroEyebrow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünkü yangın riski'**
+  String get riskHeroEyebrow;
+
+  /// No description provided for @riskHeroLevelLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'düşük'**
+  String get riskHeroLevelLow;
+
+  /// No description provided for @riskHeroLevelMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'orta'**
+  String get riskHeroLevelMedium;
+
+  /// No description provided for @riskHeroLevelHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'yüksek'**
+  String get riskHeroLevelHigh;
+
+  /// No description provided for @riskHeroLevelVeryHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'çok yüksek'**
+  String get riskHeroLevelVeryHigh;
+
+  /// No description provided for @riskHeroSentence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün {place} yangın riski {level} çünkü {reason}.'**
+  String riskHeroSentence(String place, String level, String reason);
+
+  /// No description provided for @riskHeroTurkeyName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye geneli'**
+  String get riskHeroTurkeyName;
+
+  /// No description provided for @riskHeroTurkeyPlace.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye genelinde'**
+  String get riskHeroTurkeyPlace;
+
+  /// No description provided for @riskHeroSourceLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumuna göre · {city}'**
+  String riskHeroSourceLocation(String city);
+
+  /// No description provided for @riskHeroSourceSelected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçili bölge'**
+  String get riskHeroSourceSelected;
+
+  /// No description provided for @riskHeroReasonHotDry.
+  ///
+  /// In tr, this message translates to:
+  /// **'hava hem sıcak hem kuru ({temp}°C, nem %{humidity})'**
+  String riskHeroReasonHotDry(int temp, int humidity);
+
+  /// No description provided for @riskHeroReasonHeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'hava sıcak ({temp}°C)'**
+  String riskHeroReasonHeat(int temp);
+
+  /// No description provided for @riskHeroReasonDry.
+  ///
+  /// In tr, this message translates to:
+  /// **'hava kuru (nem %{humidity})'**
+  String riskHeroReasonDry(int humidity);
+
+  /// No description provided for @riskHeroReasonWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'rüzgâr yangının yayılmasını kolaylaştırıyor ({wind} km/sa)'**
+  String riskHeroReasonWind(int wind);
+
+  /// No description provided for @riskHeroReasonCalm.
+  ///
+  /// In tr, this message translates to:
+  /// **'hava ılımlı ({temp}°C, nem %{humidity}, rüzgâr {wind} km/sa)'**
+  String riskHeroReasonCalm(int temp, int humidity, int wind);
+
+  /// No description provided for @riskHeroUnavailableTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk verisi şu an alınamıyor'**
+  String get riskHeroUnavailableTitle;
+
+  /// No description provided for @riskHeroUnavailableBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı düzelince aşağı çekerek yenileyebilirsin.'**
+  String get riskHeroUnavailableBody;
 }
 
 class _AppLocalizationsDelegate

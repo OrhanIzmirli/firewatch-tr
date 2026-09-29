@@ -3107,4 +3107,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassTowardsNorthWest => 'towards the north-west';
+
+  @override
+  String get riskHeroEyebrow => 'Today\'s wildfire risk';
+
+  @override
+  String get riskHeroLevelLow => 'low';
+
+  @override
+  String get riskHeroLevelMedium => 'moderate';
+
+  @override
+  String get riskHeroLevelHigh => 'high';
+
+  @override
+  String get riskHeroLevelVeryHigh => 'very high';
+
+  @override
+  String riskHeroSentence(String place, String level, String reason) {
+    return 'Today the wildfire risk in $place is $level because $reason.';
+  }
+
+  @override
+  String get riskHeroTurkeyName => 'All of Türkiye';
+
+  @override
+  String get riskHeroTurkeyPlace => 'Türkiye';
+
+  @override
+  String riskHeroSourceLocation(String city) {
+    return 'Based on your location · $city';
+  }
+
+  @override
+  String get riskHeroSourceSelected => 'Selected region';
+
+  @override
+  String riskHeroReasonHotDry(int temp, int humidity) {
+    return 'it is both hot and dry ($temp°C, $humidity% humidity)';
+  }
+
+  @override
+  String riskHeroReasonHeat(int temp) {
+    return 'it is hot ($temp°C)';
+  }
+
+  @override
+  String riskHeroReasonDry(int humidity) {
+    return 'the air is dry ($humidity% humidity)';
+  }
+
+  @override
+  String riskHeroReasonWind(int wind) {
+    return 'the wind helps fire spread ($wind km/h)';
+  }
+
+  @override
+  String riskHeroReasonCalm(int temp, int humidity, int wind) {
+    return 'the weather is mild ($temp°C, $humidity% humidity, wind $wind km/h)';
+  }
+
+  @override
+  String get riskHeroUnavailableTitle => 'Risk data is unavailable right now';
+
+  @override
+  String get riskHeroUnavailableBody =>
+      'Pull down to refresh once the connection is back.';
 }

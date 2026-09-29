@@ -1217,5 +1217,43 @@
   "compassTowardsSouth": "güneye doğru",
   "compassTowardsSouthWest": "güneybatıya doğru",
   "compassTowardsWest": "batıya doğru",
-  "compassTowardsNorthWest": "kuzeybatıya doğru"
+  "compassTowardsNorthWest": "kuzeybatıya doğru",
+  "riskHeroEyebrow": "Bugünkü yangın riski",
+  "riskHeroLevelLow": "düşük",
+  "riskHeroLevelMedium": "orta",
+  "riskHeroLevelHigh": "yüksek",
+  "riskHeroLevelVeryHigh": "çok yüksek",
+  "riskHeroSentence": "Bugün {place} yangın riski {level} çünkü {reason}.",
+  "@riskHeroSentence": {
+    "placeholders": { "place": { "type": "String" }, "level": { "type": "String" }, "reason": { "type": "String" } }
+  },
+  "riskHeroTurkeyName": "Türkiye geneli",
+  "riskHeroTurkeyPlace": "Türkiye genelinde",
+  "riskHeroSourceLocation": "Konumuna göre · {city}",
+  "@riskHeroSourceLocation": {
+    "placeholders": { "city": { "type": "String" } }
+  },
+  "riskHeroSourceSelected": "Seçili bölge",
+  "riskHeroReasonHotDry": "hava hem sıcak hem kuru ({temp}°C, nem %{humidity})",
+  "@riskHeroReasonHotDry": {
+    "placeholders": { "temp": { "type": "int" }, "humidity": { "type": "int" } }
+  },
+  "riskHeroReasonHeat": "hava sıcak ({temp}°C)",
+  "@riskHeroReasonHeat": {
+    "placeholders": { "temp": { "type": "int" } }
+  },
+  "riskHeroReasonDry": "hava kuru (nem %{humidity})",
+  "@riskHeroReasonDry": {
+    "placeholders": { "humidity": { "type": "int" } }
+  },
+  "riskHeroReasonWind": "rüzgâr yangının yayılmasını kolaylaştırıyor ({wind} km/sa)",
+  "@riskHeroReasonWind": {
+    "placeholders": { "wind": { "type": "int" } }
+  },
+  "riskHeroReasonCalm": "hava ılımlı ({temp}°C, nem %{humidity}, rüzgâr {wind} km/sa)",
+  "@riskHeroReasonCalm": {
+    "placeholders": { "temp": { "type": "int" }, "humidity": { "type": "int" }, "wind": { "type": "int" } }
+  },
+  "riskHeroUnavailableTitle": "Risk verisi şu an alınamıyor",
+  "riskHeroUnavailableBody": "Bağlantı düzelince aşağı çekerek yenileyebilirsin."
 }

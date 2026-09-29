@@ -3101,4 +3101,70 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get compassTowardsNorthWest => 'kuzeybatıya doğru';
+
+  @override
+  String get riskHeroEyebrow => 'Bugünkü yangın riski';
+
+  @override
+  String get riskHeroLevelLow => 'düşük';
+
+  @override
+  String get riskHeroLevelMedium => 'orta';
+
+  @override
+  String get riskHeroLevelHigh => 'yüksek';
+
+  @override
+  String get riskHeroLevelVeryHigh => 'çok yüksek';
+
+  @override
+  String riskHeroSentence(String place, String level, String reason) {
+    return 'Bugün $place yangın riski $level çünkü $reason.';
+  }
+
+  @override
+  String get riskHeroTurkeyName => 'Türkiye geneli';
+
+  @override
+  String get riskHeroTurkeyPlace => 'Türkiye genelinde';
+
+  @override
+  String riskHeroSourceLocation(String city) {
+    return 'Konumuna göre · $city';
+  }
+
+  @override
+  String get riskHeroSourceSelected => 'Seçili bölge';
+
+  @override
+  String riskHeroReasonHotDry(int temp, int humidity) {
+    return 'hava hem sıcak hem kuru ($temp°C, nem %$humidity)';
+  }
+
+  @override
+  String riskHeroReasonHeat(int temp) {
+    return 'hava sıcak ($temp°C)';
+  }
+
+  @override
+  String riskHeroReasonDry(int humidity) {
+    return 'hava kuru (nem %$humidity)';
+  }
+
+  @override
+  String riskHeroReasonWind(int wind) {
+    return 'rüzgâr yangının yayılmasını kolaylaştırıyor ($wind km/sa)';
+  }
+
+  @override
+  String riskHeroReasonCalm(int temp, int humidity, int wind) {
+    return 'hava ılımlı ($temp°C, nem %$humidity, rüzgâr $wind km/sa)';
+  }
+
+  @override
+  String get riskHeroUnavailableTitle => 'Risk verisi şu an alınamıyor';
+
+  @override
+  String get riskHeroUnavailableBody =>
+      'Bağlantı düzelince aşağı çekerek yenileyebilirsin.';
 }

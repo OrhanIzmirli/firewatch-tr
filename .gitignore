@@ -8,3 +8,5 @@ build/
 android/key.properties
 *.jks
 *.keystore
+config.bat
+node_modules

@@ -1,4 +1,13 @@
 class NewsItem {
+  final String contentType;
+  final String imageUrl;
+  final String sourceLogoUrl;
+  final String actionUrl;
+  final String eventStart;
+  final String eventEnd;
+  final String eventCity;
+  final String eventLocation;
+  final bool officialSource;
   final String id;
   final String title;
   final String source;
@@ -13,6 +22,15 @@ class NewsItem {
   final List<String> paragraphs;
 
   const NewsItem({
+    this.contentType = 'fires',
+    this.imageUrl = '',
+    this.sourceLogoUrl = '',
+    this.actionUrl = '',
+    this.eventStart = '',
+    this.eventEnd = '',
+    this.eventCity = '',
+    this.eventLocation = '',
+    this.officialSource = false,
     required this.id,
     required this.title,
     required this.source,
@@ -28,6 +46,15 @@ class NewsItem {
   });
 
   Map<String, dynamic> toJson() => {
+        'content_type': contentType,
+        'image_url': imageUrl,
+        'source_logo_url': sourceLogoUrl,
+        'action_url': actionUrl,
+        'event_start': eventStart,
+        'event_end': eventEnd,
+        'event_city': eventCity,
+        'event_location': eventLocation,
+        'official_source': officialSource,
         'id': id,
         'title': title,
         'source': source,
@@ -44,6 +71,15 @@ class NewsItem {
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
     return NewsItem(
+      contentType: json['content_type']?.toString() ?? 'fires',
+      imageUrl: json['image_url']?.toString() ?? '',
+      sourceLogoUrl: json['source_logo_url']?.toString() ?? '',
+      actionUrl: json['action_url']?.toString() ?? '',
+      eventStart: json['event_start']?.toString() ?? '',
+      eventEnd: json['event_end']?.toString() ?? '',
+      eventCity: json['event_city']?.toString() ?? '',
+      eventLocation: json['event_location']?.toString() ?? '',
+      officialSource: json['official_source'] == true,
       id: json['id']?.toString() ?? '',
       title: json['title'] ?? '',
       source: json['source'] ?? 'Bilinmiyor',

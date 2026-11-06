@@ -7,8 +7,9 @@ import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../map/map_screen.dart';
 import '../news/news_screen.dart';
-import '../notifications/notifications_screen.dart';
-import '../settings/settings_screen.dart';
+import '../risk/risk_screen.dart';
+import '../history/history_screen.dart';
+
 import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
@@ -103,23 +104,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
       initialConfidenceFilter: widget.mapConfidenceFilter,
       initialIncidentFilter: widget.mapIncidentFilter,
     ),
+    const RiskScreen(),
+    const HistoryScreen(),
     const NewsScreen(),
-    const NotificationsScreen(),
-    const SettingsScreen(),
   ];
-
-  Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
-    final icon = Icon(
-      selected ? Icons.notifications : Icons.notifications_none,
-    );
-    final child = unreadCount <= 0
-        ? icon
-        : Badge(
-            label: Text(unreadCount > 9 ? '9+' : '$unreadCount'),
-            child: icon,
-          );
-    return key == null ? child : KeyedSubtree(key: key, child: child);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,25 +129,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
             selectedIcon: const Icon(Icons.map),
             label: l10n.navMap,
           ),
+          const NavigationDestination(
+            icon: Icon(Icons.shield_outlined), selectedIcon: Icon(Icons.shield), label: 'Risk'),
+          NavigationDestination(
+            icon: const Icon(Icons.history),
+            label: l10n.localeName.startsWith('tr') ? 'Geçmiş' : 'History'),
           NavigationDestination(
             icon: const Icon(Icons.newspaper_outlined),
-            selectedIcon: const Icon(Icons.newspaper),
-            label: l10n.navNews,
-          ),
-          NavigationDestination(
-            icon: _alertsIcon(
-              false,
-              nearbyMatches.length,
-              key: CoachMarkKeys.alertsNavIcon,
-            ),
-            selectedIcon: _alertsIcon(true, nearbyMatches.length),
-            label: l10n.navAlerts,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
-            selectedIcon: const Icon(Icons.settings),
-            label: l10n.navSettings,
-          ),
+            selectedIcon: const Icon(Icons.newspaper), label: l10n.navNews),
         ];
 
         return Scaffold(

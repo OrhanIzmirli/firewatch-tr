@@ -11,8 +11,11 @@ import '../features/news/news_detail_screen.dart';
 import '../features/notification_permission/notification_permission_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/risk/risk_screen.dart';
+import '../features/risk/district_risk_screen.dart';
 import '../features/safety/safety_guide_screen.dart';
 import '../features/settings/data_sources_screen.dart';
+import '../features/settings/settings_screen.dart';
+import '../features/notifications/notifications_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/watchlist/watchlist_screen.dart';
 import '../models/fire_event.dart';
@@ -48,6 +51,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/app',
+        redirect: (context, state) => state.uri.queryParameters['tab'] == 'settings' ? '/settings' : null,
         // NoTransitionPage: these routes only ever swap between the same
         // MainShellScreen at a different tab index (via context.go, never
         // push), so there's no "previous screen" to animate away from.
@@ -60,9 +64,9 @@ class AppRouter {
           int initialIndex = 0;
           switch (tab) {
             case 'map': initialIndex = 1; break;
-            case 'news': initialIndex = 2; break;
-            case 'alerts': initialIndex = 3; break;
-            case 'settings': initialIndex = 4; break;
+            case 'risk': initialIndex = 2; break;
+            case 'history': initialIndex = 3; break;
+            case 'news': initialIndex = 4; break;
             default: initialIndex = 0;
           }
           return NoTransitionPage(child: MainShellScreen(initialIndex: initialIndex));
@@ -115,6 +119,9 @@ class AppRouter {
         path: '/risk',
         builder: (context, state) => RiskScreen(highlightRegion: state.extra as String?),
       ),
+      GoRoute(path: '/risk-map', builder: (context, state) => const DistrictRiskScreen()),
+      GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
+      GoRoute(path: '/notification-settings', builder: (context, state) => const NotificationsScreen()),
       GoRoute(
         path: '/data-sources',
         builder: (context, state) => const DataSourcesScreen(),

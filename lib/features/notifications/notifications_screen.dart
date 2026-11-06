@@ -24,7 +24,7 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
-import 'widgets/alert_scope_section.dart';
+
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -338,7 +338,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         const SizedBox(height: AppSpacing.xxl),
 
                         // ── Bildirim Kapsamı ──────────────────────
-                        const AlertScopeSection(),
+
 
                         const SizedBox(height: AppSpacing.xxl),
 

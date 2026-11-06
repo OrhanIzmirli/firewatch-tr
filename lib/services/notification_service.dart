@@ -7,6 +7,7 @@ import '../l10n/l10n_lookup.dart';
 import '../models/alert_scope.dart';
 import '../router/app_router.dart';
 import 'render_api_service.dart';
+import 'alert_inbox.dart';
 
 class NotificationService {
   NotificationService._();
@@ -28,6 +29,7 @@ class NotificationService {
   );
 
   Future<void> initialize() async {
+    await AlertInbox.instance.initialize();
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -86,21 +88,23 @@ class NotificationService {
         print('Background message opened: ${message.notification?.title}');
       }
       final fireId = message.data['fire_id'];
+      AlertInbox.instance.add(message.notification?.title ?? 'FireWatch TR', message.notification?.body ?? '', payload: fireId == null ? null : 'fire:$fireId', id: message.messageId);
       // Fetched fresh and used synchronously within this callback (no
       // await in between) — the analyzer flags it only because the
       // enclosing _setupFirebaseMessaging is itself async, not because
       // this context is actually stale.
       final context = rootNavigatorKey.currentContext;
-      if (context != null && fireId != null) {
+      if (context != null) {
         // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/fire/$fireId');
+        GoRouter.of(context).go(fireId == null ? '/app?section=alerts' : '/fire/$fireId');
       }
     });
 
     final initialMessage = await _fcm.getInitialMessage();
     if (initialMessage != null) {
       final fireId = initialMessage.data['fire_id'];
-      if (fireId != null) {
+      await AlertInbox.instance.add(initialMessage.notification?.title ?? 'FireWatch TR', initialMessage.notification?.body ?? '', payload: fireId == null ? null : 'fire:$fireId', id: initialMessage.messageId);
+      {
         Future.delayed(const Duration(seconds: 1), () {
           // Fetched fresh here (not captured before the delay) since the
           // root navigator's context can only be resolved at the moment
@@ -108,7 +112,7 @@ class NotificationService {
           final context = rootNavigatorKey.currentContext;
           if (context != null) {
             // ignore: use_build_context_synchronously
-            GoRouter.of(context).go('/fire/$fireId');
+            GoRouter.of(context).go(fireId == null ? '/app?section=alerts' : '/fire/$fireId');
           }
         });
       }
@@ -123,7 +127,7 @@ class NotificationService {
     if (context == null) return;
 
     if (payload == null || payload.isEmpty) {
-      GoRouter.of(context).go('/app?tab=alerts');
+      GoRouter.of(context).go('/app?section=alerts');
       return;
     }
     if (payload.startsWith('fire:')) {
@@ -131,7 +135,7 @@ class NotificationService {
       GoRouter.of(context).go('/fire/$fireId');
       return;
     }
-    GoRouter.of(context).go('/app?tab=alerts');
+    GoRouter.of(context).go('/app?section=alerts');
   }
 
   Future<void> _createAndroidChannel() async {
@@ -224,6 +228,7 @@ class NotificationService {
     required String distanceLabel,
   }) async {
     final l10n = await currentAppLocalizations();
+    await AlertInbox.instance.add(l10n.notifNearbyFireTitle, l10n.notifNearbyFireBody(distanceLabel, count));
     await _plugin.show(
       2001,
       l10n.notifNearbyFireTitle,
@@ -238,6 +243,7 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
+    await AlertInbox.instance.add(title, body, payload: 'fire:$fireId');
     await _plugin.show(
       3001,
       title,
@@ -252,6 +258,7 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
+    await AlertInbox.instance.add(title, body, payload: payload);
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title,

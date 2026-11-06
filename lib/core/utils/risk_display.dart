@@ -6,24 +6,24 @@ import '../../l10n/app_localizations.dart';
 /// the /api/risk/summary backend endpoint. Used by any screen that shows
 /// risk-region data (Risk screen, Home screen overview cards, ...).
 
-Color colorForApiRiskLevel(String level) {
-  switch (level) {
-    case 'Critical':
-    case 'High':
-      return AppColors.danger;
-    case 'Medium':
-      return AppColors.warning;
-    default:
-      return AppColors.success;
-  }
-}
-
-/// Colors a 0-100 risk score directly: red above 70, orange 40-70, green
-/// below 40 — used by the regional distribution bar chart.
-Color riskScoreColor(int score) {
-  if (score > 70) return AppColors.danger;
-  if (score >= 40) return AppColors.warning;
-  return AppColors.success;
+/// Display bands retain the published app's 25/50/75 cutoffs.
+/// These scores are indices, never probabilities.
+String riskLevelForScore(num score) => score >= 75 ? 'Critical' : score >= 50 ? 'High' : score >= 25 ? 'Medium' : 'Low';
+Color colorForApiRiskLevel(String level) => switch (level) {
+  'Critical' => AppColors.danger,
+  'High' => AppColors.primary,
+  'Medium' => const Color(0xFFFACC15),
+  _ => AppColors.success,
+};
+Color riskScoreColor(num score) => colorForApiRiskLevel(riskLevelForScore(score));
+String riskAdvice(AppLocalizations l10n, num score) {
+  final tr = l10n.localeName.startsWith('tr');
+  return switch (riskLevelForScore(score)) {
+    'Critical' => tr ? 'Açık alanda ateş yakmayın. Şüpheli dumanı 112’ye bildirin; resmi uyarıları izleyin.' : 'Do not light outdoor fires. Report suspicious smoke to 112 and follow official alerts.',
+    'High' => tr ? 'Açık alanda ateş yakmayın; kıvılcım çıkarabilecek işlerden kaçının.' : 'Do not light outdoor fires; avoid activities that create sparks.',
+    'Medium' => tr ? 'Kuru bitki örtüsü yakınında dikkatli olun; yerel uyarıları izleyin.' : 'Take care near dry vegetation and follow local alerts.',
+    _ => tr ? 'Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.' : 'Low risk is not zero risk. Never leave fire or cigarette ends outdoors.',
+  };
 }
 
 String displayRegionName(AppLocalizations l10n, String region) {
@@ -41,7 +41,7 @@ String displayRegionName(AppLocalizations l10n, String region) {
 
 String riskLevelLabel(AppLocalizations l10n, String level) {
   switch (level) {
-    case 'Critical': return l10n.commonCritical;
+    case 'Critical': return l10n.localeName.startsWith('tr') ? 'Çok yüksek' : 'Very high';
     case 'High': return l10n.commonHigh;
     case 'Medium': return l10n.commonMedium;
     default: return l10n.commonLow;

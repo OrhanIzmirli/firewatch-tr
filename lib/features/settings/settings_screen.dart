@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/api_config.dart';
+import '../notifications/widgets/alert_scope_section.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../shared/widgets/language_badge.dart';
@@ -48,6 +49,11 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const AlertScopeSection(),
+            ListTile(leading: const Icon(Icons.notifications_outlined),
+              title: const Text('Uyarı izinleri ve otomatik tarama'),
+              onTap: () => context.push('/notification-settings')),
+            const SizedBox(height: AppSpacing.lg),
             GlassPanel(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,6 +21,7 @@ import '../../models/fire_point.dart';
 import '../../models/incident_summary.dart';
 import '../../models/news_item.dart';
 import '../../services/fire_api_service.dart';
+import 'widgets/recent_alerts.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
 import '../../services/render_api_service.dart';
@@ -583,7 +584,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     final highestRiskColor = highestRiskRegion == null
         ? AppColors.success
-        : colorForApiRiskLevel(highestRiskRegion['risk_level'] as String);
+        : riskScoreColor(highestRiskRegion['general_risk_score'] as num);
 
     // ── Overview card 3: fires within 100km, falling back to the
     // nationwide count when location isn't available ──
@@ -620,6 +621,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: Text(l10n.appName, style: GoogleFonts.inter(fontWeight: FontWeight.w700)),
         actions: [
+          IconButton(tooltip: l10n.navSettings, icon: const Icon(Icons.settings_outlined), onPressed: () => context.push('/settings')),
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],
       ),
@@ -632,6 +634,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const RecentAlerts(),
             if (_firesSlowLoading) const SlowLoadingBanner(),
             // ── Header ──────────────────────────────────────
             GlassPanel(
@@ -784,11 +787,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     title: l10n.homeOverviewHighestRiskTitle,
                     value: highestRiskRegion == null
                         ? l10n.riskDataLoading
-                        : l10n.homeOverviewHighestRiskValue(
-                            displayRegionName(l10n, highestRiskRegion['region'] as String),
-                            highestRiskRegion['general_risk_score'] as int,
-                          ),
-                    subtitle: l10n.homeOverviewHighestRiskSubtitle,
+                        : riskLevelLabel(l10n, riskLevelForScore(highestRiskRegion['general_risk_score'] as num)),
+                    subtitle: highestRiskRegion == null ? l10n.homeOverviewHighestRiskSubtitle : riskAdvice(l10n, highestRiskRegion['general_risk_score'] as num),
                     icon: Icons.warning_amber_rounded,
                     color: highestRiskColor,
                     delay: 60.ms,

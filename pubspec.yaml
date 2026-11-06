@@ -2,7 +2,7 @@ name: firewatch_tr
 description: "A wildfire tracking mobile app for Turkey."
 publish_to: 'none'
 
-version: 1.0.3+4
+version: 1.0.4+5
 
 environment:
   sdk: ^3.11.4
@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2
 
+  add_2_calendar: 3.0.1
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   font_awesome_flutter: ^10.8.0
@@ -60,6 +61,8 @@ flutter:
   generate: true
 
   assets:
+    - assets/data/il_sinirlari.geojson
+    - assets/data/il_yil_veri.json
     - assets/images/forest-fire.jpg
     - assets/icon/app_icon.png
 

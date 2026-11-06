@@ -13,11 +13,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../shared/widgets/carto_basemap.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
 import '../../models/fire_point.dart';
+import '../../models/annual_province_data.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/render_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -34,6 +36,7 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
 import 'widgets/incident_sheet.dart';
+import 'widgets/annual_province_layer.dart';
 
 class MapScreen extends StatefulWidget {
   final double? focusLat;
@@ -69,6 +72,40 @@ class _MapScreenState extends State<MapScreen> {
   String? _errorMessage;
   bool _isSlowLoading = false;
   bool _isLegendOpen = false;
+  bool _showAnnualHistory = false;
+  bool _annualLoading = false;
+  String? _annualError;
+  int _annualYear = 2025;
+  final ScrollController _annualYearsController = ScrollController(
+    initialScrollOffset: 800,
+  );
+  AnnualProvinceData? _annualData;
+
+  Future<void> _toggleAnnualHistory(bool enabled) async {
+    setState(() {
+      _showAnnualHistory = enabled;
+      _isLegendOpen = false;
+    });
+    if (!enabled || _annualData != null || _annualLoading) return;
+    setState(() {
+      _annualLoading = true;
+      _annualError = null;
+    });
+    try {
+      final data = await AnnualProvinceData.load();
+      if (mounted) setState(() => _annualData = data);
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _annualError =
+              'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _annualLoading = false);
+    }
+  }
+
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   double _currentZoom = 5.6;
 
@@ -139,6 +176,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void dispose() {
+    _annualYearsController.dispose();
     _tileResetController.close();
     _sheetController.removeListener(_onSheetMoved);
     _sheetController.dispose();
@@ -523,12 +561,17 @@ class _MapScreenState extends State<MapScreen> {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: status.color.withValues(alpha: status.fillOpacity),
+        color: (incident.looksLikeFixedSource ? Colors.grey : status.color)
+            .withValues(
+              alpha: incident.looksLikeFixedSource ? 0.55 : status.fillOpacity,
+            ),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.9),
           width: size >= 18 ? 1.6 : 1.1,
         ),
-        boxShadow: status == IncidentStatus.activeDetection
+        boxShadow:
+            status == IncidentStatus.activeDetection &&
+                !incident.looksLikeFixedSource
             ? [
                 BoxShadow(
                   color: AppColors.danger.withValues(alpha: 0.45),
@@ -929,6 +972,89 @@ class _MapScreenState extends State<MapScreen> {
           _screenTitle(l10n),
           style: GoogleFonts.inter(fontWeight: FontWeight.w700),
         ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(_showAnnualHistory ? 140 : 48),
+          child: SizedBox(
+            height: _showAnnualHistory ? 140 : 48,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 12),
+                    FilterChip(
+                      label: const Text('Geçmiş yıllar'),
+                      avatar: const Icon(Icons.layers_outlined, size: 18),
+                      selected: _showAnnualHistory,
+                      onSelected: _toggleAnnualHistory,
+                    ),
+                    if (_showAnnualHistory) ...[
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          'İl bazında yanan alan',
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Geçmiş yıl renkleri',
+                        onPressed: () => showModalBottomSheet<void>(
+                          context: context,
+                          showDragHandle: true,
+                          builder: (_) => const SafeArea(child: AnnualLegend()),
+                        ),
+                        icon: const Icon(Icons.info_outline),
+                      ),
+                    ],
+                  ],
+                ),
+                if (_showAnnualHistory) ...[
+                  SizedBox(
+                    height: 44,
+                    child: ListView(
+                      controller: _annualYearsController,
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      children: [
+                        for (final year in AnnualProvinceData.years)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: ChoiceChip(
+                              label: Text('$year'),
+                              selected: _annualYear == year,
+                              selectedColor: const Color(0xFF422B25),
+                              labelStyle: TextStyle(
+                                color: _annualYear == year
+                                    ? AppColors.primary
+                                    : null,
+                              ),
+                              onSelected: (_) =>
+                                  setState(() => _annualYear = year),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (_annualLoading) const LinearProgressIndicator(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          _annualError ??
+                              'İl rengi: $_annualYear OGM yanan alanı. Noktalar: mevcut tespitler. Uydu noktası yangın sayısı değildir.',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF9CA3AF),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
       ),
       // The map is the screen, not a card on it. Everything that explains the
       // map -- what a detection is, what to do about one, what is near you --
@@ -994,6 +1120,7 @@ class _MapScreenState extends State<MapScreen> {
           child: FlutterMap(
             mapController: _mapController,
             options: MapOptions(
+              backgroundColor: AppColors.surface,
               initialCenter: widget.focusLat != null
                   ? LatLng(widget.focusLat!, widget.focusLng!)
                   // Biased south of Turkey's true centre: the map now runs
@@ -1016,29 +1143,32 @@ class _MapScreenState extends State<MapScreen> {
               },
             ),
             children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
-                // A tile that fails (typically a brief
-                // connectivity drop) is otherwise kept
-                // forever in the tile manager and never
-                // re-requested, leaving permanently grey
-                // squares. This evicts the off-screen
-                // ones; the reset stream below is what
-                // recovers the ones still on screen.
-                evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
-                reset: _tileResetStream,
-                errorTileCallback: (tile, error, stack) {
-                  if (kDebugMode) {
-                    debugPrint(
-                      'Map tile failed '
-                      'z=${tile.coordinates.z} '
-                      'x=${tile.coordinates.x} '
-                      'y=${tile.coordinates.y}: $error',
-                    );
-                  }
-                },
-              ),
+              if (CartoBasemap.configured)
+                TileLayer(
+                  urlTemplate: CartoBasemap.url,
+                  userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
+                  // A tile that fails (typically a brief
+                  // connectivity drop) is otherwise kept
+                  // forever in the tile manager and never
+                  // re-requested, leaving permanently grey
+                  // squares. This evicts the off-screen
+                  // ones; the reset stream below is what
+                  // recovers the ones still on screen.
+                  evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+                  reset: _tileResetStream,
+                  errorTileCallback: (tile, error, stack) {
+                    if (kDebugMode) {
+                      debugPrint(
+                        'Map tile failed '
+                        'z=${tile.coordinates.z} '
+                        'x=${tile.coordinates.x} '
+                        'y=${tile.coordinates.y}: $error',
+                      );
+                    }
+                  },
+                ),
+              if (_showAnnualHistory && _annualData != null)
+                AnnualProvinceLayer(data: _annualData!, year: _annualYear),
               MarkerLayer(
                 markers: _userPosition != null
                     ? [
@@ -1076,7 +1206,7 @@ class _MapScreenState extends State<MapScreen> {
               if (_showIncidents)
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 72,
+                    maxClusterRadius: 88,
                     size: const Size(52, 52),
                     computeSize: (markers) {
                       final d = _clusterDiameter(
@@ -1112,7 +1242,7 @@ class _MapScreenState extends State<MapScreen> {
               else
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 45,
+                    maxClusterRadius: 72,
                     size: const Size(40, 40),
                     alignment: Alignment.center,
                     markers: _visibleFirePoints.map((point) {
@@ -1146,7 +1276,8 @@ class _MapScreenState extends State<MapScreen> {
             ],
           ),
         ),
-        if (_isLoading)
+        const Positioned(left: 0, right: 0, bottom: 0, child: MapAttribution()),
+        if (_isLoading && !_showAnnualHistory)
           Positioned.fill(
             child: Container(
               color: Colors.black.withValues(alpha: 0.12),
@@ -1165,52 +1296,33 @@ class _MapScreenState extends State<MapScreen> {
                   scrollDirection: Axis.horizontal,
                   child: GlassPanel(
                     padding: const EdgeInsets.all(4),
-                    radius: AppSpacing.pillRadius,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         _LayerChip(
-                          label: l10n.incidentToggleShow,
-                          icon: Icons.local_fire_department_rounded,
+                          label: 'Yangınlar',
+                          icon: Icons.local_fire_department_outlined,
                           selected: _showIncidents,
                           onTap: () => _setLayer(showIncidents: true),
                         ),
                         _LayerChip(
-                          label: l10n.incidentToggleDetections,
-                          icon: Icons.grain_rounded,
+                          label: 'Tespitler',
+                          icon: Icons.satellite_alt_outlined,
                           selected: !_showIncidents,
                           onTap: () => _setLayer(showIncidents: false),
                         ),
+                        if (_showIncidents)
+                          ...IncidentFilter.values.map(
+                            (filter) => _FilterChip(
+                              label: filter.label(l10n),
+                              count: _incidentCountFor(filter),
+                              selected: _incidentFilter == filter,
+                              onTap: () => _setIncidentFilter(filter),
+                            ),
+                          ),
                       ],
                     ),
                   ),
                 ),
-                if (_showIncidents) ...[
-                  const SizedBox(height: 6),
-                  // Scrollable because the honest filter label is longer than
-                  // a convenient one and is worth more than a row that never
-                  // scrolls.
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: GlassPanel(
-                      padding: const EdgeInsets.all(3),
-                      radius: AppSpacing.pillRadius,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: IncidentFilter.values
-                            .map(
-                              (filter) => _FilterChip(
-                                label: filter.label(l10n),
-                                count: _incidentCountFor(filter),
-                                selected: _incidentFilter == filter,
-                                onTap: () => _setIncidentFilter(filter),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                ],
                 // One line saying what the chosen layer actually contains.
                 // "Detections" told the user nothing: the word describes how
                 // the data was produced, not what they are looking at.
@@ -1349,7 +1461,39 @@ class _MapScreenState extends State<MapScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             radius: 16,
             child: InkWell(
-              onTap: () => setState(() => _isLegendOpen = !_isLegendOpen),
+              onTap: () {
+                if (_showAnnualHistory) {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    showDragHandle: true,
+                    isScrollControlled: true,
+                    builder: (_) => SafeArea(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const AnnualLegend(),
+                            if (_showIncidents)
+                              const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: IncidentLegend(),
+                              ),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                'Dosyada belirtilen kaynaklar: ${_annualData?.source ?? 'OGM; NASA FIRMS; EFFIS; GADM 4.1'}',
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  setState(() => _isLegendOpen = !_isLegendOpen);
+                }
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

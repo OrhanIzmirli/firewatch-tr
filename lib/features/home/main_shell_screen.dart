@@ -9,7 +9,7 @@ import '../../shared/widgets/coach_mark_overlay.dart';
 import '../map/map_screen.dart';
 import '../news/news_screen.dart';
 import '../notifications/notifications_screen.dart';
-import '../settings/settings_screen.dart';
+import '../risk/risk_screen.dart';
 import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
@@ -104,9 +104,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
       initialConfidenceFilter: widget.mapConfidenceFilter,
       initialIncidentFilter: widget.mapIncidentFilter,
     ),
+    const RiskScreen(),
     const NewsScreen(),
     const NotificationsScreen(),
-    const SettingsScreen(),
   ];
 
   Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
@@ -148,6 +148,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: l10n.navMap,
           ),
           NavigationDestination(
+            icon: const Icon(Icons.shield_outlined),
+            selectedIcon: const Icon(Icons.shield),
+            label: l10n.navRisk,
+          ),
+          NavigationDestination(
             icon: const Icon(Icons.newspaper_outlined),
             selectedIcon: const Icon(Icons.newspaper),
             label: l10n.navNews,
@@ -160,11 +165,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
             ),
             selectedIcon: _alertsIcon(true, nearbyMatches.length),
             label: l10n.navAlerts,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
-            selectedIcon: const Icon(Icons.settings),
-            label: l10n.navSettings,
           ),
         ];
 

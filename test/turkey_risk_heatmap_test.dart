@@ -5,15 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 
 void main() {
-  group('riskHeatBandFor uses the design bands', () {
+  group('riskHeatBandFor uses the shared 25/50/75 bands', () {
     test('boundaries', () {
       expect(riskHeatBandFor(0), RiskHeatBand.low);
-      expect(riskHeatBandFor(29.9), RiskHeatBand.low);
-      expect(riskHeatBandFor(30), RiskHeatBand.medium);
-      expect(riskHeatBandFor(54), RiskHeatBand.medium);
-      expect(riskHeatBandFor(55), RiskHeatBand.high);
-      expect(riskHeatBandFor(79), RiskHeatBand.high);
-      expect(riskHeatBandFor(80), RiskHeatBand.veryHigh);
+      expect(riskHeatBandFor(24.9), RiskHeatBand.low);
+      expect(riskHeatBandFor(25), RiskHeatBand.medium);
+      expect(riskHeatBandFor(49), RiskHeatBand.medium);
+      expect(riskHeatBandFor(50), RiskHeatBand.high);
+      expect(riskHeatBandFor(74), RiskHeatBand.high);
+      expect(riskHeatBandFor(75), RiskHeatBand.veryHigh);
       expect(riskHeatBandFor(100), RiskHeatBand.veryHigh);
     });
 
@@ -28,10 +28,10 @@ void main() {
   group('riskHeatGradientColor', () {
     test('band middles are exactly the band colours, ends clamp', () {
       expect(riskHeatGradientColor(0), riskHeatLowColor);
-      expect(riskHeatGradientColor(15), riskHeatLowColor);
-      expect(riskHeatGradientColor(42.5), riskHeatMediumColor);
-      expect(riskHeatGradientColor(67.5), riskHeatHighColor);
-      expect(riskHeatGradientColor(90), riskHeatVeryHighColor);
+      expect(riskHeatGradientColor(12.5), riskHeatLowColor);
+      expect(riskHeatGradientColor(37.5), riskHeatMediumColor);
+      expect(riskHeatGradientColor(62.5), riskHeatHighColor);
+      expect(riskHeatGradientColor(87.5), riskHeatVeryHighColor);
       expect(riskHeatGradientColor(100), riskHeatVeryHighColor);
     });
   });

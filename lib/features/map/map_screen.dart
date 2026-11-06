@@ -22,6 +22,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
 import '../../models/persistent_heat_source.dart';
 import '../../models/fire_point.dart';
+import '../../models/annual_province_data.dart';
 import '../../models/saved_place.dart';
 import '../../services/fwi_point_service.dart';
 import '../../services/saved_places_provider.dart';
@@ -32,6 +33,7 @@ import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/color_dot.dart';
+import '../../shared/widgets/carto_basemap.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/report_fire_panel.dart';
@@ -41,6 +43,7 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
 import 'widgets/incident_sheet.dart';
+import 'widgets/annual_province_layer.dart';
 import 'widgets/saved_places_sheet.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -89,6 +92,39 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// Whether the camera is currently zoomed to a saved place, which is what
   /// makes the one-tap "all of Türkiye" reset appear in the bottom bar.
   bool _isPlaceFocused = false;
+
+  /// "Past years" layer: provinces coloured by OGM burned area for one year
+  /// (bundled data, loaded on first use). Mutually exclusive with the FWI
+  /// layer — two colour scales on the same ground cannot both be read.
+  bool _showAnnualHistory = false;
+  bool _annualLoading = false;
+  bool _annualLoadFailed = false;
+  int _annualYear = AnnualProvinceData.years.last;
+  AnnualProvinceData? _annualData;
+  final ScrollController _annualYearsController = ScrollController(
+    initialScrollOffset: 800,
+  );
+
+  Future<void> _toggleAnnualHistory() async {
+    final enabled = !_showAnnualHistory;
+    setState(() {
+      _showAnnualHistory = enabled;
+      if (enabled) _showRiskLayer = false;
+    });
+    if (!enabled || _annualData != null || _annualLoading) return;
+    setState(() {
+      _annualLoading = true;
+      _annualLoadFailed = false;
+    });
+    try {
+      final data = await AnnualProvinceData.load();
+      if (mounted) setState(() => _annualData = data);
+    } catch (_) {
+      if (mounted) setState(() => _annualLoadFailed = true);
+    } finally {
+      if (mounted) setState(() => _annualLoading = false);
+    }
+  }
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   double _currentZoom = 5.6;
 
@@ -204,6 +240,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   void dispose() {
+    _annualYearsController.dispose();
     _tileResetController.close();
     _sheetController.removeListener(_onSheetMoved);
     _sheetController.dispose();
@@ -254,7 +291,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _toggleRiskLayer() {
-    setState(() => _showRiskLayer = !_showRiskLayer);
+    setState(() {
+      _showRiskLayer = !_showRiskLayer;
+      if (_showRiskLayer) _showAnnualHistory = false;
+    });
     if (_showRiskLayer) _probeForecastDays();
   }
 
@@ -780,12 +820,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: status.color.withValues(alpha: status.fillOpacity),
+        color: (incident.looksLikeFixedSource ? Colors.grey : status.color)
+            .withValues(
+              alpha: incident.looksLikeFixedSource ? 0.55 : status.fillOpacity,
+            ),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.9),
           width: size >= 18 ? 1.6 : 1.1,
         ),
-        boxShadow: status == IncidentStatus.activeDetection
+        boxShadow:
+            status == IncidentStatus.activeDetection &&
+                !incident.looksLikeFixedSource
             ? [
                 BoxShadow(
                   color: AppColors.danger.withValues(alpha: 0.45),
@@ -1266,6 +1311,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           child: FlutterMap(
             mapController: _mapController,
             options: MapOptions(
+              backgroundColor: AppColors.surface,
               initialCenter: widget.focusLat != null
                   ? LatLng(widget.focusLat!, widget.focusLng!)
                   // Biased south of Turkey's true centre: the map now runs
@@ -1292,7 +1338,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: CartoBasemap.configured
+                    ? CartoBasemap.url
+                    : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
                 // A tile that fails (typically a brief
                 // connectivity drop) is otherwise kept
@@ -1314,6 +1362,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   }
                 },
               ),
+              if (_showAnnualHistory && _annualData != null)
+                AnnualProvinceLayer(data: _annualData!, year: _annualYear),
               // The FWI raster sits between the base map and the markers:
               // danger paints the ground, detections stay on top. Built only
               // while the risk toggle is on, so no WMS request ever leaves
@@ -1398,7 +1448,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               if (_showIncidents)
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 72,
+                    maxClusterRadius: 88,
                     size: const Size(52, 52),
                     computeSize: (markers) {
                       final d = _clusterDiameter(
@@ -1434,7 +1484,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               else
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 45,
+                    maxClusterRadius: 72,
                     size: const Size(40, 40),
                     alignment: Alignment.center,
                     markers: _visibleFirePoints.map((point) {
@@ -1475,7 +1525,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             ],
           ),
         ),
-        if (_isLoading)
+        if (_isLoading && !_showAnnualHistory)
           // A translucent veil, not a barrier: the map stays usable while
           // data loads.
           Positioned.fill(
@@ -1522,9 +1572,19 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         selected: _showRiskLayer,
                         onTap: _toggleRiskLayer,
                       ),
+                      _LayerChip(
+                        label: l10n.annualLayerToggle,
+                        icon: Icons.history_rounded,
+                        selected: _showAnnualHistory,
+                        onTap: _toggleAnnualHistory,
+                      ),
                     ],
                   ),
                 ),
+              if (_showAnnualHistory) ...[
+                const SizedBox(height: 6),
+                _buildAnnualStrip(l10n, titleColor),
+              ],
               if (_pinDropMode) ...[
                 const SizedBox(height: 6),
                 GlassPanel(
@@ -1648,13 +1708,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         // Attribution is a legal requirement, not a UI element: bare text on
         // the map edge, no box. The halo keeps it readable over any of the
         // six FWI band colours. Repeated inside the layers panel.
-        if (_showRiskLayer)
-          Positioned(
+        Positioned(
             right: 12,
             bottom: bottomInset + 18,
             child: IgnorePointer(
               child: Text(
-                l10n.riskAttribution,
+                [
+                  '© OpenStreetMap',
+                  if (CartoBasemap.configured) '© CARTO',
+                  if (_showRiskLayer) l10n.riskAttribution,
+                ].join(' · '),
                 style: GoogleFonts.ibmPlexSans(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -1684,6 +1747,54 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// the FWI forecast-day picker, opacity slider and attribution while the
   /// risk layer is active. One collapsible panel instead of the two legends
   /// and three floating boxes it replaced.
+  /// Year picker and one-line caption for the "Past years" layer, under the
+  /// layer chips. Province taps open their own detail sheet.
+  Widget _buildAnnualStrip(AppLocalizations l10n, Color titleColor) {
+    final caption = _annualLoadFailed
+        ? l10n.annualLayerLoadError
+        : l10n.annualLayerCaption(_annualYear);
+    return GlassPanel(
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, AppSpacing.sm),
+      radius: AppSpacing.cardRadius,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 36,
+            child: ListView(
+              controller: _annualYearsController,
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (final year in AnnualProvinceData.years)
+                  _DayChip(
+                    label: '$year',
+                    selected: _annualYear == year,
+                    onTap: () => setState(() => _annualYear = year),
+                  ),
+              ],
+            ),
+          ),
+          if (_annualLoading)
+            const LinearProgressIndicator(minHeight: 2),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            child: Text(
+              caption,
+              style: GoogleFonts.ibmPlexSans(
+                fontSize: 11,
+                height: 1.3,
+                color: _annualLoadFailed
+                    ? AppColors.warning
+                    : titleColor.withValues(alpha: 0.78),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildLayersPanel(AppLocalizations l10n, Color titleColor) {
     final classLabels = _riskClassLabels(l10n);
     // The official EFFIS class colours, very low → extreme, defined once in
@@ -1837,6 +1948,23 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ),
               ] else
                 const SizedBox(height: AppSpacing.sm),
+              if (_showAnnualHistory) ...[
+                const AnnualLegend(),
+                Text(
+                  l10n.annualLayerSources(
+                    _annualData?.source ?? 'OGM; NASA FIRMS; EFFIS; GADM 4.1',
+                  ),
+                  style: GoogleFonts.ibmPlexSans(
+                    fontSize: 10,
+                    height: 1.35,
+                    color: titleColor.withValues(alpha: 0.66),
+                  ),
+                ),
+                Divider(
+                  height: AppSpacing.lg,
+                  color: titleColor.withValues(alpha: 0.12),
+                ),
+              ],
               // The marker key for whichever fire layer is on. One legend at
               // a time — stacking both produced "low confidence" twice,
               // meaning two different things.

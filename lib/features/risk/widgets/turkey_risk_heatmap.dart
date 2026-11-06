@@ -11,28 +11,28 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/utils/risk_display.dart';
 import '../../../l10n/app_localizations.dart';
 
 // ── Scale ──────────────────────────────────────────────────────────────────
 //
-// The four FireWatch TR status colours and their score bands, as fixed in
-// the design document. The heat layer blends between them; the pill uses
-// the band a score falls in.
+// The four FireWatch TR status colours and their score bands come from one
+// place: AppColors.risk* and riskLevelForScore() (25/50/75). The heat layer
+// blends between them; the pill uses the band a score falls in.
 
-const Color riskHeatLowColor = Color(0xFF0CA30C); // 0–30
-const Color riskHeatMediumColor = Color(0xFFFAB219); // 30–55
-const Color riskHeatHighColor = Color(0xFFEC835A); // 55–80
-const Color riskHeatVeryHighColor = Color(0xFFD03B3B); // 80–100
+const Color riskHeatLowColor = AppColors.riskLow; // 0–24
+const Color riskHeatMediumColor = AppColors.riskMedium; // 25–49
+const Color riskHeatHighColor = AppColors.riskHigh; // 50–74
+const Color riskHeatVeryHighColor = AppColors.riskCritical; // 75–100
 
 enum RiskHeatBand { low, medium, high, veryHigh }
 
-/// Lower bound inclusive: 30 is medium, 55 is high, 80 is very high.
-RiskHeatBand riskHeatBandFor(num score) {
-  if (score >= 80) return RiskHeatBand.veryHigh;
-  if (score >= 55) return RiskHeatBand.high;
-  if (score >= 30) return RiskHeatBand.medium;
-  return RiskHeatBand.low;
-}
+RiskHeatBand riskHeatBandFor(num score) => switch (riskLevelForScore(score)) {
+  'Critical' => RiskHeatBand.veryHigh,
+  'High' => RiskHeatBand.high,
+  'Medium' => RiskHeatBand.medium,
+  _ => RiskHeatBand.low,
+};
 
 Color riskHeatBandColor(RiskHeatBand band) {
   switch (band) {
@@ -50,10 +50,10 @@ Color riskHeatBandColor(RiskHeatBand band) {
 // Each colour sits at the middle of its band, so a score in the middle of
 // a band gets exactly that band's colour and the edges blend.
 const List<(double, Color)> _gradientStops = [
-  (15, riskHeatLowColor),
-  (42.5, riskHeatMediumColor),
-  (67.5, riskHeatHighColor),
-  (90, riskHeatVeryHighColor),
+  (12.5, riskHeatLowColor),
+  (37.5, riskHeatMediumColor),
+  (62.5, riskHeatHighColor),
+  (87.5, riskHeatVeryHighColor),
 ];
 
 /// Continuous green → yellow → orange → red colour for a 0–100 score.
@@ -314,7 +314,7 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
       case RiskHeatBand.high:
         return l10n.commonHigh;
       case RiskHeatBand.veryHigh:
-        return l10n.riskHeatLevelVeryHigh;
+        return l10n.commonCritical;
     }
   }
 

@@ -28,6 +28,7 @@ class NewsService {
   // success would otherwise overwrite good cached data with nothing).
   Future<List<NewsItem>> fetchNewsFromRender({
     String? category,
+    String? contentType,
     int limit = 20,
     int offset = 0,
   }) async {
@@ -35,6 +36,7 @@ class NewsService {
       '/news',
       queryParameters: {
         'category': ?category,
+        'content_type': ?contentType,
         'limit': limit,
         'offset': offset,
       },

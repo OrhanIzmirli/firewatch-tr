@@ -53,6 +53,11 @@ class _RiskScreenState extends State<RiskScreen> {
   bool _loading = true;
   bool _isSlowLoading = false;
 
+  /// True while the screen shows the saved copy because the server could
+  /// not be reached; [_cachedAt] is when that copy was saved.
+  bool _showingCached = false;
+  DateTime? _cachedAt;
+
   bool _showMyLocation = false;
   bool _myLocationLoading = false;
   String? _myLocationError;
@@ -81,6 +86,32 @@ class _RiskScreenState extends State<RiskScreen> {
       _maybeShowRiskCoachMarks();
       _maybeShowHighlightedRegion();
     });
+    _maybeLocateSilently();
+  }
+
+  /// When location permission was already granted, find the user's region
+  /// in the background so it is highlighted in the chart and the "My
+  /// location" tab opens ready. Never asks for permission and never switches
+  /// tabs — the Türkiye heat map stays the first view.
+  Future<void> _maybeLocateSilently() async {
+    if (widget.highlightRegion != null) return;
+    try {
+      final permission = await Geolocator.checkPermission();
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
+        return;
+      }
+      if (!mounted || _myCity != null || _myLocationLoading) return;
+      await _loadMyLocation();
+    } catch (_) {
+      // The Türkiye view works without location.
+    }
+  }
+
+  String _formatDateTime(DateTime date) {
+    final d = date.toLocal();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${two(d.day)}.${two(d.month)}.${d.year} ${two(d.hour)}:${two(d.minute)}';
   }
 
   void _maybeShowHighlightedRegion() {
@@ -143,10 +174,12 @@ class _RiskScreenState extends State<RiskScreen> {
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
           if (!mounted) return;
-          final (data, _) = cached;
+          final (data, savedAt) = cached;
           setState(() {
             _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
             _isSlowLoading = true;
+            _showingCached = true;
+            _cachedAt = savedAt;
             _loading = false;
           });
         },
@@ -160,6 +193,8 @@ class _RiskScreenState extends State<RiskScreen> {
           _regions = regions;
           _loading = false;
           _isSlowLoading = false;
+          _showingCached = false;
+          _cachedAt = null;
         });
         }
       }
@@ -168,8 +203,10 @@ class _RiskScreenState extends State<RiskScreen> {
       if (mounted) {
         setState(() {
           if (cached != null) {
-            final (data, _) = cached;
+            final (data, savedAt) = cached;
             _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+            _showingCached = true;
+            _cachedAt = savedAt;
           }
           _isSlowLoading = false;
           _loading = false;
@@ -418,17 +455,41 @@ class _RiskScreenState extends State<RiskScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(l10n.riskScoreOutOf100(score),
                     style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+                Text(l10n.riskScoreNotProbability,
+                    style: GoogleFonts.ibmPlexSans(fontSize: 11.5, color: secondaryTextColor)),
+                const SizedBox(height: AppSpacing.md),
+                Text(riskAdvice(l10n, score),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.4, fontWeight: FontWeight.w700, color: titleColor)),
                 const SizedBox(height: AppSpacing.sm),
                 Text(_riskNote(l10n, region),
                     style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
-                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor),
+                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor, hint: l10n.riskMetricHintTemperature),
                 const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor),
+                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor, hint: l10n.riskMetricHintHumidity),
                 const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor),
+                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor, hint: l10n.riskMetricHintWind),
                 const SizedBox(height: 8),
                 _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor),
+                const SizedBox(height: AppSpacing.md),
+                // nearby_fire_count is optional in /risk/summary; say so
+                // rather than showing a zero the backend never sent.
+                Text(
+                  region['nearby_fire_count'] != null
+                      ? l10n.riskNearbyFireCount('${region['nearby_fire_count']}')
+                      : l10n.riskNearbyFireCountUnavailable,
+                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
+                ),
+                if (region['previous_risk_score'] != null)
+                  Text(
+                    l10n.riskPreviousScore('${region['previous_risk_score']}'),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
+                  ),
+                if (DateTime.tryParse(region['date']?.toString() ?? '') case final calculated?)
+                  Text(
+                    l10n.riskCalculatedAt(_formatDateTime(calculated)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
+                  ),
               ],
             ),
           ),
@@ -608,7 +669,20 @@ class _RiskScreenState extends State<RiskScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        StatusChip(label: l10n.riskLiveView, icon: Icons.auto_graph_rounded),
+                        StatusChip(
+                          label: _showingCached ? l10n.riskSavedView : l10n.riskLiveView,
+                          icon: _showingCached ? Icons.cloud_off_rounded : Icons.auto_graph_rounded,
+                          color: _showingCached ? AppColors.warning : null,
+                        ),
+                        if (_showingCached) ...[
+                          const SizedBox(height: AppSpacing.sm),
+                          Text(
+                            _cachedAt == null
+                                ? l10n.riskServerUnreachable
+                                : l10n.riskServerUnreachableSavedAt(_formatDateTime(_cachedAt!)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.warning),
+                          ),
+                        ],
                         const SizedBox(height: AppSpacing.lg),
                         Text(l10n.riskSummaryTitle,
                             style: GoogleFonts.ibmPlexSans(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
@@ -628,6 +702,9 @@ class _RiskScreenState extends State<RiskScreen> {
                         const SizedBox(height: AppSpacing.sm),
                         Text(l10n.riskSummarySubtitle,
                             style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.45, color: secondaryTextColor)),
+                        const SizedBox(height: 6),
+                        Text(l10n.riskScoresAreIndices,
+                            style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.4, color: mutedTextColor)),
                         const SizedBox(height: AppSpacing.lg),
                         Row(
                           children: [
@@ -963,47 +1040,25 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxxl),
 
-                  InkWell(
+                  _RiskLinkCard(
+                    icon: Icons.forest_rounded,
+                    title: l10n.riskRestorationCardTitle,
+                    subtitle: l10n.riskRestorationCardSubtitle,
                     onTap: () => context.push('/restoration'),
-                    borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                    child: GlassPanel(
-                      padding: const EdgeInsets.all(AppSpacing.xl),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.14),
-                              borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                            ),
-                            child: const Icon(Icons.forest_rounded, color: AppColors.primary),
-                          ),
-                          const SizedBox(width: AppSpacing.md),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  Localizations.localeOf(context).languageCode == 'tr'
-                                      ? 'Yangın kayıpları ve restorasyon'
-                                      : 'Fire loss & restoration',
-                                  style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  Localizations.localeOf(context).languageCode == 'tr'
-                                      ? 'Aylık yanan alan verilerini zaman içinde takip edin'
-                                      : 'Follow monthly burned-area data over time',
-                                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: mutedTextColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
-                        ],
-                      ),
-                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  _RiskLinkCard(
+                    icon: Icons.history_rounded,
+                    title: l10n.riskHistoryCardTitle,
+                    subtitle: l10n.riskHistoryCardSubtitle,
+                    onTap: () => context.push('/history'),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  _RiskLinkCard(
+                    icon: Icons.map_outlined,
+                    title: l10n.riskDistrictMapCardTitle,
+                    subtitle: l10n.riskDistrictMapCardSubtitle,
+                    onTap: () => context.push('/risk-map'),
                   ),
 
                   const SizedBox(height: AppSpacing.xxxl),
@@ -1462,11 +1517,14 @@ class _DetailMetricRow extends StatelessWidget {
   final String value;
   final Color color;
 
-  const _DetailMetricRow({required this.icon, required this.label, required this.value, required this.color});
+  /// Why this reading matters for fire risk, shown under the value.
+  final String? hint;
+
+  const _DetailMetricRow({required this.icon, required this.label, required this.value, required this.color, this.hint});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final row = Row(
       children: [
         Icon(icon, size: 16, color: color),
         const SizedBox(width: AppSpacing.sm),
@@ -1475,6 +1533,63 @@ class _DetailMetricRow extends StatelessWidget {
         // their width between refreshes.
         Expanded(child: Text(value, style: AppTheme.mono(size: 13, weight: FontWeight.w600, color: color))),
       ],
+    );
+    if (hint == null) return row;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        row,
+        Padding(
+          padding: const EdgeInsets.only(left: 24, top: 2),
+          child: Text(hint!, style: GoogleFonts.ibmPlexSans(fontSize: 11.5, height: 1.35, color: color.withValues(alpha: 0.8))),
+        ),
+      ],
+    );
+  }
+}
+
+/// A tappable card that leads off the risk screen to a related screen.
+class _RiskLinkCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _RiskLinkCard({required this.icon, required this.title, required this.subtitle, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+      child: GlassPanel(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+              ),
+              child: Icon(icon, color: AppColors.primary),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 4),
+                  Text(subtitle, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.textMuted)),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
+          ],
+        ),
+      ),
     );
   }
 }

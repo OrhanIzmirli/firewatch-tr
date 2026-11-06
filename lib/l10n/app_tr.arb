@@ -1228,5 +1228,61 @@
   "riskHeatMapSemantics": "Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru {score}/100, {level}.",
   "@riskHeatMapSemantics": {
     "placeholders": { "score": { "type": "int" }, "level": { "type": "String" } }
+  },
+  "navRisk": "Risk",
+  "riskAdviceCritical": "Açık alanda ateş yakmayın. Şüpheli dumanı 112’ye bildirin; resmi uyarıları izleyin.",
+  "riskAdviceHigh": "Açık alanda ateş yakmayın; kıvılcım çıkarabilecek işlerden kaçının.",
+  "riskAdviceMedium": "Kuru bitki örtüsü yakınında dikkatli olun; yerel uyarıları izleyin.",
+  "riskAdviceLow": "Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.",
+  "riskScoreNotProbability": "Bu bir olasılık yüzdesi değildir.",
+  "riskScoresAreIndices": "Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.",
+  "riskMetricHintTemperature": "Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.",
+  "riskMetricHintHumidity": "Düşük nem, yanıcı bitki örtüsünü kurutabilir.",
+  "riskMetricHintWind": "Rüzgâr alevleri ve kıvılcımları taşıyabilir.",
+  "riskNearbyFireCount": "Son günlerde yakında {count} yangın tespiti.",
+  "@riskNearbyFireCount": {
+    "placeholders": { "count": { "type": "String" } }
+  },
+  "riskNearbyFireCountUnavailable": "Yakındaki son yangın sayısı henüz paylaşılmıyor.",
+  "riskPreviousScore": "Önceki puan: {score}/100",
+  "@riskPreviousScore": {
+    "placeholders": { "score": { "type": "String" } }
+  },
+  "riskCalculatedAt": "Hesaplama: {date}",
+  "@riskCalculatedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "riskSavedView": "Kaydedilmiş görünüm",
+  "riskServerUnreachable": "Sunucuya ulaşılamadı. Kaydedilmiş veriler gösteriliyor.",
+  "riskServerUnreachableSavedAt": "Sunucuya ulaşılamadı. Son kayıt: {date}",
+  "@riskServerUnreachableSavedAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "riskRestorationCardTitle": "Yangın kayıpları ve restorasyon",
+  "riskRestorationCardSubtitle": "Aylık yanan alan verilerini zaman içinde takip edin",
+  "riskHistoryCardTitle": "Geçmiş yangınlar",
+  "riskHistoryCardSubtitle": "Geçmiş yangın alanları, tarihleri ve restorasyon güncellemeleri",
+  "riskDistrictMapCardTitle": "İl / ilçe risk haritası",
+  "riskDistrictMapCardSubtitle": "İlçe düzeyinde risk puanları ve sıralama",
+  "newsTabFires": "Yangınlar",
+  "newsTabRecovery": "Yenilenme",
+  "newsTabSolidarity": "Dayanışma",
+  "newsTabEvents": "Etkinlikler",
+  "newsShowingSaved": "Kaydedilmiş haberler gösteriliyor.",
+  "newsNoneInTab": "Bu başlıkta henüz içerik yok.",
+  "newsEventJoin": "Katıl",
+  "newsDonate": "Bağış yap",
+  "newsAddToCalendar": "Takvime ekle",
+  "newsCalendarFailed": "Takvim uygulaması açılamadı.",
+  "newsLinkFailed": "Bağlantı açılamadı.",
+  "annualLayerToggle": "Geçmiş yıllar",
+  "annualLayerCaption": "İl rengi: {year} OGM yanan alanı. Noktalar: mevcut tespitler. Uydu noktası yangın sayısı değildir.",
+  "@annualLayerCaption": {
+    "placeholders": { "year": { "type": "int" } }
+  },
+  "annualLayerLoadError": "Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.",
+  "annualLayerSources": "Dosyada belirtilen kaynaklar: {sources}",
+  "@annualLayerSources": {
+    "placeholders": { "sources": { "type": "String" } }
   }
 }

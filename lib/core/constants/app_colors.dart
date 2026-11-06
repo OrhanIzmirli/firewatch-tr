@@ -52,6 +52,14 @@ class AppColors {
   static const Color fwiVeryHigh = Color(0xFFAD060E);
   static const Color fwiExtreme = Color(0xFF3A0015);
 
+  /// The four fire-risk status colours (design document). Every risk score
+  /// in the app — cards, lists, district map, heat map — is painted with
+  /// these, through riskLevelForScore() in core/utils/risk_display.dart.
+  static const Color riskLow = Color(0xFF0CA30C);
+  static const Color riskMedium = Color(0xFFFAB219);
+  static const Color riskHigh = Color(0xFFEC835A);
+  static const Color riskCritical = Color(0xFFD03B3B);
+
   /// Maps a canonical (non-localized) risk tier — 'high' | 'medium' | 'low'
   /// — to its semantic color. Use this instead of matching localized label
   /// text, which varies by language.

@@ -3126,4 +3126,142 @@ class AppLocalizationsEn extends AppLocalizations {
   String riskHeatMapSemantics(int score, String level) {
     return 'Türkiye wildfire risk heat map. Nationwide risk score $score/100, $level.';
   }
+
+  @override
+  String get navRisk => 'Risk';
+
+  @override
+  String get riskAdviceCritical =>
+      'Do not light outdoor fires. Report suspicious smoke to 112 and follow official alerts.';
+
+  @override
+  String get riskAdviceHigh =>
+      'Do not light outdoor fires; avoid activities that create sparks.';
+
+  @override
+  String get riskAdviceMedium =>
+      'Take care near dry vegetation and follow local alerts.';
+
+  @override
+  String get riskAdviceLow =>
+      'Low risk is not zero risk. Never leave fire or cigarette ends outdoors.';
+
+  @override
+  String get riskScoreNotProbability => 'This is an index, not a probability.';
+
+  @override
+  String get riskScoresAreIndices =>
+      'Scores are a 0–100 index, not the probability of a fire.';
+
+  @override
+  String get riskMetricHintTemperature =>
+      'Heat can make vegetation lose moisture faster.';
+
+  @override
+  String get riskMetricHintHumidity =>
+      'Low humidity can dry out flammable vegetation.';
+
+  @override
+  String get riskMetricHintWind => 'Wind can carry flames and embers.';
+
+  @override
+  String riskNearbyFireCount(String count) {
+    return '$count recent nearby fire detections.';
+  }
+
+  @override
+  String get riskNearbyFireCountUnavailable =>
+      'Recent nearby detection count is not yet available.';
+
+  @override
+  String riskPreviousScore(String score) {
+    return 'Previous score: $score/100';
+  }
+
+  @override
+  String riskCalculatedAt(String date) {
+    return 'Calculated: $date';
+  }
+
+  @override
+  String get riskSavedView => 'Saved view';
+
+  @override
+  String get riskServerUnreachable => 'Server unavailable. Showing saved data.';
+
+  @override
+  String riskServerUnreachableSavedAt(String date) {
+    return 'Server unavailable. Last saved: $date';
+  }
+
+  @override
+  String get riskRestorationCardTitle => 'Fire loss & restoration';
+
+  @override
+  String get riskRestorationCardSubtitle =>
+      'Follow monthly burned-area data over time';
+
+  @override
+  String get riskHistoryCardTitle => 'Past fires';
+
+  @override
+  String get riskHistoryCardSubtitle =>
+      'Past fire areas, dates and restoration updates';
+
+  @override
+  String get riskDistrictMapCardTitle => 'Province / district risk map';
+
+  @override
+  String get riskDistrictMapCardSubtitle =>
+      'District-level risk scores and ranking';
+
+  @override
+  String get newsTabFires => 'Fires';
+
+  @override
+  String get newsTabRecovery => 'Recovery';
+
+  @override
+  String get newsTabSolidarity => 'Solidarity';
+
+  @override
+  String get newsTabEvents => 'Events';
+
+  @override
+  String get newsShowingSaved => 'Showing saved articles.';
+
+  @override
+  String get newsNoneInTab => 'No content in this category yet.';
+
+  @override
+  String get newsEventJoin => 'Join';
+
+  @override
+  String get newsDonate => 'Donate';
+
+  @override
+  String get newsAddToCalendar => 'Add to calendar';
+
+  @override
+  String get newsCalendarFailed => 'Could not open a calendar app.';
+
+  @override
+  String get newsLinkFailed => 'Could not open link.';
+
+  @override
+  String get annualLayerToggle => 'Past years';
+
+  @override
+  String annualLayerCaption(int year) {
+    return 'Province colour: $year OGM burned area. Dots: current detections. A satellite dot is not a fire count.';
+  }
+
+  @override
+  String get annualLayerLoadError =>
+      'Could not load past-year files. Turn the layer off and on to retry.';
+
+  @override
+  String annualLayerSources(String sources) {
+    return 'Sources listed in the file: $sources';
+  }
 }

@@ -6,25 +6,38 @@ import '../../l10n/app_localizations.dart';
 /// the /api/risk/summary backend endpoint. Used by any screen that shows
 /// risk-region data (Risk screen, Home screen overview cards, ...).
 
-Color colorForApiRiskLevel(String level) {
-  switch (level) {
-    case 'Critical':
-    case 'High':
-      return AppColors.danger;
-    case 'Medium':
-      return AppColors.warning;
-    default:
-      return AppColors.success;
-  }
-}
+/// The single source of the risk bands: 0-24 Low, 25-49 Medium, 50-74 High,
+/// 75-100 Critical — the same cutoffs the backend uses for risk_level.
+/// Lower bound inclusive. Scores are indices, never probabilities.
+const double riskMediumFrom = 25;
+const double riskHighFrom = 50;
+const double riskCriticalFrom = 75;
 
-/// Colors a 0-100 risk score directly: red above 70, orange 40-70, green
-/// below 40 — used by the regional distribution bar chart.
-Color riskScoreColor(int score) {
-  if (score > 70) return AppColors.danger;
-  if (score >= 40) return AppColors.warning;
-  return AppColors.success;
-}
+String riskLevelForScore(num score) => score >= riskCriticalFrom
+    ? 'Critical'
+    : score >= riskHighFrom
+        ? 'High'
+        : score >= riskMediumFrom
+            ? 'Medium'
+            : 'Low';
+
+Color colorForApiRiskLevel(String level) => switch (level) {
+  'Critical' => AppColors.riskCritical,
+  'High' => AppColors.riskHigh,
+  'Medium' => AppColors.riskMedium,
+  _ => AppColors.riskLow,
+};
+
+Color riskScoreColor(num score) => colorForApiRiskLevel(riskLevelForScore(score));
+
+/// One short, actionable sentence per band.
+String riskAdvice(AppLocalizations l10n, num score) =>
+    switch (riskLevelForScore(score)) {
+      'Critical' => l10n.riskAdviceCritical,
+      'High' => l10n.riskAdviceHigh,
+      'Medium' => l10n.riskAdviceMedium,
+      _ => l10n.riskAdviceLow,
+    };
 
 String displayRegionName(AppLocalizations l10n, String region) {
   switch (region) {

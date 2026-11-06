@@ -5473,6 +5473,234 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru {score}/100, {level}.'**
   String riskHeatMapSemantics(int score, String level);
+
+  /// No description provided for @navRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk'**
+  String get navRisk;
+
+  /// No description provided for @riskAdviceCritical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık alanda ateş yakmayın. Şüpheli dumanı 112’ye bildirin; resmi uyarıları izleyin.'**
+  String get riskAdviceCritical;
+
+  /// No description provided for @riskAdviceHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık alanda ateş yakmayın; kıvılcım çıkarabilecek işlerden kaçının.'**
+  String get riskAdviceHigh;
+
+  /// No description provided for @riskAdviceMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuru bitki örtüsü yakınında dikkatli olun; yerel uyarıları izleyin.'**
+  String get riskAdviceMedium;
+
+  /// No description provided for @riskAdviceLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.'**
+  String get riskAdviceLow;
+
+  /// No description provided for @riskScoreNotProbability.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bir olasılık yüzdesi değildir.'**
+  String get riskScoreNotProbability;
+
+  /// No description provided for @riskScoresAreIndices.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.'**
+  String get riskScoresAreIndices;
+
+  /// No description provided for @riskMetricHintTemperature.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.'**
+  String get riskMetricHintTemperature;
+
+  /// No description provided for @riskMetricHintHumidity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük nem, yanıcı bitki örtüsünü kurutabilir.'**
+  String get riskMetricHintHumidity;
+
+  /// No description provided for @riskMetricHintWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgâr alevleri ve kıvılcımları taşıyabilir.'**
+  String get riskMetricHintWind;
+
+  /// No description provided for @riskNearbyFireCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son günlerde yakında {count} yangın tespiti.'**
+  String riskNearbyFireCount(String count);
+
+  /// No description provided for @riskNearbyFireCountUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakındaki son yangın sayısı henüz paylaşılmıyor.'**
+  String get riskNearbyFireCountUnavailable;
+
+  /// No description provided for @riskPreviousScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önceki puan: {score}/100'**
+  String riskPreviousScore(String score);
+
+  /// No description provided for @riskCalculatedAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesaplama: {date}'**
+  String riskCalculatedAt(String date);
+
+  /// No description provided for @riskSavedView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilmiş görünüm'**
+  String get riskSavedView;
+
+  /// No description provided for @riskServerUnreachable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya ulaşılamadı. Kaydedilmiş veriler gösteriliyor.'**
+  String get riskServerUnreachable;
+
+  /// No description provided for @riskServerUnreachableSavedAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya ulaşılamadı. Son kayıt: {date}'**
+  String riskServerUnreachableSavedAt(String date);
+
+  /// No description provided for @riskRestorationCardTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın kayıpları ve restorasyon'**
+  String get riskRestorationCardTitle;
+
+  /// No description provided for @riskRestorationCardSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık yanan alan verilerini zaman içinde takip edin'**
+  String get riskRestorationCardSubtitle;
+
+  /// No description provided for @riskHistoryCardTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yangınlar'**
+  String get riskHistoryCardTitle;
+
+  /// No description provided for @riskHistoryCardSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yangın alanları, tarihleri ve restorasyon güncellemeleri'**
+  String get riskHistoryCardSubtitle;
+
+  /// No description provided for @riskDistrictMapCardTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl / ilçe risk haritası'**
+  String get riskDistrictMapCardTitle;
+
+  /// No description provided for @riskDistrictMapCardSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlçe düzeyinde risk puanları ve sıralama'**
+  String get riskDistrictMapCardSubtitle;
+
+  /// No description provided for @newsTabFires.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangınlar'**
+  String get newsTabFires;
+
+  /// No description provided for @newsTabRecovery.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yenilenme'**
+  String get newsTabRecovery;
+
+  /// No description provided for @newsTabSolidarity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dayanışma'**
+  String get newsTabSolidarity;
+
+  /// No description provided for @newsTabEvents.
+  ///
+  /// In tr, this message translates to:
+  /// **'Etkinlikler'**
+  String get newsTabEvents;
+
+  /// No description provided for @newsShowingSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilmiş haberler gösteriliyor.'**
+  String get newsShowingSaved;
+
+  /// No description provided for @newsNoneInTab.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu başlıkta henüz içerik yok.'**
+  String get newsNoneInTab;
+
+  /// No description provided for @newsEventJoin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Katıl'**
+  String get newsEventJoin;
+
+  /// No description provided for @newsDonate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağış yap'**
+  String get newsDonate;
+
+  /// No description provided for @newsAddToCalendar.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takvime ekle'**
+  String get newsAddToCalendar;
+
+  /// No description provided for @newsCalendarFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takvim uygulaması açılamadı.'**
+  String get newsCalendarFailed;
+
+  /// No description provided for @newsLinkFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı açılamadı.'**
+  String get newsLinkFailed;
+
+  /// No description provided for @annualLayerToggle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yıllar'**
+  String get annualLayerToggle;
+
+  /// No description provided for @annualLayerCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl rengi: {year} OGM yanan alanı. Noktalar: mevcut tespitler. Uydu noktası yangın sayısı değildir.'**
+  String annualLayerCaption(int year);
+
+  /// No description provided for @annualLayerLoadError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.'**
+  String get annualLayerLoadError;
+
+  /// No description provided for @annualLayerSources.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dosyada belirtilen kaynaklar: {sources}'**
+  String annualLayerSources(String sources);
 }
 
 class _AppLocalizationsDelegate

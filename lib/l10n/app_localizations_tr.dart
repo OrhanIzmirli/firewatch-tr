@@ -3120,4 +3120,144 @@ class AppLocalizationsTr extends AppLocalizations {
   String riskHeatMapSemantics(int score, String level) {
     return 'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru $score/100, $level.';
   }
+
+  @override
+  String get navRisk => 'Risk';
+
+  @override
+  String get riskAdviceCritical =>
+      'Açık alanda ateş yakmayın. Şüpheli dumanı 112’ye bildirin; resmi uyarıları izleyin.';
+
+  @override
+  String get riskAdviceHigh =>
+      'Açık alanda ateş yakmayın; kıvılcım çıkarabilecek işlerden kaçının.';
+
+  @override
+  String get riskAdviceMedium =>
+      'Kuru bitki örtüsü yakınında dikkatli olun; yerel uyarıları izleyin.';
+
+  @override
+  String get riskAdviceLow =>
+      'Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.';
+
+  @override
+  String get riskScoreNotProbability => 'Bu bir olasılık yüzdesi değildir.';
+
+  @override
+  String get riskScoresAreIndices =>
+      'Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.';
+
+  @override
+  String get riskMetricHintTemperature =>
+      'Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.';
+
+  @override
+  String get riskMetricHintHumidity =>
+      'Düşük nem, yanıcı bitki örtüsünü kurutabilir.';
+
+  @override
+  String get riskMetricHintWind =>
+      'Rüzgâr alevleri ve kıvılcımları taşıyabilir.';
+
+  @override
+  String riskNearbyFireCount(String count) {
+    return 'Son günlerde yakında $count yangın tespiti.';
+  }
+
+  @override
+  String get riskNearbyFireCountUnavailable =>
+      'Yakındaki son yangın sayısı henüz paylaşılmıyor.';
+
+  @override
+  String riskPreviousScore(String score) {
+    return 'Önceki puan: $score/100';
+  }
+
+  @override
+  String riskCalculatedAt(String date) {
+    return 'Hesaplama: $date';
+  }
+
+  @override
+  String get riskSavedView => 'Kaydedilmiş görünüm';
+
+  @override
+  String get riskServerUnreachable =>
+      'Sunucuya ulaşılamadı. Kaydedilmiş veriler gösteriliyor.';
+
+  @override
+  String riskServerUnreachableSavedAt(String date) {
+    return 'Sunucuya ulaşılamadı. Son kayıt: $date';
+  }
+
+  @override
+  String get riskRestorationCardTitle => 'Yangın kayıpları ve restorasyon';
+
+  @override
+  String get riskRestorationCardSubtitle =>
+      'Aylık yanan alan verilerini zaman içinde takip edin';
+
+  @override
+  String get riskHistoryCardTitle => 'Geçmiş yangınlar';
+
+  @override
+  String get riskHistoryCardSubtitle =>
+      'Geçmiş yangın alanları, tarihleri ve restorasyon güncellemeleri';
+
+  @override
+  String get riskDistrictMapCardTitle => 'İl / ilçe risk haritası';
+
+  @override
+  String get riskDistrictMapCardSubtitle =>
+      'İlçe düzeyinde risk puanları ve sıralama';
+
+  @override
+  String get newsTabFires => 'Yangınlar';
+
+  @override
+  String get newsTabRecovery => 'Yenilenme';
+
+  @override
+  String get newsTabSolidarity => 'Dayanışma';
+
+  @override
+  String get newsTabEvents => 'Etkinlikler';
+
+  @override
+  String get newsShowingSaved => 'Kaydedilmiş haberler gösteriliyor.';
+
+  @override
+  String get newsNoneInTab => 'Bu başlıkta henüz içerik yok.';
+
+  @override
+  String get newsEventJoin => 'Katıl';
+
+  @override
+  String get newsDonate => 'Bağış yap';
+
+  @override
+  String get newsAddToCalendar => 'Takvime ekle';
+
+  @override
+  String get newsCalendarFailed => 'Takvim uygulaması açılamadı.';
+
+  @override
+  String get newsLinkFailed => 'Bağlantı açılamadı.';
+
+  @override
+  String get annualLayerToggle => 'Geçmiş yıllar';
+
+  @override
+  String annualLayerCaption(int year) {
+    return 'İl rengi: $year OGM yanan alanı. Noktalar: mevcut tespitler. Uydu noktası yangın sayısı değildir.';
+  }
+
+  @override
+  String get annualLayerLoadError =>
+      'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.';
+
+  @override
+  String annualLayerSources(String sources) {
+    return 'Dosyada belirtilen kaynaklar: $sources';
+  }
 }

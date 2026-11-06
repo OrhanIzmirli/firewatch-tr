@@ -24,6 +24,7 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
+import 'widgets/news_event_actions.dart';
 
 enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
 
@@ -47,14 +48,61 @@ class _NewsScreenState extends State<NewsScreen> {
   final FireApiService _fireApiService = FireApiService();
   final ScrollController _scrollController = ScrollController();
 
+  /// Content tabs. 'fires' is the original feed (items without a
+  /// content_type count as fires); the others ask the backend for
+  /// `?content_type=<tab>`.
+  static const List<String> _contentTypes = ['fires', 'recovery', 'solidarity', 'events'];
+
+  String _contentType = 'fires';
   String _selectedCategory = 'Tümü';
   _NewsFilterKind _selectedFilter = _NewsFilterKind.all;
   String? _myRegionRaw;
+  String? _myCityRaw;
   List<NewsItem> _allNews = [];
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  bool _showingCached = false;
   String? _errorMessage;
+
+  /// Raw items fetched for the current tab, before the client-side
+  /// content-type filter — the next page's offset.
+  int _fetchedCount = 0;
+
+  /// Bumped on every reload so a slow response for a tab the user already
+  /// left cannot overwrite the tab they are looking at.
+  int _loadGeneration = 0;
+
+  bool get _isFiresTab => _contentType == 'fires';
+
+  /// The fires tab keeps the original cache key so existing installs keep
+  /// their saved feed; the new tabs get one key each.
+  String get _tabCacheKey => _isFiresTab ? _cacheKey : 'news_$_contentType';
+
+  String? get _contentTypeParam => _isFiresTab ? null : _contentType;
+
+  List<NewsItem> _ofCurrentType(List<NewsItem> items) =>
+      items.where((n) => n.contentType == _contentType).toList();
+
+  String _contentTypeLabel(AppLocalizations l10n, String type) {
+    switch (type) {
+      case 'recovery': return l10n.newsTabRecovery;
+      case 'solidarity': return l10n.newsTabSolidarity;
+      case 'events': return l10n.newsTabEvents;
+      default: return l10n.newsTabFires;
+    }
+  }
+
+  void _selectContentType(String type) {
+    if (type == _contentType) return;
+    setState(() {
+      _contentType = type;
+      _selectedCategory = 'Tümü';
+      _selectedFilter = _NewsFilterKind.all;
+      _allNews = [];
+    });
+    _loadNews();
+  }
 
   @override
   void dispose() {
@@ -149,7 +197,10 @@ class _NewsScreenState extends State<NewsScreen> {
       );
       final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
       if (!mounted || cityInfo.outsideTurkey) return;
-      setState(() => _myRegionRaw = cityInfo.region);
+      setState(() {
+        _myRegionRaw = cityInfo.region;
+        _myCityRaw = cityInfo.city;
+      });
     } catch (_) {
       // "My Region" filter just won't be available.
     }
@@ -206,6 +257,7 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Future<void> _loadNews() async {
+    final generation = ++_loadGeneration;
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -213,29 +265,37 @@ class _NewsScreenState extends State<NewsScreen> {
     });
 
     try {
-      final news = await _newsService.fetchNewsFromRender(
-        category: _categoryParams[_selectedCategory],
+      final raw = await _newsService.fetchNewsFromRender(
+        category: _isFiresTab ? _categoryParams[_selectedCategory] : null,
+        contentType: _contentTypeParam,
         limit: _pageSize,
         offset: 0,
       );
-      if (_selectedCategory == 'Tümü') {
-        await OfflineCacheService.instance.save(_cacheKey, news.map((n) => n.toJson()).toList());
+      final news = _ofCurrentType(raw);
+      if (!_isFiresTab || _selectedCategory == 'Tümü') {
+        await OfflineCacheService.instance.save(_tabCacheKey, news.map((n) => n.toJson()).toList());
       }
-      if (!mounted) return;
+      if (!mounted || generation != _loadGeneration) return;
       setState(() {
         _allNews = news;
+        _fetchedCount = raw.length;
         _isLoading = false;
-        _hasMore = news.length >= _pageSize;
+        _showingCached = false;
+        _hasMore = raw.length >= _pageSize;
       });
     } catch (e) {
-      if (!mounted) return;
-      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      if (!mounted || generation != _loadGeneration) return;
+      final cached = await OfflineCacheService.instance.load(_tabCacheKey);
+      if (!mounted || generation != _loadGeneration) return;
       if (cached != null) {
         final (data, _) = cached;
         setState(() {
-          _allNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
+          _allNews = (data as List)
+              .map((e) => NewsItem.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList();
           _isLoading = false;
           _hasMore = false;
+          _showingCached = true;
         });
       } else {
         setState(() {
@@ -247,17 +307,20 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Future<void> _loadMore() async {
+    final generation = _loadGeneration;
     setState(() => _isLoadingMore = true);
     try {
-      final more = await _newsService.fetchNewsFromRender(
-        category: _categoryParams[_selectedCategory],
+      final raw = await _newsService.fetchNewsFromRender(
+        category: _isFiresTab ? _categoryParams[_selectedCategory] : null,
+        contentType: _contentTypeParam,
         limit: _pageSize,
-        offset: _allNews.length,
+        offset: _fetchedCount,
       );
-      if (!mounted) return;
+      if (!mounted || generation != _loadGeneration) return;
       setState(() {
-        _allNews = [..._allNews, ...more];
-        _hasMore = more.length >= _pageSize;
+        _allNews = [..._allNews, ..._ofCurrentType(raw)];
+        _fetchedCount += raw.length;
+        _hasMore = raw.length >= _pageSize;
         _isLoadingMore = false;
       });
     } catch (_) {
@@ -267,6 +330,20 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   List<NewsItem> get _filteredItems {
+    if (!_isFiresTab) {
+      final items = [..._allNews];
+      if (_contentType == 'events') {
+        // Events in the user's own city first, then soonest first.
+        final myCity = _myCityRaw == null ? null : foldTurkish(_myCityRaw!);
+        int local(NewsItem n) =>
+            myCity != null && foldTurkish(n.eventCity) == myCity ? 1 : 0;
+        items.sort((a, b) {
+          final byCity = local(b).compareTo(local(a));
+          return byCity != 0 ? byCity : a.eventStart.compareTo(b.eventStart);
+        });
+      }
+      return items;
+    }
     return _allNews.where((item) {
       final categoryMatch = _selectedCategory == 'Tümü' ||
           item.category.toLowerCase() == _selectedCategory.toLowerCase();
@@ -408,10 +485,31 @@ class _NewsScreenState extends State<NewsScreen> {
               action: l10n.trustNewsAction,
             ),
 
+            const SizedBox(height: AppSpacing.lg),
+
+            // ── İçerik sekmeleri ───────────────────────────────
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final type in _contentTypes)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: _buildFilterChip(
+                        label: _contentTypeLabel(l10n, type),
+                        isSelected: _contentType == type,
+                        isDark: isDark,
+                        onTap: () => _selectContentType(type),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
             const SizedBox(height: AppSpacing.xxl),
 
             // ── Featured Card ──────────────────────────────────
-            if (_allNews.isNotEmpty) ...[
+            if (_isFiresTab && _allNews.isNotEmpty) ...[
               SectionHeader(
                 key: CoachMarkKeys.newsFeatured,
                 title: l10n.newsFeatured,
@@ -429,6 +527,7 @@ class _NewsScreenState extends State<NewsScreen> {
               const SizedBox(height: AppSpacing.xxxl),
             ],
 
+            if (_isFiresTab) ...[
             // ── Kategoriler ────────────────────────────────────
             SectionHeader(
               title: l10n.newsCategories,
@@ -499,6 +598,7 @@ class _NewsScreenState extends State<NewsScreen> {
             ),
 
             const SizedBox(height: AppSpacing.xxxl),
+            ],
 
             // ── Son Haberler ───────────────────────────────────
             SectionHeader(
@@ -512,6 +612,23 @@ class _NewsScreenState extends State<NewsScreen> {
 
             const SizedBox(height: AppSpacing.md),
 
+            if (_showingCached && !_isLoading)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: Row(
+                  children: [
+                    const Icon(Icons.cloud_off_rounded, size: 16, color: AppColors.warning),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        l10n.newsShowingSaved,
+                        style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
             if (Localizations.localeOf(context).languageCode == 'en' && !_englishBannerDismissed)
               EnglishTranslationBanner(
                 onDismiss: () => setState(() => _englishBannerDismissed = true),
@@ -524,7 +641,7 @@ class _NewsScreenState extends State<NewsScreen> {
             else if (filteredItems.isEmpty)
               EmptyStateView(
                 icon: Icons.article_outlined,
-                title: l10n.newsNoneInCategory,
+                title: _isFiresTab ? l10n.newsNoneInCategory : l10n.newsNoneInTab,
               )
             else ...[
               ...filteredItems.asMap().entries.map((entry) {
@@ -532,9 +649,15 @@ class _NewsScreenState extends State<NewsScreen> {
                 final NewsItem item = entry.value;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                  child: NewsCard(
-                    item: item,
-                    onTap: () => context.push('/news-detail', extra: item),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      NewsCard(
+                        item: item,
+                        onTap: () => context.push('/news-detail', extra: item),
+                      ),
+                      if (NewsEventActions.hasContent(item)) NewsEventActions(item: item),
+                    ],
                   ).animate()
                       .fadeIn(duration: 300.ms, delay: (220 + (index * 70)).ms)
                       .slideX(begin: 0.03, end: 0)

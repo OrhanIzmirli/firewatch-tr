@@ -68,7 +68,7 @@ class _FireDeepLinkScreenState extends State<FireDeepLinkScreen> {
     }
 
     if (!mounted) return;
-    context.go('/app?tab=alerts');
+    context.go('/app?section=alerts');
   }
 
   @override

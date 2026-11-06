@@ -1,0 +1,164 @@
+{
+ "note": "GET /api/history for the app's \"last 3 years\" preset, fetched 2026-11-06; features dropped except the first, count kept",
+ "from": "2023-11-06",
+ "to": "2026-11-06",
+ "http_status": 200,
+ "feature_count": 2091,
+ "metadata": {
+  "from": "2023-11-06",
+  "to": "2026-11-06",
+  "time_zone": "Europe/Istanbul",
+  "min_detection_count": 5,
+  "fixed_heat_sources_excluded": true,
+  "data_available_from": "2026-08-05",
+  "source": {
+   "provider": "NASA FIRMS",
+   "products": [
+    "VIIRS 375 m active fire (S-NPP, NOAA-20, NOAA-21)",
+    "MODIS 1 km active fire"
+   ],
+   "url": "https://firms.modaps.eosdis.nasa.gov/",
+   "attribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS).",
+   "geometry_kind": "satellite_heat_detection_footprint",
+   "caveat_tr": "Harita, uydunun ısı tespit ettiği yerlerin izidir (her tespit çevresinde 188 m); yanan alan sınırı değildir. Yanan alan ölçülmediği için alan bilgisi verilmez. Anız ve tarım yangınları da dahildir.",
+   "caveat_en": "The map shows where the satellite detected heat (188 m around each detection), not the burned-area boundary. Burned area is not measured, so no area is given. Agricultural burns are included."
+  }
+ },
+ "first_feature": {
+  "type": "Feature",
+  "id": 13433,
+  "geometry": {
+   "type": "MultiPolygon",
+   "coordinates": [
+    [
+     [
+      [
+       35.44173,
+       40.61911
+      ],
+      [
+       35.44104,
+       40.61793
+      ],
+      [
+       35.43945,
+       40.61747
+      ],
+      [
+       35.4379,
+       40.618
+      ],
+      [
+       35.43729,
+       40.61921
+      ],
+      [
+       35.43798,
+       40.62039
+      ],
+      [
+       35.43957,
+       40.62085
+      ],
+      [
+       35.44112,
+       40.62032
+      ],
+      [
+       35.44173,
+       40.61911
+      ]
+     ]
+    ],
+    [
+     [
+      [
+       35.43295,
+       40.62175
+      ],
+      [
+       35.43146,
+       40.62326
+      ],
+      [
+       35.43314,
+       40.62473
+      ],
+      [
+       35.43359,
+       40.62639
+      ],
+      [
+       35.43673,
+       40.62632
+      ],
+      [
+       35.43734,
+       40.62511
+      ],
+      [
+       35.43566,
+       40.62364
+      ],
+      [
+       35.43802,
+       40.62334
+      ],
+      [
+       35.43863,
+       40.62213
+      ],
+      [
+       35.43794,
+       40.62095
+      ],
+      [
+       35.43587,
+       40.62065
+      ],
+      [
+       35.43536,
+       40.6191
+      ],
+      [
+       35.43377,
+       40.61864
+      ],
+      [
+       35.43222,
+       40.61917
+      ],
+      [
+       35.43161,
+       40.62038
+      ],
+      [
+       35.43295,
+       40.62175
+      ]
+     ]
+    ]
+   ]
+  },
+  "properties": {
+   "city": "Amasya",
+   "district": "Mecitözü",
+   "district_basis": "nearest_district_center",
+   "date_start": "2026-11-03",
+   "date_end": "2026-11-04",
+   "area_ha": null,
+   "detection_count": 5,
+   "duration_hours": 24.7,
+   "max_frp_mw": 21.4,
+   "geometry_kind": "satellite_heat_detection_footprint",
+   "source": "NASA FIRMS",
+   "source_url": "https://firms.modaps.eosdis.nasa.gov/map/",
+   "centroid": [
+    35.43571,
+    40.62201
+   ],
+   "restoration_updates": [],
+   "campaigns": []
+  }
+ }
+}

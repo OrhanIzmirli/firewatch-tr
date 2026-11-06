@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
@@ -75,6 +76,14 @@ class DataSourcesScreen extends StatelessWidget {
             body: l10n.dataSourcesWeatherBody,
             titleColor: titleColor,
             bodyColor: bodyColor,
+            // Both providers license their data CC BY 4.0 and ask for a
+            // credit with a link: Open-Meteo "Weather data by Open-Meteo.com"
+            // (open-meteo.com/en/license), MET Norway "Data from MET Norway"
+            // (api.met.no/doc/License, checked 2026-11-06).
+            links: [
+              (l10n.dataSourcesWeatherOpenMeteoCredit, 'https://open-meteo.com/'),
+              (l10n.dataSourcesWeatherMetCredit, 'https://api.met.no/'),
+            ],
           ),
           const SizedBox(height: AppSpacing.md),
           _Section(
@@ -105,6 +114,8 @@ class _Section extends StatelessWidget {
   final String body;
   final Color titleColor;
   final Color bodyColor;
+  /// Credit lines that open the provider's site, as its licence asks.
+  final List<(String, String)> links;
 
   const _Section({
     required this.icon,
@@ -112,6 +123,7 @@ class _Section extends StatelessWidget {
     required this.body,
     required this.titleColor,
     required this.bodyColor,
+    this.links = const [],
   });
 
   @override
@@ -146,6 +158,21 @@ class _Section extends StatelessWidget {
               color: bodyColor,
             ),
           ),
+          if (links.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
+              child: Wrap(
+                spacing: AppSpacing.sm,
+                children: [
+                  for (final (label, url) in links)
+                    TextButton.icon(
+                      onPressed: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+                      icon: const Icon(Icons.open_in_new, size: 14),
+                      label: Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 12)),
+                    ),
+                ],
+              ),
+            ),
         ],
       ),
     );

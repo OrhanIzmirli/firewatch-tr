@@ -473,9 +473,11 @@ class _RiskScreenState extends State<RiskScreen> {
                 const SizedBox(height: 8),
                 _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor, hint: l10n.riskDrynessDerivation),
                 const SizedBox(height: AppSpacing.md),
-                // /risk/summary does not send nearby_fire_count yet (backend
-                // 7daa8ee). Shown when it arrives; until then release builds
-                // leave the line out and debug builds say it is missing.
+                // nearby_fire_count: detections in the region over the last
+                // 24 h, fixed heat sources excluded; null when the backend's
+                // ingest or clustering is more than 6 h stale (backend 2fe7cc1).
+                // Missing means unavailable, never zero: release builds leave
+                // the line out and debug builds say it is missing.
                 if (region['nearby_fire_count'] != null)
                   Text(
                     l10n.riskNearbyFireCount('${region['nearby_fire_count']}'),

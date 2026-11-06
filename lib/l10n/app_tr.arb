@@ -403,7 +403,9 @@
   "dataSourcesNotKnownTitle": "Bilinmeyen",
   "dataSourcesNotKnownBody": "Bir yangının söndüğü, kontrol altına alındığı veya güvenli olduğu uydudan çıkarılamaz. Uydu bulut ve duman altını göremez; tespit olmaması yalnızca uydunun görmediği anlamına gelir. Bu uygulama böyle bir iddiada bulunmaz — yalnızca resmi bir kaynak doğrularsa, kaynağıyla birlikte gösterilir.",
   "dataSourcesWeatherTitle": "Bölgesel risk — ayrı bir kaynak",
-  "dataSourcesWeatherBody": "Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.",
+  "dataSourcesWeatherBody": "Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez. Hava verisi Open-Meteo'dan gelir (CC BY 4.0); Open-Meteo yanıt vermediğinde Norveç Meteoroloji Enstitüsü MET Norway'in Locationforecast verisi kullanılır (NLOD 2.0 / CC BY 4.0). Sıcaklık, nem ve rüzgar iki kaynakta da aynı anlama gelir.",
+  "dataSourcesWeatherOpenMeteoCredit": "Weather data by Open-Meteo.com",
+  "dataSourcesWeatherMetCredit": "Data from MET Norway",
   "dataSourcesPlacesTitle": "Yer verisi — il ve ilçe sınırları",
   "dataSourcesPlacesBody": "Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.",
   "dataSourcesFwiTitle": "Yangın tehlikesi haritası (FWI) — ayrı bir kaynak",
@@ -426,7 +428,7 @@
   "riskTitle": "Risk Analizi",
   "riskLiveView": "Canlı Risk Görünümü",
   "riskSummaryTitle": "Türkiye Yangın Risk Özeti",
-  "riskSummarySubtitle": "Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.",
+  "riskSummarySubtitle": "Open-Meteo / MET Norway hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.",
   "riskHighestRisk": "En yüksek risk: {region} ({score}/100)",
   "@riskHighestRisk": {
     "placeholders": {
@@ -891,7 +893,7 @@
   "riskInfoFormulaWind": "Rüzgar (en fazla 25 puan)",
   "riskInfoFormulaFireCount": "NASA Yangın Sayısı (en fazla 20 puan)",
   "riskInfoSourcesTitle": "Veri Kaynakları",
-  "riskInfoSourcesBody": "NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.",
+  "riskInfoSourcesBody": "NASA FIRMS uydu verisi, Open-Meteo (yedek: MET Norway) hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.",
   "riskInfoUpdateFrequencyTitle": "Güncelleme Sıklığı",
   "riskInfoUpdateFrequencyBody": "Risk skorları her 3 saatte bir yeniden hesaplanır.",
 

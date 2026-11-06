@@ -1046,7 +1046,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesWeatherBody =>
-      'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave.';
+      'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave. Weather comes from Open-Meteo (CC BY 4.0); when Open-Meteo does not answer, the Norwegian Meteorological Institute\'s MET Norway Locationforecast is used (NLOD 2.0 / CC BY 4.0). Temperature, humidity and wind mean the same from either source.';
+
+  @override
+  String get dataSourcesWeatherOpenMeteoCredit =>
+      'Weather data by Open-Meteo.com';
+
+  @override
+  String get dataSourcesWeatherMetCredit => 'Data from MET Norway';
 
   @override
   String get dataSourcesPlacesTitle =>
@@ -1118,7 +1125,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskSummarySubtitle =>
-      'Real-time risk analysis calculated from Open-Meteo weather data and NASA FIRMS satellite data.';
+      'Real-time risk analysis calculated from Open-Meteo / MET Norway weather data and NASA FIRMS satellite data.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -2122,7 +2129,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskInfoSourcesBody =>
-      'Calculated using NASA FIRMS satellite data, Open-Meteo weather data, and RSS news feeds.';
+      'Calculated using NASA FIRMS satellite data, Open-Meteo weather data (MET Norway as fallback), and RSS news feeds.';
 
   @override
   String get riskInfoUpdateFrequencyTitle => 'Update Frequency';

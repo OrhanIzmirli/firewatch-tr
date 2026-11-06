@@ -1042,7 +1042,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesWeatherBody =>
-      'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.';
+      'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez. Hava verisi Open-Meteo\'dan gelir (CC BY 4.0); Open-Meteo yanıt vermediğinde Norveç Meteoroloji Enstitüsü MET Norway\'in Locationforecast verisi kullanılır (NLOD 2.0 / CC BY 4.0). Sıcaklık, nem ve rüzgar iki kaynakta da aynı anlama gelir.';
+
+  @override
+  String get dataSourcesWeatherOpenMeteoCredit =>
+      'Weather data by Open-Meteo.com';
+
+  @override
+  String get dataSourcesWeatherMetCredit => 'Data from MET Norway';
 
   @override
   String get dataSourcesPlacesTitle => 'Yer verisi — il ve ilçe sınırları';
@@ -1114,7 +1121,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskSummarySubtitle =>
-      'Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.';
+      'Open-Meteo / MET Norway hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -2117,7 +2124,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskInfoSourcesBody =>
-      'NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.';
+      'NASA FIRMS uydu verisi, Open-Meteo (yedek: MET Norway) hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.';
 
   @override
   String get riskInfoUpdateFrequencyTitle => 'Güncelleme Sıklığı';

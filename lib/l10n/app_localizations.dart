@@ -1937,8 +1937,20 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesWeatherBody.
   ///
   /// In tr, this message translates to:
-  /// **'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.'**
+  /// **'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez. Hava verisi Open-Meteo\'dan gelir (CC BY 4.0); Open-Meteo yanıt vermediğinde Norveç Meteoroloji Enstitüsü MET Norway\'in Locationforecast verisi kullanılır (NLOD 2.0 / CC BY 4.0). Sıcaklık, nem ve rüzgar iki kaynakta da aynı anlama gelir.'**
   String get dataSourcesWeatherBody;
+
+  /// No description provided for @dataSourcesWeatherOpenMeteoCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Weather data by Open-Meteo.com'**
+  String get dataSourcesWeatherOpenMeteoCredit;
+
+  /// No description provided for @dataSourcesWeatherMetCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Data from MET Norway'**
+  String get dataSourcesWeatherMetCredit;
 
   /// No description provided for @dataSourcesPlacesTitle.
   ///
@@ -2069,7 +2081,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskSummarySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.'**
+  /// **'Open-Meteo / MET Norway hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.'**
   String get riskSummarySubtitle;
 
   /// No description provided for @riskHighestRisk.
@@ -3797,7 +3809,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskInfoSourcesBody.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.'**
+  /// **'NASA FIRMS uydu verisi, Open-Meteo (yedek: MET Norway) hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.'**
   String get riskInfoSourcesBody;
 
   /// No description provided for @riskInfoUpdateFrequencyTitle.

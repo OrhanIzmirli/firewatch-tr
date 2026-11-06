@@ -1229,7 +1229,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskEnvironmentalFactors => 'Environmental Factors';
 
   @override
-  String get riskDrynessIndex => 'Dryness Index';
+  String get riskDrynessIndex => 'Dryness indicator';
 
   @override
   String get riskDrynessVeryHigh => 'Very high';
@@ -1238,7 +1238,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskWindPressure => 'Wind Pressure';
 
   @override
-  String get riskVegetationDensity => 'Vegetation Density';
+  String get riskVegetationDensity => 'Vegetation pressure';
 
   @override
   String get riskVegetationMediumHigh => 'Medium - High';
@@ -2200,7 +2200,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustRiskMeaning =>
-      'The risk score (0-100) estimates wildfire likelihood by combining temperature, humidity, wind speed, and dryness — it is a forecast, not a guarantee.';
+      'The risk score (0-100) is an index combining temperature, humidity, wind and recent NASA fire detections in the region — it is not the probability of a fire and not a guarantee.';
 
   @override
   String get trustRiskSource =>
@@ -3264,4 +3264,173 @@ class AppLocalizationsEn extends AppLocalizations {
   String annualLayerSources(String sources) {
     return 'Sources listed in the file: $sources';
   }
+
+  @override
+  String get riskDrynessIndexDerived =>
+      'Dryness indicator (derived from temperature, humidity and wind)';
+
+  @override
+  String get riskVegetationDensityDerived =>
+      'Vegetation pressure (derived from temperature and wind)';
+
+  @override
+  String get riskDrynessDerivation =>
+      'Derived from temperature, humidity and wind.';
+
+  @override
+  String annualPastYearChip(int year) {
+    return '$year · Past year';
+  }
+
+  @override
+  String get annualNoData => 'No data';
+
+  @override
+  String get annualMetricOgmArea => 'OGM burned area';
+
+  @override
+  String get annualMetricOgmCount => 'OGM fire count';
+
+  @override
+  String get annualMetricSatellite => 'Satellite points';
+
+  @override
+  String get annualMetricEffisArea => 'EFFIS area';
+
+  @override
+  String get annualMetricOgmAreaDesc =>
+      'Forest area burned, as recorded by OGM. Province colours always follow this value.';
+
+  @override
+  String get annualMetricOgmCountDesc =>
+      'Number of forest fires recorded by OGM.';
+
+  @override
+  String get annualMetricSatelliteDesc =>
+      'Satellite points are not a fire count. They are thermal detections over forest and shrubland.';
+
+  @override
+  String get annualMetricEffisAreaDesc =>
+      'Burned area mapped by EFFIS from satellite imagery. Coverage of small fires can differ from OGM.';
+
+  @override
+  String get annualMetricExplainTitle => 'What the values mean';
+
+  @override
+  String get annualMetricExplainHint =>
+      'Choosing one only changes the explanation; the province colour always shows OGM burned area.';
+
+  @override
+  String get annualProvinceNote =>
+      'A satellite point is not a fire count. Province fills show the yearly province total, not fire perimeters.';
+
+  @override
+  String get annualLegendTitle => 'Past years · OGM burned area';
+
+  @override
+  String annualLegendTickMax(String value) {
+    return '≥ $value ha';
+  }
+
+  @override
+  String get annualLegendNote =>
+      'Logarithmic colour scale · Darker means more area burned. Provinces without data are not filled. This layer is not current fire risk.';
+
+  @override
+  String get districtRiskRankingTitle => 'Risk ranking';
+
+  @override
+  String get districtRiskScoresNotProbability =>
+      'Scores are not probabilities.';
+
+  @override
+  String get districtRiskSampleBanner =>
+      'SAMPLE DATA · Shapes are schematic; not real district boundaries or current risk.';
+
+  @override
+  String get districtRiskLoadFailed =>
+      'Could not load district risk data. Tap to retry.';
+
+  @override
+  String get districtRiskAllProvinces => 'Türkiye';
+
+  @override
+  String get districtRiskAllDistricts => 'All districts';
+
+  @override
+  String get districtRiskNoScore => 'No risk data';
+
+  @override
+  String get districtRiskOpenRanking => 'Open risk ranking';
+
+  @override
+  String get historyLoadFailed => 'Could not load fire history. Tap to retry.';
+
+  @override
+  String get historySourceOpenFailed => 'Could not open source.';
+
+  @override
+  String get historySampleRecord =>
+      'SAMPLE RECORD — does not represent a real fire.';
+
+  @override
+  String get historyAreaUnknown => 'Area unavailable';
+
+  @override
+  String historyAreaPitches(String hectares, String pitches) {
+    return '$hectares hectares — about $pitches football pitches.';
+  }
+
+  @override
+  String get historyPitchComparison =>
+      'Comparison: a 105 × 68 m pitch = 0.714 hectares.';
+
+  @override
+  String get historyAreaSource => 'Burnt-area source';
+
+  @override
+  String get historyRestorationTitle => 'Restoration';
+
+  @override
+  String get historyNoRestoration =>
+      'No sourced restoration record is available for this area yet. This does not mean no work has taken place.';
+
+  @override
+  String get historyComparisonSource => 'Comparison source';
+
+  @override
+  String get historyOpenAnnouncement => 'Open official announcement';
+
+  @override
+  String get historyCampaignsTitle => 'Change starts with one person';
+
+  @override
+  String get historyNoCampaigns =>
+      'No verified campaign or volunteer event has been added yet.';
+
+  @override
+  String get historyPeriodThisSummer => 'This summer';
+
+  @override
+  String get historyPeriodSinceLastSummer => 'Since last summer';
+
+  @override
+  String get historyPeriodLast3Years => 'Last 3 years';
+
+  @override
+  String get historyPeriodCustom => 'Custom range';
+
+  @override
+  String get historyNoRecords => 'No records in the selected range.';
+
+  @override
+  String get historySampleBanner =>
+      'SAMPLE DATA · Shaded areas are schematic; not real fire perimeters.';
+
+  @override
+  String get historySourceSample =>
+      'Source: sample data. Planned live source: EFFIS / Copernicus.';
+
+  @override
+  String get historySourceLive => 'Source: EFFIS / Copernicus · CC BY 4.0';
 }

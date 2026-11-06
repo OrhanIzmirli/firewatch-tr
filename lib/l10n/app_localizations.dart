@@ -2279,7 +2279,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskDrynessIndex.
   ///
   /// In tr, this message translates to:
-  /// **'Kuruluk İndeksi'**
+  /// **'Kuruluk göstergesi'**
   String get riskDrynessIndex;
 
   /// No description provided for @riskDrynessVeryHigh.
@@ -2297,7 +2297,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskVegetationDensity.
   ///
   /// In tr, this message translates to:
-  /// **'Bitki Yoğunluğu'**
+  /// **'Bitki baskısı'**
   String get riskVegetationDensity;
 
   /// No description provided for @riskVegetationMediumHigh.
@@ -3923,7 +3923,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustRiskMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.'**
+  /// **'Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son NASA yangın tespitlerini birleştiren bir endekstir; yangın çıkma olasılığı değildir, garanti de vermez.'**
   String get trustRiskMeaning;
 
   /// No description provided for @trustRiskSource.
@@ -5701,6 +5701,294 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Dosyada belirtilen kaynaklar: {sources}'**
   String annualLayerSources(String sources);
+
+  /// No description provided for @riskDrynessIndexDerived.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kuruluk göstergesi (sıcaklık, nem ve rüzgârdan türetilir)'**
+  String get riskDrynessIndexDerived;
+
+  /// No description provided for @riskVegetationDensityDerived.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitki baskısı (sıcaklık ve rüzgârdan türetilir)'**
+  String get riskVegetationDensityDerived;
+
+  /// No description provided for @riskDrynessDerivation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcaklık, nem ve rüzgârdan türetilir.'**
+  String get riskDrynessDerivation;
+
+  /// No description provided for @annualPastYearChip.
+  ///
+  /// In tr, this message translates to:
+  /// **'{year} · Geçmiş yıl'**
+  String annualPastYearChip(int year);
+
+  /// No description provided for @annualNoData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri yok'**
+  String get annualNoData;
+
+  /// No description provided for @annualMetricOgmArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'OGM yanan alan'**
+  String get annualMetricOgmArea;
+
+  /// No description provided for @annualMetricOgmCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'OGM yangın sayısı'**
+  String get annualMetricOgmCount;
+
+  /// No description provided for @annualMetricSatellite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu noktası'**
+  String get annualMetricSatellite;
+
+  /// No description provided for @annualMetricEffisArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'EFFIS alan'**
+  String get annualMetricEffisArea;
+
+  /// No description provided for @annualMetricOgmAreaDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'OGM’nin kaydettiği yanan orman alanı. İl renkleri her zaman bu değere göre belirlenir.'**
+  String get annualMetricOgmAreaDesc;
+
+  /// No description provided for @annualMetricOgmCountDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'OGM’nin kaydettiği orman yangını sayısı.'**
+  String get annualMetricOgmCountDesc;
+
+  /// No description provided for @annualMetricSatelliteDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki termal tespitleri gösterir.'**
+  String get annualMetricSatelliteDesc;
+
+  /// No description provided for @annualMetricEffisAreaDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'EFFIS’in uydu görüntülerinden hesapladığı yanan alan. Küçük yangınların kapsamı OGM’den farklı olabilir.'**
+  String get annualMetricEffisAreaDesc;
+
+  /// No description provided for @annualMetricExplainTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değerlerin açıklaması'**
+  String get annualMetricExplainTitle;
+
+  /// No description provided for @annualMetricExplainHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçim yalnızca açıklamayı değiştirir; il rengi her zaman OGM yanan alanını gösterir.'**
+  String get annualMetricExplainHint;
+
+  /// No description provided for @annualProvinceNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu noktası yangın sayısı değildir. İl dolguları yangının sınırını değil, il genelindeki yıllık toplamı gösterir.'**
+  String get annualProvinceNote;
+
+  /// No description provided for @annualLegendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yıllar · OGM yanan alan'**
+  String get annualLegendTitle;
+
+  /// No description provided for @annualLegendTickMax.
+  ///
+  /// In tr, this message translates to:
+  /// **'≥ {value} ha'**
+  String annualLegendTickMax(String value);
+
+  /// No description provided for @annualLegendNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Logaritmik renk ölçeği · Koyu renk daha fazla yanan alanı gösterir. Verisi olmayan iller boyanmaz. Bu katman güncel yangın riski değildir.'**
+  String get annualLegendNote;
+
+  /// No description provided for @districtRiskRankingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk sıralaması'**
+  String get districtRiskRankingTitle;
+
+  /// No description provided for @districtRiskScoresNotProbability.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanlar olasılık yüzdesi değildir.'**
+  String get districtRiskScoresNotProbability;
+
+  /// No description provided for @districtRiskSampleBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖRNEK VERİ · Sınırlar şematiktir; gerçek ilçe sınırları ve güncel risk değildir.'**
+  String get districtRiskSampleBanner;
+
+  /// No description provided for @districtRiskLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlçe risk verisi alınamadı. Yeniden denemek için dokunun.'**
+  String get districtRiskLoadFailed;
+
+  /// No description provided for @districtRiskAllProvinces.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye'**
+  String get districtRiskAllProvinces;
+
+  /// No description provided for @districtRiskAllDistricts.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm ilçeler'**
+  String get districtRiskAllDistricts;
+
+  /// No description provided for @districtRiskNoScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk verisi yok'**
+  String get districtRiskNoScore;
+
+  /// No description provided for @districtRiskOpenRanking.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk sıralamasını aç'**
+  String get districtRiskOpenRanking;
+
+  /// No description provided for @historyLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş yangın verileri alınamadı. Yeniden denemek için dokunun.'**
+  String get historyLoadFailed;
+
+  /// No description provided for @historySourceOpenFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaynak açılamadı.'**
+  String get historySourceOpenFailed;
+
+  /// No description provided for @historySampleRecord.
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖRNEK KAYIT — gerçek bir yangını temsil etmez.'**
+  String get historySampleRecord;
+
+  /// No description provided for @historyAreaUnknown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alan henüz bilinmiyor'**
+  String get historyAreaUnknown;
+
+  /// No description provided for @historyAreaPitches.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hectares} hektar — yaklaşık {pitches} futbol sahası.'**
+  String historyAreaPitches(String hectares, String pitches);
+
+  /// No description provided for @historyPitchComparison.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılaştırma: 105 × 68 m saha = 0,714 hektar.'**
+  String get historyPitchComparison;
+
+  /// No description provided for @historyAreaSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alan verisinin kaynağı'**
+  String get historyAreaSource;
+
+  /// No description provided for @historyRestorationTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Restorasyon'**
+  String get historyRestorationTitle;
+
+  /// No description provided for @historyNoRestoration.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu alan için kaynakla doğrulanmış restorasyon kaydı henüz yok. Bu, çalışma yapılmadığı anlamına gelmez.'**
+  String get historyNoRestoration;
+
+  /// No description provided for @historyComparisonSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılaştırmanın kaynağı'**
+  String get historyComparisonSource;
+
+  /// No description provided for @historyOpenAnnouncement.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmi duyuruyu aç'**
+  String get historyOpenAnnouncement;
+
+  /// No description provided for @historyCampaignsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişim tek kişiyle başlar'**
+  String get historyCampaignsTitle;
+
+  /// No description provided for @historyNoCampaigns.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğrulanmış bir kampanya veya gönüllü etkinliği henüz eklenmedi.'**
+  String get historyNoCampaigns;
+
+  /// No description provided for @historyPeriodThisSummer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yaz'**
+  String get historyPeriodThisSummer;
+
+  /// No description provided for @historyPeriodSinceLastSummer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçen yazdan beri'**
+  String get historyPeriodSinceLastSummer;
+
+  /// No description provided for @historyPeriodLast3Years.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 3 yıl'**
+  String get historyPeriodLast3Years;
+
+  /// No description provided for @historyPeriodCustom.
+  ///
+  /// In tr, this message translates to:
+  /// **'Özel aralık'**
+  String get historyPeriodCustom;
+
+  /// No description provided for @historyNoRecords.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçilen aralıkta kayıt yok.'**
+  String get historyNoRecords;
+
+  /// No description provided for @historySampleBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖRNEK VERİ · Boyalı alanlar şematiktir; gerçek yangın sınırları değildir.'**
+  String get historySampleBanner;
+
+  /// No description provided for @historySourceSample.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaynak: örnek veri. Canlı bağlantı hedefi: EFFIS / Copernicus.'**
+  String get historySourceSample;
+
+  /// No description provided for @historySourceLive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaynak: EFFIS / Copernicus · CC BY 4.0'**
+  String get historySourceLive;
 }
 
 class _AppLocalizationsDelegate

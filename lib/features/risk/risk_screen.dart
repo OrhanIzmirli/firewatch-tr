@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
+import '../../core/config/feature_flags.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
@@ -470,16 +471,21 @@ class _RiskScreenState extends State<RiskScreen> {
                 const SizedBox(height: 8),
                 _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor, hint: l10n.riskMetricHintWind),
                 const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor),
+                _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor, hint: l10n.riskDrynessDerivation),
                 const SizedBox(height: AppSpacing.md),
-                // nearby_fire_count is optional in /risk/summary; say so
-                // rather than showing a zero the backend never sent.
-                Text(
-                  region['nearby_fire_count'] != null
-                      ? l10n.riskNearbyFireCount('${region['nearby_fire_count']}')
-                      : l10n.riskNearbyFireCountUnavailable,
-                  style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                ),
+                // /risk/summary does not send nearby_fire_count yet (backend
+                // 7daa8ee). Shown when it arrives; until then release builds
+                // leave the line out and debug builds say it is missing.
+                if (region['nearby_fire_count'] != null)
+                  Text(
+                    l10n.riskNearbyFireCount('${region['nearby_fire_count']}'),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
+                  )
+                else if (FeatureFlags.showPendingDataNotes)
+                  Text(
+                    l10n.riskNearbyFireCountUnavailable,
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
+                  ),
                 if (region['previous_risk_score'] != null)
                   Text(
                     l10n.riskPreviousScore('${region['previous_risk_score']}'),
@@ -1040,28 +1046,32 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxxl),
 
-                  _RiskLinkCard(
-                    icon: Icons.forest_rounded,
-                    title: l10n.riskRestorationCardTitle,
-                    subtitle: l10n.riskRestorationCardSubtitle,
-                    onTap: () => context.push('/restoration'),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _RiskLinkCard(
-                    icon: Icons.history_rounded,
-                    title: l10n.riskHistoryCardTitle,
-                    subtitle: l10n.riskHistoryCardSubtitle,
-                    onTap: () => context.push('/history'),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _RiskLinkCard(
-                    icon: Icons.map_outlined,
-                    title: l10n.riskDistrictMapCardTitle,
-                    subtitle: l10n.riskDistrictMapCardSubtitle,
-                    onTap: () => context.push('/risk-map'),
-                  ),
-
-                  const SizedBox(height: AppSpacing.xxxl),
+                  // Each card is shown only where its screen has real data
+                  // (FeatureFlags); debug builds show all three.
+                  for (final card in [
+                    if (FeatureFlags.restoration)
+                      _RiskLinkCard(
+                        icon: Icons.forest_rounded,
+                        title: l10n.riskRestorationCardTitle,
+                        subtitle: l10n.riskRestorationCardSubtitle,
+                        onTap: () => context.push('/restoration'),
+                      ),
+                    if (FeatureFlags.fireHistory)
+                      _RiskLinkCard(
+                        icon: Icons.history_rounded,
+                        title: l10n.riskHistoryCardTitle,
+                        subtitle: l10n.riskHistoryCardSubtitle,
+                        onTap: () => context.push('/history'),
+                      ),
+                    if (FeatureFlags.districtRiskMap)
+                      _RiskLinkCard(
+                        icon: Icons.map_outlined,
+                        title: l10n.riskDistrictMapCardTitle,
+                        subtitle: l10n.riskDistrictMapCardSubtitle,
+                        onTap: () => context.push('/risk-map'),
+                      ),
+                  ]) ...[card, const SizedBox(height: AppSpacing.md)],
+                  const SizedBox(height: AppSpacing.xl),
 
                   SectionHeader(
                     title: l10n.riskEnvironmentalFactors,
@@ -1072,7 +1082,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   const SizedBox(height: AppSpacing.md),
 
                   _ProgressFactorCard(
-                    title: l10n.riskDrynessIndex,
+                    title: l10n.riskDrynessIndexDerived,
                     value: _avgDryness / 100,
                     label: _avgDryness >= 70 ? l10n.riskDrynessVeryHigh : _avgDryness >= 50 ? l10n.commonHigh : l10n.commonMedium,
                     color: AppColors.danger,
@@ -1088,7 +1098,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   _ProgressFactorCard(
-                    title: l10n.riskVegetationDensity,
+                    title: l10n.riskVegetationDensityDerived,
                     value: _avgVegetation / 100,
                     label: _avgVegetation >= 60 ? l10n.riskVegetationMediumHigh : l10n.commonMedium,
                     color: AppColors.primary,

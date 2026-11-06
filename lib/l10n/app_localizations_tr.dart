@@ -1225,7 +1225,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskEnvironmentalFactors => 'Çevresel Faktörler';
 
   @override
-  String get riskDrynessIndex => 'Kuruluk İndeksi';
+  String get riskDrynessIndex => 'Kuruluk göstergesi';
 
   @override
   String get riskDrynessVeryHigh => 'Çok yüksek';
@@ -1234,7 +1234,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskWindPressure => 'Rüzgar Baskısı';
 
   @override
-  String get riskVegetationDensity => 'Bitki Yoğunluğu';
+  String get riskVegetationDensity => 'Bitki baskısı';
 
   @override
   String get riskVegetationMediumHigh => 'Orta - Yüksek';
@@ -2195,7 +2195,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustRiskMeaning =>
-      'Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.';
+      'Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son NASA yangın tespitlerini birleştiren bir endekstir; yangın çıkma olasılığı değildir, garanti de vermez.';
 
   @override
   String get trustRiskSource =>
@@ -3260,4 +3260,173 @@ class AppLocalizationsTr extends AppLocalizations {
   String annualLayerSources(String sources) {
     return 'Dosyada belirtilen kaynaklar: $sources';
   }
+
+  @override
+  String get riskDrynessIndexDerived =>
+      'Kuruluk göstergesi (sıcaklık, nem ve rüzgârdan türetilir)';
+
+  @override
+  String get riskVegetationDensityDerived =>
+      'Bitki baskısı (sıcaklık ve rüzgârdan türetilir)';
+
+  @override
+  String get riskDrynessDerivation => 'Sıcaklık, nem ve rüzgârdan türetilir.';
+
+  @override
+  String annualPastYearChip(int year) {
+    return '$year · Geçmiş yıl';
+  }
+
+  @override
+  String get annualNoData => 'Veri yok';
+
+  @override
+  String get annualMetricOgmArea => 'OGM yanan alan';
+
+  @override
+  String get annualMetricOgmCount => 'OGM yangın sayısı';
+
+  @override
+  String get annualMetricSatellite => 'Uydu noktası';
+
+  @override
+  String get annualMetricEffisArea => 'EFFIS alan';
+
+  @override
+  String get annualMetricOgmAreaDesc =>
+      'OGM’nin kaydettiği yanan orman alanı. İl renkleri her zaman bu değere göre belirlenir.';
+
+  @override
+  String get annualMetricOgmCountDesc =>
+      'OGM’nin kaydettiği orman yangını sayısı.';
+
+  @override
+  String get annualMetricSatelliteDesc =>
+      'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki termal tespitleri gösterir.';
+
+  @override
+  String get annualMetricEffisAreaDesc =>
+      'EFFIS’in uydu görüntülerinden hesapladığı yanan alan. Küçük yangınların kapsamı OGM’den farklı olabilir.';
+
+  @override
+  String get annualMetricExplainTitle => 'Değerlerin açıklaması';
+
+  @override
+  String get annualMetricExplainHint =>
+      'Seçim yalnızca açıklamayı değiştirir; il rengi her zaman OGM yanan alanını gösterir.';
+
+  @override
+  String get annualProvinceNote =>
+      'Uydu noktası yangın sayısı değildir. İl dolguları yangının sınırını değil, il genelindeki yıllık toplamı gösterir.';
+
+  @override
+  String get annualLegendTitle => 'Geçmiş yıllar · OGM yanan alan';
+
+  @override
+  String annualLegendTickMax(String value) {
+    return '≥ $value ha';
+  }
+
+  @override
+  String get annualLegendNote =>
+      'Logaritmik renk ölçeği · Koyu renk daha fazla yanan alanı gösterir. Verisi olmayan iller boyanmaz. Bu katman güncel yangın riski değildir.';
+
+  @override
+  String get districtRiskRankingTitle => 'Risk sıralaması';
+
+  @override
+  String get districtRiskScoresNotProbability =>
+      'Puanlar olasılık yüzdesi değildir.';
+
+  @override
+  String get districtRiskSampleBanner =>
+      'ÖRNEK VERİ · Sınırlar şematiktir; gerçek ilçe sınırları ve güncel risk değildir.';
+
+  @override
+  String get districtRiskLoadFailed =>
+      'İlçe risk verisi alınamadı. Yeniden denemek için dokunun.';
+
+  @override
+  String get districtRiskAllProvinces => 'Türkiye';
+
+  @override
+  String get districtRiskAllDistricts => 'Tüm ilçeler';
+
+  @override
+  String get districtRiskNoScore => 'Risk verisi yok';
+
+  @override
+  String get districtRiskOpenRanking => 'Risk sıralamasını aç';
+
+  @override
+  String get historyLoadFailed =>
+      'Geçmiş yangın verileri alınamadı. Yeniden denemek için dokunun.';
+
+  @override
+  String get historySourceOpenFailed => 'Kaynak açılamadı.';
+
+  @override
+  String get historySampleRecord =>
+      'ÖRNEK KAYIT — gerçek bir yangını temsil etmez.';
+
+  @override
+  String get historyAreaUnknown => 'Alan henüz bilinmiyor';
+
+  @override
+  String historyAreaPitches(String hectares, String pitches) {
+    return '$hectares hektar — yaklaşık $pitches futbol sahası.';
+  }
+
+  @override
+  String get historyPitchComparison =>
+      'Karşılaştırma: 105 × 68 m saha = 0,714 hektar.';
+
+  @override
+  String get historyAreaSource => 'Alan verisinin kaynağı';
+
+  @override
+  String get historyRestorationTitle => 'Restorasyon';
+
+  @override
+  String get historyNoRestoration =>
+      'Bu alan için kaynakla doğrulanmış restorasyon kaydı henüz yok. Bu, çalışma yapılmadığı anlamına gelmez.';
+
+  @override
+  String get historyComparisonSource => 'Karşılaştırmanın kaynağı';
+
+  @override
+  String get historyOpenAnnouncement => 'Resmi duyuruyu aç';
+
+  @override
+  String get historyCampaignsTitle => 'Değişim tek kişiyle başlar';
+
+  @override
+  String get historyNoCampaigns =>
+      'Doğrulanmış bir kampanya veya gönüllü etkinliği henüz eklenmedi.';
+
+  @override
+  String get historyPeriodThisSummer => 'Bu yaz';
+
+  @override
+  String get historyPeriodSinceLastSummer => 'Geçen yazdan beri';
+
+  @override
+  String get historyPeriodLast3Years => 'Son 3 yıl';
+
+  @override
+  String get historyPeriodCustom => 'Özel aralık';
+
+  @override
+  String get historyNoRecords => 'Seçilen aralıkta kayıt yok.';
+
+  @override
+  String get historySampleBanner =>
+      'ÖRNEK VERİ · Boyalı alanlar şematiktir; gerçek yangın sınırları değildir.';
+
+  @override
+  String get historySourceSample =>
+      'Kaynak: örnek veri. Canlı bağlantı hedefi: EFFIS / Copernicus.';
+
+  @override
+  String get historySourceLive => 'Kaynak: EFFIS / Copernicus · CC BY 4.0';
 }

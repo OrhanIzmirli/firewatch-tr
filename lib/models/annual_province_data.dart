@@ -76,6 +76,12 @@ class AnnualProvinceData {
     );
   }
 
+  /// Burned area (ha) at colour stop [i] of [stops]. [color] maps
+  /// log10(ha + 1) / logMax onto the stops at equal steps, so stop i sits at
+  /// 10^(logMax · i / 3) − 1 ha — the legend labels its ticks with these.
+  static double hectaresAtStop(double logMax, int i) =>
+      math.pow(10, logMax * i / (stops.length - 1)).toDouble() - 1;
+
   num? value(String code, int year, String metric) {
     final raw = provinces[code]?['yillar']?['$year']?[metric];
     return raw is num && raw.isFinite && raw >= 0 ? raw : null;
@@ -84,8 +90,9 @@ class AnnualProvinceData {
   Color color(String code, int year) {
     final hectares = value(code, year, 'ogm_yanan_alan_ha');
     if (hectares == null) return Colors.transparent;
-    final t = (math.log(hectares + 1) / math.ln10 / logMax).clamp(0.0, 1.0) * 3;
-    final i = math.min(2, t.floor());
+    final t = (math.log(hectares + 1) / math.ln10 / logMax).clamp(0.0, 1.0) *
+        (stops.length - 1);
+    final i = math.min(stops.length - 2, t.floor());
     return Color.lerp(stops[i], stops[i + 1], t - i)!.withValues(alpha: 0.8);
   }
 }

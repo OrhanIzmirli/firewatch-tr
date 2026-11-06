@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/config/feature_flags.dart';
+
 import '../features/emergency/emergency_screen.dart';
 import '../features/fire_detail/fire_deep_link_screen.dart';
 import '../features/fire_detail/fire_detail_screen.dart';
@@ -122,11 +124,23 @@ class AppRouter {
         path: '/risk',
         builder: (context, state) => RiskScreen(highlightRegion: state.extra as String?),
       ),
-      GoRoute(path: '/risk-map', builder: (context, state) => const DistrictRiskScreen()),
+      // Sample-data and placeholder screens are debug-only until their
+      // data source exists (see FeatureFlags); a stale deep link lands on
+      // the risk tab instead.
+      GoRoute(
+        path: '/risk-map',
+        redirect: (context, state) => FeatureFlags.districtRiskMap ? null : '/app?tab=risk',
+        builder: (context, state) => const DistrictRiskScreen(),
+      ),
       GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
-      GoRoute(path: '/history', builder: (context, state) => const HistoryScreen()),
+      GoRoute(
+        path: '/history',
+        redirect: (context, state) => FeatureFlags.fireHistory ? null : '/app?tab=risk',
+        builder: (context, state) => const HistoryScreen(),
+      ),
       GoRoute(
         path: '/restoration',
+        redirect: (context, state) => FeatureFlags.restoration ? null : '/app?tab=risk',
         builder: (context, state) => const RestorationScreen(),
       ),
       GoRoute(

@@ -1,6 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/annual_province_data.dart';
 import '../../../models/geo_area.dart';
 
@@ -84,6 +87,9 @@ class AnnualProvinceDetails extends StatefulWidget {
 }
 
 class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
+  /// Which value's explanation is shown. Selecting a chip only changes the
+  /// explanation and highlights that value's card; the province colour on
+  /// the map is always OGM burned area.
   int _metric = 0;
   static const keys = [
     'ogm_yanan_alan_ha',
@@ -91,20 +97,23 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
     'uydu_orman_maki_noktasi',
     'effis_yanan_alan_ha',
   ];
-  static const labels = [
-    'OGM yanan alan',
-    'OGM yangın sayısı',
-    'Uydu noktası',
-    'EFFIS alan',
-  ];
-  static const descriptions = [
-    'OGM’nin kaydettiği yanan orman alanı. İl renkleri her zaman bu değere göre belirlenir.',
-    'OGM’nin kaydettiği orman yangını sayısı.',
-    'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki termal tespitleri gösterir.',
-    'EFFIS’in uydu görüntülerinden hesapladığı yanan alan. Küçük yangınların kapsamı OGM’den farklı olabilir.',
-  ];
+
   @override
-  Widget build(BuildContext context) => SafeArea(
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final labels = [
+      l10n.annualMetricOgmArea,
+      l10n.annualMetricOgmCount,
+      l10n.annualMetricSatellite,
+      l10n.annualMetricEffisArea,
+    ];
+    final descriptions = [
+      l10n.annualMetricOgmAreaDesc,
+      l10n.annualMetricOgmCountDesc,
+      l10n.annualMetricSatelliteDesc,
+      l10n.annualMetricEffisAreaDesc,
+    ];
+    return SafeArea(
     child: SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.72,
       child: ListView(
@@ -113,7 +122,7 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
           Align(
             alignment: Alignment.centerLeft,
             child: Chip(
-              label: Text('${widget.year} · Geçmiş yıl'),
+              label: Text(l10n.annualPastYearChip(widget.year)),
               backgroundColor: const Color(0xFF422B25),
               labelStyle: const TextStyle(color: Color(0xFFF97316)),
             ),
@@ -136,10 +145,10 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
                   keys[i],
                 );
                 final formatted = value == null
-                    ? 'Veri yok'
+                    ? l10n.annualNoData
                     : NumberFormat(
                         i == 0 || i == 3 ? '#,##0.##' : '#,##0',
-                        'tr_TR',
+                        l10n.localeName,
                       ).format(value);
                 return SizedBox(
                   width:
@@ -152,7 +161,12 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
                     margin: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
-                      side: const BorderSide(color: Color(0xFF222836)),
+                      side: BorderSide(
+                        color: _metric == i
+                            ? const Color(0xFFF97316)
+                            : const Color(0xFF222836),
+                        width: _metric == i ? 1.5 : 1,
+                      ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -186,11 +200,22 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
             ),
           ),
           const SizedBox(height: 16),
+          Text(
+            l10n.annualMetricExplainTitle,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            l10n.annualMetricExplainHint,
+            style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
+          ),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 6,
             children: List.generate(
               4,
               (i) => ChoiceChip(
+                avatar: const Icon(Icons.info_outline, size: 16),
                 label: Text(labels[i]),
                 selected: _metric == i,
                 onSelected: (_) => setState(() => _metric = i),
@@ -199,48 +224,87 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
           ),
           Text(descriptions[_metric]),
           const SizedBox(height: 12),
-          const Text(
-            'Uydu noktası yangın sayısı değildir. İl dolguları yangının sınırını değil, il genelindeki yıllık toplamı gösterir.',
-          ),
+          Text(l10n.annualProvinceNote),
           const SizedBox(height: 16),
           Text(
-            'Dosyada belirtilen kaynaklar: ${widget.data.source}',
+            l10n.annualLayerSources(widget.data.source),
             style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
           ),
         ],
       ),
     ),
   );
+  }
 }
 
+/// Colour key for the province layer. The gradient's stops sit at equal
+/// steps, and so do [AnnualProvinceData.color]'s on the log scale, so each
+/// tick is labelled with the hectares its stop stands for (≈ 0 · 40 · 1.500 ·
+/// 60.000 ha for the bundled log_max of 4.7808).
 class AnnualLegend extends StatelessWidget {
-  const AnnualLegend({super.key});
+  /// The data file's renk.log_max; the bundled file's value by default.
+  final double logMax;
+  const AnnualLegend({super.key, this.logMax = defaultLogMax});
+
+  static const double defaultLogMax = 4.7808;
+
+  /// Rounds to the nearest half of the leading power of ten, so the ticks
+  /// read as round numbers: 38.2 → 40, 1537.9 → 1500, 60366 → 60000.
+  static double roundedTick(double hectares) {
+    if (hectares < 1) return 0;
+    final step =
+        math.pow(10, (math.log(hectares) / math.ln10).floor()).toDouble() / 2;
+    return (hectares / step).round() * step;
+  }
+
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(16),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Geçmiş yıllar · OGM yanan alan',
-          style: Theme.of(context).textTheme.titleMedium,
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final format = NumberFormat('#,##0', l10n.localeName);
+    final ticks = [
+      for (var i = 0; i < AnnualProvinceData.stops.length; i++)
+        format.format(
+          roundedTick(AnnualProvinceData.hectaresAtStop(logMax, i)),
         ),
-        const SizedBox(height: 12),
-        Container(
-          height: 18,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(9),
-            gradient: const LinearGradient(colors: AnnualProvinceData.stops),
+    ];
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.annualLegendTitle,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-        ),
-        const SizedBox(height: 8),
-        const Text('0 · 10 · 100 · 1.000 · 10.000 ha'),
-        const Text(
-          'Logaritmik renk ölçeği · Koyu renk daha fazla yanan alanı gösterir. Verisi olmayan iller boyanmaz. Bu katman güncel yangın riski değildir.',
-          style: TextStyle(fontSize: 12),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(height: 12),
+          Container(
+            height: 18,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9),
+              gradient: const LinearGradient(colors: AnnualProvinceData.stops),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var i = 0; i < ticks.length; i++)
+                Text(
+                  i == ticks.length - 1
+                      ? l10n.annualLegendTickMax(ticks[i])
+                      : ticks[i],
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(l10n.annualLegendNote, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
 }

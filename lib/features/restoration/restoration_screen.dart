@@ -75,8 +75,8 @@ class RestorationScreen extends StatelessWidget {
             ),
             body: _t(
               context,
-              "Yanan alan verileri, NASA'nın aylık uydu analizine dayanır. Yeni biten bir ayın verisi genellikle takip eden ayın ortasında sisteme eklenir.",
-              'Burned-area data is based on NASA monthly satellite analysis. A completed month is usually added around the middle of the following month.',
+              "Yanan alan verileri geldiğinde NASA'nın aylık uydu analizine dayanacak. Biten bir ayın verisi genellikle takip eden ayın ortasında eklenecek.",
+              'Once available, burned-area data will be based on NASA monthly satellite analysis. A completed month will usually be added around the middle of the following month.',
             ),
             color: AppColors.primary,
           ),
@@ -306,8 +306,10 @@ class _RestorationTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // No step is shown as recorded: nothing feeds this screen yet, so a
+    // "recorded" badge would claim a record that does not exist.
     final steps = [
-      (Icons.local_fire_department_outlined, isTurkish ? 'Yangın olayı' : 'Fire event', true),
+      (Icons.local_fire_department_outlined, isTurkish ? 'Yangın olayı' : 'Fire event', false),
       (Icons.satellite_alt_rounded, isTurkish ? 'Aylık uydu ölçümü' : 'Monthly satellite measure', false),
       (Icons.park_outlined, isTurkish ? 'Restorasyon başlangıcı' : 'Restoration start', false),
       (Icons.fact_check_outlined, isTurkish ? 'Son doğrulama' : 'Latest verification', false),

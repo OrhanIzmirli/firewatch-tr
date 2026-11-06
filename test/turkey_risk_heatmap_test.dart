@@ -109,8 +109,8 @@ void main() {
       )));
       await tester.pump(const Duration(milliseconds: 500));
       expect(tester.takeException(), isNull);
-      // (82 + 58 + 10) / 3 = 50 -> "Orta" on the 30/55/80 bands.
-      expect(find.text('Türkiye geneli · 50/100 · Orta'), findsOneWidget);
+      // (82 + 58 + 10) / 3 = 50 -> "Yüksek" on the shared 25/50/75 bands.
+      expect(find.text('Türkiye geneli · 50/100 · Yüksek'), findsOneWidget);
     });
   });
 }

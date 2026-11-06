@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:firewatch_tr/models/annual_province_data.dart';
 import 'package:firewatch_tr/features/map/widgets/annual_province_layer.dart';
 
@@ -85,6 +86,9 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('tr'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         theme: ThemeData.dark(),
         home: Scaffold(
           body: AnnualProvinceDetails(
@@ -129,6 +133,9 @@ void main() {
     var markerTaps = 0;
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('tr'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         home: Scaffold(
           body: FlutterMap(
             options: const MapOptions(
@@ -169,5 +176,44 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(AnnualProvinceDetails), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  test('Legend ticks sit on the colour stops of the log scale', () {
+    // Each stop's hectares map back to exactly that stop's colour, so the
+    // labels under the gradient match what the map paints.
+    for (var i = 0; i < AnnualProvinceData.stops.length; i++) {
+      final ha = AnnualProvinceData.hectaresAtStop(data.logMax, i);
+      final sample = AnnualProvinceData(
+        data.areas,
+        {'01': {'yillar': {'2025': {'ogm_yanan_alan_ha': ha}}}},
+        data.logMax,
+        data.source,
+      );
+      expect(
+        sample.color('01', 2025).toARGB32(),
+        AnnualProvinceData.stops[i].withValues(alpha: 0.8).toARGB32(),
+        reason: 'stop $i at ${ha.toStringAsFixed(1)} ha',
+      );
+    }
+    expect(data.logMax, AnnualLegend.defaultLogMax);
+    expect(
+      [for (var i = 0; i < 4; i++) AnnualLegend.roundedTick(AnnualProvinceData.hectaresAtStop(data.logMax, i))],
+      [0, 40, 1500, 60000],
+    );
+  });
+
+  testWidgets('Legend labels the stops 0 · 40 · 1.500 · ≥ 60.000 ha', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('tr'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: Scaffold(body: AnnualLegend()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (final label in ['0', '40', '1.500', '≥ 60.000 ha']) {
+      expect(find.text(label), findsOneWidget, reason: label);
+    }
   });
 }

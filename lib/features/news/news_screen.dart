@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/config/feature_flags.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/news_content_analysis.dart';
@@ -485,9 +486,11 @@ class _NewsScreenState extends State<NewsScreen> {
               action: l10n.trustNewsAction,
             ),
 
-            const SizedBox(height: AppSpacing.lg),
-
             // ── İçerik sekmeleri ───────────────────────────────
+            // Debug-only until GET /api/news supports content_type
+            // (FeatureFlags.newsContentTabs); release shows the fires feed.
+            if (FeatureFlags.newsContentTabs) ...[
+            const SizedBox(height: AppSpacing.lg),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -505,6 +508,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 ],
               ),
             ),
+            ],
 
             const SizedBox(height: AppSpacing.xxl),
 

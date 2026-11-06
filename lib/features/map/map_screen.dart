@@ -1949,7 +1949,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ] else
                 const SizedBox(height: AppSpacing.sm),
               if (_showAnnualHistory) ...[
-                const AnnualLegend(),
+                AnnualLegend(
+                  logMax: _annualData?.logMax ?? AnnualLegend.defaultLogMax,
+                ),
                 Text(
                   l10n.annualLayerSources(
                     _annualData?.source ?? 'OGM; NASA FIRMS; EFFIS; GADM 4.1',

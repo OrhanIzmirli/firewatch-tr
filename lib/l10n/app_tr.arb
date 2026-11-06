@@ -1340,6 +1340,18 @@
   "historyPeriodCustom": "Özel aralık",
   "historyNoRecords": "Seçilen aralıkta kayıt yok.",
   "historySampleBanner": "ÖRNEK VERİ · Boyalı alanlar şematiktir; gerçek yangın sınırları değildir.",
-  "historySourceSample": "Kaynak: örnek veri. Canlı bağlantı hedefi: EFFIS / Copernicus.",
-  "historySourceLive": "Kaynak: EFFIS / Copernicus · CC BY 4.0"
+  "historySourceSample": "Kaynak: örnek veri. Canlı kaynak: NASA FIRMS (VIIRS/MODIS).",
+  "historySourceLive": "Kaynak: NASA FIRMS (VIIRS/MODIS) · uydu ısı tespitleri",
+  "historyDetections": "{count} tespit · {hours} saat",
+  "@historyDetections": {
+    "placeholders": { "count": { "type": "String" }, "hours": { "type": "String" } }
+  },
+  "historyMaxFrp": "En yüksek ışınım gücü (FRP): {frp} MW",
+  "@historyMaxFrp": {
+    "placeholders": { "frp": { "type": "String" } }
+  },
+  "historyFootprintNote": "Haritadaki şekil, uydunun ısı tespit ettiği yerlerin izidir (her tespitin çevresinde 188 m); yanan alanın sınırı değildir. Yanan alan ölçülmediği için alan gösterilmez. Anız ve tarım yangınları da dahildir.",
+  "historyNearestDistrictNote": "İlçe, olayın merkezine en yakın ilçe merkezine göre belirlendi; sınıra yakın olaylarda komşu ilçe olabilir.",
+  "historyOpenFirmsMap": "NASA FIRMS haritasını aç",
+  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS)."
 }

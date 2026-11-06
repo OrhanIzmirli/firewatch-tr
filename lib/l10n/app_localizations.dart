@@ -5981,14 +5981,50 @@ abstract class AppLocalizations {
   /// No description provided for @historySourceSample.
   ///
   /// In tr, this message translates to:
-  /// **'Kaynak: örnek veri. Canlı bağlantı hedefi: EFFIS / Copernicus.'**
+  /// **'Kaynak: örnek veri. Canlı kaynak: NASA FIRMS (VIIRS/MODIS).'**
   String get historySourceSample;
 
   /// No description provided for @historySourceLive.
   ///
   /// In tr, this message translates to:
-  /// **'Kaynak: EFFIS / Copernicus · CC BY 4.0'**
+  /// **'Kaynak: NASA FIRMS (VIIRS/MODIS) · uydu ısı tespitleri'**
   String get historySourceLive;
+
+  /// No description provided for @historyDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} tespit · {hours} saat'**
+  String historyDetections(String count, String hours);
+
+  /// No description provided for @historyMaxFrp.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek ışınım gücü (FRP): {frp} MW'**
+  String historyMaxFrp(String frp);
+
+  /// No description provided for @historyFootprintNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki şekil, uydunun ısı tespit ettiği yerlerin izidir (her tespitin çevresinde 188 m); yanan alanın sınırı değildir. Yanan alan ölçülmediği için alan gösterilmez. Anız ve tarım yangınları da dahildir.'**
+  String get historyFootprintNote;
+
+  /// No description provided for @historyNearestDistrictNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlçe, olayın merkezine en yakın ilçe merkezine göre belirlendi; sınıra yakın olaylarda komşu ilçe olabilir.'**
+  String get historyNearestDistrictNote;
+
+  /// No description provided for @historyOpenFirmsMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA FIRMS haritasını aç'**
+  String get historyOpenFirmsMap;
+
+  /// No description provided for @historyFirmsAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).'**
+  String get historyFirmsAttribution;
 }
 
 class _AppLocalizationsDelegate

@@ -1313,6 +1313,12 @@
   "historyPeriodCustom": "Custom range",
   "historyNoRecords": "No records in the selected range.",
   "historySampleBanner": "SAMPLE DATA · Shaded areas are schematic; not real fire perimeters.",
-  "historySourceSample": "Source: sample data. Planned live source: EFFIS / Copernicus.",
-  "historySourceLive": "Source: EFFIS / Copernicus · CC BY 4.0"
+  "historySourceSample": "Source: sample data. Live source: NASA FIRMS (VIIRS/MODIS).",
+  "historySourceLive": "Source: NASA FIRMS (VIIRS/MODIS) · satellite heat detections",
+  "historyDetections": "{count} detections · {hours} h",
+  "historyMaxFrp": "Peak radiative power (FRP): {frp} MW",
+  "historyFootprintNote": "The shape on the map traces where the satellite detected heat (188 m around each detection); it is not the burned-area boundary. Burned area is not measured, so no area is shown. Agricultural burns are included.",
+  "historyNearestDistrictNote": "The district is the one whose centre is nearest the fire; near a border it can be the neighbouring district.",
+  "historyOpenFirmsMap": "Open the NASA FIRMS map",
+  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS)."
 }

@@ -39,9 +39,43 @@ fits all islands. No historical slider is included in this first version.
 
 ## History GeoJSON
 
-Configure `--dart-define=FIRE_HISTORY_URL=https://…`.
-GET query: `from` and `to` ISO dates; the selected ending calendar day is inclusive.
+Configure `--dart-define=FIRE_HISTORY_URL=https://firewatch-tr-backend.onrender.com/api/history`
+(implemented by backend 6401434 / 8d7553b; live since 2026-11-06).
+GET query: `from` and `to` as plain calendar days, `YYYY-MM-DD` (not timestamps; a
+timestamp is rejected with 400). Days are Europe/Istanbul and the ending day is inclusive.
+At most 1,100 days per request, enough for the "since last summer" and "last 3 years" presets.
 Return a FeatureCollection with stable ids and Polygon/MultiPolygon boundaries.
+Feature `id` is a number from the backend; the app also accepts text ids (sample data).
+
+### What the backend actually returns (NASA FIRMS satellite records)
+
+The first source is the backend's own `fire_incidents` table: VIIRS/MODIS thermal
+detections clustered into incidents, ≥5 detections, fixed heat sources excluded.
+There is data from 2026-08-05 onward (`metadata.data_available_from`).
+
+```json
+{
+  "city":"Antalya", "district":"Kepez", "district_basis":"nearest_district_center",
+  "date_start":"2026-09-07", "date_end":"2026-09-09",
+  "area_ha":null, "detection_count":533, "duration_hours":41.1, "max_frp_mw":3422.3,
+  "geometry_kind":"satellite_heat_detection_footprint",
+  "source":"NASA FIRMS", "source_url":"https://firms.modaps.eosdis.nasa.gov/map/",
+  "centroid":[30.78444, 37.10792],
+  "restoration_updates":[], "campaigns":[]
+}
+```
+
+* The geometry is the **satellite heat-detection footprint** (188 m around each detection,
+  merged and simplified), not a burn scar. The app says so in the detail sheet.
+* `area_ha` is always `null`: no burned area is measured. The app shows detections,
+  duration and peak FRP instead, and never a football-pitch comparison for these records.
+* `district` is the district with the nearest centre (`district_basis`); the app notes this.
+* `metadata.source` carries provider, products, caveats and the FIRMS acknowledgement;
+  the app shows the same acknowledgement sentence under the record.
+* `restoration_updates` and `campaigns` are empty until verified official records exist.
+
+### Full schema (future sources with official records)
+
 Each feature's properties:
 
 ```json
@@ -65,9 +99,12 @@ Optional `cost_amount` and `cost_currency` require the update's official source.
 Optional `cost_comparison` additionally requires `comparison_source_url`, supporting
 the comparison's unit cost, date, currency and calculation. Never invent cost comparisons.
 Records without source URLs are not rendered as verified restoration progress.
-Burnt-area attribution: EFFIS / Copernicus. Verify the exact product license when
-the backend selects its EFFIS source. Fixture mode explicitly attributes only sample data.
-Football comparison: area_ha / 0.714, rounded to whole pitches.
+Attribution: NASA FIRMS (VIIRS/MODIS), with NASA's acknowledgement sentence
+(verbatim from earthdata.nasa.gov/data/tools/firms, checked 2026-11-06). EFFIS is not used
+for history; if a burnt-area product is added later, verify its licence then.
+Fixture mode explicitly attributes only sample data.
+Football comparison: area_ha / 0.714, rounded to whole pitches — only when `area_ha` is a
+measured number; never for satellite heat-detection records.
 
 ## News (existing GET /api/news)
 

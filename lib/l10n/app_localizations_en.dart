@@ -3429,8 +3429,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historySourceSample =>
-      'Source: sample data. Planned live source: EFFIS / Copernicus.';
+      'Source: sample data. Live source: NASA FIRMS (VIIRS/MODIS).';
 
   @override
-  String get historySourceLive => 'Source: EFFIS / Copernicus · CC BY 4.0';
+  String get historySourceLive =>
+      'Source: NASA FIRMS (VIIRS/MODIS) · satellite heat detections';
+
+  @override
+  String historyDetections(String count, String hours) {
+    return '$count detections · $hours h';
+  }
+
+  @override
+  String historyMaxFrp(String frp) {
+    return 'Peak radiative power (FRP): $frp MW';
+  }
+
+  @override
+  String get historyFootprintNote =>
+      'The shape on the map traces where the satellite detected heat (188 m around each detection); it is not the burned-area boundary. Burned area is not measured, so no area is shown. Agricultural burns are included.';
+
+  @override
+  String get historyNearestDistrictNote =>
+      'The district is the one whose centre is nearest the fire; near a border it can be the neighbouring district.';
+
+  @override
+  String get historyOpenFirmsMap => 'Open the NASA FIRMS map';
+
+  @override
+  String get historyFirmsAttribution =>
+      'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
 }

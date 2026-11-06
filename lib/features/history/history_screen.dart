@@ -5,6 +5,7 @@ import '../../core/config/feature_flags.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/geo_area.dart';
 import '../../shared/widgets/area_map.dart';
+import 'history_format.dart';
 import 'history_sample_data.dart';
 
 /// Past fire areas with their sourced restoration updates. Runs on two
@@ -45,7 +46,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final generation = ++_generation;
     setState(() { _loading = true; _loadFailed = false; });
     try {
-      final data = endpoint.isEmpty ? historySampleData : (await _dio.get(endpoint, queryParameters: {'from': _range.start.toIso8601String(), 'to': _range.end.toIso8601String()})).data;
+      // The backend takes calendar days (YYYY-MM-DD); the end day is inclusive.
+      final data = endpoint.isEmpty ? historySampleData : (await _dio.get(endpoint, queryParameters: {'from': historyQueryDate(_range.start), 'to': historyQueryDate(_range.end)})).data;
       final areas = GeoArea.collection(data);
       if (mounted && generation == _generation) setState(() { _areas = areas; _selected = null; });
     } catch (_) { if (mounted && generation == _generation) setState(() { _areas = []; _loadFailed = true; }); }
@@ -63,22 +65,45 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (!opened && mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.historySourceOpenFailed)));
   }
   String _date(DateTime date) => '${date.day}.${date.month}.${date.year}';
+  /// Area when the record has one; otherwise detections and duration —
+  /// never "null ha".
+  String _listSubtitle(AppLocalizations l10n, Map<String, dynamic> p) {
+    final hectares = num.tryParse('${p['area_ha']}');
+    final detections = HistoryDetectionInfo.fromProperties(p);
+    final measure = hectares != null
+        ? '${hectares.toStringAsFixed(0)} ha'
+        : detections != null
+            ? l10n.historyDetections('${detections.count}', detections.durationHours == null ? '–' : formatHours(detections.durationHours!))
+            : l10n.historyAreaUnknown;
+    return '$measure · ${p['date_start']}';
+  }
   void _detail(GeoArea area) {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _selected = area);
     final p = area.properties;
     final hectares = num.tryParse('${p['area_ha']}');
+    final detections = HistoryDetectionInfo.fromProperties(p);
     final updates = ((p['restoration_updates'] as List?) ?? []).whereType<Map>().where((u) => _link(u['source_url'])).toList();
     final campaigns = ((p['campaigns'] as List?) ?? []).whereType<Map>().where((c) => c['official_source'] == true && _link(c['url'])).toList();
     showModalBottomSheet(context: context, isScrollControlled: true, showDragHandle: true, builder: (context) => SafeArea(child: SizedBox(height: MediaQuery.sizeOf(context).height * 0.75,
       child: ListView(padding: const EdgeInsets.all(20), children: [
         if (endpoint.isEmpty) Text(l10n.historySampleRecord),
         Text('${area.city} / ${area.district}', style: Theme.of(context).textTheme.headlineSmall),
+        if (isNearestDistrict(p)) Text(l10n.historyNearestDistrictNote, style: Theme.of(context).textTheme.bodySmall),
         Text('${p['date_start']} – ${p['date_end']}'),
         const SizedBox(height: 16),
-        Text(hectares == null ? l10n.historyAreaUnknown : l10n.historyAreaPitches(hectares.toStringAsFixed(0), '${(hectares / 0.714).round()}'), style: Theme.of(context).textTheme.titleLarge),
-        Text(l10n.historyPitchComparison),
-        if (_link(p['source_url'])) TextButton(onPressed: () => _open('${p['source_url']}'), child: Text(l10n.historyAreaSource)),
+        // Satellite records have no measured area: show what was measured
+        // (detections, duration, peak FRP) instead of an area or a pitch count.
+        if (hectares == null && detections != null) ...[
+          Text(l10n.historyDetections('${detections.count}', detections.durationHours == null ? '–' : formatHours(detections.durationHours!)), style: Theme.of(context).textTheme.titleLarge),
+          if (detections.maxFrpMw != null) Text(l10n.historyMaxFrp(detections.maxFrpMw!.round().toString())),
+        ] else ...[
+          Text(hectares == null ? l10n.historyAreaUnknown : l10n.historyAreaPitches(hectares.toStringAsFixed(0), '${(hectares / 0.714).round()}'), style: Theme.of(context).textTheme.titleLarge),
+          if (hectares != null) Text(l10n.historyPitchComparison),
+        ],
+        if (isHeatFootprint(p)) ...[const SizedBox(height: 8), Text(l10n.historyFootprintNote)],
+        if (_link(p['source_url'])) TextButton(onPressed: () => _open('${p['source_url']}'), child: Text(isHeatFootprint(p) ? l10n.historyOpenFirmsMap : l10n.historyAreaSource)),
+        if (endpoint.isNotEmpty) Text(l10n.historyFirmsAttribution, style: Theme.of(context).textTheme.bodySmall),
         const Divider(height: 32),
         Text(l10n.historyRestorationTitle, style: Theme.of(context).textTheme.titleLarge),
         if (updates.isEmpty) Text(l10n.historyNoRestoration),
@@ -115,7 +140,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         if (!_loading && visible.isEmpty && !_loadFailed) Text(l10n.historyNoRecords),
         Expanded(child: AreaMap(areas: visible, selected: _selected, color: (_) => const Color(0xFFF97316), onSelected: _detail)),
         Text(endpoint.isEmpty ? l10n.historySourceSample : l10n.historySourceLive, style: Theme.of(context).textTheme.bodySmall),
-        SafeArea(top: false, child: SizedBox(height: 110, child: ListView(children: visible.map((a) => ListTile(title: Text('${a.city} / ${a.district}'), subtitle: Text('${a.properties['area_ha']} ha · ${a.properties['date_start']}'), trailing: const Icon(Icons.chevron_right), onTap: () => _detail(a))).toList()))),
+        SafeArea(top: false, child: SizedBox(height: 110, child: ListView(children: visible.map((a) => ListTile(title: Text('${a.city} / ${a.district}'), subtitle: Text(_listSubtitle(l10n, a.properties)), trailing: const Icon(Icons.chevron_right), onTap: () => _detail(a))).toList()))),
       ]));
   }
 }

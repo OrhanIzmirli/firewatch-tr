@@ -3425,8 +3425,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get historySourceSample =>
-      'Kaynak: örnek veri. Canlı bağlantı hedefi: EFFIS / Copernicus.';
+      'Kaynak: örnek veri. Canlı kaynak: NASA FIRMS (VIIRS/MODIS).';
 
   @override
-  String get historySourceLive => 'Kaynak: EFFIS / Copernicus · CC BY 4.0';
+  String get historySourceLive =>
+      'Kaynak: NASA FIRMS (VIIRS/MODIS) · uydu ısı tespitleri';
+
+  @override
+  String historyDetections(String count, String hours) {
+    return '$count tespit · $hours saat';
+  }
+
+  @override
+  String historyMaxFrp(String frp) {
+    return 'En yüksek ışınım gücü (FRP): $frp MW';
+  }
+
+  @override
+  String get historyFootprintNote =>
+      'Haritadaki şekil, uydunun ısı tespit ettiği yerlerin izidir (her tespitin çevresinde 188 m); yanan alanın sınırı değildir. Yanan alan ölçülmediği için alan gösterilmez. Anız ve tarım yangınları da dahildir.';
+
+  @override
+  String get historyNearestDistrictNote =>
+      'İlçe, olayın merkezine en yakın ilçe merkezine göre belirlendi; sınıra yakın olaylarda komşu ilçe olabilir.';
+
+  @override
+  String get historyOpenFirmsMap => 'NASA FIRMS haritasını aç';
+
+  @override
+  String get historyFirmsAttribution =>
+      'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
 }

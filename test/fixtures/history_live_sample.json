@@ -1,0 +1,302 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": 958,
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       33.2903,
+       39.60387
+      ],
+      [
+       33.29087,
+       39.60521
+      ],
+      [
+       33.29396,
+       39.6052
+      ],
+      [
+       33.29579,
+       39.60105
+      ],
+      [
+       33.29514,
+       39.59986
+      ],
+      [
+       33.29359,
+       39.59937
+      ],
+      [
+       33.29117,
+       39.60059
+      ],
+      [
+       33.2903,
+       39.60387
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "city": "Kırıkkale",
+    "district": "Karakeçili",
+    "district_basis": "nearest_district_center",
+    "date_start": "2026-08-15",
+    "date_end": "2026-08-15",
+    "area_ha": null,
+    "detection_count": 5,
+    "duration_hours": 1.6,
+    "max_frp_mw": 1,
+    "geometry_kind": "satellite_heat_detection_footprint",
+    "source": "NASA FIRMS",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/",
+    "centroid": [
+     33.29284,
+     39.60271
+    ],
+    "restoration_updates": [],
+    "campaigns": []
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 560,
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        39.30648,
+        37.70667
+       ],
+       [
+        39.30512,
+        37.70812
+       ],
+       [
+        39.30575,
+        37.70931
+       ],
+       [
+        39.30726,
+        37.7098
+       ],
+       [
+        39.31245,
+        37.70832
+       ],
+       [
+        39.31307,
+        37.70712
+       ],
+       [
+        39.31244,
+        37.70593
+       ],
+       [
+        39.30847,
+        37.70523
+       ],
+       [
+        39.30648,
+        37.70667
+       ]
+      ]
+     ],
+     [
+      [
+       [
+        39.31059,
+        37.7141
+       ],
+       [
+        39.31237,
+        37.71369
+       ],
+       [
+        39.31299,
+        37.71249
+       ],
+       [
+        39.31236,
+        37.7113
+       ],
+       [
+        39.3088,
+        37.71131
+       ],
+       [
+        39.30818,
+        37.71251
+       ],
+       [
+        39.30881,
+        37.7137
+       ],
+       [
+        39.31059,
+        37.7141
+       ]
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "city": "Şanlıurfa",
+    "district": "Siverek",
+    "district_basis": "nearest_district_center",
+    "date_start": "2026-08-10",
+    "date_end": "2026-08-10",
+    "area_ha": null,
+    "detection_count": 6,
+    "duration_hours": 1.7,
+    "max_frp_mw": 5.1,
+    "geometry_kind": "satellite_heat_detection_footprint",
+    "source": "NASA FIRMS",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/",
+    "centroid": [
+     39.30941,
+     37.70911
+    ],
+    "restoration_updates": [],
+    "campaigns": []
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 9249,
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        35.41903,
+        36.69637
+       ],
+       [
+        35.41953,
+        36.69788
+       ],
+       [
+        35.42103,
+        36.69834
+       ],
+       [
+        35.42318,
+        36.69765
+       ],
+       [
+        35.42376,
+        36.69644
+       ],
+       [
+        35.42311,
+        36.69525
+       ],
+       [
+        35.42099,
+        36.69447
+       ],
+       [
+        35.41952,
+        36.69499
+       ],
+       [
+        35.41903,
+        36.69637
+       ]
+      ]
+     ],
+     [
+      [
+       [
+        35.39866,
+        36.6994
+       ],
+       [
+        35.397,
+        36.70099
+       ],
+       [
+        35.39765,
+        36.70218
+       ],
+       [
+        35.40117,
+        36.70308
+       ],
+       [
+        35.40264,
+        36.70256
+       ],
+       [
+        35.40322,
+        36.70135
+       ],
+       [
+        35.40214,
+        36.698
+       ],
+       [
+        35.39917,
+        36.69806
+       ],
+       [
+        35.39866,
+        36.6994
+       ]
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "city": "Adana",
+    "district": "Karataş",
+    "district_basis": "nearest_district_center",
+    "date_start": "2026-10-10",
+    "date_end": "2026-10-11",
+    "area_ha": null,
+    "detection_count": 6,
+    "duration_hours": 13.3,
+    "max_frp_mw": 2.9,
+    "geometry_kind": "satellite_heat_detection_footprint",
+    "source": "NASA FIRMS",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/",
+    "centroid": [
+     35.41077,
+     36.69848
+    ],
+    "restoration_updates": [],
+    "campaigns": []
+   }
+  }
+ ],
+ "metadata": {
+  "from": "2023-11-06",
+  "to": "2026-11-06",
+  "time_zone": "Europe/Istanbul",
+  "min_detection_count": 5,
+  "fixed_heat_sources_excluded": true,
+  "data_available_from": "2026-08-05",
+  "source": {
+   "provider": "NASA FIRMS",
+   "products": [
+    "VIIRS 375 m active fire (S-NPP, NOAA-20, NOAA-21)",
+    "MODIS 1 km active fire"
+   ],
+   "url": "https://firms.modaps.eosdis.nasa.gov/",
+   "attribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS).",
+   "geometry_kind": "satellite_heat_detection_footprint",
+   "caveat_tr": "Harita, uydunun ısı tespit ettiği yerlerin izidir (her tespit çevresinde 188 m); yanan alan sınırı değildir. Yanan alan ölçülmediği için alan bilgisi verilmez. Anız ve tarım yangınları da dahildir.",
+   "caveat_en": "The map shows where the satellite detected heat (188 m around each detection), not the burned-area boundary. Burned area is not measured, so no area is given. Agricultural burns are included."
+  }
+ }
+}

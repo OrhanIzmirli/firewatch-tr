@@ -1,3 +1,4 @@
+import '../core/utils/turkey_land_filter.dart';
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
@@ -42,16 +43,6 @@ class FireApiService {
   );
 
   static const String _backendUrl = ApiConfig.backendBaseUrl;
-
-  static bool _isOnLand(double lat, double lng) {
-    if (lat < 35.8 || lat > 42.1) return false;
-    if (lng < 26.0 || lng > 44.8) return false;
-    if (lng < 26.5 && lat < 41.0) return false;
-    if (lat < 36.0 && lng < 36.0) return false;
-    if (lat > 41.8 && lng < 31.0) return false;
-    if (lng > 44.0 && lat < 37.5) return false;
-    return true;
-  }
 
   // En yakın şehri PostGIS ile bul
   Future<NearestCityResult> getNearestCity(double lat, double lng) async {
@@ -128,7 +119,7 @@ class FireApiService {
       final lng = double.tryParse(row[lngIndex].toString());
 
       if (lat == null || lng == null) continue;
-      if (!_isOnLand(lat, lng)) continue;
+      if (!isOnTurkishLand(lat, lng)) continue;
 
       fires.add(
         FirePoint(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'tracked_places_api.dart';
+
 class LocaleNotifier extends StateNotifier<Locale> {
   LocaleNotifier() : super(const Locale('tr')) {
     _loadLocale();
@@ -21,6 +23,8 @@ class LocaleNotifier extends StateNotifier<Locale> {
     state = locale;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_localeKey, locale.languageCode);
+    // Tracked-place alerts are worded on the server in this language.
+    await TrackedPlacesApi().updateDevice(locale: locale.languageCode == 'en' ? 'en' : 'tr');
   }
 }
 

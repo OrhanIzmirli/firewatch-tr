@@ -133,14 +133,18 @@ class TrackedPlacesApi {
 
   /// FCM token refresh or language change. A no-op before registration —
   /// registering sends both anyway.
+  ///
+  /// Also what keeps the install "seen": the server deletes installs it
+  /// hasn't heard from for 90 days, so the app calls this on every start.
+  /// Never throws — it runs on app start and on language change.
   Future<void> updateDevice({String? fcmToken, String? locale}) async {
-    if (!await PlaceIdentity.isRegistered()) return;
     try {
+      if (!await PlaceIdentity.isRegistered()) return;
       await _dio.patch('/places/devices/me', options: await _auth(), data: {
         'fcm_token': ?fcmToken,
         'locale': ?locale,
       });
-    } on DioException catch (e) {
+    } catch (e) {
       if (kDebugMode) debugPrint('places device update failed: $e');
     }
   }

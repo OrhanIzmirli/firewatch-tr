@@ -172,6 +172,25 @@ void main() {
       expect(await PlaceIdentity.read(), isNull);
     });
 
+    test('updateDevice refreshes a registered install (token, language); otherwise does nothing', () async {
+      final adapter = _ScriptedAdapter((o) => (200, {'status': 'success'}));
+      final api = _api(adapter);
+      await api.updateDevice(fcmToken: 'fcm-token-new-xxxxxxxxxxxx', locale: 'en');
+      expect(adapter.requests, isEmpty, reason: 'never registered: no identity is created');
+      expect(await PlaceIdentity.read(), isNull);
+
+      await PlaceIdentity.readOrCreate();
+      await PlaceIdentity.markRegistered(true);
+      await api.updateDevice(fcmToken: 'fcm-token-new-xxxxxxxxxxxx', locale: 'en');
+      final r = adapter.requests.single;
+      expect('${r.method} ${r.path}', 'PATCH /places/devices/me');
+      expect(r.data, {'fcm_token': 'fcm-token-new-xxxxxxxxxxxx', 'locale': 'en'});
+      expect(r.headers['X-Install-Id'], isNotNull);
+
+      // A failing server is swallowed: app start and language change go on.
+      await _api(_ScriptedAdapter((o) => (500, {}))).updateDevice(locale: 'tr');
+    });
+
     test('deleteAll with nothing registered sends nothing', () async {
       final adapter = _ScriptedAdapter((o) => (500, {}));
       expect(await _api(adapter).deleteAll(), isTrue);

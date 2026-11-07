@@ -73,6 +73,16 @@ class NotificationService {
       await _renderApi.subscribeToNotifications(token);
     }
 
+    // Tracked places: the server deletes an install it hasn't seen for 90
+    // days (privacy policy: "if you don't open the app for 90 days"), so
+    // every start counts as "seen" — and keeps the token and language
+    // current. A no-op for installs that never added a place.
+    final localeName = (await currentAppLocalizations()).localeName;
+    await TrackedPlacesApi().updateDevice(
+      fcmToken: token != null && token.isNotEmpty ? token : null,
+      locale: localeName,
+    );
+
     // A rotated token must reach both device tables, or alerts silently
     // stop: fcm_tokens (region alerts) and place_devices (tracked places).
     _fcm.onTokenRefresh.listen((newToken) async {

@@ -3707,4 +3707,23 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeBriefOpenMap => 'Haritayı aç';
+
+  @override
+  String get dataSourcesBordersTitle => 'İl sınırları';
+
+  @override
+  String get dataSourcesBordersBody =>
+      'Haritadaki \"Geçmiş yıllar\" katmanında çizilen 81 il sınırı ve sunucunun bir tespiti hangi ile atadığı aynı dosyadan gelir: geoBoundaries (gbOpen, TUR ADM1), OpenStreetMap verisinden türetilmiştir. Sınırlar sadeleştirilmiştir; il sınırına çok yakın bir nokta komşu ile düşebilir. Denizdeki ya da sınır dışındaki noktalar en yakın ile atanır.';
+
+  @override
+  String get dataSourcesBordersGeoBoundariesCredit =>
+      'İl sınırları: geoBoundaries';
+
+  @override
+  String get dataSourcesBordersOsmCredit =>
+      '© OpenStreetMap katkıda bulunanlar (ODbL)';
+
+  @override
+  String get annualLayerBorderCredit =>
+      'Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)';
 }

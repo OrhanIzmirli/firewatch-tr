@@ -1434,5 +1434,10 @@
   "homeBriefTitle": "Bugün ne bilmeliyim?",
   "homeBriefSubtitle": "Kısa durum özeti",
   "homeBriefViewRisk": "Riski incele",
-  "homeBriefOpenMap": "Haritayı aç"
+  "homeBriefOpenMap": "Haritayı aç",
+  "dataSourcesBordersTitle": "İl sınırları",
+  "dataSourcesBordersBody": "Haritadaki \"Geçmiş yıllar\" katmanında çizilen 81 il sınırı ve sunucunun bir tespiti hangi ile atadığı aynı dosyadan gelir: geoBoundaries (gbOpen, TUR ADM1), OpenStreetMap verisinden türetilmiştir. Sınırlar sadeleştirilmiştir; il sınırına çok yakın bir nokta komşu ile düşebilir. Denizdeki ya da sınır dışındaki noktalar en yakın ile atanır.",
+  "dataSourcesBordersGeoBoundariesCredit": "İl sınırları: geoBoundaries",
+  "dataSourcesBordersOsmCredit": "© OpenStreetMap katkıda bulunanlar (ODbL)",
+  "annualLayerBorderCredit": "Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)"
 }

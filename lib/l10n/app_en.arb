@@ -1388,5 +1388,10 @@
   "homeBriefTitle": "What should I know today?",
   "homeBriefSubtitle": "Quick situation brief",
   "homeBriefViewRisk": "View risk",
-  "homeBriefOpenMap": "Open map"
+  "homeBriefOpenMap": "Open map",
+  "dataSourcesBordersTitle": "Province boundaries",
+  "dataSourcesBordersBody": "The 81 province boundaries drawn in the map's \"Past years\" layer and the ones the server uses to assign a detection to a province come from the same file: geoBoundaries (gbOpen, TUR ADM1), derived from OpenStreetMap data. They are simplified; a point very close to a border may fall in the neighbouring province. Points at sea or outside the borders are assigned to the nearest province.",
+  "dataSourcesBordersGeoBoundariesCredit": "Province boundaries: geoBoundaries",
+  "dataSourcesBordersOsmCredit": "© OpenStreetMap contributors (ODbL)",
+  "annualLayerBorderCredit": "Province boundaries on the map: geoBoundaries / © OpenStreetMap contributors (ODbL)"
 }

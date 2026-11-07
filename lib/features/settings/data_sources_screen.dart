@@ -95,6 +95,21 @@ class DataSourcesScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           _Section(
+            icon: Icons.layers_outlined,
+            title: l10n.dataSourcesBordersTitle,
+            body: l10n.dataSourcesBordersBody,
+            titleColor: titleColor,
+            bodyColor: bodyColor,
+            // geoBoundaries gbOpen TUR ADM1 (TUR-ADM1-25984515) is built
+            // from OpenStreetMap, so OSM's ODbL governs it; checked
+            // 2026-11-07 against the geoBoundaries API metadata.
+            links: [
+              (l10n.dataSourcesBordersGeoBoundariesCredit, 'https://www.geoboundaries.org/'),
+              (l10n.dataSourcesBordersOsmCredit, 'https://www.openstreetmap.org/copyright'),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _Section(
             icon: Icons.map_rounded,
             title: l10n.dataSourcesPlacesTitle,
             body: l10n.dataSourcesPlacesBody,

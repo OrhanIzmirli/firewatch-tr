@@ -1996,9 +1996,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   logMax: _annualData?.logMax ?? AnnualLegend.defaultLogMax,
                 ),
                 Text(
-                  l10n.annualLayerSources(
-                    _annualData?.source ?? 'OGM; NASA FIRMS; EFFIS; GADM 4.1',
-                  ),
+                  // The data file's own statement (how its province totals
+                  // were made), then whose boundaries are actually drawn.
+                  '${l10n.annualLayerSources(_annualData?.source ?? 'OGM; NASA FIRMS; EFFIS')}\n'
+                  '${l10n.annualLayerBorderCredit}',
                   style: GoogleFonts.ibmPlexSans(
                     fontSize: 10,
                     height: 1.35,

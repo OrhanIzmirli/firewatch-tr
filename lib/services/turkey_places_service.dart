@@ -77,6 +77,13 @@ class TurkeyPlacesService {
       .replaceAll('â', 'a')
       .replaceAll('î', 'i');
 
+  /// Former official names that people still search for, folded. Mersin
+  /// was officially "İçel" until 2002 and the backend used that name until
+  /// migration 015.
+  static const Map<String, List<String>> formerNames = {
+    'mersin': ['icel'],
+  };
+
   /// Prefix-then-substring search over provinces and districts, diacritics
   /// folded so "usak" finds Uşak. Provinces sort before districts, prefix
   /// matches before substring matches.
@@ -85,11 +92,11 @@ class TurkeyPlacesService {
     if (q.isEmpty) return const [];
     final all = await _load();
     int score(SavedPlace p) {
-      final n = _fold(p.name);
+      final names = [_fold(p.name), ...?formerNames[_fold(p.name)]];
       var s = 0;
-      if (n.startsWith(q)) {
+      if (names.any((n) => n.startsWith(q))) {
         s = 2;
-      } else if (n.contains(q)) {
+      } else if (names.any((n) => n.contains(q))) {
         s = 1;
       } else {
         return 0;

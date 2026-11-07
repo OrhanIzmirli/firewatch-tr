@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,11 +45,15 @@ class AnnualProvinceData {
       assets.loadString('assets/data/il_sinirlari.geojson'),
       assets.loadString('assets/data/il_yil_veri.json'),
     ]);
-    return AnnualProvinceData.fromJson(
-      jsonDecode(raw[0]) as Map<String, dynamic>,
-      jsonDecode(raw[1]) as Map<String, dynamic>,
-    );
+    // ~1.2 MB of boundaries (56k vertices): decoded and built off the UI
+    // thread.
+    return compute(_parse, raw);
   }
+
+  static AnnualProvinceData _parse(List<String> raw) => AnnualProvinceData.fromJson(
+        jsonDecode(raw[0]) as Map<String, dynamic>,
+        jsonDecode(raw[1]) as Map<String, dynamic>,
+      );
 
   factory AnnualProvinceData.fromJson(
     Map<String, dynamic> geometry,

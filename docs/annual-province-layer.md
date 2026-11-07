@@ -7,10 +7,24 @@ gösterir; yangın sınırı, güncel risk veya anlık tespit değildir.
 
 ## Veri
 
-Kullanıcının sağladığı il_sinirlari.geojson ve il_yil_veri.json değişmeden
-assets/data altında paketlenir. İller iki haneli plaka koduyla eşleştirilir.
-81 il ve 2016–2025 yılları bulunur. Dosyalardaki kaynak beyanları korunmuştur;
-rakamlar bağımsız olarak resmi yayınlarla karşılaştırılmamıştır.
+il_yil_veri.json (kullanıcının sağladığı il-yıl özeti) değişmeden paketlenir;
+içindeki kaynak beyanı korunmuştur, rakamlar bağımsız olarak resmi yayınlarla
+karşılaştırılmamıştır. Beyana göre il toplamları GADM 4.1 sınırlarıyla
+hesaplanmıştır.
+
+il_sinirlari.geojson 7 Kasım 2026'da değiştirildi. Eski dosya GADM 4.1'den
+geliyordu; GADM ticari kullanıma ve yeniden dağıtıma izin vermez. Yeni dosya:
+geoBoundaries gbOpen TUR ADM1 (TUR-ADM1-25984515, sadeleştirilmiş sürüm),
+OpenStreetMap verisinden türetilmiştir — © OpenStreetMap katkıda bulunanlar,
+ODbL 1.0. Koordinatlar 6 ondalığa yuvarlandı (daha az ondalık çokgenleri
+bozuyordu); plaka geoBoundaries'in shapeISO alanından (TR-01…TR-81), il adları
+veritabanındaki yazımla (Hakkari, Mersin). 81 il, 55.865 köşe, iller arası
+örtüşme 0 km² (eski dosyada 813 km²).
+
+Aynı dosya backend'de il atamasının kaynağıdır (firewatch-tr-backend,
+database/seed/turkey_province_borders.geojson). İki kopyanın SHA-256 değeri
+iki depodaki testlerde sabitlenmiştir; biri değişirse diğeri de değişmelidir.
+İller iki haneli plaka koduyla eşleştirilir; 81 il ve 2016–2025 yılları bulunur.
 
 İl sınırları ve dört yıllık ölçü ağ bağlantısı olmadan yüklenir. Güncel
 tespitlerin yenilenmesi ve CARTO altlığı bağlantı gerektirir. CARTO anahtarı

@@ -6433,6 +6433,36 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Haritayı aç'**
   String get homeBriefOpenMap;
+
+  /// No description provided for @dataSourcesBordersTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl sınırları'**
+  String get dataSourcesBordersTitle;
+
+  /// No description provided for @dataSourcesBordersBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki \"Geçmiş yıllar\" katmanında çizilen 81 il sınırı ve sunucunun bir tespiti hangi ile atadığı aynı dosyadan gelir: geoBoundaries (gbOpen, TUR ADM1), OpenStreetMap verisinden türetilmiştir. Sınırlar sadeleştirilmiştir; il sınırına çok yakın bir nokta komşu ile düşebilir. Denizdeki ya da sınır dışındaki noktalar en yakın ile atanır.'**
+  String get dataSourcesBordersBody;
+
+  /// No description provided for @dataSourcesBordersGeoBoundariesCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl sınırları: geoBoundaries'**
+  String get dataSourcesBordersGeoBoundariesCredit;
+
+  /// No description provided for @dataSourcesBordersOsmCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'© OpenStreetMap katkıda bulunanlar (ODbL)'**
+  String get dataSourcesBordersOsmCredit;
+
+  /// No description provided for @annualLayerBorderCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)'**
+  String get annualLayerBorderCredit;
 }
 
 class _AppLocalizationsDelegate

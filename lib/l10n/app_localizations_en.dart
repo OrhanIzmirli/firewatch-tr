@@ -3711,4 +3711,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeBriefOpenMap => 'Open map';
+
+  @override
+  String get dataSourcesBordersTitle => 'Province boundaries';
+
+  @override
+  String get dataSourcesBordersBody =>
+      'The 81 province boundaries drawn in the map\'s \"Past years\" layer and the ones the server uses to assign a detection to a province come from the same file: geoBoundaries (gbOpen, TUR ADM1), derived from OpenStreetMap data. They are simplified; a point very close to a border may fall in the neighbouring province. Points at sea or outside the borders are assigned to the nearest province.';
+
+  @override
+  String get dataSourcesBordersGeoBoundariesCredit =>
+      'Province boundaries: geoBoundaries';
+
+  @override
+  String get dataSourcesBordersOsmCredit =>
+      '© OpenStreetMap contributors (ODbL)';
+
+  @override
+  String get annualLayerBorderCredit =>
+      'Province boundaries on the map: geoBoundaries / © OpenStreetMap contributors (ODbL)';
 }

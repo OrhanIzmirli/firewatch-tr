@@ -9,6 +9,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../core/utils/map_tiles.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/utils/risk_display.dart';
@@ -364,7 +365,8 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate: MapTiles.osmUrl,
+                    tileProvider: MapTiles.providerFor(MapTiles.osmUrl),
                     userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
                     // Greyscale (and dimmed in dark mode) so the only colour
                     // on the map is the risk itself.

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../core/utils/map_tiles.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -195,9 +196,11 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
                   ),
                   children: [
                     TileLayer(
-                      urlTemplate: CartoBasemap.configured
-                          ? CartoBasemap.url
-                          : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      urlTemplate: CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                      // Disk-cached when it is OSM; CARTO always from the network.
+                      tileProvider: MapTiles.providerFor(
+                        CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                      ),
                       userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
                     ),
                     CircleLayer(circles: [

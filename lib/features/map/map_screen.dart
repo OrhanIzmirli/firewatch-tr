@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/utils/map_tiles.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
@@ -1601,9 +1602,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             ),
             children: [
               TileLayer(
-                urlTemplate: CartoBasemap.configured
-                    ? CartoBasemap.url
-                    : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                // Disk-cached when it is OSM; CARTO always from the network.
+                tileProvider: MapTiles.providerFor(
+                  CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                ),
                 userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
                 // A tile that fails (typically a brief
                 // connectivity drop) is otherwise kept

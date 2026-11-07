@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../core/utils/map_tiles.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
@@ -460,7 +461,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                             ),
                             children: [
                               TileLayer(
-                                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                urlTemplate: MapTiles.osmUrl,
+                                tileProvider: MapTiles.providerFor(MapTiles.osmUrl),
                                 userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
                                 evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
                                 errorTileCallback: (tile, error, stack) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../core/utils/map_tiles.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -45,9 +46,11 @@ class _PlacePickerScreenState extends State<PlacePickerScreen> {
             ),
             children: [
               TileLayer(
-                urlTemplate: CartoBasemap.configured
-                    ? CartoBasemap.url
-                    : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                // Disk-cached when it is OSM; CARTO always from the network.
+                tileProvider: MapTiles.providerFor(
+                  CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
+                ),
                 userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
               ),
             ],

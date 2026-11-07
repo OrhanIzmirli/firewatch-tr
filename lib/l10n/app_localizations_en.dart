@@ -1697,6 +1697,138 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locDisclosureNotNow => 'Not now';
 
   @override
+  String get trackedPlacesTitle => 'My places';
+
+  @override
+  String get trackedPlacesSubtitle =>
+      'Get notified of new satellite heat detections within the radius';
+
+  @override
+  String get trackedPlacesEmpty =>
+      'You\'re not tracking any places yet. Add up to 5, like your home or summer house.';
+
+  @override
+  String get trackedPlacesAdd => 'Add place';
+
+  @override
+  String get trackedPlacesFull => 'You can track up to 5 places.';
+
+  @override
+  String trackedPlacesRadius(int km) {
+    return '$km km radius';
+  }
+
+  @override
+  String trackedPlacesLastAlert(String date) {
+    return 'Last alert: $date';
+  }
+
+  @override
+  String get trackedPlacesNoAlertYet => 'No alerts yet';
+
+  @override
+  String get trackedPlacesNotifyTooltip => 'Alerts for this place';
+
+  @override
+  String trackedPlacesDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get trackedPlacesDeleteBody =>
+      'This place and its alert records are deleted from the server.';
+
+  @override
+  String get trackedPlacesDelete => 'Delete';
+
+  @override
+  String get trackedPlacesUnavailable => 'This feature is coming soon.';
+
+  @override
+  String get trackedPlacesLoadFailed =>
+      'Couldn\'t load your places. Showing the last saved list.';
+
+  @override
+  String get trackedPlacesSourceMap => 'Pick on map';
+
+  @override
+  String get trackedPlacesSourceMyLocation => 'Use my location';
+
+  @override
+  String get trackedPlacesLocationFailed => 'Couldn\'t get your location.';
+
+  @override
+  String get trackedPlacesNameLabel => 'Place name';
+
+  @override
+  String get trackedPlacesNameHint => 'e.g. Home, Summer house';
+
+  @override
+  String get trackedPlacesNameRequired => 'Enter a name.';
+
+  @override
+  String get trackedPlacesRadiusLabel => 'Radius';
+
+  @override
+  String get trackedPlacesSave => 'Save';
+
+  @override
+  String trackedPlacesSaved(String name) {
+    return 'Now tracking \"$name\".';
+  }
+
+  @override
+  String get trackedPlacesErrorOutside => 'This point is outside Turkey.';
+
+  @override
+  String get trackedPlacesErrorNetwork =>
+      'Couldn\'t save. Check your internet connection and try again.';
+
+  @override
+  String get trackedPlacesErrorGeneric => 'Something went wrong, try again.';
+
+  @override
+  String get trackedPlacesPickerTitle => 'Choose the location';
+
+  @override
+  String get trackedPlacesPickerHint =>
+      'Move the map to put the marker on the place, or long-press the map.';
+
+  @override
+  String get trackedPlacesPickerConfirm => 'Use this location';
+
+  @override
+  String get trackedPlacesApproxNote =>
+      'The location is stored on the server at about 1 km precision. Alerts are satellite heat detections, not confirmed fires.';
+
+  @override
+  String get trackedPlacesMigrateTitle => 'Track your saved pins?';
+
+  @override
+  String trackedPlacesMigrateBody(int count) {
+    return 'You have $count saved pins. Convert them to tracked places to get notified of new satellite heat detections within 10 km.';
+  }
+
+  @override
+  String get trackedPlacesMigrateAccept => 'Convert';
+
+  @override
+  String trackedPlacesMigrateDone(int count) {
+    return 'Tracking $count places.';
+  }
+
+  @override
+  String get locDisclosureTracked =>
+      'For places you track, the name, the location rounded to about 1 km and the radius are stored on our server. Delete one from the list, or all of them with Settings → Delete my location data.';
+
+  @override
+  String get notifPlacesChannelName => 'My places';
+
+  @override
+  String get notifPlacesChannelDescription =>
+      'Satellite heat detections near the places you track';
+
+  @override
   String get settingsDeleteLocation => 'Delete my location data';
 
   @override
@@ -1704,7 +1836,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsDeleteLocationConfirmBody =>
-      'Your approximate location stored on our server is deleted immediately. Notifications stay on; if you haven\'t picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.';
+      'Your approximate location and all your tracked places on our server are deleted immediately. Notifications stay on; if you haven\'t picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.';
 
   @override
   String get settingsDeleteLocationConfirm => 'Delete';

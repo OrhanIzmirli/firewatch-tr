@@ -94,6 +94,11 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
       cityId: prefs.getInt(_cityIdKey),
       isLoaded: true,
     );
+    if (state.scope == AlertScope.places) {
+      // A closure, so a Firebase that failed to start throws inside the
+      // migration's try instead of out of _bootstrap.
+      await migrateLegacyPlacesScope(() => NotificationService.instance.readServerScope());
+    }
 
     // Both are best-effort and independent: a failed city fetch still leaves
     // region selection usable, and a denied location just means no suggestion.
@@ -188,6 +193,27 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
     }
   }
 
+  /// 1.1's "my places" scope only ever lived on this device; the server
+  /// kept whichever scope was synced before it ('all', a region or a
+  /// province). Adopt exactly that, so nothing widens or narrows. When the
+  /// server can't be asked, fall back to 'all' locally without syncing:
+  /// the server still has its own value, and the user can pick again.
+  @visibleForTesting
+  Future<void> migrateLegacyPlacesScope(Future<ServerScope?> Function() readServerScope) async {
+    ServerScope? server;
+    try {
+      server = await readServerScope();
+    } catch (_) {
+      server = null;
+    }
+    final scope = server?.scope ?? AlertScope.all;
+    await setScope(
+      scope == AlertScope.places ? AlertScope.all : scope,
+      regionKey: server?.regionKey,
+      cityId: server?.cityId,
+    );
+  }
+
   /// Pushes the current selection to the backend. Returns false when the call
   /// failed, so the UI can tell the user their choice is only local so far.
   ///
@@ -197,9 +223,7 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
     if (state.scope == AlertScope.region && state.regionKey == null) return false;
     if (state.scope == AlertScope.city && state.cityId == null) return false;
 
-    // The backend's fcm_tokens.alert_scope does not accept 'places' yet;
-    // this scope is enforced by the device's own monitoring scans. Nothing
-    // to push, and nothing failed — the caller should not warn.
+    // Never offered any more; see migrateLegacyPlacesScope.
     if (state.scope == AlertScope.places) return true;
 
     return NotificationService.instance.updateAlertScope(

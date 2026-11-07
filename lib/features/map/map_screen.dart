@@ -46,6 +46,7 @@ import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
 import 'widgets/saved_places_sheet.dart';
 import '../../services/location_disclosure.dart';
+import '../tracked_places/add_tracked_place_flow.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
@@ -1336,6 +1337,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               },
               onTap: (tapPosition, point) {
                 if (_pinDropMode) _handlePinDrop(point);
+              },
+              // Long-press: follow this point ("Takip ettiğim yerler").
+              onLongPress: (tapPosition, point) {
+                if (!_pinDropMode) showAddTrackedPlaceFlow(context, initialPoint: point);
               },
             ),
             children: [

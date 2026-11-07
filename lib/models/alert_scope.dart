@@ -6,16 +6,24 @@ import '../l10n/app_localizations.dart';
 /// fcm_tokens.alert_scope — keep them in sync with
 /// database/migrations/001_add_notification_scope.sql.
 ///
-/// [places] narrows alerts to the user's saved places (provinces, districts
-/// and dropped pins). Its wire value is 'places'; until the backend
-/// migration adds it to fcm_tokens.alert_scope, the scope is enforced by
-/// this device's own monitoring scans and is not pushed to the server.
+/// [places] is the 1.1 "my saved places" scope, which was enforced only by
+/// this device's own scans. 1.2 replaced it with tracked places (server-side
+/// alerts, risk screen); the value remains so a stored 'places' can still be
+/// read and migrated by AlertScopeNotifier, and is never offered or set.
 enum AlertScope { all, region, city, places }
 
 /// SharedPreferences key the chosen scope is stored under. Shared between
 /// AlertScopeNotifier (writes) and FireMonitoringService (reads outside the
 /// widget tree), so the two can never drift apart.
 const String kAlertScopePrefsKey = 'alert_scope';
+
+/// The scope the backend has stored for this device's token.
+class ServerScope {
+  final AlertScope scope;
+  final String? regionKey;
+  final int? cityId;
+  const ServerScope({required this.scope, this.regionKey, this.cityId});
+}
 
 extension AlertScopeWire on AlertScope {
   String get wireValue {

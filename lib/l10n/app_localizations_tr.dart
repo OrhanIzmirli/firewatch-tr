@@ -1693,6 +1693,139 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locDisclosureNotNow => 'Şimdi değil';
 
   @override
+  String get trackedPlacesTitle => 'Takip ettiğim yerler';
+
+  @override
+  String get trackedPlacesSubtitle =>
+      'Yarıçap içinde yeni uydu ısı tespiti olunca bildirim al';
+
+  @override
+  String get trackedPlacesEmpty =>
+      'Henüz takip ettiğin bir yer yok. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.';
+
+  @override
+  String get trackedPlacesAdd => 'Yer ekle';
+
+  @override
+  String get trackedPlacesFull => 'En fazla 5 yer takip edebilirsin.';
+
+  @override
+  String trackedPlacesRadius(int km) {
+    return '$km km yarıçap';
+  }
+
+  @override
+  String trackedPlacesLastAlert(String date) {
+    return 'Son uyarı: $date';
+  }
+
+  @override
+  String get trackedPlacesNoAlertYet => 'Henüz uyarı yok';
+
+  @override
+  String get trackedPlacesNotifyTooltip => 'Bu yer için bildirimler';
+
+  @override
+  String trackedPlacesDeleteTitle(String name) {
+    return '\"$name\" silinsin mi?';
+  }
+
+  @override
+  String get trackedPlacesDeleteBody =>
+      'Bu yer ve uyarı kayıtları sunucudan silinir.';
+
+  @override
+  String get trackedPlacesDelete => 'Sil';
+
+  @override
+  String get trackedPlacesUnavailable => 'Bu özellik yakında açılacak.';
+
+  @override
+  String get trackedPlacesLoadFailed =>
+      'Yerler yüklenemedi. Son kaydedilen liste gösteriliyor.';
+
+  @override
+  String get trackedPlacesSourceMap => 'Haritadan seç';
+
+  @override
+  String get trackedPlacesSourceMyLocation => 'Konumumu ekle';
+
+  @override
+  String get trackedPlacesLocationFailed => 'Konum alınamadı.';
+
+  @override
+  String get trackedPlacesNameLabel => 'Yer adı';
+
+  @override
+  String get trackedPlacesNameHint => 'ör. Ev, Yazlık';
+
+  @override
+  String get trackedPlacesNameRequired => 'Bir ad gir.';
+
+  @override
+  String get trackedPlacesRadiusLabel => 'Yarıçap';
+
+  @override
+  String get trackedPlacesSave => 'Kaydet';
+
+  @override
+  String trackedPlacesSaved(String name) {
+    return '\"$name\" takip ediliyor.';
+  }
+
+  @override
+  String get trackedPlacesErrorOutside => 'Bu nokta Türkiye sınırları dışında.';
+
+  @override
+  String get trackedPlacesErrorNetwork =>
+      'Kaydedilemedi. İnternet bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get trackedPlacesErrorGeneric => 'Bir sorun oluştu, tekrar dene.';
+
+  @override
+  String get trackedPlacesPickerTitle => 'Konumu seç';
+
+  @override
+  String get trackedPlacesPickerHint =>
+      'Haritayı kaydırıp işaretçiyi yerin üzerine getir ya da haritaya uzun bas.';
+
+  @override
+  String get trackedPlacesPickerConfirm => 'Bu konumu kullan';
+
+  @override
+  String get trackedPlacesApproxNote =>
+      'Konum sunucuda yaklaşık 1 km hassasiyetle saklanır. Bildirimler doğrulanmış yangın değil, uydu ısı tespitidir.';
+
+  @override
+  String get trackedPlacesMigrateTitle =>
+      'Kayıtlı pin\'lerini takip etmek ister misin?';
+
+  @override
+  String trackedPlacesMigrateBody(int count) {
+    return '$count kayıtlı pin\'in var. Takip edilen yere dönüştürürsen 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.';
+  }
+
+  @override
+  String get trackedPlacesMigrateAccept => 'Dönüştür';
+
+  @override
+  String trackedPlacesMigrateDone(int count) {
+    return '$count yer takip ediliyor.';
+  }
+
+  @override
+  String get locDisclosureTracked =>
+      'Takip ettiğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.';
+
+  @override
+  String get notifPlacesChannelName => 'Takip ettiğim yerler';
+
+  @override
+  String get notifPlacesChannelDescription =>
+      'Takip ettiğin yerlerin yakınındaki uydu ısı tespitleri';
+
+  @override
   String get settingsDeleteLocation => 'Konum verimi sil';
 
   @override
@@ -1700,7 +1833,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsDeleteLocationConfirmBody =>
-      'Sunucuda saklanan yaklaşık konumun hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.';
+      'Sunucuda saklanan yaklaşık konumun ve takip ettiğin tüm yerler hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.';
 
   @override
   String get settingsDeleteLocationConfirm => 'Sil';

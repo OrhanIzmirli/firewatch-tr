@@ -25,6 +25,7 @@ import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/turkey_risk_heatmap.dart';
+import '../../services/location_disclosure.dart';
 
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
@@ -235,7 +236,8 @@ class _RiskScreenState extends State<RiskScreen> {
 
       var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
+        if (!mounted) return;
+        permission = await LocationDisclosure.requestPermission(context);
       }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         if (!mounted) return;

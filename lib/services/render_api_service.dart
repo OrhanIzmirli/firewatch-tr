@@ -6,15 +6,17 @@ import '../models/fire_incident.dart';
 import '../models/incident_summary.dart';
 
 class RenderApiService {
-  RenderApiService();
+  RenderApiService({Dio? dio})
+      : _dio = dio ??
+            Dio(
+              BaseOptions(
+                baseUrl: ApiConfig.apiBaseUrl,
+                connectTimeout: const Duration(seconds: 20),
+                receiveTimeout: const Duration(seconds: 20),
+              ),
+            );
 
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: ApiConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
-    ),
-  );
+  final Dio _dio;
 
   // HABERLER
   Future<List<Map<String, dynamic>>> fetchNews({
@@ -92,6 +94,21 @@ class RenderApiService {
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       if (kDebugMode) debugPrint('Error subscribing to notifications: $e');
+      return false;
+    }
+  }
+
+  // SUNUCUDAKİ KONUMU SİL — Ayarlar > "Konum verimi sil". Yalnızca
+  // fcm_tokens.latitude/longitude silinir; bildirimler ve kapsam aynen kalır.
+  Future<bool> deleteStoredLocation(String token) async {
+    try {
+      final response = await _dio.post(
+        '/notify/location/delete',
+        data: {'token': token},
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error deleting stored location: $e');
       return false;
     }
   }

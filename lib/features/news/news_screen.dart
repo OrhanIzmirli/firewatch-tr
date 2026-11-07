@@ -26,6 +26,7 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
 import 'widgets/news_event_actions.dart';
+import '../../services/location_disclosure.dart';
 
 enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
 
@@ -191,7 +192,10 @@ class _NewsScreenState extends State<NewsScreen> {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) return;
       var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (!mounted) return;
+        permission = await LocationDisclosure.requestPermission(context);
+      }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),

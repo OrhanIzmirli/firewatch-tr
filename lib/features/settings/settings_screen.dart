@@ -10,6 +10,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_provider.dart';
+import '../../services/notification_service.dart';
 import '../../services/settings_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -396,6 +397,23 @@ class SettingsScreen extends ConsumerWidget {
                             : Colors.black.withValues(alpha: 0.05),
                       ),
                       _LegalLinkTile(
+                        key: const Key('settingsDeleteLocationTile'),
+                        icon: Icons.location_off_outlined,
+                        label: l10n.settingsDeleteLocation,
+                        trailingIcon: Icons.chevron_right_rounded,
+                        onTap: () => confirmAndDeleteServerLocation(
+                          context,
+                          l10n,
+                          NotificationService.instance.deleteServerLocation,
+                        ),
+                      ),
+                      Divider(
+                        height: 24,
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.06)
+                            : Colors.black.withValues(alpha: 0.05),
+                      ),
+                      _LegalLinkTile(
                         icon: Icons.description_outlined,
                         label: l10n.settingsTermsOfService,
                         onTap: () => _openLegalUrl(
@@ -486,15 +504,58 @@ Future<void> _openLegalUrl(
   }
 }
 
+/// Settings → "Delete my location data": confirm, then erase the
+/// approximate location the backend stores for this device. [delete] is
+/// injected so the flow can be tested without Firebase.
+@visibleForTesting
+Future<void> confirmAndDeleteServerLocation(
+  BuildContext context,
+  AppLocalizations l10n,
+  Future<bool> Function() delete,
+) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: Text(l10n.settingsDeleteLocationConfirmTitle),
+      content: Text(l10n.settingsDeleteLocationConfirmBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(l10n.commonCancel),
+        ),
+        FilledButton(
+          key: const Key('settingsDeleteLocationConfirm'),
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text(l10n.settingsDeleteLocationConfirm),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true || !context.mounted) return;
+
+  final ok = await delete();
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        ok ? l10n.settingsDeleteLocationDone : l10n.settingsDeleteLocationFailed,
+      ),
+    ),
+  );
+}
+
 class _LegalLinkTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final IconData trailingIcon;
 
   const _LegalLinkTile({
+    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
+    this.trailingIcon = Icons.open_in_new_rounded,
   });
 
   @override
@@ -532,7 +593,7 @@ class _LegalLinkTile extends StatelessWidget {
               ),
             ),
             Icon(
-              Icons.open_in_new_rounded,
+              trailingIcon,
               size: 18,
               color: isDark
                   ? AppColors.white.withValues(alpha: 0.4)

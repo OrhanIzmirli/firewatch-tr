@@ -25,6 +25,7 @@ import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
+import '../../services/location_disclosure.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -172,6 +173,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   /// region-targeted server pushes have somewhere to match against.
   Future<void> _startAutoMonitoring() async {
     final l10n = AppLocalizations.of(context)!;
+
+    // This flow stores the (rounded) location on the server, so the
+    // explanation comes first even when the permission was granted before.
+    final accepted = await LocationDisclosure.ensureAccepted(context, force: true);
+    if (!accepted || !mounted) return;
+
     setState(() => _isBusy = true);
 
     var permission = await Geolocator.checkPermission();

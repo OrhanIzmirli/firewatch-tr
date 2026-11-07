@@ -513,7 +513,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backgroundLocationDialogBody =>
-      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
+      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. These checks run on your phone; your location is not sent to the server during them. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
 
   @override
   String get backgroundLocationDialogConfirm => 'Continue';
@@ -1655,17 +1655,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locPermSubtitle =>
-      'With location access, we can show wildfire events, risky regions, and more relevant alerts near you.';
+      'With your location we can show wildfire detections and the risk around you. Distances are calculated on your phone.';
 
   @override
   String get locPermNote =>
-      'This permission isn\'t required. You can skip it for now and still use the app.';
+      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km; it is deleted immediately when you turn notifications off or use Settings → Delete my location data. This permission isn\'t required, you can skip it for now.';
 
   @override
   String get locPermEnable => 'Enable Location';
 
   @override
   String get locPermSkip => 'Skip for Now';
+
+  @override
+  String get locDisclosureTitle => 'How we use your location';
+
+  @override
+  String get locDisclosureOnDevice =>
+      'Distance to nearby fire detections and the risk around you are calculated on your phone.';
+
+  @override
+  String get locDisclosureNearestCity =>
+      'To show which province you are in, your location is sent to our server; this lookup is not stored.';
+
+  @override
+  String get locDisclosureStored =>
+      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km so we can send alerts for your area. Your exact location is never stored.';
+
+  @override
+  String get locDisclosureDelete =>
+      'It is deleted immediately when you turn notifications off or tap Settings → Delete my location data. If you don\'t open the app for 90 days, your record is deleted entirely.';
+
+  @override
+  String get locDisclosureOptional =>
+      'Location permission is optional; you can use the app without it and revoke it at any time in your phone\'s settings.';
+
+  @override
+  String get locDisclosureContinue => 'Continue';
+
+  @override
+  String get locDisclosureNotNow => 'Not now';
+
+  @override
+  String get settingsDeleteLocation => 'Delete my location data';
+
+  @override
+  String get settingsDeleteLocationConfirmTitle => 'Delete your location data?';
+
+  @override
+  String get settingsDeleteLocationConfirmBody =>
+      'Your approximate location stored on our server is deleted immediately. Notifications stay on; if you haven\'t picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.';
+
+  @override
+  String get settingsDeleteLocationConfirm => 'Delete';
+
+  @override
+  String get settingsDeleteLocationDone =>
+      'Your location data on the server was deleted.';
+
+  @override
+  String get settingsDeleteLocationFailed =>
+      'Couldn\'t delete your location data. Check your internet connection and try again.';
 
   @override
   String get compassNorth => 'N';
@@ -2243,7 +2293,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsSource =>
-      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location.';
+      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location on your phone. For regional alerts from our server, your location is stored rounded to about 1 km when you start automatic monitoring.';
 
   @override
   String get trustAlertsInterpret =>

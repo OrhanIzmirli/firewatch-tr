@@ -40,6 +40,7 @@ import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import '../../services/location_disclosure.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -235,7 +236,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         return;
       }
       var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied && mounted) {
+        permission = await LocationDisclosure.requestPermission(context);
+      }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
         return;

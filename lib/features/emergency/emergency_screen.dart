@@ -13,6 +13,7 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
 import 'widgets/emergency_action_card.dart';
 import 'widgets/emergency_contact_card.dart';
+import '../../services/location_disclosure.dart';
 
 class EmergencyScreen extends StatelessWidget {
   const EmergencyScreen({super.key});
@@ -31,7 +32,8 @@ class EmergencyScreen extends StatelessWidget {
       Position? position;
 
       if (permission == LocationPermission.denied) {
-        await Geolocator.requestPermission();
+        if (!context.mounted) return;
+        await LocationDisclosure.requestPermission(context);
       }
 
       position = await Geolocator.getCurrentPosition();

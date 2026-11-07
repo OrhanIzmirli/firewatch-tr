@@ -511,7 +511,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get backgroundLocationDialogBody =>
-      'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.';
+      'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu kontroller telefonunda yapılır; bu sırada konumun sunucuya gönderilmez. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.';
 
   @override
   String get backgroundLocationDialogConfirm => 'Devam Et';
@@ -1651,17 +1651,66 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get locPermSubtitle =>
-      'Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.';
+      'Konumunla yakınındaki yangın tespitlerini ve çevrendeki riski gösterebiliriz. Mesafeler telefonunda hesaplanır.';
 
   @override
   String get locPermNote =>
-      'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.';
+      'Bildirimler için otomatik taramayı başlatırsan konumun yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır; bildirimleri kapattığında ya da Ayarlar → Konum verimi sil ile hemen silinir. Bu izin zorunlu değil, şimdilik atlayabilirsin.';
 
   @override
   String get locPermEnable => 'Konumu Etkinleştir';
 
   @override
   String get locPermSkip => 'Şimdilik Geç';
+
+  @override
+  String get locDisclosureTitle => 'Konumunu nasıl kullanıyoruz?';
+
+  @override
+  String get locDisclosureOnDevice =>
+      'Yakınındaki yangın tespitlerine olan mesafe ve çevrendeki risk telefonunda hesaplanır.';
+
+  @override
+  String get locDisclosureNearestCity =>
+      'Bulunduğun ili göstermek için konumun sunucumuza gönderilir; bu sorgu saklanmaz.';
+
+  @override
+  String get locDisclosureStored =>
+      'Bildirimler için otomatik taramayı başlatırsan, bölgenle ilgili uyarı gönderebilmek için konumun yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumun saklanmaz.';
+
+  @override
+  String get locDisclosureDelete =>
+      'Bildirimleri kapattığında ya da Ayarlar → Konum verimi sil\'e dokunduğunda hemen silinir. Uygulamayı 90 gün açmazsan kaydın tamamen silinir.';
+
+  @override
+  String get locDisclosureOptional =>
+      'Konum izni zorunlu değil; uygulamayı konumsuz da kullanabilir, izni istediğin zaman telefon ayarlarından kaldırabilirsin.';
+
+  @override
+  String get locDisclosureContinue => 'Devam et';
+
+  @override
+  String get locDisclosureNotNow => 'Şimdi değil';
+
+  @override
+  String get settingsDeleteLocation => 'Konum verimi sil';
+
+  @override
+  String get settingsDeleteLocationConfirmTitle => 'Konum verin silinsin mi?';
+
+  @override
+  String get settingsDeleteLocationConfirmBody =>
+      'Sunucuda saklanan yaklaşık konumun hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.';
+
+  @override
+  String get settingsDeleteLocationConfirm => 'Sil';
+
+  @override
+  String get settingsDeleteLocationDone => 'Sunucudaki konum verin silindi.';
+
+  @override
+  String get settingsDeleteLocationFailed =>
+      'Konum verin silinemedi. İnternet bağlantını kontrol edip tekrar dene.';
 
   @override
   String get compassNorth => 'K';
@@ -2238,7 +2287,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsSource =>
-      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla karşılaştırır.';
+      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla telefonunuzda karşılaştırır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak saklanır.';
 
   @override
   String get trustAlertsInterpret =>

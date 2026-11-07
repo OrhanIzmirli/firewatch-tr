@@ -45,6 +45,7 @@ import 'widgets/incident_legend.dart';
 import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
 import 'widgets/saved_places_sheet.dart';
+import '../../services/location_disclosure.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
@@ -527,7 +528,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       if (!serviceEnabled) return null;
       var permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
+        if (!mounted) return null;
+        permission = await LocationDisclosure.requestPermission(context);
       }
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {

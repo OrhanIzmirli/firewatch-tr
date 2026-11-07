@@ -183,6 +183,21 @@ class NotificationService {
     }
   }
 
+  /// Settings → "Delete my location data": erases the approximate location
+  /// the backend keeps for this device (notifications stay on). Without an
+  /// FCM token the device was never registered, so nothing is stored and
+  /// the request is unnecessary.
+  Future<bool> deleteServerLocation() async {
+    String? token;
+    try {
+      token = await _fcm.getToken();
+    } catch (_) {
+      token = null;
+    }
+    if (token == null || token.isEmpty) return true;
+    return _renderApi.deleteStoredLocation(token);
+  }
+
   /// Pushes the user's alert-scope choice to the backend so targeted fire
   /// alerts respect it. Uses PATCH (which only updates an existing row) and
   /// falls back to a full subscribe when the token isn't registered yet —

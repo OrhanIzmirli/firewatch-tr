@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/auto_refresh.dart';
 import '../../core/utils/detection_score.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
@@ -241,6 +242,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     // raw feed, so opening the sheet is the other thing that needs it.
     _sheetController.addListener(_onSheetMoved);
     _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
+    _autoRefresher.start();
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -254,6 +256,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   void dispose() {
+    _autoRefresher.dispose();
     _annualYearsController.dispose();
     _tileResetController.close();
     _sheetController.removeListener(_onSheetMoved);
@@ -269,8 +272,20 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Future<void> _refreshMap() async {
     if (!_tileResetController.isClosed) _tileResetController.add(null);
     await _loadIncidents();
-    if (_firePointsRequested) await _loadFirePoints();
+    if (_firePointsRequested) await _loadFirePoints(force: true);
+    _autoRefresher.markRefreshed();
   }
+
+  /// Settings › data refresh interval: events and (if already loaded) the
+  /// raw feed reload in place, without the loading veil.
+  late final AutoRefresher _autoRefresher = AutoRefresher(
+    onRefresh: () async {
+      await _loadIncidents();
+      if (_firePointsRequested) {
+        await _loadFirePoints(force: true, silent: true);
+      }
+    },
+  );
 
   void _onSheetMoved() {
     if (_firePointsRequested || !_sheetController.isAttached) return;
@@ -623,21 +638,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
-  Future<void> _loadFirePoints() async {
+  /// [force] skips the two-minute feed memo; [silent] keeps the loading
+  /// veil down (auto refresh updates the markers in place).
+  Future<void> _loadFirePoints({bool force = false, bool silent = false}) async {
     // Best-effort, in parallel with the feed: the summary carries the fixed
     // heat sources so their pixels are drawn grey on this layer too.
     _renderApi.fetchIncidentSummary().then((summary) {
       if (!mounted || summary == null) return;
       setState(() => _summaryPersistentSources = summary.persistentHeatSources);
     });
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-      _isSlowLoading = false;
-    });
+    if (!silent) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+        _isSlowLoading = false;
+      });
+    }
     try {
       final firePoints = await raceWithCacheFallback(
-        fetch: retryOnce(() => _fireApiService.fetchTurkeyFiresWithCities()),
+        fetch: retryOnce(
+          () => _fireApiService.fetchTurkeyFiresWithCities(force: force),
+        ),
         timeout: const Duration(seconds: 12),
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {

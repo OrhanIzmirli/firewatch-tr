@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+
 import '../core/utils/turkey_land_filter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
@@ -75,7 +79,55 @@ class FireApiService {
     );
   }
 
-  Future<List<FirePoint>> fetchTurkeyFires() async {
+  /// How long one /api/thermal response is reused. Home, map, alerts and
+  /// the background monitor all ask for the same feed within seconds of
+  /// each other; FIRMS itself updates a few times an hour at most.
+  static const Duration feedMemoTtl = Duration(minutes: 2);
+
+  List<FirePoint>? _feedMemo;
+  DateTime? _feedMemoAt;
+  Future<List<FirePoint>>? _feedInFlight;
+
+  /// Test hook: forget the memoised feed.
+  @visibleForTesting
+  void clearFeedMemo() {
+    _feedMemo = null;
+    _feedMemoAt = null;
+    _feedInFlight = null;
+  }
+
+  /// Test hook: replaces the network fetch.
+  @visibleForTesting
+  Future<List<FirePoint>> Function()? feedFetcherForTest;
+
+  /// The thermal feed, memoised for [feedMemoTtl] and shared between
+  /// concurrent callers. [force] (pull-to-refresh, the refresh button,
+  /// auto refresh) always goes to the network.
+  Future<List<FirePoint>> fetchTurkeyFires({bool force = false}) {
+    final at = _feedMemoAt;
+    final memo = _feedMemo;
+    if (!force &&
+        memo != null &&
+        at != null &&
+        DateTime.now().difference(at) < feedMemoTtl) {
+      return Future.value(memo);
+    }
+    final inFlight = _feedInFlight;
+    if (!force && inFlight != null) return inFlight;
+    final fetch = feedFetcherForTest ?? _fetchTurkeyFiresNetwork;
+    final future = fetch().then((points) {
+      _feedMemo = points;
+      _feedMemoAt = DateTime.now();
+      return points;
+    });
+    _feedInFlight = future;
+    future.whenComplete(() {
+      if (identical(_feedInFlight, future)) _feedInFlight = null;
+    }).ignore();
+    return future;
+  }
+
+  Future<List<FirePoint>> _fetchTurkeyFiresNetwork() async {
     // NASA credentials stay on the backend. The backend selects the first
     // currently populated VIIRS/MODIS product and returns the original CSV;
     // no generated or mock detections are ever substituted.
@@ -314,20 +366,32 @@ class FireApiService {
   /// 400 — one or two requests for the whole country, where this used to
   /// issue one GET per group (60+ on a normal day) and, on a free-tier
   /// backend, could take longer than the map's own timeout.
-  Future<List<FirePoint>> fetchTurkeyFiresWithCities() async {
-    final fires = await fetchTurkeyFires();
+  ///
+  /// Coordinates already in the persistent city memo ([NearestCityMemo])
+  /// cost nothing; only the rest go to the backend.
+  Future<List<FirePoint>> fetchTurkeyFiresWithCities({bool force = false}) async {
+    final fires = await fetchTurkeyFires(force: force);
     if (fires.isEmpty) return fires;
 
-    String keyFor(FirePoint p) =>
-        '${p.latitude.toStringAsFixed(2)}_${p.longitude.toStringAsFixed(2)}';
+    String keyFor(FirePoint p) => NearestCityMemo.keyFor(p.latitude, p.longitude);
 
     final representativeByKey = <String, FirePoint>{};
     for (final p in fires) {
       representativeByKey.putIfAbsent(keyFor(p), () => p);
     }
 
-    final keys = representativeByKey.keys.toList();
+    final memo = NearestCityMemo.instance;
+    await memo.load();
     final cityInfoByKey = <String, NearestCityResult>{};
+    final keys = <String>[];
+    for (final key in representativeByKey.keys) {
+      final hit = memo.get(key);
+      if (hit != null) {
+        cityInfoByKey[key] = hit;
+      } else {
+        keys.add(key);
+      }
+    }
     for (var i = 0; i < keys.length; i += _nearestCityBatchSize) {
       final chunkKeys = keys.sublist(
         i,
@@ -343,14 +407,135 @@ class FireApiService {
       if (results == null) continue; // this chunk keeps its bbox labels
       for (var k = 0; k < chunkKeys.length; k++) {
         final info = results[k];
-        if (info != null) cityInfoByKey[chunkKeys[k]] = info;
+        if (info == null) continue; // generic fallback: shown, not cached
+        cityInfoByKey[chunkKeys[k]] = info;
+        memo.put(chunkKeys[k], info);
       }
     }
+    if (keys.isNotEmpty) unawaited(memo.persist());
 
     return fires.map((p) {
       final info = cityInfoByKey[keyFor(p)];
       if (info == null || info.outsideTurkey) return p;
       return p.copyWith(cityName: info.city, nearestRegion: info.region);
     }).toList();
+  }
+}
+
+/// Nearest-city answers keyed by the fire pixel's coordinate rounded to two
+/// decimals (~1 km; never the user's position), kept in memory and in
+/// SharedPreferences so a cold start does not re-ask the backend about
+/// pixels it has already named. Ported from 1.0.5/1.0.6 with two TR
+/// changes: the key is versioned v2, because migration 015 (7 Nov 2026)
+/// moved provinces onto real boundaries and a v1 answer could name the
+/// wrong province; and every entry expires after [ttl].
+class NearestCityMemo {
+  NearestCityMemo({DateTime Function()? clock}) : _clock = clock ?? DateTime.now;
+
+  static final NearestCityMemo instance = NearestCityMemo();
+
+  static const String prefsKey = 'nearest_city_cache_v2';
+
+  /// 1.0.6's v1 key. Removed on load; never read.
+  static const String legacyPrefsKey = 'nearest_city_cache_v1';
+
+  static const Duration ttl = Duration(days: 30);
+  static const int maxEntries = 1500;
+
+  final DateTime Function() _clock;
+  final Map<String, ({NearestCityResult result, DateTime at})> _entries = {};
+  bool _loaded = false;
+
+  static String keyFor(double lat, double lng) =>
+      '${lat.toStringAsFixed(2)}_${lng.toStringAsFixed(2)}';
+
+  int get length => _entries.length;
+
+  NearestCityResult? get(String key) {
+    final entry = _entries[key];
+    if (entry == null) return null;
+    if (_clock().difference(entry.at) > ttl) {
+      _entries.remove(key);
+      return null;
+    }
+    return entry.result;
+  }
+
+  void put(String key, NearestCityResult result) {
+    _entries.remove(key);
+    _entries[key] = (result: result, at: _clock());
+    // Insertion order is age order: drop the oldest beyond the cap.
+    while (_entries.length > maxEntries) {
+      _entries.remove(_entries.keys.first);
+    }
+  }
+
+  Future<void> load() async {
+    if (_loaded) return;
+    _loaded = true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.containsKey(legacyPrefsKey)) {
+        await prefs.remove(legacyPrefsKey);
+      }
+      final raw = prefs.getString(prefsKey);
+      if (raw == null) return;
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) return;
+      final now = _clock();
+      final rows = <(String, NearestCityResult, DateTime)>[];
+      decoded.forEach((key, value) {
+        if (key is! String || value is! Map) return;
+        final at = DateTime.fromMillisecondsSinceEpoch(
+          (value['t'] as num?)?.toInt() ?? 0,
+        );
+        if (now.difference(at) > ttl) return;
+        final outside = value['o'] == true;
+        final city = value['c'];
+        final region = value['r'];
+        if (!outside && (city is! String || region is! String)) return;
+        rows.add((
+          key,
+          NearestCityResult(
+            outsideTurkey: outside,
+            city: outside ? null : city as String,
+            region: outside ? null : region as String,
+            distanceKm: (value['d'] as num?)?.toDouble(),
+          ),
+          at,
+        ));
+      });
+      rows.sort((a, b) => a.$3.compareTo(b.$3));
+      for (final (key, result, at) in rows) {
+        _entries.putIfAbsent(key, () => (result: result, at: at));
+      }
+      while (_entries.length > maxEntries) {
+        _entries.remove(_entries.keys.first);
+      }
+    } catch (_) {
+      // A corrupt memo only costs a few lookups.
+    }
+  }
+
+  Future<void> persist() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(prefsKey, jsonEncode({
+        for (final e in _entries.entries)
+          e.key: {
+            if (e.value.result.outsideTurkey) 'o': true,
+            if (e.value.result.city != null) 'c': e.value.result.city,
+            if (e.value.result.region != null) 'r': e.value.result.region,
+            if (e.value.result.distanceKm != null) 'd': e.value.result.distanceKm,
+            't': e.value.at.millisecondsSinceEpoch,
+          },
+      }));
+    } catch (_) {}
+  }
+
+  @visibleForTesting
+  void resetForTest() {
+    _entries.clear();
+    _loaded = false;
   }
 }

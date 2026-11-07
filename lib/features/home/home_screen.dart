@@ -14,6 +14,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/auto_refresh.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
@@ -88,20 +89,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   IncidentSummary? _incidentSummary;
   bool _incidentSummaryLoading = true;
 
+  /// Settings › data refresh interval: a silent reload of the fire feed
+  /// and the 24-hour summary, no spinner.
+  late final AutoRefresher _autoRefresher = AutoRefresher(
+    onRefresh: () => Future.wait([
+      _loadFires(force: true, silent: true),
+      _loadIncidentSummary(),
+    ]),
+  );
+
   @override
   void initState() {
     super.initState();
     _loadData();
     _loadUserPosition();
+    _autoRefresher.start();
   }
 
-  Future<void> _loadData() async {
+  /// [force] skips the two-minute feed memo (pull-to-refresh).
+  Future<void> _loadData({bool force = false}) async {
     await Future.wait([
       _loadNews(),
-      _loadFires(),
+      _loadFires(force: force),
       _loadRiskSummary(),
       _loadIncidentSummary(),
     ]);
+    _autoRefresher.markRefreshed();
   }
 
   /// Best-effort. A null summary hides the section rather than showing zeros,
@@ -374,11 +387,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _loadFires() async {
-    if (mounted) setState(() { _fireLoading = true; _firesSlowLoading = false; });
+  Future<void> _loadFires({bool force = false, bool silent = false}) async {
+    if (mounted && !silent) setState(() { _fireLoading = true; _firesSlowLoading = false; });
     try {
       final allPoints = await raceWithCacheFallback(
-        fetch: retryOnce(() => _fireApiService.fetchTurkeyFiresWithCities()),
+        fetch: retryOnce(
+          () => _fireApiService.fetchTurkeyFiresWithCities(force: force),
+        ),
         timeout: const Duration(seconds: 12),
         cacheKey: _firesCacheKey,
         onSlowFallback: (cached) {
@@ -562,6 +577,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void dispose() {
+    _autoRefresher.dispose();
     _searchDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
@@ -654,7 +670,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: _loadData,
+        onRefresh: () => _loadData(force: true),
         color: AppColors.primary,
         child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

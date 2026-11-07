@@ -23,6 +23,7 @@ import 'package:firewatch_tr/models/geo_area.dart';
 import 'package:firewatch_tr/models/news_item.dart';
 import 'package:firewatch_tr/services/app_version.dart';
 import 'package:firewatch_tr/services/device_position.dart';
+import 'package:firewatch_tr/services/fire_api_service.dart';
 import 'package:firewatch_tr/services/notification_service.dart';
 import 'package:firewatch_tr/shared/widgets/detection_safety_notice.dart';
 
@@ -332,6 +333,22 @@ void main() {
       final src = File('lib/features/home/home_screen.dart').readAsStringSync();
       expect(src, contains('riskLoading ? l10n.homeBriefRiskLoading : l10n.homeBriefRiskUnavailable'));
       expect(src, isNot(contains("'Bölgesel risk verisi yükleniyor.'")));
+    });
+  });
+
+  group('thermal CSV', () {
+    test('parsed off the UI thread, with duplicates merged and sea points dropped', () {
+      expect(File('lib/services/fire_api_service.dart').readAsStringSync(), contains('compute(parseThermalCsv, raw)'));
+      final csv = [
+        'latitude,longitude,bright_ti4,confidence,instrument,acq_date,acq_time,frp',
+        '36.90000,30.70000,340,h,VIIRS,2026-11-07,1030,12', // Antalya
+        '36.90100,30.70100,330,n,MODIS,2026-11-07,1100,8', // 140 m away: same fire
+        '36.95000,30.70000,320,n,VIIRS,2026-11-07,1030,5', // 5.5 km away: separate
+        '35.00000,30.00000,330,h,VIIRS,2026-11-07,1030,9', // open sea
+      ].join('\n');
+      final points = FireApiService.parseThermalCsv(csv);
+      expect(points, hasLength(2));
+      expect(points.first.isMerged, isTrue);
     });
   });
 }

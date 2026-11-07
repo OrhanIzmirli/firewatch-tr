@@ -1,4 +1,5 @@
 import '../core/utils/turkey_land_filter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
@@ -81,6 +82,15 @@ class FireApiService {
     final response = await _dio.get<String>('$_backendUrl/api/thermal');
     final raw = response.data;
     if (raw == null || raw.trim().isEmpty) return [];
+    // Parsing, the land filter and the quadratic duplicate merge run in a
+    // background isolate: on a busy day they held the UI thread long
+    // enough for an ANR when the map fell back to raw detections.
+    return compute(parseThermalCsv, raw);
+  }
+
+  /// CSV text from /api/thermal → deduplicated points on Turkish land.
+  /// Static and pure so it can run via compute().
+  static List<FirePoint> parseThermalCsv(String raw) {
     final rows = const CsvToListConverter(
       eol: '\n',
       shouldParseNumbers: false,

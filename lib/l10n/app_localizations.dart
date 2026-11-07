@@ -1103,7 +1103,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsHighRiskDetectionBody.
   ///
   /// In tr, this message translates to:
-  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.'**
+  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.'**
   String notificationsHighRiskDetectionBody(String region, String temp);
 
   /// No description provided for @watchlistTitle.
@@ -3358,7 +3358,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskReasonHighWithTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Termal sensör {temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.'**
+  /// **'Termal sensör {temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.'**
   String riskReasonHighWithTemp(String temp);
 
   /// No description provided for @riskReasonHighNoTemp.
@@ -3394,7 +3394,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireGeneratedDescHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.'**
+  /// **'Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.'**
   String get fireGeneratedDescHigh;
 
   /// No description provided for @fireGeneratedDescMedium.
@@ -3430,7 +3430,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireStatusActive.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok Güçlü Isı Sinyali'**
   String get fireStatusActive;
 
   /// No description provided for @fireStatusLikelyActive.
@@ -4199,7 +4199,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.'**
+  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.'**
   String get trustHomeInterpret;
 
   /// No description provided for @trustHomeAction.
@@ -4211,7 +4211,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
+  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
   String get trustMapMeaning;
 
   /// No description provided for @trustMapSource.
@@ -4361,7 +4361,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartLocationHintAgricultural.
   ///
   /// In tr, this message translates to:
-  /// **'tarım arazisinde; anız yakma ihtimali var'**
+  /// **'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır'**
   String get smartLocationHintAgricultural;
 
   /// No description provided for @smartFrpHigh.
@@ -4751,7 +4751,7 @@ abstract class AppLocalizations {
   /// No description provided for @detectionProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok Güçlü Isı Sinyali'**
   String get detectionProbableFire;
 
   /// No description provided for @detectionHighThermalAnomaly.
@@ -4817,7 +4817,7 @@ abstract class AppLocalizations {
   /// No description provided for @legendProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok güçlü ısı sinyali'**
   String get legendProbableFire;
 
   /// No description provided for @legendHighThermal.

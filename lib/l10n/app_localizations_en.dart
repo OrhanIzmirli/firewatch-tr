@@ -568,7 +568,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '${temp}K heat detected in the $region region. High likelihood of an active fire.';
+    return '${temp}K heat detected in the $region region. A strong satellite heat signal, not a verified fire.';
   }
 
   @override
@@ -1860,7 +1860,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Thermal sensor detected ${temp}K heat. High likelihood of an active fire — stay away from the area.';
+    return 'Thermal sensor detected ${temp}K heat. A strong heat signal, not a verified fire. Stay away from the area.';
   }
 
   @override
@@ -1887,7 +1887,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fireGeneratedDescHigh =>
-      'High-intensity thermal activity. Strong likelihood of an active fire.';
+      'High-intensity thermal activity. A strong heat signal, not a verified fire.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1910,7 +1910,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'No urgent action needed right now — keep an eye on the area.';
 
   @override
-  String get fireStatusActive => 'Probable Fire';
+  String get fireStatusActive => 'Very Strong Heat Signal';
 
   @override
   String get fireStatusLikelyActive => 'High Thermal Anomaly';
@@ -2362,7 +2362,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.';
+      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Very Strong Heat Signal. All other points remain thermal anomalies.';
 
   @override
   String get trustHomeAction =>
@@ -2370,7 +2370,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustMapMeaning =>
-      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.';
+      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means very strong heat signal; orange high anomaly; yellow nominal; gray low confidence.';
 
   @override
   String get trustMapSource =>
@@ -2472,7 +2472,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartLocationHintAgricultural =>
-      'farmland — possible crop or stubble burning';
+      'farmland — stubble burning also leaves heat traces like this';
 
   @override
   String get smartFrpHigh =>
@@ -2715,7 +2715,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use the Clear button in the top corner to remove all saved points at once.';
 
   @override
-  String get detectionProbableFire => 'Probable Fire';
+  String get detectionProbableFire => 'Very Strong Heat Signal';
 
   @override
   String get detectionHighThermalAnomaly => 'High Thermal Anomaly';
@@ -2755,7 +2755,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapLegendTitle => 'Map Legend';
 
   @override
-  String get legendProbableFire => 'Probable Fire';
+  String get legendProbableFire => 'Very strong heat signal';
 
   @override
   String get legendHighThermal => 'High Thermal Anomaly';

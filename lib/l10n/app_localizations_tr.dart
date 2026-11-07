@@ -566,7 +566,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '$region bölgesinde ${temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.';
+    return '$region bölgesinde ${temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.';
   }
 
   @override
@@ -1857,7 +1857,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Termal sensör ${temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.';
+    return 'Termal sensör ${temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.';
   }
 
   @override
@@ -1884,7 +1884,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get fireGeneratedDescHigh =>
-      'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.';
+      'Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1907,7 +1907,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
 
   @override
-  String get fireStatusActive => 'Muhtemel Yangın';
+  String get fireStatusActive => 'Çok Güçlü Isı Sinyali';
 
   @override
   String get fireStatusLikelyActive => 'Yüksek Isı Anomalisi';
@@ -2358,7 +2358,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.';
+      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.';
 
   @override
   String get trustHomeAction =>
@@ -2366,7 +2366,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapMeaning =>
-      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
+      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
 
   @override
   String get trustMapSource =>
@@ -2468,7 +2468,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get smartLocationHintAgricultural =>
-      'tarım arazisinde; anız yakma ihtimali var';
+      'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır';
 
   @override
   String get smartFrpHigh =>
@@ -2711,7 +2711,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.';
 
   @override
-  String get detectionProbableFire => 'Muhtemel Yangın';
+  String get detectionProbableFire => 'Çok Güçlü Isı Sinyali';
 
   @override
   String get detectionHighThermalAnomaly => 'Yüksek Isı Anomalisi';
@@ -2751,7 +2751,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapLegendTitle => 'Harita Lejantı';
 
   @override
-  String get legendProbableFire => 'Muhtemel Yangın';
+  String get legendProbableFire => 'Çok güçlü ısı sinyali';
 
   @override
   String get legendHighThermal => 'Yüksek Isı Anomalisi';

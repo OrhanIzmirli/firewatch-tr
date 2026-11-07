@@ -22,5 +22,17 @@ class GeoArea {
     if (polygons.isEmpty || polygons.any((p) => p.isEmpty || p.any((r) => r.length < 4))) throw const FormatException('Invalid polygon rings');
     return GeoArea('${json['id']}', Map<String,dynamic>.from(json['properties'] as Map), polygons);
   }
-  static List<GeoArea> collection(dynamic json) => (json['features'] as List).map((f) => GeoArea.fromJson(Map<String,dynamic>.from(f))).toList();
+  /// Every valid feature. One malformed feature is skipped rather than
+  /// failing the whole collection — it used to blank the history screen.
+  static List<GeoArea> collection(dynamic json) {
+    final areas = <GeoArea>[];
+    for (final f in json['features'] as List) {
+      try {
+        areas.add(GeoArea.fromJson(Map<String, dynamic>.from(f as Map)));
+      } on Object {
+        continue;
+      }
+    }
+    return areas;
+  }
 }

@@ -102,4 +102,14 @@ class NewsItem {
       ),
     );
   }
+
+  /// Whether this item was published within [window] of [now]. False when
+  /// the date is missing or unparseable — "today's headline" must not be
+  /// claimed for an item we cannot date.
+  bool publishedWithin(Duration window, {DateTime? now}) {
+    final published = DateTime.tryParse(publishedAt);
+    if (published == null) return false;
+    final age = (now ?? DateTime.now()).difference(published);
+    return age <= window; // a future date (clock skew) counts as fresh
+  }
 }

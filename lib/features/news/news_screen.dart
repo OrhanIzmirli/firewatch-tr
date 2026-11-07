@@ -520,7 +520,11 @@ class _NewsScreenState extends State<NewsScreen> {
               SectionHeader(
                 key: CoachMarkKeys.newsFeatured,
                 title: l10n.newsFeatured,
-                subtitle: l10n.newsFeaturedSubtitle,
+                // "Today's" only when it is: the feed's newest item can be
+                // two weeks old out of season.
+                subtitle: _allNews.first.publishedWithin(const Duration(hours: 24))
+                    ? l10n.newsFeaturedSubtitle
+                    : l10n.newsFeaturedSubtitleLatest,
                 icon: const Icon(Icons.bolt_rounded),
               ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
 

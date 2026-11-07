@@ -96,9 +96,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
     }
   }
 
+  /// Tabs opened so far in this session; only these are built.
+  final Set<int> _visitedTabs = {};
+
   List<Widget> get _screens => [
     const HomeScreen(),
     MapScreen(
+      // Tabs now stay alive; a new focus (a notification tap, a "show on
+      // map" link) must still land, so a different focus is a new map.
+      key: ValueKey('map:${widget.mapFocusLat}:${widget.mapFocusLng}:${widget.mapConfidenceFilter}:${widget.mapIncidentFilter}'),
       focusLat: widget.mapFocusLat,
       focusLng: widget.mapFocusLng,
       initialConfidenceFilter: widget.mapConfidenceFilter,
@@ -168,8 +174,19 @@ class _MainShellScreenState extends State<MainShellScreen> {
           ),
         ];
 
+        final screens = _screens;
+        _visitedTabs.add(_currentIndex);
         return Scaffold(
-          body: _screens[_currentIndex],
+          // Each tab is built the first time it is opened and then kept:
+          // recreating it on every switch refetched everything (Home alone
+          // made four API calls plus a location fix per visit).
+          body: IndexedStack(
+            index: _currentIndex,
+            children: [
+              for (final (i, screen) in screens.indexed)
+                _visitedTabs.contains(i) ? screen : const SizedBox.shrink(),
+            ],
+          ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: (index) {

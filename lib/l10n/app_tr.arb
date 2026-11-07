@@ -1420,5 +1420,19 @@
   "riskFactorWindHint": "Risk puanına +{points}/{max} ekler: rüzgâr alevleri ve kıvılcımları taşıyabilir.",
   "@riskFactorWindHint": {"placeholders": {"points": {"type": "int"}, "max": {"type": "int"}}},
   "riskNoteLightWind": "Hafif rüzgâr ({wind} km/h)",
-  "@riskNoteLightWind": {"placeholders": {"wind": {"type": "int"}}}
+  "@riskNoteLightWind": {"placeholders": {"wind": {"type": "int"}}},
+  "newsFeaturedSubtitleLatest": "En güncel başlık",
+  "homeBriefRiskLoading": "Bölgesel risk verisi yükleniyor.",
+  "homeBriefRiskUnavailable": "Bölgesel risk verisi şu an alınamadı.",
+  "homeBriefRiskHighest": "En yüksek bölgesel risk {region} bölgesinde: {score}/100.",
+  "@homeBriefRiskHighest": {"placeholders": {"region": {"type": "String"}, "score": {"type": "int"}}},
+  "homeBriefNationwide": "{count} önemli uydu tespiti Türkiye genelinde izleniyor.",
+  "@homeBriefNationwide": {"placeholders": {"count": {"type": "int"}}},
+  "homeBriefNoneNearby": "100 km çevrende önemli bir tespit görünmüyor.",
+  "homeBriefNearby": "100 km çevrende {count} tespit var; haritadan ayrıntıları kontrol et.",
+  "@homeBriefNearby": {"placeholders": {"count": {"type": "int"}}},
+  "homeBriefTitle": "Bugün ne bilmeliyim?",
+  "homeBriefSubtitle": "Kısa durum özeti",
+  "homeBriefViewRisk": "Riski incele",
+  "homeBriefOpenMap": "Haritayı aç"
 }

@@ -766,6 +766,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ? null
                   : displayRegionName(l10n, highestRiskRegion['region'] as String),
               highestRiskScore: highestRiskRegion?['general_risk_score'] as int?,
+              riskLoading: _riskLoading,
               nearbyCount: nearbyCount,
               activeFireCount: activeFireCount,
               onOpenMap: () => context.go('/map'),
@@ -1189,6 +1190,7 @@ class _PreviewRow extends StatelessWidget {
 class _DailyBriefCard extends StatelessWidget {
   final String? highestRiskRegion;
   final int? highestRiskScore;
+  final bool riskLoading;
   final int? nearbyCount;
   final int activeFireCount;
   final VoidCallback onOpenMap;
@@ -1197,6 +1199,7 @@ class _DailyBriefCard extends StatelessWidget {
   const _DailyBriefCard({
     required this.highestRiskRegion,
     required this.highestRiskScore,
+    required this.riskLoading,
     required this.nearbyCount,
     required this.activeFireCount,
     required this.onOpenMap,
@@ -1205,27 +1208,21 @@ class _DailyBriefCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTr = Localizations.localeOf(context).languageCode == 'tr';
+    final l10n = AppLocalizations.of(context)!;
     final score = highestRiskScore;
     final accent = score == null
         ? AppColors.primary
         : riskScoreColor(score);
+    // "Loading" only while it is: a failed fetch with no cache used to
+    // say "loading" forever.
     final riskSentence = highestRiskRegion == null || score == null
-        ? (isTr ? 'Bölgesel risk verisi yükleniyor.' : 'Regional risk data is loading.')
-        : isTr
-            ? 'En yüksek bölgesel risk $highestRiskRegion bölgesinde: $score/100.'
-            : 'The highest regional risk is in $highestRiskRegion: $score/100.';
+        ? (riskLoading ? l10n.homeBriefRiskLoading : l10n.homeBriefRiskUnavailable)
+        : l10n.homeBriefRiskHighest(highestRiskRegion!, score);
     final nearbySentence = nearbyCount == null
-        ? (isTr
-            ? '$activeFireCount önemli uydu tespiti Türkiye genelinde izleniyor.'
-            : '$activeFireCount notable satellite detections are being monitored nationwide.')
+        ? l10n.homeBriefNationwide(activeFireCount)
         : nearbyCount == 0
-            ? (isTr
-                ? '100 km çevrende önemli bir tespit görünmüyor.'
-                : 'No notable detection is visible within 100 km.')
-            : (isTr
-                ? '100 km çevrende $nearbyCount tespit var; haritadan ayrıntıları kontrol et.'
-                : '$nearbyCount detections are within 100 km; check the map for details.');
+            ? l10n.homeBriefNoneNearby
+            : l10n.homeBriefNearby(nearbyCount!);
 
     return GlassPanel(
       padding: const EdgeInsets.all(AppSpacing.xl),
@@ -1249,11 +1246,11 @@ class _DailyBriefCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isTr ? 'Bugün ne bilmeliyim?' : 'What should I know today?',
+                      l10n.homeBriefTitle,
                       style: GoogleFonts.ibmPlexSans(fontSize: 17, fontWeight: FontWeight.w800),
                     ),
                     Text(
-                      isTr ? 'Kısa durum özeti' : 'Quick situation brief',
+                      l10n.homeBriefSubtitle,
                       style: GoogleFonts.ibmPlexSans(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],
@@ -1272,7 +1269,7 @@ class _DailyBriefCard extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onOpenRisk,
                   icon: const Icon(Icons.auto_graph_rounded, size: 18),
-                  label: Text(isTr ? 'Riski incele' : 'View risk'),
+                  label: Text(l10n.homeBriefViewRisk),
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
@@ -1280,7 +1277,7 @@ class _DailyBriefCard extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onOpenMap,
                   icon: const Icon(Icons.map_outlined, size: 18),
-                  label: Text(isTr ? 'Haritayı aç' : 'Open map'),
+                  label: Text(l10n.homeBriefOpenMap),
                 ),
               ),
             ],

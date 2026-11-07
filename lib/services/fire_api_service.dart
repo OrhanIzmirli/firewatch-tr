@@ -169,6 +169,8 @@ class FireApiService {
   /// same pipeline, without any additional cross-source-specific logic.
   static const _duplicateRadiusMeters = 500.0;
   static const _duplicateWindow = Duration(hours: 3);
+  static const _duplicateLatDeg = 0.005;
+  static const _duplicateLngDeg = 0.0075;
 
   static int _confidenceRank(String confidence) {
     final c = confidence.toLowerCase().trim();
@@ -200,6 +202,14 @@ class FireApiService {
       var matchIndex = -1;
       for (var i = 0; i < accepted.length; i++) {
         final existing = accepted[i];
+        // Cheap bounding-box reject before the great-circle maths: this
+        // loop is quadratic in the day's detections. 500 m is ~0.0045° of
+        // latitude and, at Türkiye's latitudes (36–42°N), at most ~0.0061°
+        // of longitude; the margins below are wider than both.
+        if ((candidate.latitude - existing.latitude).abs() > _duplicateLatDeg ||
+            (candidate.longitude - existing.longitude).abs() > _duplicateLngDeg) {
+          continue;
+        }
         final distanceMeters = Geolocator.distanceBetween(
           candidate.latitude,
           candidate.longitude,

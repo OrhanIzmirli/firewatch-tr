@@ -3670,4 +3670,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String riskNoteLightWind(int wind) {
     return 'Light wind ($wind km/h)';
   }
+
+  @override
+  String get newsFeaturedSubtitleLatest => 'Latest headline';
+
+  @override
+  String get homeBriefRiskLoading => 'Regional risk data is loading.';
+
+  @override
+  String get homeBriefRiskUnavailable =>
+      'Regional risk data is unavailable right now.';
+
+  @override
+  String homeBriefRiskHighest(String region, int score) {
+    return 'The highest regional risk is in $region: $score/100.';
+  }
+
+  @override
+  String homeBriefNationwide(int count) {
+    return '$count notable satellite detections are being monitored nationwide.';
+  }
+
+  @override
+  String get homeBriefNoneNearby =>
+      'No notable detection is visible within 100 km.';
+
+  @override
+  String homeBriefNearby(int count) {
+    return '$count detections are within 100 km; check the map for details.';
+  }
+
+  @override
+  String get homeBriefTitle => 'What should I know today?';
+
+  @override
+  String get homeBriefSubtitle => 'Quick situation brief';
+
+  @override
+  String get homeBriefViewRisk => 'View risk';
+
+  @override
+  String get homeBriefOpenMap => 'Open map';
 }

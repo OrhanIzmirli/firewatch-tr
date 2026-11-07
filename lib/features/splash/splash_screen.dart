@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
@@ -22,7 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _startAppFlow() async {
-    await Future.delayed(const Duration(milliseconds: 1800));
+    // A short brand beat, not a wait: it used to hold every start for
+    // 1.8 s even though nothing below depends on it.
+    await Future.delayed(const Duration(milliseconds: 600));
 
     final prefs = SharedPreferencesAsync();
     final hasSelectedLanguage = await prefs.getBool('hasSelectedLanguage') ?? false;
@@ -51,15 +52,12 @@ class _SplashScreenState extends State<SplashScreen> {
               fit: BoxFit.cover,
             ),
           ),
+          // A plain scrim instead of a full-screen BackdropFilter blur: the
+          // blur was recomputed on every frame of the spinner animation,
+          // which is costly on low-end GPUs right at cold start.
           Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: 6,
-                sigmaY: 6,
-              ),
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.55),
-              ),
+            child: Container(
+              color: Colors.black.withValues(alpha: 0.68),
             ),
           ),
           Positioned.fill(

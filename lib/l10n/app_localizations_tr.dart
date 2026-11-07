@@ -3666,4 +3666,45 @@ class AppLocalizationsTr extends AppLocalizations {
   String riskNoteLightWind(int wind) {
     return 'Hafif rüzgâr ($wind km/h)';
   }
+
+  @override
+  String get newsFeaturedSubtitleLatest => 'En güncel başlık';
+
+  @override
+  String get homeBriefRiskLoading => 'Bölgesel risk verisi yükleniyor.';
+
+  @override
+  String get homeBriefRiskUnavailable =>
+      'Bölgesel risk verisi şu an alınamadı.';
+
+  @override
+  String homeBriefRiskHighest(String region, int score) {
+    return 'En yüksek bölgesel risk $region bölgesinde: $score/100.';
+  }
+
+  @override
+  String homeBriefNationwide(int count) {
+    return '$count önemli uydu tespiti Türkiye genelinde izleniyor.';
+  }
+
+  @override
+  String get homeBriefNoneNearby =>
+      '100 km çevrende önemli bir tespit görünmüyor.';
+
+  @override
+  String homeBriefNearby(int count) {
+    return '100 km çevrende $count tespit var; haritadan ayrıntıları kontrol et.';
+  }
+
+  @override
+  String get homeBriefTitle => 'Bugün ne bilmeliyim?';
+
+  @override
+  String get homeBriefSubtitle => 'Kısa durum özeti';
+
+  @override
+  String get homeBriefViewRisk => 'Riski incele';
+
+  @override
+  String get homeBriefOpenMap => 'Haritayı aç';
 }

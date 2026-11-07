@@ -29,7 +29,12 @@ class AppTheme {
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
-  static ThemeData get darkTheme {
+  /// Built once: these were getters, so every rebuild of the app root
+  /// constructed both themes again (with ~10 GoogleFonts lookups each).
+  static final ThemeData darkTheme = _buildDarkTheme();
+  static final ThemeData lightTheme = _buildLightTheme();
+
+  static ThemeData _buildDarkTheme() {
     final base = ThemeData(
       brightness: Brightness.dark,
       useMaterial3: true,
@@ -212,7 +217,7 @@ class AppTheme {
     );
   }
 
-  static ThemeData get lightTheme {
+  static ThemeData _buildLightTheme() {
     final base = ThemeData(
       brightness: Brightness.light,
       useMaterial3: true,

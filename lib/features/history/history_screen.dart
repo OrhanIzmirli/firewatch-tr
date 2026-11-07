@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/feature_flags.dart';
@@ -11,6 +14,9 @@ import 'history_sample_data.dart';
 /// Past fire areas with their sourced restoration updates. Runs on two
 /// sample records while FIRE_HISTORY_URL is unset — and is then reachable in
 /// debug builds only (see FeatureFlags.fireHistory).
+/// Top-level so it can run in an isolate via compute().
+List<GeoArea> parseHistoryAreas(String raw) => GeoArea.collection(jsonDecode(raw));
+
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
   @override
@@ -47,8 +53,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() { _loading = true; _loadFailed = false; });
     try {
       // The backend takes calendar days (YYYY-MM-DD); the end day is inclusive.
-      final data = endpoint.isEmpty ? historySampleData : (await _dio.get(endpoint, queryParameters: {'from': historyQueryDate(_range.start), 'to': historyQueryDate(_range.end)})).data;
-      final areas = GeoArea.collection(data);
+      // A season is ~2 MB of GeoJSON and tens of thousands of vertices:
+      // fetched as text and decoded + built in a background isolate, so
+      // the UI thread never stalls on it.
+      final areas = endpoint.isEmpty
+          ? GeoArea.collection(historySampleData)
+          : await compute(parseHistoryAreas, (await _dio.get<String>(endpoint, queryParameters: {'from': historyQueryDate(_range.start), 'to': historyQueryDate(_range.end)}, options: Options(responseType: ResponseType.plain))).data ?? '');
       if (mounted && generation == _generation) setState(() { _areas = areas; _selected = null; });
     } catch (_) { if (mounted && generation == _generation) setState(() { _areas = []; _loadFailed = true; }); }
     finally { if (mounted && generation == _generation) setState(() => _loading = false); }
@@ -140,7 +150,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         if (!_loading && visible.isEmpty && !_loadFailed) Text(l10n.historyNoRecords),
         Expanded(child: AreaMap(areas: visible, selected: _selected, color: (_) => const Color(0xFFF97316), onSelected: _detail)),
         Text(endpoint.isEmpty ? l10n.historySourceSample : l10n.historySourceLive, style: Theme.of(context).textTheme.bodySmall),
-        SafeArea(top: false, child: SizedBox(height: 110, child: ListView(children: visible.map((a) => ListTile(title: Text('${a.city} / ${a.district}'), subtitle: Text(_listSubtitle(l10n, a.properties)), trailing: const Icon(Icons.chevron_right), onTap: () => _detail(a))).toList()))),
+        SafeArea(top: false, child: SizedBox(height: 110, child: ListView.builder(itemCount: visible.length, itemBuilder: (context, i) { final a = visible[i]; return ListTile(title: Text('${a.city} / ${a.district}'), subtitle: Text(_listSubtitle(l10n, a.properties)), trailing: const Icon(Icons.chevron_right), onTap: () => _detail(a)); }))),
       ]));
   }
 }

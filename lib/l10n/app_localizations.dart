@@ -6367,6 +6367,72 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Hafif rüzgâr ({wind} km/h)'**
   String riskNoteLightWind(int wind);
+
+  /// No description provided for @newsFeaturedSubtitleLatest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En güncel başlık'**
+  String get newsFeaturedSubtitleLatest;
+
+  /// No description provided for @homeBriefRiskLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel risk verisi yükleniyor.'**
+  String get homeBriefRiskLoading;
+
+  /// No description provided for @homeBriefRiskUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgesel risk verisi şu an alınamadı.'**
+  String get homeBriefRiskUnavailable;
+
+  /// No description provided for @homeBriefRiskHighest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek bölgesel risk {region} bölgesinde: {score}/100.'**
+  String homeBriefRiskHighest(String region, int score);
+
+  /// No description provided for @homeBriefNationwide.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} önemli uydu tespiti Türkiye genelinde izleniyor.'**
+  String homeBriefNationwide(int count);
+
+  /// No description provided for @homeBriefNoneNearby.
+  ///
+  /// In tr, this message translates to:
+  /// **'100 km çevrende önemli bir tespit görünmüyor.'**
+  String get homeBriefNoneNearby;
+
+  /// No description provided for @homeBriefNearby.
+  ///
+  /// In tr, this message translates to:
+  /// **'100 km çevrende {count} tespit var; haritadan ayrıntıları kontrol et.'**
+  String homeBriefNearby(int count);
+
+  /// No description provided for @homeBriefTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün ne bilmeliyim?'**
+  String get homeBriefTitle;
+
+  /// No description provided for @homeBriefSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa durum özeti'**
+  String get homeBriefSubtitle;
+
+  /// No description provided for @homeBriefViewRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Riski incele'**
+  String get homeBriefViewRisk;
+
+  /// No description provided for @homeBriefOpenMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritayı aç'**
+  String get homeBriefOpenMap;
 }
 
 class _AppLocalizationsDelegate

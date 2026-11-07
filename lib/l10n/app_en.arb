@@ -1377,5 +1377,16 @@
   "riskFactorHumidityHint": "Adds +{points}/{max} to the risk score: low humidity dries out flammable vegetation.",
   "riskFactorWindHintNone": "Below 10 km/h, wind adds nothing to the risk score.",
   "riskFactorWindHint": "Adds +{points}/{max} to the risk score: wind can carry flames and embers.",
-  "riskNoteLightWind": "Light wind ({wind} km/h)"
+  "riskNoteLightWind": "Light wind ({wind} km/h)",
+  "newsFeaturedSubtitleLatest": "Latest headline",
+  "homeBriefRiskLoading": "Regional risk data is loading.",
+  "homeBriefRiskUnavailable": "Regional risk data is unavailable right now.",
+  "homeBriefRiskHighest": "The highest regional risk is in {region}: {score}/100.",
+  "homeBriefNationwide": "{count} notable satellite detections are being monitored nationwide.",
+  "homeBriefNoneNearby": "No notable detection is visible within 100 km.",
+  "homeBriefNearby": "{count} detections are within 100 km; check the map for details.",
+  "homeBriefTitle": "What should I know today?",
+  "homeBriefSubtitle": "Quick situation brief",
+  "homeBriefViewRisk": "View risk",
+  "homeBriefOpenMap": "Open map"
 }

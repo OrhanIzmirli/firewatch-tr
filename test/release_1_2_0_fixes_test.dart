@@ -19,6 +19,8 @@ import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:firewatch_tr/l10n/app_localizations_en.dart';
 import 'package:firewatch_tr/l10n/app_localizations_tr.dart';
 import 'package:firewatch_tr/models/fire_incident.dart';
+import 'package:firewatch_tr/models/geo_area.dart';
+import 'package:firewatch_tr/models/news_item.dart';
 import 'package:firewatch_tr/services/app_version.dart';
 import 'package:firewatch_tr/services/device_position.dart';
 import 'package:firewatch_tr/services/notification_service.dart';
@@ -275,6 +277,61 @@ void main() {
       final last = tester.getRect(find.text(tr.annualLayerToggle));
       expect(last.left, greaterThanOrEqualTo(0));
       expect(last.right, lessThanOrEqualTo(360));
+    });
+  });
+
+  group('general scan fixes', () {
+    test('background monitoring initialises Firebase before the notification service', () {
+      final src = File('lib/services/background_task_service.dart').readAsStringSync();
+      final init = src.indexOf('Firebase.initializeApp(');
+      expect(init, greaterThan(0));
+      expect(init, lessThan(src.indexOf('NotificationService.instance.initializeLocal()')));
+      // The service no longer touches Firebase when constructed.
+      expect(File('lib/services/notification_service.dart').readAsStringSync(),
+          contains('FirebaseMessaging get _fcm => FirebaseMessaging.instance;'));
+    });
+
+    test('FCM listeners are registered before any network call', () {
+      final src = File('lib/services/notification_service.dart').readAsStringSync();
+      final setup = src.substring(
+          src.indexOf('Future<void> _setupFirebaseMessaging()'), src.indexOf('Future<void> _registerToken()'));
+      final listen = setup.indexOf('FirebaseMessaging.onMessage.listen');
+      expect(listen, greaterThan(0));
+      expect(listen, lessThan(setup.indexOf('getInitialMessage()')));
+      expect(listen, lessThan(setup.indexOf('_registerToken')));
+      expect(setup.indexOf('_fcm.getToken()'), -1, reason: 'token fetch lives in _registerToken');
+    });
+
+    test('one malformed history feature is skipped, not fatal', () {
+      final good = {
+        'id': 1,
+        'properties': {'city': 'Şanlıurfa', 'district': 'Siverek'},
+        'geometry': {
+          'type': 'Polygon',
+          'coordinates': [
+            [[39.0, 37.0], [39.1, 37.0], [39.1, 37.1], [39.0, 37.0]]
+          ],
+        },
+      };
+      final bad = {'id': 2, 'properties': {}, 'geometry': {'type': 'Point', 'coordinates': [39.0, 37.0]}};
+      final areas = GeoArea.collection({'features': [good, bad, {'id': 3}]});
+      expect(areas.map((a) => a.id), ['1']);
+    });
+
+    test('the featured "today" label only for items from the last 24 h', () {
+      NewsItem item(String at) => NewsItem.fromJson({'id': 1, 'title': 't', 'published_at': at});
+      final now = DateTime.utc(2026, 11, 7, 12);
+      expect(item('2026-11-07T08:00:00Z').publishedWithin(const Duration(hours: 24), now: now), isTrue);
+      expect(item('2026-10-25T08:00:00Z').publishedWithin(const Duration(hours: 24), now: now), isFalse);
+      expect(item('').publishedWithin(const Duration(hours: 24), now: now), isFalse);
+    });
+
+    testWidgets('the daily brief says "unavailable", not "loading", once loading has failed', (tester) async {
+      // Strings, not widgets: the card is private to home_screen.dart.
+      expect(tr.homeBriefRiskLoading, isNot(tr.homeBriefRiskUnavailable));
+      final src = File('lib/features/home/home_screen.dart').readAsStringSync();
+      expect(src, contains('riskLoading ? l10n.homeBriefRiskLoading : l10n.homeBriefRiskUnavailable'));
+      expect(src, isNot(contains("'Bölgesel risk verisi yükleniyor.'")));
     });
   });
 }

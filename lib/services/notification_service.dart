@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,7 +22,11 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  /// Lazy: reading FirebaseMessaging.instance before Firebase.initializeApp
+  /// throws, and the background isolate constructs this service too.
+  FirebaseMessaging get _fcm => FirebaseMessaging.instance;
+  bool _localReady = false;
+  bool _messagingReady = false;
   final RenderApiService _renderApi = RenderApiService();
 
   /// Tracked-place heat alerts (backend placeAlertJob). Its own channel so
@@ -35,7 +41,17 @@ class NotificationService {
     importance: Importance.max,
   );
 
+  /// Full setup for the app: local notifications, then FCM.
   Future<void> initialize() async {
+    await initializeLocal();
+    await _setupFirebaseMessaging();
+  }
+
+  /// Local notifications only (inbox, plugin, channels). Enough for the
+  /// background fire check, which shows alerts but must not register FCM
+  /// listeners or ask for permissions from a headless isolate.
+  Future<void> initializeLocal() async {
+    if (_localReady) return;
     await AlertInbox.instance.initialize();
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -50,7 +66,7 @@ class NotificationService {
     );
 
     await _createAndroidChannel();
-    await _setupFirebaseMessaging();
+    _localReady = true;
   }
 
   /// Whether app start may raise the system notification prompt.
@@ -64,47 +80,16 @@ class NotificationService {
   static bool shouldRequestPermissionAtStartup({required bool hasSeenOnboarding}) =>
       hasSeenOnboarding;
 
+  /// Order matters. Listeners and the launch notification come first and
+  /// cannot be blocked: they used to be registered only after getToken and
+  /// two backend calls (20 s timeouts each on a cold Render start), so a tap
+  /// that cold-started the app waited up to ~40 s, foreground messages in
+  /// that window were dropped, and an offline getToken failure left the
+  /// whole session without listeners. Token registration now runs last,
+  /// unawaited, and its failures are contained.
   Future<void> _setupFirebaseMessaging() async {
-    final hasSeenOnboarding =
-        await SharedPreferencesAsync().getBool('hasSeenOnboarding') ?? false;
-    final settings = shouldRequestPermissionAtStartup(hasSeenOnboarding: hasSeenOnboarding)
-        ? await _fcm.requestPermission(
-            alert: true,
-            announcement: false,
-            badge: true,
-            carPlay: false,
-            criticalAlert: false,
-            provisional: false,
-            sound: true,
-          )
-        : await _fcm.getNotificationSettings();
-
-    if (kDebugMode) {
-      print('FCM Permission status: ${settings.authorizationStatus}');
-    }
-
-    final token = await _fcm.getToken();
-    if (token != null && token.isNotEmpty) {
-      await _renderApi.subscribeToNotifications(token);
-    }
-
-    // Tracked places: the server deletes an install it hasn't seen for 90
-    // days (privacy policy: "if you don't open the app for 90 days"), so
-    // every start counts as "seen" — and keeps the token and language
-    // current. A no-op for installs that never added a place.
-    final localeName = (await currentAppLocalizations()).localeName;
-    await TrackedPlacesApi().updateDevice(
-      fcmToken: token != null && token.isNotEmpty ? token : null,
-      locale: localeName,
-    );
-
-    // A rotated token must reach both device tables, or alerts silently
-    // stop: fcm_tokens (region alerts) and place_devices (tracked places).
-    _fcm.onTokenRefresh.listen((newToken) async {
-      if (newToken.isEmpty) return;
-      await _renderApi.subscribeToNotifications(newToken);
-      await TrackedPlacesApi().updateDevice(fcmToken: newToken);
-    });
+    if (_messagingReady) return;
+    _messagingReady = true;
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (kDebugMode) {
@@ -127,10 +112,8 @@ class NotificationService {
       }
       final payload = payloadForData(message.data);
       AlertInbox.instance.add(message.notification?.title ?? 'FireWatch TR', message.notification?.body ?? '', payload: payload == 'alerts_tab' ? null : payload, id: message.messageId);
-      // Fetched fresh and used synchronously within this callback (no
-      // await in between) — the analyzer flags it only because the
-      // enclosing _setupFirebaseMessaging is itself async, not because
-      // this context is actually stale.
+      // Fetched fresh and used synchronously in this callback; the lint
+      // fires only because the enclosing method is async.
       final context = rootNavigatorKey.currentContext;
       if (context != null) {
         // ignore: use_build_context_synchronously
@@ -138,15 +121,26 @@ class NotificationService {
       }
     });
 
-    final initialMessage = await _fcm.getInitialMessage();
-    if (initialMessage != null) {
-      final payload = payloadForData(initialMessage.data);
-      await AlertInbox.instance.add(initialMessage.notification?.title ?? 'FireWatch TR', initialMessage.notification?.body ?? '', payload: payload == 'alerts_tab' ? null : payload, id: initialMessage.messageId);
-      {
+    // A rotated token must reach both device tables, or alerts silently
+    // stop: fcm_tokens (region alerts) and place_devices (tracked places).
+    _fcm.onTokenRefresh.listen((newToken) async {
+      if (newToken.isEmpty) return;
+      try {
+        await _renderApi.subscribeToNotifications(newToken);
+        await TrackedPlacesApi().updateDevice(fcmToken: newToken);
+      } catch (e) {
+        if (kDebugMode) debugPrint('Token refresh registration failed: $e');
+      }
+    });
+
+    try {
+      final initialMessage = await _fcm.getInitialMessage();
+      if (initialMessage != null) {
+        final payload = payloadForData(initialMessage.data);
+        await AlertInbox.instance.add(initialMessage.notification?.title ?? 'FireWatch TR', initialMessage.notification?.body ?? '', payload: payload == 'alerts_tab' ? null : payload, id: initialMessage.messageId);
         Future.delayed(const Duration(seconds: 1), () {
-          // Fetched fresh here (not captured before the delay) since the
-          // root navigator's context can only be resolved at the moment
-          // it's actually used.
+          // Resolved at the moment of use: the root navigator may not
+          // exist yet when the launch message is read.
           final context = rootNavigatorKey.currentContext;
           if (context != null) {
             // ignore: use_build_context_synchronously
@@ -154,6 +148,55 @@ class NotificationService {
           }
         });
       }
+    } catch (e) {
+      if (kDebugMode) debugPrint('getInitialMessage failed: $e');
+    }
+
+    try {
+      final hasSeenOnboarding =
+          await SharedPreferencesAsync().getBool('hasSeenOnboarding') ?? false;
+      final settings = shouldRequestPermissionAtStartup(hasSeenOnboarding: hasSeenOnboarding)
+          ? await _fcm.requestPermission(
+              alert: true,
+              announcement: false,
+              badge: true,
+              carPlay: false,
+              criticalAlert: false,
+              provisional: false,
+              sound: true,
+            )
+          : await _fcm.getNotificationSettings();
+      if (kDebugMode) {
+        print('FCM Permission status: ${settings.authorizationStatus}');
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('Notification permission check failed: $e');
+    }
+
+    unawaited(_registerToken());
+  }
+
+  /// Registers this install's token with the backend. Network-bound and
+  /// best-effort: nothing waits on it, and a failure (offline, cold
+  /// backend) only means the next start tries again.
+  Future<void> _registerToken() async {
+    try {
+      final token = await _fcm.getToken();
+      if (token != null && token.isNotEmpty) {
+        await _renderApi.subscribeToNotifications(token);
+      }
+
+      // Tracked places: the server deletes an install it hasn't seen for 90
+      // days (privacy policy: "if you don't open the app for 90 days"), so
+      // every start counts as "seen" — and keeps the token and language
+      // current. A no-op for installs that never added a place.
+      final localeName = (await currentAppLocalizations()).localeName;
+      await TrackedPlacesApi().updateDevice(
+        fcmToken: token != null && token.isNotEmpty ? token : null,
+        locale: localeName,
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Token registration failed: $e');
     }
   }
 

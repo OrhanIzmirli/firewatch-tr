@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../firebase_options.dart';
 import 'fire_monitoring_service.dart';
 import 'notification_service.dart';
 
@@ -15,7 +17,12 @@ void backgroundTaskCallbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await NotificationService.instance.initialize();
+      // This isolate starts with nothing initialised. Without Firebase the
+      // check used to throw before doing anything, so background
+      // monitoring never ran; and it needs only local notifications, not
+      // FCM listeners or permission prompts.
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await NotificationService.instance.initializeLocal();
       await FireMonitoringService.instance.initialize();
       await FireMonitoringService.instance.checkNow(triggerNotification: true);
       return Future.value(true);

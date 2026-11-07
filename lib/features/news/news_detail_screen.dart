@@ -302,6 +302,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 
             const SizedBox(height: AppSpacing.xxl),
 
+            // Only when the source gave us any; an empty heading looked like
+            // a loading failure.
+            if (newsItem.highlights.isNotEmpty) ...[
             SectionHeader(
               title: l10n.newsDetailHighlightsTitle,
               subtitle: l10n.newsDetailHighlightsSubtitle,
@@ -356,7 +359,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             }),
 
             const SizedBox(height: AppSpacing.xxxl),
+            ],
 
+            if (newsItem.paragraphs.isNotEmpty) ...[
             SectionHeader(
               title: l10n.newsDetailFullContentTitle,
               subtitle: l10n.newsDetailFullContentSubtitle,
@@ -397,6 +402,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ),
               );
             }),
+            ],
 
             const SizedBox(height: AppSpacing.xxxl),
 

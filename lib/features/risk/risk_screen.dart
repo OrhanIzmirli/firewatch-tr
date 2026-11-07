@@ -1061,7 +1061,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   _ProgressFactorCard(
                     title: l10n.riskDrynessIndexDerived,
                     value: _avgDryness / 100,
-                    label: _avgDryness >= 70 ? l10n.riskDrynessVeryHigh : _avgDryness >= 50 ? l10n.commonHigh : l10n.commonMedium,
+                    label: indexBandLabel(l10n, _avgDryness),
                     color: AppColors.danger,
                     delay: const Duration(milliseconds: 280),
                   ),
@@ -1069,7 +1069,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   _ProgressFactorCard(
                     title: l10n.riskWindPressure,
                     value: (_avgWind / 80).clamp(0, 1),
-                    label: _avgWind >= 50 ? l10n.commonHigh : _avgWind >= 25 ? l10n.commonMedium : l10n.commonLow,
+                    label: windBandLabel(l10n, _avgWind),
                     color: AppColors.warning,
                     delay: const Duration(milliseconds: 350),
                   ),
@@ -1077,7 +1077,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   _ProgressFactorCard(
                     title: l10n.riskVegetationDensityDerived,
                     value: _avgVegetation / 100,
-                    label: _avgVegetation >= 60 ? l10n.riskVegetationMediumHigh : l10n.commonMedium,
+                    label: indexBandLabel(l10n, _avgVegetation),
                     color: AppColors.primary,
                     delay: const Duration(milliseconds: 420),
                   ),
@@ -1085,7 +1085,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   _ProgressFactorCard(
                     title: l10n.riskHumidityLevel,
                     value: (_avgHumidity / 100).clamp(0, 1),
-                    label: _avgHumidity >= 60 ? l10n.commonHigh : _avgHumidity >= 40 ? l10n.commonMedium : l10n.commonLow,
+                    label: humidityBandLabel(l10n, _avgHumidity),
                     color: AppColors.success,
                     delay: const Duration(milliseconds: 490),
                   ),
@@ -1340,7 +1340,7 @@ class _MyLocationSection extends StatelessWidget {
             _RiskMetricCard(
               title: l10n.riskDrynessIndex,
               value: '${dryness.toInt()}',
-              subtitle: dryness >= 70 ? l10n.riskDrynessVeryHigh : dryness >= 50 ? l10n.commonHigh : l10n.commonMedium,
+              subtitle: indexBandLabel(l10n, dryness),
               icon: Icons.grain_rounded,
               accent: AppColors.danger,
               delay: const Duration(milliseconds: 340),
@@ -1348,7 +1348,7 @@ class _MyLocationSection extends StatelessWidget {
             _RiskMetricCard(
               title: l10n.riskVegetationDensity,
               value: '${vegetation.toInt()}',
-              subtitle: vegetation >= 60 ? l10n.riskVegetationMediumHigh : l10n.commonMedium,
+              subtitle: indexBandLabel(l10n, vegetation),
               icon: Icons.eco_outlined,
               accent: AppColors.primary,
               delay: const Duration(milliseconds: 400),

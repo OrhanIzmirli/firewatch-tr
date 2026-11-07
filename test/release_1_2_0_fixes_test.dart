@@ -351,4 +351,16 @@ void main() {
       expect(points.first.isMerged, isTrue);
     });
   });
+
+  group('environmental factor cards', () {
+    test('bands come from risk_factors.dart and an index of 21 is low', () {
+      expect(indexBandLabel(tr, 21), tr.commonLow);
+      expect([24, 25, 50, 75].map((v) => indexBandLabel(tr, v)),
+          [tr.commonLow, tr.commonMedium, tr.commonHigh, tr.riskDrynessVeryHigh]);
+      expect([19, 20, 35].map((v) => windBandLabel(tr, v)), [tr.commonLow, tr.commonMedium, tr.commonHigh]);
+      expect([30, 50, 71].map((v) => humidityBandLabel(tr, v)), [tr.commonLow, tr.commonMedium, tr.commonHigh]);
+      final src = File('lib/features/risk/risk_screen.dart').readAsStringSync();
+      expect(RegExp(r'_avg(Dryness|Wind|Vegetation|Humidity) >=').hasMatch(src), isFalse);
+    });
+  });
 }

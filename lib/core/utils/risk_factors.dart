@@ -98,3 +98,24 @@ String riskNote(AppLocalizations l10n, {required num temperature, required num h
   ];
   return parts.join(' • ');
 }
+
+/// Band of a derived 0–100 index (dryness, vegetation pressure) for the
+/// "environmental factors" cards. Quarters, like the risk score: an index
+/// of 21 is low — the cards used to floor these at "medium".
+String indexBandLabel(AppLocalizations l10n, num index) => index >= 75
+    ? l10n.riskDrynessVeryHigh
+    : index >= 50
+        ? l10n.commonHigh
+        : index >= 25
+            ? l10n.commonMedium
+            : l10n.commonLow;
+
+/// Wind band on the same steps as [riskNote]: strong from 35 km/h,
+/// moderate from 20, low below.
+String windBandLabel(AppLocalizations l10n, num kmh) =>
+    kmh >= 35 ? l10n.commonHigh : kmh >= 20 ? l10n.commonMedium : l10n.commonLow;
+
+/// Humidity band on the same steps as [riskNote]: low up to 30%, medium
+/// up to 50%, high above.
+String humidityBandLabel(AppLocalizations l10n, num percent) =>
+    percent <= 30 ? l10n.commonLow : percent <= 50 ? l10n.commonMedium : l10n.commonHigh;

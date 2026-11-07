@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/auto_refresh.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
@@ -87,20 +89,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   IncidentSummary? _incidentSummary;
   bool _incidentSummaryLoading = true;
 
+  /// Settings › data refresh interval: a silent reload of the fire feed
+  /// and the 24-hour summary, no spinner.
+  late final AutoRefresher _autoRefresher = AutoRefresher(
+    onRefresh: () => Future.wait([
+      _loadFires(force: true, silent: true),
+      _loadIncidentSummary(),
+    ]),
+  );
+
   @override
   void initState() {
     super.initState();
     _loadData();
     _loadUserPosition();
+    _autoRefresher.start();
   }
 
-  Future<void> _loadData() async {
+  /// [force] skips the two-minute feed memo (pull-to-refresh).
+  Future<void> _loadData({bool force = false}) async {
     await Future.wait([
       _loadNews(),
-      _loadFires(),
+      _loadFires(force: force),
       _loadRiskSummary(),
       _loadIncidentSummary(),
     ]);
+    _autoRefresher.markRefreshed();
   }
 
   /// Best-effort. A null summary hides the section rather than showing zeros,
@@ -123,6 +137,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (total < 24) return l10n.durationHoursShort(total);
     return l10n.durationDaysHours(total ~/ 24, total % 24);
   }
+
+  /// Active detections below the multi-pass bar (never negative, in case
+  /// an older backend's two counts disagree).
+  int _weakerActive(IncidentSummary summary) =>
+      math.max(0, summary.activeCount - summary.activeSignificantCount);
 
   /// The last 24 hours in three cards.
   ///
@@ -148,16 +167,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             SmartOverviewCard(
               title: l10n.homeLast24hActiveTitle,
-              value: summary.activeCount.toString(),
-              // Two layers on purpose. The raw count grows through the fire
-              // season and reads as a fire count, but most of it is single
-              // fresh pixels that have not had a second overpass yet. The
-              // map still shows all of them — asymmetric caution holds
-              // there — but a headline number is a different claim.
-              subtitle: l10n.homeLast24hActiveSubtitleLayered(
-                summary.activeSignificantCount,
-                summary.recentDetectionHours,
-              ),
+              // As in 1.0.6: the headline is the multi-pass count, the
+              // number the events layer actually draws. Single fresh pixels
+              // are counted in the subtitle and live on the Points layer.
+              value: summary.activeSignificantCount.toString(),
+              subtitle: l10n.homeMultiPassSubtitle(_weakerActive(summary)),
               icon: Icons.local_fire_department_rounded,
               color: AppColors.danger,
               delay: 0.ms,
@@ -179,6 +193,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          l10n.homeMultiPassNote(
+            summary.activeSignificantCount,
+            _weakerActive(summary),
+          ),
+          style: GoogleFonts.ibmPlexSans(
+            fontSize: 12,
+            height: 1.4,
+            color: Theme.of(context).textTheme.bodySmall?.color,
+          ),
         ),
         if (summary.hasStrongestActive) ...[
           const SizedBox(height: AppSpacing.md),
@@ -361,15 +387,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  Future<void> _loadFires() async {
-    if (mounted) setState(() { _fireLoading = true; _firesSlowLoading = false; });
+  Future<void> _loadFires({bool force = false, bool silent = false}) async {
+    if (mounted && !silent) setState(() { _fireLoading = true; _firesSlowLoading = false; });
     try {
       final allPoints = await raceWithCacheFallback(
-        fetch: retryOnce(() => _fireApiService.fetchTurkeyFiresWithCities()),
+        fetch: retryOnce(
+          () => _fireApiService.fetchTurkeyFiresWithCities(force: force),
+        ),
         timeout: const Duration(seconds: 12),
         cacheKey: _firesCacheKey,
         onSlowFallback: (cached) {
-          if (!mounted) return;
+          // A silent refresh never swaps fresh data for the offline copy.
+          if (silent || !mounted) return;
           final (data, _) = cached;
           setState(() {
             _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
@@ -388,6 +417,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     } catch (e, stack) {
       if (kDebugMode) debugPrint('ERROR _loadFires: $e\n$stack');
+      // Silent refresh failed: keep what is on screen.
+      if (silent) return;
       final cached = await OfflineCacheService.instance.load(_firesCacheKey);
       if (mounted) {
         setState(() {
@@ -549,6 +580,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void dispose() {
+    _autoRefresher.dispose();
     _searchDebounce?.cancel();
     _searchController.dispose();
     super.dispose();
@@ -641,7 +673,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: _loadData,
+        onRefresh: () => _loadData(force: true),
         color: AppColors.primary,
         child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

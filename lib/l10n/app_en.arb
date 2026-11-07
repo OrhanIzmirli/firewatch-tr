@@ -238,7 +238,7 @@
   },
   "notificationsNoHighRisk": "No high-confidence thermal anomalies right now.",
   "notificationsHighRiskDetectionTitle": "High-Risk Thermal Detection",
-  "notificationsHighRiskDetectionBody": "{temp}K heat detected in the {region} region. High likelihood of an active fire.",
+  "notificationsHighRiskDetectionBody": "{temp}K heat detected in the {region} region. A strong satellite heat signal, not a verified fire.",
   "@notificationsHighRiskDetectionBody": {
     "placeholders": {
       "region": { "type": "String" },
@@ -714,7 +714,7 @@
   "compassEast": "E",
   "compassWest": "W",
 
-  "riskReasonHighWithTemp": "Thermal sensor detected {temp}K heat. High likelihood of an active fire — stay away from the area.",
+  "riskReasonHighWithTemp": "Thermal sensor detected {temp}K heat. A strong heat signal, not a verified fire. Stay away from the area.",
   "@riskReasonHighWithTemp": {
     "placeholders": { "temp": { "type": "String" } }
   },
@@ -730,7 +730,7 @@
   },
   "riskReasonLowNoTemp": "Low-level thermal activity. Monitoring is recommended.",
 
-  "fireGeneratedDescHigh": "High-intensity thermal activity. Strong likelihood of an active fire.",
+  "fireGeneratedDescHigh": "High-intensity thermal activity. A strong heat signal, not a verified fire.",
   "fireGeneratedDescMedium": "Moderate heat increase. The area needs monitoring.",
   "fireGeneratedDescLow": "Low-level thermal activity. Monitoring is recommended.",
 
@@ -738,7 +738,7 @@
   "fireRecommendedActionMedium": "Keep track of developments and avoid getting close to the area unnecessarily.",
   "fireRecommendedActionLow": "No urgent action needed right now — keep an eye on the area.",
 
-  "fireStatusActive": "Probable Fire",
+  "fireStatusActive": "Very Strong Heat Signal",
   "fireStatusLikelyActive": "High Thermal Anomaly",
   "fireStatusMonitoring": "Monitoring",
   "fireStatusHistorical": "Historical Detection",
@@ -960,10 +960,10 @@
 
   "trustHomeMeaning": "Counts are satellite thermal anomalies from the last 24 hours, not confirmed wildfires. Some may be agricultural burns, industrial heat, or hot surfaces.",
   "trustHomeSource": "Data comes from NASA FIRMS (Fire Information for Resource Management System), combining VIIRS and MODIS satellite passes, refreshed every 3 hours.",
-  "trustHomeInterpret": "Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.",
+  "trustHomeInterpret": "Only a high-confidence detection above 30 MW FRP and 350 K is labelled Very Strong Heat Signal. All other points remain thermal anomalies.",
   "trustHomeAction": "Tap a detection for confidence, FRP, and limitations. If you see smoke or flames, follow official emergency guidance and report what you observe.",
 
-  "trustMapMeaning": "Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.",
+  "trustMapMeaning": "Each marker is a satellite thermal anomaly, not a confirmed fire. Red means very strong heat signal; orange high anomaly; yellow nominal; gray low confidence.",
   "trustMapSource": "Fire data sourced from NASA FIRMS (VIIRS & MODIS satellites). Secondary verification via EFFIS (Copernicus Emergency Management Service) will be added when their API is restored.",
   "trustMapInterpret": "Clusters only mean multiple heat detections are close together. They do not by themselves confirm the cause or size of a fire.",
   "trustMapAction": "Tap a marker to review confidence and FRP. If you personally observe a fire, use Report and follow official emergency instructions.",
@@ -998,7 +998,7 @@
   "smartLocationHintForest": "a high-risk forest area",
   "smartLocationHintCoastal": "a coastal area",
   "smartLocationHintUrban": "an urban area — could be a structure fire or industrial heat source",
-  "smartLocationHintAgricultural": "farmland — possible crop or stubble burning",
+  "smartLocationHintAgricultural": "farmland — stubble burning also leaves heat traces like this",
 
   "smartFrpHigh": "A high Fire Radiative Power (FRP) reading indicates significant energy release.",
   "smartPixelFootprint": "The satellite pixel is ~{hectares} hectares; the fire is somewhere inside it and its real size is unknown.",
@@ -1092,7 +1092,7 @@
   "coachMarkWatchlistClearDesc": "Use the Clear button in the top corner to remove all saved points at once.",
   "coachMarkWatchlistTapTitle": "View Details",
   "coachMarkWatchlistTapDesc": "Tap a saved fire to see its current status and full details.",
-  "detectionProbableFire": "Probable Fire",
+  "detectionProbableFire": "Very Strong Heat Signal",
   "detectionHighThermalAnomaly": "High Thermal Anomaly",
   "detectionThermalDetection": "Thermal Detection",
   "detectionLowConfidence": "Low Confidence Detection",
@@ -1105,7 +1105,7 @@
   "@detectionFrpExplanation": {"placeholders":{"frp":{"type":"String"}}},
   "detectionLimitations": "Cloud, smoke, satellite resolution and non-fire heat sources can cause missed or misleading detections. Use official emergency information and direct observation for safety decisions.",
   "mapLegendTitle": "Map Legend",
-  "legendProbableFire": "Probable Fire",
+  "legendProbableFire": "Very strong heat signal",
   "legendHighThermal": "High Thermal Anomaly",
   "legendLowConfidence": "Low Confidence",
   "mapMarkerDisclaimerBefore": "The map shows NASA satellite thermal detections.",
@@ -1231,10 +1231,8 @@
   "riskAttribution": "© European Union, Copernicus EFFIS",
   "homeLast24hTitle": "Last 24 Hours",
   "homeLast24hSubtitle": "Summary of satellite detections",
-  "homeLast24hActiveTitle": "Active detection",
+  "homeLast24hActiveTitle": "Multi-pass detections",
   "homeLast24hActiveSubtitle": "Seen by a satellite within the last {hours} hours",
-  "homeLast24hActiveSubtitleLayered": "{strong} with strong evidence; seen by satellite in the last {hours} h",
-  "@homeLast24hActiveSubtitleLayered": {"placeholders": {"strong": {"type": "int"}, "hours": {"type": "int"}}},
   "@homeLast24hActiveSubtitle": {"placeholders": {"hours": {"type": "int"}}},
   "homeLast24hEndedTitle": "Detection ended",
   "homeLast24hEndedSubtitle": "Not a claim that they are out.",
@@ -1393,5 +1391,18 @@
   "dataSourcesBordersGeoBoundariesCredit": "Province boundaries: geoBoundaries",
   "annualLayerProvenance": "Yearly province totals were calculated in the source data set (OGM forest fire statistics; NASA FIRMS VIIRS S-NPP with ESA WorldCover 2021; EFFIS). By that data set's own statement, its satellite point counts were calculated with GADM 4.1 province boundaries. The province boundaries drawn on the map are geoBoundaries / OpenStreetMap.",
   "osmAttribution": "© OpenStreetMap contributors, ODbL",
-  "odblLicenseLink": "ODbL 1.0 licence"
+  "odblLicenseLink": "ODbL 1.0 licence",
+  "mapDetectionConfidence": "Detection confidence: {score}/100",
+  "mapDetectionConfidenceInfoTitle": "Detection confidence",
+  "mapDetectionConfidenceInfoBody": "Computed from NASA's confidence level, radiated power (FRP), multi-pass detections within 20 km and how recent the detection is. Weather is not part of this score.",
+  "mapDetectionConfidenceInfoNotFire": "This score shows how distinct a single satellite pixel is. It does not say there is a fire there.",
+  "mapStrongUnverifiedReason": "Strong heat signal ({frp} MW) in a single satellite pixel — not yet verified",
+  "mapStrongUnverifiedBanner": "{count, plural, =1{1 strong unverified detection — view on Points} other{{count} strong unverified detections — view on Points}}",
+  "multiPassDetectionLabel": "Multi-pass detection",
+  "multiPassDetectionExplanation": "Seen at the same spot on at least two separate satellite passes, with a strong heat signal. This does not prove a fire; it is stronger evidence than a single pixel.",
+  "homeMultiPassSubtitle": "At least 2 satellite passes; {weaker} more heat traces under Points",
+  "homeMultiPassNote": "{count} multi-pass detections (at least 2 satellite passes); the map shows {weaker} more single-pass or weak heat traces. None of these is a verified fire.",
+  "incidentExtinguishedConflict": "Official: extinguished — satellite still sees heat",
+  "fireDetailLinkedNews": "News linked to this fire",
+  "osmTileAttribution": "© OpenStreetMap contributors"
 }

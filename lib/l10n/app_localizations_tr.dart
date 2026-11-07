@@ -566,7 +566,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '$region bölgesinde ${temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.';
+    return '$region bölgesinde ${temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.';
   }
 
   @override
@@ -1857,7 +1857,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Termal sensör ${temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.';
+    return 'Termal sensör ${temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.';
   }
 
   @override
@@ -1884,7 +1884,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get fireGeneratedDescHigh =>
-      'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.';
+      'Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1907,7 +1907,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
 
   @override
-  String get fireStatusActive => 'Muhtemel Yangın';
+  String get fireStatusActive => 'Çok Güçlü Isı Sinyali';
 
   @override
   String get fireStatusLikelyActive => 'Yüksek Isı Anomalisi';
@@ -2358,7 +2358,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.';
+      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.';
 
   @override
   String get trustHomeAction =>
@@ -2366,7 +2366,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapMeaning =>
-      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
+      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
 
   @override
   String get trustMapSource =>
@@ -2468,7 +2468,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get smartLocationHintAgricultural =>
-      'tarım arazisinde; anız yakma ihtimali var';
+      'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır';
 
   @override
   String get smartFrpHigh =>
@@ -2711,7 +2711,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.';
 
   @override
-  String get detectionProbableFire => 'Muhtemel Yangın';
+  String get detectionProbableFire => 'Çok Güçlü Isı Sinyali';
 
   @override
   String get detectionHighThermalAnomaly => 'Yüksek Isı Anomalisi';
@@ -2751,7 +2751,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapLegendTitle => 'Harita Lejantı';
 
   @override
-  String get legendProbableFire => 'Muhtemel Yangın';
+  String get legendProbableFire => 'Çok güçlü ısı sinyali';
 
   @override
   String get legendHighThermal => 'Yüksek Isı Anomalisi';
@@ -3177,16 +3177,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeLast24hSubtitle => 'Uydu tespitlerinin özeti';
 
   @override
-  String get homeLast24hActiveTitle => 'Aktif tespit';
+  String get homeLast24hActiveTitle => 'Çoklu geçiş tespiti';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Son $hours saat içinde uydu tarafından görüldü';
-  }
-
-  @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong tanesi güçlü kanıtlı; son $hours saatte uyduyla görüldü';
   }
 
   @override
@@ -3723,4 +3718,57 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get odblLicenseLink => 'ODbL 1.0 lisansı';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Tespit güveni: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Tespit güveni';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'NASA\'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.';
+
+  @override
+  String mapStrongUnverifiedReason(int frp) {
+    return 'Tek bir uydu pikselinde güçlü ısı sinyali ($frp MW) — henüz doğrulanmadı';
+  }
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    return '$count güçlü, doğrulanmamış tespit — Noktalar\'da gör';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Çoklu geçiş tespiti';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'En az 2 uydu geçişi; $weaker ısı izi daha Noktalar katmanında';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count çoklu geçiş tespiti (en az 2 uydu geçişi); haritada $weaker tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor';
+
+  @override
+  String get fireDetailLinkedNews => 'Bu yangınla ilişkilendirilen haberler';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap katkıcıları';
 }

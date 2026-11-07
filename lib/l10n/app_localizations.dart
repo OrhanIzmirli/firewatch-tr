@@ -1103,7 +1103,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsHighRiskDetectionBody.
   ///
   /// In tr, this message translates to:
-  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.'**
+  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.'**
   String notificationsHighRiskDetectionBody(String region, String temp);
 
   /// No description provided for @watchlistTitle.
@@ -3358,7 +3358,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskReasonHighWithTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Termal sensör {temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.'**
+  /// **'Termal sensör {temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.'**
   String riskReasonHighWithTemp(String temp);
 
   /// No description provided for @riskReasonHighNoTemp.
@@ -3394,7 +3394,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireGeneratedDescHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.'**
+  /// **'Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.'**
   String get fireGeneratedDescHigh;
 
   /// No description provided for @fireGeneratedDescMedium.
@@ -3430,7 +3430,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireStatusActive.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok Güçlü Isı Sinyali'**
   String get fireStatusActive;
 
   /// No description provided for @fireStatusLikelyActive.
@@ -4199,7 +4199,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.'**
+  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.'**
   String get trustHomeInterpret;
 
   /// No description provided for @trustHomeAction.
@@ -4211,7 +4211,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
+  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
   String get trustMapMeaning;
 
   /// No description provided for @trustMapSource.
@@ -4361,7 +4361,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartLocationHintAgricultural.
   ///
   /// In tr, this message translates to:
-  /// **'tarım arazisinde; anız yakma ihtimali var'**
+  /// **'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır'**
   String get smartLocationHintAgricultural;
 
   /// No description provided for @smartFrpHigh.
@@ -4751,7 +4751,7 @@ abstract class AppLocalizations {
   /// No description provided for @detectionProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok Güçlü Isı Sinyali'**
   String get detectionProbableFire;
 
   /// No description provided for @detectionHighThermalAnomaly.
@@ -4817,7 +4817,7 @@ abstract class AppLocalizations {
   /// No description provided for @legendProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Muhtemel Yangın'**
+  /// **'Çok güçlü ısı sinyali'**
   String get legendProbableFire;
 
   /// No description provided for @legendHighThermal.
@@ -5573,7 +5573,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hActiveTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif tespit'**
+  /// **'Çoklu geçiş tespiti'**
   String get homeLast24hActiveTitle;
 
   /// No description provided for @homeLast24hActiveSubtitle.
@@ -5581,12 +5581,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Son {hours} saat içinde uydu tarafından görüldü'**
   String homeLast24hActiveSubtitle(int hours);
-
-  /// No description provided for @homeLast24hActiveSubtitleLayered.
-  ///
-  /// In tr, this message translates to:
-  /// **'{strong} tanesi güçlü kanıtlı; son {hours} saatte uyduyla görüldü'**
-  String homeLast24hActiveSubtitleLayered(int strong, int hours);
 
   /// No description provided for @homeLast24hEndedTitle.
   ///
@@ -6463,6 +6457,84 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ODbL 1.0 lisansı'**
   String get odblLicenseLink;
+
+  /// No description provided for @mapDetectionConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit güveni: {score}/100'**
+  String mapDetectionConfidence(int score);
+
+  /// No description provided for @mapDetectionConfidenceInfoTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit güveni'**
+  String get mapDetectionConfidenceInfoTitle;
+
+  /// No description provided for @mapDetectionConfidenceInfoBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA\'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.'**
+  String get mapDetectionConfidenceInfoBody;
+
+  /// No description provided for @mapDetectionConfidenceInfoNotFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.'**
+  String get mapDetectionConfidenceInfoNotFire;
+
+  /// No description provided for @mapStrongUnverifiedReason.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek bir uydu pikselinde güçlü ısı sinyali ({frp} MW) — henüz doğrulanmadı'**
+  String mapStrongUnverifiedReason(int frp);
+
+  /// No description provided for @mapStrongUnverifiedBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} güçlü, doğrulanmamış tespit — Noktalar\'da gör'**
+  String mapStrongUnverifiedBanner(int count);
+
+  /// No description provided for @multiPassDetectionLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çoklu geçiş tespiti'**
+  String get multiPassDetectionLabel;
+
+  /// No description provided for @multiPassDetectionExplanation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.'**
+  String get multiPassDetectionExplanation;
+
+  /// No description provided for @homeMultiPassSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En az 2 uydu geçişi; {weaker} ısı izi daha Noktalar katmanında'**
+  String homeMultiPassSubtitle(int weaker);
+
+  /// No description provided for @homeMultiPassNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.'**
+  String homeMultiPassNote(int count, int weaker);
+
+  /// No description provided for @incidentExtinguishedConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor'**
+  String get incidentExtinguishedConflict;
+
+  /// No description provided for @fireDetailLinkedNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yangınla ilişkilendirilen haberler'**
+  String get fireDetailLinkedNews;
+
+  /// No description provided for @osmTileAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'© OpenStreetMap katkıcıları'**
+  String get osmTileAttribution;
 }
 
 class _AppLocalizationsDelegate

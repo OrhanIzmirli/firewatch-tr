@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -168,4 +170,34 @@ int? newsWordCount(NewsItem item) {
   final trimmed = text.trim();
   if (trimmed.isEmpty) return null;
   return trimmed.split(_whitespacePattern).length;
+}
+
+// ── Near-duplicate collapsing ─────────────────────────────────────────────
+
+final RegExp _titleTokenSplit = RegExp(r'[^\p{L}\p{N}]+', unicode: true);
+
+/// Collapses copies of the same story syndicated by different outlets down
+/// to the first occurrence, by folded-title word overlap: two titles are the
+/// same story when at least 80% of the shorter one's words (longer than two
+/// letters) appear in the other. Order is preserved, so callers sort by
+/// preference first.
+List<NewsItem> dedupeNewsByTitle(List<NewsItem> items) {
+  final kept = <NewsItem>[];
+  final keptTokens = <Set<String>>[];
+  for (final item in items) {
+    final tokens = foldTurkish(item.title)
+        .split(_titleTokenSplit)
+        .where((w) => w.length > 2)
+        .toSet();
+    final isDuplicate = keptTokens.any((other) {
+      if (tokens.isEmpty || other.isEmpty) return false;
+      final overlap = tokens.intersection(other).length;
+      return overlap / math.min(tokens.length, other.length) >= 0.8;
+    });
+    if (!isDuplicate) {
+      kept.add(item);
+      keptTokens.add(tokens);
+    }
+  }
+  return kept;
 }

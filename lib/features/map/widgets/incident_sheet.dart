@@ -83,6 +83,35 @@ class IncidentSheet extends StatelessWidget {
             const DetectionSafetyNotice(),
             const SizedBox(height: AppSpacing.lg),
 
+            // Official "extinguished" while a satellite still sees heat.
+            // Only reachable behind FeatureFlags.officialStatus.
+            if (incident.hasExtinguishedConflict) ...[
+              _Line(
+                icon: Icons.report_problem_rounded,
+                text: l10n.incidentExtinguishedConflict,
+                color: AppColors.warning,
+                emphasis: true,
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+
+            if (incident.isMultiPassDetection) ...[
+              _Line(
+                icon: Icons.layers_rounded,
+                text: l10n.multiPassDetectionLabel,
+                color: titleColor,
+                emphasis: true,
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.multiPassDetectionExplanation,
+                style: GoogleFonts.ibmPlexSans(
+                  fontSize: 12.5, height: 1.45, color: bodyColor,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+            ],
+
             if (cityName != null) ...[
               _Line(
                 icon: Icons.place_rounded,
@@ -187,9 +216,9 @@ class IncidentSheet extends StatelessWidget {
               ),
             ],
 
-            // Reads official.state but never invents it. Today this is always
-            // null, so the section simply does not render.
-            if (incident.hasOfficialStatus) ...[
+            // Reads official.state but never invents it, and only behind
+            // FeatureFlags.officialStatus (off until a TR source exists).
+            if (incident.hasShownOfficialStatus) ...[
               const SizedBox(height: AppSpacing.xl),
               _OfficialCard(incident: incident, titleColor: titleColor, bodyColor: bodyColor),
             ],

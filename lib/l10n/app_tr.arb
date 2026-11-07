@@ -238,7 +238,7 @@
   },
   "notificationsNoHighRisk": "Şu an yüksek güvenilirlikli termal anomali bulunmuyor.",
   "notificationsHighRiskDetectionTitle": "Yüksek Riskli Termal Tespit",
-  "notificationsHighRiskDetectionBody": "{region} bölgesinde {temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.",
+  "notificationsHighRiskDetectionBody": "{region} bölgesinde {temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.",
   "@notificationsHighRiskDetectionBody": {
     "placeholders": {
       "region": { "type": "String" },
@@ -720,7 +720,7 @@
   "compassEast": "D",
   "compassWest": "B",
 
-  "riskReasonHighWithTemp": "Termal sensör {temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.",
+  "riskReasonHighWithTemp": "Termal sensör {temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.",
   "@riskReasonHighWithTemp": {
     "placeholders": { "temp": { "type": "String" } }
   },
@@ -736,7 +736,7 @@
   },
   "riskReasonLowNoTemp": "Düşük seviye termal aktivite. Takip önerilir.",
 
-  "fireGeneratedDescHigh": "Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.",
+  "fireGeneratedDescHigh": "Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.",
   "fireGeneratedDescMedium": "Orta seviye ısı artışı. Bölge izleme gerektirir.",
   "fireGeneratedDescLow": "Düşük seviye termal aktivite. Takip önerilir.",
 
@@ -744,7 +744,7 @@
   "fireRecommendedActionMedium": "Gelişmeleri takip et, bölgeye gereksiz yaklaşma.",
   "fireRecommendedActionLow": "Şu an acil aksiyon gerekmiyor, bölgeyi takip et.",
 
-  "fireStatusActive": "Muhtemel Yangın",
+  "fireStatusActive": "Çok Güçlü Isı Sinyali",
   "fireStatusLikelyActive": "Yüksek Isı Anomalisi",
   "fireStatusMonitoring": "İzleniyor",
   "fireStatusHistorical": "Geçmiş Tespit",
@@ -966,10 +966,10 @@
 
   "trustHomeMeaning": "Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.",
   "trustHomeSource": "Veriler NASA FIRMS'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.",
-  "trustHomeInterpret": "Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.",
+  "trustHomeInterpret": "Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.",
   "trustHomeAction": "Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.",
 
-  "trustMapMeaning": "Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.",
+  "trustMapMeaning": "Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.",
   "trustMapSource": "Yangın verileri NASA FIRMS'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.",
   "trustMapInterpret": "Kümeler yalnızca birbirine yakın birden fazla ısı tespiti olduğunu gösterir; yangının nedenini veya büyüklüğünü doğrulamaz.",
   "trustMapAction": "Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et'i kullanın ve resmi talimatları izleyin.",
@@ -1004,7 +1004,7 @@
   "smartLocationHintForest": "ormanlık, yüksek riskli bir bölgede",
   "smartLocationHintCoastal": "kıyı bölgesinde",
   "smartLocationHintUrban": "kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir",
-  "smartLocationHintAgricultural": "tarım arazisinde; anız yakma ihtimali var",
+  "smartLocationHintAgricultural": "tarım arazisinde; anız yakımı da bu tür ısı izi bırakır",
 
   "smartFrpHigh": "Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.",
   "smartPixelFootprint": "Uydu pikseli ~{hectares} hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.",
@@ -1096,7 +1096,7 @@
   "coachMarkWatchlistHowToAddDesc": "Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.",
   "coachMarkWatchlistClearTitle": "Temizle",
   "coachMarkWatchlistClearDesc": "Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.",
-  "detectionProbableFire": "Muhtemel Yangın",
+  "detectionProbableFire": "Çok Güçlü Isı Sinyali",
   "detectionHighThermalAnomaly": "Yüksek Isı Anomalisi",
   "detectionThermalDetection": "Termal Tespit",
   "detectionLowConfidence": "Düşük Güvenilirlik",
@@ -1109,7 +1109,7 @@
   "@detectionFrpExplanation": {"placeholders":{"frp":{"type":"String"}}},
   "detectionLimitations": "Bulut, duman, uydu çözünürlüğü ve yangın dışı ısı kaynakları eksik veya yanıltıcı tespitlere yol açabilir. Güvenlik kararlarında resmi acil durum bilgilerini kullanın.",
   "mapLegendTitle": "Harita Lejantı",
-  "legendProbableFire": "Muhtemel Yangın",
+  "legendProbableFire": "Çok güçlü ısı sinyali",
   "legendHighThermal": "Yüksek Isı Anomalisi",
   "legendLowConfidence": "Düşük Güvenilirlik",
   "mapMarkerDisclaimerBefore": "Harita NASA uydu termal tespitlerini gösterir.",
@@ -1237,10 +1237,8 @@
   "riskAttribution": "© European Union, Copernicus EFFIS",
   "homeLast24hTitle": "Son 24 Saat",
   "homeLast24hSubtitle": "Uydu tespitlerinin özeti",
-  "homeLast24hActiveTitle": "Aktif tespit",
+  "homeLast24hActiveTitle": "Çoklu geçiş tespiti",
   "homeLast24hActiveSubtitle": "Son {hours} saat içinde uydu tarafından görüldü",
-  "homeLast24hActiveSubtitleLayered": "{strong} tanesi güçlü kanıtlı; son {hours} saatte uyduyla görüldü",
-  "@homeLast24hActiveSubtitleLayered": {"placeholders": {"strong": {"type": "int"}, "hours": {"type": "int"}}},
   "@homeLast24hActiveSubtitle": {"placeholders": {"hours": {"type": "int"}}},
   "homeLast24hEndedTitle": "Tespiti sona eren",
   "homeLast24hEndedSubtitle": "Söndüğü anlamına gelmez.",
@@ -1436,5 +1434,23 @@
   "dataSourcesBordersGeoBoundariesCredit": "İl sınırları: geoBoundaries",
   "annualLayerProvenance": "Yıllık il toplamları kaynak veri setinde hesaplanmıştır (OGM orman yangını istatistikleri; NASA FIRMS VIIRS S-NPP ve ESA WorldCover 2021; EFFIS). Veri setinin kendi beyanına göre uydu noktası sayıları GADM 4.1 il sınırlarıyla hesaplanmıştır. Haritada çizilen il sınırları geoBoundaries / OpenStreetMap'tir.",
   "osmAttribution": "© OpenStreetMap katkıcıları, ODbL",
-  "odblLicenseLink": "ODbL 1.0 lisansı"
+  "odblLicenseLink": "ODbL 1.0 lisansı",
+  "mapDetectionConfidence": "Tespit güveni: {score}/100",
+  "@mapDetectionConfidence": {"placeholders": {"score": {"type": "int"}}},
+  "mapDetectionConfidenceInfoTitle": "Tespit güveni",
+  "mapDetectionConfidenceInfoBody": "NASA'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.",
+  "mapDetectionConfidenceInfoNotFire": "Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.",
+  "mapStrongUnverifiedReason": "Tek bir uydu pikselinde güçlü ısı sinyali ({frp} MW) — henüz doğrulanmadı",
+  "@mapStrongUnverifiedReason": {"placeholders": {"frp": {"type": "int"}}},
+  "mapStrongUnverifiedBanner": "{count} güçlü, doğrulanmamış tespit — Noktalar'da gör",
+  "@mapStrongUnverifiedBanner": {"placeholders": {"count": {"type": "int"}}},
+  "multiPassDetectionLabel": "Çoklu geçiş tespiti",
+  "multiPassDetectionExplanation": "Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.",
+  "homeMultiPassSubtitle": "En az 2 uydu geçişi; {weaker} ısı izi daha Noktalar katmanında",
+  "@homeMultiPassSubtitle": {"placeholders": {"weaker": {"type": "int"}}},
+  "homeMultiPassNote": "{count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.",
+  "@homeMultiPassNote": {"placeholders": {"count": {"type": "int"}, "weaker": {"type": "int"}}},
+  "incidentExtinguishedConflict": "Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor",
+  "fireDetailLinkedNews": "Bu yangınla ilişkilendirilen haberler",
+  "osmTileAttribution": "© OpenStreetMap katkıcıları"
 }

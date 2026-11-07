@@ -568,7 +568,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '${temp}K heat detected in the $region region. High likelihood of an active fire.';
+    return '${temp}K heat detected in the $region region. A strong satellite heat signal, not a verified fire.';
   }
 
   @override
@@ -1860,7 +1860,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Thermal sensor detected ${temp}K heat. High likelihood of an active fire — stay away from the area.';
+    return 'Thermal sensor detected ${temp}K heat. A strong heat signal, not a verified fire. Stay away from the area.';
   }
 
   @override
@@ -1887,7 +1887,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fireGeneratedDescHigh =>
-      'High-intensity thermal activity. Strong likelihood of an active fire.';
+      'High-intensity thermal activity. A strong heat signal, not a verified fire.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1910,7 +1910,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'No urgent action needed right now — keep an eye on the area.';
 
   @override
-  String get fireStatusActive => 'Probable Fire';
+  String get fireStatusActive => 'Very Strong Heat Signal';
 
   @override
   String get fireStatusLikelyActive => 'High Thermal Anomaly';
@@ -2362,7 +2362,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeInterpret =>
-      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.';
+      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Very Strong Heat Signal. All other points remain thermal anomalies.';
 
   @override
   String get trustHomeAction =>
@@ -2370,7 +2370,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustMapMeaning =>
-      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.';
+      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means very strong heat signal; orange high anomaly; yellow nominal; gray low confidence.';
 
   @override
   String get trustMapSource =>
@@ -2472,7 +2472,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get smartLocationHintAgricultural =>
-      'farmland — possible crop or stubble burning';
+      'farmland — stubble burning also leaves heat traces like this';
 
   @override
   String get smartFrpHigh =>
@@ -2715,7 +2715,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use the Clear button in the top corner to remove all saved points at once.';
 
   @override
-  String get detectionProbableFire => 'Probable Fire';
+  String get detectionProbableFire => 'Very Strong Heat Signal';
 
   @override
   String get detectionHighThermalAnomaly => 'High Thermal Anomaly';
@@ -2755,7 +2755,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapLegendTitle => 'Map Legend';
 
   @override
-  String get legendProbableFire => 'Probable Fire';
+  String get legendProbableFire => 'Very strong heat signal';
 
   @override
   String get legendHighThermal => 'High Thermal Anomaly';
@@ -3182,16 +3182,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLast24hSubtitle => 'Summary of satellite detections';
 
   @override
-  String get homeLast24hActiveTitle => 'Active detection';
+  String get homeLast24hActiveTitle => 'Multi-pass detections';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Seen by a satellite within the last $hours hours';
-  }
-
-  @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong with strong evidence; seen by satellite in the last $hours h';
   }
 
   @override
@@ -3727,4 +3722,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get odblLicenseLink => 'ODbL 1.0 licence';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Detection confidence: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Detection confidence';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'Computed from NASA\'s confidence level, radiated power (FRP), multi-pass detections within 20 km and how recent the detection is. Weather is not part of this score.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'This score shows how distinct a single satellite pixel is. It does not say there is a fire there.';
+
+  @override
+  String mapStrongUnverifiedReason(int frp) {
+    return 'Strong heat signal ($frp MW) in a single satellite pixel — not yet verified';
+  }
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count strong unverified detections — view on Points',
+      one: '1 strong unverified detection — view on Points',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Multi-pass detection';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Seen at the same spot on at least two separate satellite passes, with a strong heat signal. This does not prove a fire; it is stronger evidence than a single pixel.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'At least 2 satellite passes; $weaker more heat traces under Points';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count multi-pass detections (at least 2 satellite passes); the map shows $weaker more single-pass or weak heat traces. None of these is a verified fire.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Official: extinguished — satellite still sees heat';
+
+  @override
+  String get fireDetailLinkedNews => 'News linked to this fire';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap contributors';
 }

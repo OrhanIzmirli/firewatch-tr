@@ -41,6 +41,7 @@ import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -243,9 +244,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
         return;
       }
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 8));
       if (!mounted) return;
       debugPrint('[Location] Fresh GPS fix: lat=${position.latitude}, lng=${position.longitude}');
       setState(() => _userPosition = position);
@@ -1210,11 +1209,7 @@ class _DailyBriefCard extends StatelessWidget {
     final score = highestRiskScore;
     final accent = score == null
         ? AppColors.primary
-        : score >= 75
-            ? AppColors.danger
-            : score >= 50
-                ? AppColors.warning
-                : AppColors.success;
+        : riskScoreColor(score);
     final riskSentence = highestRiskRegion == null || score == null
         ? (isTr ? 'Bölgesel risk verisi yükleniyor.' : 'Regional risk data is loading.')
         : isTr

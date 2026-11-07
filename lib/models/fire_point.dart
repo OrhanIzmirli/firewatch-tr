@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/utils/turkish_text.dart';
+import '../core/utils/risk_display.dart';
 import '../l10n/app_localizations.dart';
 import '../services/risk_data_cache.dart';
 
@@ -501,13 +502,11 @@ class FirePoint {
     );
     final regionScore = regionRisk?['general_risk_score'] as int?;
     if (regionScore != null) {
-      if (regionScore >= 60) {
-        sentences.add(l10n.smartSpreadDangerous);
-      } else if (regionScore >= 30) {
-        sentences.add(l10n.smartSpreadModerate);
-      } else {
-        sentences.add(l10n.smartSpreadLow);
-      }
+      sentences.add(switch (riskLevelForScore(regionScore)) {
+        'Critical' || 'High' => l10n.smartSpreadDangerous,
+        'Medium' => l10n.smartSpreadModerate,
+        _ => l10n.smartSpreadLow,
+      });
     }
 
     // 5. Time since detection.

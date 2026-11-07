@@ -1083,9 +1083,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsInfoVersion => 'Version';
 
   @override
-  String get settingsInfoVersionValue => 'v1.0.0';
-
-  @override
   String get settingsInfoPlatform => 'Platform';
 
   @override
@@ -1285,12 +1282,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskNoteStrongWind(int wind) {
-    return 'Strong wind (${wind}km/h)';
+    return 'Strong wind ($wind km/h)';
   }
 
   @override
   String riskNoteMediumWind(int wind) {
-    return 'Moderate wind (${wind}km/h)';
+    return 'Moderate wind ($wind km/h)';
   }
 
   @override
@@ -1843,7 +1840,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsDeleteLocationDone =>
-      'Your location data on the server was deleted.';
+      'Your location and tracked places were deleted from the server.';
 
   @override
   String get settingsDeleteLocationFailed =>
@@ -3246,7 +3243,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get incidentPanelTitle => 'Fire Event';
+  String get incidentPanelTitle => 'Satellite Heat Event';
 
   @override
   String get incidentOfficialTitle => 'Official status';
@@ -3341,17 +3338,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get riskScoresAreIndices =>
       'Scores are a 0–100 index, not the probability of a fire.';
-
-  @override
-  String get riskMetricHintTemperature =>
-      'Heat can make vegetation lose moisture faster.';
-
-  @override
-  String get riskMetricHintHumidity =>
-      'Low humidity can dry out flammable vegetation.';
-
-  @override
-  String get riskMetricHintWind => 'Wind can carry flames and embers.';
 
   @override
   String riskNearbyFireCount(String count) {
@@ -3648,4 +3634,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get historyFirmsAttribution =>
       'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
+
+  @override
+  String get detectionNotConfirmedNotice =>
+      'This is a satellite heat detection, not a confirmed fire. If you see fire or smoke, call 112 right away.';
+
+  @override
+  String get riskFactorTempHintNone =>
+      'Below 25°C, temperature adds nothing to the risk score.';
+
+  @override
+  String riskFactorTempHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: heat makes vegetation lose moisture faster.';
+  }
+
+  @override
+  String get riskFactorHumidityHintNone =>
+      'Above 50%, humidity adds nothing to the risk score; damp vegetation ignites less easily.';
+
+  @override
+  String riskFactorHumidityHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: low humidity dries out flammable vegetation.';
+  }
+
+  @override
+  String get riskFactorWindHintNone =>
+      'Below 10 km/h, wind adds nothing to the risk score.';
+
+  @override
+  String riskFactorWindHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: wind can carry flames and embers.';
+  }
+
+  @override
+  String riskNoteLightWind(int wind) {
+    return 'Light wind ($wind km/h)';
+  }
 }

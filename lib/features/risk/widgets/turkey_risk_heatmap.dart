@@ -349,6 +349,14 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
                   ),
                   minZoom: 3.5,
                   maxZoom: 10,
+                  // Panning stays around Türkiye: a page scroll that started
+                  // on the map used to drag it off to Finland.
+                  cameraConstraint: CameraConstraint.containCenter(
+                    bounds: LatLngBounds(
+                      LatLng(turkeyHeatBounds.south - 2, turkeyHeatBounds.west - 3),
+                      LatLng(turkeyHeatBounds.north + 2, turkeyHeatBounds.east + 3),
+                    ),
+                  ),
                   backgroundColor: background,
                   interactionOptions: const InteractionOptions(
                     flags: InteractiveFlag.all & ~InteractiveFlag.rotate,

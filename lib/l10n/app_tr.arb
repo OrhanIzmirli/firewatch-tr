@@ -414,11 +414,10 @@
   "settingsAppInfoSubtitle": "Sürüm ve ürün özeti",
   "settingsInfoApp": "Uygulama",
   "settingsInfoVersion": "Sürüm",
-  "settingsInfoVersionValue": "v1.0.0",
   "settingsInfoPlatform": "Platform",
   "settingsInfoPlatformValue": "Flutter / Android",
   "settingsInfoPurpose": "Amaç",
-  "settingsInfoPurposeValue": "Yangın odaklı disaster tracking",
+  "settingsInfoPurposeValue": "Yangın odaklı afet takibi",
   "settingsFooterNote": "Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.",
   "settingsLegal": "Yasal",
   "settingsPrivacyPolicy": "Gizlilik Politikası",
@@ -505,11 +504,11 @@
   "@riskNoteHighHumidity": {
     "placeholders": { "hum": { "type": "int" } }
   },
-  "riskNoteStrongWind": "Güçlü rüzgar ({wind}km/h)",
+  "riskNoteStrongWind": "Güçlü rüzgâr ({wind} km/h)",
   "@riskNoteStrongWind": {
     "placeholders": { "wind": { "type": "int" } }
   },
-  "riskNoteMediumWind": "Orta rüzgar ({wind}km/h)",
+  "riskNoteMediumWind": "Orta rüzgâr ({wind} km/h)",
   "@riskNoteMediumWind": {
     "placeholders": { "wind": { "type": "int" } }
   },
@@ -713,7 +712,7 @@
   "settingsDeleteLocationConfirmTitle": "Konum verin silinsin mi?",
   "settingsDeleteLocationConfirmBody": "Sunucuda saklanan yaklaşık konumun ve takip ettiğin tüm yerler hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.",
   "settingsDeleteLocationConfirm": "Sil",
-  "settingsDeleteLocationDone": "Sunucudaki konum verin silindi.",
+  "settingsDeleteLocationDone": "Konum verin ve takip ettiğin yerler sunucudan silindi.",
   "settingsDeleteLocationFailed": "Konum verin silinemedi. İnternet bağlantını kontrol edip tekrar dene.",
 
   "compassNorth": "K",
@@ -1260,7 +1259,7 @@
   "incidentsEmpty": "Bu aralıkta gruplanmış yangın olayı yok.",
   "incidentsCount": "{count} olay",
   "@incidentsCount": {"placeholders": {"count": {"type": "int"}}},
-  "incidentPanelTitle": "Yangın Olayı",
+  "incidentPanelTitle": "Uydu Isı Olayı",
   "incidentOfficialTitle": "Resmî durum",
   "incidentSatelliteLimitNote": "Uydu günde birkaç kez geçer ve bulut ya da duman altını göremez. Tespit olmaması yangının bittiği anlamına gelmez.",
   "incidentFixedSourceHint": "Bu konum iki gündür her uydu geçişinde ve değişmeyen güçte görünüyor — sabit bir ısı kaynağı olabilir.",
@@ -1295,9 +1294,6 @@
   "riskAdviceLow": "Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.",
   "riskScoreNotProbability": "Bu bir olasılık yüzdesi değildir.",
   "riskScoresAreIndices": "Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.",
-  "riskMetricHintTemperature": "Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.",
-  "riskMetricHintHumidity": "Düşük nem, yanıcı bitki örtüsünü kurutabilir.",
-  "riskMetricHintWind": "Rüzgâr alevleri ve kıvılcımları taşıyabilir.",
   "riskNearbyFireCount": "Son günlerde yakında {count} yangın tespiti.",
   "@riskNearbyFireCount": {
     "placeholders": { "count": { "type": "String" } }
@@ -1412,5 +1408,17 @@
   "historyFootprintNote": "Haritadaki şekil, uydunun ısı tespit ettiği yerlerin izidir (her tespitin çevresinde 188 m); yanan alanın sınırı değildir. Yanan alan ölçülmediği için alan gösterilmez. Anız ve tarım yangınları da dahildir.",
   "historyNearestDistrictNote": "İlçe, olayın merkezine en yakın ilçe merkezine göre belirlendi; sınıra yakın olaylarda komşu ilçe olabilir.",
   "historyOpenFirmsMap": "NASA FIRMS haritasını aç",
-  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS)."
+  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS).",
+  "detectionNotConfirmedNotice": "Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürsen hemen 112'yi ara.",
+  "riskFactorTempHintNone": "25°C altındaki sıcaklık risk puanını artırmaz.",
+  "riskFactorTempHint": "Risk puanına +{points}/{max} ekler: sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açar.",
+  "@riskFactorTempHint": {"placeholders": {"points": {"type": "int"}, "max": {"type": "int"}}},
+  "riskFactorHumidityHintNone": "%50 üzerindeki nem risk puanını artırmaz; nemli bitki örtüsü daha zor tutuşur.",
+  "riskFactorHumidityHint": "Risk puanına +{points}/{max} ekler: düşük nem yanıcı bitki örtüsünü kurutur.",
+  "@riskFactorHumidityHint": {"placeholders": {"points": {"type": "int"}, "max": {"type": "int"}}},
+  "riskFactorWindHintNone": "10 km/h altındaki rüzgâr risk puanını artırmaz.",
+  "riskFactorWindHint": "Risk puanına +{points}/{max} ekler: rüzgâr alevleri ve kıvılcımları taşıyabilir.",
+  "@riskFactorWindHint": {"placeholders": {"points": {"type": "int"}, "max": {"type": "int"}}},
+  "riskNoteLightWind": "Hafif rüzgâr ({wind} km/h)",
+  "@riskNoteLightWind": {"placeholders": {"wind": {"type": "int"}}}
 }

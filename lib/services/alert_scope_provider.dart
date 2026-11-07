@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/alert_scope.dart';
 import 'notification_service.dart';
 import 'render_api_service.dart';
+import 'device_position.dart';
 
 class AlertScopeState {
   final AlertScope scope;
@@ -124,12 +125,7 @@ class AlertScopeNotifier extends StateNotifier<AlertScopeState> {
           permission == LocationPermission.deniedForever) {
         return;
       }
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
       if (!mounted) return;
 
       // The region is resolved by the backend from turkey_cities, never

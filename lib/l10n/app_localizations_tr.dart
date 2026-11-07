@@ -1079,9 +1079,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsInfoVersion => 'Sürüm';
 
   @override
-  String get settingsInfoVersionValue => 'v1.0.0';
-
-  @override
   String get settingsInfoPlatform => 'Platform';
 
   @override
@@ -1091,7 +1088,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsInfoPurpose => 'Amaç';
 
   @override
-  String get settingsInfoPurposeValue => 'Yangın odaklı disaster tracking';
+  String get settingsInfoPurposeValue => 'Yangın odaklı afet takibi';
 
   @override
   String get settingsFooterNote =>
@@ -1281,12 +1278,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskNoteStrongWind(int wind) {
-    return 'Güçlü rüzgar (${wind}km/h)';
+    return 'Güçlü rüzgâr ($wind km/h)';
   }
 
   @override
   String riskNoteMediumWind(int wind) {
-    return 'Orta rüzgar (${wind}km/h)';
+    return 'Orta rüzgâr ($wind km/h)';
   }
 
   @override
@@ -1839,7 +1836,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsDeleteLocationConfirm => 'Sil';
 
   @override
-  String get settingsDeleteLocationDone => 'Sunucudaki konum verin silindi.';
+  String get settingsDeleteLocationDone =>
+      'Konum verin ve takip ettiğin yerler sunucudan silindi.';
 
   @override
   String get settingsDeleteLocationFailed =>
@@ -3240,7 +3238,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get incidentPanelTitle => 'Yangın Olayı';
+  String get incidentPanelTitle => 'Uydu Isı Olayı';
 
   @override
   String get incidentOfficialTitle => 'Resmî durum';
@@ -3335,18 +3333,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get riskScoresAreIndices =>
       'Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.';
-
-  @override
-  String get riskMetricHintTemperature =>
-      'Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.';
-
-  @override
-  String get riskMetricHintHumidity =>
-      'Düşük nem, yanıcı bitki örtüsünü kurutabilir.';
-
-  @override
-  String get riskMetricHintWind =>
-      'Rüzgâr alevleri ve kıvılcımları taşıyabilir.';
 
   @override
   String riskNearbyFireCount(String count) {
@@ -3644,4 +3630,40 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get historyFirmsAttribution =>
       'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
+
+  @override
+  String get detectionNotConfirmedNotice =>
+      'Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürsen hemen 112\'yi ara.';
+
+  @override
+  String get riskFactorTempHintNone =>
+      '25°C altındaki sıcaklık risk puanını artırmaz.';
+
+  @override
+  String riskFactorTempHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açar.';
+  }
+
+  @override
+  String get riskFactorHumidityHintNone =>
+      '%50 üzerindeki nem risk puanını artırmaz; nemli bitki örtüsü daha zor tutuşur.';
+
+  @override
+  String riskFactorHumidityHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: düşük nem yanıcı bitki örtüsünü kurutur.';
+  }
+
+  @override
+  String get riskFactorWindHintNone =>
+      '10 km/h altındaki rüzgâr risk puanını artırmaz.';
+
+  @override
+  String riskFactorWindHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: rüzgâr alevleri ve kıvılcımları taşıyabilir.';
+  }
+
+  @override
+  String riskNoteLightWind(int wind) {
+    return 'Hafif rüzgâr ($wind km/h)';
+  }
 }

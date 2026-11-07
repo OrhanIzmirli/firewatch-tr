@@ -9,6 +9,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/app_version.dart';
 import '../../services/locale_provider.dart';
 import '../../services/notification_service.dart';
 import '../../services/tracked_places_provider.dart';
@@ -341,7 +342,7 @@ class SettingsScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.md),
                       _InfoLine(
                         label: l10n.settingsInfoVersion,
-                        value: l10n.settingsInfoVersionValue,
+                        value: ref.watch(appVersionProvider).valueOrNull ?? '…',
                         delay: const Duration(milliseconds: 140),
                       ),
                       const SizedBox(height: AppSpacing.md),

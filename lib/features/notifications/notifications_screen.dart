@@ -26,6 +26,7 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
 import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -229,12 +230,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     Position? position;
     try {
-      position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
     } catch (_) {
       // Best-effort — subscription still proceeds without a location; the
       // device just won't be eligible for region-targeted server alerts.

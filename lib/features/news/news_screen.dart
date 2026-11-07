@@ -27,6 +27,7 @@ import 'widgets/featured_news_card.dart';
 import 'widgets/news_card.dart';
 import 'widgets/news_event_actions.dart';
 import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
 
 enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
 
@@ -197,9 +198,7 @@ class _NewsScreenState extends State<NewsScreen> {
         permission = await LocationDisclosure.requestPermission(context);
       }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 8));
       final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
       if (!mounted || cityInfo.outsideTurkey) return;
       setState(() {

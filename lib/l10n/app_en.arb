@@ -414,7 +414,6 @@
   "settingsAppInfoSubtitle": "Version and product summary",
   "settingsInfoApp": "App",
   "settingsInfoVersion": "Version",
-  "settingsInfoVersionValue": "v1.0.0",
   "settingsInfoPlatform": "Platform",
   "settingsInfoPlatformValue": "Flutter / Android",
   "settingsInfoPurpose": "Purpose",
@@ -505,11 +504,11 @@
   "@riskNoteHighHumidity": {
     "placeholders": { "hum": { "type": "int" } }
   },
-  "riskNoteStrongWind": "Strong wind ({wind}km/h)",
+  "riskNoteStrongWind": "Strong wind ({wind} km/h)",
   "@riskNoteStrongWind": {
     "placeholders": { "wind": { "type": "int" } }
   },
-  "riskNoteMediumWind": "Moderate wind ({wind}km/h)",
+  "riskNoteMediumWind": "Moderate wind ({wind} km/h)",
   "@riskNoteMediumWind": {
     "placeholders": { "wind": { "type": "int" } }
   },
@@ -707,7 +706,7 @@
   "settingsDeleteLocationConfirmTitle": "Delete your location data?",
   "settingsDeleteLocationConfirmBody": "Your approximate location and all your tracked places on our server are deleted immediately. Notifications stay on; if you haven't picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.",
   "settingsDeleteLocationConfirm": "Delete",
-  "settingsDeleteLocationDone": "Your location data on the server was deleted.",
+  "settingsDeleteLocationDone": "Your location and tracked places were deleted from the server.",
   "settingsDeleteLocationFailed": "Couldn't delete your location data. Check your internet connection and try again.",
 
   "compassNorth": "N",
@@ -1254,7 +1253,7 @@
   "incidentsEmpty": "No grouped fire events in this range.",
   "incidentsCount": "{count} events",
   "@incidentsCount": {"placeholders": {"count": {"type": "int"}}},
-  "incidentPanelTitle": "Fire Event",
+  "incidentPanelTitle": "Satellite Heat Event",
   "incidentOfficialTitle": "Official status",
   "incidentSatelliteLimitNote": "Satellites pass a few times a day and cannot see through cloud or smoke. No detection does not mean the fire is over.",
   "incidentFixedSourceHint": "This location has appeared on every satellite pass for two days at unchanging power — it may be a fixed heat source.",
@@ -1289,9 +1288,6 @@
   "riskAdviceLow": "Low risk is not zero risk. Never leave fire or cigarette ends outdoors.",
   "riskScoreNotProbability": "This is an index, not a probability.",
   "riskScoresAreIndices": "Scores are a 0–100 index, not the probability of a fire.",
-  "riskMetricHintTemperature": "Heat can make vegetation lose moisture faster.",
-  "riskMetricHintHumidity": "Low humidity can dry out flammable vegetation.",
-  "riskMetricHintWind": "Wind can carry flames and embers.",
   "riskNearbyFireCount": "{count} recent nearby fire detections.",
   "riskNearbyFireCountUnavailable": "Recent nearby detection count is not yet available.",
   "riskPreviousScore": "Previous score: {score}/100",
@@ -1373,5 +1369,13 @@
   "historyFootprintNote": "The shape on the map traces where the satellite detected heat (188 m around each detection); it is not the burned-area boundary. Burned area is not measured, so no area is shown. Agricultural burns are included.",
   "historyNearestDistrictNote": "The district is the one whose centre is nearest the fire; near a border it can be the neighbouring district.",
   "historyOpenFirmsMap": "Open the NASA FIRMS map",
-  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS)."
+  "historyFirmsAttribution": "We acknowledge the use of data and/or imagery from NASA's Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA's Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA's Earth Science Data and Information System (ESDIS).",
+  "detectionNotConfirmedNotice": "This is a satellite heat detection, not a confirmed fire. If you see fire or smoke, call 112 right away.",
+  "riskFactorTempHintNone": "Below 25°C, temperature adds nothing to the risk score.",
+  "riskFactorTempHint": "Adds +{points}/{max} to the risk score: heat makes vegetation lose moisture faster.",
+  "riskFactorHumidityHintNone": "Above 50%, humidity adds nothing to the risk score; damp vegetation ignites less easily.",
+  "riskFactorHumidityHint": "Adds +{points}/{max} to the risk score: low humidity dries out flammable vegetation.",
+  "riskFactorWindHintNone": "Below 10 km/h, wind adds nothing to the risk score.",
+  "riskFactorWindHint": "Adds +{points}/{max} to the risk score: wind can carry flames and embers.",
+  "riskNoteLightWind": "Light wind ({wind} km/h)"
 }

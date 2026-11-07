@@ -7,6 +7,7 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/fire_incident.dart';
+import '../../../shared/widgets/detection_safety_notice.dart';
 import '../../../shared/widgets/glass_panel.dart';
 
 /// Detail panel for one clustered fire event.
@@ -76,6 +77,10 @@ class IncidentSheet extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
 
             _StatusHeader(status: status, titleColor: titleColor),
+            const SizedBox(height: AppSpacing.lg),
+            // First thing under the status, never below the fold: this is
+            // not a confirmed fire, and 112 is one tap away.
+            const DetectionSafetyNotice(),
             const SizedBox(height: AppSpacing.lg),
 
             if (cityName != null) ...[

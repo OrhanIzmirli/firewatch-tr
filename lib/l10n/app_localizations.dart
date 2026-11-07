@@ -2000,12 +2000,6 @@ abstract class AppLocalizations {
   /// **'Sürüm'**
   String get settingsInfoVersion;
 
-  /// No description provided for @settingsInfoVersionValue.
-  ///
-  /// In tr, this message translates to:
-  /// **'v1.0.0'**
-  String get settingsInfoVersionValue;
-
   /// No description provided for @settingsInfoPlatform.
   ///
   /// In tr, this message translates to:
@@ -2027,7 +2021,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsInfoPurposeValue.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın odaklı disaster tracking'**
+  /// **'Yangın odaklı afet takibi'**
   String get settingsInfoPurposeValue;
 
   /// No description provided for @settingsFooterNote.
@@ -2363,13 +2357,13 @@ abstract class AppLocalizations {
   /// No description provided for @riskNoteStrongWind.
   ///
   /// In tr, this message translates to:
-  /// **'Güçlü rüzgar ({wind}km/h)'**
+  /// **'Güçlü rüzgâr ({wind} km/h)'**
   String riskNoteStrongWind(int wind);
 
   /// No description provided for @riskNoteMediumWind.
   ///
   /// In tr, this message translates to:
-  /// **'Orta rüzgar ({wind}km/h)'**
+  /// **'Orta rüzgâr ({wind} km/h)'**
   String riskNoteMediumWind(int wind);
 
   /// No description provided for @newsTitle.
@@ -3328,7 +3322,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDeleteLocationDone.
   ///
   /// In tr, this message translates to:
-  /// **'Sunucudaki konum verin silindi.'**
+  /// **'Konum verin ve takip ettiğin yerler sunucudan silindi.'**
   String get settingsDeleteLocationDone;
 
   /// No description provided for @settingsDeleteLocationFailed.
@@ -5669,7 +5663,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentPanelTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın Olayı'**
+  /// **'Uydu Isı Olayı'**
   String get incidentPanelTitle;
 
   /// No description provided for @incidentOfficialTitle.
@@ -5833,24 +5827,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.'**
   String get riskScoresAreIndices;
-
-  /// No description provided for @riskMetricHintTemperature.
-  ///
-  /// In tr, this message translates to:
-  /// **'Sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açabilir.'**
-  String get riskMetricHintTemperature;
-
-  /// No description provided for @riskMetricHintHumidity.
-  ///
-  /// In tr, this message translates to:
-  /// **'Düşük nem, yanıcı bitki örtüsünü kurutabilir.'**
-  String get riskMetricHintHumidity;
-
-  /// No description provided for @riskMetricHintWind.
-  ///
-  /// In tr, this message translates to:
-  /// **'Rüzgâr alevleri ve kıvılcımları taşıyabilir.'**
-  String get riskMetricHintWind;
 
   /// No description provided for @riskNearbyFireCount.
   ///
@@ -6343,6 +6319,54 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).'**
   String get historyFirmsAttribution;
+
+  /// No description provided for @detectionNotConfirmedNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürsen hemen 112\'yi ara.'**
+  String get detectionNotConfirmedNotice;
+
+  /// No description provided for @riskFactorTempHintNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'25°C altındaki sıcaklık risk puanını artırmaz.'**
+  String get riskFactorTempHintNone;
+
+  /// No description provided for @riskFactorTempHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk puanına +{points}/{max} ekler: sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açar.'**
+  String riskFactorTempHint(int points, int max);
+
+  /// No description provided for @riskFactorHumidityHintNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'%50 üzerindeki nem risk puanını artırmaz; nemli bitki örtüsü daha zor tutuşur.'**
+  String get riskFactorHumidityHintNone;
+
+  /// No description provided for @riskFactorHumidityHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk puanına +{points}/{max} ekler: düşük nem yanıcı bitki örtüsünü kurutur.'**
+  String riskFactorHumidityHint(int points, int max);
+
+  /// No description provided for @riskFactorWindHintNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'10 km/h altındaki rüzgâr risk puanını artırmaz.'**
+  String get riskFactorWindHintNone;
+
+  /// No description provided for @riskFactorWindHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk puanına +{points}/{max} ekler: rüzgâr alevleri ve kıvılcımları taşıyabilir.'**
+  String riskFactorWindHint(int points, int max);
+
+  /// No description provided for @riskNoteLightWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hafif rüzgâr ({wind} km/h)'**
+  String riskNoteLightWind(int wind);
 }
 
 class _AppLocalizationsDelegate

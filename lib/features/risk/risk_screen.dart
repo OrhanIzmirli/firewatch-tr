@@ -12,6 +12,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/risk_display.dart';
+import '../../core/utils/risk_factors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/offline_cache_service.dart';
@@ -27,6 +28,7 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/turkey_risk_heatmap.dart';
 import 'widgets/tracked_places_section.dart';
 import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
 
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
@@ -249,12 +251,7 @@ class _RiskScreenState extends State<RiskScreen> {
         return;
       }
 
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
       if (!mounted) return;
 
       final isEmulatorTestLocation =
@@ -323,36 +320,12 @@ class _RiskScreenState extends State<RiskScreen> {
     return null;
   }
 
-  String _riskNote(AppLocalizations l10n, Map<String, dynamic> region) {
-    final temp = double.tryParse(region['temperature'].toString()) ?? 0;
-    final hum = double.tryParse(region['humidity'].toString()) ?? 0;
-    final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
-
-    final parts = <String>[];
-    if (temp >= 35) {
-      parts.add(l10n.riskNoteHighTemp(temp.toInt()));
-    } else if (temp >= 25) {
-      parts.add(l10n.riskNoteMildTemp(temp.toInt()));
-    } else {
-      parts.add(l10n.riskNoteCoolTemp(temp.toInt()));
-    }
-
-    if (hum <= 30) {
-      parts.add(l10n.riskNoteLowHumidity(hum.toInt()));
-    } else if (hum <= 50) {
-      parts.add(l10n.riskNoteMediumHumidity(hum.toInt()));
-    } else {
-      parts.add(l10n.riskNoteHighHumidity(hum.toInt()));
-    }
-
-    if (wind >= 30) {
-      parts.add(l10n.riskNoteStrongWind(wind.toInt()));
-    } else if (wind >= 15) {
-      parts.add(l10n.riskNoteMediumWind(wind.toInt()));
-    }
-
-    return parts.join(' • ');
-  }
+  String _riskNote(AppLocalizations l10n, Map<String, dynamic> region) => riskNote(
+        l10n,
+        temperature: double.tryParse(region['temperature'].toString()) ?? 0,
+        humidity: double.tryParse(region['humidity'].toString()) ?? 0,
+        wind: double.tryParse(region['wind_speed'].toString()) ?? 0,
+      );
 
   void _showRiskInfoSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -422,7 +395,7 @@ class _RiskScreenState extends State<RiskScreen> {
   void _showRegionDetail(BuildContext context, Map<String, dynamic> region) {
     final l10n = AppLocalizations.of(context)!;
     final score = region['general_risk_score'] as int;
-    final level = region['risk_level'] as String;
+    final level = riskLevelForScore(score);
     final color = colorForApiRiskLevel(level);
     final temp = double.tryParse(region['temperature'].toString()) ?? 0;
     final hum = double.tryParse(region['humidity'].toString()) ?? 0;
@@ -468,11 +441,11 @@ class _RiskScreenState extends State<RiskScreen> {
                 Text(_riskNote(l10n, region),
                     style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
-                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor, hint: l10n.riskMetricHintTemperature),
+                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor, hint: temperatureHint(l10n, temp)),
                 const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor, hint: l10n.riskMetricHintHumidity),
+                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor, hint: humidityHint(l10n, hum)),
                 const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor, hint: l10n.riskMetricHintWind),
+                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor, hint: windHint(l10n, wind)),
                 const SizedBox(height: 8),
                 _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor, hint: l10n.riskDrynessDerivation),
                 const SizedBox(height: AppSpacing.md),
@@ -598,16 +571,12 @@ class _RiskScreenState extends State<RiskScreen> {
 
     final topRegion = _highestRisk;
     final avgRiskScore = _avgRisk.toInt();
-    final overallLevel = avgRiskScore >= 75 ? l10n.commonCritical :
-                         avgRiskScore >= 50 ? l10n.commonHigh :
-                         avgRiskScore >= 25 ? l10n.commonMedium : l10n.commonLow;
-    final overallLevelColor = avgRiskScore >= 75
-        ? AppColors.danger
-        : avgRiskScore >= 50
-            ? AppColors.danger
-            : avgRiskScore >= 25
-                ? AppColors.warning
-                : AppColors.success;
+    // The chip sits beside "Highest risk: <region> (<score>/100)", so it
+    // grades that same score — grading the national average there showed
+    // "Low" next to a Medium region. Same function as every other card.
+    final summaryScore = (topRegion?['general_risk_score'] as num?) ?? avgRiskScore;
+    final overallLevel = riskLevelLabel(l10n, riskLevelForScore(summaryScore));
+    final overallLevelColor = riskScoreColor(summaryScore);
 
     DateTime? lastCalculated;
     for (final region in _regions) {
@@ -850,7 +819,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                   highest['general_risk_score'] as int),
                           subtitle: l10n.riskOverviewHighestSubtitle,
                           icon: Icons.warning_amber_rounded,
-                          color: highest == null ? AppColors.primary : colorForApiRiskLevel(highest['risk_level'] as String),
+                          color: highest == null ? AppColors.primary : riskScoreColor(highest['general_risk_score'] as num),
                           delay: 140.ms,
                           onTap: highest == null ? null : () => _showRegionDetail(context, highest),
                         ),
@@ -863,7 +832,7 @@ class _RiskScreenState extends State<RiskScreen> {
                                   lowest['general_risk_score'] as int),
                           subtitle: l10n.riskOverviewLowestSubtitle,
                           icon: Icons.eco_outlined,
-                          color: lowest == null ? AppColors.primary : colorForApiRiskLevel(lowest['risk_level'] as String),
+                          color: lowest == null ? AppColors.primary : riskScoreColor(lowest['general_risk_score'] as num),
                           delay: 220.ms,
                           onTap: lowest == null ? null : () => _showRegionDetail(context, lowest),
                         ),
@@ -872,7 +841,7 @@ class _RiskScreenState extends State<RiskScreen> {
                           value: '$avgRiskScore',
                           subtitle: l10n.riskOverviewAvgSubtitle,
                           icon: Icons.local_fire_department_rounded,
-                          color: avgRiskScore >= 50 ? AppColors.danger : AppColors.warning,
+                          color: riskScoreColor(avgRiskScore),
                           delay: 300.ms,
                         ),
                         SmartOverviewCard(
@@ -1033,7 +1002,7 @@ class _RiskScreenState extends State<RiskScreen> {
                     final idx = entry.key;
                     final region = entry.value;
                     final score = region['general_risk_score'] as int;
-                    final level = region['risk_level'] as String;
+                    final level = riskLevelForScore(score);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppSpacing.md),
                       child: InkWell(
@@ -1257,7 +1226,7 @@ class _MyLocationSection extends StatelessWidget {
     }
 
     final score = data['general_risk_score'] as int;
-    final level = data['risk_level'] as String;
+    final level = riskLevelForScore(score);
     final color = colorForApiRiskLevel(level);
     final temp = double.tryParse(data['temperature'].toString()) ?? 0;
     final hum = double.tryParse(data['humidity'].toString()) ?? 0;

@@ -8,6 +8,7 @@ import '../l10n/l10n_lookup.dart';
 import '../models/fire_point.dart';
 import 'fire_api_service.dart';
 import 'notification_service.dart';
+import 'device_position.dart';
 
 class FireMonitoringService {
   FireMonitoringService._();
@@ -85,12 +86,7 @@ class FireMonitoringService {
         return;
       }
 
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
 
       statusNotifier.value = l10n.monitorStatusFetchingData;
 

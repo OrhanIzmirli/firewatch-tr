@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/utils/emergency_call.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -573,7 +574,10 @@ class _EmergencyNumberCard extends StatelessWidget {
         ? AppColors.white.withValues(alpha: 0.64)
         : Colors.black.withValues(alpha: 0.56);
 
-    return GlassPanel(
+    // Only a real phone number opens the dialer; the AFAD row carries a
+    // sentence, not a number.
+    final dialable = RegExp(r'^\d{3,}$').hasMatch(number);
+    final card = GlassPanel(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
         children: [
@@ -627,7 +631,14 @@ class _EmergencyNumberCard extends StatelessWidget {
           ),
         ],
       ),
-    )
+    );
+    return (dialable
+            ? InkWell(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                onTap: () => openDialer(number),
+                child: card,
+              )
+            : card)
         .animate(delay: delay)
         .fadeIn(duration: 280.ms)
         .slideX(begin: 0.03, end: 0)

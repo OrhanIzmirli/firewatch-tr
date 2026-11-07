@@ -13,6 +13,7 @@ import '../../services/tracked_places_api.dart';
 import '../../services/tracked_places_provider.dart';
 import '../../shared/widgets/carto_basemap.dart';
 import 'place_picker_screen.dart';
+import '../../services/device_position.dart';
 
 enum _Source { map, myLocation }
 
@@ -109,9 +110,7 @@ Future<LatLng?> _currentPoint(BuildContext context) async {
     if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
       return null;
     }
-    final p = await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 10)),
-    );
+    final p = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
     return LatLng(p.latitude, p.longitude);
   } catch (_) {
     return null;

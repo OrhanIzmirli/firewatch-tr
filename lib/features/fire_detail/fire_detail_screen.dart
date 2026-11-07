@@ -25,6 +25,7 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/detection_safety_notice.dart';
 
 enum _RelatedNewsTier { region, city, generic }
 
@@ -313,6 +314,9 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                 ],
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.08, end: 0),
+
+            const SizedBox(height: AppSpacing.lg),
+            const DetectionSafetyNotice(),
 
             const SizedBox(height: AppSpacing.xxl),
 

@@ -34,6 +34,7 @@ import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/carto_basemap.dart';
+import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/report_fire_panel.dart';
@@ -42,11 +43,13 @@ import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
+import 'widgets/map_layer_bar.dart';
 import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
 import 'widgets/saved_places_sheet.dart';
 import '../../services/location_disclosure.dart';
 import '../tracked_places/add_tracked_place_flow.dart';
+import '../../services/device_position.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
@@ -536,12 +539,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           permission == LocationPermission.deniedForever) {
         return null;
       }
-      return await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      return await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
     } catch (_) {
       return null;
     }
@@ -1045,7 +1043,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             ? AppColors.white.withValues(alpha: 0.72)
             : Colors.black.withValues(alpha: 0.62);
 
-        return Padding(
+        // Scrolls: with the safety notice the card is taller than a small
+        // phone's sheet allowance.
+        return SingleChildScrollView(
+          child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: GlassPanel(
             padding: const EdgeInsets.all(AppSpacing.xl),
@@ -1088,6 +1089,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: AppSpacing.md),
+                const DetectionSafetyNotice(),
                 const SizedBox(height: AppSpacing.md),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -1225,6 +1228,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ),
               ],
             ),
+          ),
           ),
         );
       },
@@ -1555,11 +1559,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (_incidents.isNotEmpty)
-                GlassPanel(
-                  padding: const EdgeInsets.all(4),
-                  radius: AppSpacing.pillRadius,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                MapLayerBar(
                     children: [
                       _LayerChip(
                         label: l10n.incidentToggleShowShort,
@@ -1586,7 +1586,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         onTap: _toggleAnnualHistory,
                       ),
                     ],
-                  ),
                 ),
               if (_showAnnualHistory) ...[
                 const SizedBox(height: 6),

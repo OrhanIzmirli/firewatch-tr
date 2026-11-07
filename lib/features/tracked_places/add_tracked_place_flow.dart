@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/utils/map_tiles.dart';
+import '../../shared/widgets/osm_attribution.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -202,6 +203,13 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
                         CartoBasemap.configured ? CartoBasemap.url : MapTiles.osmUrl,
                       ),
                       userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: OsmAttribution(
+                        fontSize: 9,
+                        extra: [if (CartoBasemap.configured) '© CARTO'],
+                      ),
                     ),
                     CircleLayer(circles: [
                       CircleMarker(

@@ -1403,5 +1403,6 @@
   "homeMultiPassSubtitle": "At least 2 satellite passes; {weaker} more heat traces under Points",
   "homeMultiPassNote": "{count} multi-pass detections (at least 2 satellite passes); the map shows {weaker} more single-pass or weak heat traces. None of these is a verified fire.",
   "incidentExtinguishedConflict": "Official: extinguished — satellite still sees heat",
-  "fireDetailLinkedNews": "News linked to this fire"
+  "fireDetailLinkedNews": "News linked to this fire",
+  "osmTileAttribution": "© OpenStreetMap contributors"
 }

@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/utils/map_tiles.dart';
+import '../../shared/widgets/osm_attribution.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -77,7 +78,13 @@ class _PlacePickerScreenState extends State<PlacePickerScreen> {
               ),
             ),
           ),
-          const Positioned(left: 0, bottom: 0, child: MapAttribution()),
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: OsmAttribution(
+              extra: [if (CartoBasemap.configured) '© CARTO'],
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: SafeArea(

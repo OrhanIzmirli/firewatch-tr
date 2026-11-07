@@ -6,28 +6,57 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/retry.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// OpenStreetMap tiles with a disk cache. Ported from 1.0.6.
 ///
-/// Only OSM tiles are cached. OSM's tile usage policy asks apps to cache
-/// and to honour a sensible lifetime; CARTO's terms for stored tiles are
-/// not settled, so a CARTO URL always goes to the network
-/// ([providerFor] returns null and flutter_map uses its default).
+/// OSM tile usage policy (operations.osmfoundation.org/policies/tiles),
+/// and how this app meets it:
+///  * a User-Agent that identifies the app — [userAgent], package name and
+///    version, sent on every tile request (OSM and CARTO alike);
+///  * cache tiles locally, honouring HTTP expiry or at least 7 days — tiles
+///    are kept for [DiskCachedTileProvider.maxAge] (14 days);
+///  * no bulk downloading — tiles are fetched only when a map shows them
+///    (flutter_map's default one-tile pan buffer); nothing is pre-fetched;
+///  * visible attribution — OsmAttribution on every map that draws OSM.
+///
+/// Only OSM tiles are stored. CARTO's terms for stored tiles are not
+/// settled, so a CARTO URL gets a network provider with flutter_map's own
+/// built-in cache switched OFF (it is on by default).
 class MapTiles {
   MapTiles._();
 
   static const String osmUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+  static const String packageName = 'com.oguzh.firewatch.firewatch_tr';
 
   /// Beyond this many files (~150 MB worst case) the oldest quarter goes.
   static const int maxTiles = 4000;
 
   static Directory? _cacheDir;
 
-  /// Called once from main() before the first map builds. Local disk only,
-  /// no network. Without a cache directory the maps still work, uncached.
+  /// "FireWatchTR/1.2.0+8 (com.oguzh.firewatch.firewatch_tr)". Set from the
+  /// installed build in [init]; the fallback still names the app.
+  static String userAgent = buildUserAgent(null, null);
+
+  static String buildUserAgent(String? version, String? buildNumber) {
+    final v = (version ?? '').trim();
+    final b = (buildNumber ?? '').trim();
+    final ver = v.isEmpty ? '' : (b.isEmpty ? '/$v' : '/$v+$b');
+    return 'FireWatchTR$ver ($packageName)';
+  }
+
+  /// Called once from main() before the first map builds. Local disk and
+  /// platform only, no network. Without a cache directory the maps still
+  /// work, uncached.
   static Future<void> init() async {
     if (kIsWeb) return;
+    try {
+      final info = await PackageInfo.fromPlatform();
+      userAgent = buildUserAgent(info.version, info.buildNumber);
+    } catch (_) {}
     try {
       final base = await getApplicationCacheDirectory();
       final dir = Directory('${base.path}/map_tiles');
@@ -60,12 +89,29 @@ class MapTiles {
   @visibleForTesting
   static set cacheDirForTest(Directory? dir) => _cacheDir = dir;
 
-  /// The tile provider for [urlTemplate]: the disk cache for OSM, null
-  /// (flutter_map's default network provider) for anything else.
-  static TileProvider? providerFor(String urlTemplate) {
+  static Map<String, String> get _headers => {'User-Agent': userAgent};
+
+  /// Shared by every network provider. Maps rebuild often and get a new
+  /// provider each time; passing a client in means a disposed provider
+  /// never closes it, and no rebuild opens a fresh connection pool.
+  static final http.Client _networkClient = RetryClient(http.Client());
+
+  /// The tile provider for [urlTemplate], always sending [userAgent]:
+  /// the disk cache for OSM; for anything else (CARTO) a plain network
+  /// provider that stores nothing. Without a cache directory OSM falls back
+  /// to flutter_map's network provider and its HTTP-header-based cache.
+  static TileProvider providerFor(String urlTemplate) {
     final dir = _cacheDir;
-    if (dir == null || urlTemplate != osmUrl) return null;
-    return DiskCachedTileProvider(cacheDir: dir);
+    if (urlTemplate == osmUrl) {
+      return dir == null
+          ? NetworkTileProvider(headers: _headers, httpClient: _networkClient)
+          : DiskCachedTileProvider(cacheDir: dir, headers: _headers);
+    }
+    return NetworkTileProvider(
+      headers: _headers,
+      httpClient: _networkClient,
+      cachingProvider: const DisabledMapCachingProvider(),
+    );
   }
 }
 
@@ -73,7 +119,7 @@ class MapTiles {
 /// fresh; a stale or missing tile is re-downloaded, and when the network
 /// fails a stale copy is still better than a grey square.
 class DiskCachedTileProvider extends TileProvider {
-  DiskCachedTileProvider({required this.cacheDir});
+  DiskCachedTileProvider({required this.cacheDir, super.headers});
 
   final Directory cacheDir;
 

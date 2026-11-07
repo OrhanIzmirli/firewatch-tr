@@ -6529,6 +6529,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bu yangınla ilişkilendirilen haberler'**
   String get fireDetailLinkedNews;
+
+  /// No description provided for @osmTileAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'© OpenStreetMap katkıcıları'**
+  String get osmTileAttribution;
 }
 
 class _AppLocalizationsDelegate

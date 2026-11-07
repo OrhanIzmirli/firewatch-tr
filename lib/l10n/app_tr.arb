@@ -1451,5 +1451,6 @@
   "homeMultiPassNote": "{count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.",
   "@homeMultiPassNote": {"placeholders": {"count": {"type": "int"}, "weaker": {"type": "int"}}},
   "incidentExtinguishedConflict": "Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor",
-  "fireDetailLinkedNews": "Bu yangınla ilişkilendirilen haberler"
+  "fireDetailLinkedNews": "Bu yangınla ilişkilendirilen haberler",
+  "osmTileAttribution": "© OpenStreetMap katkıcıları"
 }

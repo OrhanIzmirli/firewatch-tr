@@ -3768,4 +3768,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get fireDetailLinkedNews => 'Bu yangınla ilişkilendirilen haberler';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap katkıcıları';
 }

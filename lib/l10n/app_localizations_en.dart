@@ -3778,4 +3778,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fireDetailLinkedNews => 'News linked to this fire';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap contributors';
 }

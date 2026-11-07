@@ -41,6 +41,7 @@ import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/province_borders_credit.dart';
 import '../../shared/widgets/info_icon_button.dart';
+import '../../shared/widgets/osm_attribution.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
@@ -1993,23 +1994,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         Positioned(
             right: 12,
             bottom: bottomInset + 18,
-            child: IgnorePointer(
-              child: Text(
-                [
-                  '© OpenStreetMap',
-                  if (CartoBasemap.configured) '© CARTO',
-                  if (_showRiskLayer) l10n.riskAttribution,
-                ].join(' · '),
-                style: GoogleFonts.ibmPlexSans(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  shadows: const [
-                    Shadow(color: Colors.black87, blurRadius: 3),
-                    Shadow(color: Colors.black54, blurRadius: 1),
-                  ],
-                ),
-              ),
+            // Tappable: opens openstreetmap.org/copyright.
+            child: OsmAttribution(
+              extra: [
+                if (CartoBasemap.configured) '© CARTO',
+                if (_showRiskLayer) l10n.riskAttribution,
+              ],
             ),
           ),
         if (_isLayersPanelOpen)

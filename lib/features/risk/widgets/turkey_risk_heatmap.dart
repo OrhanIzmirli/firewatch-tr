@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../shared/widgets/osm_attribution.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../core/utils/map_tiles.dart';
@@ -417,14 +419,10 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
               Positioned(
                 right: 8,
                 bottom: 4,
-                child: IgnorePointer(
-                  child: Text(
-                    '© OpenStreetMap',
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 9,
-                      color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.55),
-                    ),
-                  ),
+                child: OsmAttribution(
+                  fontSize: 9,
+                  halo: false,
+                  color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.6),
                 ),
               ),
             ],

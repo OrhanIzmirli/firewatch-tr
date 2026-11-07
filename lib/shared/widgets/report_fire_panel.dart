@@ -13,6 +13,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/utils/map_tiles.dart';
+import 'osm_attribution.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
@@ -473,6 +474,10 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                                     );
                                   }
                                 },
+                              ),
+                              const Align(
+                                alignment: Alignment.bottomRight,
+                                child: OsmAttribution(fontSize: 9),
                               ),
                               MarkerLayer(markers: [
                                 Marker(

@@ -16,20 +16,91 @@ void main() {
     if (await dir.exists()) await dir.delete(recursive: true);
   });
 
-  test('only OSM tiles get the disk cache; CARTO goes to the network', () {
+  const cartoUrl =
+      'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=x';
+
+  test('only OSM tiles get the disk cache; CARTO stores nothing at all', () {
     MapTiles.cacheDirForTest = dir;
     expect(MapTiles.providerFor(MapTiles.osmUrl), isA<DiskCachedTileProvider>());
+    final carto = MapTiles.providerFor(cartoUrl);
+    expect(carto, isA<NetworkTileProvider>());
+    // flutter_map caches by default; for CARTO that must be switched off.
     expect(
-      MapTiles.providerFor(
-        'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=x',
-      ),
-      isNull,
+      (carto as NetworkTileProvider).cachingProvider,
+      isA<DisabledMapCachingProvider>(),
     );
     expect(CartoBasemap.url, isNot(MapTiles.osmUrl));
   });
 
-  test('without a cache directory every map falls back to the network', () {
-    expect(MapTiles.providerFor(MapTiles.osmUrl), isNull);
+  test('without a cache directory OSM falls back to the network provider', () {
+    expect(MapTiles.providerFor(MapTiles.osmUrl), isA<NetworkTileProvider>());
+  });
+
+  group('OSM tile policy', () {
+    test('User-Agent names the app: package and version', () {
+      expect(
+        MapTiles.buildUserAgent('1.2.0', '8'),
+        'FireWatchTR/1.2.0+8 (com.oguzh.firewatch.firewatch_tr)',
+      );
+      expect(
+        MapTiles.buildUserAgent(null, null),
+        'FireWatchTR (com.oguzh.firewatch.firewatch_tr)',
+      );
+    });
+
+    test('every provider sends that User-Agent, cached or not', () {
+      MapTiles.userAgent = MapTiles.buildUserAgent('1.2.0', '8');
+      for (final withDir in [true, false]) {
+        MapTiles.cacheDirForTest = withDir ? dir : null;
+        for (final url in [MapTiles.osmUrl, cartoUrl]) {
+          expect(
+            MapTiles.providerFor(url).headers['User-Agent'],
+            'FireWatchTR/1.2.0+8 (com.oguzh.firewatch.firewatch_tr)',
+            reason: '$url withDir=$withDir',
+          );
+        }
+      }
+    });
+
+    test('a TileLayer does not overwrite it with flutter_map\'s default', () {
+      MapTiles.userAgent = MapTiles.buildUserAgent('1.2.0', '8');
+      final layer = TileLayer(
+        urlTemplate: MapTiles.osmUrl,
+        tileProvider: MapTiles.providerFor(MapTiles.osmUrl),
+        userAgentPackageName: MapTiles.packageName,
+      );
+      expect(layer.tileProvider.headers['User-Agent'], startsWith('FireWatchTR/'));
+    });
+
+    test('cache lifetime meets the 7-day minimum', () {
+      expect(DiskCachedTileProvider.maxAge.inDays, greaterThanOrEqualTo(7));
+    });
+
+    // No pre-fetching: nothing may widen flutter_map's default one-tile
+    // pan buffer or download tiles outside a visible map.
+    test('no bulk download anywhere in lib/', () {
+      final src = Directory('lib')
+          .listSync(recursive: true)
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.dart'))
+          .map((f) => f.readAsStringSync())
+          .join('\n');
+      expect(src, isNot(contains('panBuffer')));
+      expect(src, isNot(contains('keepBuffer')));
+      expect(src, isNot(contains('downloadRegion')));
+    });
+
+    test('every map that can draw OSM tiles shows the OSM attribution', () {
+      final files = Directory('lib')
+          .listSync(recursive: true)
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.dart'))
+          .where((f) => f.readAsStringSync().contains('MapTiles.osmUrl'));
+      expect(files, isNotEmpty);
+      for (final f in files) {
+        expect(f.readAsStringSync(), contains('OsmAttribution('), reason: f.path);
+      }
+    });
   });
 
   test('tiles are stored per z/x/y under an osm_ prefix', () {

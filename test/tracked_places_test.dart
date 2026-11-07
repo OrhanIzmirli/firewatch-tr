@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:firewatch_tr/features/risk/widgets/tracked_places_section.dart';
 import 'package:firewatch_tr/features/tracked_places/add_tracked_place_flow.dart';
+import 'package:firewatch_tr/features/tracked_places/tracked_places_screen.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:firewatch_tr/models/alert_scope.dart';
@@ -235,6 +237,7 @@ void main() {
         'place:38.5012,27.2',
       );
       expect(NotificationService.payloadForData({'type': 'place_heat'}), 'alerts_tab');
+      expect(NotificationService.payloadForData({'type': 'place_heat_summary', 'count': '3'}), 'places');
       expect(NotificationService.payloadForData({'fire_id': 'a_b'}), 'fire:a_b');
       expect(NotificationService.payloadForData({}), 'alerts_tab');
     });
@@ -381,5 +384,32 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Bu nokta Türkiye sınırları dışında.'), findsOneWidget);
     });
+  });
+
+  testWidgets('the summary push opens the tracked-places list; back goes to the risk tab', (tester) async {
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        GoRoute(path: '/home', builder: (_, _) => const Scaffold(body: Text('home'))),
+        GoRoute(path: '/app', builder: (_, s) => Scaffold(body: Text('app ${s.uri.query}'))),
+        GoRoute(path: '/tracked-places', builder: (_, _) => const TrackedPlacesScreen()),
+      ],
+    );
+    await tester.pumpWidget(ProviderScope(
+      overrides: [trackedPlacesApiProvider.overrideWithValue(_api(_ScriptedAdapter((o) => (200, _fixture))))],
+      child: MaterialApp.router(
+        routerConfig: router,
+        locale: const Locale('tr'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+      ),
+    ));
+    NotificationService.openPayload(router, NotificationService.payloadForData({'type': 'place_heat_summary', 'count': '2'}));
+    await tester.pumpAndSettle();
+    expect(find.byType(TrackedPlacesScreen), findsOneWidget);
+    expect(find.text('Takip ettiğim yerler'), findsWidgets);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('app tab=risk'), findsOneWidget);
   });
 }

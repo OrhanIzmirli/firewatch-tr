@@ -144,8 +144,10 @@ class NotificationService {
 
   /// Local-notification payload for an FCM data map:
   /// `place:<lat>,<lng>` for a tracked-place heat alert (opens the map
-  /// there), `fire:<id>` for a fire, otherwise the alerts tab.
+  /// there), `places` for the "N new detections" summary (opens the
+  /// tracked-places list), `fire:<id>` for a fire, otherwise the alerts tab.
   static String payloadForData(Map<String, dynamic> data) {
+    if (data['type'] == 'place_heat_summary') return 'places';
     if (data['type'] == 'place_heat') {
       final lat = double.tryParse('${data['lat']}');
       final lng = double.tryParse('${data['lng']}');
@@ -163,6 +165,10 @@ class NotificationService {
     }
     if (payload.startsWith('fire:')) {
       router.go('/fire/${payload.substring(5)}');
+      return;
+    }
+    if (payload == 'places') {
+      router.go('/tracked-places');
       return;
     }
     if (payload.startsWith('place:')) {

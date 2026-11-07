@@ -21,6 +21,11 @@ class NewsItem {
   final List<String> highlights;
   final List<String> paragraphs;
 
+  /// Fire-event IDs the backend explicitly linked this article to: the
+  /// strongest relatedness signal, checked before any region/title match.
+  /// Empty from today's backend (see RelatedNewsTier.linked).
+  final List<String> relatedFireIds;
+
   const NewsItem({
     this.contentType = 'fires',
     this.actionUrl = '',
@@ -43,6 +48,7 @@ class NewsItem {
     required this.isBreaking,
     required this.highlights,
     required this.paragraphs,
+    this.relatedFireIds = const [],
   });
 
   Map<String, dynamic> toJson() => {
@@ -67,6 +73,7 @@ class NewsItem {
         'is_breaking': isBreaking,
         'highlights': highlights,
         'paragraphs': paragraphs,
+        'related_fire_ids': relatedFireIds,
       };
 
   factory NewsItem.fromJson(Map<String, dynamic> json) {
@@ -100,6 +107,10 @@ class NewsItem {
             ? [json['paragraphs']]
             : json['paragraphs'] ?? [],
       ),
+      relatedFireIds: [
+        for (final id in (json['related_fire_ids'] as List? ?? const []))
+          if (id != null) id.toString(),
+      ],
     );
   }
 

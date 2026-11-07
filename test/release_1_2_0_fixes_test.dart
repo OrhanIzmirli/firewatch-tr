@@ -279,6 +279,33 @@ void main() {
       expect(last.left, greaterThanOrEqualTo(0));
       expect(last.right, lessThanOrEqualTo(360));
     });
+
+    testWidgets('the clipped edge fades: right at rest, left at the end, none when it fits', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3; // 360 dp
+      addTearDown(tester.view.reset);
+      Widget chip(String label) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Text(label),
+          );
+      Future<({bool start, bool end})> pump(List<String> labels) async {
+        await tester.pumpWidget(_app(Align(
+          alignment: Alignment.topLeft,
+          child: MapLayerBar(children: [for (final l in labels) chip(l)]),
+        )));
+        await tester.pump();
+        return tester.state<MapLayerBarState>(find.byType(MapLayerBar)).fades;
+      }
+
+      final many = [for (var i = 0; i < 8; i++) 'Katman ${i + 1} uzun ad'];
+      expect(await pump(many), (start: false, end: true));
+
+      await tester.drag(find.byType(MapLayerBar), const Offset(-3000, 0));
+      await tester.pumpAndSettle();
+      expect(tester.state<MapLayerBarState>(find.byType(MapLayerBar)).fades, (start: true, end: false));
+
+      expect(await pump(['A', 'B']), (start: false, end: false));
+    });
   });
 
   group('general scan fixes', () {

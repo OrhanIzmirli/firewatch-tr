@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'core/theme/app_theme.dart';
@@ -21,6 +22,9 @@ import 'services/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // IBM Plex is bundled (assets/fonts); never fetch fonts at runtime — it
+  // failed offline and leaked a request to Google on first launch.
+  GoogleFonts.config.allowRuntimeFetching = false;
   if (kReleaseMode && !ApiConfig.backendBaseUrl.startsWith('https://')) {
     throw StateError('Release builds require an HTTPS backend URL.');
   }

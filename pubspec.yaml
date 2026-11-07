@@ -67,6 +67,10 @@ flutter:
     - assets/icon/app_icon.png
     - assets/data/turkey_places.json
     - assets/data/turkey_outline.json
+    # IBM Plex, bundled so text renders in the right font offline and on
+    # first launch; google_fonts finds these by file name (OFL, see
+    # assets/fonts/OFL.txt).
+    - assets/fonts/
 
 flutter_launcher_icons:
   android: true

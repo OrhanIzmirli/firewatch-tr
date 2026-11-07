@@ -48,7 +48,21 @@ void main() {
     expect(file.readAsStringSync(), isNot(contains('GADM')));
     final tr = AppLocalizationsTr();
     expect(tr.dataSourcesBordersBody, contains('geoBoundaries'));
-    expect(tr.annualLayerBorderCredit, contains('OpenStreetMap'));
+    // ODbL attribution: "© OpenStreetMap contributors, ODbL" + licence link.
+    expect(tr.osmAttribution, '© OpenStreetMap katkıcıları, ODbL');
+    // The legend no longer passes the data file's "il sınırları GADM 4.1"
+    // off as the drawn borders.
+    expect(tr.annualLayerProvenance, contains('geoBoundaries / OpenStreetMap'));
+    expect(tr.annualLayerProvenance, contains('uydu noktası sayıları GADM 4.1'));
+    for (final f in ['lib/features/map/map_screen.dart', 'lib/features/map/widgets/annual_province_layer.dart']) {
+      final src = File(f).readAsStringSync();
+      expect(src, contains('ProvinceBordersCredit('), reason: f);
+      expect(src, isNot(contains('annualLayerSources')), reason: f);
+    }
+    final credit = File('lib/shared/widgets/province_borders_credit.dart').readAsStringSync();
+    expect(credit, contains('https://www.openstreetmap.org/copyright'));
+    expect(credit, contains('https://opendatacommons.org/licenses/odbl/'));
+    expect(File('lib/features/settings/data_sources_screen.dart').readAsStringSync(), contains('odblLicenseUrl'));
   });
 
   test('the file is the one pinned for the backend', () {

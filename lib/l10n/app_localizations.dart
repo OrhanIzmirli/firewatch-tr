@@ -5990,12 +5990,6 @@ abstract class AppLocalizations {
   /// **'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.'**
   String get annualLayerLoadError;
 
-  /// No description provided for @annualLayerSources.
-  ///
-  /// In tr, this message translates to:
-  /// **'Dosyada belirtilen kaynaklar: {sources}'**
-  String annualLayerSources(String sources);
-
   /// No description provided for @riskDrynessIndexDerived.
   ///
   /// In tr, this message translates to:
@@ -6452,17 +6446,23 @@ abstract class AppLocalizations {
   /// **'İl sınırları: geoBoundaries'**
   String get dataSourcesBordersGeoBoundariesCredit;
 
-  /// No description provided for @dataSourcesBordersOsmCredit.
+  /// No description provided for @annualLayerProvenance.
   ///
   /// In tr, this message translates to:
-  /// **'© OpenStreetMap katkıda bulunanlar (ODbL)'**
-  String get dataSourcesBordersOsmCredit;
+  /// **'Yıllık il toplamları kaynak veri setinde hesaplanmıştır (OGM orman yangını istatistikleri; NASA FIRMS VIIRS S-NPP ve ESA WorldCover 2021; EFFIS). Veri setinin kendi beyanına göre uydu noktası sayıları GADM 4.1 il sınırlarıyla hesaplanmıştır. Haritada çizilen il sınırları geoBoundaries / OpenStreetMap\'tir.'**
+  String get annualLayerProvenance;
 
-  /// No description provided for @annualLayerBorderCredit.
+  /// No description provided for @osmAttribution.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)'**
-  String get annualLayerBorderCredit;
+  /// **'© OpenStreetMap katkıcıları, ODbL'**
+  String get osmAttribution;
+
+  /// No description provided for @odblLicenseLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'ODbL 1.0 lisansı'**
+  String get odblLicenseLink;
 }
 
 class _AppLocalizationsDelegate

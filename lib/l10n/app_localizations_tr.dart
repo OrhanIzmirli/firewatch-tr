@@ -3432,11 +3432,6 @@ class AppLocalizationsTr extends AppLocalizations {
       'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.';
 
   @override
-  String annualLayerSources(String sources) {
-    return 'Dosyada belirtilen kaynaklar: $sources';
-  }
-
-  @override
   String get riskDrynessIndexDerived =>
       'Kuruluk göstergesi (sıcaklık, nem ve rüzgârdan türetilir)';
 
@@ -3720,10 +3715,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'İl sınırları: geoBoundaries';
 
   @override
-  String get dataSourcesBordersOsmCredit =>
-      '© OpenStreetMap katkıda bulunanlar (ODbL)';
+  String get annualLayerProvenance =>
+      'Yıllık il toplamları kaynak veri setinde hesaplanmıştır (OGM orman yangını istatistikleri; NASA FIRMS VIIRS S-NPP ve ESA WorldCover 2021; EFFIS). Veri setinin kendi beyanına göre uydu noktası sayıları GADM 4.1 il sınırlarıyla hesaplanmıştır. Haritada çizilen il sınırları geoBoundaries / OpenStreetMap\'tir.';
 
   @override
-  String get annualLayerBorderCredit =>
-      'Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)';
+  String get osmAttribution => '© OpenStreetMap katkıcıları, ODbL';
+
+  @override
+  String get odblLicenseLink => 'ODbL 1.0 lisansı';
 }

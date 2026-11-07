@@ -3436,11 +3436,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load past-year files. Turn the layer off and on to retry.';
 
   @override
-  String annualLayerSources(String sources) {
-    return 'Sources listed in the file: $sources';
-  }
-
-  @override
   String get riskDrynessIndexDerived =>
       'Dryness indicator (derived from temperature, humidity and wind)';
 
@@ -3724,10 +3719,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Province boundaries: geoBoundaries';
 
   @override
-  String get dataSourcesBordersOsmCredit =>
-      '© OpenStreetMap contributors (ODbL)';
+  String get annualLayerProvenance =>
+      'Yearly province totals were calculated in the source data set (OGM forest fire statistics; NASA FIRMS VIIRS S-NPP with ESA WorldCover 2021; EFFIS). By that data set\'s own statement, its satellite point counts were calculated with GADM 4.1 province boundaries. The province boundaries drawn on the map are geoBoundaries / OpenStreetMap.';
 
   @override
-  String get annualLayerBorderCredit =>
-      'Province boundaries on the map: geoBoundaries / © OpenStreetMap contributors (ODbL)';
+  String get osmAttribution => '© OpenStreetMap contributors, ODbL';
+
+  @override
+  String get odblLicenseLink => 'ODbL 1.0 licence';
 }

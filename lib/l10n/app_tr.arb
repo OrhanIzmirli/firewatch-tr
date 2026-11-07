@@ -1336,10 +1336,6 @@
     "placeholders": { "year": { "type": "int" } }
   },
   "annualLayerLoadError": "Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.",
-  "annualLayerSources": "Dosyada belirtilen kaynaklar: {sources}",
-  "@annualLayerSources": {
-    "placeholders": { "sources": { "type": "String" } }
-  },
   "riskDrynessIndexDerived": "Kuruluk göstergesi (sıcaklık, nem ve rüzgârdan türetilir)",
   "riskVegetationDensityDerived": "Bitki baskısı (sıcaklık ve rüzgârdan türetilir)",
   "riskDrynessDerivation": "Sıcaklık, nem ve rüzgârdan türetilir.",
@@ -1438,6 +1434,7 @@
   "dataSourcesBordersTitle": "İl sınırları",
   "dataSourcesBordersBody": "Haritadaki \"Geçmiş yıllar\" katmanında çizilen 81 il sınırı ve sunucunun bir tespiti hangi ile atadığı aynı dosyadan gelir: geoBoundaries (gbOpen, TUR ADM1), OpenStreetMap verisinden türetilmiştir. Sınırlar sadeleştirilmiştir; il sınırına çok yakın bir nokta komşu ile düşebilir. Denizdeki ya da sınır dışındaki noktalar en yakın ile atanır.",
   "dataSourcesBordersGeoBoundariesCredit": "İl sınırları: geoBoundaries",
-  "dataSourcesBordersOsmCredit": "© OpenStreetMap katkıda bulunanlar (ODbL)",
-  "annualLayerBorderCredit": "Haritadaki il sınırları: geoBoundaries / © OpenStreetMap katkıda bulunanlar (ODbL)"
+  "annualLayerProvenance": "Yıllık il toplamları kaynak veri setinde hesaplanmıştır (OGM orman yangını istatistikleri; NASA FIRMS VIIRS S-NPP ve ESA WorldCover 2021; EFFIS). Veri setinin kendi beyanına göre uydu noktası sayıları GADM 4.1 il sınırlarıyla hesaplanmıştır. Haritada çizilen il sınırları geoBoundaries / OpenStreetMap'tir.",
+  "osmAttribution": "© OpenStreetMap katkıcıları, ODbL",
+  "odblLicenseLink": "ODbL 1.0 lisansı"
 }

@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/province_borders_credit.dart';
 import '../../shared/widgets/glass_panel.dart';
 
 /// Where every number in this app comes from, and what it does not mean.
@@ -105,7 +106,8 @@ class DataSourcesScreen extends StatelessWidget {
             // 2026-11-07 against the geoBoundaries API metadata.
             links: [
               (l10n.dataSourcesBordersGeoBoundariesCredit, 'https://www.geoboundaries.org/'),
-              (l10n.dataSourcesBordersOsmCredit, 'https://www.openstreetmap.org/copyright'),
+              (l10n.osmAttribution, osmCopyrightUrl),
+              (l10n.odblLicenseLink, odblLicenseUrl),
             ],
           ),
           const SizedBox(height: AppSpacing.md),

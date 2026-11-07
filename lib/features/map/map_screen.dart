@@ -36,6 +36,7 @@ import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/carto_basemap.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/province_borders_credit.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -1995,17 +1996,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 AnnualLegend(
                   logMax: _annualData?.logMax ?? AnnualLegend.defaultLogMax,
                 ),
-                Text(
-                  // The data file's own statement (how its province totals
-                  // were made), then whose boundaries are actually drawn.
-                  '${l10n.annualLayerSources(_annualData?.source ?? 'OGM; NASA FIRMS; EFFIS')}\n'
-                  '${l10n.annualLayerBorderCredit}',
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 10,
-                    height: 1.35,
-                    color: titleColor.withValues(alpha: 0.66),
-                  ),
-                ),
+                ProvinceBordersCredit(color: titleColor.withValues(alpha: 0.66)),
                 Divider(
                   height: AppSpacing.lg,
                   color: titleColor.withValues(alpha: 0.12),

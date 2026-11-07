@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/annual_province_data.dart';
 import '../../../models/geo_area.dart';
+import '../../../shared/widgets/province_borders_credit.dart';
 
 class AnnualProvinceLayer extends StatefulWidget {
   final AnnualProvinceData data;
@@ -265,10 +266,7 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
           const SizedBox(height: 12),
           Text(l10n.annualProvinceNote),
           const SizedBox(height: 16),
-          Text(
-            l10n.annualLayerSources(widget.data.source),
-            style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
-          ),
+          const ProvinceBordersCredit(color: Color(0xFF9CA3AF), fontSize: 11),
         ],
       ),
     ),

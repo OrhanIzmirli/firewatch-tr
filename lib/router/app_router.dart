@@ -24,6 +24,7 @@ import '../features/watchlist/watchlist_screen.dart';
 import '../models/fire_event.dart';
 import '../models/fire_incident.dart';
 import '../models/news_item.dart';
+import '../features/tracked_places/tracked_places_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -115,6 +116,11 @@ class AppRouter {
           final newsItem = state.extra as NewsItem;
           return NewsDetailScreen(newsItem: newsItem);
         },
+      ),
+      // Where the tracked-places summary push lands.
+      GoRoute(
+        path: '/tracked-places',
+        builder: (context, state) => const TrackedPlacesScreen(),
       ),
       GoRoute(
         path: '/watchlist',

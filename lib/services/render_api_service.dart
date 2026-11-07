@@ -161,6 +161,28 @@ class RenderApiService {
     }
   }
 
+  /// Reads the scope the backend holds for [token] without changing it: a
+  /// PATCH that carries only is_active (the caller passes the current push
+  /// setting, so that doesn't change either) answers with the stored row.
+  Future<ServerScope?> readServerScope(String token, {required bool isActive}) async {
+    try {
+      final response = await _dio.patch(
+        '/notify/subscribe',
+        data: {'token': token, 'is_active': isActive},
+      );
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>?;
+      if (data == null) return null;
+      return ServerScope(
+        scope: AlertScopeWire.fromWire(data['alert_scope'] as String?),
+        regionKey: data['region_key'] as String?,
+        cityId: (data['city_id'] as num?)?.toInt(),
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error reading server scope: $e');
+      return null;
+    }
+  }
+
   /// Clustered fire events. Returns an empty list on any failure so the
   /// caller keeps the existing raw-detection view rather than showing an
   /// error — /api/incidents is additive, not a replacement.

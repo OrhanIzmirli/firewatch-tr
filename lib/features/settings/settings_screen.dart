@@ -11,6 +11,7 @@ import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_provider.dart';
 import '../../services/notification_service.dart';
+import '../../services/tracked_places_provider.dart';
 import '../../services/settings_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -404,7 +405,9 @@ class SettingsScreen extends ConsumerWidget {
                         onTap: () => confirmAndDeleteServerLocation(
                           context,
                           l10n,
-                          NotificationService.instance.deleteServerLocation,
+                          () => NotificationService.instance.deleteServerLocation(
+                            trackedPlaces: ref.read(trackedPlacesProvider.notifier),
+                          ),
                         ),
                       ),
                       Divider(

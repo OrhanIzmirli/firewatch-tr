@@ -3079,6 +3079,228 @@ abstract class AppLocalizations {
   /// **'Şimdi değil'**
   String get locDisclosureNotNow;
 
+  /// No description provided for @trackedPlacesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip ettiğim yerler'**
+  String get trackedPlacesTitle;
+
+  /// No description provided for @trackedPlacesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarıçap içinde yeni uydu ısı tespiti olunca bildirim al'**
+  String get trackedPlacesSubtitle;
+
+  /// No description provided for @trackedPlacesEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz takip ettiğin bir yer yok. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.'**
+  String get trackedPlacesEmpty;
+
+  /// No description provided for @trackedPlacesAdd.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yer ekle'**
+  String get trackedPlacesAdd;
+
+  /// No description provided for @trackedPlacesFull.
+  ///
+  /// In tr, this message translates to:
+  /// **'En fazla 5 yer takip edebilirsin.'**
+  String get trackedPlacesFull;
+
+  /// No description provided for @trackedPlacesRadius.
+  ///
+  /// In tr, this message translates to:
+  /// **'{km} km yarıçap'**
+  String trackedPlacesRadius(int km);
+
+  /// No description provided for @trackedPlacesLastAlert.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son uyarı: {date}'**
+  String trackedPlacesLastAlert(String date);
+
+  /// No description provided for @trackedPlacesNoAlertYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz uyarı yok'**
+  String get trackedPlacesNoAlertYet;
+
+  /// No description provided for @trackedPlacesNotifyTooltip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yer için bildirimler'**
+  String get trackedPlacesNotifyTooltip;
+
+  /// No description provided for @trackedPlacesDeleteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'\"{name}\" silinsin mi?'**
+  String trackedPlacesDeleteTitle(String name);
+
+  /// No description provided for @trackedPlacesDeleteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yer ve uyarı kayıtları sunucudan silinir.'**
+  String get trackedPlacesDeleteBody;
+
+  /// No description provided for @trackedPlacesDelete.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sil'**
+  String get trackedPlacesDelete;
+
+  /// No description provided for @trackedPlacesUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu özellik yakında açılacak.'**
+  String get trackedPlacesUnavailable;
+
+  /// No description provided for @trackedPlacesLoadFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerler yüklenemedi. Son kaydedilen liste gösteriliyor.'**
+  String get trackedPlacesLoadFailed;
+
+  /// No description provided for @trackedPlacesSourceMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritadan seç'**
+  String get trackedPlacesSourceMap;
+
+  /// No description provided for @trackedPlacesSourceMyLocation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumumu ekle'**
+  String get trackedPlacesSourceMyLocation;
+
+  /// No description provided for @trackedPlacesLocationFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum alınamadı.'**
+  String get trackedPlacesLocationFailed;
+
+  /// No description provided for @trackedPlacesNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yer adı'**
+  String get trackedPlacesNameLabel;
+
+  /// No description provided for @trackedPlacesNameHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'ör. Ev, Yazlık'**
+  String get trackedPlacesNameHint;
+
+  /// No description provided for @trackedPlacesNameRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir ad gir.'**
+  String get trackedPlacesNameRequired;
+
+  /// No description provided for @trackedPlacesRadiusLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarıçap'**
+  String get trackedPlacesRadiusLabel;
+
+  /// No description provided for @trackedPlacesSave.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydet'**
+  String get trackedPlacesSave;
+
+  /// No description provided for @trackedPlacesSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'\"{name}\" takip ediliyor.'**
+  String trackedPlacesSaved(String name);
+
+  /// No description provided for @trackedPlacesErrorOutside.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu nokta Türkiye sınırları dışında.'**
+  String get trackedPlacesErrorOutside;
+
+  /// No description provided for @trackedPlacesErrorNetwork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilemedi. İnternet bağlantını kontrol edip tekrar dene.'**
+  String get trackedPlacesErrorNetwork;
+
+  /// No description provided for @trackedPlacesErrorGeneric.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir sorun oluştu, tekrar dene.'**
+  String get trackedPlacesErrorGeneric;
+
+  /// No description provided for @trackedPlacesPickerTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu seç'**
+  String get trackedPlacesPickerTitle;
+
+  /// No description provided for @trackedPlacesPickerHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritayı kaydırıp işaretçiyi yerin üzerine getir ya da haritaya uzun bas.'**
+  String get trackedPlacesPickerHint;
+
+  /// No description provided for @trackedPlacesPickerConfirm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu konumu kullan'**
+  String get trackedPlacesPickerConfirm;
+
+  /// No description provided for @trackedPlacesApproxNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum sunucuda yaklaşık 1 km hassasiyetle saklanır. Bildirimler doğrulanmış yangın değil, uydu ısı tespitidir.'**
+  String get trackedPlacesApproxNote;
+
+  /// No description provided for @trackedPlacesMigrateTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıtlı pin\'lerini takip etmek ister misin?'**
+  String get trackedPlacesMigrateTitle;
+
+  /// No description provided for @trackedPlacesMigrateBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kayıtlı pin\'in var. Takip edilen yere dönüştürürsen 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.'**
+  String trackedPlacesMigrateBody(int count);
+
+  /// No description provided for @trackedPlacesMigrateAccept.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönüştür'**
+  String get trackedPlacesMigrateAccept;
+
+  /// No description provided for @trackedPlacesMigrateDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yer takip ediliyor.'**
+  String trackedPlacesMigrateDone(int count);
+
+  /// No description provided for @locDisclosureTracked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip ettiğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.'**
+  String get locDisclosureTracked;
+
+  /// No description provided for @notifPlacesChannelName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip ettiğim yerler'**
+  String get notifPlacesChannelName;
+
+  /// No description provided for @notifPlacesChannelDescription.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip ettiğin yerlerin yakınındaki uydu ısı tespitleri'**
+  String get notifPlacesChannelDescription;
+
   /// No description provided for @settingsDeleteLocation.
   ///
   /// In tr, this message translates to:
@@ -3094,7 +3316,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDeleteLocationConfirmBody.
   ///
   /// In tr, this message translates to:
-  /// **'Sunucuda saklanan yaklaşık konumun hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.'**
+  /// **'Sunucuda saklanan yaklaşık konumun ve takip ettiğin tüm yerler hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.'**
   String get settingsDeleteLocationConfirmBody;
 
   /// No description provided for @settingsDeleteLocationConfirm.

@@ -27,8 +27,8 @@ class LocationDisclosure {
   LocationDisclosure._();
 
   /// Bump the suffix when the disclosed practice changes, so everyone sees
-  /// the new text once.
-  static const prefsKey = 'location_disclosure_v1_accepted';
+  /// the new text once. v2 (1.2.0) adds tracked places.
+  static const prefsKey = 'location_disclosure_v2_accepted';
 
   /// "Not now" holds for the rest of this app session, so screens that look
   /// up the location on their own (home, news) don't ask again and again.
@@ -117,6 +117,7 @@ class LocationDisclosureSheet extends StatelessWidget {
       (Icons.phone_android_rounded, l10n.locDisclosureOnDevice),
       (Icons.location_city_rounded, l10n.locDisclosureNearestCity),
       (Icons.notifications_active_outlined, l10n.locDisclosureStored),
+      (Icons.place_outlined, l10n.locDisclosureTracked),
       (Icons.delete_outline_rounded, l10n.locDisclosureDelete),
       (Icons.toggle_off_outlined, l10n.locDisclosureOptional),
     ];

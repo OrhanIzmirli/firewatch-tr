@@ -5573,7 +5573,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hActiveTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif tespit'**
+  /// **'Çoklu geçiş tespiti'**
   String get homeLast24hActiveTitle;
 
   /// No description provided for @homeLast24hActiveSubtitle.
@@ -5581,12 +5581,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Son {hours} saat içinde uydu tarafından görüldü'**
   String homeLast24hActiveSubtitle(int hours);
-
-  /// No description provided for @homeLast24hActiveSubtitleLayered.
-  ///
-  /// In tr, this message translates to:
-  /// **'{strong} tanesi güçlü kanıtlı; son {hours} saatte uyduyla görüldü'**
-  String homeLast24hActiveSubtitleLayered(int strong, int hours);
 
   /// No description provided for @homeLast24hEndedTitle.
   ///
@@ -6463,6 +6457,78 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ODbL 1.0 lisansı'**
   String get odblLicenseLink;
+
+  /// No description provided for @mapDetectionConfidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit güveni: {score}/100'**
+  String mapDetectionConfidence(int score);
+
+  /// No description provided for @mapDetectionConfidenceInfoTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tespit güveni'**
+  String get mapDetectionConfidenceInfoTitle;
+
+  /// No description provided for @mapDetectionConfidenceInfoBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'NASA\'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.'**
+  String get mapDetectionConfidenceInfoBody;
+
+  /// No description provided for @mapDetectionConfidenceInfoNotFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.'**
+  String get mapDetectionConfidenceInfoNotFire;
+
+  /// No description provided for @mapStrongUnverifiedReason.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek bir uydu pikselinde güçlü ısı sinyali ({frp} MW) — henüz doğrulanmadı'**
+  String mapStrongUnverifiedReason(int frp);
+
+  /// No description provided for @mapStrongUnverifiedBanner.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} güçlü, doğrulanmamış tespit — Noktalar\'da gör'**
+  String mapStrongUnverifiedBanner(int count);
+
+  /// No description provided for @multiPassDetectionLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çoklu geçiş tespiti'**
+  String get multiPassDetectionLabel;
+
+  /// No description provided for @multiPassDetectionExplanation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.'**
+  String get multiPassDetectionExplanation;
+
+  /// No description provided for @homeMultiPassSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'En az 2 uydu geçişi; {weaker} ısı izi daha Noktalar katmanında'**
+  String homeMultiPassSubtitle(int weaker);
+
+  /// No description provided for @homeMultiPassNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.'**
+  String homeMultiPassNote(int count, int weaker);
+
+  /// No description provided for @incidentExtinguishedConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor'**
+  String get incidentExtinguishedConflict;
+
+  /// No description provided for @fireDetailLinkedNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yangınla ilişkilendirilen haberler'**
+  String get fireDetailLinkedNews;
 }
 
 class _AppLocalizationsDelegate

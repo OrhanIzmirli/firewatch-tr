@@ -3182,16 +3182,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLast24hSubtitle => 'Summary of satellite detections';
 
   @override
-  String get homeLast24hActiveTitle => 'Active detection';
+  String get homeLast24hActiveTitle => 'Multi-pass detections';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Seen by a satellite within the last $hours hours';
-  }
-
-  @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong with strong evidence; seen by satellite in the last $hours h';
   }
 
   @override
@@ -3727,4 +3722,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get odblLicenseLink => 'ODbL 1.0 licence';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Detection confidence: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Detection confidence';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'Computed from NASA\'s confidence level, radiated power (FRP), multi-pass detections within 20 km and how recent the detection is. Weather is not part of this score.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'This score shows how distinct a single satellite pixel is. It does not say there is a fire there.';
+
+  @override
+  String mapStrongUnverifiedReason(int frp) {
+    return 'Strong heat signal ($frp MW) in a single satellite pixel — not yet verified';
+  }
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count strong unverified detections — view on Points',
+      one: '1 strong unverified detection — view on Points',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Multi-pass detection';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Seen at the same spot on at least two separate satellite passes, with a strong heat signal. This does not prove a fire; it is stronger evidence than a single pixel.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'At least 2 satellite passes; $weaker more heat traces under Points';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count multi-pass detections (at least 2 satellite passes); the map shows $weaker more single-pass or weak heat traces. None of these is a verified fire.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Official: extinguished — satellite still sees heat';
+
+  @override
+  String get fireDetailLinkedNews => 'News linked to this fire';
 }

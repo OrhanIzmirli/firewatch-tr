@@ -100,8 +100,11 @@ void main() {
       tier: 'high',
     );
 
-    test('active keeps thin evidence — it is happening now', () {
-      expect(IncidentFilter.active.matches(activeThin), isTrue);
+    // 1.0.6 routing (1.2.0+8): thin active evidence moved to the Points
+    // layer, where strong pixels get an attention marker and the events
+    // layer shows a banner counting them. It is routed, not deleted.
+    test('active draws multi-pass only; thin evidence goes to Points', () {
+      expect(IncidentFilter.active.matches(activeThin), isFalse);
       expect(IncidentFilter.active.matches(activeStrong), isTrue);
       expect(IncidentFilter.active.matches(endedStrong), isFalse);
     });
@@ -112,8 +115,8 @@ void main() {
       expect(IncidentFilter.ended.matches(activeStrong), isFalse);
     });
 
-    test('all is the union, not everything', () {
-      expect(IncidentFilter.all.matches(activeThin), isTrue);
+    test('all is every multi-pass detection, active or not', () {
+      expect(IncidentFilter.all.matches(activeThin), isFalse);
       expect(IncidentFilter.all.matches(endedStrong), isTrue);
       // The one that must not reappear: no longer detected and never had
       // more than a single weak pixel behind it.

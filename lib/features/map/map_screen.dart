@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/detection_score.dart';
 import '../../core/utils/loading_race.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_incident.dart';
@@ -289,7 +290,73 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       _firePointsRequested = true;
       await _loadFirePoints();
     }
+    if (mounted) _ensureFocusTargetVisible();
   }
+
+  /// Being detected now, below the multi-pass bar, strong heat: counted
+  /// from the incidents already loaded, so the events layer can point at
+  /// them without fetching the raw feed.
+  int get _strongUnverifiedCount =>
+      _incidents.where((i) => i.isStrongUnverified).length;
+
+  /// Deep links (a nearby-fire alert, a tracked place) carry coordinates
+  /// only. Single-pass detections are no longer on the events layer, so when
+  /// nothing on that layer is within 3 km of the target the map would open
+  /// on an empty spot: switch to the possible-fire-points layer instead.
+  void _ensureFocusTargetVisible() {
+    final lat = widget.focusLat;
+    final lng = widget.focusLng;
+    if (lat == null || lng == null || !_showIncidents) return;
+    final hasEventNearby = _incidents.any(
+      (i) =>
+          IncidentFilter.all.matches(i) &&
+          Geolocator.distanceBetween(lat, lng, i.latitude, i.longitude) <=
+              3000,
+    );
+    if (!hasEventNearby) _setLayer(showIncidents: false);
+  }
+
+  /// Banner tap: switch to the points layer AND aim the camera at the
+  /// strong unverified detections the banner counted.
+  void _showStrongUnverifiedOnMap() {
+    final targets = _incidents.where((i) => i.isStrongUnverified).toList();
+    _setLayer(showIncidents: false);
+    if (targets.isEmpty) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (targets.length == 1) {
+        _mapController.move(
+          LatLng(targets.first.latitude, targets.first.longitude),
+          9,
+        );
+      } else {
+        _mapController.fitCamera(
+          CameraFit.bounds(
+            bounds: LatLngBounds.fromPoints([
+              for (final t in targets) LatLng(t.latitude, t.longitude),
+            ]),
+            padding: const EdgeInsets.fromLTRB(48, 190, 48, 320),
+            maxZoom: 10,
+          ),
+        );
+      }
+    });
+  }
+
+  /// Detection confidence is read several times per marker and each read
+  /// scans the incident list for nearby multi-pass detections: memoised per
+  /// pixel, cleared whenever either feed reloads.
+  final Map<String, int> _scoreCache = {};
+
+  int _scoreFor(FirePoint p) => _scoreCache.putIfAbsent(
+        '${p.latitude},${p.longitude},${p.acquisitionDate}${p.acquisitionTime}',
+        () => detectionConfidenceScoreFor(p, incidents: _incidents),
+      );
+
+  /// Attention marker: fresh and strong, never on a labelled fixed source.
+  bool _strongUnverifiedPoint(FirePoint p) =>
+      !_isFixedSourcePoint(p) &&
+      isStrongUnverifiedPoint(p, score: _scoreFor(p));
 
   /// True once the raw feed has been fetched, so switching layers back and
   /// forth does not re-fetch it.
@@ -455,6 +522,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final fellBack = incidents.isEmpty && _showIncidents;
     setState(() {
       _incidents = incidents;
+      // The nearby component of detection confidence depends on this list.
+      _scoreCache.clear();
       if (incidents.isEmpty) _showIncidents = false;
       // The loading veil was only ever cleared by the raw-detection fetch,
       // which the events layer never triggers — so on the default layer it
@@ -578,6 +647,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               .map((e) => FirePoint.fromJson(e as Map<String, dynamic>))
               .toList();
           setState(() {
+            _scoreCache.clear();
             _firePoints = points;
             _nearbyFirePoints = _buildNearbyList(points);
             _isSlowLoading = true;
@@ -594,6 +664,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
       if (!mounted) return;
       setState(() {
+        _scoreCache.clear();
         _firePoints = allPoints;
         _nearbyFirePoints = nearby;
         _isLoading = false;
@@ -612,6 +683,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             .map((e) => FirePoint.fromJson(e as Map<String, dynamic>))
             .toList();
         setState(() {
+          _scoreCache.clear();
           _firePoints = points;
           _nearbyFirePoints = _buildNearbyList(points);
           _isSlowLoading = false;
@@ -678,36 +750,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     showReportFirePanel(context);
   }
 
-  /// Marker color by NASA confidence tier only — high: danger (red),
-  /// nominal: warning (orange), low: grey — independent of
-  /// FirePoint.detectionColor (which still drives the bottom sheet/cards
-  /// elsewhere and is deliberately left alone).
+  /// Marker colour by detection confidence (see detection_score.dart):
+  /// ≥65 danger, ≥40 warning, else grey. It grades the evidence behind the
+  /// pixel — tier, power, nearby multi-pass detections, age — and says
+  /// nothing about whether it is a fire. FirePoint.detectionColor still
+  /// drives the bottom sheet header and is deliberately left alone.
   Color _markerColor(FirePoint point) {
-    // A pixel on a steelworks is not a fire of any confidence tier.
+    // A pixel on a steelworks is not a fire of any confidence.
     if (_isFixedSourcePoint(point)) return AppColors.textFaint;
-    switch (point.riskTier) {
-      case 'high':
-        return AppColors.danger;
-      case 'medium':
-        return AppColors.warning;
-      default:
-        return Colors.grey;
-    }
+    final score = _scoreFor(point);
+    if (score >= kDetectionConfidenceHigh) return AppColors.danger;
+    if (score >= kDetectionConfidenceMedium) return AppColors.warning;
+    return Colors.grey;
   }
 
-  /// Base marker size by confidence tier (at the reference zoom level) —
-  /// high-confidence detections read as the largest/most urgent,
-  /// low-confidence detections shrink so the map isn't visually dominated
-  /// by noise-tier points.
+  /// Base marker size (at the reference zoom) on the same bands, so weak
+  /// pixels shrink and the map is not dominated by noise.
   double _baseMarkerSize(FirePoint point) {
-    switch (point.riskTier) {
-      case 'high':
-        return 28;
-      case 'medium':
-        return 22;
-      default:
-        return 16;
-    }
+    final score = _scoreFor(point);
+    if (score >= kDetectionConfidenceHigh) return 28;
+    if (score >= kDetectionConfidenceMedium) return 22;
+    return 16;
   }
 
   /// Scales marker size with the current zoom level so markers stay
@@ -736,6 +799,34 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Widget _buildMarkerIcon(FirePoint point) {
     final size = _markerSize(point);
     final color = _markerColor(point);
+    // Fresh, strong, unverified: an attention marker so the eye finds it —
+    // an amber ring with an exclamation mark, never a flame. It does not
+    // pulse (a single pixel has not earned "live"), and the sheet states
+    // in words that it is not verified.
+    if (_strongUnverifiedPoint(point)) {
+      final d = (size * 0.9).clamp(20.0, 40.0);
+      return Container(
+        width: d,
+        height: d,
+        decoration: BoxDecoration(
+          color: AppColors.background.withValues(alpha: 0.9),
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.warning, width: 2.4),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.warning.withValues(alpha: 0.45),
+              blurRadius: 6,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Icon(
+          Icons.priority_high_rounded,
+          color: AppColors.warning,
+          size: d * 0.62,
+        ),
+      );
+    }
     // Over the FWI raster the tier colours stop working: a red disc on the
     // red "very high" band is invisible. The risk-on variant is a near-black
     // disc with a white ring — the ring carries the edge on the dark FWI
@@ -806,6 +897,30 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final status = incident.status;
     final size = _incidentMarkerSize(status);
     final showIcon = size >= 20;
+    // Official status markers, both unreachable while
+    // FeatureFlags.officialStatus is off (no reliable TR source yet).
+    // A conflict ("officially out", satellite still sees heat) never gets
+    // the reassuring green check: it is drawn amber.
+    if (incident.hasExtinguishedConflict || incident.isOfficiallyExtinguished) {
+      final conflict = incident.hasExtinguishedConflict;
+      final color = conflict ? AppColors.warning : AppColors.success;
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color.withValues(alpha: 0.9),
+          border: Border.all(color: Colors.white, width: 1.6),
+        ),
+        child: showIcon
+            ? Icon(
+                conflict ? Icons.report_problem_rounded : Icons.check_rounded,
+                color: Colors.white,
+                size: size * 0.56,
+              )
+            : null,
+      );
+    }
     // Same contrast problem as the raw detections: a danger-red event disc
     // disappears on the FWI raster's red and maroon bands. With the risk
     // layer on, the disc goes near-black with a solid white ring and the
@@ -900,11 +1015,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     );
   }
 
-  /// Raw detection markers, same rules as [_incidentMarkers].
+  /// Raw detection markers, same rules as [_incidentMarkers]. The incident
+  /// list is an input too: it feeds the nearby part of detection confidence.
+  /// Strong unverified pixels are left out here and drawn on their own
+  /// layer ([_attentionMarkers]) so they never average into a bubble.
   List<Marker> get _pointMarkers => _pointMarkerCache.get(
-        [_firePoints, _confidenceFilterActive, _showRiskLayer],
+        [_firePoints, _incidents, _confidenceFilterActive, _showRiskLayer],
         () => [
           for (final point in _visibleFirePoints)
+            if (!_strongUnverifiedPoint(point))
             Marker(
               point: LatLng(point.latitude, point.longitude),
               width: 48,
@@ -917,6 +1036,30 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ),
               ),
             ),
+        ],
+      );
+
+  final MarkerListCache _attentionMarkerCache = MarkerListCache();
+
+  /// Strong unverified pixels: always on top, never clustered.
+  List<Marker> get _attentionMarkers => _attentionMarkerCache.get(
+        [_firePoints, _incidents, _confidenceFilterActive, _showRiskLayer],
+        () => [
+          for (final point in _visibleFirePoints)
+            if (_strongUnverifiedPoint(point))
+              Marker(
+                point: LatLng(point.latitude, point.longitude),
+                width: 52,
+                height: 52,
+                child: GestureDetector(
+                  onTap: () => _openFireBottomSheet(point),
+                  child: ValueListenableBuilder<double>(
+                    valueListenable: _zoom,
+                    builder: (context, _, _) =>
+                        Center(child: _buildMarkerIcon(point)),
+                  ),
+                ),
+              ),
         ],
       );
 
@@ -1176,8 +1319,31 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ],
                     ),
                     StatusChip(label: timeAgo, icon: Icons.access_time_rounded),
+                    StatusChip(
+                      label: l10n.mapDetectionConfidence(_scoreFor(point)),
+                      icon: Icons.insights_rounded,
+                      color: _markerColor(point),
+                    ),
+                    InfoIconButton(
+                      title: l10n.mapDetectionConfidenceInfoTitle,
+                      bodyLines: [
+                        l10n.mapDetectionConfidenceInfoBody,
+                        l10n.mapDetectionConfidenceInfoNotFire,
+                      ],
+                    ),
                   ],
                 ),
+                if (_strongUnverifiedPoint(point)) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    l10n.mapStrongUnverifiedReason(point.frp.round()),
+                    style: GoogleFonts.ibmPlexSans(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.warning,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.lg),
                 Text(
                   point.cityName != null
@@ -1540,7 +1706,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         _buildIncidentCluster(markers),
                   ),
                 )
-              else
+              else ...[
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
                     maxClusterRadius: 72,
@@ -1571,6 +1737,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     ),
                   ),
                 ),
+                MarkerLayer(markers: _attentionMarkers),
+              ],
             ],
           ),
         ),
@@ -1625,6 +1793,49 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ),
                     ],
                 ),
+              if (_showIncidents && _strongUnverifiedCount > 0) ...[
+                const SizedBox(height: 6),
+                GestureDetector(
+                  key: const ValueKey('strong-unverified-banner'),
+                  onTap: _showStrongUnverifiedOnMap,
+                  child: GlassPanel(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 7,
+                    ),
+                    radius: AppSpacing.cardRadius,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.priority_high_rounded,
+                          size: 16,
+                          color: AppColors.warning,
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            l10n.mapStrongUnverifiedBanner(
+                              _strongUnverifiedCount,
+                            ),
+                            style: GoogleFonts.ibmPlexSans(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w600,
+                              color: titleColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          size: 16,
+                          color: titleColor.withValues(alpha: 0.7),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               if (_showAnnualHistory) ...[
                 const SizedBox(height: 6),
                 _buildAnnualStrip(l10n, titleColor),

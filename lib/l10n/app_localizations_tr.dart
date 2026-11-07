@@ -3177,16 +3177,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeLast24hSubtitle => 'Uydu tespitlerinin özeti';
 
   @override
-  String get homeLast24hActiveTitle => 'Aktif tespit';
+  String get homeLast24hActiveTitle => 'Çoklu geçiş tespiti';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
     return 'Son $hours saat içinde uydu tarafından görüldü';
-  }
-
-  @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong tanesi güçlü kanıtlı; son $hours saatte uyduyla görüldü';
   }
 
   @override
@@ -3723,4 +3718,54 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get odblLicenseLink => 'ODbL 1.0 lisansı';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Tespit güveni: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Tespit güveni';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'NASA\'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.';
+
+  @override
+  String mapStrongUnverifiedReason(int frp) {
+    return 'Tek bir uydu pikselinde güçlü ısı sinyali ($frp MW) — henüz doğrulanmadı';
+  }
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    return '$count güçlü, doğrulanmamış tespit — Noktalar\'da gör';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Çoklu geçiş tespiti';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'En az 2 uydu geçişi; $weaker ısı izi daha Noktalar katmanında';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count çoklu geçiş tespiti (en az 2 uydu geçişi); haritada $weaker tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor';
+
+  @override
+  String get fireDetailLinkedNews => 'Bu yangınla ilişkilendirilen haberler';
 }

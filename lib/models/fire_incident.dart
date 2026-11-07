@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/config/feature_flags.dart';
 import '../core/constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
 
@@ -228,6 +229,47 @@ class FireIncident {
   /// True only when a named official source confirmed a state. Never inferred.
   bool get hasOfficialStatus => officialState != null && officialState!.isNotEmpty;
 
+  /// "Çoklu geçiş tespiti" / multi-pass detection: seen on at least two
+  /// separate satellite passes with a real heat signal ([IncidentSignificance]).
+  /// Stronger evidence than a single pixel. Still NOT a verified fire, and no
+  /// string may call it proven, confirmed or verified.
+  bool get isMultiPassDetection => isSignificant;
+
+  /// An official statement the app is allowed to show. False whenever
+  /// [FeatureFlags.officialStatus] is off: there is no reliable Turkish
+  /// source feeding `official_state` yet, and nothing unsourced may stand in.
+  bool get hasShownOfficialStatus =>
+      FeatureFlags.officialStatus && hasOfficialStatus;
+
+  /// Whether the events layer draws this: multi-pass satellite evidence, or
+  /// (once a source exists) an official statement or burnt-area mapping.
+  /// A lone pixel — even one detected right now — lives on the possible-
+  /// fire-points layer instead. Nothing is deleted; it is routed to the
+  /// layer whose name matches its evidence.
+  bool get belongsOnEventsLayer =>
+      isMultiPassDetection ||
+      hasShownOfficialStatus ||
+      opticalBurntAreaHa != null;
+
+  /// Official extinguishment — the ONLY path to "out". Satellite silence
+  /// never qualifies, and with the flag off this is always false.
+  bool get isOfficiallyExtinguished =>
+      hasShownOfficialStatus && officialState == 'extinguished';
+
+  /// An official "extinguished" while a satellite sees heat right now. The
+  /// two claims conflict and the map must not err on the reassuring side.
+  bool get hasExtinguishedConflict =>
+      isOfficiallyExtinguished && status == IncidentStatus.activeDetection;
+
+  /// Being detected now, below the multi-pass bar, but with a heat signal
+  /// too strong to leave unremarked: counted by the events-layer banner and
+  /// drawn with an attention marker on the points layer.
+  bool get isStrongUnverified =>
+      !belongsOnEventsLayer &&
+      !isPersistentHeatSource &&
+      status == IncidentStatus.activeDetection &&
+      (maxFrpMw ?? 0) >= 15;
+
   /// A trend is shown only when the backend published one; it withholds
   /// rather than guesses, so there is nothing to re-check here.
   bool get hasTrend => frpTrend != null && frpTrend!.isNotEmpty;
@@ -427,27 +469,26 @@ extension IncidentFilterX on IncidentFilter {
     );
   }
 
-  /// Note the asymmetry: [active] keeps everything currently being detected,
-  /// however thin the evidence, because a weak signal happening *now* is
-  /// exactly the thing a person opening this app wants to see. The evidence
-  /// bar only applies once nothing is being detected any more, where a
-  /// one-pixel event is no longer a warning, just clutter.
+  /// The events layer draws only [FireIncident.belongsOnEventsLayer] (as in
+  /// 1.0.6). Before 1.2.0 the active filter kept every fresh pixel; those
+  /// now live on the possible-fire-points layer, where they are scored and
+  /// the strong ones get an attention marker, and the events layer shows a
+  /// banner counting them so they are one tap away. Nothing is deleted.
   ///
-  /// Nothing is deleted by this. Everything below the bar is still on the
-  /// possible-fire-points layer, one tap away.
+  /// A labelled fixed heat source is being detected right now, so it stays
+  /// on the active layer (drawn grey), never in "no longer seen", and always
+  /// in "all". Labelled, not hidden.
   bool matches(FireIncident incident) {
     final isActive = incident.status == IncidentStatus.activeDetection;
-    // A fixed source is being detected right now, so it belongs with the
-    // active layer (drawn grey), never in "no longer seen", and always in
-    // "all". Labelled, not hidden.
     if (incident.isPersistentHeatSource) return this != IncidentFilter.ended;
+    if (!incident.belongsOnEventsLayer) return false;
     switch (this) {
       case IncidentFilter.active:
         return isActive;
       case IncidentFilter.ended:
-        return !isActive && incident.isSignificant;
+        return !isActive;
       case IncidentFilter.all:
-        return isActive || incident.isSignificant;
+        return true;
     }
   }
 

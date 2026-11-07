@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
+import '../../../core/constants/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/annual_province_data.dart';
 import '../../../models/geo_area.dart';
@@ -37,7 +38,9 @@ class _AnnualProvinceLayerState extends State<AnnualProvinceLayer> {
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      backgroundColor: const Color(0xFF111828),
+      // The app's own dark surface (the content below is styled for a dark
+      // sheet); the navy used here matched nothing else in the app.
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -49,27 +52,63 @@ class _AnnualProvinceLayerState extends State<AnnualProvinceLayer> {
     );
   }
 
+  /// Built once per data/year and reused as the same widget instance:
+  /// flutter_map re-projects every vertex of a PolygonLayer whose widget
+  /// changes, and this one is all 81 provinces. The tapped province is
+  /// outlined by a small layer of its own on top.
+  late PolygonLayer<String> _baseLayer = _buildBaseLayer();
+
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: _select,
-    child: PolygonLayer<String>(
-      hitNotifier: _hit,
-      polygons: [
-        for (final area in widget.data.areas)
-          for (final polygon in area.polygons)
-            Polygon<String>(
-              points: polygon.first,
-              holePointsList: polygon.skip(1).toList(),
-              hitValue: area.id,
-              color: widget.data.color(area.id, widget.year),
-              borderColor: area.id == _selected
-                  ? const Color(0xFFF97316)
-                  : const Color(0x590E0500),
-              borderStrokeWidth: area.id == _selected ? 2 : 0.8,
+  void didUpdateWidget(covariant AnnualProvinceLayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.data != widget.data || oldWidget.year != widget.year) {
+      _baseLayer = _buildBaseLayer();
+    }
+  }
+
+  PolygonLayer<String> _buildBaseLayer() => PolygonLayer<String>(
+        hitNotifier: _hit,
+        polygons: [
+          for (final area in widget.data.areas)
+            for (final polygon in area.polygons)
+              Polygon<String>(
+                points: polygon.first,
+                holePointsList: polygon.skip(1).toList(),
+                hitValue: area.id,
+                color: widget.data.color(area.id, widget.year),
+                borderColor: const Color(0x590E0500),
+                borderStrokeWidth: 0.8,
+              ),
+        ],
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = _selected == null
+        ? null
+        : widget.data.areas.where((a) => a.id == _selected).firstOrNull;
+    return GestureDetector(
+      onTap: _select,
+      child: Stack(
+        children: [
+          _baseLayer,
+          if (selected != null)
+            PolygonLayer<String>(
+              polygons: [
+                for (final polygon in selected.polygons)
+                  Polygon<String>(
+                    points: polygon.first,
+                    holePointsList: polygon.skip(1).toList(),
+                    color: Colors.transparent,
+                    borderColor: const Color(0xFFF97316),
+                    borderStrokeWidth: 2,
+                  ),
+              ],
             ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }
 
 class AnnualProvinceDetails extends StatefulWidget {

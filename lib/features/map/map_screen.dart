@@ -44,6 +44,7 @@ import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
 import 'widgets/map_layer_bar.dart';
+import 'widgets/marker_list_cache.dart';
 import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
 import 'widgets/saved_places_sheet.dart';
@@ -131,7 +132,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
-  double _currentZoom = 5.6;
+  /// Zoom drives only marker *size*, so it lives in a notifier the markers
+  /// listen to; a setState here used to rebuild — and so re-cluster — every
+  /// marker each 0.2 zoom of a pinch.
+  final ValueNotifier<double> _zoom = ValueNotifier(5.6);
+  double get _currentZoom => _zoom.value;
+  final MarkerListCache _incidentMarkerCache = MarkerListCache();
+  final MarkerListCache _pointMarkerCache = MarkerListCache();
 
   List<FirePoint> _firePoints = [];
   List<FirePoint> _nearbyFirePoints = [];
@@ -222,7 +229,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.focusLat != null) _currentZoom = 13;
+    if (widget.focusLat != null) _zoom.value = 13;
     if (widget.initialIncidentFilter != null) {
       _incidentFilter = widget.initialIncidentFilter!;
     } else {
@@ -250,6 +257,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     _sheetController.removeListener(_onSheetMoved);
     _sheetController.dispose();
     _mapController.dispose();
+    _zoom.dispose();
     super.dispose();
   }
 
@@ -855,6 +863,62 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// without the marker having to carry the model around.
   final Map<Key?, FireIncident> _incidentByMarkerKey = {};
 
+  /// Event markers, rebuilt only when the events, the filter or the
+  /// risk-layer styling change (see MarkerListCache). Marker size follows
+  /// zoom through [_zoom] without rebuilding the list.
+  List<Marker> get _incidentMarkers => _incidentMarkerCache.get(
+        [_incidents, _incidentFilter, _showRiskLayer],
+        () {
+          _incidentByMarkerKey.clear();
+          return [
+            for (final incident in _visibleIncidents)
+              _incidentMarker(incident),
+          ];
+        },
+      );
+
+  Marker _incidentMarker(FireIncident incident) {
+    final key = ValueKey<String>('incident-${incident.id}');
+    _incidentByMarkerKey[key] = incident;
+    return Marker(
+      key: key,
+      point: LatLng(incident.latitude, incident.longitude),
+      width: 48,
+      height: 48,
+      child: GestureDetector(
+        onTap: () => IncidentSheet.show(
+          context,
+          incident: incident,
+          cityName: _cityNameFor(incident),
+        ),
+        child: ValueListenableBuilder<double>(
+          valueListenable: _zoom,
+          builder: (context, _, _) => Center(child: _buildIncidentMarker(incident)),
+        ),
+      ),
+    );
+  }
+
+  /// Raw detection markers, same rules as [_incidentMarkers].
+  List<Marker> get _pointMarkers => _pointMarkerCache.get(
+        [_firePoints, _confidenceFilterActive, _showRiskLayer],
+        () => [
+          for (final point in _visibleFirePoints)
+            Marker(
+              point: LatLng(point.latitude, point.longitude),
+              width: 48,
+              height: 48,
+              child: GestureDetector(
+                onTap: () => _openFireBottomSheet(point),
+                child: ValueListenableBuilder<double>(
+                  valueListenable: _zoom,
+                  builder: (context, _, _) => Center(child: _buildMarkerIcon(point)),
+                ),
+              ),
+            ),
+        ],
+      );
+
   /// The most severe status inside a cluster. A bubble hiding one actively
   /// burning fire among ninety quiet ones has to read as urgent, not average.
   IncidentStatus _clusterStatus(List<Marker> markers) {
@@ -1336,7 +1400,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               maxZoom: 18,
               onPositionChanged: (camera, hasGesture) {
                 if ((camera.zoom - _currentZoom).abs() > 0.2) {
-                  setState(() => _currentZoom = camera.zoom);
+                  _zoom.value = camera.zoom;
                 }
               },
               onTap: (tapPosition, point) {
@@ -1470,24 +1534,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     },
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(40),
-                    markers: _visibleIncidents.map((incident) {
-                      final key = ValueKey<String>('incident-${incident.id}');
-                      _incidentByMarkerKey[key] = incident;
-                      return Marker(
-                        key: key,
-                        point: LatLng(incident.latitude, incident.longitude),
-                        width: 48,
-                        height: 48,
-                        child: GestureDetector(
-                          onTap: () => IncidentSheet.show(
-                            context,
-                            incident: incident,
-                            cityName: _cityNameFor(incident),
-                          ),
-                          child: Center(child: _buildIncidentMarker(incident)),
-                        ),
-                      );
-                    }).toList(),
+                    markers: _incidentMarkers,
                     builder: (context, markers) =>
                         _buildIncidentCluster(markers),
                   ),
@@ -1498,17 +1545,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     maxClusterRadius: 72,
                     size: const Size(40, 40),
                     alignment: Alignment.center,
-                    markers: _visibleFirePoints.map((point) {
-                      return Marker(
-                        point: LatLng(point.latitude, point.longitude),
-                        width: 48,
-                        height: 48,
-                        child: GestureDetector(
-                          onTap: () => _openFireBottomSheet(point),
-                          child: Center(child: _buildMarkerIcon(point)),
-                        ),
-                      );
-                    }).toList(),
+                    markers: _pointMarkers,
                     builder: (context, markers) => Container(
                       decoration: BoxDecoration(
                         // Dark + ringed over the FWI raster, like the

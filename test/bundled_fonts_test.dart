@@ -33,7 +33,7 @@ void main() {
         GoogleFonts.ibmPlexSansTextTheme(ThemeData.light().textTheme);
         await GoogleFonts.pendingFonts();
       },
-      zoneSpecification: ZoneSpecification(print: (_, __, ___, line) => printed.add(line)),
+      zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) => printed.add(line)),
     );
     expect(printed.where((l) => l.contains('unable to load font')), isEmpty);
   });

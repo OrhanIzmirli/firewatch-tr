@@ -397,7 +397,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         timeout: const Duration(seconds: 12),
         cacheKey: _firesCacheKey,
         onSlowFallback: (cached) {
-          if (!mounted) return;
+          // A silent refresh never swaps fresh data for the offline copy.
+          if (silent || !mounted) return;
           final (data, _) = cached;
           setState(() {
             _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
@@ -416,6 +417,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     } catch (e, stack) {
       if (kDebugMode) debugPrint('ERROR _loadFires: $e\n$stack');
+      // Silent refresh failed: keep what is on screen.
+      if (silent) return;
       final cached = await OfflineCacheService.instance.load(_firesCacheKey);
       if (mounted) {
         setState(() {

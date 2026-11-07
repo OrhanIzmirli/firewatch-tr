@@ -663,7 +663,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         timeout: const Duration(seconds: 12),
         cacheKey: _cacheKey,
         onSlowFallback: (cached) {
-          if (!mounted) return;
+          // A silent refresh never swaps fresh data for the offline copy.
+          if (silent || !mounted) return;
           final (data, _) = cached;
           final points = (data as List)
               .map((e) => FirePoint.fromJson(e as Map<String, dynamic>))
@@ -697,6 +698,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       );
     } catch (e) {
       debugPrint('Fire points fetch FAILED: $e');
+      // Silent refresh failed: keep the markers on screen, no error banner.
+      if (silent) return;
       final cached = await OfflineCacheService.instance.load(_cacheKey);
       if (!mounted) return;
       if (cached != null) {

@@ -523,3 +523,17 @@ Doğrulama kuralı: her PR, yerelde uçtan uca çalıştığı görülmeden push
 ## Görsel karar (8 Kasım 2026)
 
 Doğa sekmesi uygulamanın mevcut temasını kullanır. Ayrı açık tema veya lacivert/amber palet yoktur; yalnız hafif yeşil vurgular kullanılır. Bu belgede buna aykırı bir ifade varsa bu not geçerlidir.
+
+## Uygulama durumu (8 Kasım 2026)
+
+Sekme uygulandı. Kaynaklar yeniden açılıp kontrol edildi; aşağıdakiler içeriğe alınmadı:
+
+| İçerik | Neden |
+|---|---|
+| Kızılçam kozalak ve tohum bilgileri | El kitabı PDF'i görüntü tabanlı, metni doğrulanamadı |
+| "Yol kenarına park etmeyin" | OGM Muğla sayfası yalnız araçların köy içinden geçişini engellememekten söz ediyor |
+| WWF el ilanı ve AKUT'a dayanan kartlar | Yayıncı belirsiz veya resmî kurum değil |
+| Kuş besleme görevleri | Türkiye kaynağı yok |
+| Etkinlikler ve gelişmeler | Backend ve yayın izni yok; uydurma etkinlik olmaması için bölüm eklenmedi |
+
+Hatırlatma, seçilebilir saat yerine günde bir kez çalışan basit yerel bildirimdir ve o gün görev işaretlense de gönderilir.

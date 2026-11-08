@@ -498,7 +498,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsBackgroundSubtitle =>
-      'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol edin (Android bunu geciktirebilir)';
+      'Uygulama kapalıyken uydu tespitlerini aralıklarla kontrol edin. Android bu kontrolleri geciktirebilir, uydu verisi de saatlerce gecikebilir.';
 
   @override
   String get notificationsEnableBackground => 'Arka Plan Takibini Aç';
@@ -4160,4 +4160,139 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeOverviewNewsNoFresh => 'Yeni haber yok';
+
+  @override
+  String get navNature => 'Doğa';
+
+  @override
+  String natureSource(String name) {
+    return 'Kaynak: $name';
+  }
+
+  @override
+  String get natureTodayTask => 'Bugünün görevi';
+
+  @override
+  String get natureTaskSaved =>
+      'Kaydedildi. Yarın yeni bir görev burada olacak.';
+
+  @override
+  String get natureYes => 'Yaptım';
+
+  @override
+  String get natureNo => 'Bugün değil';
+
+  @override
+  String get natureAnotherTask => 'Başka görev';
+
+  @override
+  String get natureShare => 'Paylaş';
+
+  @override
+  String get naturePickProvince => 'İlinizi seçin';
+
+  @override
+  String get natureProvince => 'İliniz';
+
+  @override
+  String get natureOpenInat => 'iNaturalist\'i aç';
+
+  @override
+  String natureProvinceStat(
+    String province,
+    int year,
+    int hectares,
+    int fires,
+  ) {
+    return 'OGM verisine göre $province: $year yılında $hectares hektar, $fires yangın.';
+  }
+
+  @override
+  String natureShareRisk(String region, String level, int score) {
+    return 'Bugün $region bölgesinde yangın riski: $level ($score/100). Yangın görürseniz önce 112’yi arayın. FireWatch TR';
+  }
+
+  @override
+  String natureStreak(int days) {
+    return '$days gün';
+  }
+
+  @override
+  String get natureWeeklyChallenge => 'Haftanın hedefi';
+
+  @override
+  String get natureGoalDays => 'Bu hafta 4 gün görevinize bakın';
+
+  @override
+  String get natureGoalLesson => 'Bir ders bitirin';
+
+  @override
+  String get natureGoalShares => 'İki bilgi veya risk kartı paylaşın';
+
+  @override
+  String get natureFactTitle => 'Günün doğa bilgisi';
+
+  @override
+  String get natureLessons => 'Kısa dersler';
+
+  @override
+  String natureLessonLength(int cards) {
+    return '$cards kart';
+  }
+
+  @override
+  String get natureBadges => 'Rozetler';
+
+  @override
+  String get natureBadgeFirst => 'İlk adım';
+
+  @override
+  String get natureBadgeSeven => 'Yedi gün';
+
+  @override
+  String get natureBadgeThirty => 'Otuz gün';
+
+  @override
+  String get natureBadgeSeasons => 'Dört mevsim';
+
+  @override
+  String get natureBadgeCurious => 'Meraklı';
+
+  @override
+  String get natureBadgeAllLessons => 'Bilgi sahibi';
+
+  @override
+  String get natureBadgeSharer => 'Paylaşan';
+
+  @override
+  String get natureBadgeObserver => 'Gözlemci';
+
+  @override
+  String get natureOnDevice =>
+      'İlerlemeniz yalnızca bu telefonda saklanır, sunucuya gönderilmez. Uygulamayı silerseniz kaybolur.';
+
+  @override
+  String get natureReminder => 'Günlük hatırlatma';
+
+  @override
+  String get natureReminderDesc => 'Günde en fazla bir kez';
+
+  @override
+  String get natureReminderText => 'Bugünün doğa görevi hazır.';
+
+  @override
+  String get natureShowStreak => 'Seriyi göster';
+
+  @override
+  String get natureDeleteTitle => 'Doğa verilerimi sil';
+
+  @override
+  String get natureDeleteBody =>
+      'Görevleriniz, seriniz, dersleriniz ve rozetleriniz bu telefondan silinir. Bu işlem geri alınamaz.';
+
+  @override
+  String get natureDeleteConfirm => 'Sil';
+
+  @override
+  String get natureFinish => 'Bitir';
 }

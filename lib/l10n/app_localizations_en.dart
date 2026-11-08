@@ -501,7 +501,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsBackgroundSubtitle =>
-      'Check satellite detections about every 15 minutes while the app is closed (Android may delay this)';
+      'Check satellite detections at intervals while the app is closed. Android can delay these checks, and satellite data can be hours late.';
 
   @override
   String get notificationsEnableBackground => 'Enable Background Monitoring';
@@ -4173,4 +4173,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeOverviewNewsNoFresh => 'No new articles';
+
+  @override
+  String get navNature => 'Nature';
+
+  @override
+  String natureSource(String name) {
+    return 'Source: $name';
+  }
+
+  @override
+  String get natureTodayTask => 'Today\'s task';
+
+  @override
+  String get natureTaskSaved => 'Saved. A new task will be here tomorrow.';
+
+  @override
+  String get natureYes => 'Done';
+
+  @override
+  String get natureNo => 'Not today';
+
+  @override
+  String get natureAnotherTask => 'Another task';
+
+  @override
+  String get natureShare => 'Share';
+
+  @override
+  String get naturePickProvince => 'Choose your province';
+
+  @override
+  String get natureProvince => 'Your province';
+
+  @override
+  String get natureOpenInat => 'Open iNaturalist';
+
+  @override
+  String natureProvinceStat(
+    String province,
+    int year,
+    int hectares,
+    int fires,
+  ) {
+    return 'OGM data for $province: $hectares hectares and $fires fires in $year.';
+  }
+
+  @override
+  String natureShareRisk(String region, String level, int score) {
+    return 'Fire risk in $region today: $level ($score/100). If you see a fire, call 112 first. FireWatch TR';
+  }
+
+  @override
+  String natureStreak(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get natureWeeklyChallenge => 'This week\'s goal';
+
+  @override
+  String get natureGoalDays => 'Look at your task on 4 days this week';
+
+  @override
+  String get natureGoalLesson => 'Finish a lesson';
+
+  @override
+  String get natureGoalShares => 'Share two facts or risk cards';
+
+  @override
+  String get natureFactTitle => 'Today\'s nature fact';
+
+  @override
+  String get natureLessons => 'Short lessons';
+
+  @override
+  String natureLessonLength(int cards) {
+    return '$cards cards';
+  }
+
+  @override
+  String get natureBadges => 'Badges';
+
+  @override
+  String get natureBadgeFirst => 'First step';
+
+  @override
+  String get natureBadgeSeven => 'Seven days';
+
+  @override
+  String get natureBadgeThirty => 'Thirty days';
+
+  @override
+  String get natureBadgeSeasons => 'Four seasons';
+
+  @override
+  String get natureBadgeCurious => 'Curious';
+
+  @override
+  String get natureBadgeAllLessons => 'Well informed';
+
+  @override
+  String get natureBadgeSharer => 'Sharer';
+
+  @override
+  String get natureBadgeObserver => 'Observer';
+
+  @override
+  String get natureOnDevice =>
+      'Your progress is stored only on this phone and is not sent to any server. It is lost if you delete the app.';
+
+  @override
+  String get natureReminder => 'Daily reminder';
+
+  @override
+  String get natureReminderDesc => 'At most once a day';
+
+  @override
+  String get natureReminderText => 'Today\'s nature task is ready.';
+
+  @override
+  String get natureShowStreak => 'Show streak';
+
+  @override
+  String get natureDeleteTitle => 'Delete my Nature data';
+
+  @override
+  String get natureDeleteBody =>
+      'Your tasks, streak, lessons and badges will be deleted from this phone. This cannot be undone.';
+
+  @override
+  String get natureDeleteConfirm => 'Delete';
+
+  @override
+  String get natureFinish => 'Finish';
 }

@@ -50,3 +50,13 @@ Gizlilik politikası: https://firewatch-tr-backend.onrender.com/privacy
 
 - Backend PR'ı (`fix/accuracy-audit`) deploy edilmeden 1.2.0 yayımlanmamalı (`DOGRULUK-RAPORU.md`, bölüm 4).
 - `RELEASE-NOTES-tr.txt` bu metnin eski hâli; "kendiliğinden yenilenir" ve "şehir adları önbellekte" maddeleri kullanıcıya fayda anlatmadığı için çıkarıldı.
+
+## Veri güncelliği (mağaza metninde kullanılacak ifade)
+
+"Yaklaşık 15 dakikada bir" ifadesi kullanılmamalı. Yerine:
+
+TR: "Uydu verileri gün içinde aralıklarla güncellenir. NASA'nın yayımlama süresi ve sunucumuzun çalışma düzeni nedeniyle güncellemeler saatlerce gecikebilir. Anlık uyarı garantisi yoktur; yangın görürseniz önce 112'yi arayın."
+
+EN: "Satellite data is updated at intervals during the day. NASA's publishing time and how our server runs can delay updates by hours. Instant alerts are not guaranteed; if you see a fire, call 112 first."
+
+Ölçüm, 1-8 Kasım 2026: bir yayının sonraki veri çekimini beklemesi medyan 1 sa 51 dk, en kötü 17 sa 55 dk; uydu geçişinden veritabanına medyan 3 sa 50 dk.

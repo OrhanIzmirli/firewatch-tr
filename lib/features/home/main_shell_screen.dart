@@ -14,6 +14,7 @@ import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
 import '../../shared/widgets/app_sheet.dart';
+import '../nature/nature_screen.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -41,7 +42,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex.clamp(0, 4);
+    _currentIndex = widget.initialIndex.clamp(0, 5);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _maybePromptForRating(),
     );
@@ -93,7 +94,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void didUpdateWidget(covariant MainShellScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialIndex != widget.initialIndex) {
-      _currentIndex = widget.initialIndex.clamp(0, 4);
+      _currentIndex = widget.initialIndex.clamp(0, 5);
     }
   }
 
@@ -114,6 +115,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     const RiskScreen(),
     const NewsScreen(),
     const NotificationsScreen(),
+    const NatureScreen(),
   ];
 
   Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
@@ -172,6 +174,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
             ),
             selectedIcon: _alertsIcon(true, nearbyMatches.length),
             label: l10n.navAlerts,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.eco_outlined),
+            selectedIcon: const Icon(Icons.eco),
+            label: l10n.navNature,
           ),
         ];
 

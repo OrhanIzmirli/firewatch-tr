@@ -73,6 +73,7 @@ class AppRouter {
             case 'risk': initialIndex = 2; break;
             case 'news': initialIndex = 3; break;
             case 'alerts': initialIndex = 4; break;
+            case 'nature': initialIndex = 5; break;
             default: initialIndex = 0;
           }
           return NoTransitionPage(child: MainShellScreen(initialIndex: initialIndex));

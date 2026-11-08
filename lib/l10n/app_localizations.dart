@@ -995,7 +995,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsBackgroundSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol edin (Android bunu geciktirebilir)'**
+  /// **'Uygulama kapalıyken uydu tespitlerini aralıklarla kontrol edin. Android bu kontrolleri geciktirebilir, uydu verisi de saatlerce gecikebilir.'**
   String get notificationsBackgroundSubtitle;
 
   /// No description provided for @notificationsEnableBackground.
@@ -7171,6 +7171,240 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Yeni haber yok'**
   String get homeOverviewNewsNoFresh;
+
+  /// No description provided for @navNature.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğa'**
+  String get navNature;
+
+  /// No description provided for @natureSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaynak: {name}'**
+  String natureSource(String name);
+
+  /// No description provided for @natureTodayTask.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünün görevi'**
+  String get natureTodayTask;
+
+  /// No description provided for @natureTaskSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedildi. Yarın yeni bir görev burada olacak.'**
+  String get natureTaskSaved;
+
+  /// No description provided for @natureYes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaptım'**
+  String get natureYes;
+
+  /// No description provided for @natureNo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün değil'**
+  String get natureNo;
+
+  /// No description provided for @natureAnotherTask.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başka görev'**
+  String get natureAnotherTask;
+
+  /// No description provided for @natureShare.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paylaş'**
+  String get natureShare;
+
+  /// No description provided for @naturePickProvince.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlinizi seçin'**
+  String get naturePickProvince;
+
+  /// No description provided for @natureProvince.
+  ///
+  /// In tr, this message translates to:
+  /// **'İliniz'**
+  String get natureProvince;
+
+  /// No description provided for @natureOpenInat.
+  ///
+  /// In tr, this message translates to:
+  /// **'iNaturalist\'i aç'**
+  String get natureOpenInat;
+
+  /// No description provided for @natureProvinceStat.
+  ///
+  /// In tr, this message translates to:
+  /// **'OGM verisine göre {province}: {year} yılında {hectares} hektar, {fires} yangın.'**
+  String natureProvinceStat(String province, int year, int hectares, int fires);
+
+  /// No description provided for @natureShareRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün {region} bölgesinde yangın riski: {level} ({score}/100). Yangın görürseniz önce 112’yi arayın. FireWatch TR'**
+  String natureShareRisk(String region, String level, int score);
+
+  /// No description provided for @natureStreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün'**
+  String natureStreak(int days);
+
+  /// No description provided for @natureWeeklyChallenge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haftanın hedefi'**
+  String get natureWeeklyChallenge;
+
+  /// No description provided for @natureGoalDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta 4 gün görevinize bakın'**
+  String get natureGoalDays;
+
+  /// No description provided for @natureGoalLesson.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir ders bitirin'**
+  String get natureGoalLesson;
+
+  /// No description provided for @natureGoalShares.
+  ///
+  /// In tr, this message translates to:
+  /// **'İki bilgi veya risk kartı paylaşın'**
+  String get natureGoalShares;
+
+  /// No description provided for @natureFactTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün doğa bilgisi'**
+  String get natureFactTitle;
+
+  /// No description provided for @natureLessons.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa dersler'**
+  String get natureLessons;
+
+  /// No description provided for @natureLessonLength.
+  ///
+  /// In tr, this message translates to:
+  /// **'{cards} kart'**
+  String natureLessonLength(int cards);
+
+  /// No description provided for @natureBadges.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rozetler'**
+  String get natureBadges;
+
+  /// No description provided for @natureBadgeFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk adım'**
+  String get natureBadgeFirst;
+
+  /// No description provided for @natureBadgeSeven.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yedi gün'**
+  String get natureBadgeSeven;
+
+  /// No description provided for @natureBadgeThirty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otuz gün'**
+  String get natureBadgeThirty;
+
+  /// No description provided for @natureBadgeSeasons.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dört mevsim'**
+  String get natureBadgeSeasons;
+
+  /// No description provided for @natureBadgeCurious.
+  ///
+  /// In tr, this message translates to:
+  /// **'Meraklı'**
+  String get natureBadgeCurious;
+
+  /// No description provided for @natureBadgeAllLessons.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilgi sahibi'**
+  String get natureBadgeAllLessons;
+
+  /// No description provided for @natureBadgeSharer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paylaşan'**
+  String get natureBadgeSharer;
+
+  /// No description provided for @natureBadgeObserver.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gözlemci'**
+  String get natureBadgeObserver;
+
+  /// No description provided for @natureOnDevice.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlerlemeniz yalnızca bu telefonda saklanır, sunucuya gönderilmez. Uygulamayı silerseniz kaybolur.'**
+  String get natureOnDevice;
+
+  /// No description provided for @natureReminder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük hatırlatma'**
+  String get natureReminder;
+
+  /// No description provided for @natureReminderDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günde en fazla bir kez'**
+  String get natureReminderDesc;
+
+  /// No description provided for @natureReminderText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünün doğa görevi hazır.'**
+  String get natureReminderText;
+
+  /// No description provided for @natureShowStreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seriyi göster'**
+  String get natureShowStreak;
+
+  /// No description provided for @natureDeleteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğa verilerimi sil'**
+  String get natureDeleteTitle;
+
+  /// No description provided for @natureDeleteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görevleriniz, seriniz, dersleriniz ve rozetleriniz bu telefondan silinir. Bu işlem geri alınamaz.'**
+  String get natureDeleteBody;
+
+  /// No description provided for @natureDeleteConfirm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sil'**
+  String get natureDeleteConfirm;
+
+  /// No description provided for @natureFinish.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitir'**
+  String get natureFinish;
 }
 
 class _AppLocalizationsDelegate

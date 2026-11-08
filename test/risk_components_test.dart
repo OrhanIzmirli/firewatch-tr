@@ -152,6 +152,12 @@ void main() {
     });
   });
 
+  test('only a row the server marks as stale reads as stale', () {
+    expect(isRiskRowStale({'is_stale': true}), isTrue);
+    expect(isRiskRowStale({'is_stale': false}), isFalse);
+    expect(isRiskRowStale({}), isFalse);
+  });
+
   group('RiskRegionList', () {
     testWidgets('every level is written with its region, with score and weather', (tester) async {
       Map<String, dynamic>? tapped;

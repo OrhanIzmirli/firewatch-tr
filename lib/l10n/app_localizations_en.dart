@@ -3412,6 +3412,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get riskDataStale => 'Data is out of date';
+
+  @override
   String riskCalculatedAt(String date) {
     return 'Calculated: $date';
   }

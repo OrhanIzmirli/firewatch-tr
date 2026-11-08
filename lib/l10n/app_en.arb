@@ -1300,6 +1300,7 @@
   "riskNearbyFireCount": "{count} recent nearby satellite detections.",
   "riskNearbyFireCountUnavailable": "Recent nearby detection count is not yet available.",
   "riskPreviousScore": "Previous score: {score}/100",
+  "riskDataStale": "Data is out of date",
   "riskCalculatedAt": "Calculated: {date}",
   "riskSavedView": "Saved view",
   "riskServerUnreachable": "Server unavailable. Showing saved data.",

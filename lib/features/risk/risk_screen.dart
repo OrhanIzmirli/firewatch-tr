@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
+import 'risk_components.dart';
 import '../../core/config/api_config.dart';
 import '../../core/config/feature_flags.dart';
 import '../../core/constants/app_spacing.dart';
@@ -433,6 +434,8 @@ class _RiskScreenState extends State<RiskScreen> {
                   Text(l10n.riskPreviousScore('$previous'), style: smallStyle),
                 if (DateTime.tryParse((region['created_at'] ?? region['date'])?.toString() ?? '') case final calculated?)
                   Text(l10n.riskCalculatedAt(_formatDateTime(calculated)), style: smallStyle),
+                if (isRiskRowStale(region))
+                  Text(l10n.riskDataStale, style: smallStyle.copyWith(fontWeight: FontWeight.w700, color: AppColors.warning)),
               ],
             ),
           ),
@@ -587,6 +590,12 @@ class _RiskScreenState extends State<RiskScreen> {
                               ),
                             ],
                           ),
+                          if (_regions.any(isRiskRowStale))
+                            Text(
+                              l10n.riskDataStale,
+                              key: const Key('riskDataStale'),
+                              style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.warning),
+                            ),
                         ],
                         const SizedBox(height: AppSpacing.md),
                         if (topRegion != null)

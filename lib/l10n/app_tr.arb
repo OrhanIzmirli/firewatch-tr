@@ -1310,6 +1310,7 @@
   "@riskPreviousScore": {
     "placeholders": { "score": { "type": "String" } }
   },
+  "riskDataStale": "Veri eski",
   "riskCalculatedAt": "Hesaplama: {date}",
   "@riskCalculatedAt": {
     "placeholders": { "date": { "type": "String" } }

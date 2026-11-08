@@ -3405,6 +3405,9 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get riskDataStale => 'Veri eski';
+
+  @override
   String riskCalculatedAt(String date) {
     return 'Hesaplama: $date';
   }

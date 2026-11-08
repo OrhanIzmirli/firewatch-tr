@@ -5925,6 +5925,12 @@ abstract class AppLocalizations {
   /// **'Önceki puan: {score}/100'**
   String riskPreviousScore(String score);
 
+  /// No description provided for @riskDataStale.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri eski'**
+  String get riskDataStale;
+
   /// No description provided for @riskCalculatedAt.
   ///
   /// In tr, this message translates to:

@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import '../risk/risk_components.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/auto_refresh.dart';
@@ -681,7 +682,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         : riskLevelLabel(l10n, riskLevelForScore(highestRiskRegion['general_risk_score'] as num)),
                     subtitle: highestRiskRegion == null
                         ? l10n.homeOverviewHighestRiskSubtitle
-                        : '${displayRegionName(l10n, highestRiskRegion['region'] as String)} · ${highestRiskRegion['general_risk_score']}/100',
+                        : '${displayRegionName(l10n, highestRiskRegion['region'] as String)} · ${highestRiskRegion['general_risk_score']}/100${isRiskRowStale(highestRiskRegion) ? ' · ${l10n.riskDataStale}' : ''}',
                     icon: Icons.warning_amber_rounded,
                     color: highestRiskColor,
                     delay: 60.ms,

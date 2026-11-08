@@ -62,7 +62,7 @@ flowchart LR
 
   A --> U
   F --> U
-  E["Copernicus EFFIS<br/>FWI map layer"] --> U
+  E["Copernicus EFFIS<br/>fire danger index in risk details"] --> U
 ```
 
 This repository is the client. Ingestion, clustering and scoring live in the [backend](https://github.com/OrhanIzmirli/firewatch-tr-backend).

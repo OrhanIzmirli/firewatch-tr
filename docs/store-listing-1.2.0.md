@@ -16,7 +16,6 @@ Evini, köyünü, yazlığını ya da bağını ekle. 5 yere kadar, 5, 10 veya 2
 HARİTA
 • Birden çok uydu geçişinde görülen olaylar ve tek tek ısı noktaları
 • Her nokta için ısı gücü (FRP), NASA güven düzeyi ve tespit saati
-• Yangın Hava Endeksi (Copernicus EFFIS) katmanı
 • Geçmiş yıllar katmanı: 2016-2025 il bazında OGM yanan alan verileri
 • Harita daha önce açtığın bölgelerde çevrimdışı da görünür
 

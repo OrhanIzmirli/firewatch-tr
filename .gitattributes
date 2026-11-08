@@ -1,0 +1,2 @@
+# Flutter web build output is committed; keep it out of language stats.
+build/** linguist-generated=true

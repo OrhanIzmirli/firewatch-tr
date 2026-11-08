@@ -116,7 +116,7 @@
   "@homeOverviewNewsValue": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "homeOverviewNewsSubtitleUpdated": "Last update: {timeAgo}",
+  "homeOverviewNewsSubtitleUpdated": "Latest: {timeAgo}",
   "@homeOverviewNewsSubtitleUpdated": {
     "placeholders": { "timeAgo": { "type": "String" } }
   },
@@ -1230,15 +1230,15 @@
   "riskAttribution": "© European Union, Copernicus EFFIS · CC BY 4.0",
   "homeLast24hTitle": "Last 24 Hours",
   "homeLast24hSubtitle": "Summary of satellite detections",
-  "homeLast24hActiveTitle": "Multi-pass detections",
+  "homeLast24hActiveTitle": "Repeated detections",
   "homeLast24hActiveSubtitle": "Seen by a satellite within the last {hours} hours",
   "@homeLast24hActiveSubtitle": {"placeholders": {"hours": {"type": "int"}}},
-  "homeLast24hEndedTitle": "Detection ended",
+  "homeLast24hEndedTitle": "No longer seen",
   "homeLast24hEndedSubtitle": "Not a claim that they are out.",
   "homeLast24hLongestTitle": "Longest running",
   "homeLast24hLongestSubtitle": "Since first detection, still being detected",
-  "homeLast24hStrongestTitle": "Strongest satellite detection",
-  "homeLast24hStrongestSubtitle": "Highest heat output right now, still being detected",
+  "homeLast24hStrongestTitle": "Strongest satellite detection — not verified",
+  "homeLast24hStrongestSubtitle": "The strongest detection satellites see right now",
   "homeLast24hStrongestSubtitleWithDuration": "At least {duration}, still being detected",
   "@homeLast24hStrongestSubtitleWithDuration": {"placeholders": {"duration": {"type": "String"}}},
   "durationHoursShort": "{hours} h",
@@ -1508,5 +1508,6 @@
   "settingsTipsSubtitle": "Show short tips on screens",
   "pageAboutLink": "About this page",
   "dataSourcesLandCoverTitle": "Land cover",
-  "dataSourcesLandCoverBody": "Whether a detection is on forest, farmland or industry comes from the ESA WorldCover 2021 map, looking at the 750 metres around it. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Licence: CC BY 4.0."
+  "dataSourcesLandCoverBody": "Whether a detection is on forest, farmland or industry comes from the ESA WorldCover 2021 map, looking at the 750 metres around it. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Licence: CC BY 4.0.",
+  "homeOverviewNewsNoFresh": "No new articles"
 }

@@ -116,14 +116,14 @@
   "@homeOverviewNewsValue": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "homeOverviewNewsSubtitleUpdated": "Son güncelleme: {timeAgo}",
+  "homeOverviewNewsSubtitleUpdated": "Son haber: {timeAgo}",
   "@homeOverviewNewsSubtitleUpdated": {
     "placeholders": { "timeAgo": { "type": "String" } }
   },
   "homeOverviewNewsNone": "Henüz haber yok",
   "homeLatestNews": "Son Haberler",
   "homeLatestNewsSubtitle": "Öne çıkan gelişmeler",
-  "homeBreakingCount": "{count} sıcak",
+  "homeBreakingCount": "{count} son dakika",
   "@homeBreakingCount": {
     "placeholders": { "count": { "type": "int" } }
   },
@@ -1230,20 +1230,20 @@
   "riskAttribution": "© European Union, Copernicus EFFIS · CC BY 4.0",
   "homeLast24hTitle": "Son 24 Saat",
   "homeLast24hSubtitle": "Uydu tespitlerinin özeti",
-  "homeLast24hActiveTitle": "Çoklu geçiş tespiti",
+  "homeLast24hActiveTitle": "Tekrarlanan tespit",
   "homeLast24hActiveSubtitle": "Son {hours} saat içinde uydu tarafından görüldü",
   "@homeLast24hActiveSubtitle": {"placeholders": {"hours": {"type": "int"}}},
-  "homeLast24hEndedTitle": "Tespiti sona eren",
+  "homeLast24hEndedTitle": "Artık görülmeyen",
   "homeLast24hEndedSubtitle": "Söndüğü anlamına gelmez.",
   "homeLast24hLongestTitle": "En uzun süren",
   "homeLast24hLongestSubtitle": "İlk tespitten bu yana, halen tespit ediliyor",
-  "homeLast24hStrongestTitle": "En güçlü uydu tespiti",
-  "homeLast24hStrongestSubtitle": "Şu an en yüksek ısı gücü, halen tespit ediliyor",
+  "homeLast24hStrongestTitle": "En güçlü uydu tespiti — doğrulanmadı",
+  "homeLast24hStrongestSubtitle": "Uyduların şu an gördüğü en güçlü tespit",
   "homeLast24hStrongestSubtitleWithDuration": "En az {duration}, halen tespit ediliyor",
   "@homeLast24hStrongestSubtitleWithDuration": {"placeholders": {"duration": {"type": "String"}}},
-  "durationHoursShort": "{hours} sa",
+  "durationHoursShort": "{hours} saat",
   "@durationHoursShort": {"placeholders": {"hours": {"type": "int"}}},
-  "durationDaysHours": "{days} g {hours} sa",
+  "durationDaysHours": "{days} gün {hours} saat",
   "@durationDaysHours": {"placeholders": {"days": {"type": "int"}, "hours": {"type": "int"}}},
   "incidentsEmpty": "Bu aralıkta gruplanmış uydu olayı yok.",
   "incidentsCount": "{count} olay",
@@ -1576,5 +1576,6 @@
   "settingsTipsSubtitle": "Ekranlardaki kısa ipuçlarını göster",
   "pageAboutLink": "Bu sayfa hakkında",
   "dataSourcesLandCoverTitle": "Arazi örtüsü",
-  "dataSourcesLandCoverBody": "Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0."
+  "dataSourcesLandCoverBody": "Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0.",
+  "homeOverviewNewsNoFresh": "Yeni haber yok"
 }

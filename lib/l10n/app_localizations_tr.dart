@@ -277,7 +277,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String homeOverviewNewsSubtitleUpdated(String timeAgo) {
-    return 'Son güncelleme: $timeAgo';
+    return 'Son haber: $timeAgo';
   }
 
   @override
@@ -291,7 +291,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String homeBreakingCount(int count) {
-    return '$count sıcak';
+    return '$count son dakika';
   }
 
   @override
@@ -3173,7 +3173,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeLast24hSubtitle => 'Uydu tespitlerinin özeti';
 
   @override
-  String get homeLast24hActiveTitle => 'Çoklu geçiş tespiti';
+  String get homeLast24hActiveTitle => 'Tekrarlanan tespit';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
@@ -3181,7 +3181,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get homeLast24hEndedTitle => 'Tespiti sona eren';
+  String get homeLast24hEndedTitle => 'Artık görülmeyen';
 
   @override
   String get homeLast24hEndedSubtitle => 'Söndüğü anlamına gelmez.';
@@ -3194,11 +3194,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'İlk tespitten bu yana, halen tespit ediliyor';
 
   @override
-  String get homeLast24hStrongestTitle => 'En güçlü uydu tespiti';
+  String get homeLast24hStrongestTitle =>
+      'En güçlü uydu tespiti — doğrulanmadı';
 
   @override
   String get homeLast24hStrongestSubtitle =>
-      'Şu an en yüksek ısı gücü, halen tespit ediliyor';
+      'Uyduların şu an gördüğü en güçlü tespit';
 
   @override
   String homeLast24hStrongestSubtitleWithDuration(String duration) {
@@ -3207,12 +3208,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String durationHoursShort(int hours) {
-    return '$hours sa';
+    return '$hours saat';
   }
 
   @override
   String durationDaysHours(int days, int hours) {
-    return '$days g $hours sa';
+    return '$days gün $hours saat';
   }
 
   @override
@@ -4156,4 +4157,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get dataSourcesLandCoverBody =>
       'Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0.';
+
+  @override
+  String get homeOverviewNewsNoFresh => 'Yeni haber yok';
 }

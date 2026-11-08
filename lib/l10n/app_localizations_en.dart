@@ -277,7 +277,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeOverviewNewsSubtitleUpdated(String timeAgo) {
-    return 'Last update: $timeAgo';
+    return 'Latest: $timeAgo';
   }
 
   @override
@@ -3180,7 +3180,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLast24hSubtitle => 'Summary of satellite detections';
 
   @override
-  String get homeLast24hActiveTitle => 'Multi-pass detections';
+  String get homeLast24hActiveTitle => 'Repeated detections';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
@@ -3188,7 +3188,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeLast24hEndedTitle => 'Detection ended';
+  String get homeLast24hEndedTitle => 'No longer seen';
 
   @override
   String get homeLast24hEndedSubtitle => 'Not a claim that they are out.';
@@ -3201,11 +3201,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Since first detection, still being detected';
 
   @override
-  String get homeLast24hStrongestTitle => 'Strongest satellite detection';
+  String get homeLast24hStrongestTitle =>
+      'Strongest satellite detection — not verified';
 
   @override
   String get homeLast24hStrongestSubtitle =>
-      'Highest heat output right now, still being detected';
+      'The strongest detection satellites see right now';
 
   @override
   String homeLast24hStrongestSubtitleWithDuration(String duration) {
@@ -4169,4 +4170,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dataSourcesLandCoverBody =>
       'Whether a detection is on forest, farmland or industry comes from the ESA WorldCover 2021 map, looking at the 750 metres around it. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Licence: CC BY 4.0.';
+
+  @override
+  String get homeOverviewNewsNoFresh => 'No new articles';
 }

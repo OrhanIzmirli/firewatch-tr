@@ -8,7 +8,7 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 
 | Dosya | Önce | Sonra |
 |---|---|---|
-| `lib/features/home/home_screen.dart` | 4'lü kart ızgarası, tekrar eden metinler, tespit listesi | Konumunuzda bugün, Yerlerim, tek satır Türkiye özeti, son 72 saatin haberleri |
+| `lib/features/home/home_screen.dart` | Hatalı ve teknik kart metinleri, MW ve sıcaklık, eski haberlere "yeni" denmesi | Eski ızgara korundu; üstüne Konumunuzda bugün ve Yerlerim geldi; metinler düzeltildi; yeni haber yalnız son 72 saat |
 | `lib/features/map/map_screen.dart` | Noktanın kartında sıcaklık, güven, uydu satırları, MW | Sade cümle, tarım/sanayi etiketi; teknikler Tüm teknik bilgiler'de |
 | `lib/features/map/widgets/incident_sheet.dart` | "Çoklu geçiş" ile "Tek geçişte" çelişkisi, MW, uydu listesi | Sade cümle ve geçiş sayısı; teknikler kapalı bölümde; haber doğrulaması ve ilgili haberler |
 | `lib/features/fire_detail/fire_detail_screen.dart` | FRP, uydu cihazı, sıcaklık açıkta | Hepsi kapalı bölümde; sıcaklık "yüzey parlaklık sıcaklığı" adıyla ve açıklamayla |
@@ -25,7 +25,7 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 | `tooltip*` | Bilgi düğmesiyle açılan açıklamalar |
 | `historyMaxFrp`, `historySource*`, `annualLayerProvenance` | Geçmiş ekranı ve yıllık katman kaynak notu |
 
-## Değişen metinler (266 anahtar)
+## Değişen metinler (273 anahtar)
 
 | Anahtar | TR eski | TR yeni | EN eski | EN yeni |
 |---|---|---|---|---|
@@ -65,6 +65,8 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 | `detectionProbableFire` | Çok Güçlü Isı Sinyali | Çok Güçlü Tespit | Very Strong Heat Signal | Very Strong Detection |
 | `detectionThermalDetection` | Termal Tespit | Uydu Tespiti | Thermal Detection | Satellite Detection |
 | `districtRiskScoresNotProbability` | Puanlar olasılık yüzdesi değildir. | Puanlar yangın çıkıp çıkmayacağını söylemez. | Scores are not probabilities. | Scores do not say whether a fire will start. |
+| `durationDaysHours` | {days} g {hours} sa | {days} gün {hours} saat | {days} d {hours} h | {days} d {hours} h |
+| `durationHoursShort` | {hours} sa | {hours} saat | {hours} h | {hours} h |
 | `emergencyBagDocsSubtitle` | Kimlik, önemli evrak ve telefonunu tek yerde tut. | Kimlik, önemli evrak ve telefonunuzu tek yerde tutun. | Keep your ID, important papers, and phone in one place. | Keep your ID, important papers, and phone in one place. |
 | `emergencyBagMeetingPointSubtitle` | Ayrı düşme ihtimaline karşı önceden karar ver. | Ayrı düşme ihtimaline karşı önceden karar verin. | Decide in advance in case you get separated. | Decide in advance in case you get separated. |
 | `emergencyContactLinesSubtitle` | Temel numaraları hazır tut | Temel numaraları hazır tutun | Keep the essential numbers handy | Keep the essential numbers handy |
@@ -89,16 +91,21 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 | `fireStatusLikelyActive` | Yüksek Isı Anomalisi | Güçlü Tespit | High Thermal Anomaly | Strong Detection |
 | `homeActiveThermalPoints` | Aktif Termal Noktalar | Güncel Uydu Tespitleri | Active Thermal Points | Recent Satellite Detections |
 | `homeActiveThermalSubtitle` | NASA FIRMS • PostGIS şehir tespiti | NASA uydu verisi | NASA FIRMS • PostGIS city detection | NASA satellite data |
+| `homeBreakingCount` | {count} sıcak | {count} son dakika | {count} breaking | {count} breaking |
 | `homeBriefNearby` | 100 km çevrende {count} tespit var; haritadan ayrıntıları kontrol et. | 100 km çevrenizde {count} tespit var; haritadan ayrıntıları kontrol edin. | {count} detections are within 100 km; check the map for details. | {count} detections are within 100 km; check the map for details. |
 | `homeBriefNoneNearby` | 100 km çevrende önemli bir tespit görünmüyor. | 100 km çevrenizde önemli bir tespit görünmüyor. | No notable detection is visible within 100 km. | No notable detection is visible within 100 km. |
 | `homeHeaderSubtitle` | Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş. | Aktif olayları takip edin, risk seviyelerini görün ve güvenlik rehberine hızlıca ulaşın. | Track active events, see risk levels, and quickly reach the safety guide. | Track active events, see risk levels, and quickly reach the safety guide. |
 | `homeHeaderTitle` | Türkiye Termal Anomali Takibi | Türkiye Uydu Tespitleri | Turkey Thermal Anomaly Tracking | Satellite Detections in Türkiye |
-| `homeLast24hStrongestTitle` | En şiddetli yangın | En güçlü uydu tespiti | Most intense fire | Strongest satellite detection |
+| `homeLast24hActiveTitle` | Çoklu geçiş tespiti | Tekrarlanan tespit | Multi-pass detections | Repeated detections |
+| `homeLast24hEndedTitle` | Tespiti sona eren | Artık görülmeyen | Detection ended | No longer seen |
+| `homeLast24hStrongestSubtitle` | Şu an en yüksek ısı gücü, halen tespit ediliyor | Uyduların şu an gördüğü en güçlü tespit | Highest heat output right now, still being detected | The strongest detection satellites see right now |
+| `homeLast24hStrongestTitle` | En şiddetli yangın | En güçlü uydu tespiti — doğrulanmadı | Most intense fire | Strongest satellite detection — not verified |
 | `homeMultiPassNote` | {count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir. | {count} tekrarlanan tespit (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf tespit daha var. Hiçbiri doğrulanmadı. | {count} multi-pass detections (at least 2 satellite passes); the map shows {weaker} more single-pass or weak heat traces. None of these is a verified fire. | {count} repeated detections (at least 2 satellite passes); the map shows {weaker} more single-pass or weak detections. None of these is verified. |
 | `homeMultiPassSubtitle` | En az 2 uydu geçişi; {weaker} ısı izi daha Noktalar katmanında | En az 2 uydu geçişi; {weaker} zayıf tespit daha Noktalar katmanında | At least 2 satellite passes; {weaker} more heat traces under Points | At least 2 satellite passes; {weaker} more weak detections under Points |
 | `homeNoActiveFires` | Güncel termal anomali bulunamadı. | Uydular şu an güncel bir tespit bildirmedi. | No recent thermal anomalies found. | Satellites report no recent detections right now. |
 | `homeOverviewActiveFiresTitle` | Güncel Termal Anomaliler | Güncel Uydu Tespitleri | Recent Thermal Anomalies | Recent Satellite Detections |
 | `homeOverviewNearbyTitle` | Yakındaki Termal Tespitler | Yakındaki Uydu Tespitleri | Nearby Thermal Detections | Nearby Satellite Detections |
+| `homeOverviewNewsSubtitleUpdated` | Son güncelleme: {timeAgo} | Son haber: {timeAgo} | Last update: {timeAgo} | Latest: {timeAgo} |
 | `homeOverviewUniqueCount` | {count} benzersiz termal anomali konumu tespit edildi | Uydular {count} ayrı konumda tespit yaptı | {count} unique thermal anomaly locations detected | Satellites made detections at {count} separate locations |
 | `incidentHeatHigh` | Yüksek | Güçlü | High | Strong |
 | `incidentHeatLow` | Düşük | Zayıf | Low | Weak |
@@ -296,7 +303,7 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 | `watchlistSavedPointsSubtitle` | {count} termal tespit takipte | {count} uydu tespiti takipte | {count} thermal detections being tracked | {count} satellite detections being tracked |
 | `watchlistSyncingTitle` | {count} kaydedilmiş yangın noktası var. | {count} kaydedilmiş uydu tespiti var. | You have {count} saved fire points. | You have {count} saved satellite detections. |
 
-## Eklenen metinler (43 anahtar)
+## Eklenen metinler (44 anahtar)
 
 | Anahtar | TR | EN |
 |---|---|---|
@@ -325,6 +332,7 @@ Kural: Ana ekranlarda "ısı izi, ısı sinyali, piksel, FRP, MW, termal anomali
 | `homeNearbyNone` | 25 km içinde uydular güçlü bir tespit yapmadı. | Satellites made no strong detection within 25 km. |
 | `homeNearbySome` | 25 km içinde uydular {count} güçlü tespit yaptı. | Satellites made {count} strong detections within 25 km. |
 | `homeNewsTitle` | Haberler | News |
+| `homeOverviewNewsNoFresh` | Yeni haber yok | No new articles |
 | `homeRiskUnavailable` | Risk şu an hesaplanamadı. | Risk can't be calculated right now. |
 | `homeSeeOnMap` | Haritada gör | See on map |
 | `homeTodayTitle` | Konumunuzda bugün | At your location today |

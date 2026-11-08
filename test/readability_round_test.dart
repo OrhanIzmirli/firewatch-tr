@@ -207,11 +207,20 @@ void main() {
       expect(m, isNot(contains('commonTemperature')));
       expect(m, contains('commonAllTechnical'));
     });
-    test('home: no grid, no search, one summary line', () {
+    test('home: your place and places above the grid; only recent news counts as new', () {
       final h = read('lib/features/home/home_screen.dart');
-      expect(h, isNot(contains('GridView')));
-      expect(h, isNot(contains('homeBreakingCount')));
-      expect(h, contains('newsFreshFor = Duration(hours: 72)'));
+      expect(h.indexOf('_TodayCard('), lessThan(h.indexOf('TrackedPlacesSection(')));
+      expect(h.indexOf('TrackedPlacesSection('), lessThan(h.lastIndexOf('GridView.count')));
+      expect(h, contains('publishedWithin(const Duration(hours: 72))'));
+      expect(h, isNot(contains('homeLast24hStrongestPower')));
+      expect(h, isNot(contains('commonTemperature')));
+    });
+    test('the grid and summary texts are the corrected ones', () {
+      final data = jsonDecode(read('lib/l10n/app_tr.arb').replaceFirst('\uFEFF', '')) as Map<String, dynamic>;
+      expect(data['homeLast24hStrongestTitle'], 'En güçlü uydu tespiti — doğrulanmadı');
+      expect(data['homeOverviewActiveFiresTitle'], 'Güncel Uydu Tespitleri');
+      expect(data['homeOverviewNewsNoFresh'], 'Yeni haber yok');
+      expect(data['durationDaysHours'], '{days} gün {hours} saat');
     });
     test('the TR strings address the reader as siz', () {
       final data = jsonDecode(read('lib/l10n/app_tr.arb').replaceFirst('﻿', '')) as Map<String, dynamic>;

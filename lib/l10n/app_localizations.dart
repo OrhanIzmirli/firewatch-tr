@@ -587,7 +587,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewNewsSubtitleUpdated.
   ///
   /// In tr, this message translates to:
-  /// **'Son güncelleme: {timeAgo}'**
+  /// **'Son haber: {timeAgo}'**
   String homeOverviewNewsSubtitleUpdated(String timeAgo);
 
   /// No description provided for @homeOverviewNewsNone.
@@ -611,7 +611,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeBreakingCount.
   ///
   /// In tr, this message translates to:
-  /// **'{count} sıcak'**
+  /// **'{count} son dakika'**
   String homeBreakingCount(int count);
 
   /// No description provided for @homeNewsLoading.
@@ -5567,7 +5567,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hActiveTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Çoklu geçiş tespiti'**
+  /// **'Tekrarlanan tespit'**
   String get homeLast24hActiveTitle;
 
   /// No description provided for @homeLast24hActiveSubtitle.
@@ -5579,7 +5579,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hEndedTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Tespiti sona eren'**
+  /// **'Artık görülmeyen'**
   String get homeLast24hEndedTitle;
 
   /// No description provided for @homeLast24hEndedSubtitle.
@@ -5603,13 +5603,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hStrongestTitle.
   ///
   /// In tr, this message translates to:
-  /// **'En güçlü uydu tespiti'**
+  /// **'En güçlü uydu tespiti — doğrulanmadı'**
   String get homeLast24hStrongestTitle;
 
   /// No description provided for @homeLast24hStrongestSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an en yüksek ısı gücü, halen tespit ediliyor'**
+  /// **'Uyduların şu an gördüğü en güçlü tespit'**
   String get homeLast24hStrongestSubtitle;
 
   /// No description provided for @homeLast24hStrongestSubtitleWithDuration.
@@ -5621,13 +5621,13 @@ abstract class AppLocalizations {
   /// No description provided for @durationHoursShort.
   ///
   /// In tr, this message translates to:
-  /// **'{hours} sa'**
+  /// **'{hours} saat'**
   String durationHoursShort(int hours);
 
   /// No description provided for @durationDaysHours.
   ///
   /// In tr, this message translates to:
-  /// **'{days} g {hours} sa'**
+  /// **'{days} gün {hours} saat'**
   String durationDaysHours(int days, int hours);
 
   /// No description provided for @incidentsEmpty.
@@ -7165,6 +7165,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0.'**
   String get dataSourcesLandCoverBody;
+
+  /// No description provided for @homeOverviewNewsNoFresh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni haber yok'**
+  String get homeOverviewNewsNoFresh;
 }
 
 class _AppLocalizationsDelegate

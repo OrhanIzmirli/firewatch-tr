@@ -519,3 +519,7 @@ Doğrulama kuralı: her PR, yerelde uçtan uca çalıştığı görülmeden push
 9. Ticari model değişirse (B2B veya Pro) FAO'nun "ticari olmayan" koşulu dahil kaynak izinleri yeniden gözden geçirilmeli. Yazılı izin istekleri buna göre yazılsın mı?
 10. RSPB dışında Türkiye'den kuş besleme kaynağı bulunamazsa kuş görevleri kalsın mı? (Yemek önerisi içermeyen su görevi kalabilir.)
 11. Telefon değiştirenler için dışa aktarma istenir mi? Öneri: 1.3.0'da yok, "yalnızca cihazda" sözü en sade hâliyle kalır.
+
+## Görsel karar (8 Kasım 2026)
+
+Doğa sekmesi uygulamanın mevcut temasını kullanır. Ayrı açık tema veya lacivert/amber palet yoktur; yalnız hafif yeşil vurgular kullanılır. Bu belgede buna aykırı bir ifade varsa bu not geçerlidir.

@@ -74,8 +74,6 @@ class _RegionRiskLayerState extends State<RegionRiskLayer> {
                   holePointsList: polygon.skip(1).toList(),
                   hitValue: area.id,
                   color: riskScoreColor(score).withValues(alpha: RegionRiskLayer.fillAlpha),
-                  borderColor: const Color(0x400E0500),
-                  borderStrokeWidth: 0.6,
                 ),
         ],
       );

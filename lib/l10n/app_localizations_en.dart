@@ -1070,7 +1070,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesFwiBody =>
-      'The FWI (Copernicus) layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model and provides a forecast of up to 10 days, today included (9 days ahead); the last day can stay empty until the day\'s model run is published. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0). It is separate from the FireWatch risk score and does not feed into it.';
+      'The Copernicus indicator on the Risk screen shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0). It is separate from the FireWatch risk score and does not feed into it.';
 
   @override
   String get settingsAppInfo => 'App Information';
@@ -2390,7 +2390,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustRiskInterpret =>
-      'Compare your region\'s score to the Turkey average on the chart — a score significantly above average signals elevated local conditions worth monitoring.';
+      'Compare your region\'s score to the Turkey average in the list — a score significantly above average signals elevated local conditions worth monitoring.';
 
   @override
   String get trustRiskAction =>
@@ -2668,11 +2668,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'This 0-100 score is calculated from temperature, humidity, wind, and NASA satellite detections. Tap the info button to see exactly how.';
 
   @override
-  String get coachMarkRiskChartTitle => 'Regional Distribution';
+  String get coachMarkRiskChartTitle => 'Regions';
 
   @override
   String get coachMarkRiskChartDesc =>
-      'Tap a region\'s bar to see that region\'s detailed risk breakdown.';
+      'Tap a region in the list to see that region\'s detailed risk breakdown.';
 
   @override
   String get coachMarkRiskMyLocationTabTitle => 'My Location';
@@ -3026,9 +3026,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentFilterAll => 'All';
 
   @override
-  String get riskLayerToggle => 'FWI (Copernicus)';
-
-  @override
   String get incidentToggleShowShort => 'Events';
 
   @override
@@ -3082,11 +3079,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get placesRiskNoData => 'No data';
 
   @override
-  String placesRiskLine(String day) {
-    return 'FWI danger · $day';
-  }
-
-  @override
   String placesActiveDetections(int count) {
     return '$count active detections';
   }
@@ -3098,10 +3090,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String placesLastDetection(String hours) {
     return 'Last detection ~$hours h ago';
   }
-
-  @override
-  String get placesResolutionNote =>
-      'The FWI class is a regional forecast from ECMWF\'s global weather model; it is meaningful at province and district scale and does not resolve at neighbourhood scale. Two nearby places showing the same class is the data\'s resolution, not an error.';
 
   @override
   String get notificationScopePlaces => 'My saved places';
@@ -3129,16 +3117,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get riskLegendTitle => 'Copernicus fire danger index (FWI)';
-
-  @override
-  String get riskLegendNote =>
-      'A regional danger forecast computed from weather; not a satellite detection.';
-
-  @override
-  String get riskLegendHide => 'Hide legend';
-
-  @override
   String get riskClassVeryLow => 'Very low';
 
   @override
@@ -3155,23 +3133,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskClassExtreme => 'Extreme';
-
-  @override
-  String get riskOpacityLabel => 'Opacity';
-
-  @override
-  String get riskDayToday => 'Today';
-
-  @override
-  String get riskDayTomorrow => 'Tomorrow';
-
-  @override
-  String get riskDayNotPublished =>
-      'This day\'s forecast has not been published yet. It opens once the daily model run arrives.';
-
-  @override
-  String get riskAttribution =>
-      '© European Union, Copernicus EFFIS · CC BY 4.0';
 
   @override
   String get homeLast24hTitle => 'Last 24 Hours';
@@ -3298,8 +3259,115 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskHeatUnavailable => 'Risk data is unavailable right now';
 
   @override
+  String riskRegionLevel(String region, String level) {
+    return '$region: $level';
+  }
+
+  @override
+  String riskHighestScoreLine(Object score) {
+    return 'Highest score: $score/100';
+  }
+
+  @override
+  String get riskRegionsTitle => 'Regions';
+
+  @override
+  String riskRegionWeather(String temp, String humidity, String wind) {
+    return '$temp°C · $humidity% humidity · $wind km/h';
+  }
+
+  @override
+  String riskPercent(Object value) {
+    return '$value%';
+  }
+
+  @override
+  String get riskComponentsTitle => 'How the score adds up';
+
+  @override
+  String get riskComponentsTotal => 'Total';
+
+  @override
+  String get riskComponentsCapped => 'The score cannot go above 100.';
+
+  @override
+  String get riskComponentsUnavailable =>
+      'The score breakdown cannot be shown right now.';
+
+  @override
+  String get riskComponentWindLabel => 'Wind';
+
+  @override
+  String get riskComponentTempMild => 'Warm air slowly dries out vegetation.';
+
+  @override
+  String get riskComponentTempHot => 'Hot air dries out vegetation quickly.';
+
+  @override
+  String get riskComponentHumidityMid =>
+      'As humidity falls, vegetation starts to dry.';
+
+  @override
+  String get riskComponentHumidityLow =>
+      'The air is very dry; vegetation dries quickly.';
+
+  @override
+  String get riskComponentWindMid => 'Wind can carry sparks and flames.';
+
+  @override
+  String get riskComponentWindHigh =>
+      'Strong wind speeds up the spread of fire.';
+
+  @override
+  String get riskComponentDetections =>
+      'Satellite heat detections in the region in the last 24 hours; not every detection is a fire.';
+
+  @override
+  String get riskComponentDetectionsNone =>
+      'No satellite detections in the region in the last 24 hours. This does not mean there is no fire.';
+
+  @override
+  String get riskComponentDetectionsUnknown =>
+      'The satellite detection count is unavailable right now.';
+
+  @override
+  String get riskComponentDetectionsChanged =>
+      'The score used the count from its last calculation; the count has changed since.';
+
+  @override
+  String riskComponentDetectionsValue(int count) {
+    return '$count detections';
+  }
+
+  @override
+  String get riskComponentUnknownValue => 'Unknown';
+
+  @override
+  String get riskComponentBonus => 'Hot and dry air';
+
+  @override
+  String get riskComponentBonusNote =>
+      'Extra points because heat and dry air come together.';
+
+  @override
+  String get riskExplainSum =>
+      'The score is the sum of these components (at most 100). Thresholds:';
+
+  @override
+  String riskExplainBonus(
+    int warmTemp,
+    int warmHumidity,
+    int warmPoints,
+    int hotTemp,
+    int hotHumidity,
+    int hotPoints,
+  ) {
+    return 'Hot and dry together: above $warmTemp°C with humidity below $warmHumidity% +$warmPoints; above $hotTemp°C with humidity below $hotHumidity% +$hotPoints';
+  }
+
+  @override
   String riskHeatMapSemantics(int score, String level) {
-    return 'Türkiye wildfire risk heat map. Nationwide risk score $score/100, $level.';
+    return 'Türkiye wildfire risk region map. Nationwide risk score $score/100, $level.';
   }
 
   @override
@@ -3417,11 +3485,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get annualLayerToggle => 'Past years';
 
   @override
-  String annualLayerCaption(int year) {
-    return 'Province colour: $year OGM burned area. Dots: current detections. A satellite dot is not a fire count.';
-  }
-
-  @override
   String get annualLayerLoadError =>
       'Could not load past-year files. Turn the layer off and on to retry.';
 
@@ -3485,7 +3548,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'A satellite point is not a fire count. Province fills show the yearly province total, not fire perimeters.';
 
   @override
-  String get annualLegendTitle => 'Past years · OGM burned area';
+  String get annualLegendTitle => 'Past years · burned area';
 
   @override
   String annualLegendTickMax(String value) {
@@ -3494,7 +3557,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get annualLegendNote =>
-      'Logarithmic colour scale · Darker means more area burned. Provinces without data are not filled. This layer is not current fire risk.';
+      'A darker colour means more burned area; provinces left blank have no data. This layer does not show today\'s fires.';
 
   @override
   String get districtRiskRankingTitle => 'Risk ranking';
@@ -4095,6 +4158,47 @@ class AppLocalizationsEn extends AppLocalizations {
       'In an industrial or built-up area — may be a fixed heat source';
 
   @override
+  String systemStatusFresh(String time) {
+    return 'System working · Last check: $time';
+  }
+
+  @override
+  String systemStatusStale(String time) {
+    return 'Satellite data is out of date · Last check: $time';
+  }
+
+  @override
+  String get mapStatusNoneBody =>
+      'In the last 24 hours, satellites did not detect fire in forest areas.';
+
+  @override
+  String mapStatusStrongBody(int count) {
+    return 'Strong detections in forest areas in the last 24 hours: $count. They are not shown under Events right now; see Points.';
+  }
+
+  @override
+  String mapStatusOtherLine(int count) {
+    return 'Detections on farmland or industry: $count';
+  }
+
+  @override
+  String get mapStatusShowPoints => 'Show points';
+
+  @override
+  String get mapLayerRiskDesc => 'Today\'s fire risk by region.';
+
+  @override
+  String get mapLayerAnnualDesc => 'Burned area by province in past years.';
+
+  @override
+  String mapAnnualNote(String year) {
+    return 'Burned area in $year. It does not show today\'s fires.';
+  }
+
+  @override
+  String get mapSourcesLink => 'Sources';
+
+  @override
   String detectionOtherLine(int count) {
     return 'There are $count strong detections on farmland and industrial areas; they are on the Points layer.';
   }
@@ -4362,9 +4466,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fidanPath => 'Fidan’s path';
 
   @override
-  String get fidanMoreLessons => 'New lessons are on the way';
-
-  @override
   String get fidanNewApple => 'A new apple! 🍎';
 
   @override
@@ -4379,9 +4480,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fidanCorrect => 'Correct! 🎉';
-
-  @override
-  String get fidanWrong => 'Think again.';
 
   @override
   String get fidanFullGrown =>
@@ -4546,4 +4644,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fidanLocked => 'Finish the previous lesson first.';
+
+  @override
+  String get factAnother => 'Another fact';
+
+  @override
+  String get newsNoneRecent => 'No new stories in the last 30 days.';
+
+  @override
+  String get settingsNatureNotesSubtitle =>
+      '2-3 short facts a week. Separate from fire alerts.';
+
+  @override
+  String get settingsNatureNotesSample => 'Send a sample';
+
+  @override
+  String newsArchive(int count) {
+    return 'Archive ($count stories)';
+  }
+
+  @override
+  String get fidanReplay => 'Play again';
+
+  @override
+  String get fidanRewardReplay => 'You played it again. It sticks better now!';
+
+  @override
+  String get fidanSectionReward => 'Section reward';
+
+  @override
+  String get fidanAllDone => 'You finished every lesson!';
+
+  @override
+  String get fidanAlmost => 'Almost!';
+
+  @override
+  String get fidanCheck => 'Check';
+
+  @override
+  String get fidanOrderHelp => 'Drag, or use the arrows, to put them in order.';
+
+  @override
+  String get fidanMatchHelp => 'Tap one on the left, then one on the right.';
+
+  @override
+  String get fidanTrue => 'True';
+
+  @override
+  String get fidanFalse => 'False';
+
+  @override
+  String get fidanMoveUp => 'Move up';
+
+  @override
+  String get fidanMoveDown => 'Move down';
+
+  @override
+  String fidanSectionDone(String section) {
+    return '“$section” is done! A flower opened on your tree.';
+  }
+
+  @override
+  String fidanReplayMode(int xp) {
+    return 'Replay mode: play any lesson again, +$xp XP each time.';
+  }
+
+  @override
+  String fidanAppleSection(String section) {
+    return '🍎 You finished “$section”';
+  }
 }

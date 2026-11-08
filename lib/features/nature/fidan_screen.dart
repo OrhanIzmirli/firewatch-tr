@@ -25,11 +25,14 @@ import '../../shared/widgets/app_sheet.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../map/widgets/region_risk_layer.dart';
+import 'fact_widgets.dart';
 import 'fidan_account.dart';
 import 'nature_content.dart';
 import 'nature_facts.dart';
 import 'nature_progress.dart';
 import 'tree.dart';
+
+part 'fidan_lessons.dart';
 
 /// White text on this reaches 3:1, the minimum for large button labels.
 const leaf = Color(0xFF3F9A1F);
@@ -164,6 +167,10 @@ String stageName(AppLocalizations l10n, int stage) => switch (stage) {
 };
 
 String appleLabel(AppLocalizations l10n, Apple apple, String lang) {
+  if (apple.section != null) {
+    final section = natureSections.firstWhere((x) => x.id == apple.section);
+    return l10n.fidanAppleSection(section.title.of(lang));
+  }
   if (apple.lesson != null) {
     final lesson = natureLessons.firstWhere((l) => l.id == apple.lesson);
     return l10n.fidanAppleLesson(lesson.title.of(lang));
@@ -304,7 +311,7 @@ class _FidanHomeCardState extends State<FidanHomeCard> {
                 Container(
                   decoration: BoxDecoration(color: AppColors.success.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(16)),
                   padding: const EdgeInsets.all(4),
-                  child: TreeView(stage: treeStage(p), season: seasonOf(_today), mood: thirsty ? Mood.thirsty : Mood.calm, apples: applesOf(p).length, size: 78),
+                  child: TreeView(stage: treeStage(p), season: seasonOf(_today), mood: thirsty ? Mood.thirsty : Mood.calm, apples: applesOf(p).length, flowers: sectionsDone(p).length, size: 78),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
@@ -700,7 +707,10 @@ class _FidanScreenState extends State<FidanScreen> {
                       Text(l10n.fidanDidYouKnow, style: _t(16, weight: FontWeight.w900)),
                       const SizedBox(height: 4),
                       Text(fact.of(lang), style: _t(16, height: 1.3)),
-                      _SourceText(fact.sourceName, fact.sourceUrl),
+                      Row(children: [
+                        Expanded(child: _SourceText(fact.sourceName, fact.sourceUrl)),
+                        IconButton(key: const Key('fidanFactShare'), tooltip: l10n.natureShare, onPressed: () => shareFact(context, fact), icon: const Icon(Icons.ios_share_rounded, color: leafDark, size: 20)),
+                      ]),
                     ],
                   ),
                 ),
@@ -762,7 +772,7 @@ class _ShareSheetState extends State<_ShareSheet> {
               decoration: BoxDecoration(color: cream, borderRadius: BorderRadius.circular(24)),
               child: Column(
                 children: [
-                  TreeView(stage: treeStage(p), season: seasonOf(widget.today), mood: Mood.happy, apples: applesOf(p).length, size: 200),
+                  TreeView(stage: treeStage(p), season: seasonOf(widget.today), mood: Mood.happy, apples: applesOf(p).length, flowers: sectionsDone(p).length, size: 200),
                   Text(
                     caption,
                     textAlign: TextAlign.center,
@@ -776,516 +786,6 @@ class _ShareSheetState extends State<_ShareSheet> {
           const SizedBox(height: AppSpacing.md),
           BigGreenButton(l10n.natureShare, onTap: () => _share(caption)),
         ],
-      ),
-    );
-  }
-}
-
-class FidanRewardScreen extends StatefulWidget {
-  final int xp;
-  final bool newApple;
-  final int? grewTo;
-  final String message;
-  final DateTime today;
-  const FidanRewardScreen({super.key, required this.xp, required this.newApple, required this.grewTo, required this.message, required this.today});
-
-  @override
-  State<FidanRewardScreen> createState() => _FidanRewardScreenState();
-}
-
-class _FidanRewardScreenState extends State<FidanRewardScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200));
-
-  @override
-  void initState() {
-    super.initState();
-    HapticFeedback.lightImpact();
-    _c.forward();
-  }
-
-  @override
-  void dispose() {
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final p = NatureStore.instance.progress;
-    return FidanTheme(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _c,
-                builder: (_, _) => CustomPaint(painter: ConfettiPainter(_c.value)),
-              ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 24),
-                            TreeView(
-                              stage: treeStage(p),
-                              mood: Mood.happy,
-                              season: seasonOf(widget.today),
-                              apples: applesOf(p).length,
-                              size: 280,
-                            ).animate().scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1), duration: 600.ms, curve: Curves.elasticOut),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.fidanXpGain(widget.xp),
-                              key: const Key('fidanXpGain'),
-                              textAlign: TextAlign.center,
-                              style: _t(52, weight: FontWeight.w900, color: leaf),
-                            ),
-                            if (widget.newApple)
-                              Text(
-                                l10n.fidanNewApple,
-                                key: const Key('fidanNewApple'),
-                                textAlign: TextAlign.center,
-                                style: _t(25, weight: FontWeight.w900),
-                              ),
-                            if (widget.grewTo != null)
-                              Text(
-                                l10n.fidanGrew(stageName(l10n, widget.grewTo!)),
-                                textAlign: TextAlign.center,
-                                style: _t(21, weight: FontWeight.w900, color: leafDark),
-                              ),
-                            const SizedBox(height: 8),
-                            Text(
-                              widget.message,
-                              textAlign: TextAlign.center,
-                              style: _t(18, color: inkSoft),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    BigGreenButton(l10n.fidanContinue, key: const Key('fidanRewardContinue'), onTap: () => Navigator.of(context).pop()),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class LessonPathScreen extends StatefulWidget {
-  final DateTime? today;
-  const LessonPathScreen({super.key, this.today});
-
-  @override
-  State<LessonPathScreen> createState() => _LessonPathScreenState();
-}
-
-class _LessonPathScreenState extends State<LessonPathScreen> {
-  final _store = NatureStore.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _store.addListener(_changed);
-  }
-
-  @override
-  void dispose() {
-    _store.removeListener(_changed);
-    super.dispose();
-  }
-
-  void _changed() {
-    if (mounted) setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final lang = Localizations.localeOf(context).languageCode;
-    final p = _store.progress;
-    final today = widget.today ?? DateTime.now();
-    final next = natureLessons.indexWhere((l) => !p.lessons.contains(l.id));
-    const xs = [0.28, 0.72, 0.30, 0.70, 0.34];
-    const top = 72.0;
-    const gap = 150.0;
-    final count = natureLessons.length + 1;
-    return FidanTheme(
-      child: Scaffold(
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, box) {
-              final w = box.maxWidth;
-              final pts = [for (var i = 0; i < count; i++) Offset(xs[i % xs.length] * w, top + 60 + i * gap)];
-              final doneUntil = next == -1 ? natureLessons.length : next;
-              return SingleChildScrollView(
-                child: SizedBox(
-                  width: w,
-                  height: top + 60 + (count - 1) * gap + 100,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(child: CustomPaint(painter: _RoadPainter(pts, doneUntil))),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(6, 6, 14, 0),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                              onPressed: () => Navigator.of(context).pop(),
-                              icon: const Icon(Icons.arrow_back_rounded, color: ink),
-                            ),
-                            Expanded(
-                              child: Text(l10n.fidanPath, style: _t(22, weight: FontWeight.w900)),
-                            ),
-                            if (!p.hideStreak) _Pill('🔥 ${currentStreak(p.days, today)}'),
-                            const SizedBox(width: 6),
-                            _Pill('⭐ ${xpOf(p)}'),
-                          ],
-                        ),
-                      ),
-                      for (var i = 0; i < count; i++) ...[
-                        Positioned(
-                          left: pts[i].dx - 42,
-                          top: pts[i].dy - 42,
-                          child: _Stop(
-                            state: i < natureLessons.length && p.lessons.contains(natureLessons[i].id) ? 2 : (i == next ? 1 : 0),
-                            lessonKey: i < natureLessons.length ? Key('natureLesson-${natureLessons[i].id}') : null,
-                            label: i < natureLessons.length ? natureLessons[i].title.of(lang) : l10n.fidanMoreLessons,
-                            onTap: i < natureLessons.length && (i <= next || next == -1)
-                                ? () => Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (_) => NatureLessonScreen(lesson: natureLessons[i], today: today),
-                                    ),
-                                  )
-                                : () {
-                                    ScaffoldMessenger.of(context)
-                                      ..hideCurrentSnackBar()
-                                      ..showSnackBar(SnackBar(content: Text(i < natureLessons.length ? l10n.fidanLocked : l10n.fidanMoreLessons)));
-                                  },
-                          ),
-                        ),
-                        Positioned(
-                          left: xs[i % xs.length] < 0.5 ? pts[i].dx + 50 : 14,
-                          right: xs[i % xs.length] < 0.5 ? 10 : w - pts[i].dx + 50,
-                          top: pts[i].dy - 30,
-                          child: Text(
-                            i < natureLessons.length ? natureLessons[i].title.of(lang) : l10n.fidanMoreLessons,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: _t(16.5, weight: FontWeight.w800, color: i == next || (i < natureLessons.length && p.lessons.contains(natureLessons[i].id)) ? ink : const Color(0xFF62785A)),
-                          ),
-                        ),
-                        if (i < natureLessons.length && p.lessons.contains(natureLessons[i].id))
-                          Positioned(
-                            left: pts[i].dx + 20,
-                            top: pts[i].dy - 54,
-                            child: const Text('🍎', style: TextStyle(fontSize: 24)),
-                          ),
-                      ],
-                      if (next >= 0)
-                        Positioned(
-                          left: (pts[next].dx - 130).clamp(0.0, w - 84),
-                          top: pts[next].dy + 44,
-                          child: TreeView(stage: treeStage(p), season: seasonOf(today), mood: Mood.happy, size: 84),
-                        ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RoadPainter extends CustomPainter {
-  final List<Offset> pts;
-  final int doneUntil;
-  _RoadPainter(this.pts, this.doneUntil);
-
-  Path _through(List<Offset> p) {
-    final path = Path()..moveTo(p.first.dx, p.first.dy);
-    for (var i = 1; i < p.length; i++) {
-      final a = p[i - 1], b = p[i];
-      final mid = (a.dy + b.dy) / 2;
-      path.cubicTo(a.dx, mid, b.dx, mid, b.dx, b.dy);
-    }
-    return path;
-  }
-
-  @override
-  void paint(Canvas c, Size s) {
-    final p = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 20
-      ..strokeCap = StrokeCap.round;
-    c.drawPath(_through(pts), p..color = const Color(0xFFDCEBCB));
-    if (doneUntil > 0) c.drawPath(_through(pts.sublist(0, doneUntil + 1)), p..color = const Color(0xFF8FD35F));
-  }
-
-  @override
-  bool shouldRepaint(_RoadPainter o) => o.doneUntil != doneUntil || o.pts != pts;
-}
-
-class _Stop extends StatelessWidget {
-  /// 2 done, 1 next, 0 locked.
-  final int state;
-  final Key? lessonKey;
-  final String label;
-  final VoidCallback onTap;
-  const _Stop({required this.state, this.lessonKey, required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = switch (state) {
-      2 => leaf,
-      1 => const Color(0xFFFFB627),
-      _ => const Color(0xFFD3DEC8),
-    };
-    final stop = Semantics(
-      button: true,
-      label: label,
-      child: GestureDetector(
-        key: lessonKey,
-        onTap: onTap,
-        child: Container(
-          width: 84,
-          height: 84,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 5),
-            boxShadow: state == 1 ? const [BoxShadow(color: Color(0xCCFFC94D), blurRadius: 30, spreadRadius: 10)] : null,
-          ),
-          child: Icon(
-            switch (state) {
-              2 => Icons.check_rounded,
-              1 => Icons.play_arrow_rounded,
-              _ => Icons.lock_rounded,
-            },
-            color: Colors.white,
-            size: 42,
-          ),
-        ),
-      ),
-    );
-    return state == 1 ? stop.animate(onPlay: (c) => c.repeat(reverse: true)).scaleXY(begin: 1, end: 1.05, duration: 900.ms, curve: Curves.easeInOut) : stop;
-  }
-}
-
-class NatureLessonScreen extends StatefulWidget {
-  final NatureLesson lesson;
-  final DateTime? today;
-  const NatureLessonScreen({super.key, required this.lesson, this.today});
-
-  @override
-  State<NatureLessonScreen> createState() => _NatureLessonScreenState();
-}
-
-class _NatureLessonScreenState extends State<NatureLessonScreen> {
-  final _pages = PageController();
-  int _step = 0;
-  int? _chosen;
-
-  int get _cards => widget.lesson.cards.length;
-  int get _total => _cards + widget.lesson.quiz.length;
-
-  @override
-  void dispose() {
-    _pages.dispose();
-    super.dispose();
-  }
-
-  Future<void> _next() async {
-    if (_step + 1 >= _total) {
-      final store = NatureStore.instance;
-      final l10n = AppLocalizations.of(context)!;
-      final navigator = Navigator.of(context);
-      final before = store.progress;
-      await store.finishLesson(widget.lesson.id);
-      final after = store.progress;
-      if (identical(before.lessons, after.lessons) || before.lessons.length == after.lessons.length) {
-        navigator.pop();
-        return;
-      }
-      navigator.pushReplacement(
-        MaterialPageRoute<void>(
-          builder: (_) => FidanRewardScreen(
-            xp: xpOf(after) - xpOf(before),
-            newApple: applesOf(after).length > applesOf(before).length,
-            grewTo: treeStage(after) > treeStage(before) ? treeStage(after) : null,
-            message: l10n.fidanRewardLesson,
-            today: widget.today ?? DateTime.now(),
-          ),
-        ),
-      );
-      return;
-    }
-    setState(() => _chosen = null);
-    await _pages.nextPage(duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
-  }
-
-  Widget _card(LessonCard c, String lang) => SingleChildScrollView(
-    padding: const EdgeInsets.symmetric(horizontal: 4),
-    child: Column(
-      children: [
-        const SizedBox(height: 28),
-        Container(
-          width: 190,
-          height: 190,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(color: Color(0xFFD8F1FF), shape: BoxShape.circle),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: FittedBox(child: Text(c.emoji, style: const TextStyle(fontSize: 70))),
-          ),
-        ),
-        const SizedBox(height: 22),
-        Text(
-          c.title.of(lang),
-          textAlign: TextAlign.center,
-          style: _t(27, weight: FontWeight.w900),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          c.body.of(lang),
-          textAlign: TextAlign.center,
-          style: _t(19, color: inkSoft, height: 1.3),
-        ),
-        const SizedBox(height: 6),
-        for (final s in c.sources) _SourceText(s.name, s.url),
-      ],
-    ),
-  );
-
-  Widget _quiz(QuizQuestion q, String lang, AppLocalizations l10n) => SingleChildScrollView(
-    padding: const EdgeInsets.symmetric(horizontal: 4),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: 24),
-        Text(q.question.of(lang), style: _t(23, weight: FontWeight.w900)),
-        const SizedBox(height: 14),
-        for (final (i, o) in q.options.indexed) _option(q, i, o.of(lang)),
-        if (_chosen != null) ...[
-          const SizedBox(height: 12),
-          Text(
-            '${_chosen == q.correct ? l10n.fidanCorrect : l10n.fidanWrong} ${q.feedback.of(lang)}',
-            key: const Key('natureFeedback'),
-            textAlign: TextAlign.center,
-            style: _t(16.5, weight: FontWeight.w800, color: leafDark),
-          ),
-          Center(child: _SourceText(q.source.name, q.source.url)),
-        ],
-      ],
-    ),
-  );
-
-  Widget _option(QuizQuestion q, int i, String text) {
-    final answered = _chosen != null;
-    final right = answered && i == q.correct;
-    final wrong = answered && i == _chosen && i != q.correct;
-    final color = right ? const Color(0xFFDDF4C6) : (wrong ? const Color(0xFFFFE0DB) : Colors.white);
-    final border = right ? leaf : (wrong ? const Color(0xFFE5392F) : const Color(0xFFDDE8D2));
-    Widget box = Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          key: Key('natureOption-$i'),
-          borderRadius: BorderRadius.circular(18),
-          onTap: answered
-              ? null
-              : () {
-                  HapticFeedback.lightImpact();
-                  setState(() => _chosen = i);
-                },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-            decoration: BoxDecoration(
-              color: color,
-              border: Border.all(color: border, width: 2),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    text,
-                    style: _t(17, weight: FontWeight.w700, color: right ? leafDark : inkSoft),
-                  ),
-                ),
-                if (right) const Icon(Icons.check_circle_rounded, color: leaf, size: 26),
-                if (wrong) const Icon(Icons.cancel_rounded, color: Color(0xFFE5392F), size: 26),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-    if (wrong) box = box.animate().shake(duration: 400.ms, hz: 6);
-    if (right) box = box.animate().scaleXY(begin: 0.96, end: 1, duration: 260.ms, curve: Curves.easeOutBack);
-    return box;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final lang = Localizations.localeOf(context).languageCode;
-    final inQuiz = _step >= _cards;
-    return FidanTheme(
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 8, 14, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close_rounded, color: inkSoft, size: 28),
-                    ),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(value: (_step + 1) / _total, minHeight: 12, color: leaf, backgroundColor: const Color(0xFFD5EBBD)),
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pages,
-                    physics: inQuiz ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
-                    itemCount: _cards + (inQuiz ? widget.lesson.quiz.length : 1),
-                    onPageChanged: (i) => setState(() => _step = i),
-                    itemBuilder: (_, i) => i < _cards ? _card(widget.lesson.cards[i], lang) : _quiz(widget.lesson.quiz[i - _cards], lang, l10n),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                BigGreenButton(_step + 1 >= _total ? l10n.natureFinish : l10n.fidanContinue, key: const Key('natureNext'), onTap: !inQuiz || _chosen != null ? _next : null),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

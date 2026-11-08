@@ -7,16 +7,20 @@ import '../../../core/constants/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/annual_province_data.dart';
 import '../../../models/geo_area.dart';
-import '../../../shared/widgets/province_borders_credit.dart';
+import 'map_sources.dart';
 import '../../../shared/widgets/app_sheet.dart';
 
 class AnnualProvinceLayer extends StatefulWidget {
   final AnnualProvinceData data;
   final int year;
+
+  /// Province lines, drawn above the colours and below the tapped province.
+  final Widget? outline;
   const AnnualProvinceLayer({
     super.key,
     required this.data,
     required this.year,
+    this.outline,
   });
   @override
   State<AnnualProvinceLayer> createState() => _AnnualProvinceLayerState();
@@ -73,8 +77,6 @@ class _AnnualProvinceLayerState extends State<AnnualProvinceLayer> {
                 holePointsList: polygon.skip(1).toList(),
                 hitValue: area.id,
                 color: widget.data.color(area.id, widget.year),
-                borderColor: const Color(0x590E0500),
-                borderStrokeWidth: 0.8,
               ),
         ],
       );
@@ -89,6 +91,7 @@ class _AnnualProvinceLayerState extends State<AnnualProvinceLayer> {
       child: Stack(
         children: [
           _baseLayer,
+          ?widget.outline,
           if (selected != null)
             PolygonLayer<String>(
               polygons: [
@@ -262,7 +265,7 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
           const SizedBox(height: 12),
           Text(l10n.annualProvinceNote),
           const SizedBox(height: 16),
-          const ProvinceBordersCredit(color: Color(0xFF9CA3AF), fontSize: 11),
+          const MapSourcesLink(topic: MapSourcesTopic.annual),
         ],
       ),
     ),
@@ -277,7 +280,8 @@ class _AnnualProvinceDetailsState extends State<AnnualProvinceDetails> {
 class AnnualLegend extends StatelessWidget {
   /// The data file's renk.log_max; the bundled file's value by default.
   final double logMax;
-  const AnnualLegend({super.key, this.logMax = defaultLogMax});
+  final EdgeInsetsGeometry padding;
+  const AnnualLegend({super.key, this.logMax = defaultLogMax, this.padding = const EdgeInsets.all(16)});
 
   static const double defaultLogMax = 4.7808;
 
@@ -301,7 +305,7 @@ class AnnualLegend extends StatelessWidget {
         ),
     ];
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: padding,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,16 +324,28 @@ class AnnualLegend extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               for (var i = 0; i < ticks.length; i++)
-                Text(
-                  i == ticks.length - 1
-                      ? l10n.annualLegendTickMax(ticks[i])
-                      : ticks[i],
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFeatures: [FontFeature.tabularFigures()],
+                Expanded(
+                  // Shrinks instead of overflowing at large text sizes.
+                  child: Align(
+                    alignment: i == 0
+                        ? Alignment.centerLeft
+                        : i == ticks.length - 1
+                            ? Alignment.centerRight
+                            : Alignment.center,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        i == ticks.length - 1
+                            ? l10n.annualLegendTickMax(ticks[i])
+                            : ticks[i],
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
             ],

@@ -8,6 +8,7 @@ import '../map/map_screen.dart';
 import '../news/news_screen.dart';
 import '../risk/risk_screen.dart';
 import 'home_screen.dart';
+import '../nature/nature_notes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
 import '../../shared/widgets/app_sheet.dart';
@@ -112,6 +113,16 @@ class _MainShellScreenState extends State<MainShellScreen> {
     const RiskScreen(),
     const NewsScreen(),
   ];
+
+  bool _notesSynced = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_notesSynced) return;
+    _notesSynced = true;
+    NatureNotes.sync(AppLocalizations.of(context)!, Localizations.localeOf(context).languageCode);
+  }
 
   @override
   Widget build(BuildContext context) {

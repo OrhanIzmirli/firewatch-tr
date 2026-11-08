@@ -7,7 +7,7 @@ import 'province_borders_credit.dart' show osmCopyrightUrl;
 /// "© OpenStreetMap katkıcıları" on a map that draws OSM tiles, as OSM's
 /// tile usage policy and attribution guidelines require: visible on the map
 /// itself and linking to openstreetmap.org/copyright. [extra] adds other
-/// credits on the same line (CARTO, the FWI source).
+/// credits on the same line (CARTO).
 class OsmAttribution extends StatelessWidget {
   const OsmAttribution({
     super.key,

@@ -244,13 +244,16 @@ void main() {
       expect(foldRegionName('Güneydoğu Anadolu'), 'guneydogu anadolu');
     });
 
-    test('the Risk chip is the score; FWI is separate and labelled', () {
+    test('the map has one Risk layer; the FWI layer and its texts are gone', () {
       for (final file in ['app_tr.arb', 'app_en.arb']) {
         final arb = _arb(file);
         expect(arb['mapRiskLayer'], 'Risk');
-        expect(arb['riskLayerToggle'], 'FWI (Copernicus)');
-        expect(arb['riskLegendTitle'], contains('Copernicus'));
-        expect(arb['riskAttribution'], contains('CC BY 4.0'));
+        for (final removed in ['riskLayerToggle', 'riskLegendTitle', 'riskLegendNote', 'riskAttribution', 'riskOpacityLabel', 'riskDayNotPublished']) {
+          expect(arb.containsKey(removed), isFalse, reason: removed);
+        }
+        // The Risk screen's Copernicus card still credits its source.
+        expect(arb['riskCopernicusAttribution'], contains('CC BY 4.0'));
+        expect(arb['dataSourcesFwiBody'], isNot(contains('10')), reason: 'the forecast-day picker went with the layer');
       }
       final legend = _arb('app_tr.arb');
       expect(legend['mapRiskLegendMedium'], contains('25'));

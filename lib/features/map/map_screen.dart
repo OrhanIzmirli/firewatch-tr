@@ -8,7 +8,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,10 +27,9 @@ import '../../models/fire_point.dart';
 import '../../models/annual_province_data.dart';
 import '../../models/tracked_place.dart';
 import '../../models/detection_status.dart';
-import '../../services/fwi_point_service.dart';
 import '../../services/risk_data_cache.dart';
 import '../../core/utils/risk_display.dart';
-import '../../shared/widgets/detection_status_card.dart';
+import '../../shared/widgets/system_status_line.dart';
 import 'widgets/region_risk_layer.dart';
 import '../../services/tracked_places_provider.dart';
 import '../../services/fire_api_service.dart';
@@ -44,7 +42,6 @@ import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/carto_basemap.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/province_borders_credit.dart';
 import '../../shared/widgets/osm_attribution.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -52,7 +49,9 @@ import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/incident_legend.dart';
-import 'widgets/map_layer_bar.dart';
+import 'widgets/map_layers_panel.dart';
+import 'widgets/map_status_card.dart';
+import 'widgets/province_outline_layer.dart';
 import 'widgets/marker_list_cache.dart';
 import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
@@ -78,12 +77,16 @@ class MapScreen extends ConsumerStatefulWidget {
   /// Null means "use whatever the user last chose".
   final IncidentFilter? initialIncidentFilter;
 
+  /// Replaces the backend client in tests.
+  final RenderApiService? renderApi;
+
   const MapScreen({
     super.key,
     this.focusLat,
     this.focusLng,
     this.initialConfidenceFilter = false,
     this.initialIncidentFilter,
+    this.renderApi,
   });
 
   @override
@@ -98,50 +101,74 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   String? _errorMessage;
   bool _isSlowLoading = false;
 
-  /// The one collapsible surface over the map. It holds everything that used
-  /// to float separately — the merged legend, the FWI day picker, opacity and
-  /// attribution — and starts closed: the map is the product, not the panel.
+  /// Whether the Layers sheet is up, for the button's highlight.
   bool _isLayersPanelOpen = false;
+
+  /// The Layers sheet is a separate route, so a setState here does not reach
+  /// it; this tells it to rebuild.
+  final ValueNotifier<int> _layersRevision = ValueNotifier(0);
+
+  void _updateLayers(VoidCallback change) {
+    setState(change);
+    _layersRevision.value++;
+  }
 
   /// Whether the camera is currently zoomed to a saved place, which is what
   /// makes the one-tap "all of Türkiye" reset appear in the bottom bar.
   bool _isPlaceFocused = false;
 
-  /// "Past years" layer: provinces coloured by OGM burned area for one year
-  /// (bundled data, loaded on first use). Mutually exclusive with the FWI
-  /// layer — two colour scales on the same ground cannot both be read.
+  /// "Past years" layer: provinces coloured by OGM burned area for one year.
+  /// Mutually exclusive with the Risk layer: two colour scales on the same
+  /// ground cannot both be read.
   bool _showAnnualHistory = false;
   bool _annualLoading = false;
   bool _annualLoadFailed = false;
   int _annualYear = AnnualProvinceData.years.last;
+
+  /// The bundled province shapes and yearly totals. Loaded with the screen,
+  /// because the province lines are drawn on every layer.
   AnnualProvinceData? _annualData;
-  final ScrollController _annualYearsController = ScrollController(
-    initialScrollOffset: 800,
-  );
+  ProvinceOutlineLayer? _provinceOutline;
+  Future<AnnualProvinceData>? _provinceLoad;
+
+  Future<AnnualProvinceData> _ensureProvinceData() async {
+    if (_annualData case final data?) return data;
+    try {
+      final data = await (_provinceLoad ??= AnnualProvinceData.load());
+      if (mounted && _annualData == null) {
+        _updateLayers(() {
+          _annualData = data;
+          _provinceOutline = ProvinceOutlineLayer(areas: data.areas, darkBase: CartoBasemap.configured);
+        });
+      }
+      return data;
+    } catch (_) {
+      // Forget the failure, so turning a layer on tries again.
+      _provinceLoad = null;
+      rethrow;
+    }
+  }
 
   Future<void> _toggleAnnualHistory() async {
     final enabled = !_showAnnualHistory;
-    setState(() {
+    _updateLayers(() {
       _showAnnualHistory = enabled;
-      if (enabled) {
-        _showFwiLayer = false;
-        _showRegionRisk = false;
-      }
+      if (enabled) _showRegionRisk = false;
     });
     if (!enabled || _annualData != null || _annualLoading) return;
-    setState(() {
+    _updateLayers(() {
       _annualLoading = true;
       _annualLoadFailed = false;
     });
     try {
-      final data = await AnnualProvinceData.load();
-      if (mounted) setState(() => _annualData = data);
+      await _ensureProvinceData();
     } catch (_) {
-      if (mounted) setState(() => _annualLoadFailed = true);
+      if (mounted) _updateLayers(() => _annualLoadFailed = true);
     } finally {
-      if (mounted) setState(() => _annualLoading = false);
+      if (mounted) _updateLayers(() => _annualLoading = false);
     }
   }
+
   late bool _confidenceFilterActive = widget.initialConfidenceFilter;
   /// Zoom drives only marker *size*, so it lives in a notifier the markers
   /// listen to; a setState here used to rebuild — and so re-cluster — every
@@ -194,37 +221,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// history. The rest stay one tap away.
   IncidentFilter _incidentFilter = IncidentFilter.active;
 
-  /// The EFFIS fire-danger (FWI) raster. An on/off overlay, not a third
-  /// position of the events/detections choice: a danger *forecast* composes
-  /// with either fire layer and must never read as a detection itself.
-  bool _showFwiLayer = false;
-
   /// The FireWatch risk score by region: the map's "Risk" layer.
   bool _showRegionRisk = false;
   bool _regionRiskFailed = false;
   Map<String, int> _regionScores = const {};
 
-  /// Either colour layer is on, so markers need the high-contrast style.
-  bool get _showRiskLayer => _showFwiLayer || _showRegionRisk;
-
   DetectionStatus? _detectionStatus;
   bool _statusCardDismissed = false;
 
-  /// Overlay opacity. 0.55 keeps the base map readable underneath while the
-  /// danger classes stay clearly distinguishable.
-  double _riskOpacity = 0.55;
-
-  /// 0 = today … 9 = today+9. The `ecmwf.fwi` layer on EFFIS's global GWIS
-  /// service (ECMWF model, worldwide coverage — unlike the old regional
-  /// `mf010.fwi`, it does not stop at ~43°E and leave Van and Hakkari blank)
-  /// serves a 10-day forecast, today included. The last day can come up
-  /// empty until the day's model run is published; the transparent-image
-  /// defence below covers that window.
-  int _riskDayOffset = 0;
-
-  /// Days the forecast-day picker offers, today included — the verified
-  /// horizon of ecmwf.fwi.
-  static const int _riskForecastDays = 10;
+  /// The first events answer has arrived, empty or not.
+  bool _incidentsLoaded = false;
 
   /// How much of the screen the info sheet takes when it is resting. Enough
   /// for the title line and the Report button, and no more — the filters,
@@ -240,7 +246,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   final MapController _mapController = MapController();
   final FireApiService _fireApiService = FireApiService();
-  final RenderApiService _renderApi = RenderApiService();
+  late final RenderApiService _renderApi = widget.renderApi ?? RenderApiService();
 
   /// Drives [TileLayer.reset]. Tiles that failed to load are never re-requested
   /// on their own, so without an explicit reset a connectivity blip leaves the
@@ -265,6 +271,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     // raw feed, so opening the sheet is the other thing that needs it.
     _sheetController.addListener(_onSheetMoved);
     _bootstrapMapData().then((_) => _maybeShowMapCoachMarks());
+    // Without the shapes the map only lacks its province lines.
+    unawaited(_ensureProvinceData().then<void>((_) {}, onError: (Object _) {}));
     _autoRefresher.start();
     if (widget.focusLat != null && widget.focusLng != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -280,7 +288,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   void dispose() {
     _autoRefresher.dispose();
-    _annualYearsController.dispose();
+    _layersRevision.dispose();
     _tileResetController.close();
     _sheetController.removeListener(_onSheetMoved);
     _sheetController.dispose();
@@ -402,38 +410,28 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   /// Switches layer, pulling the raw feed in on first use.
   void _setLayer({required bool showIncidents}) {
-    setState(() => _showIncidents = showIncidents);
+    setState(() {
+      _showIncidents = showIncidents;
+      if (showIncidents) _statusCardDismissed = false;
+    });
     if (!showIncidents && !_firePointsRequested) {
       _firePointsRequested = true;
       _loadFirePoints();
     }
   }
 
-  void _toggleRiskLayer() {
-    setState(() {
-      _showFwiLayer = !_showFwiLayer;
-      if (_showFwiLayer) {
-        _showAnnualHistory = false;
-        _showRegionRisk = false;
-      }
-    });
-    if (_showFwiLayer) _probeForecastDays();
-  }
-
   Future<void> _toggleRegionRisk() async {
     final enabled = !_showRegionRisk;
-    setState(() {
+    _updateLayers(() {
       _showRegionRisk = enabled;
       if (enabled) {
-        _showFwiLayer = false;
         _showAnnualHistory = false;
-        _statusCardDismissed = true;
         _regionRiskFailed = false;
       }
     });
     if (!enabled) return;
     try {
-      _annualData ??= await AnnualProvinceData.load();
+      await _ensureProvinceData();
       await RiskDataCache.instance.warmUp();
       final scores = <String, int>{
         for (final row in RiskDataCache.instance.regions)
@@ -441,13 +439,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             foldRegionName('${row['region']}'): (row['general_risk_score'] as num).toInt(),
       };
       if (mounted) {
-        setState(() {
+        _updateLayers(() {
           _regionScores = scores;
           _regionRiskFailed = scores.isEmpty;
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _regionRiskFailed = true);
+      if (mounted) _updateLayers(() => _regionRiskFailed = true);
     }
   }
 
@@ -469,14 +467,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Future<void> _loadDetectionStatus() async {
     final status = await _renderApi.fetchDetectionStatus();
     if (mounted) setState(() => _detectionStatus = status);
-  }
-
-  void _showLast7Days() {
-    setState(() {
-      _incidentFilter = IncidentFilter.all;
-      _statusCardDismissed = true;
-    });
-    _setLayer(showIncidents: true);
   }
 
   void _openPlacesSheet() {
@@ -523,87 +513,23 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     setState(() => _isPlaceFocused = false);
   }
 
-  /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
-  /// mandatory: without it EFFIS answers HTTP 200 with a fully transparent
-  /// image — the layer looks on and shows nothing, silently.
-  String get _fwiDateParam => _fwiDateParamFor(_riskDayOffset);
-
-  String _fwiDateParamFor(int offset) => DateFormat(
-    'yyyy-MM-dd',
-  ).format(DateTime.now().add(Duration(days: offset)));
-
-  /// Which forecast days the server has actually published, keyed by date.
-  /// Missing means "not probed yet" and is treated as published — the tap
-  /// gate must never block on ignorance, only on observed emptiness.
-  final Map<String, bool> _fwiDayPublished = {};
-
-  /// Probes each picker day with a one-pixel sample over central Anatolia
-  /// (always land, always inside coverage when the day is published). An
-  /// unpublished day renders fully transparent, which is otherwise
-  /// indistinguishable from an "on" layer — the user would just see an
-  /// empty map and no reason.
-  Future<void> _probeForecastDays() async {
-    for (var offset = 0; offset < _riskForecastDays; offset++) {
-      final date = _fwiDateParamFor(offset);
-      // "Published" is final for the day; "unpublished" is re-probed, since
-      // it flips the moment the daily run lands.
-      if (_fwiDayPublished[date] == true) continue;
-      final sample = await FwiPointService.instance.sample(
-        lat: 39.5,
-        lng: 34.5,
-        date: date,
-      );
-      // Network failure is "unknown", not "unpublished" — don't block.
-      if (sample == null || !mounted) continue;
-      setState(() => _fwiDayPublished[date] = sample.hasData);
-    }
-  }
-
-  String _riskDayLabel(AppLocalizations l10n, int offset) {
-    if (offset == 0) return l10n.riskDayToday;
-    if (offset == 1) return l10n.riskDayTomorrow;
-    // Weekday + day of month: a 10-day picker wraps past one week, so a
-    // bare weekday name would appear twice meaning two different dates.
-    return DateFormat(
-      'EEE d',
-      Localizations.localeOf(context).toString(),
-    ).format(DateTime.now().add(Duration(days: offset)));
-  }
-
-  List<String> _riskClassLabels(AppLocalizations l10n) => [
-    l10n.riskClassVeryLow,
-    l10n.riskClassLow,
-    l10n.riskClassModerate,
-    l10n.riskClassHigh,
-    l10n.riskClassVeryHigh,
-    l10n.riskClassExtreme,
-  ];
-
-  /// Best-effort: a failure or an empty result silently leaves the detection
-  /// view in charge rather than showing an error, so adding events cannot
-  /// regress the map that already worked.
+  /// Best-effort. An empty answer leaves the events layer on, where the status
+  /// card explains it; jumping to the points layer here is what used to leave
+  /// the reader with an unexplained map.
   Future<void> _loadIncidents() async {
     _loadDetectionStatus();
     final incidents = await _renderApi.fetchIncidents(days: 7, limit: 300);
     if (!mounted) return;
-    final fellBack = incidents.isEmpty && _showIncidents;
     setState(() {
       _incidents = incidents;
+      _incidentsLoaded = true;
       // The nearby component of detection confidence depends on this list.
       _scoreCache.clear();
-      if (incidents.isEmpty) _showIncidents = false;
       // The loading veil was only ever cleared by the raw-detection fetch,
-      // which the events layer never triggers — so on the default layer it
-      // sat over the map forever, dimming it and eating every gesture.
-      // Events arriving is this layer's "loaded".
-      if (incidents.isNotEmpty) _isLoading = false;
+      // which the events layer never triggers. Events arriving is this
+      // layer's "loaded".
+      _isLoading = false;
     });
-    // Falling back to the detection layer is the one path that selects it
-    // without a tap, so it has to trigger the same lazy fetch.
-    if (fellBack && !_firePointsRequested) {
-      _firePointsRequested = true;
-      await _loadFirePoints();
-    }
   }
 
   Future<void> _restoreIncidentFilter() async {
@@ -620,14 +546,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     await prefs.setString(_filterPrefKey, filter.storageValue);
   }
 
-  /// Quiet: the card, unless the map is showing events anyway. A problem
-  /// with the data: the card whatever the map shows, until it is closed.
-  bool _showDetectionCard(DetectionStatus status) {
-    if (_statusCardDismissed || status.kind == DetectionStatusKind.strong) return false;
-    if (status.kind != DetectionStatusKind.none) return true;
-    // Never beside the banner counting strong detections.
-    return _visibleIncidents.isEmpty && _strongUnverifiedCount == 0;
-  }
+  bool _showStatusCard(DetectionStatus? status) => shouldShowMapStatusCard(
+        status: status,
+        now: DateTime.now(),
+        eventsLayerOn: _showIncidents,
+        eventsLoaded: _incidentsLoaded,
+        visibleEvents: _visibleIncidents.length,
+        strongUnverified: _strongUnverifiedCount,
+        colorLayerOn: _showRegionRisk || _showAnnualHistory,
+        dismissed: _statusCardDismissed,
+      );
 
   /// 'agriculture' or 'built' when a classified incident sits on this point.
   String? _farmOrBuiltNear(FirePoint point) {
@@ -917,12 +845,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         ),
       );
     }
-    // Over the FWI raster the tier colours stop working: a red disc on the
-    // red "very high" band is invisible. The risk-on variant is a near-black
-    // disc with a white ring — the ring carries the edge on the dark FWI
-    // bands, the disc on the light ones — and the tier colour moves to a
-    // centre dot, where it reads against the dark disc instead of the map.
-    if (_showRiskLayer) {
+    // Over the risk colours the tier colours stop working: a red disc on a
+    // red region is invisible. The risk-on variant is a near-black disc with a
+    // white ring, and the tier colour moves to a centre dot, where it reads
+    // against the dark disc instead of the map.
+    if (_showRegionRisk) {
       return Container(
         width: size * 0.62,
         height: size * 0.62,
@@ -1012,11 +939,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       );
     }
     // Same contrast problem as the raw detections: a danger-red event disc
-    // disappears on the FWI raster's red and maroon bands. With the risk
-    // layer on, the disc goes near-black with a solid white ring and the
-    // status colour moves to the glyph (or a centre dot when too small for
-    // one), which stays readable on all six FWI class colours.
-    if (_showRiskLayer) {
+    // disappears on the red risk regions. With the risk layer on, the disc
+    // goes near-black with a solid white ring and the status colour moves to
+    // the glyph (or a centre dot when too small for one).
+    if (_showRegionRisk) {
       return DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -1073,7 +999,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// risk-layer styling change (see MarkerListCache). Marker size follows
   /// zoom through [_zoom] without rebuilding the list.
   List<Marker> get _incidentMarkers => _incidentMarkerCache.get(
-        [_incidents, _incidentFilter, _showRiskLayer],
+        [_incidents, _incidentFilter, _showRegionRisk],
         () {
           _incidentByMarkerKey.clear();
           return [
@@ -1110,7 +1036,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// Strong unverified pixels are left out here and drawn on their own
   /// layer ([_attentionMarkers]) so they never average into a bubble.
   List<Marker> get _pointMarkers => _pointMarkerCache.get(
-        [_firePoints, _incidents, _confidenceFilterActive, _showRiskLayer],
+        [_firePoints, _incidents, _confidenceFilterActive, _showRegionRisk],
         () => [
           for (final point in _visibleFirePoints)
             if (!_strongUnverifiedPoint(point))
@@ -1133,7 +1059,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   /// Strong unverified pixels: always on top, never clustered.
   List<Marker> get _attentionMarkers => _attentionMarkerCache.get(
-        [_firePoints, _incidents, _confidenceFilterActive, _showRiskLayer],
+        [_firePoints, _incidents, _confidenceFilterActive, _showRegionRisk],
         () => [
           for (final point in _visibleFirePoints)
             if (_strongUnverifiedPoint(point))
@@ -1221,10 +1147,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         fillAlpha = 0.8;
     }
 
-    // High-contrast variant over the FWI raster: dark bubble, solid white
+    // High-contrast variant over the risk colours: dark bubble, solid white
     // ring, and the status colour on the glyph instead of the fill — same
     // reasoning as the single markers.
-    final onRisk = _showRiskLayer;
+    final onRisk = _showRegionRisk;
 
     return Center(
       child: Container(
@@ -1649,39 +1575,20 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   }
                 },
               ),
+              // Colour layers, then the province lines and mask, then the
+              // markers. The annual layer places the lines itself, so its
+              // tapped province can be outlined above them.
               if (_showAnnualHistory && _annualData != null)
-                AnnualProvinceLayer(data: _annualData!, year: _annualYear),
-              // The FWI raster sits between the base map and the markers:
-              // danger paints the ground, detections stay on top. Built only
-              // while the risk toggle is on, so no WMS request ever leaves
-              // the device with the layer off.
-              if (_showRegionRisk && _annualData != null && _regionScores.isNotEmpty)
-                RegionRiskLayer(
-                  areas: _annualData!.areas,
-                  scores: _regionScores,
-                  onRegionTap: (region, score) => _showRegionRiskSnack(l10n, region, score),
-                ),
-              if (_showFwiLayer)
-                Opacity(
-                  opacity: _riskOpacity,
-                  child: TileLayer(
-                    // TileLayer does not watch wmsOptions for changes, so a
-                    // new date has to replace the layer outright or stale
-                    // tiles would survive the switch.
-                    key: ValueKey('fwi-$_fwiDateParam'),
-                    wmsOptions: WMSTileLayerOptions(
-                      baseUrl:
-                          'https://maps.effis.emergency.copernicus.eu/gwis?',
-                      layers: const ['ecmwf.fwi'],
-                      format: 'image/png',
-                      version: '1.1.1',
-                      transparent: true,
-                      otherParameters: {'TIME': _fwiDateParam},
-                    ),
-                    userAgentPackageName: 'com.oguzh.firewatch.firewatch_tr',
-                    evictErrorTileStrategy: EvictErrorTileStrategy.notVisible,
+                AnnualProvinceLayer(data: _annualData!, year: _annualYear, outline: _provinceOutline)
+              else ...[
+                if (_showRegionRisk && _annualData != null && _regionScores.isNotEmpty)
+                  RegionRiskLayer(
+                    areas: _annualData!.areas,
+                    scores: _regionScores,
+                    onRegionTap: (region, score) => _showRegionRiskSnack(l10n, region, score),
                   ),
-                ),
+                ?_provinceOutline,
+              ],
               MarkerLayer(
                 markers: _userPosition != null
                     ? [
@@ -1765,13 +1672,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     markers: _pointMarkers,
                     builder: (context, markers) => Container(
                       decoration: BoxDecoration(
-                        // Dark + ringed over the FWI raster, like the
+                        // Dark + ringed over the risk colours, like the
                         // single markers: orange-on-orange is invisible.
-                        color: _showRiskLayer
+                        color: _showRegionRisk
                             ? AppColors.background.withValues(alpha: 0.92)
                             : AppColors.primary,
                         shape: BoxShape.circle,
-                        border: _showRiskLayer
+                        border: _showRegionRisk
                             ? Border.all(color: Colors.white, width: 2)
                             : null,
                       ),
@@ -1803,10 +1710,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ),
             ),
           ),
-        // The one permanent surface at the top: which layers are on. The
-        // filters and captions that used to stack here live in the sheet
-        // now, and the FWI controls live in the layers panel. The error
-        // banner shares this column so it can never cover the chips.
+        // At the top: the events/points switch, and notes about what is on.
+        // The colour layers are in the Layers sheet. The error banner shares
+        // this column so it can never cover the switch.
         Positioned(
           left: 12,
           top: 12,
@@ -1814,41 +1720,34 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MapLayerBar(
-                    children: [
-                      _LayerChip(
+              GlassPanel(
+                key: const Key('mapModeSwitch'),
+                padding: const EdgeInsets.all(4),
+                radius: AppSpacing.pillRadius,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: _LayerChip(
+                        key: const Key('mapModeEvents'),
                         label: l10n.incidentToggleShowShort,
                         icon: Icons.local_fire_department_rounded,
                         selected: _showIncidents,
                         onTap: () => _setLayer(showIncidents: true),
                       ),
-                      _LayerChip(
+                    ),
+                    Flexible(
+                      child: _LayerChip(
+                        key: const Key('mapModePoints'),
                         label: l10n.incidentToggleDetectionsShort,
                         icon: Icons.grain_rounded,
                         selected: !_showIncidents,
                         onTap: () => _setLayer(showIncidents: false),
                       ),
-                      _LayerChip(
-                        key: const Key('mapRiskChip'),
-                        label: l10n.mapRiskLayer,
-                        icon: Icons.thermostat_rounded,
-                        selected: _showRegionRisk,
-                        onTap: _toggleRegionRisk,
-                      ),
-                      _LayerChip(
-                        label: l10n.riskLayerToggle,
-                        icon: Icons.public_rounded,
-                        selected: _showFwiLayer,
-                        onTap: _toggleRiskLayer,
-                      ),
-                      _LayerChip(
-                        label: l10n.annualLayerToggle,
-                        icon: Icons.history_rounded,
-                        selected: _showAnnualHistory,
-                        onTap: _toggleAnnualHistory,
-                      ),
-                    ],
+                    ),
+                  ],
                 ),
+              ),
               if (_showIncidents && _strongUnverifiedCount > 0) ...[
                 const SizedBox(height: 6),
                 GestureDetector(
@@ -1892,35 +1791,30 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ),
                 ),
               ],
-              if (_showRegionRisk) ...[
-                const SizedBox(height: 6),
-                GlassPanel(
-                  key: const Key('mapRiskNotFire'),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                  radius: AppSpacing.cardRadius,
-                  child: Text(
-                    _regionRiskFailed ? l10n.mapRiskUnavailable : l10n.riskColorsNotFire,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w700,
-                      color: _regionRiskFailed ? AppColors.warning : titleColor,
-                    ),
-                  ),
+              if (_showRegionRisk)
+                _overlayNote(
+                  const Key('mapRiskNotFire'),
+                  _regionRiskFailed ? l10n.mapRiskUnavailable : l10n.riskColorsNotFire,
+                  _regionRiskFailed ? AppColors.warning : titleColor,
                 ),
-              ],
+              if (_showAnnualHistory)
+                _overlayNote(
+                  const Key('mapAnnualNote'),
+                  _annualLoadFailed ? l10n.annualLayerLoadError : l10n.mapAnnualNote('$_annualYear'),
+                  _annualLoadFailed ? AppColors.warning : titleColor,
+                ),
               if (_detectionStatus case final status?) ...[
                 const SizedBox(height: 6),
-                if (_showDetectionCard(status))
+                if (_showStatusCard(status))
                   ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.46),
                     child: SingleChildScrollView(
-                      child: DetectionStatusCard(
+                      child: MapStatusCard(
                         status: status,
                         onRetry: _refreshMap,
                         onDismiss: () => setState(() => _statusCardDismissed = true),
                         onReport: () => showReportFirePanel(context, initialType: ReportType.missingFire),
-                        onShowLast7Days: status.kind == DetectionStatusKind.unavailable ? null : _showLast7Days,
-                        onOpenRisk: _showRegionRisk ? null : _toggleRegionRisk,
+                        onShowPoints: _showIncidents ? () => _setLayer(showIncidents: false) : null,
                       ),
                     ),
                   )
@@ -1928,12 +1822,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   GlassPanel(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     radius: AppSpacing.cardRadius,
-                    child: DetectionFreshnessLine(status: status),
+                    color: Theme.of(context).brightness == Brightness.dark ? AppColors.surface : AppColors.white,
+                    child: SystemStatusLine(status: status),
                   ),
-              ],
-              if (_showAnnualHistory) ...[
-                const SizedBox(height: 6),
-                _buildAnnualStrip(l10n, titleColor),
               ],
               if (_errorMessage != null) ...[
                 const SizedBox(height: 6),
@@ -1978,19 +1869,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _LayerChip(
+                  key: const Key('mapLayersButton'),
                   label: l10n.mapLayersButton,
                   icon: Icons.layers_rounded,
-                  selected: _isLayersPanelOpen,
-                  onTap: () {
-                    setState(
-                      () => _isLayersPanelOpen = !_isLayersPanelOpen,
-                    );
-                    // Refresh which days are published every time the panel
-                    // opens — an unpublished day flips when the run lands.
-                    if (_isLayersPanelOpen && _showFwiLayer) {
-                      _probeForecastDays();
-                    }
-                  },
+                  selected: _isLayersPanelOpen || _showRegionRisk || _showAnnualHistory,
+                  onTap: _openLayersPanel,
                 ),
                 _MapIconAction(
                   icon: Icons.bookmark_rounded,
@@ -2018,305 +1901,78 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideY(begin: 0.2, end: 0),
         ),
         // Attribution is a legal requirement, not a UI element: bare text on
-        // the map edge, no box. The halo keeps it readable over any of the
-        // six FWI band colours. Repeated inside the layers panel.
+        // the map edge, no box.
+        // Above the bar's row: beside it, a 360 dp phone had the two overlap.
         Positioned(
             right: 12,
-            bottom: bottomInset + 18,
+            bottom: bottomInset + 60,
             // Tappable: opens openstreetmap.org/copyright.
             child: OsmAttribution(
-              extra: [
-                if (CartoBasemap.configured) '© CARTO',
-                if (_showFwiLayer) l10n.riskAttribution,
-              ],
+              extra: [if (CartoBasemap.configured) '© CARTO'],
             ),
-          ),
-        if (_isLayersPanelOpen)
-          Positioned(
-            left: 12,
-            bottom: bottomInset + 64,
-            child: _buildLayersPanel(l10n, titleColor)
-                .animate()
-                .fadeIn(duration: 180.ms)
-                .slideY(begin: 0.08, end: 0),
           ),
       ],
     );
   }
 
-  /// The layers panel: the merged legend for whatever is currently on, plus
-  /// the FWI forecast-day picker, opacity slider and attribution while the
-  /// risk layer is active. One collapsible panel instead of the two legends
-  /// and three floating boxes it replaced.
-  /// Year picker and one-line caption for the "Past years" layer, under the
-  /// layer chips. Province taps open their own detail sheet.
-  Widget _buildAnnualStrip(AppLocalizations l10n, Color titleColor) {
-    final caption = _annualLoadFailed
-        ? l10n.annualLayerLoadError
-        : l10n.annualLayerCaption(_annualYear);
-    return GlassPanel(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, AppSpacing.sm),
-      radius: AppSpacing.cardRadius,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 36,
-            child: ListView(
-              controller: _annualYearsController,
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (final year in AnnualProvinceData.years)
-                  _DayChip(
-                    label: '$year',
-                    selected: _annualYear == year,
-                    onTap: () => setState(() => _annualYear = year),
-                  ),
-              ],
-            ),
-          ),
-          if (_annualLoading)
-            const LinearProgressIndicator(minHeight: 2),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+  /// One line under the switch saying what the colours on the map are; a tap
+  /// opens the Layers sheet with the scale.
+  Widget _overlayNote(Key key, String text, Color color) => Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: GestureDetector(
+          onTap: _openLayersPanel,
+          child: GlassPanel(
+            key: key,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            radius: AppSpacing.cardRadius,
             child: Text(
-              caption,
-              style: GoogleFonts.ibmPlexSans(
-                fontSize: 11,
-                height: 1.3,
-                color: _annualLoadFailed
-                    ? AppColors.warning
-                    : titleColor.withValues(alpha: 0.78),
-              ),
+              text,
+              style: GoogleFonts.ibmPlexSans(fontSize: 12.5, fontWeight: FontWeight.w700, color: color),
             ),
           ),
-        ],
+        ),
+      );
+
+  void _openLayersPanel() {
+    setState(() => _isLayersPanelOpen = true);
+    showAppSheet<void>(
+      context,
+      builder: (sheetContext) => ListenableBuilder(
+        listenable: _layersRevision,
+        builder: (context, _) => MapLayersPanel(
+          riskOn: _showRegionRisk,
+          riskFailed: _regionRiskFailed,
+          onToggleRisk: _toggleRegionRisk,
+          annualOn: _showAnnualHistory,
+          annualLoading: _annualLoading,
+          annualFailed: _annualLoadFailed,
+          annualYear: _annualYear,
+          annualLogMax: _annualData?.logMax ?? AnnualLegend.defaultLogMax,
+          onToggleAnnual: _toggleAnnualHistory,
+          onYearSelected: (year) => _updateLayers(() => _annualYear = year),
+          markerLegend: _buildMarkerLegend(AppLocalizations.of(context)!, Theme.of(context).textTheme.titleLarge?.color ?? AppColors.white),
+        ),
       ),
-    );
+    ).whenComplete(() {
+      if (mounted) setState(() => _isLayersPanelOpen = false);
+    });
   }
 
-  Widget _buildLayersPanel(AppLocalizations l10n, Color titleColor) {
-    final classLabels = _riskClassLabels(l10n);
-    // The official EFFIS class colours, very low → extreme, defined once in
-    // [AppColors] so the legend cannot drift from the raster.
-    const fwiColors = [
-      AppColors.fwiVeryLow,
-      AppColors.fwiLow,
-      AppColors.fwiModerate,
-      AppColors.fwiHigh,
-      AppColors.fwiVeryHigh,
-      AppColors.fwiExtreme,
-    ];
-    final sectionStyle = GoogleFonts.ibmPlexSans(
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-      color: titleColor,
-    );
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 420),
-      child: GlassPanel(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.lg,
-          AppSpacing.md,
-          AppSpacing.md,
-          AppSpacing.md,
-        ),
-        radius: AppSpacing.largeCardRadius,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.layers_rounded,
-                    size: 16,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      l10n.mapLayersButton,
-                      style: GoogleFonts.ibmPlexSans(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        color: titleColor,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: l10n.riskLegendHide,
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    iconSize: 16,
-                    onPressed: () =>
-                        setState(() => _isLayersPanelOpen = false),
-                    icon: Icon(
-                      Icons.close_rounded,
-                      color: titleColor.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ],
-              ),
-              if (_showRegionRisk) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(l10n.mapRiskLegendTitle, style: sectionStyle),
-                const SizedBox(height: 6),
-                _LegendRow(color: colorForApiRiskLevel('Low'), label: l10n.mapRiskLegendLow, textColor: titleColor),
-                const SizedBox(height: 5),
-                _LegendRow(color: colorForApiRiskLevel('Medium'), label: l10n.mapRiskLegendMedium, textColor: titleColor),
-                const SizedBox(height: 5),
-                _LegendRow(color: colorForApiRiskLevel('High'), label: l10n.mapRiskLegendHigh, textColor: titleColor),
-                const SizedBox(height: 5),
-                _LegendRow(color: colorForApiRiskLevel('Critical'), label: l10n.mapRiskLegendCritical, textColor: titleColor),
-                const SizedBox(height: 6),
-                Text(
-                  l10n.riskColorsNotFire,
-                  style: GoogleFonts.ibmPlexSans(fontSize: 10.5, height: 1.35, fontWeight: FontWeight.w700, color: titleColor),
-                ),
-                Divider(height: AppSpacing.lg, color: titleColor.withValues(alpha: 0.12)),
-              ],
-              if (_showFwiLayer) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(l10n.riskLegendTitle, style: sectionStyle),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 2,
-                  runSpacing: 2,
-                  children: [
-                    for (var offset = 0; offset < _riskForecastDays; offset++)
-                      _DayChip(
-                        label: _riskDayLabel(l10n, offset),
-                        selected: _riskDayOffset == offset,
-                        // Dimmed but still tappable: a dead-looking chip
-                        // with no reason teaches nothing. The tap explains
-                        // instead of selecting, so nobody lands on the
-                        // blank layer an unpublished day renders as.
-                        dimmed: _fwiDayPublished[_fwiDateParamFor(offset)] ==
-                            false,
-                        onTap: () {
-                          if (_fwiDayPublished[_fwiDateParamFor(offset)] ==
-                              false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(l10n.riskDayNotPublished),
-                              ),
-                            );
-                            return;
-                          }
-                          setState(() => _riskDayOffset = offset);
-                        },
-                      ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      l10n.riskOpacityLabel,
-                      style: GoogleFonts.ibmPlexSans(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: titleColor.withValues(alpha: 0.78),
-                      ),
-                    ),
-                    Expanded(
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          trackHeight: 2,
-                          thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 7,
-                          ),
-                          overlayShape: const RoundSliderOverlayShape(
-                            overlayRadius: 14,
-                          ),
-                        ),
-                        child: Slider(
-                          value: _riskOpacity,
-                          min: 0.2,
-                          max: 1.0,
-                          onChanged: (value) =>
-                              setState(() => _riskOpacity = value),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                for (var i = 0; i < fwiColors.length; i++) ...[
-                  _LegendRow(
-                    color: fwiColors[i],
-                    label: classLabels[i],
-                    textColor: titleColor,
-                  ),
-                  if (i < fwiColors.length - 1) const SizedBox(height: 5),
-                ],
-                const SizedBox(height: 6),
-                Text(
-                  l10n.riskLegendNote,
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 10,
-                    height: 1.35,
-                    color: titleColor.withValues(alpha: 0.66),
-                  ),
-                ),
-                Divider(
-                  height: AppSpacing.lg,
-                  color: titleColor.withValues(alpha: 0.12),
-                ),
-              ] else
-                const SizedBox(height: AppSpacing.sm),
-              if (_showAnnualHistory) ...[
-                AnnualLegend(
-                  logMax: _annualData?.logMax ?? AnnualLegend.defaultLogMax,
-                ),
-                ProvinceBordersCredit(color: titleColor.withValues(alpha: 0.66)),
-                Divider(
-                  height: AppSpacing.lg,
-                  color: titleColor.withValues(alpha: 0.12),
-                ),
-              ],
-              // The marker key for whichever fire layer is on. One legend at
-              // a time — stacking both produced "low confidence" twice,
-              // meaning two different things.
-              Text(l10n.mapLegendTitle, style: sectionStyle),
-              const SizedBox(height: 6),
-              if (_showIncidents)
-                const IncidentLegend()
-              else ...[
-                _LegendRow(
-                  color: AppColors.danger,
-                  label: l10n.legendProbableFire,
-                  textColor: titleColor,
-                ),
-                const SizedBox(height: 8),
-                _LegendRow(
-                  color: AppColors.primary,
-                  label: l10n.legendHighThermal,
-                  textColor: titleColor,
-                ),
-                const SizedBox(height: 8),
-                _LegendRow(
-                  color: AppColors.textMuted,
-                  label: l10n.legendLowConfidence,
-                  textColor: titleColor,
-                ),
-              ],
-              if (_showFwiLayer) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  l10n.riskAttribution,
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 9.5,
-                    color: titleColor.withValues(alpha: 0.72),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+  /// The marker key for whichever fire layer is on. One legend at a time:
+  /// stacking both produced "low confidence" twice, meaning two different
+  /// things.
+  Widget _buildMarkerLegend(AppLocalizations l10n, Color textColor) {
+    if (_showIncidents) return const IncidentLegend();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _LegendRow(color: AppColors.danger, label: l10n.legendProbableFire, textColor: textColor),
+        const SizedBox(height: 8),
+        _LegendRow(color: AppColors.primary, label: l10n.legendHighThermal, textColor: textColor),
+        const SizedBox(height: 8),
+        _LegendRow(color: AppColors.textMuted, label: l10n.legendLowConfidence, textColor: textColor),
+      ],
     );
   }
 
@@ -2982,54 +2638,6 @@ class _MapIconAction extends StatelessWidget {
   }
 }
 
-/// Sibling of [_FilterChip] for the FWI forecast-day picker: same compact
-/// pill, no count — a forecast day has nothing to count.
-class _DayChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-
-  /// The forecast for this day has not been published yet: drawn faded, and
-  /// the caller's onTap explains instead of selecting.
-  final bool dimmed;
-  final VoidCallback onTap;
-
-  const _DayChip({
-    required this.label,
-    required this.selected,
-    this.dimmed = false,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final idle = isDark
-        ? AppColors.white.withValues(alpha: dimmed ? 0.28 : 0.66)
-        : Colors.black.withValues(alpha: dimmed ? 0.25 : 0.6);
-
-    return InkWell(
-      borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.ibmPlexSans(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w700,
-            color: selected ? Colors.white : idle,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _LayerChip extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -3066,12 +2674,17 @@ class _LayerChip extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: selected ? Colors.white : idle),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: GoogleFonts.ibmPlexSans(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w700,
-                color: selected ? Colors.white : idle,
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  style: GoogleFonts.ibmPlexSans(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: selected ? Colors.white : idle,
+                  ),
+                ),
               ),
             ),
           ],

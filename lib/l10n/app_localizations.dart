@@ -1973,7 +1973,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesFwiBody.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki FWI (Copernicus) katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir ve bugün dahil 10 güne kadar (9 gün ileriye) tahmin sunar; günün model koşusu yayımlanana dek son gün boş kalabilir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0). FireWatch risk puanından ayrıdır ve puana katılmaz.'**
+  /// **'Risk ekranındaki Copernicus göstergesi, Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0). FireWatch risk puanından ayrıdır ve puana katılmaz.'**
   String get dataSourcesFwiBody;
 
   /// No description provided for @settingsAppInfo.
@@ -4241,7 +4241,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustRiskInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgenizin puanını grafikte Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.'**
+  /// **'Bölgenizin puanını listede Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.'**
   String get trustRiskInterpret;
 
   /// No description provided for @trustRiskAction.
@@ -4673,13 +4673,13 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskChartTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgesel Dağılım'**
+  /// **'Bölgeler'**
   String get coachMarkRiskChartTitle;
 
   /// No description provided for @coachMarkRiskChartDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsiniz.'**
+  /// **'Listeden bir bölgeye dokunarak o bölgenin detaylı risk analizini görebilirsiniz.'**
   String get coachMarkRiskChartDesc;
 
   /// No description provided for @coachMarkRiskMyLocationTabTitle.
@@ -5294,12 +5294,6 @@ abstract class AppLocalizations {
   /// **'Tümü'**
   String get incidentFilterAll;
 
-  /// No description provided for @riskLayerToggle.
-  ///
-  /// In tr, this message translates to:
-  /// **'FWI (Copernicus)'**
-  String get riskLayerToggle;
-
   /// No description provided for @incidentToggleShowShort.
   ///
   /// In tr, this message translates to:
@@ -5402,12 +5396,6 @@ abstract class AppLocalizations {
   /// **'Veri yok'**
   String get placesRiskNoData;
 
-  /// No description provided for @placesRiskLine.
-  ///
-  /// In tr, this message translates to:
-  /// **'FWI tehlikesi · {day}'**
-  String placesRiskLine(String day);
-
   /// No description provided for @placesActiveDetections.
   ///
   /// In tr, this message translates to:
@@ -5425,12 +5413,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Son tespit ~{hours} saat önce'**
   String placesLastDetection(String hours);
-
-  /// No description provided for @placesResolutionNote.
-  ///
-  /// In tr, this message translates to:
-  /// **'FWI sınıfı, ECMWF\'nin küresel hava modelinden gelen bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.'**
-  String get placesResolutionNote;
 
   /// No description provided for @notificationScopePlaces.
   ///
@@ -5468,24 +5450,6 @@ abstract class AppLocalizations {
   /// **'Kayıtlı yerlerinizin çevresinde {count} uydu tespiti var. Harita ekranından kontrol edin.'**
   String notifPlacesFireBody(int count);
 
-  /// No description provided for @riskLegendTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Copernicus yangın tehlike indeksi (FWI)'**
-  String get riskLegendTitle;
-
-  /// No description provided for @riskLegendNote.
-  ///
-  /// In tr, this message translates to:
-  /// **'Hava koşullarından hesaplanan bölgesel tehlike tahmini; uydu tespiti değildir.'**
-  String get riskLegendNote;
-
-  /// No description provided for @riskLegendHide.
-  ///
-  /// In tr, this message translates to:
-  /// **'Lejantı gizle'**
-  String get riskLegendHide;
-
   /// No description provided for @riskClassVeryLow.
   ///
   /// In tr, this message translates to:
@@ -5521,36 +5485,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Aşırı'**
   String get riskClassExtreme;
-
-  /// No description provided for @riskOpacityLabel.
-  ///
-  /// In tr, this message translates to:
-  /// **'Opaklık'**
-  String get riskOpacityLabel;
-
-  /// No description provided for @riskDayToday.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bugün'**
-  String get riskDayToday;
-
-  /// No description provided for @riskDayTomorrow.
-  ///
-  /// In tr, this message translates to:
-  /// **'Yarın'**
-  String get riskDayTomorrow;
-
-  /// No description provided for @riskDayNotPublished.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bu günün tahmini henüz yayımlanmadı. Günlük model koşusu geldiğinde açılır.'**
-  String get riskDayNotPublished;
-
-  /// No description provided for @riskAttribution.
-  ///
-  /// In tr, this message translates to:
-  /// **'© European Union, Copernicus EFFIS · CC BY 4.0'**
-  String get riskAttribution;
 
   /// No description provided for @homeLast24hTitle.
   ///
@@ -5762,10 +5696,173 @@ abstract class AppLocalizations {
   /// **'Risk verisi şu an alınamıyor'**
   String get riskHeatUnavailable;
 
+  /// No description provided for @riskRegionLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region}: {level}'**
+  String riskRegionLevel(String region, String level);
+
+  /// No description provided for @riskHighestScoreLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek puan: {score}/100'**
+  String riskHighestScoreLine(Object score);
+
+  /// No description provided for @riskRegionsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgeler'**
+  String get riskRegionsTitle;
+
+  /// No description provided for @riskRegionWeather.
+  ///
+  /// In tr, this message translates to:
+  /// **'{temp}°C · %{humidity} nem · {wind} km/h'**
+  String riskRegionWeather(String temp, String humidity, String wind);
+
+  /// No description provided for @riskPercent.
+  ///
+  /// In tr, this message translates to:
+  /// **'%{value}'**
+  String riskPercent(Object value);
+
+  /// No description provided for @riskComponentsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan nasıl oluştu?'**
+  String get riskComponentsTitle;
+
+  /// No description provided for @riskComponentsTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam'**
+  String get riskComponentsTotal;
+
+  /// No description provided for @riskComponentsCapped.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan en fazla 100 olabilir.'**
+  String get riskComponentsCapped;
+
+  /// No description provided for @riskComponentsUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanın dökümü şu an gösterilemiyor.'**
+  String get riskComponentsUnavailable;
+
+  /// No description provided for @riskComponentWindLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgâr'**
+  String get riskComponentWindLabel;
+
+  /// No description provided for @riskComponentTempMild.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ilık hava bitkilerin nemini yavaşça azaltır.'**
+  String get riskComponentTempMild;
+
+  /// No description provided for @riskComponentTempHot.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak hava bitkileri hızla kurutur.'**
+  String get riskComponentTempHot;
+
+  /// No description provided for @riskComponentHumidityMid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nem azaldıkça bitki örtüsü kurumaya başlar.'**
+  String get riskComponentHumidityMid;
+
+  /// No description provided for @riskComponentHumidityLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hava çok kuru; bitki örtüsü hızla kurur.'**
+  String get riskComponentHumidityLow;
+
+  /// No description provided for @riskComponentWindMid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgâr kıvılcım ve alevleri taşıyabilir.'**
+  String get riskComponentWindMid;
+
+  /// No description provided for @riskComponentWindHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güçlü rüzgâr ateşin yayılmasını hızlandırır.'**
+  String get riskComponentWindHigh;
+
+  /// No description provided for @riskComponentDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte bölgedeki uydu ısı tespitleri; her tespit yangın demek değildir.'**
+  String get riskComponentDetections;
+
+  /// No description provided for @riskComponentDetectionsNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte bölgede uydu tespiti yok. Bu, yangın olmadığı anlamına gelmez.'**
+  String get riskComponentDetectionsNone;
+
+  /// No description provided for @riskComponentDetectionsUnknown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu tespit sayısı şu an alınamıyor.'**
+  String get riskComponentDetectionsUnknown;
+
+  /// No description provided for @riskComponentDetectionsChanged.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan, son hesaplamadaki sayıyla oluştu; sayı o zamandan beri değişti.'**
+  String get riskComponentDetectionsChanged;
+
+  /// No description provided for @riskComponentDetectionsValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} tespit'**
+  String riskComponentDetectionsValue(int count);
+
+  /// No description provided for @riskComponentUnknownValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilinmiyor'**
+  String get riskComponentUnknownValue;
+
+  /// No description provided for @riskComponentBonus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak ve kuru hava'**
+  String get riskComponentBonus;
+
+  /// No description provided for @riskComponentBonusNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak ve kuru hava bir arada olduğu için ek puan.'**
+  String get riskComponentBonusNote;
+
+  /// No description provided for @riskExplainSum.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan, bu bileşenlerin toplamıdır (en fazla 100). Eşikler:'**
+  String get riskExplainSum;
+
+  /// No description provided for @riskExplainBonus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak ve kuru birlikte: {warmTemp}°C üstü ve nem %{warmHumidity} altı +{warmPoints}; {hotTemp}°C üstü ve nem %{hotHumidity} altı +{hotPoints}'**
+  String riskExplainBonus(
+    int warmTemp,
+    int warmHumidity,
+    int warmPoints,
+    int hotTemp,
+    int hotHumidity,
+    int hotPoints,
+  );
+
   /// No description provided for @riskHeatMapSemantics.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru {score}/100, {level}.'**
+  /// **'Türkiye yangın riski bölge haritası. Türkiye geneli risk skoru {score}/100, {level}.'**
   String riskHeatMapSemantics(int score, String level);
 
   /// No description provided for @navRisk.
@@ -5960,12 +6057,6 @@ abstract class AppLocalizations {
   /// **'Geçmiş yıllar'**
   String get annualLayerToggle;
 
-  /// No description provided for @annualLayerCaption.
-  ///
-  /// In tr, this message translates to:
-  /// **'İl rengi: {year} OGM yanan alanı. Noktalar: mevcut tespitler. Uydu noktası yangın sayısı değildir.'**
-  String annualLayerCaption(int year);
-
   /// No description provided for @annualLayerLoadError.
   ///
   /// In tr, this message translates to:
@@ -6071,7 +6162,7 @@ abstract class AppLocalizations {
   /// No description provided for @annualLegendTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Geçmiş yıllar · OGM yanan alan'**
+  /// **'Geçmiş yıllar · yanan alan'**
   String get annualLegendTitle;
 
   /// No description provided for @annualLegendTickMax.
@@ -6083,7 +6174,7 @@ abstract class AppLocalizations {
   /// No description provided for @annualLegendNote.
   ///
   /// In tr, this message translates to:
-  /// **'Logaritmik renk ölçeği · Koyu renk daha fazla yanan alanı gösterir. Verisi olmayan iller boyanmaz. Bu katman güncel yangın riski değildir.'**
+  /// **'Koyu renk daha çok yanan alan demektir; boyanmayan illerin verisi yok. Bu katman bugünkü yangınları göstermez.'**
   String get annualLegendNote;
 
   /// No description provided for @districtRiskRankingTitle.
@@ -7040,6 +7131,66 @@ abstract class AppLocalizations {
   /// **'Sanayi veya yerleşim alanında — sabit ısı kaynağı olabilir'**
   String get mapPointBuilt;
 
+  /// No description provided for @systemStatusFresh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sistem çalışıyor · Son kontrol: {time}'**
+  String systemStatusFresh(String time);
+
+  /// No description provided for @systemStatusStale.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu verisi güncel değil · Son kontrol: {time}'**
+  String systemStatusStale(String time);
+
+  /// No description provided for @mapStatusNoneBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte uydular orman alanlarında yangın tespit etmedi.'**
+  String get mapStatusNoneBody;
+
+  /// No description provided for @mapStatusStrongBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte uydular orman alanlarında {count} güçlü tespit yaptı. Bunlar şu an Olaylar\'da görünmüyor; Noktalar\'a bakabilirsiniz.'**
+  String mapStatusStrongBody(int count);
+
+  /// No description provided for @mapStatusOtherLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarım/sanayi alanlarında {count} tespit var'**
+  String mapStatusOtherLine(int count);
+
+  /// No description provided for @mapStatusShowPoints.
+  ///
+  /// In tr, this message translates to:
+  /// **'Noktaları göster'**
+  String get mapStatusShowPoints;
+
+  /// No description provided for @mapLayerRiskDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölgelere göre bugünkü yangın riski.'**
+  String get mapLayerRiskDesc;
+
+  /// No description provided for @mapLayerAnnualDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'İllere göre geçmiş yıllarda yanan alan.'**
+  String get mapLayerAnnualDesc;
+
+  /// No description provided for @mapAnnualNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'{year} yılında yanan alan. Bugünkü yangınları göstermez.'**
+  String mapAnnualNote(String year);
+
+  /// No description provided for @mapSourcesLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaynaklar'**
+  String get mapSourcesLink;
+
   /// No description provided for @detectionOtherLine.
   ///
   /// In tr, this message translates to:
@@ -7496,12 +7647,6 @@ abstract class AppLocalizations {
   /// **'Fidan’ın yolu'**
   String get fidanPath;
 
-  /// No description provided for @fidanMoreLessons.
-  ///
-  /// In tr, this message translates to:
-  /// **'Yeni dersler yolda'**
-  String get fidanMoreLessons;
-
   /// No description provided for @fidanNewApple.
   ///
   /// In tr, this message translates to:
@@ -7531,12 +7676,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Doğru! 🎉'**
   String get fidanCorrect;
-
-  /// No description provided for @fidanWrong.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bir daha düşün.'**
-  String get fidanWrong;
 
   /// No description provided for @fidanFullGrown.
   ///
@@ -7807,6 +7946,126 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Önce önceki dersi bitir.'**
   String get fidanLocked;
+
+  /// No description provided for @factAnother.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başka bir bilgi'**
+  String get factAnother;
+
+  /// No description provided for @newsNoneRecent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 30 günde yeni haber yok.'**
+  String get newsNoneRecent;
+
+  /// No description provided for @settingsNatureNotesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haftada 2-3 kısa bilgi. Yangın uyarılarından ayrı.'**
+  String get settingsNatureNotesSubtitle;
+
+  /// No description provided for @settingsNatureNotesSample.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örnek gönder'**
+  String get settingsNatureNotesSample;
+
+  /// No description provided for @newsArchive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arşiv ({count} haber)'**
+  String newsArchive(int count);
+
+  /// No description provided for @fidanReplay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar et'**
+  String get fidanReplay;
+
+  /// No description provided for @fidanRewardReplay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar ettin. Bilgiler aklında daha iyi kaldı!'**
+  String get fidanRewardReplay;
+
+  /// No description provided for @fidanSectionReward.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölüm ödülü'**
+  String get fidanSectionReward;
+
+  /// No description provided for @fidanAllDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm dersleri bitirdin!'**
+  String get fidanAllDone;
+
+  /// No description provided for @fidanAlmost.
+  ///
+  /// In tr, this message translates to:
+  /// **'Az kaldı!'**
+  String get fidanAlmost;
+
+  /// No description provided for @fidanCheck.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol et'**
+  String get fidanCheck;
+
+  /// No description provided for @fidanOrderHelp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sürükle ya da oklarla sırala.'**
+  String get fidanOrderHelp;
+
+  /// No description provided for @fidanMatchHelp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce soldan, sonra sağdan bir karta dokun.'**
+  String get fidanMatchHelp;
+
+  /// No description provided for @fidanTrue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru'**
+  String get fidanTrue;
+
+  /// No description provided for @fidanFalse.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanlış'**
+  String get fidanFalse;
+
+  /// No description provided for @fidanMoveUp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yukarı al'**
+  String get fidanMoveUp;
+
+  /// No description provided for @fidanMoveDown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aşağı al'**
+  String get fidanMoveDown;
+
+  /// No description provided for @fidanSectionDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'“{section}” bölümü tamam! Ağacına bir çiçek açtı.'**
+  String fidanSectionDone(String section);
+
+  /// No description provided for @fidanReplayMode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar modu: İstediğin dersi yeniden oyna, her tekrar +{xp} XP.'**
+  String fidanReplayMode(int xp);
+
+  /// No description provided for @fidanAppleSection.
+  ///
+  /// In tr, this message translates to:
+  /// **'🍎 “{section}” bölümünü bitirdin'**
+  String fidanAppleSection(String section);
 }
 
 class _AppLocalizationsDelegate

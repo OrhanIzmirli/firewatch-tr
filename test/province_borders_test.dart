@@ -54,11 +54,15 @@ void main() {
     // off as the drawn borders.
     expect(tr.annualLayerProvenance, contains('geoBoundaries / OpenStreetMap'));
     expect(tr.annualLayerProvenance, contains('uydu noktası sayıları GADM 4.1'));
-    for (final f in ['lib/features/map/map_screen.dart', 'lib/features/map/widgets/annual_province_layer.dart']) {
+    // The credit sits behind the "Sources" link of both places that show the
+    // layer; the map itself always carries the OSM attribution.
+    expect(File('lib/features/map/widgets/map_sources.dart').readAsStringSync(), contains('ProvinceBordersCredit('));
+    for (final f in ['lib/features/map/widgets/map_layers_panel.dart', 'lib/features/map/widgets/annual_province_layer.dart']) {
       final src = File(f).readAsStringSync();
-      expect(src, contains('ProvinceBordersCredit('), reason: f);
+      expect(src, contains('MapSourcesLink('), reason: f);
       expect(src, isNot(contains('annualLayerSources')), reason: f);
     }
+    expect(File('lib/features/map/map_screen.dart').readAsStringSync(), contains('OsmAttribution('));
     final credit = File('lib/shared/widgets/province_borders_credit.dart').readAsStringSync();
     expect(credit, contains('https://www.openstreetmap.org/copyright'));
     expect(credit, contains('https://opendatacommons.org/licenses/odbl/'));

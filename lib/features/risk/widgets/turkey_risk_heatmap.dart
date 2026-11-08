@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math' as math;
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +14,13 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/utils/risk_display.dart';
 import '../../../l10n/app_localizations.dart';
+import 'risk_region_geometry.dart';
 
 // ── Scale ──────────────────────────────────────────────────────────────────
 //
 // The four FireWatch TR status colours and their score bands come from one
-// place: AppColors.risk* and riskLevelForScore() (25/50/75). The heat layer
-// blends between them; the pill uses the band a score falls in.
+// place: AppColors.risk* and riskLevelForScore() (25/50/75). A region has one
+// score, so it is painted one flat colour; nothing blends between regions.
 
 const Color riskHeatLowColor = AppColors.riskLow; // 0–24
 const Color riskHeatMediumColor = AppColors.riskMedium; // 25–49
@@ -50,164 +49,17 @@ Color riskHeatBandColor(RiskHeatBand band) {
   }
 }
 
-// Each colour sits at the middle of its band, so a score in the middle of
-// a band gets exactly that band's colour and the edges blend.
-const List<(double, Color)> _gradientStops = [
-  (12.5, riskHeatLowColor),
-  (37.5, riskHeatMediumColor),
-  (62.5, riskHeatHighColor),
-  (87.5, riskHeatVeryHighColor),
-];
+/// Flat fill of a region. Strong enough to read as the legend's colour over
+/// the greyscale base map.
+const double riskRegionFillAlpha = 0.85;
 
-/// Continuous green → yellow → orange → red colour for a 0–100 score.
-Color riskHeatGradientColor(double score) {
-  if (score <= _gradientStops.first.$1) return _gradientStops.first.$2;
-  for (var i = 1; i < _gradientStops.length; i++) {
-    final (hi, hiColor) = _gradientStops[i];
-    if (score <= hi) {
-      final (lo, loColor) = _gradientStops[i - 1];
-      return Color.lerp(loColor, hiColor, (score - lo) / (hi - lo))!;
-    }
-  }
-  return _gradientStops.last.$2;
-}
+Color riskRegionFillColor(num score) => riskScoreColor(score).withValues(alpha: riskRegionFillAlpha);
 
 // ── Geometry ───────────────────────────────────────────────────────────────
 
-/// Rough geographic centre of each of the seven regions, keyed by the raw
-/// region name /api/risk/summary returns.
-const Map<String, LatLng> riskRegionCentroids = {
-  'Marmara': LatLng(40.35, 28.2),
-  'Ege': LatLng(38.55, 28.4),
-  'Akdeniz': LatLng(37.2, 33.2),
-  'Ic Anadolu': LatLng(39.3, 33.6),
-  'Karadeniz': LatLng(40.9, 36.8),
-  'Dogu Anadolu': LatLng(39.2, 41.6),
-  'Guneydogu Anadolu': LatLng(37.6, 39.8),
-};
-
-/// The box the raster covers and the camera opens on.
+/// The box the camera opens on.
 final LatLngBounds turkeyHeatBounds =
     LatLngBounds(const LatLng(35.7, 25.5), const LatLng(42.2, 45.0));
-
-/// How far a region's score reaches, in degrees of latitude (≈200 km).
-/// Large enough that neighbouring regions melt into each other instead of
-/// reading as seven separate dots.
-const double _kernelSigmaDeg = 1.8;
-
-/// Raster width in pixels (≈0.05° per pixel). Height follows from the
-/// Mercator aspect of [turkeyHeatBounds].
-const int _rasterWidth = 390;
-
-class RiskHeatRaster {
-  final int width;
-  final int height;
-
-  /// Straight (non-premultiplied) RGBA, row-major, top row first.
-  final Uint8List rgba;
-
-  const RiskHeatRaster(this.width, this.height, this.rgba);
-}
-
-double _mercatorY(double latDeg) {
-  final lat = latDeg * math.pi / 180;
-  return math.log(math.tan(math.pi / 4 + lat / 2));
-}
-
-double _latFromMercatorY(double y) =>
-    (2 * math.atan(math.exp(y)) - math.pi / 2) * 180 / math.pi;
-
-/// Paints the smoothed score field into a raster that lines up with
-/// [turkeyHeatBounds] once flutter_map projects it.
-///
-/// Every pixel gets a Gaussian-weighted average of the region scores, so
-/// the field shades smoothly between centroids and never exceeds the
-/// highest real score. Rows are spaced evenly in Mercator Y, the space
-/// OverlayImage stretches the picture in, so the heat stays aligned with
-/// the border at every zoom. Pixels outside [rings] (the national border,
-/// even-odd rule) are left transparent.
-RiskHeatRaster buildRiskHeatRaster(
-  Map<String, double> regionScores,
-  List<List<LatLng>> rings,
-) {
-  final points = <(LatLng, double)>[
-    for (final e in regionScores.entries)
-      if (riskRegionCentroids[e.key] != null)
-        (riskRegionCentroids[e.key]!, e.value.clamp(0, 100).toDouble()),
-  ];
-
-  final west = turkeyHeatBounds.west;
-  final east = turkeyHeatBounds.east;
-  final yTop = _mercatorY(turkeyHeatBounds.north);
-  final yBottom = _mercatorY(turkeyHeatBounds.south);
-  final lonSpanRad = (east - west) * math.pi / 180;
-  const width = _rasterWidth;
-  final height = math.max(1, (width * (yTop - yBottom) / lonSpanRad).round());
-  final rgba = Uint8List(width * height * 4);
-  if (points.isEmpty) return RiskHeatRaster(width, height, rgba);
-
-  const twoSigmaSq = 2 * _kernelSigmaDeg * _kernelSigmaDeg;
-  final lonStep = (east - west) / width;
-
-  for (var row = 0; row < height; row++) {
-    final lat = _latFromMercatorY(yTop - (row + 0.5) / height * (yTop - yBottom));
-    // Degrees of longitude are shorter than degrees of latitude here.
-    final lonScale = math.cos(lat * math.pi / 180);
-
-    // Where this row crosses the border; inside is between pairs.
-    final crossings = <double>[];
-    for (final ring in rings) {
-      for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-        final a = ring[i];
-        final b = ring[j];
-        if ((a.latitude > lat) != (b.latitude > lat)) {
-          crossings.add(a.longitude +
-              (lat - a.latitude) / (b.latitude - a.latitude) * (b.longitude - a.longitude));
-        }
-      }
-    }
-    crossings.sort();
-
-    for (var k = 0; k + 1 < crossings.length; k += 2) {
-      final startCol = math.max(0, ((crossings[k] - west) / lonStep - 0.5).ceil());
-      final endCol = math.min(width - 1, ((crossings[k + 1] - west) / lonStep - 0.5).floor());
-      for (var col = startCol; col <= endCol; col++) {
-        final lon = west + (col + 0.5) * lonStep;
-        var weightSum = 0.0;
-        var scoreSum = 0.0;
-        for (final (c, s) in points) {
-          final dLat = lat - c.latitude;
-          final dLon = (lon - c.longitude) * lonScale;
-          final w = math.exp(-(dLat * dLat + dLon * dLon) / twoSigmaSq);
-          weightSum += w;
-          scoreSum += w * s;
-        }
-        // Far from every centroid all weights underflow; nearest wins then.
-        final score = weightSum > 1e-12 ? scoreSum / weightSum : _nearestScore(points, lat, lon);
-        final color = riskHeatGradientColor(score);
-        final o = (row * width + col) * 4;
-        rgba[o] = (color.r * 255).round();
-        rgba[o + 1] = (color.g * 255).round();
-        rgba[o + 2] = (color.b * 255).round();
-        rgba[o + 3] = 255;
-      }
-    }
-  }
-  return RiskHeatRaster(width, height, rgba);
-}
-
-double _nearestScore(List<(LatLng, double)> points, double lat, double lon) {
-  var best = double.infinity;
-  var score = 0.0;
-  for (final (c, s) in points) {
-    final d = math.pow(lat - c.latitude, 2) + math.pow(lon - c.longitude, 2);
-    if (d < best) {
-      best = d.toDouble();
-      score = s;
-    }
-  }
-  return score;
-}
 
 /// Outer rings of the national border from assets/data/turkey_outline.json
 /// (Natural Earth 1:50m, public domain). Loaded once per app run.
@@ -226,28 +78,11 @@ Future<List<List<LatLng>>> loadTurkeyOutline() {
   });
 }
 
-Future<Uint8List> _encodePng(RiskHeatRaster raster) async {
-  final buffer = await ui.ImmutableBuffer.fromUint8List(raster.rgba);
-  final descriptor = ui.ImageDescriptor.raw(
-    buffer,
-    width: raster.width,
-    height: raster.height,
-    pixelFormat: ui.PixelFormat.rgba8888,
-  );
-  final codec = await descriptor.instantiateCodec();
-  final frame = await codec.getNextFrame();
-  final bytes = await frame.image.toByteData(format: ui.ImageByteFormat.png);
-  frame.image.dispose();
-  codec.dispose();
-  descriptor.dispose();
-  buffer.dispose();
-  return bytes!.buffer.asUint8List();
-}
-
 // ── Widget ─────────────────────────────────────────────────────────────────
 
-/// Nationwide wildfire-risk heat map for the Risk screen. Separate from the
-/// incident map: no fires, no markers, only the regional risk scores.
+/// Nationwide wildfire-risk map for the Risk screen: the seven regions in the
+/// flat colour of their level, with clear borders. Separate from the incident
+/// map: no fires, no markers, only the regional risk scores.
 ///
 /// With [regionScores] empty (API down, nothing cached) it shows a grey
 /// outline of Türkiye and no pill; the caller shows the "no data" note.
@@ -268,39 +103,59 @@ class TurkeyRiskHeatmap extends StatefulWidget {
 
 class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
   List<List<LatLng>>? _outline;
-  ImageProvider? _heatImage;
-  int _buildToken = 0;
+  Map<String, List<List<LatLng>>>? _regionShapes;
+
+  // Built once per data and theme and reused: flutter_map re-projects every
+  // vertex of a PolygonLayer whose widget changes.
+  Widget? _regionLayer;
+  Map<String, double>? _layerScores;
+  bool? _layerDark;
 
   @override
   void initState() {
     super.initState();
-    _rebuild();
+    _load();
   }
 
-  @override
-  void didUpdateWidget(TurkeyRiskHeatmap oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!mapEquals(oldWidget.regionScores, widget.regionScores)) _rebuild();
-  }
-
-  Future<void> _rebuild() async {
-    final token = ++_buildToken;
+  Future<void> _load() async {
     try {
       final outline = await loadTurkeyOutline();
-      if (!mounted || token != _buildToken) return;
-      setState(() => _outline = outline);
-      if (widget.regionScores.isEmpty) {
-        setState(() => _heatImage = null);
-        return;
-      }
-      final png = await _encodePng(buildRiskHeatRaster(widget.regionScores, outline));
-      if (!mounted || token != _buildToken) return;
-      setState(() => _heatImage = MemoryImage(png));
+      if (mounted) setState(() => _outline = outline);
+      final shapes = await loadRiskRegionShapes();
+      if (mounted) setState(() => _regionShapes = shapes);
     } catch (e) {
-      // A broken asset or codec must not take the Risk screen down; the
-      // map simply stays without the heat layer.
-      if (kDebugMode) debugPrint('Risk heat map build failed: $e');
+      // A broken asset must not take the Risk screen down; the map simply
+      // stays without the region colours.
+      if (kDebugMode) debugPrint('Risk map build failed: $e');
     }
+  }
+
+  Widget? _regionsLayer(bool isDark) {
+    final shapes = _regionShapes;
+    if (shapes == null || widget.regionScores.isEmpty) return null;
+    if (_regionLayer == null || _layerDark != isDark || !mapEquals(_layerScores, widget.regionScores)) {
+      final scores = {
+        for (final e in widget.regionScores.entries) riskRegionShapeKey(e.key): e.value,
+      };
+      final border = isDark ? Colors.white : const Color(0xFF1B1916);
+      _layerDark = isDark;
+      _layerScores = widget.regionScores;
+      _regionLayer = PolygonLayer(
+        polygons: [
+          for (final entry in shapes.entries)
+            for (final ring in entry.value)
+              Polygon(
+                points: ring,
+                color: scores[entry.key] == null
+                    ? (isDark ? Colors.white : Colors.black).withValues(alpha: 0.10)
+                    : riskRegionFillColor(scores[entry.key]!),
+                borderColor: border,
+                borderStrokeWidth: 1.4,
+              ),
+        ],
+      );
+    }
+    return _regionLayer;
   }
 
   double get _average {
@@ -335,8 +190,9 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
     final borderColor = isDark
         ? AppColors.white.withValues(alpha: 0.55)
         : AppColors.lightText.withValues(alpha: 0.55);
+    final regionsLayer = _regionsLayer(isDark);
 
-    return Semantics(
+    final map = Semantics(
       label: hasData ? l10n.riskHeatMapSemantics(avg, bandLabel) : l10n.riskHeatUnavailable,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
@@ -377,27 +233,15 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
                       child: tile,
                     ),
                   ),
-                  if (hasData && _heatImage != null)
-                    OverlayImageLayer(
-                      overlayImages: [
-                        OverlayImage(
-                          bounds: turkeyHeatBounds,
-                          imageProvider: _heatImage!,
-                          opacity: 0.78,
-                          filterQuality: FilterQuality.high,
-                        ),
-                      ],
-                    ),
-                  if (outline.isNotEmpty)
+                  ?regionsLayer,
+                  if (outline.isNotEmpty && regionsLayer == null)
                     PolygonLayer(
                       polygons: [
                         for (final ring in outline)
                           Polygon(
                             points: ring,
-                            color: hasData
-                                ? null
-                                : (isDark ? Colors.white : Colors.black).withValues(alpha: 0.10),
-                            borderColor: hasData ? borderColor : borderColor.withValues(alpha: 0.35),
+                            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.10),
+                            borderColor: borderColor.withValues(alpha: 0.35),
                             borderStrokeWidth: 1.2,
                           ),
                       ],
@@ -430,7 +274,47 @@ class _TurkeyRiskHeatmapState extends State<TurkeyRiskHeatmap> {
         ),
       ),
     );
+
+    if (!hasData) return map;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        map,
+        const SizedBox(height: AppSpacing.sm),
+        Wrap(
+          key: const Key('riskMapLegend'),
+          spacing: AppSpacing.md,
+          runSpacing: 4,
+          children: [
+            _LegendEntry(color: riskHeatLowColor, label: l10n.mapRiskLegendLow),
+            _LegendEntry(color: riskHeatMediumColor, label: l10n.mapRiskLegendMedium),
+            _LegendEntry(color: riskHeatHighColor, label: l10n.mapRiskLegendHigh),
+            _LegendEntry(color: riskHeatVeryHighColor, label: l10n.mapRiskLegendCritical),
+          ],
+        ),
+      ],
+    );
   }
+}
+
+class _LegendEntry extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _LegendEntry({required this.color, required this.label});
+
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(width: 12, height: 12, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: GoogleFonts.ibmPlexSans(fontSize: 11, color: Theme.of(context).textTheme.bodySmall?.color),
+          ),
+        ],
+      );
 }
 
 List<double> _greyscale(double brightness) {

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,85 +17,70 @@ Future<void> openNewsSource(String url) async {
   if (uri != null) await launchUrl(uri, mode: LaunchMode.externalApplication);
 }
 
-enum NewsArt { fire, recovery, solidarity, event }
+enum NewsArt { fire, field, recovery, preparation, nature, solidarity, event }
 
-/// Which of our own drawings fits a headline that has no province.
-NewsArt newsArtFor(String title) {
+/// Which picture fits a headline that has no province.
+NewsArt newsArtFor(String title, [String? kind]) {
+  switch (kind) {
+    case 'field':
+      return NewsArt.field;
+    case 'recovery':
+      return NewsArt.recovery;
+    case 'preparation':
+      return NewsArt.preparation;
+    case 'nature':
+      return NewsArt.nature;
+  }
   final t = foldTurkish(title);
-  if (RegExp('agaclandir|fidan|yeniden yeser|restorasyon|yaban hayat').hasMatch(t)) return NewsArt.recovery;
+  if (RegExp('agaclandir|fidan|yeniden yeser|restorasyon').hasMatch(t)) return NewsArt.recovery;
+  if (RegExp('yaban hayat').hasMatch(t)) return NewsArt.nature;
   if (RegExp('destek|yardim|gonullu|dayanisma|bagis').hasMatch(t)) return NewsArt.solidarity;
-  if (RegExp('etkinlik|toren|egitim|tatbikat|senlik').hasMatch(t)) return NewsArt.event;
+  if (RegExp('etkinli|toren|senlik').hasMatch(t)) return NewsArt.event;
+  if (RegExp('tatbikat|egitim').hasMatch(t)) return NewsArt.preparation;
   return NewsArt.fire;
 }
 
-/// The outline of Türkiye on the app's dark surface, tinted by subject.
+/// A calm tile for a headline with no place: its own colour and symbol per
+/// subject, and a slightly different composition per headline.
 class NewsArtView extends StatelessWidget {
   final NewsArt art;
-  const NewsArtView(this.art, {super.key});
+  final String title;
+  const NewsArtView(this.art, {super.key, this.title = ''});
 
-  static Future<List<List<Offset>>>? _outline;
-
-  static Future<List<List<Offset>>> _load() => _outline ??= rootBundle.loadString('assets/data/turkey_outline.json').then((raw) => [
-        for (final ring in (jsonDecode(raw) as Map<String, dynamic>)['rings'] as List)
-          [for (final p in ring as List) Offset((p[0] as num).toDouble(), (p[1] as num).toDouble())],
-      ]);
-
-  Color get _tint => switch (art) {
-        NewsArt.fire => AppColors.primary,
-        NewsArt.recovery => AppColors.success,
-        NewsArt.solidarity => AppColors.info,
-        NewsArt.event => AppColors.warning,
+  (Color, Color, IconData) get _look => switch (art) {
+        NewsArt.fire => (const Color(0xFF8A4B21), const Color(0xFF3D2A1F), Icons.landscape_rounded),
+        NewsArt.field => (const Color(0xFF9A7B2E), const Color(0xFF4A3D1C), Icons.agriculture_rounded),
+        NewsArt.recovery => (const Color(0xFF3E8A4F), const Color(0xFF1F4530), Icons.park_rounded),
+        NewsArt.preparation => (const Color(0xFF356E95), const Color(0xFF1D3B52), Icons.health_and_safety_rounded),
+        NewsArt.nature => (const Color(0xFF4E8E7B), const Color(0xFF234A42), Icons.pets_rounded),
+        NewsArt.solidarity => (const Color(0xFF8B5E8E), const Color(0xFF47304B), Icons.volunteer_activism_rounded),
+        NewsArt.event => (const Color(0xFF7A6BA8), const Color(0xFF3B3360), Icons.event_rounded),
       };
 
   @override
-  Widget build(BuildContext context) => FutureBuilder<List<List<Offset>>>(
-        future: _load(),
-        builder: (context, snap) => DecoratedBox(
+  Widget build(BuildContext context) {
+    final (light, dark, icon) = _look;
+    final flip = title.hashCode.isEven;
+    return LayoutBuilder(builder: (_, box) {
+      final side = box.biggest.shortestSide;
+      return ClipRect(
+        child: DecoratedBox(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Theme.of(context).colorScheme.surfaceContainerHighest, Theme.of(context).colorScheme.surface],
-            ),
+            gradient: LinearGradient(begin: flip ? Alignment.topLeft : Alignment.topRight, end: flip ? Alignment.bottomRight : Alignment.bottomLeft, colors: [light, dark]),
           ),
-          child: SizedBox.expand(child: CustomPaint(painter: _OutlinePainter(snap.data ?? const [], _tint))),
+          child: Stack(fit: StackFit.expand, children: [
+            Positioned(
+              right: flip ? -side * 0.18 : null,
+              left: flip ? null : -side * 0.18,
+              bottom: -side * 0.2,
+              child: Icon(icon, size: side * 1.05, color: Colors.white.withValues(alpha: 0.13)),
+            ),
+            Center(child: Icon(icon, size: side * 0.36, color: Colors.white.withValues(alpha: 0.92))),
+          ]),
         ),
       );
-}
-
-class _OutlinePainter extends CustomPainter {
-  final List<List<Offset>> rings;
-  final Color tint;
-  _OutlinePainter(this.rings, this.tint);
-
-  static const _west = 25.6, _east = 44.9, _south = 35.8, _north = 42.2;
-
-  @override
-  void paint(Canvas c, Size s) {
-    if (rings.isEmpty) return;
-    const aspect = (_east - _west) * 0.78 / (_north - _south);
-    var w = s.width * 0.8;
-    var h = w / aspect;
-    if (h > s.height * 0.7) {
-      h = s.height * 0.7;
-      w = h * aspect;
-    }
-    final left = (s.width - w) / 2, top = (s.height - h) / 2;
-    Offset at(Offset p) => Offset(left + (p.dx - _west) / (_east - _west) * w, top + (_north - p.dy) / (_north - _south) * h);
-    final path = Path();
-    for (final r in rings) {
-      path.addPolygon([for (final p in r) at(p)], true);
-    }
-    c.drawPath(path, Paint()..color = tint.withValues(alpha: 0.16));
-    c.drawPath(path, Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2
-      ..strokeJoin = StrokeJoin.round
-      ..color = tint.withValues(alpha: 0.7));
+    });
   }
-
-  @override
-  bool shouldRepaint(_OutlinePainter o) => o.rings != rings || o.tint != tint;
 }
 
 /// NASA picture of the province, served by our backend, or one of our own
@@ -107,14 +89,15 @@ class _OutlinePainter extends CustomPainter {
 class NewsImage extends StatelessWidget {
   final String title;
   final String thumbPath;
+  final String kind;
 
   /// The credit needs room; a small square only says NASA.
   final bool full;
-  const NewsImage({super.key, required this.title, required this.thumbPath, this.full = false});
+  const NewsImage({super.key, required this.title, required this.thumbPath, this.kind = '', this.full = false});
 
   @override
   Widget build(BuildContext context) {
-    final fallback = NewsArtView(newsArtFor(title));
+    final fallback = NewsArtView(newsArtFor(title, kind), title: title);
     if (thumbPath.isEmpty) return fallback;
     final l10n = AppLocalizations.of(context)!;
     final date = DateTime.tryParse(thumbPath.split('/').last);
@@ -228,7 +211,7 @@ class NewsListRow extends StatelessWidget {
             ]),
           ),
           const SizedBox(width: 12),
-          ClipRRect(borderRadius: BorderRadius.circular(10), child: SizedBox.square(dimension: 86, child: NewsImage(title: item.title, thumbPath: item.thumbPath))),
+          ClipRRect(borderRadius: BorderRadius.circular(10), child: SizedBox.square(dimension: 86, child: NewsImage(title: item.title, thumbPath: item.thumbPath, kind: item.kind))),
         ]),
       ),
     );

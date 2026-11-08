@@ -21,7 +21,9 @@ import '../../shared/widgets/english_translation_banner.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import 'news_feed.dart';
 import 'news_story_screen.dart';
+import '../nature/fact_widgets.dart';
 import 'widgets/news_visual.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
@@ -36,7 +38,7 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   static const _cacheKey = 'news_list';
-  static const _pageSize = 20;
+  static const _pageSize = 100;
 
   // Static (not instance) so it survives this screen being disposed and
   // recreated on every tab switch — "once per session" means once per app
@@ -178,6 +180,7 @@ class _NewsScreenState extends State<NewsScreen> {
         _hasMore = raw.length >= _pageSize;
       });
     } catch (e) {
+      debugPrint('News load failed: $e');
       if (!mounted || generation != _loadGeneration) return;
       final cached = await OfflineCacheService.instance.load(_tabCacheKey);
       if (!mounted || generation != _loadGeneration) return;
@@ -210,7 +213,6 @@ class _NewsScreenState extends State<NewsScreen> {
     setState(() {
       _allNews = (data as List).map((e) => NewsItem.fromJson(Map<String, dynamic>.from(e as Map))).toList();
       _isLoading = false;
-      _showingCached = true;
     });
   }
 
@@ -250,7 +252,7 @@ class _NewsScreenState extends State<NewsScreen> {
   List<NewsItem> _localNews(List<NewsItem> feed) {
     final mine = {if (_myCityRaw != null) foldTurkish(_myCityRaw!), ..._placeCities};
     if (mine.isEmpty) return const [];
-    return feed.skip(1).where((n) => n.province.isNotEmpty && mine.contains(foldTurkish(n.province))).take(4).toList();
+    return feed.where((n) => n.province.isNotEmpty && mine.contains(foldTurkish(n.province))).take(4).toList();
   }
 
   Future<void> _loadStories() async {
@@ -314,7 +316,7 @@ class _NewsScreenState extends State<NewsScreen> {
         InkWell(
           onTap: () => openNewsSource(item.sourceUrl),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            ClipRRect(borderRadius: BorderRadius.circular(16), child: SizedBox(height: 186, child: NewsImage(title: item.title, thumbPath: item.thumbPath, full: true))),
+            ClipRRect(borderRadius: BorderRadius.circular(16), child: SizedBox(height: 186, child: NewsImage(title: item.title, thumbPath: item.thumbPath, kind: item.kind, full: true))),
             const SizedBox(height: 9),
             Row(children: [
               NewsSourceMark(source: item.source, logoUrl: item.sourceLogoUrl, size: 22),
@@ -335,8 +337,11 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final feed = _feed;
+    final view = arrangeNews(_feed, DateTime.now());
+    final feed = view.main;
     final local = _localNews(feed);
+    final shownLocal = {for (final n in local) n.id};
+    final list = feed.where((n) => !shownLocal.contains(n.id)).toList();
     const thinLine = Divider(height: 1, thickness: 0.6);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -388,24 +393,30 @@ class _NewsScreenState extends State<NewsScreen> {
               const SkeletonListLoader(count: 4)
             else if (_errorMessage != null)
               ErrorStateView(message: _errorMessage, onRetry: _loadNews)
-            else if (feed.isEmpty)
-              EmptyStateView(
-                icon: Icons.article_outlined,
-                title: _isFiresTab ? l10n.newsNoneInCategory : l10n.newsNoneInTab,
-              )
             else ...[
-              _featured(l10n, feed.first),
-              thinLine,
-              for (final item in feed.skip(1)) ...[
-                NewsListRow(key: item.id == feed[1].id ? CoachMarkKeys.newsList : null, item: item),
+              if (view.featured != null) ...[_featured(l10n, view.featured!), thinLine],
+              if (view.featured == null && feed.isEmpty)
+                EmptyStateView(icon: Icons.article_outlined, title: l10n.newsNoneRecent),
+              for (final (i, item) in list.indexed) ...[
+                NewsListRow(key: i == 0 ? CoachMarkKeys.newsList : null, item: item),
                 ?_groupLink(l10n, item),
                 thinLine,
+                if ((i + 1) % 5 == 0) InlineFactCard(index: (i + 1) ~/ 5),
               ],
               if (local.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.lg),
                 Text(l10n.newsInProvince, key: const Key('newsInProvince'), style: GoogleFonts.ibmPlexSans(fontSize: 19, fontWeight: FontWeight.w800)),
                 for (final item in local) ...[NewsListRow(item: item), thinLine],
               ],
+              if (view.archive.isNotEmpty)
+                ListTile(
+                  key: const Key('newsArchive'),
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(l10n.newsArchive(view.archive.length), style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => NewsArchiveScreen(items: view.archive))),
+                ),
               if (_isLoadingMore)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
@@ -422,6 +433,25 @@ class _NewsScreenState extends State<NewsScreen> {
           ],
         ),
         ),
+      ),
+    );
+  }
+}
+
+class NewsArchiveScreen extends StatelessWidget {
+  final List<NewsItem> items;
+  const NewsArchiveScreen({super.key, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.newsArchive(items.length), style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700))),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        itemCount: items.length,
+        separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0.6),
+        itemBuilder: (_, i) => NewsListRow(item: items[i]),
       ),
     );
   }

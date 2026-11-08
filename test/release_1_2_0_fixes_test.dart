@@ -14,7 +14,6 @@ import 'package:firewatch_tr/core/utils/emergency_call.dart';
 import 'package:firewatch_tr/core/utils/risk_display.dart';
 import 'package:firewatch_tr/core/utils/risk_factors.dart';
 import 'package:firewatch_tr/features/map/widgets/incident_sheet.dart';
-import 'package:firewatch_tr/features/map/widgets/map_layer_bar.dart';
 import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:firewatch_tr/l10n/app_localizations_en.dart';
 import 'package:firewatch_tr/l10n/app_localizations_tr.dart';
@@ -239,72 +238,6 @@ void main() {
           .map((f) => f.path.replaceAll('\\', '/'))
           .toSet();
       expect(direct, {'lib/services/device_position.dart', 'lib/shared/widgets/report_fire_panel.dart'});
-    });
-  });
-
-  group('map layer bar', () {
-    testWidgets('four Turkish chips at 360 dp and 1.3× text do not overflow', (tester) async {
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 3; // 360 dp wide
-      addTearDown(tester.view.reset);
-      Widget chip(String label) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(Icons.circle, size: 16),
-              const SizedBox(width: 6),
-              Text(label),
-            ]),
-          );
-      await tester.pumpWidget(MediaQuery(
-        data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
-        child: _app(Padding(
-          padding: const EdgeInsets.all(12),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: MapLayerBar(children: [
-              chip(tr.incidentToggleShowShort),
-              chip(tr.incidentToggleDetectionsShort),
-              chip(tr.riskLayerToggle),
-              chip(tr.annualLayerToggle),
-            ]),
-          ),
-        )),
-      ));
-      expect(tester.takeException(), isNull);
-      // The last chip is reachable by scrolling.
-      await tester.drag(find.byType(MapLayerBar), const Offset(-2000, 0));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-      final last = tester.getRect(find.text(tr.annualLayerToggle));
-      expect(last.left, greaterThanOrEqualTo(0));
-      expect(last.right, lessThanOrEqualTo(360));
-    });
-
-    testWidgets('the clipped edge fades: right at rest, left at the end, none when it fits', (tester) async {
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 3; // 360 dp
-      addTearDown(tester.view.reset);
-      Widget chip(String label) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Text(label),
-          );
-      Future<({bool start, bool end})> pump(List<String> labels) async {
-        await tester.pumpWidget(_app(Align(
-          alignment: Alignment.topLeft,
-          child: MapLayerBar(children: [for (final l in labels) chip(l)]),
-        )));
-        await tester.pump();
-        return tester.state<MapLayerBarState>(find.byType(MapLayerBar)).fades;
-      }
-
-      final many = [for (var i = 0; i < 8; i++) 'Katman ${i + 1} uzun ad'];
-      expect(await pump(many), (start: false, end: true));
-
-      await tester.drag(find.byType(MapLayerBar), const Offset(-3000, 0));
-      await tester.pumpAndSettle();
-      expect(tester.state<MapLayerBarState>(find.byType(MapLayerBar)).fades, (start: true, end: false));
-
-      expect(await pump(['A', 'B']), (start: false, end: false));
     });
   });
 

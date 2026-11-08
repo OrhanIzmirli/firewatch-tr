@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../nature/nature_notes.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -207,6 +208,8 @@ class SettingsScreen extends ConsumerWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
+            const _NatureNotesTile(),
+            const SizedBox(height: AppSpacing.md),
             const _TipsTile(),
             const SizedBox(height: AppSpacing.xxl),
 
@@ -897,6 +900,60 @@ class _LanguageOptionTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// "Doğa notları": on by default, separate from fire alerts.
+class _NatureNotesTile extends StatefulWidget {
+  const _NatureNotesTile();
+
+  @override
+  State<_NatureNotesTile> createState() => _NatureNotesTileState();
+}
+
+class _NatureNotesTileState extends State<_NatureNotesTile> {
+  bool _on = true;
+
+  @override
+  void initState() {
+    super.initState();
+    NatureNotes.enabled().then((on) {
+      if (mounted) setState(() => _on = on);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(children: [
+          SwitchListTile(
+            key: const Key('settingsNatureNotes'),
+            contentPadding: EdgeInsets.zero,
+            value: _on,
+            title: Text(l10n.fidanReminderChannel),
+            subtitle: Text(l10n.settingsNatureNotesSubtitle),
+            onChanged: (on) async {
+              setState(() => _on = on);
+              await NatureNotes.setEnabled(on, l10n, lang);
+            },
+          ),
+          if (_on)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: const Key('settingsNatureNotesSample'),
+                onPressed: () => NatureNotes.showSample(l10n, lang),
+                child: Text(l10n.settingsNatureNotesSample),
+              ),
+            ),
+        ]),
       ),
     );
   }

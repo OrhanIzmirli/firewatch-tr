@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firewatch_tr/core/utils/risk_display.dart';
+import 'package:firewatch_tr/features/risk/widgets/risk_region_geometry.dart';
 import 'package:firewatch_tr/features/risk/widgets/turkey_risk_heatmap.dart';
 import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -25,66 +30,84 @@ void main() {
     });
   });
 
-  group('riskHeatGradientColor', () {
-    test('band middles are exactly the band colours, ends clamp', () {
-      expect(riskHeatGradientColor(0), riskHeatLowColor);
-      expect(riskHeatGradientColor(12.5), riskHeatLowColor);
-      expect(riskHeatGradientColor(37.5), riskHeatMediumColor);
-      expect(riskHeatGradientColor(62.5), riskHeatHighColor);
-      expect(riskHeatGradientColor(87.5), riskHeatVeryHighColor);
-      expect(riskHeatGradientColor(100), riskHeatVeryHighColor);
-    });
-  });
-
-  group('buildRiskHeatRaster', () {
-    // A square "country" around the Ege and Marmara centroids.
-    final square = [
-      [
-        const LatLng(37, 26),
-        const LatLng(37, 30),
-        const LatLng(41.5, 30),
-        const LatLng(41.5, 26),
-      ],
-    ];
-
-    int alphaAt(RiskHeatRaster r, int col, int row) => r.rgba[(row * r.width + col) * 4 + 3];
-
-    test('no scores gives a fully transparent raster', () {
-      final r = buildRiskHeatRaster(const {}, square);
-      expect(r.rgba.every((b) => b == 0), isTrue);
+  group('flat region colours', () {
+    test('each band is one colour, changing exactly at 25, 50 and 75', () {
+      expect(riskRegionFillColor(0), riskRegionFillColor(24));
+      expect(riskRegionFillColor(24), isNot(riskRegionFillColor(25)));
+      expect(riskRegionFillColor(25), riskRegionFillColor(49));
+      expect(riskRegionFillColor(49), isNot(riskRegionFillColor(50)));
+      expect(riskRegionFillColor(50), riskRegionFillColor(74));
+      expect(riskRegionFillColor(74), isNot(riskRegionFillColor(75)));
+      expect(riskRegionFillColor(75), riskRegionFillColor(100));
     });
 
-    test('pixels outside the border stay transparent, inside are opaque', () {
-      final r = buildRiskHeatRaster(const {'Ege': 82, 'Marmara': 58}, square);
-      // Far east column (lon ≈ 44.9) is outside the square.
-      expect(alphaAt(r, r.width - 1, r.height ~/ 2), 0);
-      // lon ≈ 28 is column (28 - 25.5) / 0.05 = 50; middle row is inside.
-      expect(alphaAt(r, 50, r.height ~/ 2), 255);
-    });
-
-    test('the field never leaves the range of the real scores', () {
-      final r = buildRiskHeatRaster(const {'Ege': 82, 'Marmara': 58}, square);
-      final lowest = riskHeatGradientColor(58);
-      final highest = riskHeatGradientColor(82);
-      for (var i = 0; i < r.rgba.length; i += 4) {
-        if (r.rgba[i + 3] == 0) continue;
-        // Between orange and red, red channel stays within the two ends.
-        final red = r.rgba[i];
-        final lo = (lowest.r * 255).round();
-        final hi = (highest.r * 255).round();
-        expect(red, inInclusiveRange(lo < hi ? lo : hi, lo < hi ? hi : lo));
+    test('fills are the shared level colours', () {
+      for (final score in [0, 25, 50, 75]) {
+        expect(riskRegionFillColor(score).withValues(alpha: 1), riskScoreColor(score));
       }
     });
 
-    test('unknown region keys are ignored', () {
-      final r = buildRiskHeatRaster(const {'Atlantis': 99}, square);
-      expect(r.rgba.every((b) => b == 0), isTrue);
+    test('no blending is left in the map', () {
+      final src = File('lib/features/risk/widgets/turkey_risk_heatmap.dart').readAsStringSync();
+      expect(src, isNot(contains('Color.lerp')));
+      expect(src, isNot(contains('OverlayImage')));
+    });
+  });
+
+  group('dissolveRegions on the real province file', () {
+    final shapes = dissolveRegions(
+      jsonDecode(File('assets/data/il_sinirlari.geojson').readAsStringSync()) as Map<String, dynamic>,
+    );
+
+    bool inside(List<List<LatLng>> rings, LatLng p) {
+      var hit = false;
+      for (final ring in rings) {
+        for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          final a = ring[i], b = ring[j];
+          if ((a.latitude > p.latitude) != (b.latitude > p.latitude) &&
+              p.longitude <
+                  a.longitude + (p.latitude - a.latitude) / (b.latitude - a.latitude) * (b.longitude - a.longitude)) {
+            hit = !hit;
+          }
+        }
+      }
+      return hit;
+    }
+
+    test('seven regions, every API region name has a shape', () {
+      expect(shapes, hasLength(7));
+      for (final name in ['Marmara', 'Ege', 'Akdeniz', 'Ic Anadolu', 'Karadeniz', 'Dogu Anadolu', 'Guneydogu Anadolu']) {
+        expect(shapes[riskRegionShapeKey(name)], isNotNull, reason: name);
+      }
     });
 
-    test('raster height follows the Mercator aspect of the bounds', () {
-      final r = buildRiskHeatRaster(const {'Ege': 50}, square);
-      expect(r.width, 390);
-      expect(r.height, inInclusiveRange(160, 175));
+    test('all rings close, and province lines inside a region are gone', () {
+      var vertices = 0;
+      for (final rings in shapes.values) {
+        for (final ring in rings) {
+          expect(ring.first, ring.last);
+          vertices += ring.length;
+        }
+      }
+      // The file has 56k vertices in province rings.
+      expect(vertices, lessThan(30000));
+    });
+
+    test('known cities fall in their own region and no other', () {
+      const cities = {
+        'marmara': LatLng(41.01, 28.97), // Istanbul
+        'ege': LatLng(38.42, 27.14), // Izmir
+        'akdeniz': LatLng(36.9, 30.7), // Antalya
+        'ic anadolu': LatLng(39.93, 32.85), // Ankara
+        'karadeniz': LatLng(41.0, 39.72), // Trabzon
+        'dogu anadolu': LatLng(39.9, 41.27), // Erzurum
+        'guneydogu anadolu': LatLng(37.07, 37.38), // Gaziantep
+      };
+      cities.forEach((region, point) {
+        for (final other in shapes.keys) {
+          expect(inside(shapes[other]!, point), other == region, reason: '$region in $other');
+        }
+      });
     });
   });
 
@@ -111,6 +134,7 @@ void main() {
       expect(tester.takeException(), isNull);
       // (82 + 58 + 10) / 3 = 50 -> "Yüksek" on the shared 25/50/75 bands.
       expect(find.text('Türkiye geneli · 50/100 · Yüksek'), findsOneWidget);
+      expect(find.byKey(const Key('riskMapLegend')), findsOneWidget);
     });
   });
 }

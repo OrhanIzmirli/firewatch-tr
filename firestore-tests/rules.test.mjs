@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { assertFails, assertSucceeds, initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
 
-const progress = () => ({ days: { '2026-11-08': true }, lessons: ['see_fire'], shares: 1, observations: 0, longestStreak: 3, updatedAt: serverTimestamp() });
+const progress = () => ({ days: { '2026-11-08': true }, lessons: ['see_fire'], replays: 2, shares: 1, observations: 0, longestStreak: 3, updatedAt: serverTimestamp() });
 
 let env;
 before(async () => {
@@ -54,6 +54,12 @@ for (const field of ['location', 'latitude', 'places', 'plate', 'email']) {
 test('field types are enforced', async () => {
   await assertFails(setDoc(doc(as('alice'), 'users/alice'), { ...progress(), shares: 'many' }));
   await assertFails(setDoc(doc(as('alice'), 'users/alice'), { ...progress(), days: 'x' }));
+  await assertFails(setDoc(doc(as('alice'), 'users/alice'), { ...progress(), replays: 'many' }));
+});
+
+test('a document from an older app, without replays, is still accepted', async () => {
+  const { replays, ...old } = progress();
+  await assertSucceeds(setDoc(doc(as('alice'), 'users/alice'), old));
 });
 
 test('every other collection is closed', async () => {

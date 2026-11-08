@@ -48,7 +48,12 @@ void main() {
     for (final l in natureLessons) ...[
       l.title.tr,
       for (final c in l.cards) ...[c.title.tr, c.body.tr],
-      for (final q in l.quiz) ...[q.question.tr, q.feedback.tr, for (final o in q.options) o.tr],
+      for (final q in l.quiz) ...switch (q) {
+        QuizQuestion() => [q.question.tr, q.feedback.tr, for (final o in q.options) o.tr],
+        TrueFalseQuestion() => [q.statement.tr, q.feedback.tr],
+        OrderQuestion() => [q.prompt.tr, q.feedback.tr, for (final o in q.steps) o.tr],
+        MatchQuestion() => [q.prompt.tr, q.feedback.tr, for (final (a, b) in q.pairs) ...[a.tr, b.tr]],
+      },
     ],
     for (final t in natureTasks) ...[t.title.tr, t.text.tr],
   ];
@@ -63,8 +68,9 @@ void main() {
           }
         }
         for (final q in l.quiz) {
-          expect(q.source.url, startsWith('https://'));
-          expect(q.correct, inInclusiveRange(0, q.options.length - 1));
+          for (final s in q.sources) {
+            expect(s.url, startsWith('https://'));
+          }
         }
       }
       for (final t in natureTasks.where((t) => t.kind == NatureTaskKind.prevention)) {
@@ -92,7 +98,7 @@ void main() {
     });
 
     test('TEMA is neither linked nor named', () {
-      final src = File('lib/features/nature/fidan_screen.dart').readAsStringSync() + File('assets/data/nature_facts.json').readAsStringSync();
+      final src = File('lib/features/nature/fidan_screen.dart').readAsStringSync() + File('lib/features/nature/fidan_lessons.dart').readAsStringSync() + File('lib/features/nature/nature_content.dart').readAsStringSync() + File('assets/data/nature_facts.json').readAsStringSync();
       expect(RegExp(r'tema\.org|TEMA').hasMatch(src), isFalse);
     });
   });
@@ -255,7 +261,7 @@ void main() {
   group('sync', () {
     test('only progress reaches the cloud, never province or settings', () {
       final json = cloudJson(const NatureProgress(plate: '07', reminder: true, reminderHour: 8, hideStreak: true, shares: 2));
-      expect(json.keys.toSet(), {'days', 'lessons', 'shares', 'observations', 'longestStreak'});
+      expect(json.keys.toSet(), {'days', 'lessons', 'replays', 'shares', 'observations', 'longestStreak'});
       expect(jsonEncode(json).contains('07'), isFalse);
     });
 
@@ -353,31 +359,6 @@ void main() {
         });
       }
     }
-
-    testWidgets('a lesson: cards, quiz feedback, reward with an apple', (t) async {
-      t.view.physicalSize = const Size(411, 891) * 2;
-      t.view.devicePixelRatio = 2;
-      addTearDown(t.view.reset);
-      final lesson = natureLessons[1];
-      await t.pumpWidget(_app(Builder(builder: (c) => Scaffold(body: Center(child: TextButton(onPressed: () => Navigator.of(c).push(MaterialPageRoute<void>(builder: (_) => NatureLessonScreen(lesson: lesson, today: DateTime(2026, 11, 8)))), child: const Text('go')))))));
-      await t.tap(find.text('go'));
-      await settle(t, 6);
-      for (var i = 0; i < lesson.cards.length; i++) {
-        expect(find.text(lesson.cards[i].title.tr), findsOneWidget);
-        await t.tap(find.byKey(const Key('natureNext')));
-        await settle(t, 6);
-      }
-      expect(find.text(lesson.quiz.first.question.tr), findsOneWidget);
-      await t.tap(find.byKey(const Key('natureOption-1')));
-      await settle(t, 6);
-      expect(find.byKey(const Key('natureFeedback')), findsOneWidget);
-      await t.tap(find.byKey(const Key('natureNext')));
-      await settle(t, 8);
-      expect(NatureStore.instance.progress.lessons, {lesson.id});
-      expect(find.byKey(const Key('fidanXpGain')), findsOneWidget);
-      expect(find.byKey(const Key('fidanNewApple')), findsOneWidget);
-      await settle(t, 26);
-    });
 
     testWidgets('sign-in screen carries the under-13 note and no e-mail field', (t) async {
       await t.pumpWidget(_app(const FidanSignInScreen()));

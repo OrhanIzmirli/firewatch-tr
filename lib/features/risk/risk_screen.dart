@@ -9,10 +9,8 @@ import '../../core/constants/app_colors.dart';
 import '../../core/config/api_config.dart';
 import '../../core/config/feature_flags.dart';
 import '../../core/constants/app_spacing.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/utils/loading_race.dart';
 import '../../core/utils/risk_display.dart';
-import '../../core/utils/risk_factors.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
@@ -21,9 +19,10 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
-import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
+import 'widgets/risk_components_list.dart';
+import 'widgets/risk_region_list.dart';
 import 'widgets/turkey_risk_heatmap.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
@@ -319,13 +318,6 @@ class _RiskScreenState extends State<RiskScreen> {
     }
   }
 
-  String _riskNote(AppLocalizations l10n, Map<String, dynamic> region) => riskNote(
-        l10n,
-        temperature: double.tryParse(region['temperature'].toString()) ?? 0,
-        humidity: double.tryParse(region['humidity'].toString()) ?? 0,
-        wind: double.tryParse(region['wind_speed'].toString()) ?? 0,
-      );
-
   void _showRiskInfoSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     showAppSheet(
@@ -395,12 +387,7 @@ class _RiskScreenState extends State<RiskScreen> {
   void _showRegionDetail(BuildContext context, Map<String, dynamic> region) {
     final l10n = AppLocalizations.of(context)!;
     final score = region['general_risk_score'] as int;
-    final level = riskLevelForScore(score);
-    final color = colorForApiRiskLevel(level);
-    final temp = double.tryParse(region['temperature'].toString()) ?? 0;
-    final hum = double.tryParse(region['humidity'].toString()) ?? 0;
-    final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
-    final dryness = double.tryParse(region['dryness_index'].toString()) ?? 0;
+    final previous = region['previous_risk_score'];
 
     showAppSheet(
       context,
@@ -410,69 +397,42 @@ class _RiskScreenState extends State<RiskScreen> {
         final isDark = theme.brightness == Brightness.dark;
         final titleColor = theme.textTheme.titleLarge?.color ?? (isDark ? AppColors.white : AppColors.lightText);
         final secondaryTextColor = isDark ? AppColors.white.withValues(alpha: 0.72) : Colors.black.withValues(alpha: 0.62);
+        final smallStyle = GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor);
 
         return Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: GlassPanel(
-            padding: const EdgeInsets.all(AppSpacing.xl),
+            key: const Key('riskRegionSheet'),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
+                    ColorDot(color: riskScoreColor(score), size: 14),
+                    const SizedBox(width: AppSpacing.sm),
                     Expanded(
-                      child: Text(displayRegionName(l10n, region['region']),
+                      child: Text(riskPlaceLevel(l10n, displayRegionName(l10n, region['region']), score),
                           style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor)),
                     ),
-                    StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.xs),
                 Text(l10n.riskScoreOutOf100(score),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
                 Text(l10n.riskScoreNotProbability,
                     style: GoogleFonts.ibmPlexSans(fontSize: 11.5, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.md),
                 Text(riskAdvice(l10n, score),
                     style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.4, fontWeight: FontWeight.w700, color: titleColor)),
-                const SizedBox(height: AppSpacing.sm),
-                Text(_riskNote(l10n, region),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: secondaryTextColor)),
                 const SizedBox(height: AppSpacing.lg),
-                _DetailMetricRow(icon: Icons.thermostat_rounded, label: l10n.commonTemperature, value: '${temp.toInt()}°C', color: secondaryTextColor, hint: temperatureHint(l10n, temp)),
-                const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.water_drop_outlined, label: l10n.riskHumidity, value: '%${hum.toInt()}', color: secondaryTextColor, hint: humidityHint(l10n, hum)),
-                const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.air_rounded, label: l10n.commonWind, value: '${wind.toInt()} km/h', color: secondaryTextColor, hint: windHint(l10n, wind)),
-                const SizedBox(height: 8),
-                _DetailMetricRow(icon: Icons.grain_rounded, label: l10n.riskDrynessIndex, value: '${dryness.toInt()}', color: secondaryTextColor, hint: l10n.riskDrynessDerivation),
+                RiskComponentsList(row: region),
                 const SizedBox(height: AppSpacing.md),
-                // nearby_fire_count: detections in the region over the last
-                // 24 h, fixed heat sources excluded; null when the backend's
-                // ingest or clustering is more than 6 h stale (backend 2fe7cc1).
-                // Missing means unavailable, never zero: release builds leave
-                // the line out and debug builds say it is missing.
-                if (region['nearby_fire_count'] != null)
-                  Text(
-                    l10n.riskNearbyFireCount('${region['nearby_fire_count']}'),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                  )
-                else if (FeatureFlags.showPendingDataNotes)
-                  Text(
-                    l10n.riskNearbyFireCountUnavailable,
-                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                  ),
-                if (region['previous_risk_score'] != null)
-                  Text(
-                    l10n.riskPreviousScore('${region['previous_risk_score']}'),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                  ),
+                if (previous != null && previous != score)
+                  Text(l10n.riskPreviousScore('$previous'), style: smallStyle),
                 if (DateTime.tryParse((region['created_at'] ?? region['date'])?.toString() ?? '') case final calculated?)
-                  Text(
-                    l10n.riskCalculatedAt(_formatDateTime(calculated)),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                  ),
+                  Text(l10n.riskCalculatedAt(_formatDateTime(calculated)), style: smallStyle),
               ],
             ),
           ),
@@ -500,56 +460,9 @@ class _RiskScreenState extends State<RiskScreen> {
         (a['general_risk_score'] as int) > (b['general_risk_score'] as int) ? a : b);
   }
 
-  Map<String, dynamic>? get _lowestRisk {
-    if (_regions.isEmpty) return null;
-    return _regions.reduce((a, b) =>
-        (a['general_risk_score'] as int) < (b['general_risk_score'] as int) ? a : b);
-  }
-
   double get _avgRisk {
     if (_regions.isEmpty) return 0;
     final total = _regions.fold<double>(0, (sum, r) => sum + (r['general_risk_score'] as int));
-    return total / _regions.length;
-  }
-
-  /// Average of the previous calculator run's score across regions that
-  /// have a prior data point, vs the current average — a simple two-point
-  /// trend (the backend only exposes one prior snapshot per region, not a
-  /// full history).
-  double? get _avgPreviousRisk {
-    final withPrevious = _regions.where((r) => r['previous_risk_score'] != null).toList();
-    if (withPrevious.isEmpty) return null;
-    final total = withPrevious.fold<double>(0, (sum, r) => sum + (r['previous_risk_score'] as int));
-    return total / withPrevious.length;
-  }
-
-  double get _avgTemp {
-    if (_regions.isEmpty) return 0;
-    final total = _regions.fold<double>(0, (sum, r) => sum + (double.tryParse(r['temperature'].toString()) ?? 0));
-    return total / _regions.length;
-  }
-
-  double get _avgHumidity {
-    if (_regions.isEmpty) return 0;
-    final total = _regions.fold<double>(0, (sum, r) => sum + (double.tryParse(r['humidity'].toString()) ?? 0));
-    return total / _regions.length;
-  }
-
-  double get _avgWind {
-    if (_regions.isEmpty) return 0;
-    final total = _regions.fold<double>(0, (sum, r) => sum + (double.tryParse(r['wind_speed'].toString()) ?? 0));
-    return total / _regions.length;
-  }
-
-  double get _avgDryness {
-    if (_regions.isEmpty) return 0;
-    final total = _regions.fold<double>(0, (sum, r) => sum + (double.tryParse(r['dryness_index'].toString()) ?? 0));
-    return total / _regions.length;
-  }
-
-  double get _avgVegetation {
-    if (_regions.isEmpty) return 0;
-    final total = _regions.fold<double>(0, (sum, r) => sum + (double.tryParse(r['vegetation_density'].toString()) ?? 0));
     return total / _regions.length;
   }
 
@@ -569,13 +482,10 @@ class _RiskScreenState extends State<RiskScreen> {
         : Colors.black.withValues(alpha: 0.5);
 
     final topRegion = _highestRisk;
-    final avgRiskScore = _avgRisk.toInt();
-    // The chip sits beside "Highest risk: <region> (<score>/100)", so it
-    // grades that same score — grading the national average there showed
-    // "Low" next to a Medium region. Same function as every other card.
-    final summaryScore = (topRegion?['general_risk_score'] as num?) ?? avgRiskScore;
-    final overallLevel = riskLevelLabel(l10n, riskLevelForScore(summaryScore));
-    final overallLevelColor = riskScoreColor(summaryScore);
+    // Rounded like the map's pill, so the same average never reads as two
+    // different numbers.
+    final avgRiskScore = _avgRisk.round();
+    final trendDelta = riskTrendDelta(_regions);
 
     DateTime? lastCalculated;
     for (final region in _regions) {
@@ -640,12 +550,11 @@ class _RiskScreenState extends State<RiskScreen> {
                       ],
                     ),
                   ],
-                  // TODO adım 2: 7 bölge interaktif illüstrasyonu buraya gelecek
                   const SizedBox(height: AppSpacing.lg),
                   if (_isSlowLoading) const SlowLoadingBanner(),
                   GlassPanel(
                     key: CoachMarkKeys.riskScoreCard,
-                    padding: const EdgeInsets.all(AppSpacing.xl),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -663,59 +572,57 @@ class _RiskScreenState extends State<RiskScreen> {
                             style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.warning),
                           ),
                         ],
-                        const SizedBox(height: AppSpacing.lg),
+                        const SizedBox(height: AppSpacing.md),
                         Text(l10n.riskSummaryTitle,
-                            style: GoogleFonts.ibmPlexSans(fontSize: 30, fontWeight: FontWeight.w800, color: titleColor)),
+                            style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor)),
                         if (lastCalculated != null) ...[
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 4),
                           Row(
                             children: [
                               Icon(Icons.update_rounded, size: 14, color: mutedTextColor),
                               const SizedBox(width: 4),
                               Text(
-                                l10n.fireDetailLastUpdate('${lastCalculated.day.toString().padLeft(2, '0')}.${lastCalculated.month.toString().padLeft(2, '0')}.${lastCalculated.year} ${lastCalculated.hour.toString().padLeft(2, '0')}:${lastCalculated.minute.toString().padLeft(2, '0')}'),
+                                l10n.fireDetailLastUpdate(_formatDateTime(lastCalculated)),
                                 style: GoogleFonts.ibmPlexSans(fontSize: 12, color: mutedTextColor),
                               ),
                             ],
                           ),
                         ],
+                        const SizedBox(height: AppSpacing.md),
+                        if (topRegion != null)
+                          // The chip names its region: the national average
+                          // on the map can be a different level.
+                          Wrap(
+                            key: const Key('riskSummaryTopRegion'),
+                            spacing: AppSpacing.sm,
+                            runSpacing: AppSpacing.xs,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              StatusChip(
+                                label: riskPlaceLevel(
+                                  l10n,
+                                  displayRegionName(l10n, topRegion['region'] as String),
+                                  topRegion['general_risk_score'] as num,
+                                ),
+                                icon: Icons.warning_amber_rounded,
+                                color: riskScoreColor(topRegion['general_risk_score'] as num),
+                              ),
+                              Text(
+                                l10n.riskHighestScoreLine(topRegion['general_risk_score'] as int),
+                                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor),
+                              ),
+                            ],
+                          )
+                        else
+                          Text(l10n.riskDataLoading,
+                              style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
                         const SizedBox(height: AppSpacing.sm),
-                        Text(l10n.riskSummarySubtitle,
-                            style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.45, color: secondaryTextColor)),
-                        const SizedBox(height: 6),
                         Text(l10n.riskScoresAreIndices,
                             style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.4, color: mutedTextColor)),
-                        const SizedBox(height: AppSpacing.lg),
-                        Row(
-                          children: [
-                            StatusChip(label: overallLevel, icon: Icons.warning_amber_rounded, color: overallLevelColor),
-                            const SizedBox(width: AppSpacing.sm),
-                            Expanded(
-                              child: Text(
-                                topRegion != null
-                                    ? l10n.riskHighestRisk(displayRegionName(l10n, topRegion['region']), topRegion['general_risk_score'])
-                                    : l10n.riskDataLoading,
-                                style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
-                  ).animate().fadeIn(duration: 450.ms).scale(
-                        begin: const Offset(0.97, 0.97),
-                        end: const Offset(1, 1),
-                        curve: Curves.easeOutCubic,
-                      ).slideY(begin: 0.06, end: 0),
+                  ).animate().fadeIn(duration: 300.ms),
 
-                  const SizedBox(height: AppSpacing.md),
-                  TrustInfoCardGroup(
-                    meaning: l10n.trustRiskMeaning,
-                    source: l10n.trustRiskSource,
-                    interpret: l10n.trustRiskInterpret,
-                    action: l10n.trustRiskAction,
-                  ),
 
                   const SizedBox(height: AppSpacing.xl),
 
@@ -750,7 +657,7 @@ class _RiskScreenState extends State<RiskScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: AppSpacing.xxl),
+                  const SizedBox(height: AppSpacing.lg),
 
                   if (_tab == _RiskTab.myLocation) ...[
                     _PointRiskSection(
@@ -763,11 +670,6 @@ class _RiskScreenState extends State<RiskScreen> {
                               : l10n.riskTabMyLocation),
                       data: _myPoint,
                       avgRiskScore: avgRiskScore,
-                      avgTemp: _avgTemp,
-                      avgHumidity: _avgHumidity,
-                      avgWind: _avgWind,
-                      avgDryness: _avgDryness,
-                      avgVegetation: _avgVegetation,
                       needsLocation: true,
                       onRetry: _loadMyLocation,
                     ),
@@ -790,11 +692,6 @@ class _RiskScreenState extends State<RiskScreen> {
                         heading: place.name,
                         data: _placePoint,
                         avgRiskScore: avgRiskScore,
-                        avgTemp: _avgTemp,
-                        avgHumidity: _avgHumidity,
-                        avgWind: _avgWind,
-                        avgDryness: _avgDryness,
-                        avgVegetation: _avgVegetation,
                         needsLocation: false,
                         onRetry: () => _openPlace(place),
                       ),
@@ -802,266 +699,25 @@ class _RiskScreenState extends State<RiskScreen> {
                       TrackedPlacesSection(onPlaceTap: _openPlace),
                   ]
                   else ...[
-                  RelatedNewsSection(
-                    city: null,
-                    from: DateTime.now().subtract(const Duration(days: 7)),
-                    to: DateTime.now(),
-                  ),
-                  SectionHeader(
-                    title: l10n.riskKeyIndicators,
-                    subtitle: l10n.riskTurkeyAverage,
-                    icon: const Icon(Icons.dashboard_rounded),
-                  ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-                  const SizedBox(height: AppSpacing.md),
-
-                  Builder(builder: (context) {
-                    final highest = _highestRisk;
-                    final lowest = _lowestRisk;
-                    final prevAvg = _avgPreviousRisk;
-                    final trendDelta = prevAvg == null ? null : (avgRiskScore - prevAvg);
-                    final trendColor = trendDelta == null
-                        ? AppColors.primary
-                        : trendDelta > 1
-                            ? AppColors.danger
-                            : trendDelta < -1
-                                ? AppColors.success
-                                : AppColors.warning;
-                    final trendLabel = trendDelta == null
-                        ? l10n.riskOverviewTrendNoData
-                        : trendDelta > 1
-                            ? l10n.riskOverviewTrendWorsening
-                            : trendDelta < -1
-                                ? l10n.riskOverviewTrendImproving
-                                : l10n.riskOverviewTrendStable;
-                    final trendIcon = trendDelta == null
-                        ? Icons.show_chart_rounded
-                        : trendDelta > 1
-                            ? Icons.trending_up_rounded
-                            : trendDelta < -1
-                                ? Icons.trending_down_rounded
-                                : Icons.trending_flat_rounded;
-
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisSpacing: AppSpacing.md,
-                      mainAxisSpacing: AppSpacing.md,
-                      childAspectRatio: 0.86,
-                      children: [
-                        SmartOverviewCard(
-                          title: l10n.riskOverviewHighestTitle,
-                          value: highest == null
-                              ? l10n.riskDataLoading
-                              : l10n.homeOverviewHighestRiskValue(
-                                  displayRegionName(l10n, highest['region'] as String),
-                                  highest['general_risk_score'] as int),
-                          subtitle: l10n.riskOverviewHighestSubtitle,
-                          icon: Icons.warning_amber_rounded,
-                          color: highest == null ? AppColors.primary : riskScoreColor(highest['general_risk_score'] as num),
-                          delay: 140.ms,
-                          onTap: highest == null ? null : () => _showRegionDetail(context, highest),
-                        ),
-                        SmartOverviewCard(
-                          title: l10n.riskOverviewLowestTitle,
-                          value: lowest == null
-                              ? l10n.riskDataLoading
-                              : l10n.homeOverviewHighestRiskValue(
-                                  displayRegionName(l10n, lowest['region'] as String),
-                                  lowest['general_risk_score'] as int),
-                          subtitle: l10n.riskOverviewLowestSubtitle,
-                          icon: Icons.eco_outlined,
-                          color: lowest == null ? AppColors.primary : riskScoreColor(lowest['general_risk_score'] as num),
-                          delay: 220.ms,
-                          onTap: lowest == null ? null : () => _showRegionDetail(context, lowest),
-                        ),
-                        SmartOverviewCard(
-                          title: l10n.riskOverviewAvgTitle,
-                          value: '$avgRiskScore',
-                          subtitle: l10n.riskOverviewAvgSubtitle,
-                          icon: Icons.local_fire_department_rounded,
-                          color: riskScoreColor(avgRiskScore),
-                          delay: 300.ms,
-                        ),
-                        SmartOverviewCard(
-                          title: l10n.riskOverviewTrendTitle,
-                          value: trendLabel,
-                          subtitle: trendDelta == null
-                              ? l10n.riskOverviewTrendNoDataSubtitle
-                              : l10n.riskOverviewTrendSubtitle(trendDelta.abs().toStringAsFixed(0)),
-                          icon: trendIcon,
-                          color: trendColor,
-                          delay: 380.ms,
-                        ),
-                      ],
-                    );
-                  }),
-
-                  const SizedBox(height: AppSpacing.xxxl),
-
+                  if (trendDelta != null) ...[
+                    _TrendNote(delta: trendDelta, averageScore: avgRiskScore),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
                   if (_regions.isNotEmpty) ...[
                     SectionHeader(
-                      title: l10n.riskRegionalDistribution,
-                      subtitle: l10n.riskRegionalDistributionSubtitle,
-                      icon: const Icon(Icons.show_chart_rounded),
-                    ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
+                      title: l10n.riskRegionsTitle,
+                      subtitle: l10n.riskChartTapHint,
+                      icon: const Icon(Icons.public_rounded),
+                    ),
                     const SizedBox(height: AppSpacing.md),
-
-                    RepaintBoundary(
-                      child: GlassPanel(
+                    RiskRegionList(
                       key: CoachMarkKeys.riskChart,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(l10n.riskScore,
-                                    style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w700, color: titleColor)),
-                              ),
-                              Text(l10n.riskChartTapHint,
-                                  style: GoogleFonts.ibmPlexSans(fontSize: 11, color: mutedTextColor)),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacing.lg),
-                          Table(
-                            columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
-                            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                            children: _regions.asMap().entries.map((e) {
-                              final region = e.value;
-                              final score = region['general_risk_score'] as int;
-                              final isMine = _myRegionRaw != null && region['region'] == _myRegionRaw;
-                              final barColor = riskScoreColor(score);
-                              return TableRow(
-                                decoration: isMine
-                                    ? BoxDecoration(
-                                        color: AppColors.primary.withValues(alpha: 0.08),
-                                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                                      )
-                                    : null,
-                                children: [
-                                  InkWell(
-                                    onTap: () => _showRegionDetail(context, region),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-                                      child: Text(
-                                        displayRegionName(l10n, region['region']),
-                                        style: GoogleFonts.ibmPlexSans(
-                                          fontSize: 13,
-                                          fontWeight: isMine ? FontWeight.w800 : FontWeight.w600,
-                                          color: isMine
-                                              ? (isDark ? AppColors.white : Colors.black87)
-                                              : mutedTextColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () => _showRegionDetail(context, region),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 18,
-                                              child: Stack(
-                                                children: [
-                                                  Positioned.fill(
-                                                    child: DecoratedBox(
-                                                      decoration: BoxDecoration(
-                                                        color: isDark
-                                                            ? AppColors.white.withValues(alpha: 0.06)
-                                                            : Colors.black.withValues(alpha: 0.05),
-                                                        borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  FractionallySizedBox(
-                                                    widthFactor: score.clamp(0, 100) / 100,
-                                                    heightFactor: 1,
-                                                    alignment: Alignment.centerLeft,
-                                                    child: DecoratedBox(
-                                                      decoration: BoxDecoration(
-                                                        color: barColor,
-                                                        borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ).animate(delay: (220 + e.key * 40).ms).fadeIn(duration: 320.ms).scaleX(
-                                                  begin: 0,
-                                                  end: 1,
-                                                  alignment: Alignment.centerLeft,
-                                                ),
-                                          ),
-                                          const SizedBox(width: AppSpacing.sm),
-                                          SizedBox(
-                                            width: 28,
-                                            child: Text(
-                                              '$score',
-                                              textAlign: TextAlign.right,
-                                              style: AppTheme.mono(
-                                                size: 13,
-                                                weight: FontWeight.w700,
-                                                color: barColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                      ),
-                    ).animate(delay: 180.ms).fadeIn(duration: 380.ms).scale(
-                          begin: const Offset(0.98, 0.98),
-                          end: const Offset(1, 1),
-                        ),
-
-                    const SizedBox(height: AppSpacing.xxxl),
+                      regions: rankedRegions,
+                      myRegion: _myRegionRaw,
+                      onRegionTap: (region) => _showRegionDetail(context, region),
+                    ).animate().fadeIn(duration: 300.ms),
+                    const SizedBox(height: AppSpacing.xl),
                   ],
-
-                  SectionHeader(
-                    title: l10n.riskRegionDetails,
-                    subtitle: l10n.riskRegionDetailsSubtitle,
-                    icon: const Icon(Icons.public_rounded),
-                  ).animate(delay: 200.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-                  const SizedBox(height: AppSpacing.md),
-
-                  ...rankedRegions.asMap().entries.map((entry) {
-                    final idx = entry.key;
-                    final region = entry.value;
-                    final score = region['general_risk_score'] as int;
-                    final level = riskLevelForScore(score);
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                        onTap: () => _showRegionDetail(context, region),
-                        child: _RegionRiskCard(
-                          rank: idx + 1,
-                          region: displayRegionName(l10n, region['region']),
-                          risk: riskLevelLabel(l10n, level),
-                          rawLevel: level,
-                          score: score,
-                          note: _riskNote(l10n, region),
-                          delay: Duration(milliseconds: 240 + (idx * 70)),
-                        ),
-                      ),
-                    );
-                  }),
-
-                  const SizedBox(height: AppSpacing.xxxl),
 
                   // Each card is shown only where its screen has real data
                   // (FeatureFlags); debug builds show all three.
@@ -1088,53 +744,72 @@ class _RiskScreenState extends State<RiskScreen> {
                         onTap: () => context.push('/risk-map'),
                       ),
                   ]) ...[card, const SizedBox(height: AppSpacing.md)],
-                  const SizedBox(height: AppSpacing.xl),
 
-                  SectionHeader(
-                    title: l10n.riskEnvironmentalFactors,
-                    subtitle: l10n.riskTurkeyAverage,
-                    icon: const Icon(Icons.eco_outlined),
-                  ).animate(delay: 240.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-                  const SizedBox(height: AppSpacing.md),
-
-                  _ProgressFactorCard(
-                    title: l10n.riskDrynessIndexDerived,
-                    value: _avgDryness / 100,
-                    label: indexBandLabel(l10n, _avgDryness),
-                    color: AppColors.danger,
-                    delay: const Duration(milliseconds: 280),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _ProgressFactorCard(
-                    title: l10n.riskWindPressure,
-                    value: (_avgWind / 80).clamp(0, 1),
-                    label: windBandLabel(l10n, _avgWind),
-                    color: AppColors.warning,
-                    delay: const Duration(milliseconds: 350),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _ProgressFactorCard(
-                    title: l10n.riskVegetationDensityDerived,
-                    value: _avgVegetation / 100,
-                    label: indexBandLabel(l10n, _avgVegetation),
-                    color: AppColors.primary,
-                    delay: const Duration(milliseconds: 420),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _ProgressFactorCard(
-                    title: l10n.riskHumidityLevel,
-                    value: (_avgHumidity / 100).clamp(0, 1),
-                    label: humidityBandLabel(l10n, _avgHumidity),
-                    color: AppColors.success,
-                    delay: const Duration(milliseconds: 490),
+                  RelatedNewsSection(
+                    city: null,
+                    from: DateTime.now().subtract(const Duration(days: 7)),
+                    to: DateTime.now(),
                   ),
                   ],
+
+                  const SizedBox(height: AppSpacing.lg),
+                  // The explanations stay folded so the screen stays short.
+                  TrustInfoCard(
+                    key: const Key('riskMeaningCard'),
+                    title: l10n.trustAspectMeaningTitle,
+                    icon: Icons.info_outline_rounded,
+                    text: [
+                      l10n.trustRiskMeaning,
+                      l10n.riskSummarySubtitle,
+                      l10n.trustRiskSource,
+                      l10n.trustRiskInterpret,
+                      l10n.trustRiskAction,
+                    ].join('\n\n'),
+                  ),
 
                   const SizedBox(height: 100),
                 ],
               ),
             ),
+      ),
+    );
+  }
+}
+
+/// Shown only when the national average really moved since the last run.
+class _TrendNote extends StatelessWidget {
+  final double delta;
+  final int averageScore;
+
+  const _TrendNote({required this.delta, required this.averageScore});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final label = delta > 0 ? l10n.riskOverviewTrendWorsening : l10n.riskOverviewTrendImproving;
+    return GlassPanel(
+      key: const Key('riskTrendCard'),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Row(
+        children: [
+          Icon(
+            delta > 0 ? Icons.trending_up_rounded : Icons.trending_down_rounded,
+            color: riskScoreColor(averageScore),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${l10n.riskOverviewTrendTitle}: $label',
+                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: theme.textTheme.titleMedium?.color)),
+                Text(l10n.riskOverviewTrendSubtitle(delta.abs().toStringAsFixed(0)),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 12, color: theme.textTheme.bodySmall?.color)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1172,19 +847,14 @@ class _TabToggleButton extends StatelessWidget {
 }
 
 /// The same analysis for "Konumum" and for a saved place: level, score,
-/// advice, why, nearby detections, the numbers and the comparison, with the
-/// Copernicus index separate at the bottom.
+/// advice and what the score is made of, with the Copernicus index separate
+/// at the bottom.
 class _PointRiskSection extends StatelessWidget {
   final bool loading;
   final String? error;
   final String heading;
   final Map<String, dynamic>? data;
   final int avgRiskScore;
-  final double avgTemp;
-  final double avgHumidity;
-  final double avgWind;
-  final double avgDryness;
-  final double avgVegetation;
 
   /// Loading and failure messages talk about the device's location.
   final bool needsLocation;
@@ -1196,11 +866,6 @@ class _PointRiskSection extends StatelessWidget {
     required this.heading,
     required this.data,
     required this.avgRiskScore,
-    required this.avgTemp,
-    required this.avgHumidity,
-    required this.avgWind,
-    required this.avgDryness,
-    required this.avgVegetation,
     required this.needsLocation,
     required this.onRetry,
   });
@@ -1270,14 +935,10 @@ class _PointRiskSection extends StatelessWidget {
     final score = (data['general_risk_score'] as num).toInt();
     final level = riskLevelForScore(score);
     final color = colorForApiRiskLevel(level);
-    final temp = double.tryParse(data['temperature'].toString()) ?? 0;
-    final hum = double.tryParse(data['humidity'].toString()) ?? 0;
-    final wind = double.tryParse(data['wind_speed'].toString()) ?? 0;
-    final dryness = double.tryParse(data['dryness_index'].toString()) ?? 0;
-    final vegetation = double.tryParse(data['vegetation_density'].toString()) ?? 0;
     final diff = score - avgRiskScore;
     final diffStr = diff > 0 ? '+$diff' : '$diff';
     final city = data['city'] as String?;
+    final levelOwner = needsLocation ? city ?? heading : heading;
     final radius = (data['nearby_radius_km'] as num?)?.toInt() ?? 50;
     final nearby = (data['nearby_fire_count'] as num?)?.toInt();
     final nearbyText = nearby == null
@@ -1288,7 +949,6 @@ class _PointRiskSection extends StatelessWidget {
     final calculated = DateTime.tryParse('${data['date']}')?.toLocal();
     String two(int n) => n.toString().padLeft(2, '0');
     final sectionTitle = GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor);
-    final body = GoogleFonts.ibmPlexSans(fontSize: 13.5, height: 1.45, color: secondaryTextColor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1308,13 +968,25 @@ class _PointRiskSection extends StatelessWidget {
                         style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor),
                       ),
                     ),
-                    StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.md),
-                Text(l10n.riskScoreOutOf100(score),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: color)),
+                Row(
+                  children: [
+                    ColorDot(color: color, size: 12),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        riskPlaceLevel(l10n, levelOwner, score),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: titleColor),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 4),
+                Text(l10n.riskScoreOutOf100(score),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
+                const SizedBox(height: 2),
                 Text(l10n.riskMyLocationVsAverage(diffStr),
                     style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
               ],
@@ -1335,14 +1007,6 @@ class _PointRiskSection extends StatelessWidget {
               Text(riskAdvice(l10n, score),
                   style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.4, fontWeight: FontWeight.w700, color: color)),
               const SizedBox(height: AppSpacing.md),
-              Text(l10n.riskPointWhyTitle, style: sectionTitle),
-              const SizedBox(height: 4),
-              Text(riskNote(l10n, temperature: temp, humidity: hum, wind: wind), style: body),
-              const SizedBox(height: AppSpacing.md),
-              Text(l10n.riskPointNearbyTitle, style: sectionTitle),
-              const SizedBox(height: 4),
-              Text(nearbyText, style: body),
-              const SizedBox(height: AppSpacing.md),
               Text(l10n.riskScoreNotProbability,
                   style: GoogleFonts.ibmPlexSans(fontSize: 11.5, height: 1.4, color: secondaryTextColor)),
               if (calculated != null)
@@ -1352,142 +1016,13 @@ class _PointRiskSection extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: AppSpacing.xxl),
-
-        SectionHeader(
-          title: l10n.riskMyLocationMetricsTitle,
-          subtitle: city ?? '',
-          icon: const Icon(Icons.dashboard_rounded),
-        ),
-        const SizedBox(height: AppSpacing.md),
-
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisSpacing: AppSpacing.md,
-          mainAxisSpacing: AppSpacing.md,
-          childAspectRatio: 1.15,
-          children: [
-            _RiskMetricCard(
-              title: l10n.riskGeneralRisk,
-              value: '$score',
-              subtitle: l10n.riskOutOf100,
-              icon: Icons.local_fire_department_rounded,
-              accent: color,
-              delay: const Duration(milliseconds: 100),
-            ),
-            _RiskMetricCard(
-              title: l10n.commonWind,
-              value: '${wind.toInt()} km/h',
-              subtitle: wind >= 30 ? l10n.riskWindIncreasesSpread : l10n.riskWindNormal,
-              icon: Icons.air_rounded,
-              accent: AppColors.warning,
-              delay: const Duration(milliseconds: 160),
-            ),
-            _RiskMetricCard(
-              title: l10n.riskHumidity,
-              value: '%${hum.toInt()}',
-              subtitle: hum <= 30 ? l10n.riskHumidityLow : hum <= 50 ? l10n.riskHumidityMedium : l10n.riskHumidityHigh,
-              icon: Icons.water_drop_outlined,
-              accent: AppColors.primary,
-              delay: const Duration(milliseconds: 220),
-            ),
-            _RiskMetricCard(
-              title: l10n.commonTemperature,
-              value: '${temp.toInt()}°C',
-              subtitle: temp >= 35 ? l10n.riskTempCritical : temp >= 25 ? l10n.commonHigh : l10n.riskTempNormal,
-              icon: Icons.thermostat_rounded,
-              accent: temp >= 35 ? AppColors.danger : AppColors.warning,
-              delay: const Duration(milliseconds: 280),
-            ),
-            _RiskMetricCard(
-              title: l10n.riskDrynessIndex,
-              value: '${dryness.toInt()}',
-              subtitle: indexBandLabel(l10n, dryness),
-              icon: Icons.grain_rounded,
-              accent: AppColors.danger,
-              delay: const Duration(milliseconds: 340),
-            ),
-            _RiskMetricCard(
-              title: l10n.riskVegetationDensity,
-              value: '${vegetation.toInt()}',
-              subtitle: indexBandLabel(l10n, vegetation),
-              icon: Icons.eco_outlined,
-              accent: AppColors.primary,
-              delay: const Duration(milliseconds: 400),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: AppSpacing.xxl),
-
-        SectionHeader(
-          title: l10n.riskComparisonTitle,
-          subtitle: l10n.riskTurkeyAverage,
-          icon: const Icon(Icons.compare_arrows_rounded),
-        ),
         const SizedBox(height: AppSpacing.md),
 
         GlassPanel(
-          child: Column(
-            children: [
-              _ComparisonRow(
-                icon: Icons.local_fire_department_rounded,
-                label: l10n.riskGeneralRisk,
-                regionValue: score.toDouble(),
-                avgValue: avgRiskScore.toDouble(),
-                unit: '',
-                invertedRisk: false,
-              ),
-              const Divider(height: AppSpacing.xl),
-              _ComparisonRow(
-                icon: Icons.thermostat_rounded,
-                label: l10n.commonTemperature,
-                regionValue: temp,
-                avgValue: avgTemp,
-                unit: '°C',
-                invertedRisk: false,
-              ),
-              const Divider(height: AppSpacing.xl),
-              _ComparisonRow(
-                icon: Icons.water_drop_outlined,
-                label: l10n.riskHumidity,
-                regionValue: hum,
-                avgValue: avgHumidity,
-                unit: '%',
-                invertedRisk: true,
-              ),
-              const Divider(height: AppSpacing.xl),
-              _ComparisonRow(
-                icon: Icons.air_rounded,
-                label: l10n.commonWind,
-                regionValue: wind,
-                avgValue: avgWind,
-                unit: 'km/h',
-                invertedRisk: false,
-              ),
-              const Divider(height: AppSpacing.xl),
-              _ComparisonRow(
-                icon: Icons.grain_rounded,
-                label: l10n.riskDrynessIndex,
-                regionValue: dryness,
-                avgValue: avgDryness,
-                unit: '',
-                invertedRisk: false,
-              ),
-              const Divider(height: AppSpacing.xl),
-              _ComparisonRow(
-                icon: Icons.eco_outlined,
-                label: l10n.riskVegetationDensity,
-                regionValue: vegetation,
-                avgValue: avgVegetation,
-                unit: '',
-                invertedRisk: false,
-              ),
-            ],
-          ),
-        ).animate(delay: 120.ms).fadeIn(duration: 320.ms).slideY(begin: 0.06, end: 0),
+          key: const Key('pointRiskComponents'),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: RiskComponentsList(row: data, detectionsNote: nearbyText),
+        ),
 
         RelatedNewsSection(
           city: city,
@@ -1585,111 +1120,6 @@ class _CopernicusIndexCardState extends State<_CopernicusIndexCard> {
   }
 }
 
-class _ComparisonRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final double regionValue;
-  final double avgValue;
-  final String unit;
-  /// True when a lower value means higher risk (e.g. humidity).
-  final bool invertedRisk;
-
-  const _ComparisonRow({
-    required this.icon,
-    required this.label,
-    required this.regionValue,
-    required this.avgValue,
-    required this.unit,
-    required this.invertedRisk,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final mutedColor = isDark ? AppColors.white.withValues(alpha: 0.58) : Colors.black.withValues(alpha: 0.5);
-
-    final diff = regionValue - avgValue;
-    final isSimilar = diff.abs() < 0.5;
-    final isHigherRisk = invertedRisk ? diff < 0 : diff > 0;
-    final arrowIcon = isSimilar
-        ? Icons.remove_rounded
-        : diff > 0
-            ? Icons.arrow_upward_rounded
-            : Icons.arrow_downward_rounded;
-    final riskLabel = isSimilar
-        ? l10n.riskComparisonSimilar
-        : isHigherRisk
-            ? l10n.riskComparisonHigherRisk
-            : l10n.riskComparisonLowerRisk;
-    final riskColor = isSimilar ? mutedColor : (isHigherRisk ? AppColors.danger : AppColors.success);
-
-    String fmt(double v) => unit == '%' ? '%${v.toInt()}' : '${v.toInt()}$unit';
-
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: mutedColor),
-        const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          flex: 2,
-          child: Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: titleColor)),
-        ),
-        Expanded(
-          flex: 3,
-          child: Text(
-            '${fmt(regionValue)} vs ${fmt(avgValue)}',
-            textAlign: TextAlign.right,
-            style: AppTheme.mono(size: 12, color: mutedColor),
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        Icon(arrowIcon, size: 16, color: riskColor),
-        const SizedBox(width: 2),
-        Text(riskLabel, style: GoogleFonts.ibmPlexSans(fontSize: 11, fontWeight: FontWeight.w700, color: riskColor)),
-      ],
-    );
-  }
-}
-
-class _DetailMetricRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  /// Why this reading matters for fire risk, shown under the value.
-  final String? hint;
-
-  const _DetailMetricRow({required this.icon, required this.label, required this.value, required this.color, this.hint});
-
-  @override
-  Widget build(BuildContext context) {
-    final row = Row(
-      children: [
-        Icon(icon, size: 16, color: color),
-        const SizedBox(width: AppSpacing.sm),
-        Text('$label: ', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: color)),
-        // Weather readouts are mono with tabular figures so the digits hold
-        // their width between refreshes.
-        Expanded(child: Text(value, style: AppTheme.mono(size: 13, weight: FontWeight.w600, color: color))),
-      ],
-    );
-    if (hint == null) return row;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        row,
-        Padding(
-          padding: const EdgeInsets.only(left: 24, top: 2),
-          child: Text(hint!, style: GoogleFonts.ibmPlexSans(fontSize: 11.5, height: 1.35, color: color.withValues(alpha: 0.8))),
-        ),
-      ],
-    );
-  }
-}
-
 /// A tappable card that leads off the risk screen to a related screen.
 class _RiskLinkCard extends StatelessWidget {
   final IconData icon;
@@ -1733,210 +1163,5 @@ class _RiskLinkCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _RiskMetricCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final String subtitle;
-  final IconData icon;
-  final Color accent;
-  final Duration delay;
-
-  const _RiskMetricCard({
-    required this.title,
-    required this.value,
-    required this.subtitle,
-    required this.icon,
-    required this.accent,
-    this.delay = Duration.zero,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final valueColor = Theme.of(context).textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final subtitleColor = isDark
-        ? AppColors.white.withValues(alpha: 0.58)
-        : Colors.black.withValues(alpha: 0.5);
-
-    return GlassPanel(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
-            ),
-            child: Icon(icon, color: accent, size: 22),
-          ),
-          const Spacer(),
-          Text(value,
-              style: AppTheme.mono(size: 24, weight: FontWeight.w700, color: valueColor)),
-          const SizedBox(height: AppSpacing.xs),
-          Text(title,
-              style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),
-          const SizedBox(height: 2),
-          Text(subtitle,
-              style: GoogleFonts.ibmPlexSans(fontSize: 12, color: subtitleColor)),
-        ],
-      ),
-    ).animate(delay: delay).fadeIn(duration: 300.ms).slideY(begin: 0.12, end: 0).scale(
-          begin: const Offset(0.97, 0.97),
-          end: const Offset(1, 1),
-        );
-  }
-}
-
-class _RegionRiskCard extends StatelessWidget {
-  final int rank;
-  final String region;
-  final String risk;
-  final String rawLevel;
-  final int score;
-  final String note;
-  final Duration delay;
-
-  const _RegionRiskCard({
-    required this.rank,
-    required this.region,
-    required this.risk,
-    required this.rawLevel,
-    required this.score,
-    required this.note,
-    this.delay = Duration.zero,
-  });
-
-  Color get accent => colorForApiRiskLevel(rawLevel);
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final noteColor = isDark
-        ? AppColors.white.withValues(alpha: 0.58)
-        : Colors.black.withValues(alpha: 0.5);
-
-    return GlassPanel(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                ),
-                child: Text('#$rank',
-                    style: AppTheme.mono(size: 12, weight: FontWeight.w700, color: accent)),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(region,
-                    style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor)),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              StatusChip(label: risk, icon: Icons.warning_amber_rounded, color: accent),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-            child: LinearProgressIndicator(
-              value: score / 100,
-              minHeight: 10,
-              backgroundColor: isDark
-                  ? AppColors.white.withValues(alpha: 0.08)
-                  : Colors.black.withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation<Color>(accent),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(l10n.riskScoreOutOf100(score),
-              style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: accent)),
-          const SizedBox(height: 4),
-          Text(note,
-              style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.35, color: noteColor)),
-        ],
-      ),
-    ).animate(delay: delay).fadeIn(duration: 280.ms).slideX(begin: 0.03, end: 0).scale(
-          begin: const Offset(0.98, 0.98),
-          end: const Offset(1, 1),
-        );
-  }
-}
-
-class _ProgressFactorCard extends StatelessWidget {
-  final String title;
-  final double value;
-  final String label;
-  final Color color;
-  final Duration delay;
-
-  const _ProgressFactorCard({
-    required this.title,
-    required this.value,
-    required this.label,
-    required this.color,
-    this.delay = Duration.zero,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final labelColor = isDark
-        ? AppColors.white.withValues(alpha: 0.62)
-        : Colors.black.withValues(alpha: 0.56);
-
-    return GlassPanel(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(title,
-                    style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w800, color: titleColor)),
-              ),
-              Text('${(value * 100).toInt()}%',
-                  style: AppTheme.mono(size: 14, weight: FontWeight.w700, color: color)),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-            child: LinearProgressIndicator(
-              value: value,
-              minHeight: 10,
-              backgroundColor: isDark
-                  ? AppColors.white.withValues(alpha: 0.08)
-                  : Colors.black.withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation<Color>(color),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: labelColor)),
-        ],
-      ),
-    ).animate(delay: delay).fadeIn(duration: 280.ms).slideY(begin: 0.12, end: 0).scale(
-          begin: const Offset(0.98, 0.98),
-          end: const Offset(1, 1),
-        );
   }
 }

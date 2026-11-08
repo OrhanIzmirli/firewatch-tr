@@ -39,6 +39,7 @@ import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/slow_loading_banner.dart';
 import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/system_status_line.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
@@ -47,6 +48,7 @@ import '../../services/point_risk_service.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/app_sheet.dart';
 import '../../shared/widgets/alerts_bell.dart';
+import '../nature/fact_widgets.dart';
 import '../nature/fidan_screen.dart';
 import '../news/widgets/news_visual.dart';
 
@@ -590,6 +592,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               location: _todayLocation,
               point: _point,
               nearbyCount: _nearbyStrongCount,
+              status: _detectionStatus,
               onEnableLocation: _refreshLocation,
               onOpenRisk: () => context.go('/app?tab=risk'),
               onOpenMap: () => context.go('/map'),
@@ -597,6 +600,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             const FidanHomeCard(),
+            const SizedBox(height: AppSpacing.md),
+            const HomeFactCard(),
             const SizedBox(height: AppSpacing.md),
             TrackedPlacesSection(detectionCount: _detectionsNear),
             const SizedBox(height: AppSpacing.lg),
@@ -808,6 +813,7 @@ class _TodayCard extends StatelessWidget {
   final _Location location;
   final Map<String, dynamic>? point;
   final int nearbyCount;
+  final DetectionStatus? status;
   final VoidCallback onEnableLocation;
   final VoidCallback onOpenRisk;
   final VoidCallback onOpenMap;
@@ -817,6 +823,7 @@ class _TodayCard extends StatelessWidget {
     required this.location,
     required this.point,
     required this.nearbyCount,
+    required this.status,
     required this.onEnableLocation,
     required this.onOpenRisk,
     required this.onOpenMap,
@@ -853,7 +860,9 @@ class _TodayCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(l10n.riskScoreOutOf100(score), style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
           const SizedBox(height: AppSpacing.sm),
-          Text(nearbyCount > 0 ? l10n.homeNearbySome(nearbyCount) : l10n.homeNearbyNone, key: const Key('homeNearby'), style: body),
+          // "Nothing detected" is only true of data that is fresh.
+          if (nearbyCount > 0 || systemFreshness(status, DateTime.now()) == SystemFreshness.fresh)
+            Text(nearbyCount > 0 ? l10n.homeNearbySome(nearbyCount) : l10n.homeNearbyNone, key: const Key('homeNearby'), style: body),
           if (wind != null) Text(l10n.homeWind('$wind'), style: body),
           if (nearbyCount > 0 || score >= riskHighFrom) ...[
             const SizedBox(height: AppSpacing.md),
@@ -905,6 +914,8 @@ class _TodayCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(l10n.homeTodayTitle, style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primary)),
+              const SizedBox(height: AppSpacing.xs),
+              SystemStatusLine(status: status),
               const SizedBox(height: AppSpacing.sm),
               content,
             ],

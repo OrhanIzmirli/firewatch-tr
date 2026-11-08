@@ -15,6 +15,9 @@ class NatureProgress {
   /// 'yyyy-MM-dd' to true (did it) or false (not today). Both keep the day.
   final Map<String, bool> days;
   final Set<String> lessons;
+
+  /// Finished lessons played again. Worth less than a first finish.
+  final int replays;
   final int shares;
   final int observations;
   final int longestStreak;
@@ -28,6 +31,7 @@ class NatureProgress {
   const NatureProgress({
     this.days = const {},
     this.lessons = const {},
+    this.replays = 0,
     this.shares = 0,
     this.observations = 0,
     this.longestStreak = 0,
@@ -42,6 +46,7 @@ class NatureProgress {
   NatureProgress copyWith({
     Map<String, bool>? days,
     Set<String>? lessons,
+    int? replays,
     int? shares,
     int? observations,
     int? longestStreak,
@@ -55,6 +60,7 @@ class NatureProgress {
       NatureProgress(
         days: days ?? this.days,
         lessons: lessons ?? this.lessons,
+        replays: replays ?? this.replays,
         shares: shares ?? this.shares,
         observations: observations ?? this.observations,
         longestStreak: longestStreak ?? this.longestStreak,
@@ -69,6 +75,7 @@ class NatureProgress {
   Map<String, dynamic> toJson() => {
         'days': days,
         'lessons': lessons.toList(),
+        'replays': replays,
         'shares': shares,
         'observations': observations,
         'longestStreak': longestStreak,
@@ -83,6 +90,7 @@ class NatureProgress {
   factory NatureProgress.fromJson(Map<String, dynamic> j) => NatureProgress(
         days: (j['days'] as Map?)?.map((k, v) => MapEntry('$k', v == true)) ?? const {},
         lessons: ((j['lessons'] as List?) ?? const []).map((e) => '$e').toSet(),
+        replays: (j['replays'] as num?)?.toInt() ?? 0,
         shares: (j['shares'] as num?)?.toInt() ?? 0,
         observations: (j['observations'] as num?)?.toInt() ?? 0,
         longestStreak: (j['longestStreak'] as num?)?.toInt() ?? 0,
@@ -159,8 +167,21 @@ List<DateTime> reminderTimes(DateTime now, {required int hour, required int minu
 /// Days the task was really done; an old "not today" keeps the streak only.
 int activeDays(NatureProgress p) => p.days.values.where((done) => done).length;
 
-/// Ten for a task, twenty for a lesson, five for a share or an observation.
-int xpOf(NatureProgress p) => activeDays(p) * 10 + p.lessons.length * 20 + p.shares * 5 + p.observations * 5;
+const lessonXp = 20;
+const replayXp = 5;
+const sectionXp = 50;
+
+/// Sections with every lesson finished, in the order of the path.
+List<NatureSection> sectionsDone(NatureProgress p) =>
+    natureSections.where((s) => s.lessons.every((l) => p.lessons.contains(l.id))).toList();
+
+bool allLessonsDone(NatureProgress p) => natureLessons.every((l) => p.lessons.contains(l.id));
+
+/// Ten for a task, twenty for a lesson, fifty for a whole section, five for a
+/// replay, a share or an observation. Nothing here counts a fire report or a
+/// call to 112.
+int xpOf(NatureProgress p) =>
+    activeDays(p) * 10 + p.lessons.length * lessonXp + sectionsDone(p).length * sectionXp + p.replays * replayXp + p.shares * 5 + p.observations * 5;
 
 /// 0 seed, 1 sprout, 2 sapling, 3 young tree, 4 in blossom, 5 with fruit.
 int treeStage(NatureProgress p) {
@@ -195,15 +216,25 @@ class Apple {
 
   /// 'yyyy-MM-dd' of the Monday, for a week's goal.
   final String? week;
+
+  /// A section id, for finishing every lesson in it.
+  final String? section;
   const Apple.lesson(String this.lesson)
       : id = 'lesson:$lesson',
-        week = null;
+        week = null,
+        section = null;
   const Apple.week(String this.week)
       : id = 'week:$week',
-        lesson = null;
+        lesson = null,
+        section = null;
+  const Apple.section(String this.section)
+      : id = 'section:$section',
+        lesson = null,
+        week = null;
 }
 
-/// One apple per finished lesson and per week with the goal met.
+/// One apple per finished lesson, per finished section and per week with the
+/// goal met.
 List<Apple> applesOf(NatureProgress p) {
   final perWeek = <String, int>{};
   for (final e in p.days.entries) {
@@ -212,7 +243,7 @@ List<Apple> applesOf(NatureProgress p) {
     perWeek[week] = (perWeek[week] ?? 0) + 1;
   }
   final weeks = perWeek.entries.where((e) => e.value >= weeklyGoalDays).map((e) => e.key).toList()..sort();
-  return [for (final l in natureLessons) if (p.lessons.contains(l.id)) Apple.lesson(l.id), for (final w in weeks) Apple.week(w)];
+  return [for (final l in natureLessons) if (p.lessons.contains(l.id)) Apple.lesson(l.id), for (final s in sectionsDone(p)) Apple.section(s.id), for (final w in weeks) Apple.week(w)];
 }
 
 /// The only fields that ever reach the cloud. Province, reminder settings
@@ -220,6 +251,7 @@ List<Apple> applesOf(NatureProgress p) {
 Map<String, dynamic> cloudJson(NatureProgress p) => {
       'days': p.days,
       'lessons': p.lessons.toList()..sort(),
+      'replays': p.replays,
       'shares': p.shares,
       'observations': p.observations,
       'longestStreak': p.longestStreak,
@@ -235,6 +267,7 @@ NatureProgress mergeProgress(NatureProgress local, Map<String, dynamic> remote) 
   return local.copyWith(
     days: days,
     lessons: {...local.lessons, ...other.lessons},
+    replays: max(local.replays, other.replays),
     shares: max(local.shares, other.shares),
     observations: max(local.observations, other.observations),
     longestStreak: max(local.longestStreak, other.longestStreak),
@@ -330,6 +363,7 @@ class NatureStore extends ChangeNotifier {
   Future<void> addShare() => save(progress.copyWith(shares: progress.shares + 1));
   Future<void> addObservation() => save(progress.copyWith(observations: progress.observations + 1));
   Future<void> finishLesson(String id) => save(progress.copyWith(lessons: {...progress.lessons, id}));
+  Future<void> addReplay() => save(progress.copyWith(replays: progress.replays + 1));
 
   Future<void> deleteAll() async {
     progress = const NatureProgress();

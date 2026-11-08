@@ -36,37 +36,42 @@ class FactDeckState {
   final int seed;
   final Set<String> shown;
   final String? day;
-  final String? todayId;
-  const FactDeckState({required this.seed, this.shown = const {}, this.day, this.todayId});
 
-  Map<String, dynamic> toJson() => {'seed': seed, 'shown': shown.toList(), 'day': day, 'todayId': todayId};
+  /// Which fact each place in the app is showing today.
+  final Map<String, String> slots;
+  const FactDeckState({required this.seed, this.shown = const {}, this.day, this.slots = const {}});
+
+  Map<String, dynamic> toJson() => {'seed': seed, 'shown': shown.toList(), 'day': day, 'slots': slots};
 
   factory FactDeckState.fromJson(Map<String, dynamic> j) => FactDeckState(
         seed: (j['seed'] as num).toInt(),
         shown: ((j['shown'] as List?) ?? const []).map((e) => '$e').toSet(),
         day: j['day'] as String?,
-        todayId: j['todayId'] as String?,
+        slots: ((j['slots'] as Map?) ?? const {}).map((k, v) => MapEntry('$k', '$v')),
       );
 }
 
-/// The fact for [today]. The same all day, in an order of this phone's own,
-/// and none comes back before the whole pool has been shown. Facts of
-/// another season wait until nothing else is left; every third day prefers
-/// one of this season.
-(NatureFact, FactDeckState) nextFact(List<NatureFact> pool, FactDeckState state, DateTime today) {
+/// The fact for one place in the app today. A place keeps its fact all day,
+/// two places never share one on the same day, and none comes back before
+/// the whole pool has been shown. Facts of another season wait until nothing
+/// else is left; every third day prefers one of this season.
+(NatureFact, FactDeckState) pickFact(List<NatureFact> pool, FactDeckState state, DateTime today, String slot, {bool replace = false}) {
   final key = dayKey(today);
-  if (state.day == key) {
+  final slots = state.day == key ? state.slots : const <String, String>{};
+  if (!replace && slots[slot] != null) {
     for (final f in pool) {
-      if (f.id == state.todayId) return (f, state);
+      if (f.id == slots[slot]) return (f, state);
     }
   }
   var seed = state.seed;
   var shown = state.shown;
-  var unseen = pool.where((f) => !shown.contains(f.id)).toList();
+  final inUse = slots.values.toSet();
+  var unseen = pool.where((f) => !shown.contains(f.id) && !inUse.contains(f.id)).toList();
   if (unseen.isEmpty) {
     seed += 1;
     shown = const {};
-    unseen = [...pool];
+    unseen = pool.where((f) => !inUse.contains(f.id)).toList();
+    if (unseen.isEmpty) unseen = [...pool];
   }
   unseen.sort((a, b) => a.id.compareTo(b.id));
   unseen.shuffle(Random(seed));
@@ -76,8 +81,11 @@ class FactDeckState {
   final seasonal = choices.where((f) => f.season == season).toList();
   final dayNumber = DateTime.utc(today.year, today.month, today.day).millisecondsSinceEpoch ~/ 86400000;
   final pick = dayNumber % 3 == 0 && seasonal.isNotEmpty ? seasonal.first : choices.first;
-  return (pick, FactDeckState(seed: seed, shown: {...shown, pick.id}, day: key, todayId: pick.id));
+  return (pick, FactDeckState(seed: seed, shown: {...shown, pick.id}, day: key, slots: {...slots, slot: pick.id}));
 }
+
+/// The Fidan screen's fact.
+(NatureFact, FactDeckState) nextFact(List<NatureFact> pool, FactDeckState state, DateTime today) => pickFact(pool, state, today, 'fidan');
 
 /// The bundled list works offline from the first launch; the backend's list,
 /// once fetched, is kept and replaces it, so facts can grow without an update.
@@ -114,15 +122,54 @@ class NatureFacts {
     }
   }
 
-  Future<NatureFact> today(DateTime now, {AssetBundle? bundle, bool refresh = true}) async {
+  /// Reads and writes run one at a time: several places ask at startup and
+  /// each must see what the previous one took.
+  Future<void> _queue = Future.value();
+
+  Future<R> _serial<R>(Future<R> Function() job) {
+    final result = _queue.then((_) => job());
+    _queue = result.then((_) {}, onError: (_) {});
+    return result;
+  }
+
+  Future<(SharedPreferences, List<NatureFact>, FactDeckState)> _open(AssetBundle? bundle) async {
     final prefs = await SharedPreferences.getInstance();
     final pool = await _pool(prefs, bundle ?? rootBundle);
     final raw = prefs.getString(_deckKey);
-    var state = raw == null ? FactDeckState(seed: Random().nextInt(1 << 31)) : FactDeckState.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-    final (fact, next) = nextFact(pool, state, now);
-    state = next;
-    await prefs.setString(_deckKey, jsonEncode(state.toJson()));
-    if (refresh) _refresh(prefs);
-    return fact;
+    return (prefs, pool, raw == null ? FactDeckState(seed: Random().nextInt(1 << 31)) : FactDeckState.fromJson(jsonDecode(raw) as Map<String, dynamic>));
   }
+
+  Future<NatureFact> forSlot(String slot, DateTime now, {AssetBundle? bundle, bool replace = false}) => _serial(() async {
+        final (prefs, pool, state) = await _open(bundle);
+        final (fact, next) = pickFact(pool, state, now, slot, replace: replace);
+        await prefs.setString(_deckKey, jsonEncode(next.toJson()));
+        if (!_refreshed) {
+          _refreshed = true;
+          _refresh(prefs);
+        }
+        return fact;
+      });
+
+  bool _refreshed = false;
+
+  Future<NatureFact> another(String slot, DateTime now) => forSlot(slot, now, replace: true);
+
+  Future<NatureFact> today(DateTime now, {AssetBundle? bundle, bool refresh = true}) {
+    if (!refresh) _refreshed = true;
+    return forSlot('fidan', now, bundle: bundle);
+  }
+
+  /// A fact set aside for a future day's notification; marked as shown now
+  /// so the app does not also show it.
+  Future<NatureFact> planned(String? existingId, DateTime day) => _serial(() async {
+        final (prefs, pool, state) = await _open(null);
+        if (existingId != null) {
+          for (final f in pool) {
+            if (f.id == existingId) return f;
+          }
+        }
+        final (fact, next) = pickFact(pool, FactDeckState(seed: state.seed, shown: state.shown, day: 'plan', slots: const {}), day, 'plan');
+        await prefs.setString(_deckKey, jsonEncode(FactDeckState(seed: next.seed, shown: next.shown, day: state.day, slots: state.slots).toJson()));
+        return fact;
+      });
 }

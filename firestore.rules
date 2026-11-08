@@ -7,9 +7,10 @@ service cloud.firestore {
       allow read, delete: if request.auth != null && request.auth.uid == uid;
       allow create, update: if request.auth != null
         && request.auth.uid == uid
-        && request.resource.data.keys().hasOnly(['days', 'lessons', 'shares', 'observations', 'longestStreak', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['days', 'lessons', 'replays', 'shares', 'observations', 'longestStreak', 'updatedAt'])
         && request.resource.data.days is map
         && request.resource.data.lessons is list
+        && (!('replays' in request.resource.data) || request.resource.data.replays is int)
         && request.resource.data.shares is int
         && request.resource.data.observations is int
         && request.resource.data.longestStreak is int;

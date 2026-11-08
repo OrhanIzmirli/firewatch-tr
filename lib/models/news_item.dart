@@ -16,6 +16,9 @@ class NewsItem {
   /// Province named in the headline, and our NASA picture of it that day.
   final String province;
   final String thumbPath;
+
+  /// fire, field, recovery, preparation or nature; empty when unknown.
+  final String kind;
   final String publishedAt;
   final String summary;
   final String category;
@@ -46,6 +49,7 @@ class NewsItem {
     this.sourceLogoUrl = '',
     this.province = '',
     this.thumbPath = '',
+    this.kind = '',
     required this.publishedAt,
     required this.summary,
     required this.category,
@@ -88,6 +92,7 @@ class NewsItem {
         'source_logo_url': sourceLogoUrl,
         'province': province,
         'thumb_path': thumbPath,
+        'kind': kind,
         'published_at': publishedAt,
         'summary': summary,
         'category': category,
@@ -116,6 +121,7 @@ class NewsItem {
       sourceLogoUrl: (json['source_logo_url'] ?? json['sourceLogoUrl'] ?? '').toString(),
       province: json['province']?.toString() ?? '',
       thumbPath: json['thumb_path']?.toString() ?? '',
+      kind: json['kind']?.toString() ?? '',
       publishedAt: json['published_at'] ?? '',
       summary: json['summary'] ?? '',
       category: json['category'] ?? 'News',

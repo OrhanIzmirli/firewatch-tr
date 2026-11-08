@@ -916,7 +916,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     const Icon(Icons.bolt_rounded, size: 16, color: AppColors.primary),
                     const SizedBox(width: AppSpacing.sm),
-                    Text(l10n.homeBreakingCount(_topNews.where((e) => e.isBreaking).length),
+                    Text(l10n.homeBreakingCount(_topNews.where((e) => e.isBreakingNow()).length),
                         style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w800)),
                   ],
                 ),
@@ -1455,7 +1455,7 @@ class _HomeNewsPreviewCardState extends State<_HomeNewsPreviewCard> {
                             showDot: true,
                             color: newsRiskLevelColor(riskLevel),
                           ),
-                          if (item.isBreaking) StatusChip(label: l10n.newsBreakingBadge, icon: Icons.bolt_rounded),
+                          if (item.isBreakingNow()) StatusChip(label: l10n.newsBreakingBadge, icon: Icons.bolt_rounded),
                         ],
                       ),
                       const SizedBox(height: AppSpacing.md),

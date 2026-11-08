@@ -51,6 +51,21 @@ class NewsItem {
     this.relatedFireIds = const [],
   });
 
+  /// How long the backend's is_breaking flag is shown. The flag is set once,
+  /// when the headline says "son dakika", and never cleared, so without an
+  /// age limit a two-month-old story keeps its "breaking" badge.
+  static const breakingWindow = Duration(hours: 6);
+
+  /// Whether to show the "breaking" badge right now. An unparseable date is
+  /// treated as not recent: the badge is a claim about time.
+  bool isBreakingNow({DateTime? now}) {
+    if (!isBreaking) return false;
+    final published = DateTime.tryParse(publishedAt);
+    if (published == null) return false;
+    final age = (now ?? DateTime.now()).toUtc().difference(published.toUtc());
+    return age <= breakingWindow;
+  }
+
   Map<String, dynamic> toJson() => {
         'content_type': contentType,
         'action_url': actionUrl,

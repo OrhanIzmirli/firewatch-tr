@@ -164,7 +164,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                         showDot: true,
                         color: newsRiskLevelColor(riskLevel),
                       ),
-                      if (newsItem.isBreaking)
+                      if (newsItem.isBreakingNow())
                         StatusChip(
                           label: l10n.newsBreakingBadge,
                           icon: Icons.bolt_rounded,

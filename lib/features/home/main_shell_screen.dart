@@ -13,6 +13,7 @@ import '../risk/risk_screen.dart';
 import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
+import '../../shared/widgets/app_sheet.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -71,7 +72,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     final open = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.ratingPromptTitle),
+        title: DialogTitleWithClose(title: Text(l10n.ratingPromptTitle)),
         content: Text(l10n.ratingPromptMessage),
         actions: [
           TextButton(

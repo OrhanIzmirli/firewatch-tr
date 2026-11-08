@@ -16,6 +16,7 @@ import '../../services/tracked_places_provider.dart';
 import '../../shared/widgets/carto_basemap.dart';
 import 'place_search_screen.dart';
 import '../../services/device_position.dart';
+import '../../shared/widgets/app_sheet.dart';
 
 String trackedPlacesErrorText(AppLocalizations l10n, TrackedPlacesError error) {
   switch (error) {
@@ -67,10 +68,9 @@ Future<TrackedPlace?> showAddTrackedPlaceFlow(BuildContext context, {LatLng? ini
   }
   if (point == null || !context.mounted) return null;
 
-  final place = await showModalBottomSheet<TrackedPlace>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
+  final place = await showAppSheet<TrackedPlace>(
+    context,
+    scrollable: false,
     builder: (_) => AddTrackedPlaceForm(point: point!, initialName: suggestedName),
   );
   if (place != null && context.mounted) {
@@ -81,10 +81,9 @@ Future<TrackedPlace?> showAddTrackedPlaceFlow(BuildContext context, {LatLng? ini
 
 /// The settings of a place: name, radius, both switches, delete.
 Future<void> showEditTrackedPlace(BuildContext context, TrackedPlace place) {
-  return showModalBottomSheet<TrackedPlace>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
+  return showAppSheet<TrackedPlace>(
+    context,
+    scrollable: false,
     builder: (_) => AddTrackedPlaceForm(point: LatLng(place.latitude, place.longitude), existing: place),
   );
 }
@@ -146,7 +145,7 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.trackedPlacesDeleteTitle(place.name)),
+        title: DialogTitleWithClose(title: Text(l10n.trackedPlacesDeleteTitle(place.name))),
         content: Text(l10n.trackedPlacesDeleteBody),
         actions: [
           TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),

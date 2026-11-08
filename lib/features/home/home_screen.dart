@@ -1,55 +1,41 @@
 import 'dart:async';
-import 'dart:math' as math;
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../core/constants/app_colors.dart';
-import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/utils/auto_refresh.dart';
-import '../../core/utils/loading_race.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/detection_status.dart';
 import '../../models/fire_incident.dart';
-import '../../models/fire_point.dart';
-import '../../models/incident_summary.dart';
-import '../../models/persistent_heat_source.dart';
 import '../../models/news_item.dart';
 import '../../models/tracked_place.dart';
-import '../../services/fire_api_service.dart';
-import 'widgets/recent_alerts.dart';
-import '../risk/widgets/tracked_places_section.dart';
-import '../../services/fire_mapper.dart';
+import '../../services/device_position.dart';
+import '../../services/location_disclosure.dart';
 import '../../services/news_service.dart';
-import '../../services/render_api_service.dart';
 import '../../services/news_translation_service.dart';
-import '../../services/offline_cache_service.dart';
-import '../../services/watchlist_provider.dart';
+import '../../services/point_risk_service.dart';
+import '../../services/render_api_service.dart';
 import '../../shared/coach_mark_keys.dart';
-import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/detection_status_card.dart';
-import '../../models/detection_status.dart';
+import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/report_fire_panel.dart';
-import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
-import '../../shared/widgets/slow_loading_banner.dart';
-import '../../shared/widgets/smart_overview_card.dart';
-import '../../shared/widgets/state_views.dart';
 import '../../shared/widgets/status_chip.dart';
-import '../../shared/widgets/trust_info_card.dart';
-import '../../services/location_disclosure.dart';
-import '../../services/device_position.dart';
+import '../risk/widgets/tracked_places_section.dart';
 
+enum _Location { pending, unavailable, outsideTurkey, unknownRisk, ready }
+
+/// One screen, four answers, in this order: what about where I am, my
+/// places, the country in one line, the news.
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -58,224 +44,62 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  static const _newsCacheKey = 'home_news';
-  static const _firesCacheKey = 'home_fires';
-  static const _riskCacheKey = 'home_risk';
+  static const nearbyRadiusMeters = 25000.0;
+  static const newsFreshFor = Duration(hours: 72);
 
-  final TextEditingController _searchController = TextEditingController();
-  Timer? _searchDebounce;
   final NewsService _newsService = NewsService();
-  final FireApiService _fireApiService = FireApiService();
-  final Dio _dio = Dio(
-    BaseOptions(
-      // Generous enough to survive a Render free-tier cold start (can take
-      // 10-30s to wake) without throwing a false "offline" failure.
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-    ),
-  );
+  final RenderApiService _api = RenderApiService();
 
-  List<NewsItem> _topNews = [];
-  List<FirePoint> _firePoints = [];
-  DetectionStatus? _detectionStatus;
-  final RenderApiService _statusApi = RenderApiService();
+  _Location _location = _Location.pending;
+  Position? _position;
+  Map<String, dynamic>? _point;
+  List<FireIncident> _incidents = const [];
+  DetectionStatus? _status;
+  List<NewsItem> _news = const [];
 
-  /// Satellite detections in the last 24 hours inside a place's radius.
-  int _detectionsNear(TrackedPlace place) {
-    final since = DateTime.now().toUtc().subtract(const Duration(hours: 24));
-    return _firePoints.where((p) {
-      final at = p.detectionDateTimeUtc;
-      return at != null && at.isAfter(since) && place.isWithinRadius(p.latitude, p.longitude);
-    }).length;
-  }
-  List<Map<String, dynamic>> _regions = [];
-  Position? _userPosition;
-  String? _myCity;
-  double? _myDistanceKm;
-  _LocationStatus _locationStatus = _LocationStatus.pending;
-  // Canonical (non-localized) quick filter: 'high' | 'medium' | 'ege' | 'akdeniz' | 'marmara' | 'karadeniz'
-  String? _quickFilter;
-  bool _newsLoading = true;
-  bool _fireLoading = true;
-  bool _riskLoading = true;
-  bool _newsSlowLoading = false;
-  bool _firesSlowLoading = false;
-
-  final RenderApiService _renderApi = RenderApiService();
-  IncidentSummary? _incidentSummary;
-  bool _incidentSummaryLoading = true;
-
-  /// Settings › data refresh interval: a silent reload of the fire feed
-  /// and the 24-hour summary, no spinner.
-  late final AutoRefresher _autoRefresher = AutoRefresher(
-    onRefresh: () => Future.wait([
-      _loadFires(force: true, silent: true),
-      _loadIncidentSummary(),
-    ]),
-  );
+  late final AutoRefresher _autoRefresher = AutoRefresher(onRefresh: _loadData);
 
   @override
   void initState() {
     super.initState();
     _loadData();
-    _loadUserPosition();
     _autoRefresher.start();
   }
 
-  /// [force] skips the two-minute feed memo (pull-to-refresh).
-  Future<void> _loadData({bool force = false}) async {
-    await Future.wait([
-      _loadNews(),
-      _loadFires(force: force),
-      _loadRiskSummary(),
-      _loadIncidentSummary(),
-    ]);
+  @override
+  void dispose() {
+    _autoRefresher.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadData() async {
+    await Future.wait([_loadLocation(), _loadIncidents(), _loadStatus(), _loadNews()]);
     _autoRefresher.markRefreshed();
   }
 
-  /// Best-effort. A null summary hides the section rather than showing zeros,
-  /// because "0 active fires" and "we could not reach the server" are very
-  /// different statements to put in front of someone checking for a fire.
-  Future<void> _loadIncidentSummary() async {
-    final summary = await _renderApi.fetchIncidentSummary();
-    if (!mounted) return;
-    setState(() {
-      _incidentSummary = summary;
-      _incidentSummaryLoading = false;
-    });
+  Future<void> _loadIncidents() async {
+    final incidents = await _api.fetchIncidents(days: 2, limit: 300);
+    if (mounted) setState(() => _incidents = incidents);
   }
 
-  /// Turns a duration in hours into something a person reads at a glance.
-  /// Deliberately coarse — the satellite fixes the resolution at a few passes
-  /// a day, so minutes would be false precision.
-  String _formatDuration(AppLocalizations l10n, double hours) {
-    final total = hours.round();
-    if (total < 24) return l10n.durationHoursShort(total);
-    return l10n.durationDaysHours(total ~/ 24, total % 24);
+  Future<void> _loadStatus() async {
+    final status = await _api.fetchDetectionStatus();
+    if (mounted) setState(() => _status = status);
   }
 
-  /// Active detections below the multi-pass bar (never negative, in case
-  /// an older backend's two counts disagree).
-  int _weakerActive(IncidentSummary summary) =>
-      math.max(0, summary.activeCount - summary.activeSignificantCount);
-
-  /// The last 24 hours in three cards.
-  ///
-  /// The middle card is the delicate one: it counts events the satellite
-  /// stopped seeing, and its title and subtitle both have to keep saying that
-  /// rather than the shorter, wronger thing. There is no data anywhere in
-  /// this app that says a fire was put out.
-  Widget _buildLast24hSection(AppLocalizations l10n, IncidentSummary summary) {
-    // The client-side fallback has no province to work with. Printing
-    // "Province unknown · 50 MW" spends the card's one line on the thing we
-    // do not know; the power alone is the part that carries meaning.
-    final strongestCity = summary.strongestActiveCityName;
-
-    return Column(
-      children: [
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisSpacing: AppSpacing.md,
-          mainAxisSpacing: AppSpacing.md,
-          childAspectRatio: 0.86,
-          children: [
-            SmartOverviewCard(
-              title: l10n.homeLast24hActiveTitle,
-              // As in 1.0.6: the headline is the multi-pass count, the
-              // number the events layer actually draws. Single fresh pixels
-              // are counted in the subtitle and live on the Points layer.
-              value: summary.activeSignificantCount.toString(),
-              subtitle: l10n.homeMultiPassSubtitle(_weakerActive(summary)),
-              icon: Icons.local_fire_department_rounded,
-              color: AppColors.danger,
-              delay: 0.ms,
-              onTap: () => context.go(
-                '/map',
-                extra: {'incidentFilter': IncidentFilter.active.storageValue},
-              ),
-            ),
-            SmartOverviewCard(
-              title: l10n.homeLast24hEndedTitle,
-              value: summary.detectionEndedLast24h.toString(),
-              subtitle: l10n.homeLast24hEndedSubtitle,
-              icon: Icons.satellite_alt_rounded,
-              color: AppColors.primary,
-              delay: 60.ms,
-              onTap: () => context.go(
-                '/map',
-                extra: {'incidentFilter': IncidentFilter.ended.storageValue},
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          l10n.homeMultiPassNote(
-            summary.activeSignificantCount,
-            _weakerActive(summary),
-          ),
-          style: GoogleFonts.ibmPlexSans(
-            fontSize: 12,
-            height: 1.4,
-            color: Theme.of(context).textTheme.bodySmall?.color,
-          ),
-        ),
-        if (summary.hasStrongestActive) ...[
-          const SizedBox(height: AppSpacing.md),
-          SmartOverviewCard(
-            title: l10n.homeLast24hStrongestTitle,
-            value: [
-              if (strongestCity != null && strongestCity.isNotEmpty)
-                strongestCity,
-              l10n.homeLast24hStrongestPower(
-                summary.strongestActiveMaxFrpMw!.round(),
-              ),
-            ].join(' · '),
-            // Duration goes in the subtitle as a floor, never as a headline.
-            subtitle: summary.strongestActiveDurationHoursAtLeast == null
-                ? l10n.homeLast24hStrongestSubtitle
-                : l10n.homeLast24hStrongestSubtitleWithDuration(
-                    _formatDuration(
-                      l10n,
-                      summary.strongestActiveDurationHoursAtLeast!,
-                    ),
-                  ),
-            icon: Icons.whatshot_rounded,
-            color: AppColors.danger,
-            delay: 120.ms,
-            onTap: () => context.go(
-              '/map',
-              extra: {'incidentFilter': IncidentFilter.active.storageValue},
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  // Stock Android emulator AVDs used for local testing report a fixed mock
-  // GPS fix (İzmir) rather than a real location. Flagging it explicitly
-  // stops testers from mistaking "the emulator's hardcoded fix" for "the
-  // real-device city lookup is broken".
-  static const double _emulatorTestLat = 38.42;
-  static const double _emulatorTestLng = 27.14;
-
-  // Same bounding box used to decide whether a resolved location should
-  // attempt a Turkish city lookup at all.
-  static bool _isInsideTurkeyBbox(double lat, double lng) =>
-      lat >= 35.8 && lat <= 42.2 && lng >= 25.6 && lng <= 44.8;
-
-  /// Best-effort location fetch for the "Nearby Fire Alert" overview card —
-  /// silently falls back to the region-wide count on failure, but still
-  /// records _locationStatus so the header can show why (unavailable vs.
-  /// outside Turkey vs. emulator test fix) instead of just hiding the row.
-  Future<void> _loadUserPosition() async {
+  Future<void> _loadNews() async {
     try {
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
+      final news = await _newsService.fetchNewsFromRender(limit: 5);
+      if (mounted) setState(() => _news = news.where((n) => n.publishedWithin(newsFreshFor)).take(3).toList());
+    } catch (_) {
+      // No news section is the right answer when the feed cannot be read.
+    }
+  }
+
+  Future<void> _loadLocation() async {
+    try {
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        if (mounted) setState(() => _location = _Location.unavailable);
         return;
       }
       var permission = await Geolocator.checkPermission();
@@ -283,936 +107,120 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         permission = await LocationDisclosure.requestPermission(context);
       }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-        if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
+        if (mounted) setState(() => _location = _Location.unavailable);
         return;
       }
-      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 8));
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
       if (!mounted) return;
-      debugPrint('[Location] Fresh GPS fix: lat=${position.latitude}, lng=${position.longitude}');
-      setState(() => _userPosition = position);
-
-      final isEmulatorTestLocation =
-          (position.latitude - _emulatorTestLat).abs() < 0.01 &&
-          (position.longitude - _emulatorTestLng).abs() < 0.01;
-      if (isEmulatorTestLocation) {
-        debugPrint('[Location] Matches known emulator test fix (İzmir) — not a real device location.');
+      setState(() => _position = position);
+      final point = await PointRiskService.instance.fetch(lat: position.latitude, lng: position.longitude);
+      if (mounted) {
         setState(() {
-          _locationStatus = _LocationStatus.emulatorTest;
-          _myCity = null;
-          _myDistanceKm = null;
+          _point = point;
+          _location = _Location.ready;
         });
-        return;
       }
-
-      if (!_isInsideTurkeyBbox(position.latitude, position.longitude)) {
-        setState(() {
-          _locationStatus = _LocationStatus.outsideTurkey;
-          _myCity = null;
-          _myDistanceKm = null;
-        });
-        return;
-      }
-
-      final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
-      if (!mounted) return;
-      setState(() {
-        if (cityInfo.outsideTurkey) {
-          _locationStatus = _LocationStatus.outsideTurkey;
-          _myCity = null;
-          _myDistanceKm = null;
-        } else {
-          _locationStatus = _LocationStatus.resolved;
-          _myCity = cityInfo.city;
-          _myDistanceKm = cityInfo.distanceKm;
-        }
-      });
+    } on PointRiskException catch (e) {
+      if (mounted) setState(() => _location = e.error == PointRiskError.outsideTurkey ? _Location.outsideTurkey : _Location.unknownRisk);
     } catch (_) {
-      // No location — nearby-fire card falls back to the Turkey-wide count.
-      if (mounted) setState(() => _locationStatus = _LocationStatus.unavailable);
+      if (mounted) setState(() => _location = _Location.unavailable);
     }
   }
 
-  Future<void> _loadRiskSummary() async {
-    if (mounted) setState(() => _riskLoading = true);
-    try {
-      final response = await raceWithCacheFallback(
-        fetch: retryOnce(() => _dio.get('${ApiConfig.apiBaseUrl}/risk/summary')),
-        timeout: const Duration(seconds: 12),
-        cacheKey: _riskCacheKey,
-        onSlowFallback: (cached) {
-          if (!mounted) return;
-          final (data, _) = cached;
-          setState(() {
-            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-            _riskLoading = false;
-          });
-        },
-      );
-      if (response.statusCode == 200) {
-        final data = response.data['data'] as List;
-        final regions = data.map((e) => Map<String, dynamic>.from(e)).toList();
-        await OfflineCacheService.instance.save(_riskCacheKey, regions);
-        if (mounted) setState(() { _regions = regions; _riskLoading = false; });
-      }
-    } catch (_) {
-      final cached = await OfflineCacheService.instance.load(_riskCacheKey);
-      if (mounted) {
-        setState(() {
-          if (cached != null) {
-            final (data, _) = cached;
-            _regions = (data as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-          }
-          _riskLoading = false;
-        });
-      }
-    }
+  bool _isRecentStrong(FireIncident i) =>
+      !i.isKeptOffEvents && i.hoursSinceLastDetection <= 24 && (i.belongsOnEventsLayer || i.isStrongUnverified);
+
+  int get _nearbyCount {
+    final position = _position;
+    if (position == null) return 0;
+    return _incidents
+        .where((i) =>
+            _isRecentStrong(i) &&
+            Geolocator.distanceBetween(position.latitude, position.longitude, i.latitude, i.longitude) <= nearbyRadiusMeters)
+        .length;
   }
 
-  Future<void> _loadNews() async {
-    if (mounted) setState(() { _newsLoading = true; _newsSlowLoading = false; });
-    try {
-      final news = await raceWithCacheFallback(
-        fetch: retryOnce(() => _newsService.fetchNewsFromRender(limit: 3)),
-        timeout: const Duration(seconds: 12),
-        cacheKey: _newsCacheKey,
-        onSlowFallback: (cached) {
-          if (!mounted) return;
-          final (data, _) = cached;
-          setState(() {
-            _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
-            _newsSlowLoading = true;
-            _newsLoading = false;
-          });
-        },
-      );
-      await OfflineCacheService.instance.save(_newsCacheKey, news.map((n) => n.toJson()).toList());
-      if (mounted) setState(() { _topNews = news; _newsLoading = false; _newsSlowLoading = false; });
-    } catch (e, stack) {
-      if (kDebugMode) debugPrint('ERROR _loadNews: $e\n$stack');
-      final cached = await OfflineCacheService.instance.load(_newsCacheKey);
-      if (mounted) {
-        setState(() {
-          if (cached != null) {
-            final (data, _) = cached;
-            _topNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
-          }
-          _newsSlowLoading = false;
-          _newsLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _loadDetectionStatus() async {
-    final status = await _statusApi.fetchDetectionStatus();
-    if (mounted) setState(() => _detectionStatus = status);
-  }
-
-  Future<void> _loadFires({bool force = false, bool silent = false}) async {
-    if (mounted && !silent) setState(() { _fireLoading = true; _firesSlowLoading = false; });
-    _loadDetectionStatus();
-    try {
-      final allPoints = await raceWithCacheFallback(
-        fetch: retryOnce(
-          () => _fireApiService.fetchTurkeyFiresWithCities(force: force),
-        ),
-        timeout: const Duration(seconds: 12),
-        cacheKey: _firesCacheKey,
-        onSlowFallback: (cached) {
-          // A silent refresh never swaps fresh data for the offline copy.
-          if (silent || !mounted) return;
-          final (data, _) = cached;
-          setState(() {
-            _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-            _firesSlowLoading = true;
-            _fireLoading = false;
-          });
-        },
-      );
-      await OfflineCacheService.instance.save(_firesCacheKey, allPoints.map((p) => p.toJson()).toList());
-      if (mounted) {
-        setState(() {
-        _firePoints = allPoints;
-        _fireLoading = false;
-        _firesSlowLoading = false;
-      });
-      }
-    } catch (e, stack) {
-      if (kDebugMode) debugPrint('ERROR _loadFires: $e\n$stack');
-      // Silent refresh failed: keep what is on screen.
-      if (silent) return;
-      final cached = await OfflineCacheService.instance.load(_firesCacheKey);
-      if (mounted) {
-        setState(() {
-          if (cached != null) {
-            final (data, _) = cached;
-            _firePoints = (data as List).map((e) => FirePoint.fromJson(e as Map<String, dynamic>)).toList();
-          }
-          _firesSlowLoading = false;
-          _fireLoading = false;
-        });
-      }
-    }
-  }
-
-  /// A raw detection within 2 km of a fixed heat source the backend has
-  /// labelled (steelworks, refinery, flare). Drawn grey and named as such,
-  /// never as a fire — and never hidden.
-  bool _isFixedSourcePoint(FirePoint p) =>
-      p.nearPersistentSource ||
-      PersistentHeatSource.coversPoint(
-        _incidentSummary?.persistentHeatSources ?? const [],
-        p.latitude,
-        p.longitude,
-      );
-
-  bool _matchesQuickFilter(FirePoint p) {
-    final filter = _quickFilter;
-    if (filter == null) return true;
-    if (filter == 'high' || filter == 'medium') return p.riskTier == filter;
-    // Region filters: match the canonical bbox key, or the raw backend
-    // city/region text (proper nouns, same in every locale).
-    if (p.regionKey == filter) return true;
-    final nr = p.nearestRegion?.toLowerCase();
-    if (nr != null && nr.contains(filter)) return true;
-    final cn = p.cityName?.toLowerCase();
-    if (cn != null && cn.contains(filter)) return true;
-    return false;
-  }
-
-  void _showFirePreview(BuildContext context, FirePoint point) {
-    final l10n = AppLocalizations.of(context)!;
-    final bright = double.tryParse(point.brightness) ?? 0;
-    final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(0) : bright.toStringAsFixed(0);
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final secondaryTextColor = isDark
-        ? AppColors.white.withValues(alpha: 0.74)
-        : Colors.black.withValues(alpha: 0.66);
-
-    String alanTahmini;
-    if (bright >= 370) {
-      alanTahmini = l10n.homeAreaOver100Ha;
-    } else if (bright >= 330) {
-      alanTahmini = l10n.homeArea10to100Ha;
-    } else if (bright >= 300) {
-      alanTahmini = l10n.homeAreaUnder10Ha;
-    } else {
-      alanTahmini = l10n.homeAreaInsufficientRes;
-    }
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: GlassPanel(
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
-                  StatusChip(
-                    label: fireStatusLabel(l10n, point.smartStatus),
-                    showDot: true,
-                    color: fireStatusColor(point.smartStatus),
-                  ),
-                  InfoIconButton(
-                    title: l10n.tooltipConfidenceTitle,
-                    bodyLines: [l10n.smartConfidenceHigh, l10n.smartConfidenceMedium, l10n.smartConfidenceLow],
-                  ),
-                  StatusChip(label: '${point.formattedDate} ${point.formattedTime}', icon: Icons.access_time_rounded),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                l10n.homeFireRegionTitle(point.regionDisplayName(l10n)),
-                style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, color: titleColor),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                point.riskReasonText(l10n),
-                style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              _PreviewRow(
-                icon: Icons.thermostat_rounded,
-                label: l10n.commonTemperature,
-                value: '$tempC°C (${bright.toStringAsFixed(0)}K)',
-                info: InfoIconButton(title: l10n.tooltipTempTitle, bodyLines: [l10n.tooltipTempBody]),
-              ),
-              const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.area_chart_rounded, label: l10n.homeEstimatedArea, value: alanTahmini),
-              const SizedBox(height: 8),
-              _PreviewRow(
-                icon: Icons.satellite_alt_rounded,
-                label: l10n.commonSatellite,
-                value: point.mergedSatelliteLabel,
-                valueColor: point.isMerged ? AppColors.success : null,
-                info: InfoIconButton(
-                  title: l10n.tooltipSatelliteTitle,
-                  bodyLines: point.isMerged
-                      ? [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody, l10n.tooltipSatelliteMergedBody]
-                      : [l10n.tooltipSatelliteViirsBody, l10n.tooltipSatelliteModisBody],
-                ),
-              ),
-              const SizedBox(height: 8),
-              _PreviewRow(icon: Icons.location_on_rounded, label: l10n.commonCoordinate, value: point.locationLabelText(l10n)),
-              const SizedBox(height: AppSpacing.lg),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.go('/map', extra: {'lat': point.latitude, 'lng': point.longitude});
-                      },
-                      icon: const Icon(Icons.map_rounded),
-                      label: Text(l10n.commonViewOnMap),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: FilledButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.push('/fire-detail', extra: convertPointToFireEvent(point, l10n));
-                      },
-                      icon: const Icon(Icons.arrow_forward_rounded),
-                      label: Text(l10n.commonDetail),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _autoRefresher.dispose();
-    _searchDebounce?.cancel();
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _onSearchChanged() {
-    _searchDebounce?.cancel();
-    _searchDebounce = Timer(const Duration(milliseconds: 300), () {
-      if (mounted) setState(() {});
-    });
-  }
+  /// Fires-side detections in the last 24 hours inside a place's radius.
+  int _detectionsNear(TrackedPlace place) => _incidents
+      .where((i) => !i.isKeptOffEvents && i.hoursSinceLastDetection <= 24 && place.isWithinRadius(i.latitude, i.longitude))
+      .length;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    final primaryTextColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
-    final secondaryTextColor = isDark
-        ? AppColors.white.withValues(alpha: 0.75)
-        : Colors.black.withValues(alpha: 0.68);
-    final tertiaryTextColor = isDark
-        ? AppColors.white.withValues(alpha: 0.62)
-        : Colors.black.withValues(alpha: 0.5);
-
-    final savedIds = ref.watch(watchlistProvider);
-    final query = _searchController.text.trim().toLowerCase();
-
-    // ── Overview card 1: active (non-low-confidence) fire points ──
-    // Uses FirePoint.riskTier (not a local confidence parse) so it handles
-    // both VIIRS text confidence ("high"/"nominal") and MODIS numeric
-    // confidence (e.g. "79") the same way markers/badges do elsewhere.
-    final activeFireCount = _firePoints.where((p) => p.riskTier != 'low').length;
-    final activeFireColor = activeFireCount > 10
-        ? AppColors.danger
-        : activeFireCount > 5
-            ? AppColors.warning
-            : AppColors.success;
-
-    // ── Overview card 2: highest-risk region from /api/risk/summary ──
-    Map<String, dynamic>? highestRiskRegion;
-    for (final r in _regions) {
-      final score = r['general_risk_score'] as int? ?? 0;
-      final bestSoFar = highestRiskRegion?['general_risk_score'] as int? ?? -1;
-      if (score > bestSoFar) highestRiskRegion = r;
-    }
-    final highestRiskColor = highestRiskRegion == null
-        ? AppColors.success
-        : riskScoreColor(highestRiskRegion['general_risk_score'] as num);
-
-    // ── Overview card 3: fires within 100km, falling back to the
-    // nationwide count when location isn't available ──
-    final position = _userPosition;
-    final nearbyCount = position == null
-        ? null
-        : _firePoints.where((p) {
-            final distanceMeters = Geolocator.distanceBetween(
-              position.latitude, position.longitude, p.latitude, p.longitude);
-            return distanceMeters <= 100000;
-          }).length;
-    final nearbyDisplayCount = nearbyCount ?? _firePoints.length;
-    final nearbyColor = nearbyDisplayCount > 0 ? AppColors.danger : AppColors.success;
-
-    // ── Overview card 4: news freshness ──
-    String newsTimeAgo = l10n.homeOverviewNewsNone;
-    if (_topNews.isNotEmpty) {
-      final published = DateTime.tryParse(_topNews.first.publishedAt);
-      if (published != null) {
-        final diff = DateTime.now().toUtc().difference(published.toUtc());
-        if (diff.inMinutes < 1) {
-          newsTimeAgo = l10n.timeAgoJustNow;
-        } else if (diff.inMinutes < 60) {
-          newsTimeAgo = l10n.timeAgoMinutes(diff.inMinutes);
-        } else if (diff.inHours < 24) {
-          newsTimeAgo = l10n.timeAgoHours(diff.inHours);
-        } else {
-          newsTimeAgo = l10n.timeAgoDays(diff.inDays);
-        }
-      }
-    }
-
+    final status = _status;
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appName, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(tooltip: l10n.navSettings, icon: const Icon(Icons.settings_outlined), onPressed: () => context.push('/settings')),
-          IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
+          IconButton(tooltip: l10n.commonRefresh, icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => _loadData(force: true),
+        onRefresh: _loadData,
         color: AppColors.primary,
         child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // First on the screen: how new the data is, and what can be said.
-            if (_detectionStatus case final status?) ...[
-              if (status.kind == DetectionStatusKind.strong)
-                DetectionFreshnessLine(status: status)
-              else
-                DetectionStatusCard(
-                  status: status,
-                  onRetry: _loadDetectionStatus,
-                  onReport: () => showReportFirePanel(context, initialType: ReportType.missingFire),
-                  onShowLast7Days: status.kind == DetectionStatusKind.unavailable
-                      ? null
-                      : () => context.go('/map', extra: const {'incidentFilter': 'all'}),
-                ),
-              const SizedBox(height: AppSpacing.md),
-            ],
-            const RecentAlerts(),
-            const SizedBox(height: AppSpacing.md),
-            TrackedPlacesSection(detectionCount: _detectionsNear),
-            const SizedBox(height: AppSpacing.lg),
-            if (_firesSlowLoading) const SlowLoadingBanner(),
-            // ── Header ──────────────────────────────────────
-            GlassPanel(
-              padding: const EdgeInsets.all(AppSpacing.xl),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatusChip(label: l10n.homeLiveSummary, icon: Icons.bolt_rounded),
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(l10n.homeHeaderTitle,
-                      style: GoogleFonts.ibmPlexSans(fontSize: 30, fontWeight: FontWeight.w800, color: primaryTextColor)),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(l10n.homeHeaderSubtitle,
-                      style: GoogleFonts.ibmPlexSans(fontSize: 16, height: 1.45, color: secondaryTextColor)),
-                  const SizedBox(height: AppSpacing.lg),
-                  Row(
-                    children: [
-                      Icon(Icons.access_time_rounded, size: 18, color: tertiaryTextColor),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(l10n.homeNasaLiveData,
-                          style: GoogleFonts.ibmPlexSans(fontSize: 14, color: tertiaryTextColor)),
-                    ],
-                  ),
-                  if (_locationStatus != _LocationStatus.pending) ...[
-                    const SizedBox(height: AppSpacing.sm),
-                    Row(
-                      children: [
-                        Icon(
-                          switch (_locationStatus) {
-                            _LocationStatus.outsideTurkey => Icons.public_off_rounded,
-                            _LocationStatus.unavailable => Icons.location_off_rounded,
-                            _LocationStatus.emulatorTest => Icons.phone_android_rounded,
-                            _LocationStatus.resolved || _LocationStatus.pending => Icons.location_on_rounded,
-                          },
-                          size: 18,
-                          color: tertiaryTextColor,
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        Expanded(
-                          child: Text(
-                            switch (_locationStatus) {
-                              _LocationStatus.outsideTurkey => l10n.homeOutsideTurkeyLocation,
-                              _LocationStatus.unavailable => l10n.homeLocationUnavailable,
-                              _LocationStatus.emulatorTest => l10n.homeLocationEmulatorTest,
-                              _LocationStatus.resolved || _LocationStatus.pending => _myCity ?? '',
-                            },
-                            style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: primaryTextColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (_locationStatus == _LocationStatus.resolved && _myDistanceKm != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 26, top: 2),
-                        child: Text(
-                          l10n.riskMyLocationPostgisDistance(_myDistanceKm!.toStringAsFixed(1)),
-                          style: GoogleFonts.ibmPlexSans(fontSize: 12, color: tertiaryTextColor),
-                        ),
-                      ),
-                  ],
-                  const SizedBox(height: AppSpacing.lg),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton.icon(
-                          key: CoachMarkKeys.riskButton,
-                          onPressed: () => context.push('/risk'),
-                          icon: const Icon(Icons.auto_graph_rounded),
-                          label: Text(l10n.homeRiskAnalysis),
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          key: CoachMarkKeys.savedButton,
-                          onPressed: () => context.push('/watchlist'),
-                          icon: const Icon(Icons.bookmark_rounded),
-                          label: Text(l10n.homeSaved(savedIds.length)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => context.push('/safety-guide'),
-                          icon: const Icon(Icons.shield_outlined),
-                          label: Text(l10n.homeSafety),
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.md),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => context.push('/emergency'),
-                          icon: const Icon(Icons.emergency_rounded),
-                          label: Text(l10n.commonEmergency),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _TodayCard(
+                key: CoachMarkKeys.riskButton,
+                location: _location,
+                point: _point,
+                nearbyCount: _nearbyCount,
+                onEnableLocation: _loadLocation,
+                onOpenRisk: () => context.go('/app?tab=risk'),
               ),
-            ).animate().fadeIn(duration: 500.ms).scale(
-                  begin: const Offset(0.96, 0.96),
-                  end: const Offset(1, 1),
-                  curve: Curves.easeOutCubic,
-                ).slideY(begin: 0.08, end: 0),
-
-            const SizedBox(height: AppSpacing.md),
-            _DailyBriefCard(
-              highestRiskRegion: highestRiskRegion == null
-                  ? null
-                  : displayRegionName(l10n, highestRiskRegion['region'] as String),
-              highestRiskScore: highestRiskRegion?['general_risk_score'] as int?,
-              riskLoading: _riskLoading,
-              nearbyCount: nearbyCount,
-              activeFireCount: activeFireCount,
-              onOpenMap: () => context.go('/map'),
-              onOpenRisk: () => context.push('/risk'),
-            ),
-
-            const SizedBox(height: AppSpacing.md),
-            TrustInfoCardGroup(
-              meaning: l10n.trustHomeMeaning,
-              source: l10n.trustHomeSource,
-              interpret: l10n.trustHomeInterpret,
-              action: l10n.trustHomeAction,
-            ),
-
-            const SizedBox(height: AppSpacing.xxl),
-
-            // ── Genel Bakış ──────────────────────────────────
-            SectionHeader(
-              title: l10n.homeOverview,
-              subtitle: _fireLoading ? l10n.homeOverviewSubtitle : l10n.homeOverviewUniqueCount(_firePoints.length),
-              icon: const Icon(Icons.dashboard_customize_rounded),
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            if (_fireLoading || _riskLoading || _newsLoading)
-              const SkeletonMetricGrid(count: 4)
-            else
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: AppSpacing.md,
-                mainAxisSpacing: AppSpacing.md,
-                childAspectRatio: 0.86,
-                children: [
-                  SmartOverviewCard(
-                    title: l10n.homeOverviewActiveFiresTitle,
-                    value: activeFireCount.toString(),
-                    subtitle: l10n.homeOverviewActiveFiresSubtitle,
-                    icon: Icons.local_fire_department_rounded,
-                    color: activeFireColor,
-                    delay: 0.ms,
-                    onTap: () => context.go('/map', extra: {'confidenceFilter': true}),
-                  ),
-                  SmartOverviewCard(
-                    title: l10n.homeOverviewHighestRiskTitle,
-                    value: highestRiskRegion == null
-                        ? l10n.riskDataLoading
-                        : riskLevelLabel(l10n, riskLevelForScore(highestRiskRegion['general_risk_score'] as num)),
-                    subtitle: highestRiskRegion == null ? l10n.homeOverviewHighestRiskSubtitle : riskAdvice(l10n, highestRiskRegion['general_risk_score'] as num),
-                    icon: Icons.warning_amber_rounded,
-                    color: highestRiskColor,
-                    delay: 60.ms,
-                    onTap: highestRiskRegion == null
+              const SizedBox(height: AppSpacing.xl),
+              TrackedPlacesSection(detectionCount: _detectionsNear),
+              const SizedBox(height: AppSpacing.xl),
+              if (status != null) ...[
+                if (status.kind == DetectionStatusKind.strong)
+                  _TurkeyLine(status: status, onOpenMap: () => context.go('/map'))
+                else
+                  DetectionStatusCard(
+                    status: status,
+                    onRetry: _loadStatus,
+                    onReport: () => showReportFirePanel(context, initialType: ReportType.missingFire),
+                    onShowLast7Days: status.kind == DetectionStatusKind.unavailable
                         ? null
-                        : () => context.push('/risk', extra: highestRiskRegion!['region'] as String),
+                        : () => context.go('/map', extra: const {'incidentFilter': 'all'}),
                   ),
-                  SmartOverviewCard(
-                    title: l10n.homeOverviewNearbyTitle,
-                    value: nearbyCount != null
-                        ? l10n.homeOverviewNearbyValueWithLocation(nearbyCount)
-                        : l10n.homeOverviewNearbyValueNationwide(nearbyDisplayCount),
-                    subtitle: nearbyCount != null
-                        ? l10n.homeOverviewNearbySubtitleLocated
-                        : l10n.homeOverviewNearbySubtitleFallback,
-                    icon: Icons.location_on_rounded,
-                    color: nearbyColor,
-                    delay: 120.ms,
-                    onTap: position == null
-                        ? () => context.go('/map')
-                        : () => context.go('/map', extra: {'lat': position.latitude, 'lng': position.longitude}),
-                  ),
-                  SmartOverviewCard(
-                    title: l10n.homeOverviewNewsTitle,
-                    value: l10n.homeOverviewNewsValue(_topNews.length),
-                    subtitle: l10n.homeOverviewNewsSubtitleUpdated(newsTimeAgo),
-                    icon: Icons.newspaper_rounded,
-                    color: AppColors.primary,
-                    delay: 180.ms,
-                    onTap: () => context.go('/app?tab=news'),
-                  ),
-                ],
-              ),
-
-            // ── Son 24 Saat ──────────────────────────────────
-            if (_incidentSummaryLoading || _incidentSummary != null) ...[
-              const SizedBox(height: AppSpacing.xxl),
-              SectionHeader(
-                title: l10n.homeLast24hTitle,
-                subtitle: l10n.homeLast24hSubtitle,
-                icon: const Icon(Icons.history_rounded),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              if (_incidentSummaryLoading)
-                const SkeletonMetricGrid(count: 2)
-              else
-                _buildLast24hSection(l10n, _incidentSummary!),
-            ],
-
-            const SizedBox(height: AppSpacing.xxxl),
-
-            // ── Son Haberler ─────────────────────────────────
-            SectionHeader(
-              title: l10n.homeLatestNews,
-              subtitle: l10n.homeLatestNewsSubtitle,
-              icon: const Icon(Icons.newspaper_rounded),
-              trailing: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
+                const SizedBox(height: AppSpacing.xl),
+              ],
+              if (_news.isNotEmpty) ...[
+                SectionHeader(
+                  title: l10n.homeNewsTitle,
+                  icon: const Icon(Icons.newspaper_outlined),
+                  trailing: StatusChip(label: l10n.newsNewBadge),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.bolt_rounded, size: 16, color: AppColors.primary),
-                    const SizedBox(width: AppSpacing.sm),
-                    Text(l10n.homeBreakingCount(_topNews.where((e) => e.isBreakingNow()).length),
-                        style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w800)),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            if (_newsSlowLoading) const SlowLoadingBanner(),
-            if (_newsLoading)
-              const SkeletonListLoader(count: 2)
-            else if (_topNews.isEmpty)
-              EmptyStateView(
-                icon: Icons.newspaper_outlined,
-                title: l10n.emptyStateGenericTitle,
-                subtitle: l10n.emptyStateGenericSubtitle,
-              )
-            else
-              ..._topNews.asMap().entries.map((entry) {
-                final index = entry.key;
-                final NewsItem item = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                  child: _HomeNewsPreviewCard(
-                    item: item,
-                    onTap: () => context.push('/news-detail', extra: item),
-                  ).animate()
-                      .fadeIn(duration: 300.ms, delay: (100 + (index * 70)).ms)
-                      .slideX(begin: 0.03, end: 0)
-                      .scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)),
-                );
-              }),
-
-            const SizedBox(height: AppSpacing.xxxl),
-
-            // ── Aktif Termal Noktalar ─────────────────────────
-            SectionHeader(
-              title: l10n.homeActiveThermalPoints,
-              subtitle: l10n.homeActiveThermalSubtitle,
-              icon: const FaIcon(FontAwesomeIcons.fireFlameCurved),
-              trailing: SizedBox(
-                height: 48,
-                child: InkWell(
-                  onTap: () => context.go('/map'),
-                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.map_rounded, size: 16, color: AppColors.primary),
-                          const SizedBox(width: AppSpacing.sm),
-                          Text(l10n.homeMap, style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w800)),
-                        ],
-                      ),
-                    ),
+                const SizedBox(height: AppSpacing.md),
+                for (final item in _news)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                    child: _HomeNewsPreviewCard(item: item, onTap: () => context.push('/news-detail', extra: item)),
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            // Filtre chips
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+              ],
+              Wrap(
+                spacing: AppSpacing.sm,
                 children: [
-                  _FilterChip(label: l10n.commonAll, selected: _quickFilter == null && query.isEmpty, onTap: () { _searchDebounce?.cancel(); _searchController.clear(); setState(() => _quickFilter = null); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.homeFilterHighRisk, selected: _quickFilter == 'high', onTap: () { setState(() => _quickFilter = _quickFilter == 'high' ? null : 'high'); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.homeFilterMediumRisk, selected: _quickFilter == 'medium', onTap: () { setState(() => _quickFilter = _quickFilter == 'medium' ? null : 'medium'); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionEge, selected: _quickFilter == 'ege', onTap: () { setState(() => _quickFilter = _quickFilter == 'ege' ? null : 'ege'); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionAkdeniz, selected: _quickFilter == 'akdeniz', onTap: () { setState(() => _quickFilter = _quickFilter == 'akdeniz' ? null : 'akdeniz'); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionMarmara, selected: _quickFilter == 'marmara', onTap: () { setState(() => _quickFilter = _quickFilter == 'marmara' ? null : 'marmara'); }),
-                  const SizedBox(width: 8),
-                  _FilterChip(label: l10n.regionKaradeniz, selected: _quickFilter == 'karadeniz', onTap: () { setState(() => _quickFilter = _quickFilter == 'karadeniz' ? null : 'karadeniz'); }),
+                  TextButton.icon(
+                    onPressed: () => context.push('/safety-guide'),
+                    icon: const Icon(Icons.health_and_safety_outlined, size: 18),
+                    label: Text(l10n.homeSafety),
+                  ),
+                  TextButton.icon(
+                    key: CoachMarkKeys.savedButton,
+                    onPressed: () => context.push('/watchlist'),
+                    icon: const Icon(Icons.bookmark_outline_rounded, size: 18),
+                    label: Text(l10n.watchlistTitle),
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            GlassPanel(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (_) => _onSearchChanged(),
-                decoration: InputDecoration(
-                  hintText: l10n.homeSearchHint,
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  suffixIcon: query.isNotEmpty
-                      ? IconButton(onPressed: () { _searchDebounce?.cancel(); _searchController.clear(); setState(() {}); }, icon: const Icon(Icons.close_rounded))
-                      : null,
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-
-            if (_fireLoading)
-              const SkeletonListLoader(count: 3)
-            else
-              ..._firePoints
-                  .where((p) => _matchesQuickFilter(p) && (query.isEmpty ||
-                      p.regionDisplayName(l10n).toLowerCase().contains(query) ||
-                      (p.cityName?.toLowerCase().contains(query) ?? false) ||
-                      (p.nearestRegion?.toLowerCase().contains(query) ?? false) ||
-                      p.riskLevelLabel(l10n).toLowerCase().contains(query) ||
-                      p.acquisitionDate.contains(query)))
-                  .take(10)
-                  .toList()
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                final index = entry.key;
-                final FirePoint point = entry.value;
-                final bright = double.tryParse(point.brightness) ?? 0;
-                final tempC = bright > 200 ? (bright - 273.15).toStringAsFixed(0) : bright.toStringAsFixed(0);
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                  child: GlassPanel(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    child: InkWell(
-                      onTap: () => _showFirePreview(context, point),
-                      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  point.regionDisplayName(l10n),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w800, color: primaryTextColor),
-                                ),
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Flexible(
-                                child: Wrap(
-                                  spacing: AppSpacing.xs,
-                                  runSpacing: AppSpacing.xs,
-                                  alignment: WrapAlignment.end,
-                                  children: [
-                                    if (_isFixedSourcePoint(point))
-                                      StatusChip(
-                                        label: l10n.homeFixedHeatSourceChip,
-                                        icon: Icons.factory_outlined,
-                                        color: AppColors.textFaint,
-                                      )
-                                    else ...[
-                                      StatusChip(label: point.detectionTitle(l10n), icon: Icons.satellite_alt_rounded, color: point.detectionColor),
-                                      StatusChip(
-                                        label: fireStatusLabel(l10n, point.smartStatus),
-                                        showDot: true,
-                                        color: fireStatusColor(point.smartStatus),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            '${point.formattedDate} • ${point.formattedTime} UTC',
-                            style: AppTheme.mono(size: 12, color: tertiaryTextColor),
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                          Text(
-                            point.riskReasonText(l10n),
-                            style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.4, color: secondaryTextColor),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                          Row(
-                            children: [
-                              Icon(Icons.thermostat_rounded, size: 13, color: tertiaryTextColor),
-                              const SizedBox(width: 4),
-                              Text('$tempC°C', style: AppTheme.mono(size: 12, color: tertiaryTextColor)),
-                              const SizedBox(width: 12),
-                              Icon(Icons.satellite_alt_rounded, size: 13, color: point.isMerged ? AppColors.success : tertiaryTextColor),
-                              const SizedBox(width: 4),
-                              Flexible(
-                                child: Text(point.mergedSatelliteLabel,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.ibmPlexSans(
-                                        fontSize: 12,
-                                        fontWeight: point.isMerged ? FontWeight.w700 : FontWeight.normal,
-                                        color: point.isMerged ? AppColors.success : tertiaryTextColor)),
-                              ),
-                              const SizedBox(width: 12),
-                              const Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
-                              Text(l10n.commonDetail, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ).animate()
-                      .fadeIn(duration: 320.ms, delay: (120 + (index * 70)).ms)
-                      .slideX(begin: 0.03, end: 0)
-                      .scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1), duration: 280.ms),
-                );
-              }),
-
-            const SizedBox(height: 110),
-          ],
-        ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Classifies the device's resolved GPS fix for display: still figuring it
-/// out, no fix could be obtained at all, a fix outside Turkey, the fixed
-/// mock-location Android emulators report, or a genuine resolved Turkish
-/// city.
-enum _LocationStatus { pending, unavailable, outsideTurkey, emulatorTest, resolved }
-
-class _FilterChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _FilterChip({required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: 48,
-        child: Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: selected ? AppColors.primary : AppColors.primary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-            ),
-            child: Text(label,
-                style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w600,
-                    color: selected ? Colors.white : AppColors.primary)),
+            ],
           ),
         ),
       ),
@@ -1220,137 +228,123 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-class _PreviewRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Widget? info;
-  final Color? valueColor;
-
-  const _PreviewRow({required this.icon, required this.label, required this.value, this.info, this.valueColor});
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = isDark
-        ? AppColors.white.withValues(alpha: 0.65)
-        : Colors.black.withValues(alpha: 0.55);
-
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: valueColor ?? color),
-        const SizedBox(width: 6),
-        Text('$label: ', style: GoogleFonts.ibmPlexSans(fontSize: 13, color: color)),
-        Expanded(
-          // Readout values are mono with tabular figures so refreshing
-          // digits (temperature, coordinates) never jitter.
-          child: Text(value,
-              style: AppTheme.mono(size: 13, weight: FontWeight.w600, color: valueColor ?? color),
-              overflow: TextOverflow.ellipsis),
-        ),
-        ?info,
-      ],
-    );
-  }
-}
-
-class _DailyBriefCard extends StatelessWidget {
-  final String? highestRiskRegion;
-  final int? highestRiskScore;
-  final bool riskLoading;
-  final int? nearbyCount;
-  final int activeFireCount;
-  final VoidCallback onOpenMap;
+class _TodayCard extends StatelessWidget {
+  final _Location location;
+  final Map<String, dynamic>? point;
+  final int nearbyCount;
+  final VoidCallback onEnableLocation;
   final VoidCallback onOpenRisk;
 
-  const _DailyBriefCard({
-    required this.highestRiskRegion,
-    required this.highestRiskScore,
-    required this.riskLoading,
+  const _TodayCard({
+    super.key,
+    required this.location,
+    required this.point,
     required this.nearbyCount,
-    required this.activeFireCount,
-    required this.onOpenMap,
+    required this.onEnableLocation,
     required this.onOpenRisk,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final score = highestRiskScore;
-    final accent = score == null
-        ? AppColors.primary
-        : riskScoreColor(score);
-    // "Loading" only while it is: a failed fetch with no cache used to
-    // say "loading" forever.
-    final riskSentence = highestRiskRegion == null || score == null
-        ? (riskLoading ? l10n.homeBriefRiskLoading : l10n.homeBriefRiskUnavailable)
-        : l10n.homeBriefRiskHighest(highestRiskRegion!, score);
-    final nearbySentence = nearbyCount == null
-        ? l10n.homeBriefNationwide(activeFireCount)
-        : nearbyCount == 0
-            ? l10n.homeBriefNoneNearby
-            : l10n.homeBriefNearby(nearbyCount!);
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall?.color;
+    final point = this.point;
+    final body = GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: muted);
 
-    return GlassPanel(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
+    final Widget content;
+    if (location == _Location.ready && point != null) {
+      final score = (point['general_risk_score'] as num).toInt();
+      final level = riskLevelForScore(score);
+      final color = colorForApiRiskLevel(level);
+      final city = point['city'] as String?;
+      final wind = num.tryParse('${point['wind_speed']}')?.round();
+      content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(AppSpacing.controlRadius),
-                ),
-                child: Icon(Icons.wb_sunny_outlined, color: accent, size: 21),
-              ),
-              const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.homeBriefTitle,
-                      style: GoogleFonts.ibmPlexSans(fontSize: 17, fontWeight: FontWeight.w800),
-                    ),
-                    Text(
-                      l10n.homeBriefSubtitle,
-                      style: GoogleFonts.ibmPlexSans(fontSize: 11, color: AppColors.textMuted),
-                    ),
-                  ],
-                ),
+                child: Text(city ?? l10n.homeTodayTitle,
+                    style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800)),
               ),
+              StatusChip(label: riskLevelLabel(l10n, level), color: color, showDot: true),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
-          Text(riskSentence, style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 6),
-          Text(nearbySentence, style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.45, color: AppColors.textMuted)),
-          const SizedBox(height: AppSpacing.lg),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: onOpenRisk,
-                  icon: const Icon(Icons.auto_graph_rounded, size: 18),
-                  label: Text(l10n.homeBriefViewRisk),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: onOpenMap,
-                  icon: const Icon(Icons.map_outlined, size: 18),
-                  label: Text(l10n.homeBriefOpenMap),
-                ),
-              ),
-            ],
-          ),
+          const SizedBox(height: 4),
+          Text(l10n.riskScoreOutOf100(score), style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: color)),
+          const SizedBox(height: AppSpacing.sm),
+          Text(nearbyCount > 0 ? l10n.homeNearbySome(nearbyCount) : l10n.homeNearbyNone, key: const Key('homeNearby'), style: body),
+          if (wind != null) Text(l10n.homeWind('$wind'), style: body),
         ],
+      );
+    } else if (location == _Location.pending) {
+      content = const Center(child: Padding(padding: EdgeInsets.all(AppSpacing.md), child: CircularProgressIndicator()));
+    } else {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            switch (location) {
+              _Location.outsideTurkey => l10n.homeLocationOutside,
+              _Location.unknownRisk => l10n.homeRiskUnavailable,
+              _ => l10n.homeLocationNeeded,
+            },
+            style: body,
+          ),
+          if (location == _Location.unavailable)
+            TextButton.icon(
+              onPressed: onEnableLocation,
+              icon: const Icon(Icons.my_location_rounded, size: 18),
+              label: Text(l10n.homeLocationEnable),
+            ),
+        ],
+      );
+    }
+
+    return InkWell(
+      key: const Key('homeTodayCard'),
+      borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
+      onTap: location == _Location.ready ? onOpenRisk : null,
+      child: GlassPanel(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.homeTodayTitle, style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primary)),
+              const SizedBox(height: AppSpacing.sm),
+              content,
+            ],
+          ),
+        ),
       ),
+    ).animate().fadeIn(duration: 260.ms);
+  }
+}
+
+class _TurkeyLine extends StatelessWidget {
+  final DetectionStatus status;
+  final VoidCallback onOpenMap;
+
+  const _TurkeyLine({required this.status, required this.onOpenMap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      key: const Key('homeTurkeyLine'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.homeTurkeyLine(status.strongCount, status.otherCount), style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, fontWeight: FontWeight.w600)),
+        Row(
+          children: [
+            Expanded(child: DetectionFreshnessLine(status: status)),
+            TextButton(onPressed: onOpenMap, child: Text(l10n.homeSeeOnMap)),
+          ],
+        ),
+      ],
     );
   }
 }

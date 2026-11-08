@@ -92,7 +92,7 @@ void main() {
         'lib/features/map/map_screen.dart', // single detection sheet
         'lib/features/fire_detail/fire_detail_screen.dart', // detection detail
       ]) {
-        expect(File(path).readAsStringSync(), contains('DetectionSafetyNotice()'), reason: path);
+        expect(File(path).readAsStringSync(), contains('DetectionSafetyNotice('), reason: path);
       }
     });
 
@@ -352,14 +352,6 @@ void main() {
       expect(item('2026-11-07T08:00:00Z').publishedWithin(const Duration(hours: 24), now: now), isTrue);
       expect(item('2026-10-25T08:00:00Z').publishedWithin(const Duration(hours: 24), now: now), isFalse);
       expect(item('').publishedWithin(const Duration(hours: 24), now: now), isFalse);
-    });
-
-    testWidgets('the daily brief says "unavailable", not "loading", once loading has failed', (tester) async {
-      // Strings, not widgets: the card is private to home_screen.dart.
-      expect(tr.homeBriefRiskLoading, isNot(tr.homeBriefRiskUnavailable));
-      final src = File('lib/features/home/home_screen.dart').readAsStringSync();
-      expect(src, contains('riskLoading ? l10n.homeBriefRiskLoading : l10n.homeBriefRiskUnavailable'));
-      expect(src, isNot(contains("'Bölgesel risk verisi yükleniyor.'")));
     });
   });
 

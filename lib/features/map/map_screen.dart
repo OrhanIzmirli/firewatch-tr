@@ -45,7 +45,6 @@ import '../../shared/widgets/carto_basemap.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/province_borders_credit.dart';
-import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/osm_attribution.dart';
 import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/section_header.dart';
@@ -61,6 +60,8 @@ import 'widgets/my_places_sheet.dart';
 import '../../services/location_disclosure.dart';
 import '../tracked_places/add_tracked_place_flow.dart';
 import '../../services/device_position.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../../core/utils/detection_summary.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
@@ -144,7 +145,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// Zoom drives only marker *size*, so it lives in a notifier the markers
   /// listen to; a setState here used to rebuild — and so re-cluster — every
   /// marker each 0.2 zoom of a pinch.
-  final ValueNotifier<double> _zoom = ValueNotifier(5.6);
+  final ValueNotifier<double> _zoom = ValueNotifier(_turkeyZoom);
   double get _currentZoom => _zoom.value;
   final MarkerListCache _incidentMarkerCache = MarkerListCache();
   final MarkerListCache _pointMarkerCache = MarkerListCache();
@@ -227,6 +228,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// How much of the screen the info sheet takes when it is resting. Enough
   /// for the title line and the Report button, and no more — the filters,
   /// captions and help text open on a drag. The map owns the rest.
+  /// All of Türkiye on a phone: at 5.6 İzmir, Aydın and Muğla were off the
+  /// left edge, so events there looked missing.
+  static const double _turkeyZoom = 4.9;
+
   static const double _sheetCollapsedFraction = 0.17;
 
   final DraggableScrollableController _sheetController =
@@ -479,6 +484,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       detectionCount: (place) => _incidents
           .where((i) =>
               !i.looksLikeFixedSource &&
+              !i.isKeptOffEvents &&
               i.hoursSinceLastDetection <= 24 &&
               place.isWithinRadius(i.latitude, i.longitude))
           .length,
@@ -512,7 +518,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _resetTurkeyView() {
-    _mapController.move(const LatLng(38.2, 35.0), 5.6);
+    _mapController.move(const LatLng(38.2, 35.0), _turkeyZoom);
     setState(() => _isPlaceFocused = false);
   }
 
@@ -622,6 +628,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     return _visibleIncidents.isEmpty && _strongUnverifiedCount == 0;
   }
 
+  /// 'agriculture' or 'built' when a classified incident sits on this point.
+  String? _farmOrBuiltNear(FirePoint point) {
+    for (final i in _incidents) {
+      if (i.landCover != 'agriculture' && i.landCover != 'built') continue;
+      if (i.newsVerification != null) continue;
+      if (Geolocator.distanceBetween(i.latitude, i.longitude, point.latitude, point.longitude) <= 1500) return i.landCover;
+    }
+    return null;
+  }
+
   List<FireIncident> get _visibleIncidents =>
       _incidents.where(_incidentFilter.matches).toList();
 
@@ -642,11 +658,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             targetKey: CoachMarkKeys.mapArea,
             title: l10n.coachMarkMapMarkersTitle,
             description: l10n.coachMarkMapMarkersDesc,
-          ),
-          CoachMarkStep(
-            targetKey: CoachMarkKeys.mapArea,
-            title: l10n.coachMarkMapClustersTitle,
-            description: l10n.coachMarkMapClustersDesc,
           ),
           CoachMarkStep(
             targetKey: CoachMarkKeys.mapReportFab,
@@ -1304,20 +1315,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _openFireBottomSheet(FirePoint point) {
-    final timeAgo = _timeAgo(
-      context,
-      point.acquisitionDate,
-      point.acquisitionTime,
-    );
-    final bright = double.tryParse(point.brightness) ?? 0;
-    final tempC = bright > 200
-        ? (bright - 273.15).toStringAsFixed(1)
-        : bright.toStringAsFixed(1);
+    final cover = _farmOrBuiltNear(point);
 
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
+    showAppSheet(
+      context,
+      flatGlass: true,
+      scrollable: false,
       builder: (_) {
         final l10n = AppLocalizations.of(context)!;
         final theme = Theme.of(context);
@@ -1376,7 +1379,11 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
-                const DetectionSafetyNotice(),
+                DetectionSafetyNotice(
+                  prominent: point.riskTier == 'high' &&
+                      cover == null &&
+                      (point.smartStatus == FireStatus.active || point.smartStatus == FireStatus.likelyActive),
+                ),
                 const SizedBox(height: AppSpacing.md),
                 Wrap(
                   spacing: AppSpacing.sm,
@@ -1384,37 +1391,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     StatusChip(
-                      label: fireStatusLabel(l10n, point.smartStatus),
+                      label: fireStatusLabel(l10n, point.smartStatus, seenAt: point.detectionDateTimeUtc),
                       showDot: true,
                       color: fireStatusColor(point.smartStatus),
-                    ),
-                    InfoIconButton(
-                      title: l10n.tooltipConfidenceTitle,
-                      bodyLines: [
-                        l10n.smartConfidenceHigh,
-                        l10n.smartConfidenceMedium,
-                        l10n.smartConfidenceLow,
-                      ],
-                    ),
-                    StatusChip(label: timeAgo, icon: Icons.access_time_rounded),
-                    StatusChip(
-                      label: l10n.mapDetectionConfidence(_scoreFor(point)),
-                      icon: Icons.insights_rounded,
-                      color: _markerColor(point),
-                    ),
-                    InfoIconButton(
-                      title: l10n.mapDetectionConfidenceInfoTitle,
-                      bodyLines: [
-                        l10n.mapDetectionConfidenceInfoBody,
-                        l10n.mapDetectionConfidenceInfoNotFire,
-                      ],
                     ),
                   ],
                 ),
                 if (_strongUnverifiedPoint(point)) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    l10n.mapStrongUnverifiedReason(point.frp.round()),
+                    l10n.mapStrongUnverifiedReason,
                     style: GoogleFonts.ibmPlexSans(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -1435,47 +1421,27 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  point.riskReasonText(l10n),
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 14,
-                    height: 1.45,
-                    color: secondaryTextColor,
+                  detectionSummaryText(
+                    l10n,
+                    city: point.cityName,
+                    strong: point.riskTier == 'high' || _strongUnverifiedPoint(point),
+                    newsVerified: false,
+                    // The line below says it; once is enough.
+                    landCover: null,
+                    age: DateTime.now().toUtc().difference(point.detectionDateTimeUtc ?? DateTime.now().toUtc()),
                   ),
+                  key: const Key('pointSummary'),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 14.5, height: 1.5, fontWeight: FontWeight.w600, color: titleColor),
                 ),
+                if (cover != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    cover == 'agriculture' ? l10n.mapPointFarmland : l10n.mapPointBuilt,
+                    key: const Key('pointLandCover'),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.warning),
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.lg),
-                _DetailRow(
-                  icon: Icons.thermostat_rounded,
-                  label: l10n.commonTemperature,
-                  value: '$tempC°C (${bright.toStringAsFixed(0)}K)',
-                  color: secondaryTextColor,
-                  info: InfoIconButton(
-                    title: l10n.tooltipTempTitle,
-                    bodyLines: [l10n.tooltipTempBody],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _DetailRow(
-                  icon: Icons.satellite_alt_rounded,
-                  label: l10n.commonSatellite,
-                  value: point.mergedSatelliteLabel,
-                  color: point.isMerged
-                      ? AppColors.success
-                      : secondaryTextColor,
-                  info: InfoIconButton(
-                    title: l10n.tooltipSatelliteTitle,
-                    bodyLines: point.isMerged
-                        ? [
-                            l10n.tooltipSatelliteViirsBody,
-                            l10n.tooltipSatelliteModisBody,
-                            l10n.tooltipSatelliteMergedBody,
-                          ]
-                        : [
-                            l10n.tooltipSatelliteViirsBody,
-                            l10n.tooltipSatelliteModisBody,
-                          ],
-                  ),
-                ),
-                const SizedBox(height: 8),
                 _DetailRow(
                   icon: Icons.calendar_today_rounded,
                   label: l10n.commonDetection,
@@ -1530,7 +1496,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           );
                         },
                         icon: const Icon(Icons.arrow_forward_rounded),
-                        label: Text(l10n.commonDetail),
+                        label: Text(l10n.commonAllTechnical),
                       ),
                     ),
                   ],
@@ -1636,7 +1602,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   // under the sheet and filled the visible half with the
                   // Black Sea.
                   : const LatLng(38.2, 35.0),
-              initialZoom: widget.focusLat != null ? 13 : 5.6,
+              initialZoom: widget.focusLat != null ? 13 : _turkeyZoom,
               minZoom: 4,
               // z16 only gets you to neighbourhood level,
               // which isn't enough to place a fire; 18 is
@@ -2849,14 +2815,12 @@ class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
-  final Widget? info;
 
   const _DetailRow({
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
-    this.info,
   });
 
   @override
@@ -2878,7 +2842,6 @@ class _DetailRow extends StatelessWidget {
             ),
           ),
         ),
-        ?info,
       ],
     );
   }

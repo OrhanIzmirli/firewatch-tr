@@ -34,6 +34,8 @@ import '../../services/fwi_point_service.dart';
 import '../../services/point_risk_service.dart';
 import '../../shared/widgets/color_dot.dart';
 import 'widgets/tracked_places_section.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/related_news_section.dart';
 
 enum _RiskTab { overview, myLocation, places }
 
@@ -325,10 +327,10 @@ class _RiskScreenState extends State<RiskScreen> {
 
   void _showRiskInfoSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
+    showAppSheet(
+      context,
+      flatGlass: true,
+      scrollable: false,
       builder: (sheetContext) {
         final theme = Theme.of(sheetContext);
         final isDark = theme.brightness == Brightness.dark;
@@ -399,10 +401,9 @@ class _RiskScreenState extends State<RiskScreen> {
     final wind = double.tryParse(region['wind_speed'].toString()) ?? 0;
     final dryness = double.tryParse(region['dryness_index'].toString()) ?? 0;
 
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
+    showAppSheet(
+      context,
+      flatGlass: true,
       builder: (sheetContext) {
         final theme = Theme.of(sheetContext);
         final isDark = theme.brightness == Brightness.dark;
@@ -799,6 +800,11 @@ class _RiskScreenState extends State<RiskScreen> {
                       TrackedPlacesSection(onPlaceTap: _openPlace),
                   ]
                   else ...[
+                  RelatedNewsSection(
+                    city: null,
+                    from: DateTime.now().subtract(const Duration(days: 7)),
+                    to: DateTime.now(),
+                  ),
                   SectionHeader(
                     title: l10n.riskKeyIndicators,
                     subtitle: l10n.riskTurkeyAverage,
@@ -1481,6 +1487,11 @@ class _PointRiskSection extends StatelessWidget {
           ),
         ).animate(delay: 120.ms).fadeIn(duration: 320.ms).slideY(begin: 0.06, end: 0),
 
+        RelatedNewsSection(
+          city: city,
+          from: DateTime.now().subtract(const Duration(days: 7)),
+          to: DateTime.now(),
+        ),
         const SizedBox(height: AppSpacing.xxl),
         _CopernicusIndexCard(
           lat: (data['latitude'] as num).toDouble(),

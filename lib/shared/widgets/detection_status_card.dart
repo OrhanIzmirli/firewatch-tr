@@ -166,6 +166,10 @@ class DetectionStatusCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(latest, key: const Key('detectionLatest'), style: small),
           ],
+          if (status.kind == DetectionStatusKind.none && status.otherCount > 0) ...[
+            const SizedBox(height: 4),
+            Text(l10n.detectionOtherLine(status.otherCount), key: const Key('detectionOther'), style: small),
+          ],
           if (status.kind == DetectionStatusKind.unavailable && onRetry != null)
             TextButton.icon(
               key: const Key('detectionRetry'),

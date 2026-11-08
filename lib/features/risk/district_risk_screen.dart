@@ -6,6 +6,7 @@ import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/area_map.dart';
 import 'risk_sample_data.dart';
+import '../../shared/widgets/app_sheet.dart';
 
 /// District-level risk scores on a map, with a ranking sheet. Runs on
 /// schematic sample data while DISTRICT_RISK_URL is unset — and is then
@@ -40,7 +41,7 @@ class _DistrictRiskScreenState extends State<DistrictRiskScreen> {
   void _list() {
     final l10n = AppLocalizations.of(context)!;
     final sorted = [..._areas]..sort((a,b) => (b.score ?? -1).compareTo(a.score ?? -1));
-    showModalBottomSheet(context: context, showDragHandle: true, builder: (context) => SafeArea(child: ListView(children: [
+    showAppSheet(context, scrollable: false, builder: (context) => SafeArea(child: ListView(shrinkWrap: true, children: [
       ListTile(title: Text(l10n.districtRiskRankingTitle), subtitle: Text(l10n.districtRiskScoresNotProbability)),
       ...sorted.map((a) => ListTile(leading: Icon(Icons.circle, color: a.score == null ? Colors.grey : riskScoreColor(a.score!)),
         title: Text('${a.city} / ${a.district}'), subtitle: Text('${a.score ?? '—'}/100'), onTap: () { Navigator.pop(context); _select(a); })),

@@ -21,6 +21,65 @@ class CoachMarkStep {
 }
 
 const String _seenPrefsKey = 'hasSeenCoachMarks';
+const String coachMarksOffPrefsKey = 'coachMarksOff';
+const int coachMarkMaxSteps = 2;
+
+/// Every "seen" flag, so turning tips back on really shows them again.
+const List<String> coachMarkSeenKeys = [
+  _seenPrefsKey,
+  'hasSeenMapTour',
+  'hasSeenNewsTour',
+  'hasSeenNotificationsTour',
+  'hasSeenRiskTour',
+  'hasSeenWatchlistTour',
+];
+
+Future<bool> coachMarksEnabled() async => !((await SharedPreferences.getInstance()).getBool(coachMarksOffPrefsKey) ?? false);
+
+Future<void> setCoachMarksEnabled(bool enabled) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool(coachMarksOffPrefsKey, !enabled);
+  if (enabled) {
+    for (final key in coachMarkSeenKeys) {
+      await prefs.remove(key);
+    }
+  }
+}
+
+/// Where the card goes, kept apart from the widgets so it can be tested at
+/// any screen size. The spotlight never takes more than 40% of the screen,
+/// so there is always room for the card beside it and it never covers it.
+class CoachMarkPlacement {
+  final Rect spotlight;
+  final Rect card;
+  const CoachMarkPlacement(this.spotlight, this.card);
+}
+
+CoachMarkPlacement placeCoachMark({
+  required Rect target,
+  required Size screen,
+  required EdgeInsets padding,
+  double margin = AppSpacing.md,
+  double side = AppSpacing.lg,
+}) {
+  final safeTop = padding.top + margin;
+  final safeBottom = screen.height - padding.bottom - margin;
+  var spot = target.inflate(4);
+  final maxSpot = screen.height * 0.4;
+  if (spot.height > maxSpot) spot = Rect.fromLTWH(spot.left, spot.top, spot.width, maxSpot);
+  spot = Rect.fromLTRB(
+    spot.left.clamp(0.0, screen.width),
+    spot.top.clamp(safeTop, safeBottom),
+    spot.right.clamp(0.0, screen.width),
+    spot.bottom.clamp(safeTop, safeBottom),
+  );
+  final above = spot.top - margin - safeTop;
+  final below = safeBottom - spot.bottom - margin;
+  final card = below >= above
+      ? Rect.fromLTRB(side, spot.bottom + margin, screen.width - side, safeBottom)
+      : Rect.fromLTRB(side, safeTop, screen.width - side, spot.top - margin);
+  return CoachMarkPlacement(spot, card);
+}
 
 /// Shows the first-launch coach mark tour (Home tab + bottom nav) if it
 /// hasn't been seen yet. Safe to call every time MainShellScreen mounts —
@@ -62,8 +121,12 @@ Future<void> maybeShowScreenCoachMarks(
   BuildContext context, {
   required String prefsKey,
   required List<CoachMarkStep> steps,
+  Duration settle = const Duration(milliseconds: 520),
 }) async {
+  // A short hint, not a tour.
+  steps = steps.take(coachMarkMaxSteps).toList();
   final prefs = await SharedPreferences.getInstance();
+  if (prefs.getBool(coachMarksOffPrefsKey) ?? false) return;
   final alreadySeen = prefs.getBool(prefsKey) ?? false;
   if (kDebugMode) debugPrint('[CoachMarks] "$prefsKey" alreadySeen=$alreadySeen');
   if (alreadySeen) return;
@@ -115,6 +178,9 @@ Future<void> maybeShowScreenCoachMarks(
           curve: Curves.easeOut,
           alignment: 0.5,
         );
+        // Entry animations slide widgets for a moment after they appear;
+        // measuring during one puts the frame beside the target.
+        if (settle > Duration.zero) await Future<void>.delayed(settle);
       } catch (_) {
         // No scrollable ancestor, already visible, or the context died
         // mid-animation (screen navigated away) — any of these are fine,
@@ -155,43 +221,10 @@ Future<void> maybeShowScreenCoachMarks(
       final renderBox = step.targetKey.currentContext!.findRenderObject() as RenderBox;
       final targetSize = renderBox.size;
       final targetPosition = renderBox.localToGlobal(Offset.zero);
-      final targetRect = (targetPosition & targetSize).inflate(8);
-      final screenSize = MediaQuery.of(overlayContext).size;
-      // System status bar / notch / home-indicator insets — the card must
-      // never render behind these, or its buttons become untappable.
-      final safePadding = MediaQuery.of(overlayContext).padding;
+      final media = MediaQuery.of(overlayContext);
+      final placement = placeCoachMark(target: targetPosition & targetSize, screen: media.size, padding: media.padding);
+      final targetRect = placement.spotlight;
       final isDark = Theme.of(overlayContext).brightness == Brightness.dark;
-
-      const cardMargin = AppSpacing.md;
-      final safeTop = safePadding.top + cardMargin;
-      final safeBottom = screenSize.height - safePadding.bottom - cardMargin;
-
-      // Pick whichever side of the target actually has more room, rather
-      // than just going by which half of the screen the target's center
-      // falls in — a target taller than ~half the viewport (e.g. a chart,
-      // after auto-scrolling it into view) can otherwise leave "the other
-      // half" too cramped for the card, pushing it up past the safe area
-      // and behind the status bar.
-      final spaceAbove = (targetRect.top - safeTop - cardMargin).clamp(0.0, double.infinity);
-      final spaceBelow = (safeBottom - targetRect.bottom - cardMargin).clamp(0.0, double.infinity);
-      final showCardBelow = spaceBelow >= spaceAbove;
-      final availableSpace = showCardBelow ? spaceBelow : spaceAbove;
-      // Cap how tall the card can grow even when there's plenty of room, and
-      // guarantee a usable minimum even when there's very little — in that
-      // extreme case it may brush the safe edge, but that reads far better
-      // than being unreadable.
-      final cardHeight = availableSpace.clamp(120.0, screenSize.height * 0.42);
-
-      double? top;
-      double? bottom;
-      if (showCardBelow) {
-        final maxTop = safeBottom - cardHeight;
-        top = (targetRect.bottom + cardMargin).clamp(safeTop, maxTop < safeTop ? safeTop : maxTop);
-      } else {
-        final maxBottom = screenSize.height - safeTop - cardHeight;
-        bottom = (screenSize.height - targetRect.top + cardMargin)
-            .clamp(cardMargin, maxBottom < cardMargin ? cardMargin : maxBottom);
-      }
 
       return Stack(
         children: [
@@ -214,15 +247,18 @@ Future<void> maybeShowScreenCoachMarks(
             ),
           ),
           Positioned(
-            left: AppSpacing.lg,
-            right: AppSpacing.lg,
-            top: top,
-            bottom: bottom,
-            child: SafeArea(
+            key: const Key('coachMarkCardArea'),
+            left: placement.card.left,
+            top: placement.card.top,
+            width: placement.card.width,
+            height: placement.card.height,
+            // Hugs the target's side: below it from the top, above it from the bottom.
+            child: Align(
+              alignment: placement.card.top > targetRect.top ? Alignment.topCenter : Alignment.bottomCenter,
               child: Material(
                 color: Colors.transparent,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: cardHeight),
+                  constraints: BoxConstraints(maxHeight: placement.card.height),
                   child: Container(
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     decoration: BoxDecoration(
@@ -269,14 +305,19 @@ Future<void> maybeShowScreenCoachMarks(
                             ),
                           ),
                           const SizedBox(height: AppSpacing.lg),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            spacing: AppSpacing.sm,
                             children: [
                               SizedBox(
                                 height: 48,
                                 child: TextButton(
-                                  onPressed: finish,
-                                  child: Text(l10n.coachMarksSkip, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600)),
+                                  key: const Key('coachMarksDisableAll'),
+                                  onPressed: () async {
+                                    finish();
+                                    await setCoachMarksEnabled(false);
+                                  },
+                                  child: Text(l10n.coachMarksDisableAll, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600)),
                                 ),
                               ),
                               SizedBox(

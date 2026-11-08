@@ -96,6 +96,14 @@ class DataSourcesScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           _Section(
+            icon: Icons.terrain_rounded,
+            title: l10n.dataSourcesLandCoverTitle,
+            body: l10n.dataSourcesLandCoverBody,
+            titleColor: titleColor,
+            bodyColor: bodyColor,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _Section(
             icon: Icons.layers_outlined,
             title: l10n.dataSourcesBordersTitle,
             body: l10n.dataSourcesBordersBody,

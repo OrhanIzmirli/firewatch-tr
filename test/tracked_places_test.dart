@@ -375,7 +375,7 @@ void main() {
 
       await tester.tap(find.byKey(const Key('trackedPlaceSave')));
       await tester.pumpAndSettle();
-      expect(find.text('Bir ad gir.'), findsOneWidget);
+      expect(find.text('Bir ad girin.'), findsOneWidget);
       expect(adapter.requests, isEmpty);
 
       await tester.enterText(find.byKey(const Key('trackedPlaceName')), '  Bağ evi ');

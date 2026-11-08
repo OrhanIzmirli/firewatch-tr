@@ -5,9 +5,6 @@ import '../models/fire_point.dart';
 FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
   // Kelvin → Celsius
   final bright = double.tryParse(point.brightness) ?? 0;
-  final tempC = bright > 200
-      ? (bright - 273.15).toStringAsFixed(1)
-      : bright.toStringAsFixed(1);
 
   // Zaman formatı
   final timeStr = point.acquisitionTime.padLeft(4, '0');
@@ -87,10 +84,11 @@ FireEvent convertPointToFireEvent(FirePoint point, AppLocalizations l10n) {
     smartStatus: point.smartStatus,
     recommendedActions: [
       point.recommendedActionText(l10n),
-      l10n.fireEventTempLine(tempC, bright.toStringAsFixed(0)),
+      l10n.fireEventDetectionLine(formattedStart),
+    ],
+    technicalLines: [
       l10n.fireEventSatelliteLine(point.mergedSatelliteLabel),
       l10n.fireEventCoordinateLine(point.locationLabelText(l10n)),
-      l10n.fireEventDetectionLine(formattedStart),
     ],
   );
 }

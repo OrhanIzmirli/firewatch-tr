@@ -482,7 +482,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 ).slideY(begin: 0.06, end: 0),
 
             const SizedBox(height: AppSpacing.md),
-            TrustInfoCardGroup(
+            PageAboutLink(
               meaning: l10n.trustNewsMeaning,
               source: l10n.trustNewsSource,
               interpret: l10n.trustNewsInterpret,

@@ -14,7 +14,11 @@ enum FireLocationType { forest, coastal, agricultural, urban, generic }
 /// a `low` confidence detection is always [historical] regardless of age.
 enum FireStatus { active, likelyActive, monitoring, historical }
 
-String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
+String fireStatusLabel(AppLocalizations l10n, FireStatus status, {DateTime? seenAt}) {
+  if (status == FireStatus.historical && seenAt != null) {
+    final age = DateTime.now().toUtc().difference(seenAt.toUtc());
+    return age.inDays >= 1 ? l10n.lastSeenDays(age.inDays) : l10n.lastSeenHours(age.inHours);
+  }
   switch (status) {
     case FireStatus.active:
       return l10n.fireStatusActive;

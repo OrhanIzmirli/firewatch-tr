@@ -10,6 +10,7 @@ import '../core/config/api_config.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_spacing.dart';
 import '../l10n/app_localizations.dart';
+import '../shared/widgets/app_sheet.dart';
 
 /// The explanation shown before the app first asks for location: what the
 /// location is used for, that an approximate (~1 km) copy is kept on the
@@ -68,11 +69,9 @@ class LocationDisclosure {
     final completer = Completer<bool>();
     _inFlight = completer.future;
     try {
-      final accepted = await showModalBottomSheet<bool>(
-            context: context,
-            isScrollControlled: true,
-            useSafeArea: true,
-            isDismissible: true,
+      final accepted = await showAppSheet<bool>(
+            context,
+            scrollable: false,
             builder: (_) => const LocationDisclosureSheet(),
           ) ??
           false;

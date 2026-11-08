@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../services/alert_inbox.dart';
+import '../../../shared/widgets/app_sheet.dart';
 
 class RecentAlerts extends StatefulWidget {
   const RecentAlerts({super.key});
@@ -17,7 +18,7 @@ class _RecentAlertsState extends State<RecentAlerts> {
     if (payload != null && payload.startsWith('fire:') && payload.length > 5) {
       context.push('/fire/${Uri.encodeComponent(payload.substring(5))}');
     } else {
-      showModalBottomSheet(context: context, showDragHandle: true, builder: (context) => SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.all(24), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text('${entry['title']}', style: Theme.of(context).textTheme.titleLarge), const SizedBox(height: 12), Text('${entry['body']}')]))));
+      showAppSheet(context, scrollable: false, builder: (context) => SafeArea(child: SingleChildScrollView(padding: const EdgeInsets.all(24), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text('${entry['title']}', style: Theme.of(context).textTheme.titleLarge), const SizedBox(height: 12), Text('${entry['body']}')]))));
     }
   }
   @override

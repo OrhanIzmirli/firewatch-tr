@@ -34,6 +34,7 @@ void main() {
     await maybeShowScreenCoachMarks(
       context,
       prefsKey: prefsKey,
+      settle: Duration.zero,
       steps: [
         CoachMarkStep(targetKey: targetKey, title: 'Step title', description: 'Step description'),
       ],
@@ -48,6 +49,7 @@ void main() {
     await maybeShowScreenCoachMarks(
       context,
       prefsKey: prefsKey,
+      settle: Duration.zero,
       steps: [
         CoachMarkStep(targetKey: targetKey, title: 'Step title', description: 'Step description'),
       ],

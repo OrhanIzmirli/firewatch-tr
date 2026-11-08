@@ -23,6 +23,7 @@ import '../../services/feedback_service.dart';
 import '../../services/report_spam_guard.dart';
 import 'glass_panel.dart';
 import 'status_chip.dart';
+import 'app_sheet.dart';
 
 const int _maxPhotos = 3;
 
@@ -30,11 +31,9 @@ const int _maxPhotos = 3;
 /// sheet anchored to the bottom of the screen (rather than a side panel),
 /// so it works the same way on narrow phones as it does on tablets.
 Future<void> showReportFirePanel(BuildContext context, {ReportType initialType = ReportType.fire}) {
-  return showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    backgroundColor: Colors.transparent,
+  return showAppSheet(
+    context,
+    bare: true,
     builder: (ctx) => ReportFirePanel(initialType: initialType, onClose: () => Navigator.of(ctx).pop()),
   );
 }
@@ -166,8 +165,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
   void _showPhotoSourceSheet() {
     final l10n = AppLocalizations.of(context)!;
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       builder: (ctx) => SafeArea(
         child: Wrap(
           children: [
@@ -358,9 +357,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       duration: const Duration(milliseconds: 120),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: DraggableScrollableSheet(
-        initialChildSize: 0.92,
+        initialChildSize: kSheetMaxHeightFraction,
         minChildSize: 0.5,
-        maxChildSize: 0.95,
+        maxChildSize: kSheetMaxHeightFraction,
         expand: false,
         builder: (context, scrollController) {
           return Container(

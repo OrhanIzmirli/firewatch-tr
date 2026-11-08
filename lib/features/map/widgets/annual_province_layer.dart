@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../models/annual_province_data.dart';
 import '../../../models/geo_area.dart';
 import '../../../shared/widgets/province_borders_credit.dart';
+import '../../../shared/widgets/app_sheet.dart';
 
 class AnnualProvinceLayer extends StatefulWidget {
   final AnnualProvinceData data;
@@ -35,16 +36,11 @@ class _AnnualProvinceLayerState extends State<AnnualProvinceLayer> {
     final area = widget.data.areas.where((a) => a.id == id).firstOrNull;
     if (area == null) return;
     setState(() => _selected = id);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    showAppSheet<void>(
+      context,
       // The app's own dark surface (the content below is styled for a dark
       // sheet); the navy used here matched nothing else in the app.
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
+      color: AppColors.surface,
       builder: (_) => AnnualProvinceDetails(
         data: widget.data,
         area: area,

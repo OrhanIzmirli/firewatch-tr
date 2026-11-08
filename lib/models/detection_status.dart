@@ -11,11 +11,17 @@ class DetectionStatus {
   final DateTime? latestDetectionAt;
   final String? latestDetectionCity;
 
+  /// Strong detections in 24 h on natural ground, and on farmland or industry.
+  final int strongCount;
+  final int otherCount;
+
   const DetectionStatus({
     required this.kind,
     this.lastUpdateAt,
     this.latestDetectionAt,
     this.latestDetectionCity,
+    this.strongCount = 0,
+    this.otherCount = 0,
   });
 
   static const unavailable = DetectionStatus(kind: DetectionStatusKind.unavailable);
@@ -35,6 +41,8 @@ class DetectionStatus {
       lastUpdateAt: DateTime.tryParse('${json['last_update_at']}')?.toLocal(),
       latestDetectionAt: latest is Map ? DateTime.tryParse('${latest['detected_at']}')?.toLocal() : null,
       latestDetectionCity: latest is Map ? latest['city'] as String? : null,
+      strongCount: count is num ? count.toInt() : 0,
+      otherCount: (json['strong_other_24h'] as num?)?.toInt() ?? 0,
     );
   }
 }

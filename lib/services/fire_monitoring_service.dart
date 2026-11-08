@@ -9,6 +9,7 @@ import '../models/fire_point.dart';
 import 'fire_api_service.dart';
 import 'notification_service.dart';
 import 'device_position.dart';
+import 'render_api_service.dart';
 
 class FireMonitoringService {
   FireMonitoringService._();
@@ -98,6 +99,11 @@ class FireMonitoringService {
         return;
       }
 
+      // Same rule as the map and server alerts: farmland and industry do
+      // not raise a fire alert.
+      final incidents = await RenderApiService().fetchIncidents(days: 2, limit: 300);
+      final offEvents = incidents.where((i) => i.isKeptOffEvents).toList();
+
       final nearby = fires.where((fire) {
         final meters = Geolocator.distanceBetween(
           position.latitude,
@@ -105,7 +111,9 @@ class FireMonitoringService {
           fire.latitude,
           fire.longitude,
         );
-        return meters <= _nearbyRadiusMeters;
+        return meters <= _nearbyRadiusMeters &&
+            !offEvents.any((i) =>
+                Geolocator.distanceBetween(i.latitude, i.longitude, fire.latitude, fire.longitude) <= 1500);
       }).toList();
 
       nearbyMatchesNotifier.value = nearby;

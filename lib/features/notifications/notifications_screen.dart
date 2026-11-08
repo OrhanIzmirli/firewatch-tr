@@ -27,6 +27,8 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../home/widgets/recent_alerts.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -200,7 +202,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final wantsBackground = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.backgroundLocationDialogTitle),
+        title: DialogTitleWithClose(title: Text(l10n.backgroundLocationDialogTitle)),
         content: Text(l10n.backgroundLocationDialogBody),
         actions: [
           TextButton(
@@ -330,6 +332,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           ),
                         ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.06, end: 0),
 
+                        const SizedBox(height: AppSpacing.md),
+                        const RecentAlerts(),
                         const SizedBox(height: AppSpacing.md),
                         TrustInfoCardGroup(
                           meaning: l10n.trustAlertsMeaning,

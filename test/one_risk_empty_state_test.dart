@@ -107,7 +107,7 @@ void main() {
     testWidgets('quiet: careful wording, freshness, latest detection', (tester) async {
       await tester.pumpWidget(_app(DetectionStatusCard(status: quiet, now: now, onReport: () {}, onShowLast7Days: () {})));
       await tester.pumpAndSettle();
-      expect(find.text("Son 24 saatte uydular Türkiye'de güçlü bir ısı izi görmedi."), findsOneWidget);
+      expect(find.text("Son 24 saatte uydular Türkiye'de orman ve doğal alanlarda güçlü bir ısı tespit etmedi."), findsOneWidget);
       expect(find.textContaining('Son güncelleme: 12:40'), findsOneWidget);
       expect(find.textContaining('Uydular küçük veya bulut altındaki'), findsOneWidget);
       expect(find.text('En son tespit: 3 gün önce, Muğla'), findsOneWidget);
@@ -138,7 +138,7 @@ void main() {
     });
 
     testWidgets('stale and unavailable never say nothing was seen', (tester) async {
-      const title = "Son 24 saatte uydular Türkiye'de güçlü bir ısı izi görmedi.";
+      const title = "Son 24 saatte uydular Türkiye'de orman ve doğal alanlarda güçlü bir ısı tespit etmedi.";
       await tester.pumpWidget(_app(DetectionStatusCard(
         status: DetectionStatus(kind: DetectionStatusKind.stale, lastUpdateAt: DateTime(2026, 11, 8, 3, 5)),
         now: now,

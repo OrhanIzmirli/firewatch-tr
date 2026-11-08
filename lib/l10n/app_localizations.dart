@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @splashTagline.
   ///
   /// In tr, this message translates to:
-  /// **'Yangınları takip et, güvende kal'**
+  /// **'Yangınları takip edin, güvende kalın'**
   String get splashTagline;
 
   /// No description provided for @onboardingSkip.
@@ -383,37 +383,37 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingTitle1.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif olayları takip et'**
+  /// **'Aktif olayları takip edin'**
   String get onboardingTitle1;
 
   /// No description provided for @onboardingDesc1.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye genelindeki yangın olaylarını tek ekranda takip et ve durum değişikliklerini hızlıca gör.'**
+  /// **'Türkiye genelindeki uydu tespitlerini tek ekranda takip edin ve durum değişikliklerini hızlıca görün.'**
   String get onboardingDesc1;
 
   /// No description provided for @onboardingTitle2.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki bölgeleri gör'**
+  /// **'Yakınınızdaki bölgeleri görün'**
   String get onboardingTitle2;
 
   /// No description provided for @onboardingDesc2.
   ///
   /// In tr, this message translates to:
-  /// **'Harita ve bölge odaklı ekranlarla sana yakın olayları daha hızlı fark et.'**
+  /// **'Harita ve bölge odaklı ekranlarla size yakın olayları daha hızlı fark edin.'**
   String get onboardingDesc2;
 
   /// No description provided for @onboardingTitle3.
   ///
   /// In tr, this message translates to:
-  /// **'Güvenlik yönlendirmeleri al'**
+  /// **'Güvenlik yönlendirmeleri alın'**
   String get onboardingTitle3;
 
   /// No description provided for @onboardingDesc3.
   ///
   /// In tr, this message translates to:
-  /// **'Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.'**
+  /// **'Risk seviyelerini inceleyin, önerilen aksiyonları görün ve gerektiğinde hızlı hareket edin.'**
   String get onboardingDesc3;
 
   /// No description provided for @homeLiveSummary.
@@ -425,13 +425,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeaderTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye Termal Anomali Takibi'**
+  /// **'Türkiye Uydu Tespitleri'**
   String get homeHeaderTitle;
 
   /// No description provided for @homeHeaderSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.'**
+  /// **'Aktif olayları takip edin, risk seviyelerini görün ve güvenlik rehberine hızlıca ulaşın.'**
   String get homeHeaderSubtitle;
 
   /// No description provided for @homeNasaLiveData.
@@ -491,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewUniqueCount.
   ///
   /// In tr, this message translates to:
-  /// **'{count} benzersiz termal anomali konumu tespit edildi'**
+  /// **'Uydular {count} ayrı konumda tespit yaptı'**
   String homeOverviewUniqueCount(int count);
 
   /// No description provided for @homeTotalPoints.
@@ -515,7 +515,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewActiveFiresTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Güncel Termal Anomaliler'**
+  /// **'Güncel Uydu Tespitleri'**
   String get homeOverviewActiveFiresTitle;
 
   /// No description provided for @homeOverviewActiveFiresSubtitle.
@@ -545,7 +545,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewNearbyTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakındaki Termal Tespitler'**
+  /// **'Yakındaki Uydu Tespitleri'**
   String get homeOverviewNearbyTitle;
 
   /// No description provided for @homeOverviewNearbyValueWithLocation.
@@ -623,13 +623,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeActiveThermalPoints.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif Termal Noktalar'**
+  /// **'Güncel Uydu Tespitleri'**
   String get homeActiveThermalPoints;
 
   /// No description provided for @homeActiveThermalSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS • PostGIS şehir tespiti'**
+  /// **'NASA uydu verisi'**
   String get homeActiveThermalSubtitle;
 
   /// No description provided for @homeMap.
@@ -659,7 +659,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNoActiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Güncel termal anomali bulunamadı.'**
+  /// **'Uydular şu an güncel bir tespit bildirmedi.'**
   String get homeNoActiveFires;
 
   /// No description provided for @homeFireRegionTitle.
@@ -707,7 +707,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Termal Anomali Haritası'**
+  /// **'Uydu Tespit Haritası'**
   String get mapTitle;
 
   /// No description provided for @mapTitleEvents.
@@ -719,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapTitleDetections.
   ///
   /// In tr, this message translates to:
-  /// **'Termal Tespit Haritası'**
+  /// **'Uydu Tespit Haritası'**
   String get mapTitleDetections;
 
   /// No description provided for @mapLiveMap.
@@ -773,13 +773,13 @@ abstract class AppLocalizations {
   /// No description provided for @mapNearbyFires.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınımdaki Termal Tespitler'**
+  /// **'Yakınımdaki Uydu Tespitleri'**
   String get mapNearbyFires;
 
   /// No description provided for @mapNearbyFiresSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumuna en yakın güncel tespitler'**
+  /// **'Konumunuza en yakın güncel tespitler'**
   String get mapNearbyFiresSubtitle;
 
   /// No description provided for @mapReport.
@@ -917,7 +917,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsFeedSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip et.'**
+  /// **'Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip edin.'**
   String get notificationsFeedSubtitle;
 
   /// No description provided for @notificationsTools.
@@ -929,7 +929,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsToolsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'İzinleri ve otomatik termal anomali takibini yönet'**
+  /// **'İzinleri ve otomatik uydu tespiti takibini yönetin'**
   String get notificationsToolsSubtitle;
 
   /// No description provided for @notificationsPermissionGranted.
@@ -995,7 +995,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsBackgroundSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol et (Android bunu geciktirebilir)'**
+  /// **'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol edin (Android bunu geciktirebilir)'**
   String get notificationsBackgroundSubtitle;
 
   /// No description provided for @notificationsEnableBackground.
@@ -1019,7 +1019,7 @@ abstract class AppLocalizations {
   /// No description provided for @backgroundLocationDialogBody.
   ///
   /// In tr, this message translates to:
-  /// **'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu kontroller telefonunda yapılır; bu sırada konumun sunucuya gönderilmez. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.'**
+  /// **'FireWatch TR, uygulama kapalıyken de yakınınızdaki yangınları kontrol edip sizi uyarabilmek için konumunuza arka planda erişim istiyor. Bu kontroller telefonunuzda yapılır; bu sırada konumunuz sunucuya gönderilmez. Bu izni vermezseniz uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmeniz gerekir.'**
   String get backgroundLocationDialogBody;
 
   /// No description provided for @backgroundLocationDialogConfirm.
@@ -1049,13 +1049,13 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsNearbyLiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Yakındaki Termal Tespitler'**
+  /// **'Yakındaki Uydu Tespitleri'**
   String get notificationsNearbyLiveFires;
 
   /// No description provided for @notificationsNearbyLiveFiresSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumuna 50 km içinde bulunan noktalar'**
+  /// **'Konumunuza 50 km içinde bulunan noktalar'**
   String get notificationsNearbyLiveFiresSubtitle;
 
   /// No description provided for @notificationsDistanceAndTime.
@@ -1091,19 +1091,19 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsNoHighRisk.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an yüksek güvenilirlikli termal anomali bulunmuyor.'**
+  /// **'Uydular şu an güçlü bir tespit bildirmedi.'**
   String get notificationsNoHighRisk;
 
   /// No description provided for @notificationsHighRiskDetectionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek Riskli Termal Tespit'**
+  /// **'Güçlü Uydu Tespiti'**
   String get notificationsHighRiskDetectionTitle;
 
   /// No description provided for @notificationsHighRiskDetectionBody.
   ///
   /// In tr, this message translates to:
-  /// **'{region} bölgesinde {temp}K ısı tespit edildi. Güçlü bir uydu ısı sinyali; doğrulanmış yangın değildir.'**
+  /// **'Uydular {region} bölgesinde güçlü bir ısı tespit etti ({temp}K). Doğrulanmadı.'**
   String notificationsHighRiskDetectionBody(String region, String temp);
 
   /// No description provided for @watchlistTitle.
@@ -1139,7 +1139,7 @@ abstract class AppLocalizations {
   /// No description provided for @watchlistHeadingSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Takip etmek istediğin yangın noktalarını burada saklayabilirsin.'**
+  /// **'Takip etmek istediğiniz uydu tespitlerini burada saklayabilirsiniz.'**
   String get watchlistHeadingSubtitle;
 
   /// No description provided for @watchlistEmptyTitle.
@@ -1151,7 +1151,7 @@ abstract class AppLocalizations {
   /// No description provided for @watchlistEmptySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsin.'**
+  /// **'Tespit detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsiniz.'**
   String get watchlistEmptySubtitle;
 
   /// No description provided for @watchlistSavedPoints.
@@ -1163,13 +1163,13 @@ abstract class AppLocalizations {
   /// No description provided for @watchlistSavedPointsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'{count} termal tespit takipte'**
+  /// **'{count} uydu tespiti takipte'**
   String watchlistSavedPointsSubtitle(int count);
 
   /// No description provided for @watchlistSyncingTitle.
   ///
   /// In tr, this message translates to:
-  /// **'{count} kaydedilmiş yangın noktası var.'**
+  /// **'{count} kaydedilmiş uydu tespiti var.'**
   String watchlistSyncingTitle(int count);
 
   /// No description provided for @watchlistSyncingSubtitle.
@@ -1217,13 +1217,13 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyQuickToolsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda topla.'**
+  /// **'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda toplayın.'**
   String get emergencyQuickToolsSubtitle;
 
   /// No description provided for @emergencyStayReady.
   ///
   /// In tr, this message translates to:
-  /// **'Hazır Kal'**
+  /// **'Hazır Kalın'**
   String get emergencyStayReady;
 
   /// No description provided for @emergencyStayReadyNote.
@@ -1277,7 +1277,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyShareLocationSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınlarına yer bildir'**
+  /// **'Yakınlarınıza yer bildirin'**
   String get emergencyShareLocationSubtitle;
 
   /// No description provided for @emergencyEvacuationPlan.
@@ -1289,7 +1289,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyEvacuationPlanSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Çıkış adımlarını gözden geçir'**
+  /// **'Çıkış adımlarını gözden geçirin'**
   String get emergencyEvacuationPlanSubtitle;
 
   /// No description provided for @emergencyContactLines.
@@ -1301,7 +1301,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyContactLinesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Temel numaraları hazır tut'**
+  /// **'Temel numaraları hazır tutun'**
   String get emergencyContactLinesSubtitle;
 
   /// No description provided for @emergencyCallCenter.
@@ -1361,7 +1361,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyBagDocsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Kimlik, önemli evrak ve telefonunu tek yerde tut.'**
+  /// **'Kimlik, önemli evrak ve telefonunuzu tek yerde tutun.'**
   String get emergencyBagDocsSubtitle;
 
   /// No description provided for @emergencyBagSupplies.
@@ -1385,7 +1385,7 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyBagMeetingPointSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Ayrı düşme ihtimaline karşı önceden karar ver.'**
+  /// **'Ayrı düşme ihtimaline karşı önceden karar verin.'**
   String get emergencyBagMeetingPointSubtitle;
 
   /// No description provided for @emergencyCommNote.
@@ -1403,19 +1403,19 @@ abstract class AppLocalizations {
   /// No description provided for @emergencyStep1.
   ///
   /// In tr, this message translates to:
-  /// **'1. Resmi uyarıları doğrula'**
+  /// **'1. Resmi uyarıları doğrulayın'**
   String get emergencyStep1;
 
   /// No description provided for @emergencyStep2.
   ///
   /// In tr, this message translates to:
-  /// **'2. Yakınlarını kısa mesajla haberdar et'**
+  /// **'2. Yakınlarınızı kısa mesajla haberdar edin'**
   String get emergencyStep2;
 
   /// No description provided for @emergencyStep3.
   ///
   /// In tr, this message translates to:
-  /// **'3. Gerekliyse temel çantanı al ve güvenli çıkış rotasına yönel'**
+  /// **'3. Gerekliyse temel çantanızı alın ve güvenli çıkış rotasına yönelin'**
   String get emergencyStep3;
 
   /// No description provided for @safetyGuideTitle.
@@ -1439,7 +1439,7 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideCenterSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın sırasında ne yapacağını hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.'**
+  /// **'Yangın sırasında ne yapacağınızı hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.'**
   String get safetyGuideCenterSubtitle;
 
   /// No description provided for @safetyGuideQuickActions.
@@ -1457,49 +1457,49 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideReadyEvacuate.
   ///
   /// In tr, this message translates to:
-  /// **'Tahliyeye Hazır Ol'**
+  /// **'Tahliyeye Hazır Olun'**
   String get safetyGuideReadyEvacuate;
 
   /// No description provided for @safetyGuideReadyEvacuateSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Çıkış planını netleştir'**
+  /// **'Çıkış planını netleştirin'**
   String get safetyGuideReadyEvacuateSubtitle;
 
   /// No description provided for @safetyGuideTakeSmokeSeriously.
   ///
   /// In tr, this message translates to:
-  /// **'Dumanı Ciddiye Al'**
+  /// **'Dumanı Ciddiye Alın'**
   String get safetyGuideTakeSmokeSeriously;
 
   /// No description provided for @safetyGuideTakeSmokeSeriouslySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Kapalı alana geç, maske kullan'**
+  /// **'Kapalı alana geçin, maske kullanın'**
   String get safetyGuideTakeSmokeSeriouslySubtitle;
 
   /// No description provided for @safetyGuideFollowOfficials.
   ///
   /// In tr, this message translates to:
-  /// **'Yetkili Duyuruları İzle'**
+  /// **'Yetkili Duyuruları İzleyin'**
   String get safetyGuideFollowOfficials;
 
   /// No description provided for @safetyGuideFollowOfficialsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Resmi kaynakları takip et'**
+  /// **'Resmi kaynakları takip edin'**
   String get safetyGuideFollowOfficialsSubtitle;
 
   /// No description provided for @safetyGuideDontDelay.
   ///
   /// In tr, this message translates to:
-  /// **'Geç Kalma'**
+  /// **'Geç Kalmayın'**
   String get safetyGuideDontDelay;
 
   /// No description provided for @safetyGuideDontDelaySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Tahliye çağrısını bekletme'**
+  /// **'Tahliye çağrısını bekletmeyin'**
   String get safetyGuideDontDelaySubtitle;
 
   /// No description provided for @safetyGuideChecklist.
@@ -1517,49 +1517,49 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideChecklist1Title.
   ///
   /// In tr, this message translates to:
-  /// **'Kimlik, telefon ve şarj aletini hazır tut'**
+  /// **'Kimlik, telefon ve şarj aletini hazır tutun'**
   String get safetyGuideChecklist1Title;
 
   /// No description provided for @safetyGuideChecklist1Desc.
   ///
   /// In tr, this message translates to:
-  /// **'Zorunlu temel eşyaları tek yerde topla.'**
+  /// **'Zorunlu temel eşyaları tek yerde toplayın.'**
   String get safetyGuideChecklist1Desc;
 
   /// No description provided for @safetyGuideChecklist2Title.
   ///
   /// In tr, this message translates to:
-  /// **'Kapı ve pencere durumunu kontrol et'**
+  /// **'Kapı ve pencere durumunu kontrol edin'**
   String get safetyGuideChecklist2Title;
 
   /// No description provided for @safetyGuideChecklist2Desc.
   ///
   /// In tr, this message translates to:
-  /// **'Duman girişini azaltmak için açık alanları gözden geçir.'**
+  /// **'Duman girişini azaltmak için açık alanları gözden geçirin.'**
   String get safetyGuideChecklist2Desc;
 
   /// No description provided for @safetyGuideChecklist3Title.
   ///
   /// In tr, this message translates to:
-  /// **'Aile / yakınlarınla buluşma planı belirle'**
+  /// **'Aile / yakınlarınızla buluşma planı belirleyin'**
   String get safetyGuideChecklist3Title;
 
   /// No description provided for @safetyGuideChecklist3Desc.
   ///
   /// In tr, this message translates to:
-  /// **'Ayrı düşerseniz nerede buluşacağınızı önceden bil.'**
+  /// **'Ayrı düşerseniz nerede buluşacağınızı önceden bilin.'**
   String get safetyGuideChecklist3Desc;
 
   /// No description provided for @safetyGuideChecklist4Title.
   ///
   /// In tr, this message translates to:
-  /// **'Resmi tahliye rotasını takip et'**
+  /// **'Resmi tahliye rotasını takip edin'**
   String get safetyGuideChecklist4Title;
 
   /// No description provided for @safetyGuideChecklist4Desc.
   ///
   /// In tr, this message translates to:
-  /// **'Kendi başına riskli güzergah uydurma.'**
+  /// **'Kendi başınıza riskli güzergah uydurmayın.'**
   String get safetyGuideChecklist4Desc;
 
   /// No description provided for @safetyGuideDetailedGuide.
@@ -1577,121 +1577,121 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideAtHomeTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Evdeysen ne yapmalısın?'**
+  /// **'Evdeyseniz ne yapmalısınız?'**
   String get safetyGuideAtHomeTitle;
 
   /// No description provided for @safetyGuideAtHome1.
   ///
   /// In tr, this message translates to:
-  /// **'Duman yoğunluğu varsa kapı ve pencereleri kapalı tut.'**
+  /// **'Duman yoğunluğu varsa kapı ve pencereleri kapalı tutun.'**
   String get safetyGuideAtHome1;
 
   /// No description provided for @safetyGuideAtHome2.
   ///
   /// In tr, this message translates to:
-  /// **'Elektrik, gaz ve hızlı çıkış güzergahını kontrol et.'**
+  /// **'Elektrik, gaz ve hızlı çıkış güzergahını kontrol edin.'**
   String get safetyGuideAtHome2;
 
   /// No description provided for @safetyGuideAtHome3.
   ///
   /// In tr, this message translates to:
-  /// **'Tahliye çağrısı varsa eşyaları toplamaya çalışma, çıkışa odaklan.'**
+  /// **'Tahliye çağrısı varsa eşyaları toplamaya çalışmayın, çıkışa odaklanın.'**
   String get safetyGuideAtHome3;
 
   /// No description provided for @safetyGuideAtHome4.
   ///
   /// In tr, this message translates to:
-  /// **'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine al.'**
+  /// **'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine alın.'**
   String get safetyGuideAtHome4;
 
   /// No description provided for @safetyGuideInCarTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Araçtayken ne yapmalısın?'**
+  /// **'Araçtayken ne yapmalısınız?'**
   String get safetyGuideInCarTitle;
 
   /// No description provided for @safetyGuideInCar1.
   ///
   /// In tr, this message translates to:
-  /// **'Yoğun duman içinden geçmeye çalışma.'**
+  /// **'Yoğun duman içinden geçmeye çalışmayın.'**
   String get safetyGuideInCar1;
 
   /// No description provided for @safetyGuideInCar2.
   ///
   /// In tr, this message translates to:
-  /// **'Mümkünse güvenli açık alana veya yerleşim merkezine yönel.'**
+  /// **'Mümkünse güvenli açık alana veya yerleşim merkezine yönelin.'**
   String get safetyGuideInCar2;
 
   /// No description provided for @safetyGuideInCar3.
   ///
   /// In tr, this message translates to:
-  /// **'Aracı kuru otların ve ağaç altlarının yanında bırakma.'**
+  /// **'Aracı kuru otların ve ağaç altlarının yanında bırakmayın.'**
   String get safetyGuideInCar3;
 
   /// No description provided for @safetyGuideInCar4.
   ///
   /// In tr, this message translates to:
-  /// **'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerle.'**
+  /// **'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerleyin.'**
   String get safetyGuideInCar4;
 
   /// No description provided for @safetyGuideOutsideTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Dışarıdaysan ne yapmalısın?'**
+  /// **'Dışarıdaysanız ne yapmalısınız?'**
   String get safetyGuideOutsideTitle;
 
   /// No description provided for @safetyGuideOutside1.
   ///
   /// In tr, this message translates to:
-  /// **'Rüzgar yönünü gözlemle ve yangının önüne geçme.'**
+  /// **'Rüzgar yönünü gözlemleyin ve yangının önüne geçmeyin.'**
   String get safetyGuideOutside1;
 
   /// No description provided for @safetyGuideOutside2.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek bitki örtüsünden ve dar vadilerden uzaklaş.'**
+  /// **'Yüksek bitki örtüsünden ve dar vadilerden uzaklaşın.'**
   String get safetyGuideOutside2;
 
   /// No description provided for @safetyGuideOutside3.
   ///
   /// In tr, this message translates to:
-  /// **'Topluluk halinde hareket ediyorsan dağılmadan ilerle.'**
+  /// **'Topluluk halinde hareket ediyorsanız dağılmadan ilerleyin.'**
   String get safetyGuideOutside3;
 
   /// No description provided for @safetyGuideOutside4.
   ///
   /// In tr, this message translates to:
-  /// **'Acil durumda açık, çıplak ve yanıcı olmayan alana çık.'**
+  /// **'Acil durumda açık, çıplak ve yanıcı olmayan alana çıkın.'**
   String get safetyGuideOutside4;
 
   /// No description provided for @safetyGuideEvacOrderTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Tahliye emri geldiyse ne yapmalısın?'**
+  /// **'Tahliye emri geldiyse ne yapmalısınız?'**
   String get safetyGuideEvacOrderTitle;
 
   /// No description provided for @safetyGuideEvacOrder1.
   ///
   /// In tr, this message translates to:
-  /// **'Emri geciktirme, \"biraz daha bekleyeyim\" deme.'**
+  /// **'Emri geciktirmeyin, \"biraz daha bekleyeyim\" demeyin.'**
   String get safetyGuideEvacOrder1;
 
   /// No description provided for @safetyGuideEvacOrder2.
   ///
   /// In tr, this message translates to:
-  /// **'Sadece temel eşyaları al ve çıkışa odaklan.'**
+  /// **'Sadece temel eşyaları alın ve çıkışa odaklanın.'**
   String get safetyGuideEvacOrder2;
 
   /// No description provided for @safetyGuideEvacOrder3.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınlarını tek tek arayıp vakit kaybetme, önceden plan kullan.'**
+  /// **'Yakınlarınızı tek tek arayıp vakit kaybetmeyin, önceden plan kullanın.'**
   String get safetyGuideEvacOrder3;
 
   /// No description provided for @safetyGuideEvacOrder4.
   ///
   /// In tr, this message translates to:
-  /// **'Yetkililerin toplama alanı duyurusunu takip et.'**
+  /// **'Yetkililerin toplama alanı duyurusunu takip edin.'**
   String get safetyGuideEvacOrder4;
 
   /// No description provided for @safetyGuideEmergencyNumbers.
@@ -1703,7 +1703,7 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideEmergencyNumbersSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Hızlı erişim için not düş'**
+  /// **'Hızlı erişim için not düşün'**
   String get safetyGuideEmergencyNumbersSubtitle;
 
   /// No description provided for @safetyGuideCallCenterSubtitle.
@@ -1733,7 +1733,7 @@ abstract class AppLocalizations {
   /// No description provided for @safetyGuideAfadLocalNumber.
   ///
   /// In tr, this message translates to:
-  /// **'Yerel duyuruları takip et'**
+  /// **'Yerel duyuruları takip edin'**
   String get safetyGuideAfadLocalNumber;
 
   /// No description provided for @safetyGuideAfadLocalSubtitle.
@@ -1763,7 +1763,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsAppSettingsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimleri, konum tabanlı uyarıları ve uygulama davranışını buradan özelleştir.'**
+  /// **'Bildirimleri, konum tabanlı uyarıları ve uygulama davranışını buradan özelleştirin.'**
   String get settingsAppSettingsSubtitle;
 
   /// No description provided for @settingsNotifications.
@@ -1775,7 +1775,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsNotificationsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uyarı tercihlerini yönet'**
+  /// **'Uyarı tercihlerini yönetin'**
   String get settingsNotificationsSubtitle;
 
   /// No description provided for @settingsPushNotifications.
@@ -1787,7 +1787,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPushNotificationsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yeni olaylar ve önemli değişiklikler için bildirim al'**
+  /// **'Yeni olaylar ve önemli değişiklikler için bildirim alın'**
   String get settingsPushNotificationsSubtitle;
 
   /// No description provided for @settingsNearbyAlerts.
@@ -1799,7 +1799,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsNearbyAlertsSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumuna yakın bölgelerde olay varsa öncelikli göster'**
+  /// **'Konumunuza yakın bölgelerde olay varsa öncelikli gösterin'**
   String get settingsNearbyAlertsSubtitle;
 
   /// No description provided for @settingsAppBehavior.
@@ -1823,7 +1823,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDarkModeSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Premium koyu görünümü aktif tut'**
+  /// **'Premium koyu görünümü aktif tutun'**
   String get settingsDarkModeSubtitle;
 
   /// No description provided for @settingsRefreshInterval.
@@ -1835,7 +1835,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsRefreshIntervalSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Saha verilerinin ne sıklıkla yenileneceğini seç'**
+  /// **'Saha verilerinin ne sıklıkla yenileneceğini seçin'**
   String get settingsRefreshIntervalSubtitle;
 
   /// No description provided for @settingsLanguage.
@@ -1847,7 +1847,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLanguageSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama dilini seç'**
+  /// **'Uygulama dilini seçin'**
   String get settingsLanguageSubtitle;
 
   /// No description provided for @settingsLanguageTurkish.
@@ -1889,7 +1889,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesSatelliteBody.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP 2 Kasım 2026\'da veri vermeyi bıraktı) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.'**
+  /// **'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP 2 Kasım 2026\'da veri vermeyi bıraktı) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsiniz.'**
   String get dataSourcesSatelliteBody;
 
   /// No description provided for @dataSourcesGroupingTitle.
@@ -1961,7 +1961,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesPlacesBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir. Adres ve mahalle aramaları OpenStreetMap Nominatim ile yapılır; yazdığın metin saklanmaz, sonuçlar metnin geri çevrilemez özetiyle en fazla 7 gün önbellekte tutulur.'**
+  /// **'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir. Adres ve mahalle aramaları OpenStreetMap Nominatim ile yapılır; yazdığınız metin saklanmaz, sonuçlar metnin geri çevrilemez özetiyle en fazla 7 gün önbellekte tutulur.'**
   String get dataSourcesPlacesBody;
 
   /// No description provided for @dataSourcesFwiTitle.
@@ -2027,7 +2027,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsFooterNote.
   ///
   /// In tr, this message translates to:
-  /// **'Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.'**
+  /// **'Tercihleriniz cihazınızda saklanır ve uygulamayı her açtığınızda otomatik olarak uygulanır.'**
   String get settingsFooterNote;
 
   /// No description provided for @settingsLegal.
@@ -2387,7 +2387,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsCenterSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Saha güncellemeleri, risk uyarıları ve güvenlik odaklı gelişmeleri tek akışta takip et.'**
+  /// **'Yangınla ilgili son gelişmeler.'**
   String get newsCenterSubtitle;
 
   /// No description provided for @newsFeatured.
@@ -2411,7 +2411,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsCategoriesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Akışı filtrele'**
+  /// **'Akışı filtreleyin'**
   String get newsCategoriesSubtitle;
 
   /// No description provided for @newsCategoryRisk.
@@ -2531,7 +2531,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsContentFiltersSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Neler olduğuna göre filtrele'**
+  /// **'Neler olduğuna göre filtreleyin'**
   String get newsContentFiltersSubtitle;
 
   /// No description provided for @newsFilterMyRegion.
@@ -2849,7 +2849,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelSuccessReceivedBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bildiriminiz kaydedildi. Yakınında son 24 saatte uydu ısı tespiti bulunmadı; bu, yangın olmadığı anlamına gelmez.'**
+  /// **'Bildiriminiz kaydedildi. Uydular son 24 saatte yakınında tespit yapmadı; bu, yangın olmadığı anlamına gelmez.'**
   String get reportPanelSuccessReceivedBody;
 
   /// No description provided for @reportPanelReportIdLabel.
@@ -2932,19 +2932,19 @@ abstract class AppLocalizations {
   /// No description provided for @notifPermTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Önemli uyarıları kaçırma'**
+  /// **'Önemli uyarıları kaçırmayın'**
   String get notifPermTitle;
 
   /// No description provided for @notifPermSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirim izniyle yakınındaki yangın olaylarını ve kritik durum değişikliklerini anında öğrenebilirsin.'**
+  /// **'Bildirim izniyle yakınınızdaki uydu tespitlerini ve önemli değişiklikleri anında öğrenebilirsiniz.'**
   String get notifPermSubtitle;
 
   /// No description provided for @notifPermNote.
   ///
   /// In tr, this message translates to:
-  /// **'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.'**
+  /// **'Bu izin zorunlu değil. İsterseniz şimdilik atlayıp uygulamayı yine kullanabilirsiniz.'**
   String get notifPermNote;
 
   /// No description provided for @notifPermEnable.
@@ -2968,49 +2968,49 @@ abstract class AppLocalizations {
   /// No description provided for @notifPermDenied.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsin.'**
+  /// **'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsiniz.'**
   String get notifPermDenied;
 
   /// No description provided for @locPermServiceOff.
   ///
   /// In tr, this message translates to:
-  /// **'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.'**
+  /// **'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsiniz.'**
   String get locPermServiceOff;
 
   /// No description provided for @locPermDenied.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.'**
+  /// **'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsiniz.'**
   String get locPermDenied;
 
   /// No description provided for @locPermDeniedForever.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.'**
+  /// **'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsiniz.'**
   String get locPermDeniedForever;
 
   /// No description provided for @locPermError.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.'**
+  /// **'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsiniz.'**
   String get locPermError;
 
   /// No description provided for @locPermTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki olayları gösterelim'**
+  /// **'Yakınınızdaki olayları gösterelim'**
   String get locPermTitle;
 
   /// No description provided for @locPermSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunla yakınındaki yangın tespitlerini ve çevrendeki riski gösterebiliriz. Mesafeler telefonunda hesaplanır.'**
+  /// **'Konumunuzla yakınınızdaki uydu tespitlerini ve çevrenizdeki riski gösterebiliriz. Mesafeler telefonunuzda hesaplanır.'**
   String get locPermSubtitle;
 
   /// No description provided for @locPermNote.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimler için otomatik taramayı başlatırsan konumun yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır; bildirimleri kapattığında ya da Ayarlar → Konum verimi sil ile hemen silinir. Bu izin zorunlu değil, şimdilik atlayabilirsin.'**
+  /// **'Bildirimler için otomatik taramayı başlatırsanız konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır; bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil ile hemen silinir. Bu izin zorunlu değil, şimdilik atlayabilirsiniz.'**
   String get locPermNote;
 
   /// No description provided for @locPermEnable.
@@ -3028,37 +3028,37 @@ abstract class AppLocalizations {
   /// No description provided for @locDisclosureTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunu nasıl kullanıyoruz?'**
+  /// **'Konumunuzu nasıl kullanıyoruz?'**
   String get locDisclosureTitle;
 
   /// No description provided for @locDisclosureOnDevice.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki yangın tespitlerine olan mesafe ve çevrendeki risk telefonunda hesaplanır.'**
+  /// **'Yakınınızdaki uydu tespitlerine olan mesafe telefonunuzda hesaplanır.'**
   String get locDisclosureOnDevice;
 
   /// No description provided for @locDisclosureNearestCity.
   ///
   /// In tr, this message translates to:
-  /// **'Bulunduğun ili göstermek için konumun, riski hesaplamak için yaklaşık 10 km\'ye yuvarlanmış konumun sunucumuza gönderilir; bu sorgular saklanmaz.'**
+  /// **'Bulunduğunuz ili göstermek için konumunuz, riski hesaplamak için yaklaşık 10 km\'ye yuvarlanmış konumunuz sunucumuza gönderilir; bu sorgular saklanmaz.'**
   String get locDisclosureNearestCity;
 
   /// No description provided for @locDisclosureStored.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimler için otomatik taramayı başlatırsan, bölgenle ilgili uyarı gönderebilmek için konumun yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumun saklanmaz.'**
+  /// **'Bildirimler için otomatik taramayı başlatırsanız, bölgenizle ilgili uyarı gönderebilmek için konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumunuz saklanmaz.'**
   String get locDisclosureStored;
 
   /// No description provided for @locDisclosureDelete.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimleri kapattığında ya da Ayarlar → Konum verimi sil\'e dokunduğunda hemen silinir. Uygulamayı 90 gün açmazsan kaydın tamamen silinir.'**
+  /// **'Bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil\'e dokunduğunuzda hemen silinir. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir.'**
   String get locDisclosureDelete;
 
   /// No description provided for @locDisclosureOptional.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni zorunlu değil; uygulamayı konumsuz da kullanabilir, izni istediğin zaman telefon ayarlarından kaldırabilirsin.'**
+  /// **'Konum izni zorunlu değil; uygulamayı konumsuz da kullanabilir, izni istediğiniz zaman telefon ayarlarından kaldırabilirsiniz.'**
   String get locDisclosureOptional;
 
   /// No description provided for @locDisclosureContinue.
@@ -3082,13 +3082,13 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakında ısı tespiti olunca ya da yangın riski yükselince bildirim al'**
+  /// **'Yakında ısı tespiti olunca ya da yangın riski yükselince bildirim alın'**
   String get trackedPlacesSubtitle;
 
   /// No description provided for @trackedPlacesEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz yer eklemedin. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.'**
+  /// **'Henüz yer eklemediniz. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsiniz.'**
   String get trackedPlacesEmpty;
 
   /// No description provided for @trackedPlacesAdd.
@@ -3100,7 +3100,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesFull.
   ///
   /// In tr, this message translates to:
-  /// **'En fazla 5 yer ekleyebilirsin.'**
+  /// **'En fazla 5 yer ekleyebilirsiniz.'**
   String get trackedPlacesFull;
 
   /// No description provided for @trackedPlacesRadius.
@@ -3190,7 +3190,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesNameRequired.
   ///
   /// In tr, this message translates to:
-  /// **'Bir ad gir.'**
+  /// **'Bir ad girin.'**
   String get trackedPlacesNameRequired;
 
   /// No description provided for @trackedPlacesRadiusLabel.
@@ -3220,13 +3220,13 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesErrorNetwork.
   ///
   /// In tr, this message translates to:
-  /// **'Kaydedilemedi. İnternet bağlantını kontrol edip tekrar dene.'**
+  /// **'Kaydedilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.'**
   String get trackedPlacesErrorNetwork;
 
   /// No description provided for @trackedPlacesErrorGeneric.
   ///
   /// In tr, this message translates to:
-  /// **'Bir sorun oluştu, tekrar dene.'**
+  /// **'Bir sorun oluştu, tekrar deneyin.'**
   String get trackedPlacesErrorGeneric;
 
   /// No description provided for @trackedPlacesPickerTitle.
@@ -3238,7 +3238,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesPickerHint.
   ///
   /// In tr, this message translates to:
-  /// **'Haritayı kaydırıp işaretçiyi yerin üzerine getir ya da haritaya uzun bas.'**
+  /// **'Haritayı kaydırıp işaretçiyi yerin üzerine getirin ya da haritaya uzun basın.'**
   String get trackedPlacesPickerHint;
 
   /// No description provided for @trackedPlacesPickerConfirm.
@@ -3256,13 +3256,13 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesMigrateTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Kayıtlı yerlerini Yerlerim\'e taşımak ister misin?'**
+  /// **'Kayıtlı yerlerinizi Yerlerim\'e taşımak ister misiniz?'**
   String get trackedPlacesMigrateTitle;
 
   /// No description provided for @trackedPlacesMigrateBody.
   ///
   /// In tr, this message translates to:
-  /// **'{count} kayıtlı yerin var. Taşırsan 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.'**
+  /// **'{count} kayıtlı yeriniz var. Taşırsanız 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsınız.'**
   String trackedPlacesMigrateBody(int count);
 
   /// No description provided for @trackedPlacesMigrateAccept.
@@ -3280,7 +3280,7 @@ abstract class AppLocalizations {
   /// No description provided for @locDisclosureTracked.
   ///
   /// In tr, this message translates to:
-  /// **'Yerlerim\'e eklediğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.'**
+  /// **'Yerlerim\'e eklediğiniz yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsiniz.'**
   String get locDisclosureTracked;
 
   /// No description provided for @notifPlacesChannelName.
@@ -3304,13 +3304,13 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDeleteLocationConfirmTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konum verin silinsin mi?'**
+  /// **'Konum veriniz silinsin mi?'**
   String get settingsDeleteLocationConfirmTitle;
 
   /// No description provided for @settingsDeleteLocationConfirmBody.
   ///
   /// In tr, this message translates to:
-  /// **'Sunucuda saklanan yaklaşık konumun ve takip ettiğin tüm yerler hemen silinir. Bildirimlerin açık kalır; il veya bölge seçmediysen bundan sonra tüm bölgelerin risk uyarılarını alabilirsin. Otomatik taramayı yeniden başlatırsan konumun tekrar kaydedilir.'**
+  /// **'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; il veya bölge seçmediyseniz bundan sonra tüm bölgelerin risk uyarılarını alabilirsiniz. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.'**
   String get settingsDeleteLocationConfirmBody;
 
   /// No description provided for @settingsDeleteLocationConfirm.
@@ -3322,13 +3322,13 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDeleteLocationDone.
   ///
   /// In tr, this message translates to:
-  /// **'Konum verin ve takip ettiğin yerler sunucudan silindi.'**
+  /// **'Konum veriniz ve takip ettiğiniz yerler sunucudan silindi.'**
   String get settingsDeleteLocationDone;
 
   /// No description provided for @settingsDeleteLocationFailed.
   ///
   /// In tr, this message translates to:
-  /// **'Konum verin silinemedi. İnternet bağlantını kontrol edip tekrar dene.'**
+  /// **'Konum veriniz silinemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.'**
   String get settingsDeleteLocationFailed;
 
   /// No description provided for @compassNorth.
@@ -3358,43 +3358,43 @@ abstract class AppLocalizations {
   /// No description provided for @riskReasonHighWithTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Termal sensör {temp}K ısı tespit etti. Güçlü bir ısı sinyali; doğrulanmış yangın değildir. Bölgeye yaklaşma.'**
+  /// **'Uydular {temp}K ısı tespit etti. Doğrulanmadı. Bölgeye yaklaşmayın.'**
   String riskReasonHighWithTemp(String temp);
 
   /// No description provided for @riskReasonHighNoTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek güven seviyesinde termal anomali tespit edildi. Aktif yangın olabilir.'**
+  /// **'Uydular güçlü bir tespit yaptı. Doğrulanmadı.'**
   String get riskReasonHighNoTemp;
 
   /// No description provided for @riskReasonMediumWithTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Termal sensör {temp}K ısı ölçtü. Anız yakma, tarım faaliyeti veya erken evre yangın olabilir.'**
+  /// **'Uydular {temp}K ısı tespit etti. Nedeni doğrulanmadı.'**
   String riskReasonMediumWithTemp(String temp);
 
   /// No description provided for @riskReasonMediumNoTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Orta düzey termal anomali. Bölge izleme altında tutulmalı.'**
+  /// **'Uydular orta düzeyde bir tespit yaptı. Doğrulanmadı.'**
   String get riskReasonMediumNoTemp;
 
   /// No description provided for @riskReasonLowWithTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Düşük ısı değeri ({temp}K). Sanayi, seracılık veya doğal ısı kaynağı olabilir.'**
+  /// **'Uydular düşük bir ısı tespit etti ({temp}K). Nedeni doğrulanmadı.'**
   String riskReasonLowWithTemp(String temp);
 
   /// No description provided for @riskReasonLowNoTemp.
   ///
   /// In tr, this message translates to:
-  /// **'Düşük seviye termal aktivite. Takip önerilir.'**
+  /// **'Uydular zayıf bir tespit yaptı. Takip önerilir.'**
   String get riskReasonLowNoTemp;
 
   /// No description provided for @fireGeneratedDescHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek yoğunluklu termal aktivite. Güçlü bir ısı sinyali; doğrulanmış yangın değildir.'**
+  /// **'Uydular güçlü bir ısı tespit etti. Doğrulanmadı.'**
   String get fireGeneratedDescHigh;
 
   /// No description provided for @fireGeneratedDescMedium.
@@ -3406,37 +3406,37 @@ abstract class AppLocalizations {
   /// No description provided for @fireGeneratedDescLow.
   ///
   /// In tr, this message translates to:
-  /// **'Düşük seviye termal aktivite. Takip önerilir.'**
+  /// **'Uydular zayıf bir tespit yaptı. Takip önerilir.'**
   String get fireGeneratedDescLow;
 
   /// No description provided for @fireRecommendedActionHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgeden uzak dur, resmi yönlendirmeleri takip et ve tahliye hazırlığını yap.'**
+  /// **'Bölgeden uzak durun, resmi yönlendirmeleri takip edin ve tahliye hazırlığını yapın.'**
   String get fireRecommendedActionHigh;
 
   /// No description provided for @fireRecommendedActionMedium.
   ///
   /// In tr, this message translates to:
-  /// **'Gelişmeleri takip et, bölgeye gereksiz yaklaşma.'**
+  /// **'Gelişmeleri takip edin, bölgeye gereksiz yaklaşmayın.'**
   String get fireRecommendedActionMedium;
 
   /// No description provided for @fireRecommendedActionLow.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.'**
+  /// **'Şu an acil aksiyon gerekmiyor, bölgeyi takip edin.'**
   String get fireRecommendedActionLow;
 
   /// No description provided for @fireStatusActive.
   ///
   /// In tr, this message translates to:
-  /// **'Çok Güçlü Isı Sinyali'**
+  /// **'Çok Güçlü Tespit'**
   String get fireStatusActive;
 
   /// No description provided for @fireStatusLikelyActive.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek Isı Anomalisi'**
+  /// **'Güçlü Tespit'**
   String get fireStatusLikelyActive;
 
   /// No description provided for @fireStatusMonitoring.
@@ -3448,19 +3448,19 @@ abstract class AppLocalizations {
   /// No description provided for @fireStatusHistorical.
   ///
   /// In tr, this message translates to:
-  /// **'Geçmiş Tespit'**
+  /// **'Artık görülmüyor'**
   String get fireStatusHistorical;
 
   /// No description provided for @fireEventRegionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'{city} Bölgesi Termal Tespiti'**
+  /// **'{city} Bölgesi Uydu Tespiti'**
   String fireEventRegionTitle(String city);
 
   /// No description provided for @fireEventLiveDetectionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Güncel Termal Tespit'**
+  /// **'Güncel Uydu Tespiti'**
   String get fireEventLiveDetectionTitle;
 
   /// No description provided for @fireEventStatusActive.
@@ -3490,7 +3490,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireEventSpreadMedium.
   ///
   /// In tr, this message translates to:
-  /// **'Orta — dikkatli takip et'**
+  /// **'Orta — dikkatli takip edin'**
   String get fireEventSpreadMedium;
 
   /// No description provided for @fireEventSpreadLow.
@@ -3502,7 +3502,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireDetailAreaMeasured.
   ///
   /// In tr, this message translates to:
-  /// **'Tespit pikseli ~{hectares} hektar (yangının kendisi değil)'**
+  /// **'Uydunun gördüğü alan ~{hectares} hektar (yangının kendisi değil)'**
   String fireDetailAreaMeasured(int hectares);
 
   /// No description provided for @fireDetailWindLoading.
@@ -3612,12 +3612,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Çok yüksek yoğunluk'**
   String get frpIntensityVeryHigh;
-
-  /// No description provided for @fireEventTempLine.
-  ///
-  /// In tr, this message translates to:
-  /// **'Sıcaklık: {temp}°C (Termal değer: {kelvin}K)'**
-  String fireEventTempLine(String temp, String kelvin);
 
   /// No description provided for @fireEventSatelliteLine.
   ///
@@ -3761,7 +3755,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsTranslatedCaption.
   ///
   /// In tr, this message translates to:
-  /// **'Türkçeden çevrildi • Tam çeviri için dokun'**
+  /// **'Türkçeden çevrildi • Tam çeviri için dokunun'**
   String get newsTranslatedCaption;
 
   /// No description provided for @coachMarksGotIt.
@@ -3791,13 +3785,13 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Harita ve Yangın Noktaları'**
+  /// **'Harita ve Uydu Tespitleri'**
   String get coachMarkMapTitle;
 
   /// No description provided for @coachMarkMapDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki işaretler NASA uydularının tespit ettiği ısı noktalarıdır; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilir, buradan yeni bir yangın da bildirebilirsin.'**
+  /// **'Haritadaki işaretler NASA uydularının tespit ettiği ısı noktalarıdır; doğrulanmadı. Bir işarete dokunarak ayrıntıları görebilir, buradan yeni bir yangın da bildirebilirsiniz.'**
   String get coachMarkMapDesc;
 
   /// No description provided for @coachMarkRiskTitle.
@@ -3809,7 +3803,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Her yangın noktası Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanı sağlar.'**
+  /// **'Her uydu tespiti Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanızı sağlar.'**
   String get coachMarkRiskDesc;
 
   /// No description provided for @coachMarkWatchlistTitle.
@@ -3821,7 +3815,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkWatchlistDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Takip etmek istediğin yangın noktalarını kaydet ve buradan hızlıca tekrar ulaş.'**
+  /// **'Takip etmek istediğiniz uydu tespitlerini kaydedin ve buradan hızlıca tekrar ulaşın.'**
   String get coachMarkWatchlistDesc;
 
   /// No description provided for @coachMarkNotificationsTitle.
@@ -3833,7 +3827,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotificationsDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki uydu ısı tespitleri için bildirim al ve otomatik taramayı buradan başlat.'**
+  /// **'Yakınınızdaki uydu ısı tespitleri için bildirim alın ve otomatik taramayı buradan başlatın.'**
   String get coachMarkNotificationsDesc;
 
   /// No description provided for @riskTabTurkeyOverview.
@@ -3857,7 +3851,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskMyLocationPermissionDenied.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni verilmedi. Bölge risk bilgisini görmek için izin ver.'**
+  /// **'Konum izni verilmedi. Bölge risk bilgisini görmek için izin verin.'**
   String get riskMyLocationPermissionDenied;
 
   /// No description provided for @riskMyLocationServiceOff.
@@ -3887,7 +3881,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskMyLocationYourRegion.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgen: {city} ({region})'**
+  /// **'Bölgeniz: {city} ({region})'**
   String riskMyLocationYourRegion(String city, String region);
 
   /// No description provided for @riskMyLocationRankLabel.
@@ -3911,13 +3905,13 @@ abstract class AppLocalizations {
   /// No description provided for @riskChartTapHint.
   ///
   /// In tr, this message translates to:
-  /// **'Detaylar için bir bölgeye dokun'**
+  /// **'Detaylar için bir bölgeye dokunun'**
   String get riskChartTapHint;
 
   /// No description provided for @monitorStatusReady.
   ///
   /// In tr, this message translates to:
-  /// **'Monitoring servisi hazır.'**
+  /// **'Otomatik takip hazır.'**
   String get monitorStatusReady;
 
   /// No description provided for @monitorStatusAlreadyRunning.
@@ -3965,19 +3959,19 @@ abstract class AppLocalizations {
   /// No description provided for @monitorStatusNoActiveFires.
   ///
   /// In tr, this message translates to:
-  /// **'Şu an termal anomali verisi bulunamadı.'**
+  /// **'Uydular şu an tespit bildirmedi.'**
   String get monitorStatusNoActiveFires;
 
   /// No description provided for @monitorStatusNoNearbyFires.
   ///
   /// In tr, this message translates to:
-  /// **'50 km içinde termal tespit yok. ({count} nokta tarandı)'**
+  /// **'Uydular 50 km içinde tespit etmedi. ({count} nokta tarandı)'**
   String monitorStatusNoNearbyFires(int count);
 
   /// No description provided for @monitorStatusNearbyFiresFound.
   ///
   /// In tr, this message translates to:
-  /// **'50 km içinde {count} termal tespit bulundu!'**
+  /// **'Uydular 50 km içinde {count} tespit yaptı.'**
   String monitorStatusNearbyFiresFound(int count);
 
   /// No description provided for @monitorStatusTimeout.
@@ -4001,13 +3995,13 @@ abstract class AppLocalizations {
   /// No description provided for @notifNearbyFireTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınında termal anomali tespit edildi'**
+  /// **'Uydular yakınınızda tespit yaptı'**
   String get notifNearbyFireTitle;
 
   /// No description provided for @notifNearbyFireBody.
   ///
   /// In tr, this message translates to:
-  /// **'{distance} içinde {count} termal tespit bulundu.'**
+  /// **'{distance} içinde {count} uydu tespiti var. Doğrulanmadı.'**
   String notifNearbyFireBody(String distance, int count);
 
   /// No description provided for @notifTestBody.
@@ -4031,7 +4025,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskMyLocationPostgisDistance.
   ///
   /// In tr, this message translates to:
-  /// **'PostGIS • {distance} km uzaklıkta'**
+  /// **'{distance} km uzaklıkta'**
   String riskMyLocationPostgisDistance(String distance);
 
   /// No description provided for @riskComparisonTitle.
@@ -4133,7 +4127,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapInfo.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki işaretler VIIRS ve MODIS uydu cihazlarının tespit ettiği termal anomalileri gösterir.'**
+  /// **'Haritadaki işaretler uyduların yaptığı tespitleri gösterir.'**
   String get trustMapInfo;
 
   /// No description provided for @trustRiskInfo.
@@ -4187,37 +4181,37 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.'**
+  /// **'Bu ekrandaki sayılar uyduların son 24 saatte yaptığı tespitlerdir; doğrulanmadı. Bazıları tarımsal yakma, sanayi ısısı veya sıcak yüzey olabilir.'**
   String get trustHomeMeaning;
 
   /// No description provided for @trustHomeSource.
   ///
   /// In tr, this message translates to:
-  /// **'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir. Sunucu yaklaşık 30 dakikada bir yeni veri çeker; uydu geçişleri ve NASA\'nın işleme süresi nedeniyle bir tespit birkaç saat gecikebilir.'**
+  /// **'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; birkaç uydunun geçişlerini birleştirir. Sunucu yaklaşık 30 dakikada bir yeni veri çeker; uydu geçişleri ve NASA\'nın işleme süresi nedeniyle bir tespit birkaç saat gecikebilir.'**
   String get trustHomeSource;
 
   /// No description provided for @trustHomeInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Çok Güçlü Isı Sinyali olarak etiketlenir.'**
+  /// **'Yalnızca uydunun çok emin olduğu ve çok yüksek ısı ölçtüğü tespitler Çok Güçlü Tespit olarak etiketlenir.'**
   String get trustHomeInterpret;
 
   /// No description provided for @trustHomeAction.
   ///
   /// In tr, this message translates to:
-  /// **'Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.'**
+  /// **'Ayrıntılar için tespite dokunun. Duman veya alev görürseniz önce 112\'yi arayın.'**
   String get trustHomeAction;
 
   /// No description provided for @trustMapMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı çok güçlü ısı sinyali; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.'**
+  /// **'Her işaret bir uydu tespitidir; doğrulanmadı. Kırmızı çok güçlü, turuncu güçlü, sarı orta, gri zayıf tespittir.'**
   String get trustMapMeaning;
 
   /// No description provided for @trustMapSource.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır.'**
+  /// **'Uydu verileri NASA FIRMS\'ten alınır.'**
   String get trustMapSource;
 
   /// No description provided for @trustMapInterpret.
@@ -4229,13 +4223,13 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapAction.
   ///
   /// In tr, this message translates to:
-  /// **'Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et\'i kullanın ve resmi talimatları izleyin.'**
+  /// **'Ayrıntılar için işarete dokunun. Yangını kendiniz görürseniz önce 112\'yi arayın, sonra Raporla\'yı kullanın.'**
   String get trustMapAction;
 
   /// No description provided for @trustRiskMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son NASA yangın tespitlerini birleştiren bir endekstir; yangın çıkma olasılığı değildir, garanti de vermez.'**
+  /// **'Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son uydu tespitlerini birleştiren bir endekstir; yangın çıkıp çıkmayacağını söylemez, garanti vermez.'**
   String get trustRiskMeaning;
 
   /// No description provided for @trustRiskSource.
@@ -4283,7 +4277,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsMeaning.
   ///
   /// In tr, this message translates to:
-  /// **'Uyarılar, uydu 50 km içinde termal anomali tespit ettiğinde bildirim gönderir. Bunlar otomatik tespitlerdir, doğrulanmış olay raporları değildir.'**
+  /// **'Uyarılar, uydular 50 km içinde tespit yaptığında gönderilir. Bunlar otomatik tespitlerdir; doğrulanmadı.'**
   String get trustAlertsMeaning;
 
   /// No description provided for @trustAlertsSource.
@@ -4295,7 +4289,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsInterpret.
   ///
   /// In tr, this message translates to:
-  /// **'Güvenilirlik ısı anomalisine duyulan güveni anlatır; yangın kesinliği değildir. FRP ve parlaklığı birlikte değerlendirin.'**
+  /// **'Güven düzeyi, uydunun tespitten ne kadar emin olduğunu anlatır; yangın olduğunu doğrulamaz.'**
   String get trustAlertsInterpret;
 
   /// No description provided for @trustAlertsAction.
@@ -4313,31 +4307,31 @@ abstract class AppLocalizations {
   /// No description provided for @smartIntensityIntense.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında yoğun bir termal anomali tespit edildi.'**
+  /// **'{location} yakınında uydular çok güçlü bir tespit yaptı.'**
   String smartIntensityIntense(String location);
 
   /// No description provided for @smartIntensityHigh.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında yüksek yoğunluklu bir termal anomali tespit edildi.'**
+  /// **'{location} yakınında uydular güçlü bir tespit yaptı.'**
   String smartIntensityHigh(String location);
 
   /// No description provided for @smartIntensityModerate.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında orta düzeyde termal aktivite tespit edildi.'**
+  /// **'{location} yakınında uydular orta düzeyde bir tespit yaptı.'**
   String smartIntensityModerate(String location);
 
   /// No description provided for @smartIntensityEarly.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında erken evre bir yangın veya için için yanan bitki örtüsü olabilir.'**
+  /// **'{location} yakınında uydular zayıf bir tespit yaptı; nedeni doğrulanmadı.'**
   String smartIntensityEarly(String location);
 
   /// No description provided for @smartIntensityAnomaly.
   ///
   /// In tr, this message translates to:
-  /// **'{location} yakınında bir termal anomali tespit edildi.'**
+  /// **'{location} yakınında uydular bir tespit yaptı.'**
   String smartIntensityAnomaly(String location);
 
   /// No description provided for @smartLocationHintForest.
@@ -4355,55 +4349,55 @@ abstract class AppLocalizations {
   /// No description provided for @smartLocationHintUrban.
   ///
   /// In tr, this message translates to:
-  /// **'kentleşmesi yoğun bir ilde; yapı yangını veya endüstriyel ısı kaynağı olabilir'**
+  /// **'kentleşmesi yoğun bir ilde; bina veya sanayi kaynaklı olabilir'**
   String get smartLocationHintUrban;
 
   /// No description provided for @smartLocationHintAgricultural.
   ///
   /// In tr, this message translates to:
-  /// **'tarımın yoğun olduğu bir ilde; anız yakımı da bu tür ısı izi bırakır'**
+  /// **'tarımın yoğun olduğu bir ilde; uydular anız yakımını da tespit eder'**
   String get smartLocationHintAgricultural;
 
   /// No description provided for @smartFrpHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.'**
+  /// **'Uydu bu noktada yüksek ısı ölçtü.'**
   String get smartFrpHigh;
 
   /// No description provided for @smartPixelFootprint.
   ///
   /// In tr, this message translates to:
-  /// **'Uydu pikseli ~{hectares} hektar; ısı kaynağı bu alanın içinde, gerçek boyutu bilinmiyor.'**
+  /// **'Uydu bu noktayı ~{hectares} hektarlık bir alan olarak görür; ısının kaynağı bu alanın içindedir, gerçek boyutu bilinmiyor.'**
   String smartPixelFootprint(int hectares);
 
   /// No description provided for @smartAreaLarge.
   ///
   /// In tr, this message translates to:
-  /// **'Tahmini yangın alanı geniş (~{hectares} hektar).'**
+  /// **'Uydunun tespit ettiği alan geniş (~{hectares} hektar).'**
   String smartAreaLarge(int hectares);
 
   /// No description provided for @smartAreaMedium.
   ///
   /// In tr, this message translates to:
-  /// **'Tahmini yangın alanı orta büyüklükte (~{hectares} hektar).'**
+  /// **'Uydunun tespit ettiği alan orta büyüklükte (~{hectares} hektar).'**
   String smartAreaMedium(int hectares);
 
   /// No description provided for @smartConfidenceHigh.
   ///
   /// In tr, this message translates to:
-  /// **'NASA uydusu bu tespitten yüksek düzeyde emin.'**
+  /// **'NASA bu tespitten yüksek düzeyde emin; nedeni doğrulanmadı.'**
   String get smartConfidenceHigh;
 
   /// No description provided for @smartConfidenceMedium.
   ///
   /// In tr, this message translates to:
-  /// **'NASA bu termal anomaliyi nominal güvenilirlikte bildiriyor; doğrulama önerilir.'**
+  /// **'NASA bu tespiti orta güvenle bildiriyor; doğrulanmadı.'**
   String get smartConfidenceMedium;
 
   /// No description provided for @smartConfidenceLow.
   ///
   /// In tr, this message translates to:
-  /// **'Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.'**
+  /// **'Zayıf bir tespit; sanayi ısısı veya yansıma olabilir, doğrulanmadı.'**
   String get smartConfidenceLow;
 
   /// No description provided for @smartSpreadDangerous.
@@ -4433,7 +4427,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartTimeRecent.
   ///
   /// In tr, this message translates to:
-  /// **'{hours} saat önce {satellite} tarafından tespit edildi, hâlâ aktif olabilir.'**
+  /// **'{hours} saat önce {satellite} tespit etti; güncel durumu doğrulanmadı.'**
   String smartTimeRecent(int hours, String satellite);
 
   /// No description provided for @smartTimeOlder.
@@ -4523,13 +4517,13 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapMarkersTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın İşaretleri'**
+  /// **'Uydu Tespit İşaretleri'**
   String get coachMarkMapMarkersTitle;
 
   /// No description provided for @coachMarkMapMarkersDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki işaretler NASA uydularından gelen ısı tespitleridir; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilirsin.'**
+  /// **'Haritadaki işaretler NASA uydularından gelen ısı tespitleridir; doğrulanmadı. Bir işarete dokunarak ayrıntıları görebilirsiniz.'**
   String get coachMarkMapMarkersDesc;
 
   /// No description provided for @coachMarkMapClustersTitle.
@@ -4541,7 +4535,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapClustersDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Birbirine yakın yangın noktaları bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.'**
+  /// **'Birbirine yakın uydu tespitleri bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.'**
   String get coachMarkMapClustersDesc;
 
   /// No description provided for @coachMarkMapReportTitle.
@@ -4553,19 +4547,19 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapReportDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Sağ alttaki butona dokunarak gördüğün bir yangını GPS konumunla birlikte bildirebilirsin.'**
+  /// **'Sağ alttaki butona dokunarak gördüğünüz bir yangını GPS konumunuzla birlikte bildirebilirsiniz.'**
   String get coachMarkMapReportDesc;
 
   /// No description provided for @coachMarkMapNearbyTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınımdaki Yangınlar'**
+  /// **'Yakınımdaki Uydu Tespitleri'**
   String get coachMarkMapNearbyTitle;
 
   /// No description provided for @coachMarkMapNearbyDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bu bölüm, konumuna en yakın uydu ısı tespitlerini mesafe sırasına göre listeler.'**
+  /// **'Bu bölüm, konumunuza en yakın uydu ısı tespitlerini mesafe sırasına göre listeler.'**
   String get coachMarkMapNearbyDesc;
 
   /// No description provided for @coachMarkNewsFeaturedTitle.
@@ -4589,7 +4583,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNewsCategoryDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.'**
+  /// **'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsiniz.'**
   String get coachMarkNewsCategoryDesc;
 
   /// No description provided for @coachMarkNewsRegionTitle.
@@ -4601,7 +4595,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNewsRegionDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Önem derecesine göre filtrele — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgeni gör.'**
+  /// **'Önem derecesine göre filtreleyin — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgenizi görün.'**
   String get coachMarkNewsRegionDesc;
 
   /// No description provided for @coachMarkNewsListTitle.
@@ -4613,7 +4607,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNewsListDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bir habere dokunarak tam metnini oku; İngilizce moddaysan başlık ve özeti tek dokunuşla çevirebilirsin.'**
+  /// **'Bir habere dokunarak tam metnini okuyun; İngilizce moddaysanız başlık ve özeti tek dokunuşla çevirebilirsiniz.'**
   String get coachMarkNewsListDesc;
 
   /// No description provided for @coachMarkNotifPermissionTitle.
@@ -4625,7 +4619,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifPermissionDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki uydu ısı tespitleri için bildirim alabilmek üzere izin ver.'**
+  /// **'Yakınınızdaki uydu ısı tespitleri için bildirim alabilmek üzere izin verin.'**
   String get coachMarkNotifPermissionDesc;
 
   /// No description provided for @coachMarkNotifScanTitle.
@@ -4637,7 +4631,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifScanDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunun 50 km çevresinde uydu ısı tespiti olup olmadığını kontrol et.'**
+  /// **'Konumunuzun 50 km çevresinde uydu ısı tespiti olup olmadığını kontrol edin.'**
   String get coachMarkNotifScanDesc;
 
   /// No description provided for @coachMarkNotifMonitoringTitle.
@@ -4649,7 +4643,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifMonitoringDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama açıkken yakındaki termal tespitleri düzenli kontrol etmek için otomatik izlemeyi başlat.'**
+  /// **'Uygulama açıkken yakındaki uydu tespitlerini düzenli kontrol etmek için otomatik izlemeyi başlatın.'**
   String get coachMarkNotifMonitoringDesc;
 
   /// No description provided for @coachMarkNotifAlertsTitle.
@@ -4661,7 +4655,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifAlertsDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsin.'**
+  /// **'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsiniz.'**
   String get coachMarkNotifAlertsDesc;
 
   /// No description provided for @coachMarkRiskScoreTitle.
@@ -4673,7 +4667,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskScoreDesc.
   ///
   /// In tr, this message translates to:
-  /// **'0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsin.'**
+  /// **'0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA uydu tespitlerinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsiniz.'**
   String get coachMarkRiskScoreDesc;
 
   /// No description provided for @coachMarkRiskChartTitle.
@@ -4685,7 +4679,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskChartDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsin.'**
+  /// **'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsiniz.'**
   String get coachMarkRiskChartDesc;
 
   /// No description provided for @coachMarkRiskMyLocationTabTitle.
@@ -4697,7 +4691,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkRiskMyLocationTabDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bu sekmeye geçerek kendi bölgenin riskini Türkiye ortalamasıyla karşılaştır.'**
+  /// **'Bu sekmeye geçerek kendi bölgenizin riskini Türkiye ortalamasıyla karşılaştırın.'**
   String get coachMarkRiskMyLocationTabDesc;
 
   /// No description provided for @coachMarkRiskInfoTitle.
@@ -4721,7 +4715,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkWatchlistPurposeDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Takip etmek istediğin yangın noktalarını burada bir arada tutabilirsin.'**
+  /// **'Takip etmek istediğiniz uydu tespitlerini burada bir arada tutabilirsiniz.'**
   String get coachMarkWatchlistPurposeDesc;
 
   /// No description provided for @coachMarkWatchlistHowToAddTitle.
@@ -4733,7 +4727,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkWatchlistHowToAddDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.'**
+  /// **'Bir tespitin detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsiniz.'**
   String get coachMarkWatchlistHowToAddDesc;
 
   /// No description provided for @coachMarkWatchlistClearTitle.
@@ -4745,25 +4739,25 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkWatchlistClearDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.'**
+  /// **'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsiniz.'**
   String get coachMarkWatchlistClearDesc;
 
   /// No description provided for @detectionProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Çok Güçlü Isı Sinyali'**
+  /// **'Çok Güçlü Tespit'**
   String get detectionProbableFire;
 
   /// No description provided for @detectionHighThermalAnomaly.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek Isı Anomalisi'**
+  /// **'Güçlü Tespit'**
   String get detectionHighThermalAnomaly;
 
   /// No description provided for @detectionThermalDetection.
   ///
   /// In tr, this message translates to:
-  /// **'Termal Tespit'**
+  /// **'Uydu Tespiti'**
   String get detectionThermalDetection;
 
   /// No description provided for @detectionLowConfidence.
@@ -4775,7 +4769,7 @@ abstract class AppLocalizations {
   /// No description provided for @thermalAnomalyDisclaimer.
   ///
   /// In tr, this message translates to:
-  /// **'NASA uydusu termal anomalileri tespit eder. Yüksek güvenilirlikli tespitler aktif yangın göstergesi olabilir ancak endüstriyel ısı kaynakları da tespit edilebilir.'**
+  /// **'NASA uyduları ısı tespit eder. Tespitler doğrulanmadı; sanayi gibi yangın dışı kaynaklar da tespit edilebilir.'**
   String get thermalAnomalyDisclaimer;
 
   /// No description provided for @detectionAboutTitle.
@@ -4817,13 +4811,13 @@ abstract class AppLocalizations {
   /// No description provided for @legendProbableFire.
   ///
   /// In tr, this message translates to:
-  /// **'Çok güçlü ısı sinyali'**
+  /// **'Çok güçlü tespit'**
   String get legendProbableFire;
 
   /// No description provided for @legendHighThermal.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek Isı Anomalisi'**
+  /// **'Güçlü tespit'**
   String get legendHighThermal;
 
   /// No description provided for @legendLowConfidence.
@@ -4835,13 +4829,13 @@ abstract class AppLocalizations {
   /// No description provided for @mapMarkerDisclaimerBefore.
   ///
   /// In tr, this message translates to:
-  /// **'Harita NASA uydu termal tespitlerini gösterir.'**
+  /// **'Harita NASA uydularının yaptığı tespitleri gösterir.'**
   String get mapMarkerDisclaimerBefore;
 
   /// No description provided for @mapMarkerDisclaimerAfter.
   ///
   /// In tr, this message translates to:
-  /// **'işaretler aktif yangın olabilir.'**
+  /// **'işaretler en güçlü tespitlerdir; doğrulanmadı.'**
   String get mapMarkerDisclaimerAfter;
 
   /// No description provided for @feedbackSend.
@@ -4973,7 +4967,7 @@ abstract class AppLocalizations {
   /// No description provided for @bugReportIntro.
   ///
   /// In tr, this message translates to:
-  /// **'Neyin yanlış gittiğini anlat — doğrudan ekibe iletilir.'**
+  /// **'Neyin yanlış gittiğini anlatın — doğrudan ekibe iletilir.'**
   String get bugReportIntro;
 
   /// No description provided for @bugReportWhatHappened.
@@ -5009,7 +5003,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkWatchlistTapDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.'**
+  /// **'Kaydedilen bir tespite dokunarak güncel durumunu ve tam detaylarını görebilirsiniz.'**
   String get coachMarkWatchlistTapDesc;
 
   /// No description provided for @notificationScopeTitle.
@@ -5021,7 +5015,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Hangi yangınlar için uyarı almak istediğini seç.'**
+  /// **'Hangi yangınlar için uyarı almak istediğinizi seçin.'**
   String get notificationScopeSubtitle;
 
   /// No description provided for @notificationScopeAll.
@@ -5033,7 +5027,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeAllDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Ülke genelindeki tüm yangın uyarılarını al.'**
+  /// **'Ülke genelindeki tüm yangın uyarılarını alın.'**
   String get notificationScopeAllDesc;
 
   /// No description provided for @notificationScopeRegion.
@@ -5045,7 +5039,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeRegionDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca seçtiğin coğrafi bölgedeki yangınlar.'**
+  /// **'Yalnızca seçtiğiniz coğrafi bölgedeki yangınlar.'**
   String get notificationScopeRegionDesc;
 
   /// No description provided for @notificationScopeCity.
@@ -5057,7 +5051,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeCityDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca seçtiğin ildeki yangınlar.'**
+  /// **'Yalnızca seçtiğiniz ildeki yangınlar.'**
   String get notificationScopeCityDesc;
 
   /// No description provided for @notificationScopeRegionLabel.
@@ -5087,13 +5081,13 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeDetected.
   ///
   /// In tr, this message translates to:
-  /// **'Konumundan algılandı: {name}'**
+  /// **'Konumunuzdan algılandı: {name}'**
   String notificationScopeDetected(String name);
 
   /// No description provided for @notificationScopeDetecting.
   ///
   /// In tr, this message translates to:
-  /// **'Konumun belirleniyor...'**
+  /// **'Konumunuz belirleniyor...'**
   String get notificationScopeDetecting;
 
   /// No description provided for @notificationScopeSaved.
@@ -5105,7 +5099,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeSaveFailed.
   ///
   /// In tr, this message translates to:
-  /// **'Kapsam kaydedilemedi. İnternet bağlantını kontrol et.'**
+  /// **'Kapsam kaydedilemedi. İnternet bağlantınızı kontrol edin.'**
   String get notificationScopeSaveFailed;
 
   /// No description provided for @notificationScopeCitiesUnavailable.
@@ -5117,13 +5111,13 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopeNarrowWarning.
   ///
   /// In tr, this message translates to:
-  /// **'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.'**
+  /// **'Kapsamı daraltmak, seçtiğiniz alan dışındaki yangınlar için uyarı almayacağınız anlamına gelir.'**
   String get notificationScopeNarrowWarning;
 
   /// No description provided for @incidentsSectionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın Olayları'**
+  /// **'Uydu Olayları'**
   String get incidentsSectionTitle;
 
   /// No description provided for @incidentsSectionSubtitle.
@@ -5135,13 +5129,13 @@ abstract class AppLocalizations {
   /// No description provided for @incidentStatusActive.
   ///
   /// In tr, this message translates to:
-  /// **'Aktif tespit'**
+  /// **'Güncel tespit'**
   String get incidentStatusActive;
 
   /// No description provided for @incidentStatusAwaiting.
   ///
   /// In tr, this message translates to:
-  /// **'Tespit bekleniyor'**
+  /// **'Artık görülmüyor'**
   String get incidentStatusAwaiting;
 
   /// No description provided for @incidentStatusLowConfidence.
@@ -5195,7 +5189,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentHeatLow.
   ///
   /// In tr, this message translates to:
-  /// **'Düşük'**
+  /// **'Zayıf'**
   String get incidentHeatLow;
 
   /// No description provided for @incidentHeatModerate.
@@ -5207,13 +5201,13 @@ abstract class AppLocalizations {
   /// No description provided for @incidentHeatHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek'**
+  /// **'Güçlü'**
   String get incidentHeatHigh;
 
   /// No description provided for @incidentHeatVeryHigh.
   ///
   /// In tr, this message translates to:
-  /// **'Çok yüksek'**
+  /// **'Çok güçlü'**
   String get incidentHeatVeryHigh;
 
   /// No description provided for @incidentSpreadTitle.
@@ -5261,25 +5255,25 @@ abstract class AppLocalizations {
   /// No description provided for @incidentToggleShow.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın olayları'**
+  /// **'Uydu olayları'**
   String get incidentToggleShow;
 
   /// No description provided for @incidentToggleDetections.
   ///
   /// In tr, this message translates to:
-  /// **'Olası yangın noktaları'**
+  /// **'Doğrulanmamış uydu tespitleri'**
   String get incidentToggleDetections;
 
   /// No description provided for @incidentLayerCaptionDetections.
   ///
   /// In tr, this message translates to:
-  /// **'Uydunun tek tek gördüğü sıcak noktalar; her biri yangın olmayabilir.'**
+  /// **'Uyduların tek tek yaptığı tespitler; doğrulanmadı.'**
   String get incidentLayerCaptionDetections;
 
   /// No description provided for @incidentLayerCaptionEvents.
   ///
   /// In tr, this message translates to:
-  /// **'Aynı yangına ait tespitler tek bir olayda birleştirildi.'**
+  /// **'Uyduların aynı noktada yaptığı tespitler tek bir olayda birleştirildi.'**
   String get incidentLayerCaptionEvents;
 
   /// No description provided for @incidentFilterActive.
@@ -5339,13 +5333,13 @@ abstract class AppLocalizations {
   /// No description provided for @placesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Harita bu yerlere yakınlaşır; istersen bildirim kapsamın da bu yerlere daralır.'**
+  /// **'Harita bu yerlere yakınlaşır; isterseniz bildirim kapsamınız da bu yerlere daralır.'**
   String get placesSubtitle;
 
   /// No description provided for @placesEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz kayıtlı yer yok. İl veya ilçe ara, ya da haritaya iğne bırak.'**
+  /// **'Henüz kayıtlı yer yok. İl veya ilçe arayın, ya da haritaya iğne bırakın.'**
   String get placesEmpty;
 
   /// No description provided for @placesSearchHint.
@@ -5363,13 +5357,13 @@ abstract class AppLocalizations {
   /// No description provided for @placesDropPinHint.
   ///
   /// In tr, this message translates to:
-  /// **'Kaydetmek istediğin noktaya dokun'**
+  /// **'Kaydetmek istediğiniz noktaya dokunun'**
   String get placesDropPinHint;
 
   /// No description provided for @placesPinNameTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yere bir ad ver'**
+  /// **'Yere bir ad verin'**
   String get placesPinNameTitle;
 
   /// No description provided for @placesPinDefaultName.
@@ -5447,31 +5441,31 @@ abstract class AppLocalizations {
   /// No description provided for @notificationScopePlacesDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yalnızca harita ekranında kaydettiğin il, ilçe ve noktaların çevresindeki yangınlar.'**
+  /// **'Yalnızca harita ekranında kaydettiğiniz il, ilçe ve noktaların çevresindeki yangınlar.'**
   String get notificationScopePlacesDesc;
 
   /// No description provided for @notificationScopePlacesEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsin.'**
+  /// **'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsiniz.'**
   String get notificationScopePlacesEmpty;
 
   /// No description provided for @notificationScopePlacesNote.
   ///
   /// In tr, this message translates to:
-  /// **'{count} kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğin il/bölge kapsamını kullanmaya devam eder.'**
+  /// **'{count} kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğiniz il/bölge kapsamını kullanmaya devam eder.'**
   String notificationScopePlacesNote(int count);
 
   /// No description provided for @notifPlacesFireTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Kayıtlı yerinde yangın tespiti'**
+  /// **'Kayıtlı yerinizin yakınında uydu tespiti'**
   String get notifPlacesFireTitle;
 
   /// No description provided for @notifPlacesFireBody.
   ///
   /// In tr, this message translates to:
-  /// **'Kayıtlı yerlerinin çevresinde {count} termal tespit var. Harita ekranından kontrol et.'**
+  /// **'Kayıtlı yerlerinizin çevresinde {count} uydu tespiti var. Harita ekranından kontrol edin.'**
   String notifPlacesFireBody(int count);
 
   /// No description provided for @riskLegendTitle.
@@ -5609,14 +5603,8 @@ abstract class AppLocalizations {
   /// No description provided for @homeLast24hStrongestTitle.
   ///
   /// In tr, this message translates to:
-  /// **'En şiddetli yangın'**
+  /// **'En güçlü uydu tespiti'**
   String get homeLast24hStrongestTitle;
-
-  /// No description provided for @homeLast24hStrongestPower.
-  ///
-  /// In tr, this message translates to:
-  /// **'{mw} MW'**
-  String homeLast24hStrongestPower(int mw);
 
   /// No description provided for @homeLast24hStrongestSubtitle.
   ///
@@ -5645,7 +5633,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentsEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Bu aralıkta gruplanmış yangın olayı yok.'**
+  /// **'Bu aralıkta gruplanmış uydu olayı yok.'**
   String get incidentsEmpty;
 
   /// No description provided for @incidentsCount.
@@ -5657,7 +5645,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentPanelTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uydu Isı Olayı'**
+  /// **'Uydu tespiti'**
   String get incidentPanelTitle;
 
   /// No description provided for @incidentOfficialTitle.
@@ -5813,19 +5801,19 @@ abstract class AppLocalizations {
   /// No description provided for @riskScoreNotProbability.
   ///
   /// In tr, this message translates to:
-  /// **'Bu bir olasılık yüzdesi değildir.'**
+  /// **'Bu puan, yangın çıkıp çıkmayacağını söylemez.'**
   String get riskScoreNotProbability;
 
   /// No description provided for @riskScoresAreIndices.
   ///
   /// In tr, this message translates to:
-  /// **'Puanlar 0–100 arası bir endekstir; yangın çıkma olasılığı değildir.'**
+  /// **'Puanlar 0–100 arası bir endekstir; yangın çıkıp çıkmayacağını söylemez.'**
   String get riskScoresAreIndices;
 
   /// No description provided for @riskNearbyFireCount.
   ///
   /// In tr, this message translates to:
-  /// **'Son günlerde yakında {count} yangın tespiti.'**
+  /// **'Son günlerde yakında {count} uydu tespiti.'**
   String riskNearbyFireCount(String count);
 
   /// No description provided for @riskNearbyFireCountUnavailable.
@@ -6053,7 +6041,7 @@ abstract class AppLocalizations {
   /// No description provided for @annualMetricSatelliteDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki termal tespitleri gösterir.'**
+  /// **'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki uydu tespitlerini gösterir.'**
   String get annualMetricSatelliteDesc;
 
   /// No description provided for @annualMetricEffisAreaDesc.
@@ -6107,7 +6095,7 @@ abstract class AppLocalizations {
   /// No description provided for @districtRiskScoresNotProbability.
   ///
   /// In tr, this message translates to:
-  /// **'Puanlar olasılık yüzdesi değildir.'**
+  /// **'Puanlar yangın çıkıp çıkmayacağını söylemez.'**
   String get districtRiskScoresNotProbability;
 
   /// No description provided for @districtRiskSampleBanner.
@@ -6311,7 +6299,7 @@ abstract class AppLocalizations {
   /// No description provided for @detectionNotConfirmedNotice.
   ///
   /// In tr, this message translates to:
-  /// **'Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürsen hemen 112\'yi ara.'**
+  /// **'Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürseniz hemen 112\'yi arayın.'**
   String get detectionNotConfirmedNotice;
 
   /// No description provided for @riskFactorTempHintNone.
@@ -6389,13 +6377,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeBriefNoneNearby.
   ///
   /// In tr, this message translates to:
-  /// **'100 km çevrende önemli bir tespit görünmüyor.'**
+  /// **'100 km çevrenizde önemli bir tespit görünmüyor.'**
   String get homeBriefNoneNearby;
 
   /// No description provided for @homeBriefNearby.
   ///
   /// In tr, this message translates to:
-  /// **'100 km çevrende {count} tespit var; haritadan ayrıntıları kontrol et.'**
+  /// **'100 km çevrenizde {count} tespit var; haritadan ayrıntıları kontrol edin.'**
   String homeBriefNearby(int count);
 
   /// No description provided for @homeBriefTitle.
@@ -6473,25 +6461,25 @@ abstract class AppLocalizations {
   /// No description provided for @mapDetectionConfidenceInfoBody.
   ///
   /// In tr, this message translates to:
-  /// **'NASA\'nın güven düzeyi, ısı gücü (FRP), 20 km içindeki çoklu geçiş tespitleri ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.'**
+  /// **'NASA\'nın güven düzeyi, tespitin gücü, 20 km içindeki tekrar eden tespitler ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.'**
   String get mapDetectionConfidenceInfoBody;
 
   /// No description provided for @mapDetectionConfidenceInfoNotFire.
   ///
   /// In tr, this message translates to:
-  /// **'Bu puan tek bir uydu pikselinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu söylemez.'**
+  /// **'Bu puan bir uydu tespitinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu doğrulamaz.'**
   String get mapDetectionConfidenceInfoNotFire;
 
   /// No description provided for @mapStrongUnverifiedReason.
   ///
   /// In tr, this message translates to:
-  /// **'Tek bir uydu pikselinde güçlü ısı sinyali ({frp} MW) — henüz doğrulanmadı'**
-  String mapStrongUnverifiedReason(int frp);
+  /// **'Uydular tek geçişte güçlü bir tespit yaptı; doğrulanmadı.'**
+  String get mapStrongUnverifiedReason;
 
   /// No description provided for @mapStrongUnverifiedBanner.
   ///
   /// In tr, this message translates to:
-  /// **'{count} güçlü, doğrulanmamış tespit — Noktalar\'da gör'**
+  /// **'{count} güçlü, doğrulanmamış tespit — Noktalar\'da görün'**
   String mapStrongUnverifiedBanner(int count);
 
   /// No description provided for @multiPassDetectionLabel.
@@ -6503,19 +6491,19 @@ abstract class AppLocalizations {
   /// No description provided for @multiPassDetectionExplanation.
   ///
   /// In tr, this message translates to:
-  /// **'Aynı noktada en az iki ayrı uydu geçişinde, güçlü ısı sinyaliyle görüldü. Bu, yangın olduğunu kanıtlamaz; tek bir pikselden daha güçlü bir kanıttır.'**
+  /// **'Uydular aynı noktada en az iki ayrı geçişte güçlü tespit yaptı. Bu, yangın olduğunu doğrulamaz.'**
   String get multiPassDetectionExplanation;
 
   /// No description provided for @homeMultiPassSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'En az 2 uydu geçişi; {weaker} ısı izi daha Noktalar katmanında'**
+  /// **'En az 2 uydu geçişi; {weaker} zayıf tespit daha Noktalar katmanında'**
   String homeMultiPassSubtitle(int weaker);
 
   /// No description provided for @homeMultiPassNote.
   ///
   /// In tr, this message translates to:
-  /// **'{count} çoklu geçiş tespiti (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf ısı izi daha var. Hiçbiri doğrulanmış yangın değildir.'**
+  /// **'{count} tekrarlanan tespit (en az 2 uydu geçişi); haritada {weaker} tek geçişli ya da zayıf tespit daha var. Hiçbiri doğrulanmadı.'**
   String homeMultiPassNote(int count, int weaker);
 
   /// No description provided for @incidentExtinguishedConflict.
@@ -6611,25 +6599,25 @@ abstract class AppLocalizations {
   /// No description provided for @placeSearchNoResults.
   ///
   /// In tr, this message translates to:
-  /// **'Sonuç bulunamadı. Haritadan seçebilirsin.'**
+  /// **'Sonuç bulunamadı. Haritadan seçebilirsiniz.'**
   String get placeSearchNoResults;
 
   /// No description provided for @placeSearchFailed.
   ///
   /// In tr, this message translates to:
-  /// **'Arama şu an yapılamıyor. Haritadan seçebilirsin.'**
+  /// **'Arama şu an yapılamıyor. Haritadan seçebilirsiniz.'**
   String get placeSearchFailed;
 
   /// No description provided for @placeSearchTooShort.
   ///
   /// In tr, this message translates to:
-  /// **'En az 3 harf yaz.'**
+  /// **'En az 3 harf yazın.'**
   String get placeSearchTooShort;
 
   /// No description provided for @placeSearchPrivacy.
   ///
   /// In tr, this message translates to:
-  /// **'İl ve ilçe aramaları telefonunda yapılır. Mahalle ve adres aramaları sunucumuz üzerinden OpenStreetMap\'e iletilir; yazdığın metin saklanmaz.'**
+  /// **'İl ve ilçe aramaları telefonunuzda yapılır. Mahalle ve adres aramaları sunucumuz üzerinden OpenStreetMap\'e iletilir; yazdığınız metin saklanmaz.'**
   String get placeSearchPrivacy;
 
   /// No description provided for @placeSearchAttribution.
@@ -6641,7 +6629,7 @@ abstract class AppLocalizations {
   /// No description provided for @detectionNoneTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Son 24 saatte uydular Türkiye\'de güçlü bir ısı izi görmedi.'**
+  /// **'Son 24 saatte uydular Türkiye\'de orman ve doğal alanlarda güçlü bir ısı tespit etmedi.'**
   String get detectionNoneTitle;
 
   /// No description provided for @detectionLimitNote.
@@ -6919,6 +6907,264 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'© European Union, Copernicus EFFIS · CC BY 4.0'**
   String get riskCopernicusAttribution;
+
+  /// No description provided for @commonDetails.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detaylar'**
+  String get commonDetails;
+
+  /// No description provided for @incidentPeakPowerDetail.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek ışıma gücü (FRP): {mw} MW'**
+  String incidentPeakPowerDetail(String mw);
+
+  /// No description provided for @commonAllTechnical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm teknik bilgiler'**
+  String get commonAllTechnical;
+
+  /// No description provided for @dsStrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular {city} yakınında güçlü bir yangın izi tespit etti.'**
+  String dsStrong(String city);
+
+  /// No description provided for @dsStrongNoCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular güçlü bir yangın izi tespit etti.'**
+  String get dsStrongNoCity;
+
+  /// No description provided for @dsNormal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular {city} yakınında bir yangın izi tespit etti.'**
+  String dsNormal(String city);
+
+  /// No description provided for @dsNormalNoCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular bir yangın izi tespit etti.'**
+  String get dsNormalNoCity;
+
+  /// No description provided for @dsNotVerified.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz doğrulanmadı.'**
+  String get dsNotVerified;
+
+  /// No description provided for @dsNewsVerified.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberlerde doğrulandı.'**
+  String get dsNewsVerified;
+
+  /// No description provided for @dsFarmland.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarım alanı olduğu için anız yakma da olabilir.'**
+  String get dsFarmland;
+
+  /// No description provided for @dsBuilt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sanayi veya yerleşim alanı olduğu için sabit bir ısı kaynağı da olabilir.'**
+  String get dsBuilt;
+
+  /// No description provided for @dsSeenJustNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Az önce görüldü.'**
+  String get dsSeenJustNow;
+
+  /// No description provided for @dsSeenHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saat önce görüldü.'**
+  String dsSeenHours(int hours);
+
+  /// No description provided for @dsSeenDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün önce görüldü.'**
+  String dsSeenDays(int days);
+
+  /// No description provided for @lastSeenHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son görülme: {hours} saat önce'**
+  String lastSeenHours(int hours);
+
+  /// No description provided for @lastSeenDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son görülme: {days} gün önce'**
+  String lastSeenDays(int days);
+
+  /// No description provided for @incidentSeenPasses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular bu noktayı {passes} ayrı geçişte gördü.'**
+  String incidentSeenPasses(int passes);
+
+  /// No description provided for @incidentSeenOnce.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular bu noktayı bir kez gördü.'**
+  String get incidentSeenOnce;
+
+  /// No description provided for @newsVerifiedLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberlerde doğrulandı'**
+  String get newsVerifiedLabel;
+
+  /// No description provided for @relatedNewsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgili haberler'**
+  String get relatedNewsTitle;
+
+  /// No description provided for @mapPointFarmland.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarım alanında — anız yakma olabilir'**
+  String get mapPointFarmland;
+
+  /// No description provided for @mapPointBuilt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sanayi veya yerleşim alanında — sabit ısı kaynağı olabilir'**
+  String get mapPointBuilt;
+
+  /// No description provided for @detectionOtherLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarım ve sanayi alanlarında {count} güçlü tespit var; bunlar Noktalar katmanında.'**
+  String detectionOtherLine(int count);
+
+  /// No description provided for @fireDetailBrightness.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydunun ölçtüğü yüzey parlaklık sıcaklığı'**
+  String get fireDetailBrightness;
+
+  /// No description provided for @fireDetailBrightnessNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu, hava sıcaklığı değildir. Uydunun yerden aldığı ısı ölçümüdür; yangının sıcaklığını göstermez.'**
+  String get fireDetailBrightnessNote;
+
+  /// No description provided for @homeTodayTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuzda bugün'**
+  String get homeTodayTitle;
+
+  /// No description provided for @homeNearbyNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'25 km içinde uydular güçlü bir tespit yapmadı.'**
+  String get homeNearbyNone;
+
+  /// No description provided for @homeNearbySome.
+  ///
+  /// In tr, this message translates to:
+  /// **'25 km içinde uydular {count} güçlü tespit yaptı.'**
+  String homeNearbySome(int count);
+
+  /// No description provided for @homeWind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rüzgâr: {speed} km/s'**
+  String homeWind(String speed);
+
+  /// No description provided for @homeLocationNeeded.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuzu açarsanız buradaki riski görürsünüz.'**
+  String get homeLocationNeeded;
+
+  /// No description provided for @homeLocationOutside.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz Türkiye dışında görünüyor.'**
+  String get homeLocationOutside;
+
+  /// No description provided for @homeLocationEnable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumu aç'**
+  String get homeLocationEnable;
+
+  /// No description provided for @homeRiskUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk şu an hesaplanamadı.'**
+  String get homeRiskUnavailable;
+
+  /// No description provided for @homeTurkeyLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saat: orman ve doğal alanda {natural} güçlü tespit, tarım ve sanayi alanında {other}.'**
+  String homeTurkeyLine(int natural, int other);
+
+  /// No description provided for @homeSeeOnMap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haritada gör'**
+  String get homeSeeOnMap;
+
+  /// No description provided for @homeNewsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberler'**
+  String get homeNewsTitle;
+
+  /// No description provided for @newsNewBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni'**
+  String get newsNewBadge;
+
+  /// No description provided for @coachMarksDisableAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm ipuçlarını kapat'**
+  String get coachMarksDisableAll;
+
+  /// No description provided for @settingsTipsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İpuçları'**
+  String get settingsTipsTitle;
+
+  /// No description provided for @settingsTipsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ekranlardaki kısa ipuçlarını göster'**
+  String get settingsTipsSubtitle;
+
+  /// No description provided for @pageAboutLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sayfa hakkında'**
+  String get pageAboutLink;
+
+  /// No description provided for @dataSourcesLandCoverTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arazi örtüsü'**
+  String get dataSourcesLandCoverTitle;
+
+  /// No description provided for @dataSourcesLandCoverBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0.'**
+  String get dataSourcesLandCoverBody;
 }
 
 class _AppLocalizationsDelegate

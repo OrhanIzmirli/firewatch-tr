@@ -26,6 +26,7 @@ import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import 'related_news.dart';
+import '../../shared/widgets/related_news_section.dart';
 
 
 class FireDetailScreen extends ConsumerStatefulWidget {
@@ -285,7 +286,10 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.08, end: 0),
 
             const SizedBox(height: AppSpacing.lg),
-            const DetectionSafetyNotice(),
+            DetectionSafetyNotice(
+              prominent: fire.riskTier == 'high' &&
+                  (fire.smartStatus == FireStatus.active || fire.smartStatus == FireStatus.likelyActive),
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 
@@ -360,11 +364,6 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
               label: l10n.fireDetailAffectedArea,
               value: fire.affectedArea,
             ),
-            const SizedBox(height: AppSpacing.sm),
-            _InfoRow(
-              label: l10n.fireDetailFireRadiativePower,
-              value: _frpDisplayValue(l10n, fire.frp),
-            ),
 
             const SizedBox(height: AppSpacing.xxl),
             SectionHeader(
@@ -372,17 +371,48 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
               icon: const Icon(Icons.satellite_alt_outlined),
             ),
             const SizedBox(height: AppSpacing.md),
-            _ActionCard(text: l10n.detectionAboutViirs),
-            const SizedBox(height: AppSpacing.sm),
-            _ActionCard(
-              text: l10n.detectionConfidenceExplanation(fire.riskLevel),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            _ActionCard(
-              text: l10n.detectionFrpExplanation(fire.frp.toStringAsFixed(1)),
-            ),
-            const SizedBox(height: AppSpacing.sm),
             _ActionCard(text: l10n.detectionLimitations),
+            RelatedNewsSection(
+              city: fire.city,
+              from: DateTime.now().subtract(const Duration(days: 2)),
+              to: DateTime.now(),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            // The only place on this screen that speaks instrument.
+            ExpansionTile(
+              key: const Key('fireTechnicalDetails'),
+              tilePadding: EdgeInsets.zero,
+              title: Text(l10n.commonAllTechnical),
+              children: [
+                _InfoRow(
+                  label: l10n.fireDetailFireRadiativePower,
+                  value: _frpDisplayValue(l10n, fire.frp),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                if (fire.brightness > 0) ...[
+                  _InfoRow(
+                    label: l10n.fireDetailBrightness,
+                    value: '${(fire.brightness > 200 ? fire.brightness - 273.15 : fire.brightness).toStringAsFixed(1)}°C (${fire.brightness.toStringAsFixed(0)} K)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  _ActionCard(text: l10n.fireDetailBrightnessNote),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                for (final line in fire.technicalLines) ...[
+                  _ActionCard(text: line),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                _ActionCard(text: l10n.detectionAboutViirs),
+                const SizedBox(height: AppSpacing.sm),
+                _ActionCard(
+                  text: l10n.detectionConfidenceExplanation(fire.riskLevel),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _ActionCard(
+                  text: l10n.detectionFrpExplanation(fire.frp.toStringAsFixed(1)),
+                ),
+              ],
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 

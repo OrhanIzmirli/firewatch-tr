@@ -18,6 +18,8 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/feedback_sheet.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -203,6 +205,9 @@ class SettingsScreen extends ConsumerWidget {
                   end: const Offset(1, 1),
                 ),
 
+            const SizedBox(height: AppSpacing.xxl),
+
+            const _TipsTile(),
             const SizedBox(height: AppSpacing.xxl),
 
             SectionHeader(
@@ -520,7 +525,7 @@ Future<void> confirmAndDeleteServerLocation(
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      title: Text(l10n.settingsDeleteLocationConfirmTitle),
+      title: DialogTitleWithClose(title: Text(l10n.settingsDeleteLocationConfirmTitle)),
       content: Text(l10n.settingsDeleteLocationConfirmBody),
       actions: [
         TextButton(
@@ -891,6 +896,48 @@ class _LanguageOptionTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Tips on or off. Turning them back on shows each one again, once.
+class _TipsTile extends StatefulWidget {
+  const _TipsTile();
+
+  @override
+  State<_TipsTile> createState() => _TipsTileState();
+}
+
+class _TipsTileState extends State<_TipsTile> {
+  bool _on = true;
+
+  @override
+  void initState() {
+    super.initState();
+    coachMarksEnabled().then((on) {
+      if (mounted) setState(() => _on = on);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+      child: Material(
+        type: MaterialType.transparency,
+        child: SwitchListTile(
+          key: const Key('settingsTips'),
+          contentPadding: EdgeInsets.zero,
+          value: _on,
+          title: Text(l10n.settingsTipsTitle),
+          subtitle: Text(l10n.settingsTipsSubtitle),
+          onChanged: (on) async {
+            setState(() => _on = on);
+            await setCoachMarksEnabled(on);
+          },
         ),
       ),
     );

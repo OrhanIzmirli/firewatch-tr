@@ -15,7 +15,12 @@ import '../../l10n/app_localizations.dart';
 class DetectionSafetyNotice extends StatelessWidget {
   final Future<bool> Function()? onCall;
 
-  const DetectionSafetyNotice({super.key, this.onCall});
+  /// Large red box for a fresh, strong detection on natural ground; one line
+  /// with a small 112 link for anything old, weak or on farmland. 112 is
+  /// reachable either way.
+  final bool prominent;
+
+  const DetectionSafetyNotice({super.key, this.onCall, this.prominent = true});
 
   static const Key callButtonKey = Key('detection-safety-call-112');
 
@@ -24,6 +29,23 @@ class DetectionSafetyNotice extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDark ? AppColors.white : AppColors.lightText;
+
+    if (!prominent) {
+      return Row(
+        children: [
+          Expanded(
+            child: Text(l10n.detectionCall112Line, style: GoogleFonts.ibmPlexSans(fontSize: 13, height: 1.35, color: textColor)),
+          ),
+          TextButton.icon(
+            key: callButtonKey,
+            style: TextButton.styleFrom(foregroundColor: AppColors.danger),
+            onPressed: () => (onCall ?? openDialer)(),
+            icon: const Icon(Icons.call_rounded, size: 16),
+            label: Text(l10n.emergencyCall112),
+          ),
+        ],
+      );
+    }
 
     return Container(
       width: double.infinity,

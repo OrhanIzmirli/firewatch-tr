@@ -163,14 +163,15 @@ void main() {
       expect(IncidentFilter.all.matches(multiEnded), isTrue);
     });
 
-    test('a labelled fixed heat source stays on the active layer, grey', () {
+    test('a labelled fixed heat source is off the events layer; it stays on Points', () {
       final plant = _incident(
         overpasses: 1,
         frp: 3,
         heatSourceClass: 'persistent_heat_source',
       );
-      expect(IncidentFilter.active.matches(plant), isTrue);
+      expect(IncidentFilter.active.matches(plant), isFalse);
       expect(IncidentFilter.ended.matches(plant), isFalse);
+      expect(IncidentFilter.all.matches(plant), isFalse);
     });
   });
 
@@ -244,9 +245,9 @@ void main() {
         expect(e, isNot(contains('proven')), reason: key);
         expect(e, isNot(contains('confirmed')), reason: key);
       }
-      expect(tr['homeMultiPassNote'], contains('doğrulanmış yangın değildir'));
-      expect(en['homeMultiPassNote'], contains('None of these is a verified fire'));
-      expect(tr['multiPassDetectionExplanation'], contains('kanıtlamaz'));
+      expect(tr['homeMultiPassNote'], contains('doğrulanmadı'));
+      expect(en['homeMultiPassNote'], contains('None of these is verified'));
+      expect(tr['multiPassDetectionExplanation'], contains('doğrulamaz'));
     });
   });
 }

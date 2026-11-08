@@ -10,6 +10,7 @@ import '../../models/geo_area.dart';
 import '../../shared/widgets/area_map.dart';
 import 'history_format.dart';
 import 'history_sample_data.dart';
+import '../../shared/widgets/app_sheet.dart';
 
 /// Past fire areas with their sourced restoration updates. Runs on two
 /// sample records while FIRE_HISTORY_URL is unset — and is then reachable in
@@ -95,7 +96,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final detections = HistoryDetectionInfo.fromProperties(p);
     final updates = ((p['restoration_updates'] as List?) ?? []).whereType<Map>().where((u) => _link(u['source_url'])).toList();
     final campaigns = ((p['campaigns'] as List?) ?? []).whereType<Map>().where((c) => c['official_source'] == true && _link(c['url'])).toList();
-    showModalBottomSheet(context: context, isScrollControlled: true, showDragHandle: true, builder: (context) => SafeArea(child: SizedBox(height: MediaQuery.sizeOf(context).height * 0.75,
+    showAppSheet(context, scrollable: false, builder: (context) => SafeArea(child: SizedBox(height: MediaQuery.sizeOf(context).height * 0.75,
       child: ListView(padding: const EdgeInsets.all(20), children: [
         if (endpoint.isEmpty) Text(l10n.historySampleRecord),
         Text('${area.city} / ${area.district}', style: Theme.of(context).textTheme.headlineSmall),

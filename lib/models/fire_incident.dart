@@ -18,6 +18,10 @@ class FireIncident {
   final double durationHours;
   final int detectionCount;
   final int overpassCount;
+
+  /// natural, agriculture, built, other, unknown; null until classified.
+  final String? landCover;
+  final IncidentNews? newsVerification;
   final double latitude;
   final double longitude;
   final double? maxFrpMw;
@@ -95,6 +99,8 @@ class FireIncident {
     required this.durationHours,
     required this.detectionCount,
     required this.overpassCount,
+    this.landCover,
+    this.newsVerification,
     required this.spreadConfidence,
     this.firstDetectedAt,
     this.lastDetectedAt,
@@ -141,6 +147,8 @@ class FireIncident {
       durationHours: _toDouble(json['duration_hours']) ?? 0,
       detectionCount: (json['detection_count'] as num?)?.toInt() ?? 0,
       overpassCount: (json['overpass_count'] as num?)?.toInt() ?? 0,
+      landCover: json['land_cover'] as String?,
+      newsVerification: IncidentNews.fromJson(json['news_verification']),
       latitude: _toDouble(json['latitude']) ?? 0,
       longitude: _toDouble(json['longitude']) ?? 0,
       maxFrpMw: _toDouble(json['max_frp_mw']),
@@ -247,6 +255,15 @@ class FireIncident {
   /// fire-points layer instead. Nothing is deleted; it is routed to the
   /// layer whose name matches its evidence.
   bool get belongsOnEventsLayer =>
+      newsVerification != null ||
+      (!isKeptOffEvents && _hasEventEvidence);
+
+  /// On farmland, industry or bare ground, and no news story says otherwise.
+  /// Unclassified stays in: a real fire must not vanish on a failed lookup.
+  bool get isKeptOffEvents =>
+      newsVerification == null && const {'agriculture', 'built', 'other'}.contains(landCover);
+
+  bool get _hasEventEvidence =>
       isMultiPassDetection ||
       hasShownOfficialStatus ||
       opticalBurntAreaHa != null;
@@ -266,6 +283,7 @@ class FireIncident {
   /// drawn with an attention marker on the points layer.
   bool get isStrongUnverified =>
       !belongsOnEventsLayer &&
+      !isKeptOffEvents &&
       !isPersistentHeatSource &&
       status == IncidentStatus.activeDetection &&
       (maxFrpMw ?? 0) >= 15;
@@ -457,6 +475,20 @@ abstract final class PersistentSourceHint {
 /// It is deliberately NOT called extinguished or contained: nothing in this
 /// data can support that claim, and a filter label is exactly the kind of
 /// place where a convenient word would quietly become a fact.
+/// The story that confirms an incident, shown with a link on its card.
+class IncidentNews {
+  final String title;
+  final String? source;
+  final String? url;
+
+  const IncidentNews({required this.title, this.source, this.url});
+
+  static IncidentNews? fromJson(Object? json) {
+    if (json is! Map || json['title'] is! String) return null;
+    return IncidentNews(title: json['title'] as String, source: json['source'] as String?, url: json['url'] as String?);
+  }
+}
+
 enum IncidentFilter { active, ended, all }
 
 extension IncidentFilterX on IncidentFilter {
@@ -480,7 +512,7 @@ extension IncidentFilterX on IncidentFilter {
   /// in "all". Labelled, not hidden.
   bool matches(FireIncident incident) {
     final isActive = incident.status == IncidentStatus.activeDetection;
-    if (incident.isPersistentHeatSource) return this != IncidentFilter.ended;
+    if (incident.isPersistentHeatSource) return false;
     if (!incident.belongsOnEventsLayer) return false;
     switch (this) {
       case IncidentFilter.active:

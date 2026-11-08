@@ -9,8 +9,9 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/saved_place.dart';
 import '../../../models/tracked_place.dart';
-import '../../../services/fwi_point_service.dart';
+import '../../../core/utils/risk_display.dart';
 import '../../../services/location_disclosure.dart';
+import '../../../services/point_risk_service.dart';
 import '../../../services/saved_places_provider.dart';
 import '../../../services/tracked_places_api.dart';
 import '../../../services/tracked_places_provider.dart';
@@ -20,7 +21,7 @@ import '../../../shared/widgets/section_header.dart';
 import '../../tracked_places/add_tracked_place_flow.dart';
 
 /// "Yerlerim": the one list of the user's places, on the home screen, the map
-/// sheet and the screen a summary push opens. Each row shows the fire-danger
+/// sheet and the screen a summary push opens. Each row shows the risk
 /// level and nearby detections and has one notification switch.
 class TrackedPlacesSection extends ConsumerStatefulWidget {
   /// Detections near a place, when the host screen has them.
@@ -281,7 +282,7 @@ class _PlaceRow extends StatelessWidget {
   }
 }
 
-/// Today's FWI danger class at the place, sampled once per row.
+/// The FireWatch risk score at the place: the same number as its analysis.
 class _RiskLine extends StatefulWidget {
   final TrackedPlace place;
   const _RiskLine({required this.place});
@@ -291,28 +292,18 @@ class _RiskLine extends StatefulWidget {
 }
 
 class _RiskLineState extends State<_RiskLine> {
-  static const _colors = [
-    AppColors.fwiVeryLow,
-    AppColors.fwiLow,
-    AppColors.fwiModerate,
-    AppColors.fwiHigh,
-    AppColors.fwiVeryHigh,
-    AppColors.fwiExtreme,
-  ];
+  late Future<Map<String, dynamic>?> _risk = _load();
 
-  late Future<FwiPointSample?> _sample = _load();
-
-  Future<FwiPointSample?> _load() => FwiPointService.instance.sample(
-        lat: widget.place.latitude,
-        lng: widget.place.longitude,
-        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      );
+  Future<Map<String, dynamic>?> _load() => PointRiskService.instance
+      .fetch(lat: widget.place.latitude, lng: widget.place.longitude)
+      .then<Map<String, dynamic>?>((data) => data)
+      .catchError((Object _) => null);
 
   @override
   void didUpdateWidget(_RiskLine old) {
     super.didUpdateWidget(old);
     if (old.place.latitude != widget.place.latitude || old.place.longitude != widget.place.longitude) {
-      _sample = _load();
+      _risk = _load();
     }
   }
 
@@ -320,29 +311,24 @@ class _RiskLineState extends State<_RiskLine> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final style = GoogleFonts.ibmPlexSans(fontSize: 12.5, fontWeight: FontWeight.w600);
-    final labels = [
-      l10n.riskClassVeryLow,
-      l10n.riskClassLow,
-      l10n.riskClassModerate,
-      l10n.riskClassHigh,
-      l10n.riskClassVeryHigh,
-      l10n.riskClassExtreme,
-    ];
-    return FutureBuilder<FwiPointSample?>(
-      future: _sample,
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: _risk,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Text(l10n.commonLoading, style: style);
         }
-        final sample = snapshot.data;
-        if (sample == null) return Text(l10n.placesRiskUnknown, style: style);
-        final index = sample.classIndex;
-        if (index == null) return Text(l10n.placesRiskNoData, style: style);
+        final score = snapshot.data?['general_risk_score'];
+        if (score is! num) return Text(l10n.placesRiskUnknown, style: style);
         return Row(
           children: [
-            ColorDot(color: _colors[index], size: 9),
+            ColorDot(color: riskScoreColor(score), size: 9),
             const SizedBox(width: 6),
-            Flexible(child: Text(l10n.myPlacesRiskLine(labels[index]), style: style)),
+            Flexible(
+              child: Text(
+                l10n.myPlacesRiskLine(riskLevelLabel(l10n, riskLevelForScore(score)), score.toInt()),
+                style: style,
+              ),
+            ),
           ],
         );
       },

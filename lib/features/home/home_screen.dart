@@ -36,6 +36,9 @@ import '../../services/offline_cache_service.dart';
 import '../../services/watchlist_provider.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/glass_panel.dart';
+import '../../shared/widgets/detection_status_card.dart';
+import '../../models/detection_status.dart';
+import '../../shared/widgets/report_fire_panel.dart';
 import '../../shared/widgets/info_icon_button.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
@@ -74,6 +77,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   List<NewsItem> _topNews = [];
   List<FirePoint> _firePoints = [];
+  DetectionStatus? _detectionStatus;
+  final RenderApiService _statusApi = RenderApiService();
 
   /// Satellite detections in the last 24 hours inside a place's radius.
   int _detectionsNear(TrackedPlace place) {
@@ -398,8 +403,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  Future<void> _loadDetectionStatus() async {
+    final status = await _statusApi.fetchDetectionStatus();
+    if (mounted) setState(() => _detectionStatus = status);
+  }
+
   Future<void> _loadFires({bool force = false, bool silent = false}) async {
     if (mounted && !silent) setState(() { _fireLoading = true; _firesSlowLoading = false; });
+    _loadDetectionStatus();
     try {
       final allPoints = await raceWithCacheFallback(
         fetch: retryOnce(
@@ -692,6 +703,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // First on the screen: how new the data is, and what can be said.
+            if (_detectionStatus case final status?) ...[
+              if (status.kind == DetectionStatusKind.strong)
+                DetectionFreshnessLine(status: status)
+              else
+                DetectionStatusCard(
+                  status: status,
+                  onRetry: _loadDetectionStatus,
+                  onReport: () => showReportFirePanel(context, initialType: ReportType.missingFire),
+                  onShowLast7Days: status.kind == DetectionStatusKind.unavailable
+                      ? null
+                      : () => context.go('/map', extra: const {'incidentFilter': 'all'}),
+                ),
+              const SizedBox(height: AppSpacing.md),
+            ],
             const RecentAlerts(),
             const SizedBox(height: AppSpacing.md),
             TrackedPlacesSection(detectionCount: _detectionsNear),
@@ -1038,11 +1064,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             if (_fireLoading)
               const SkeletonListLoader(count: 3)
-            else if (_firePoints.isEmpty)
-              EmptyStateView(
-                icon: Icons.local_fire_department_outlined,
-                title: l10n.homeNoActiveFires,
-              )
             else
               ..._firePoints
                   .where((p) => _matchesQuickFilter(p) && (query.isEmpty ||

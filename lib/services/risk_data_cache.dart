@@ -16,6 +16,9 @@ class RiskDataCache {
   DateTime? _fetchedAt;
   Future<void>? _inFlight;
 
+  /// The last `/risk/summary` rows; empty until the first success.
+  List<Map<String, dynamic>> get regions => List.unmodifiable(_regions);
+
   bool get _isStale =>
       _fetchedAt == null || DateTime.now().difference(_fetchedAt!) > _ttl;
 

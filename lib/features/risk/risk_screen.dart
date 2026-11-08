@@ -14,7 +14,6 @@ import '../../core/utils/loading_race.dart';
 import '../../core/utils/risk_display.dart';
 import '../../core/utils/risk_factors.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/fire_api_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
@@ -28,6 +27,15 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/turkey_risk_heatmap.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
+import 'package:intl/intl.dart';
+
+import '../../models/tracked_place.dart';
+import '../../services/fwi_point_service.dart';
+import '../../services/point_risk_service.dart';
+import '../../shared/widgets/color_dot.dart';
+import 'widgets/tracked_places_section.dart';
+
+enum _RiskTab { overview, myLocation, places }
 
 class RiskScreen extends StatefulWidget {
   /// Raw region key (e.g. "Ege") to auto-open the detail sheet for once
@@ -52,7 +60,6 @@ class _RiskScreenState extends State<RiskScreen> {
       receiveTimeout: const Duration(seconds: 30),
     ),
   );
-  final FireApiService _fireApiService = FireApiService();
   List<Map<String, dynamic>> _regions = [];
   bool _loading = true;
   bool _isSlowLoading = false;
@@ -62,31 +69,29 @@ class _RiskScreenState extends State<RiskScreen> {
   bool _showingCached = false;
   DateTime? _cachedAt;
 
-  bool _showMyLocation = false;
+  _RiskTab _tab = _RiskTab.overview;
   bool _myLocationLoading = false;
   String? _myLocationError;
   String? _myCity;
   String? _myRegionRaw;
-  double? _myDistanceKm;
+
+  /// The risk score at the user's position, from the server.
+  Map<String, dynamic>? _myPoint;
+
+  /// The place open on the Yerlerim tab; null shows the list.
+  TrackedPlace? _selectedPlace;
+  bool _placeLoading = false;
+  String? _placeError;
+  Map<String, dynamic>? _placePoint;
 
   // Awaited by _loadMyLocation() so a "My Location" tap that lands before
   // the Turkey-wide region fetch finishes doesn't wrongly conclude
   // 'region_not_found' against a still-empty _regions list.
-  late Future<void> _riskDataLoadFuture;
-
-  // Same bounding box / mock-fix detection home_screen.dart uses, so both
-  // screens classify a given GPS fix identically instead of risk_screen
-  // relying solely on the backend's own outsideTurkey classification.
-  static const double _emulatorTestLat = 38.42;
-  static const double _emulatorTestLng = 27.14;
-
-  static bool _isInsideTurkeyBbox(double lat, double lng) =>
-      lat >= 35.8 && lat <= 42.2 && lng >= 25.6 && lng <= 44.8;
 
   @override
   void initState() {
     super.initState();
-    _riskDataLoadFuture = _loadRiskData().then((_) {
+    _loadRiskData().then((_) {
       _maybeShowRiskCoachMarks();
       _maybeShowHighlightedRegion();
     });
@@ -105,7 +110,7 @@ class _RiskScreenState extends State<RiskScreen> {
           permission != LocationPermission.whileInUse) {
         return;
       }
-      if (!mounted || _myCity != null || _myLocationLoading) return;
+      if (!mounted || _myPoint != null || _myLocationLoading) return;
       await _loadMyLocation();
     } catch (_) {
       // The Türkiye view works without location.
@@ -253,46 +258,23 @@ class _RiskScreenState extends State<RiskScreen> {
       final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
       if (!mounted) return;
 
-      final isEmulatorTestLocation =
-          (position.latitude - _emulatorTestLat).abs() < 0.01 &&
-          (position.longitude - _emulatorTestLng).abs() < 0.01;
-
-      NearestCityResult cityInfo;
-      if (!isEmulatorTestLocation && !_isInsideTurkeyBbox(position.latitude, position.longitude)) {
-        cityInfo = const NearestCityResult(outsideTurkey: true);
-      } else {
-        cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
-      }
-
+      final point = await PointRiskService.instance.fetch(lat: position.latitude, lng: position.longitude);
       if (!mounted) return;
-      if (cityInfo.outsideTurkey) {
-        setState(() {
-          _myCity = null;
-          _myRegionRaw = null;
-          _myDistanceKm = null;
-          _myLocationLoading = false;
-          _myLocationError = 'outside_turkey';
-        });
-        return;
-      }
-
-      // Wait for the Turkey-wide region fetch if it hasn't finished yet —
-      // otherwise _regions is still empty and every region legitimately
-      // "doesn't match", permanently sticking on 'region_not_found' even
-      // after _regions populates (nothing re-runs this check afterwards).
-      if (_regions.isEmpty) {
-        await _riskDataLoadFuture;
-        if (!mounted) return;
-      }
-
-      final regionRaw = cityInfo.region;
-      final matches = _regions.any((r) => r['region'] == regionRaw);
       setState(() {
-        _myCity = cityInfo.city;
-        _myRegionRaw = regionRaw;
-        _myDistanceKm = cityInfo.distanceKm;
+        _myPoint = point;
+        _myCity = point['city'] as String?;
+        _myRegionRaw = point['region'] as String?;
         _myLocationLoading = false;
-        _myLocationError = matches ? null : 'region_not_found';
+        _myLocationError = null;
+      });
+    } on PointRiskException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _myPoint = null;
+        _myCity = null;
+        _myRegionRaw = null;
+        _myLocationLoading = false;
+        _myLocationError = e.error == PointRiskError.outsideTurkey ? 'outside_turkey' : 'risk_unavailable';
       });
     } catch (e, stack) {
       if (kDebugMode) debugPrint('ERROR _loadMyLocation: $e\n$stack');
@@ -305,18 +287,33 @@ class _RiskScreenState extends State<RiskScreen> {
   }
 
   void _selectMyLocationTab() {
-    setState(() => _showMyLocation = true);
-    if (_myCity == null && !_myLocationLoading) {
+    setState(() => _tab = _RiskTab.myLocation);
+    if (_myPoint == null && !_myLocationLoading) {
       _loadMyLocation();
     }
   }
 
-  Map<String, dynamic>? get _myRegionData {
-    if (_myRegionRaw == null) return null;
-    for (final r in _regions) {
-      if (r['region'] == _myRegionRaw) return r;
+  Future<void> _openPlace(TrackedPlace place) async {
+    setState(() {
+      _selectedPlace = place;
+      _placeLoading = true;
+      _placeError = null;
+      _placePoint = null;
+    });
+    try {
+      final point = await PointRiskService.instance.fetch(lat: place.latitude, lng: place.longitude);
+      if (!mounted || _selectedPlace?.id != place.id) return;
+      setState(() {
+        _placePoint = point;
+        _placeLoading = false;
+      });
+    } on PointRiskException catch (e) {
+      if (!mounted || _selectedPlace?.id != place.id) return;
+      setState(() {
+        _placeLoading = false;
+        _placeError = e.error == PointRiskError.outsideTurkey ? 'outside_turkey' : 'risk_unavailable';
+      });
     }
-    return null;
   }
 
   String _riskNote(AppLocalizations l10n, Map<String, dynamic> region) => riskNote(
@@ -604,7 +601,7 @@ class _RiskScreenState extends State<RiskScreen> {
             onPressed: () {
               setState(() => _loading = true);
               _loadRiskData();
-              if (_showMyLocation) _loadMyLocation();
+              if (_tab == _RiskTab.myLocation) _loadMyLocation();
             },
           ),
         ],
@@ -719,14 +716,14 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xl),
 
-                  // ── Turkey Overview / My Location toggle ──────────
+                  // ── Turkey / My Location / My Places ──────────────
                   Row(
                     children: [
                       Expanded(
                         child: _TabToggleButton(
                           label: l10n.riskTabTurkeyOverview,
-                          selected: !_showMyLocation,
-                          onTap: () => setState(() => _showMyLocation = false),
+                          selected: _tab == _RiskTab.overview,
+                          onTap: () => setState(() => _tab = _RiskTab.overview),
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
@@ -734,8 +731,17 @@ class _RiskScreenState extends State<RiskScreen> {
                         child: _TabToggleButton(
                           key: CoachMarkKeys.riskMyLocationTab,
                           label: l10n.riskTabMyLocation,
-                          selected: _showMyLocation,
+                          selected: _tab == _RiskTab.myLocation,
                           onTap: _selectMyLocationTab,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: _TabToggleButton(
+                          key: const Key('riskPlacesTab'),
+                          label: l10n.riskTabPlaces,
+                          selected: _tab == _RiskTab.places,
+                          onTap: () => setState(() => _tab = _RiskTab.places),
                         ),
                       ),
                     ],
@@ -743,26 +749,54 @@ class _RiskScreenState extends State<RiskScreen> {
 
                   const SizedBox(height: AppSpacing.xxl),
 
-                  if (_showMyLocation) ...[
-                    _MyLocationSection(
+                  if (_tab == _RiskTab.myLocation) ...[
+                    _PointRiskSection(
                       loading: _myLocationLoading,
                       error: _myLocationError,
-                      city: _myCity,
-                      regionData: _myRegionData,
-                      regions: _regions,
+                      heading: _myPoint == null
+                          ? ''
+                          : (_myCity != null && _myRegionRaw != null
+                              ? l10n.riskMyLocationYourRegion(_myCity!, displayRegionName(l10n, _myRegionRaw!))
+                              : l10n.riskTabMyLocation),
+                      data: _myPoint,
                       avgRiskScore: avgRiskScore,
                       avgTemp: _avgTemp,
                       avgHumidity: _avgHumidity,
                       avgWind: _avgWind,
                       avgDryness: _avgDryness,
                       avgVegetation: _avgVegetation,
-                      distanceKm: _myDistanceKm,
+                      needsLocation: true,
                       onRetry: _loadMyLocation,
-                      onTapRegion: () {
-                        final data = _myRegionData;
-                        if (data != null) _showRegionDetail(context, data);
-                      },
                     ),
+                  ]
+                  else if (_tab == _RiskTab.places) ...[
+                    if (_selectedPlace case final place?) ...[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          key: const Key('riskPlaceBack'),
+                          onPressed: () => setState(() => _selectedPlace = null),
+                          icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                          label: Text(l10n.riskPointBack),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      _PointRiskSection(
+                        loading: _placeLoading,
+                        error: _placeError,
+                        heading: place.name,
+                        data: _placePoint,
+                        avgRiskScore: avgRiskScore,
+                        avgTemp: _avgTemp,
+                        avgHumidity: _avgHumidity,
+                        avgWind: _avgWind,
+                        avgDryness: _avgDryness,
+                        avgVegetation: _avgVegetation,
+                        needsLocation: false,
+                        onRetry: () => _openPlace(place),
+                      ),
+                    ] else
+                      TrackedPlacesSection(onPlaceTap: _openPlace),
                   ]
                   else ...[
                   SectionHeader(
@@ -1129,37 +1163,38 @@ class _TabToggleButton extends StatelessWidget {
   }
 }
 
-class _MyLocationSection extends StatelessWidget {
+/// The same analysis for "Konumum" and for a saved place: level, score,
+/// advice, why, nearby detections, the numbers and the comparison, with the
+/// Copernicus index separate at the bottom.
+class _PointRiskSection extends StatelessWidget {
   final bool loading;
   final String? error;
-  final String? city;
-  final Map<String, dynamic>? regionData;
-  final List<Map<String, dynamic>> regions;
+  final String heading;
+  final Map<String, dynamic>? data;
   final int avgRiskScore;
   final double avgTemp;
   final double avgHumidity;
   final double avgWind;
   final double avgDryness;
   final double avgVegetation;
-  final double? distanceKm;
-  final VoidCallback onRetry;
-  final VoidCallback onTapRegion;
 
-  const _MyLocationSection({
+  /// Loading and failure messages talk about the device's location.
+  final bool needsLocation;
+  final VoidCallback onRetry;
+
+  const _PointRiskSection({
     required this.loading,
     required this.error,
-    required this.city,
-    required this.regionData,
-    required this.regions,
+    required this.heading,
+    required this.data,
     required this.avgRiskScore,
     required this.avgTemp,
     required this.avgHumidity,
     required this.avgWind,
     required this.avgDryness,
     required this.avgVegetation,
-    required this.distanceKm,
+    required this.needsLocation,
     required this.onRetry,
-    required this.onTapRegion,
   });
 
   @override
@@ -1177,7 +1212,7 @@ class _MyLocationSection extends StatelessWidget {
           children: [
             const CircularProgressIndicator(color: AppColors.primary),
             const SizedBox(height: AppSpacing.md),
-            Text(l10n.riskMyLocationGettingLocation,
+            Text(needsLocation ? l10n.riskMyLocationGettingLocation : l10n.riskDataLoading,
                 style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
           ],
         ),
@@ -1188,10 +1223,11 @@ class _MyLocationSection extends StatelessWidget {
       final message = switch (error) {
         'service_off' => l10n.riskMyLocationServiceOff,
         'permission_denied' => l10n.riskMyLocationPermissionDenied,
-        'region_not_found' => l10n.riskMyLocationRegionNotFound,
         'outside_turkey' => l10n.riskOutsideTurkeyBanner,
+        'risk_unavailable' => l10n.riskPointUnavailable,
         _ => l10n.riskMyLocationError,
       };
+      final locationProblem = error != 'risk_unavailable' && error != 'outside_turkey';
       return GlassPanel(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
@@ -1207,15 +1243,15 @@ class _MyLocationSection extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             FilledButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.my_location_rounded),
-              label: Text(l10n.riskMyLocationEnableButton),
+              icon: Icon(locationProblem ? Icons.my_location_rounded : Icons.refresh_rounded),
+              label: Text(locationProblem ? l10n.riskMyLocationEnableButton : l10n.commonRetry),
             ),
           ],
         ),
       );
     }
 
-    final data = regionData;
+    final data = this.data;
     if (data == null) {
       return GlassPanel(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -1223,7 +1259,7 @@ class _MyLocationSection extends StatelessWidget {
       );
     }
 
-    final score = data['general_risk_score'] as int;
+    final score = (data['general_risk_score'] as num).toInt();
     final level = riskLevelForScore(score);
     final color = colorForApiRiskLevel(level);
     final temp = double.tryParse(data['temperature'].toString()) ?? 0;
@@ -1231,18 +1267,26 @@ class _MyLocationSection extends StatelessWidget {
     final wind = double.tryParse(data['wind_speed'].toString()) ?? 0;
     final dryness = double.tryParse(data['dryness_index'].toString()) ?? 0;
     final vegetation = double.tryParse(data['vegetation_density'].toString()) ?? 0;
-
-    final sorted = [...regions]..sort((a, b) => (b['general_risk_score'] as int).compareTo(a['general_risk_score'] as int));
-    final rank = sorted.indexWhere((r) => r['region'] == data['region']) + 1;
     final diff = score - avgRiskScore;
     final diffStr = diff > 0 ? '+$diff' : '$diff';
+    final city = data['city'] as String?;
+    final radius = (data['nearby_radius_km'] as num?)?.toInt() ?? 50;
+    final nearby = (data['nearby_fire_count'] as num?)?.toInt();
+    final nearbyText = nearby == null
+        ? l10n.riskPointNearbyUnknown
+        : nearby == 0
+            ? l10n.riskPointNearbyNone(radius)
+            : l10n.riskPointNearby(radius, nearby);
+    final calculated = DateTime.tryParse('${data['date']}')?.toLocal();
+    String two(int n) => n.toString().padLeft(2, '0');
+    final sectionTitle = GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor);
+    final body = GoogleFonts.ibmPlexSans(fontSize: 13.5, height: 1.45, color: secondaryTextColor);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(AppSpacing.largeCardRadius),
-          onTap: onTapRegion,
+        SizedBox(
+          width: double.infinity,
           child: GlassPanel(
             padding: const EdgeInsets.all(AppSpacing.xl),
             child: Column(
@@ -1252,32 +1296,16 @@ class _MyLocationSection extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        l10n.riskMyLocationYourRegion(city ?? '', displayRegionName(l10n, data['region'])),
+                        heading,
                         style: GoogleFonts.ibmPlexSans(fontSize: 20, fontWeight: FontWeight.w800, color: titleColor),
                       ),
                     ),
                     StatusChip(label: riskLevelLabel(l10n, level), icon: Icons.warning_amber_rounded, color: color),
                   ],
                 ),
-                if (distanceKm != null) ...[
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.satellite_alt_rounded, size: 13, color: secondaryTextColor),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.riskMyLocationPostgisDistance(distanceKm!.toStringAsFixed(1)),
-                        style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
-                      ),
-                    ],
-                  ),
-                ],
                 const SizedBox(height: AppSpacing.md),
                 Text(l10n.riskScoreOutOf100(score),
                     style: GoogleFonts.ibmPlexSans(fontSize: 15, fontWeight: FontWeight.w700, color: color)),
-                const SizedBox(height: 4),
-                Text(l10n.riskMyLocationRankLabel(rank),
-                    style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
                 const SizedBox(height: 4),
                 Text(l10n.riskMyLocationVsAverage(diffStr),
                     style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor)),
@@ -1285,6 +1313,36 @@ class _MyLocationSection extends StatelessWidget {
             ),
           ),
         ).animate().fadeIn(duration: 380.ms).scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)),
+
+        const SizedBox(height: AppSpacing.md),
+
+        GlassPanel(
+          key: const Key('pointRiskDetails'),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.riskPointAdviceTitle, style: sectionTitle),
+              const SizedBox(height: 4),
+              Text(riskAdvice(l10n, score),
+                  style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.4, fontWeight: FontWeight.w700, color: color)),
+              const SizedBox(height: AppSpacing.md),
+              Text(l10n.riskPointWhyTitle, style: sectionTitle),
+              const SizedBox(height: 4),
+              Text(riskNote(l10n, temperature: temp, humidity: hum, wind: wind), style: body),
+              const SizedBox(height: AppSpacing.md),
+              Text(l10n.riskPointNearbyTitle, style: sectionTitle),
+              const SizedBox(height: 4),
+              Text(nearbyText, style: body),
+              const SizedBox(height: AppSpacing.md),
+              Text(l10n.riskScoreNotProbability,
+                  style: GoogleFonts.ibmPlexSans(fontSize: 11.5, height: 1.4, color: secondaryTextColor)),
+              if (calculated != null)
+                Text(l10n.riskPointCalculatedAt('${two(calculated.hour)}:${two(calculated.minute)}'),
+                    style: GoogleFonts.ibmPlexSans(fontSize: 11.5, height: 1.4, color: secondaryTextColor)),
+            ],
+          ),
+        ),
 
         const SizedBox(height: AppSpacing.xxl),
 
@@ -1422,10 +1480,96 @@ class _MyLocationSection extends StatelessWidget {
             ],
           ),
         ).animate(delay: 120.ms).fadeIn(duration: 320.ms).slideY(begin: 0.06, end: 0),
+
+        const SizedBox(height: AppSpacing.xxl),
+        _CopernicusIndexCard(
+          lat: (data['latitude'] as num).toDouble(),
+          lng: (data['longitude'] as num).toDouble(),
+        ),
       ],
     );
   }
 
+}
+
+/// Copernicus's own fire danger class at the (already rounded) point. A
+/// second opinion, labelled as such: it is not the FireWatch score and
+/// nothing is calculated from it. Absent when the service has no answer.
+class _CopernicusIndexCard extends StatefulWidget {
+  final double lat;
+  final double lng;
+  const _CopernicusIndexCard({required this.lat, required this.lng});
+
+  @override
+  State<_CopernicusIndexCard> createState() => _CopernicusIndexCardState();
+}
+
+class _CopernicusIndexCardState extends State<_CopernicusIndexCard> {
+  static const _colors = [
+    AppColors.fwiVeryLow,
+    AppColors.fwiLow,
+    AppColors.fwiModerate,
+    AppColors.fwiHigh,
+    AppColors.fwiVeryHigh,
+    AppColors.fwiExtreme,
+  ];
+
+  late Future<FwiPointSample?> _sample = _load();
+
+  Future<FwiPointSample?> _load() => FwiPointService.instance.sample(
+        lat: widget.lat,
+        lng: widget.lng,
+        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      );
+
+  @override
+  void didUpdateWidget(_CopernicusIndexCard old) {
+    super.didUpdateWidget(old);
+    if (old.lat != widget.lat || old.lng != widget.lng) _sample = _load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final labels = [
+      l10n.riskClassVeryLow,
+      l10n.riskClassLow,
+      l10n.riskClassModerate,
+      l10n.riskClassHigh,
+      l10n.riskClassVeryHigh,
+      l10n.riskClassExtreme,
+    ];
+    final muted = Theme.of(context).textTheme.bodySmall?.color;
+    return FutureBuilder<FwiPointSample?>(
+      future: _sample,
+      builder: (context, snapshot) {
+        final index = snapshot.data?.classIndex;
+        if (index == null) return const SizedBox.shrink();
+        return GlassPanel(
+          key: const Key('copernicusIndex'),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.riskCopernicusTitle, style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  ColorDot(color: _colors[index], size: 10),
+                  const SizedBox(width: 6),
+                  Text(labels[index], style: GoogleFonts.ibmPlexSans(fontSize: 13.5, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(l10n.riskCopernicusNote, style: GoogleFonts.ibmPlexSans(fontSize: 12, height: 1.4, color: muted)),
+              const SizedBox(height: 4),
+              Text(l10n.riskCopernicusAttribution, style: GoogleFonts.ibmPlexSans(fontSize: 10.5, color: muted)),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _ComparisonRow extends StatelessWidget {

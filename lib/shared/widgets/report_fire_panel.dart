@@ -19,6 +19,7 @@ import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/feedback_service.dart';
 import '../../services/report_spam_guard.dart';
 import 'glass_panel.dart';
 import 'status_chip.dart';
@@ -28,20 +29,28 @@ const int _maxPhotos = 3;
 /// Presents the fire report form as a draggable, scrollable modal bottom
 /// sheet anchored to the bottom of the screen (rather than a side panel),
 /// so it works the same way on narrow phones as it does on tablets.
-Future<void> showReportFirePanel(BuildContext context) {
+Future<void> showReportFirePanel(BuildContext context, {ReportType initialType = ReportType.fire}) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
     backgroundColor: Colors.transparent,
-    builder: (ctx) => ReportFirePanel(onClose: () => Navigator.of(ctx).pop()),
+    builder: (ctx) => ReportFirePanel(initialType: initialType, onClose: () => Navigator.of(ctx).pop()),
   );
 }
 
+/// What is being reported. [wrongInfo] is about the app, not about a place,
+/// so it needs no location and goes to feedback, not to the fire reports.
+enum ReportType { fire, missingFire, wrongInfo }
+
 class ReportFirePanel extends StatefulWidget {
   final VoidCallback onClose;
+  final ReportType initialType;
 
-  const ReportFirePanel({super.key, required this.onClose});
+  /// Sends a [ReportType.wrongInfo] report; the feedback endpoint by default.
+  final Future<void> Function(String message)? sendWrongInfo;
+
+  const ReportFirePanel({super.key, required this.onClose, this.initialType = ReportType.fire, this.sendWrongInfo});
 
   @override
   State<ReportFirePanel> createState() => _ReportFirePanelState();
@@ -55,6 +64,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
   final Dio _dio = Dio();
   final ImagePicker _imagePicker = ImagePicker();
 
+  late ReportType _type = widget.initialType;
   String _selectedSeverity = 'Orta';
   bool _smokeVisible = true;
   bool _windStrong = false;
@@ -191,8 +201,39 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
     }
   }
 
+  String _typeLabel(AppLocalizations l10n, ReportType type) => switch (type) {
+        ReportType.fire => l10n.reportTypeFire,
+        ReportType.missingFire => l10n.reportTypeMissingFire,
+        ReportType.wrongInfo => l10n.reportTypeWrongInfo,
+      };
+
+  Future<void> _submitWrongInfo(AppLocalizations l10n) async {
+    final text = _noteController.text.trim();
+    if (text.isEmpty) {
+      _showSnack(l10n.reportPanelWrongInfoNeedText);
+      return;
+    }
+    setState(() => _isSubmitting = true);
+    try {
+      final send = widget.sendWrongInfo ??
+          (String message) => FeedbackService().submit(rating: 3, category: 'bug', message: message);
+      await send('${l10n.reportTypeWrongInfo}: $text');
+      if (!mounted) return;
+      _showSnack(l10n.reportPanelWrongInfoSent);
+      widget.onClose();
+    } catch (_) {
+      _showSnack(l10n.reportPanelSubmitFailed);
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
   Future<void> _submitReport() async {
     final l10n = AppLocalizations.of(context)!;
+    if (_type == ReportType.wrongInfo) {
+      await _submitWrongInfo(l10n);
+      return;
+    }
     if (_latitude == null || _longitude == null) {
       _showSnack(l10n.reportPanelNeedLocationFirst);
       return;
@@ -218,6 +259,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       if (_photos.isNotEmpty) extraDetails.add('${_photos.length} ${l10n.reportPanelPhotosLabel}');
 
       final description = [
+        if (_type == ReportType.missingFire) l10n.reportTypeMissingFire,
         if (_noteController.text.isNotEmpty) _noteController.text,
         if (extraDetails.isNotEmpty) extraDetails.join(', '),
         l10n.reportPanelRiskLevelLine(_severityLabel(l10n, _selectedSeverity)),
@@ -391,13 +433,54 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, AppSpacing.xl),
             children: [
+              // First thing on the screen, above the title: nobody should
+              // fill this in believing it reaches the fire brigade.
+              Container(
+                key: const Key('reportNotEmergency'),
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: AppColors.danger.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.call_rounded, color: AppColors.danger, size: 20),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(l10n.reportPanelNotEmergency,
+                          style: GoogleFonts.ibmPlexSans(fontSize: 13.5, height: 1.4, fontWeight: FontWeight.w700, color: titleColor)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
               Text(l10n.reportPanelTitle,
                   style: GoogleFonts.ibmPlexSans(fontSize: 24, fontWeight: FontWeight.w800, color: titleColor)),
               const SizedBox(height: AppSpacing.sm),
               Text(l10n.reportPanelSubtitle,
                   style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.45, color: secondaryTextColor)),
+              const SizedBox(height: AppSpacing.lg),
+
+              _PanelField(
+                label: l10n.reportPanelTypeLabel,
+                labelColor: fieldLabelColor,
+                child: Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: 4,
+                  children: [
+                    for (final type in ReportType.values)
+                      ChoiceChip(
+                        key: Key('reportType-${type.name}'),
+                        label: Text(_typeLabel(l10n, type)),
+                        selected: _type == type,
+                        onSelected: (_) => setState(() => _type = type),
+                      ),
+                  ],
+                ),
+              ),
               const SizedBox(height: AppSpacing.xl),
 
+              if (_type != ReportType.wrongInfo) ...[
               // ── Konum + harita önizleme ──────────────────────────
               GlassPanel(
                 padding: const EdgeInsets.all(AppSpacing.lg),
@@ -515,7 +598,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
               // ── Anonim gönderim ────────────────────────────────
               GlassPanel(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-                child: SwitchListTile(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: SwitchListTile(
                   contentPadding: EdgeInsets.zero,
                   value: _isAnonymous,
                   onChanged: (v) => setState(() => _isAnonymous = v),
@@ -523,6 +608,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                       style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700, color: titleColor)),
                   subtitle: Text(l10n.reportPanelAnonymousToggleSubtitle,
                       style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor)),
+                ),
                 ),
               ).animate(delay: 160.ms).fadeIn(duration: 260.ms).slideY(begin: 0.06, end: 0),
 
@@ -569,6 +655,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
               const SizedBox(height: AppSpacing.lg),
 
+              ],
+
               // ── Not (otomatik genişleyen) ───────────────────────
               _PanelField(
                 label: l10n.reportPanelExtraNote,
@@ -580,7 +668,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    hintText: l10n.reportPanelNoteHint,
+                    hintText: _type == ReportType.wrongInfo ? l10n.reportPanelWrongInfoHint : l10n.reportPanelNoteHint,
                     alignLabelWithHint: true,
                   ),
                 ),
@@ -588,6 +676,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
 
               const SizedBox(height: AppSpacing.lg),
 
+              if (_type != ReportType.wrongInfo) ...[
               // ── Fotoğraflar ─────────────────────────────────────
               _PanelField(
                 label: l10n.reportPanelPhotosLabel,
@@ -661,7 +750,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 color: isDark
                     ? AppColors.white.withValues(alpha: 0.03)
                     : Colors.black.withValues(alpha: 0.02),
-                child: Column(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Column(
                   children: [
                     SwitchListTile(
                       contentPadding: EdgeInsets.zero,
@@ -688,7 +779,9 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                     ),
                   ],
                 ),
+                ),
               ).animate(delay: 340.ms).fadeIn(duration: 300.ms).slideY(begin: 0.06, end: 0),
+              ],
 
               if (_isSubmitting && _photos.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.lg),
@@ -716,6 +809,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
                 width: double.infinity,
                 height: 48,
                 child: FilledButton.icon(
+                  key: const Key('reportSubmit'),
                   onPressed: _isSubmitting ? null : _submitReport,
                   icon: _isSubmitting
                       ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))

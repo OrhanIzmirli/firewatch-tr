@@ -1967,13 +1967,13 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesFwiTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tehlikesi haritası (FWI) — ayrı bir kaynak'**
+  /// **'Copernicus yangın tehlike indeksi (FWI) — ayrı bir kaynak'**
   String get dataSourcesFwiTitle;
 
   /// No description provided for @dataSourcesFwiBody.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir ve bugün dahil 10 güne kadar (9 gün ileriye) tahmin sunar; günün model koşusu yayımlanana dek son gün boş kalabilir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).'**
+  /// **'Haritadaki FWI (Copernicus) katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir ve bugün dahil 10 güne kadar (9 gün ileriye) tahmin sunar; günün model koşusu yayımlanana dek son gün boş kalabilir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0). FireWatch risk puanından ayrıdır ve puana katılmaz.'**
   String get dataSourcesFwiBody;
 
   /// No description provided for @settingsAppInfo.
@@ -2771,7 +2771,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelAnonymousToggleSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'İsminiz yetkililerle paylaşılmayacak'**
+  /// **'Adınız bildirimle birlikte kaydedilmez'**
   String get reportPanelAnonymousToggleSubtitle;
 
   /// No description provided for @reportPanelPhotosLabel.
@@ -3040,7 +3040,7 @@ abstract class AppLocalizations {
   /// No description provided for @locDisclosureNearestCity.
   ///
   /// In tr, this message translates to:
-  /// **'Bulunduğun ili göstermek için konumun sunucumuza gönderilir; bu sorgu saklanmaz.'**
+  /// **'Bulunduğun ili göstermek için konumun, riski hesaplamak için yaklaşık 10 km\'ye yuvarlanmış konumun sunucumuza gönderilir; bu sorgular saklanmaz.'**
   String get locDisclosureNearestCity;
 
   /// No description provided for @locDisclosureStored.
@@ -3082,7 +3082,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yakında ısı tespiti ya da yüksek yangın tehlikesi olunca bildirim al'**
+  /// **'Yakında ısı tespiti olunca ya da yangın riski yükselince bildirim al'**
   String get trackedPlacesSubtitle;
 
   /// No description provided for @trackedPlacesEmpty.
@@ -3250,7 +3250,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesApproxNote.
   ///
   /// In tr, this message translates to:
-  /// **'Konum sunucuda yaklaşık 1 km hassasiyetle saklanır. Bildirimler doğrulanmış yangın değil, uydu ısı tespitidir.'**
+  /// **'Konum sunucuda yaklaşık 1 km hassasiyetle saklanır. Bildirimler doğrulanmış yangın bildirmez: uydu ısı tespitine ya da risk puanına dayanır.'**
   String get trackedPlacesApproxNote;
 
   /// No description provided for @trackedPlacesMigrateTitle.
@@ -3292,7 +3292,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifPlacesChannelDescription.
   ///
   /// In tr, this message translates to:
-  /// **'Yerlerim\'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın tehlikesi'**
+  /// **'Yerlerim\'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın riski'**
   String get notifPlacesChannelDescription;
 
   /// No description provided for @settingsDeleteLocation.
@@ -3839,7 +3839,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskTabTurkeyOverview.
   ///
   /// In tr, this message translates to:
-  /// **'Türkiye Geneli'**
+  /// **'Türkiye geneli'**
   String get riskTabTurkeyOverview;
 
   /// No description provided for @riskTabMyLocation.
@@ -5303,7 +5303,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskLayerToggle.
   ///
   /// In tr, this message translates to:
-  /// **'Risk (FWI)'**
+  /// **'FWI (Copernicus)'**
   String get riskLayerToggle;
 
   /// No description provided for @incidentToggleShowShort.
@@ -5477,7 +5477,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskLegendTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tehlikesi (FWI)'**
+  /// **'Copernicus yangın tehlike indeksi (FWI)'**
   String get riskLegendTitle;
 
   /// No description provided for @riskLegendNote.
@@ -5555,7 +5555,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskAttribution.
   ///
   /// In tr, this message translates to:
-  /// **'© European Union, Copernicus EFFIS'**
+  /// **'© European Union, Copernicus EFFIS · CC BY 4.0'**
   String get riskAttribution;
 
   /// No description provided for @homeLast24hTitle.
@@ -6545,8 +6545,8 @@ abstract class AppLocalizations {
   /// No description provided for @myPlacesRiskLine.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tehlikesi: {level}'**
-  String myPlacesRiskLine(String level);
+  /// **'Yangın riski: {level} ({score}/100)'**
+  String myPlacesRiskLine(String level, int score);
 
   /// No description provided for @myPlacesDetections24h.
   ///
@@ -6563,7 +6563,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPlacesRiskNote.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tehlikesi, Copernicus\'un bölgesel hava tahminidir (FWI). Tespit olmaması yangın olmadığı anlamına gelmez.'**
+  /// **'Risk, hava koşulları ve yakın uydu tespitlerinden hesaplanan bir puandır. Tespit olmaması yangın olmadığı anlamına gelmez.'**
   String get myPlacesRiskNote;
 
   /// No description provided for @trackedPlacesEditTitle.
@@ -6581,13 +6581,13 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesNotifyRisk.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tehlikesi yükselince bildir'**
+  /// **'Yangın riski yükselince bildir'**
   String get trackedPlacesNotifyRisk;
 
   /// No description provided for @trackedPlacesNotifyRiskDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yüksek veya üzerine çıkınca, günde en fazla bir kez'**
+  /// **'Yüksek veya Kritik\'e çıkınca, günde en fazla bir kez'**
   String get trackedPlacesNotifyRiskDesc;
 
   /// No description provided for @placeSearchHint.
@@ -6637,6 +6637,288 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Arama sonuçları © OpenStreetMap katkıcıları (Nominatim)'**
   String get placeSearchAttribution;
+
+  /// No description provided for @detectionNoneTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte uydular Türkiye\'de güçlü bir ısı izi görmedi.'**
+  String get detectionNoneTitle;
+
+  /// No description provided for @detectionLimitNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydular küçük veya bulut altındaki yangınları göremeyebilir.'**
+  String get detectionLimitNote;
+
+  /// No description provided for @detectionLastUpdate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son güncelleme: {time}'**
+  String detectionLastUpdate(String time);
+
+  /// No description provided for @detectionStaleTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu verisi güncel değil.'**
+  String get detectionStaleTitle;
+
+  /// No description provided for @detectionStaleBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yüzden şu an tespit olup olmadığını söyleyemiyoruz.'**
+  String get detectionStaleBody;
+
+  /// No description provided for @detectionUnavailableTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uydu verisi alınamadı.'**
+  String get detectionUnavailableTitle;
+
+  /// No description provided for @detectionUnavailableBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu, tespit olmadığı anlamına gelmez. Bağlantınızı kontrol edip yeniden deneyin.'**
+  String get detectionUnavailableBody;
+
+  /// No description provided for @detectionCall112Line.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın görürseniz önce 112\'yi arayın.'**
+  String get detectionCall112Line;
+
+  /// No description provided for @detectionReportLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamada görünmeyen bir yangın ya da bir hata fark ederseniz Raporla ile bize bildirin.'**
+  String get detectionReportLine;
+
+  /// No description provided for @detectionReportButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Raporla'**
+  String get detectionReportButton;
+
+  /// No description provided for @detectionShowLast7Days.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 7 günü göster'**
+  String get detectionShowLast7Days;
+
+  /// No description provided for @detectionOpenRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk katmanını aç'**
+  String get detectionOpenRisk;
+
+  /// No description provided for @detectionLatest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En son tespit: {when}, {city}'**
+  String detectionLatest(String when, String city);
+
+  /// No description provided for @detectionLatestNoCity.
+  ///
+  /// In tr, this message translates to:
+  /// **'En son tespit: {when}'**
+  String detectionLatestNoCity(String when);
+
+  /// No description provided for @detectionDaysAgo.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün önce'**
+  String detectionDaysAgo(int days);
+
+  /// No description provided for @detectionHoursAgo.
+  ///
+  /// In tr, this message translates to:
+  /// **'{hours} saat önce'**
+  String detectionHoursAgo(int hours);
+
+  /// No description provided for @detectionJustNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'bir saatten kısa süre önce'**
+  String get detectionJustNow;
+
+  /// No description provided for @riskColorsNotFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Renkler yangın değil, yangın çıkma riskidir.'**
+  String get riskColorsNotFire;
+
+  /// No description provided for @mapRiskLayer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk'**
+  String get mapRiskLayer;
+
+  /// No description provided for @mapRiskLegendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk puanı (bölgelere göre)'**
+  String get mapRiskLegendTitle;
+
+  /// No description provided for @mapRiskLegendLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük · 0–24'**
+  String get mapRiskLegendLow;
+
+  /// No description provided for @mapRiskLegendMedium.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orta · 25–49'**
+  String get mapRiskLegendMedium;
+
+  /// No description provided for @mapRiskLegendHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek · 50–74'**
+  String get mapRiskLegendHigh;
+
+  /// No description provided for @mapRiskLegendCritical.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kritik · 75–100'**
+  String get mapRiskLegendCritical;
+
+  /// No description provided for @mapRiskUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk verisi alınamadı.'**
+  String get mapRiskUnavailable;
+
+  /// No description provided for @mapRiskRegionTap.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region}: {score}/100, {level}'**
+  String mapRiskRegionTap(String region, int score, String level);
+
+  /// No description provided for @reportPanelNotEmergency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bildirim acil servislere iletilmez; acil durumda 112\'yi arayın.'**
+  String get reportPanelNotEmergency;
+
+  /// No description provided for @reportPanelTypeLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim türü'**
+  String get reportPanelTypeLabel;
+
+  /// No description provided for @reportTypeFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın gözlemi'**
+  String get reportTypeFire;
+
+  /// No description provided for @reportTypeMissingFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamada görünmeyen yangın'**
+  String get reportTypeMissingFire;
+
+  /// No description provided for @reportTypeWrongInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hatalı bilgi/uygulama hatası'**
+  String get reportTypeWrongInfo;
+
+  /// No description provided for @reportPanelWrongInfoHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Neyin hatalı olduğunu yazın: hangi ekran, ne gördünüz, ne olmalıydı?'**
+  String get reportPanelWrongInfoHint;
+
+  /// No description provided for @reportPanelWrongInfoNeedText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen neyin hatalı olduğunu yazın.'**
+  String get reportPanelWrongInfoNeedText;
+
+  /// No description provided for @reportPanelWrongInfoSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildiriminiz alındı. Teşekkürler.'**
+  String get reportPanelWrongInfoSent;
+
+  /// No description provided for @riskTabPlaces.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerlerim'**
+  String get riskTabPlaces;
+
+  /// No description provided for @riskPointBack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yerlerim\'e dön'**
+  String get riskPointBack;
+
+  /// No description provided for @riskPointAdviceTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öneriler'**
+  String get riskPointAdviceTitle;
+
+  /// No description provided for @riskPointWhyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Neden bu seviye'**
+  String get riskPointWhyTitle;
+
+  /// No description provided for @riskPointNearbyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakın tespitler'**
+  String get riskPointNearbyTitle;
+
+  /// No description provided for @riskPointNearby.
+  ///
+  /// In tr, this message translates to:
+  /// **'{km} km içinde son 24 saatte {count} uydu tespiti'**
+  String riskPointNearby(int km, int count);
+
+  /// No description provided for @riskPointNearbyNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'{km} km içinde son 24 saatte uydu tespiti yok. Bu, yangın olmadığı anlamına gelmez.'**
+  String riskPointNearbyNone(int km);
+
+  /// No description provided for @riskPointNearbyUnknown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakın uydu tespitleri şu an bilinmiyor; puan yalnızca hava koşullarından hesaplandı.'**
+  String get riskPointNearbyUnknown;
+
+  /// No description provided for @riskPointCalculatedAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesaplanma: {time}'**
+  String riskPointCalculatedAt(String time);
+
+  /// No description provided for @riskPointUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Risk şu an hesaplanamadı. Yeniden deneyin.'**
+  String get riskPointUnavailable;
+
+  /// No description provided for @riskCopernicusTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Copernicus yangın tehlike indeksi'**
+  String get riskCopernicusTitle;
+
+  /// No description provided for @riskCopernicusNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'FireWatch risk puanından ayrı, hava modeline dayalı bir göstergedir; puana katılmaz.'**
+  String get riskCopernicusNote;
+
+  /// No description provided for @riskCopernicusAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'© European Union, Copernicus EFFIS · CC BY 4.0'**
+  String get riskCopernicusAttribution;
 }
 
 class _AppLocalizationsDelegate

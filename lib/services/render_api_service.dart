@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../models/detection_status.dart';
 import 'package:flutter/foundation.dart';
 import '../core/config/api_config.dart';
 import '../models/alert_scope.dart';
@@ -232,6 +233,19 @@ class RenderApiService {
     final incidents = await fetchIncidents(days: 3, limit: 500);
     if (incidents.isEmpty) return null;
     return IncidentSummary.fromIncidents(incidents);
+  }
+
+  /// Never null and never an empty answer: a failed request is
+  /// [DetectionStatus.unavailable], which the app must not read as "quiet".
+  Future<DetectionStatus> fetchDetectionStatus() async {
+    try {
+      final response = await _dio.get('/incidents/status');
+      final data = response.data['data'];
+      if (data is Map<String, dynamic>) return DetectionStatus.fromJson(data);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error fetching detection status: $e');
+    }
+    return DetectionStatus.unavailable;
   }
 
   /// Asks the backend which province/region a coordinate falls in.

@@ -1064,11 +1064,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data. Address and neighbourhood searches use OpenStreetMap Nominatim; what you type is not stored, and results are cached for up to 7 days under an irreversible hash of the text.';
 
   @override
-  String get dataSourcesFwiTitle => 'Fire danger map (FWI) — a separate source';
+  String get dataSourcesFwiTitle =>
+      'Copernicus fire danger index (FWI) — a separate source';
 
   @override
   String get dataSourcesFwiBody =>
-      'The risk layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model and provides a forecast of up to 10 days, today included (9 days ahead); the last day can stay empty until the day\'s model run is published. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0).';
+      'The FWI (Copernicus) layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model and provides a forecast of up to 10 days, today included (9 days ahead); the last day can stay empty until the day\'s model run is published. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0). It is separate from the FireWatch risk score and does not feed into it.';
 
   @override
   String get settingsAppInfo => 'App Information';
@@ -1510,7 +1511,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportPanelAnonymousToggleSubtitle =>
-      'Your name won\'t be shared with authorities';
+      'Your name is not saved with the report';
 
   @override
   String get reportPanelPhotosLabel => 'Photos (optional)';
@@ -1673,7 +1674,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locDisclosureNearestCity =>
-      'To show which province you are in, your location is sent to our server; this lookup is not stored.';
+      'To show which province you are in, your location is sent to our server, and to calculate risk, your location rounded to about 10 km; these lookups are not stored.';
 
   @override
   String get locDisclosureStored =>
@@ -1698,7 +1699,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trackedPlacesSubtitle =>
-      'Get alerts for heat detected nearby or high fire danger';
+      'Get alerts for heat detected nearby or rising fire risk';
 
   @override
   String get trackedPlacesEmpty =>
@@ -1796,7 +1797,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trackedPlacesApproxNote =>
-      'The location is stored on the server at about 1 km precision. Alerts are satellite heat detections, not confirmed fires.';
+      'The location is stored on the server at about 1 km precision. Alerts do not report confirmed fires: they come from satellite heat detections or the risk score.';
 
   @override
   String get trackedPlacesMigrateTitle =>
@@ -1824,7 +1825,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifPlacesChannelDescription =>
-      'Satellite heat detections near your places and fire danger there';
+      'Satellite heat detections near your places and fire risk there';
 
   @override
   String get settingsDeleteLocation => 'Delete my location data';
@@ -3032,7 +3033,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentFilterAll => 'All';
 
   @override
-  String get riskLayerToggle => 'Risk (FWI)';
+  String get riskLayerToggle => 'FWI (Copernicus)';
 
   @override
   String get incidentToggleShowShort => 'Events';
@@ -3134,7 +3135,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get riskLegendTitle => 'Fire danger (FWI)';
+  String get riskLegendTitle => 'Copernicus fire danger index (FWI)';
 
   @override
   String get riskLegendNote =>
@@ -3175,7 +3176,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'This day\'s forecast has not been published yet. It opens once the daily model run arrives.';
 
   @override
-  String get riskAttribution => '© European Union, Copernicus EFFIS';
+  String get riskAttribution =>
+      '© European Union, Copernicus EFFIS · CC BY 4.0';
 
   @override
   String get homeLast24hTitle => 'Last 24 Hours';
@@ -3789,8 +3791,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Extra points when heat and dry air coincide (max 20 pts)';
 
   @override
-  String myPlacesRiskLine(String level) {
-    return 'Fire danger: $level';
+  String myPlacesRiskLine(String level, int score) {
+    return 'Fire risk: $level ($score/100)';
   }
 
   @override
@@ -3804,7 +3806,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPlacesRiskNote =>
-      'Fire danger is Copernicus\'s regional weather forecast (FWI). No detection does not mean no fire.';
+      'Risk is a score from the weather and nearby satellite detections. No detection does not mean no fire.';
 
   @override
   String get trackedPlacesEditTitle => 'Edit place';
@@ -3813,11 +3815,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackedPlacesNotifyHeat => 'Notify me of new heat detected nearby';
 
   @override
-  String get trackedPlacesNotifyRisk => 'Notify me when fire danger rises';
+  String get trackedPlacesNotifyRisk => 'Notify me when fire risk rises';
 
   @override
   String get trackedPlacesNotifyRiskDesc =>
-      'When it reaches High or above, at most once a day';
+      'When it reaches High or Critical, at most once a day';
 
   @override
   String get placeSearchHint => 'Province, district, neighbourhood or address';
@@ -3846,4 +3848,175 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get placeSearchAttribution =>
       'Search results © OpenStreetMap contributors (Nominatim)';
+
+  @override
+  String get detectionNoneTitle =>
+      'In the last 24 hours, satellites saw no strong heat signature in Türkiye.';
+
+  @override
+  String get detectionLimitNote =>
+      'Satellites may miss small fires or fires under cloud.';
+
+  @override
+  String detectionLastUpdate(String time) {
+    return 'Last update: $time';
+  }
+
+  @override
+  String get detectionStaleTitle => 'Satellite data is out of date.';
+
+  @override
+  String get detectionStaleBody =>
+      'So we can\'t say whether there are detections right now.';
+
+  @override
+  String get detectionUnavailableTitle => 'Couldn\'t get satellite data.';
+
+  @override
+  String get detectionUnavailableBody =>
+      'This doesn\'t mean there are no detections. Check your connection and try again.';
+
+  @override
+  String get detectionCall112Line => 'If you see a fire, call 112 first.';
+
+  @override
+  String get detectionReportLine =>
+      'If you notice a fire that isn\'t in the app, or an error, tell us with Report.';
+
+  @override
+  String get detectionReportButton => 'Report';
+
+  @override
+  String get detectionShowLast7Days => 'Show last 7 days';
+
+  @override
+  String get detectionOpenRisk => 'Turn on risk layer';
+
+  @override
+  String detectionLatest(String when, String city) {
+    return 'Latest detection: $when, $city';
+  }
+
+  @override
+  String detectionLatestNoCity(String when) {
+    return 'Latest detection: $when';
+  }
+
+  @override
+  String detectionDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String detectionHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String get detectionJustNow => 'less than an hour ago';
+
+  @override
+  String get riskColorsNotFire =>
+      'The colours show the risk of a fire starting, not fires.';
+
+  @override
+  String get mapRiskLayer => 'Risk';
+
+  @override
+  String get mapRiskLegendTitle => 'Risk score (by region)';
+
+  @override
+  String get mapRiskLegendLow => 'Low · 0–24';
+
+  @override
+  String get mapRiskLegendMedium => 'Medium · 25–49';
+
+  @override
+  String get mapRiskLegendHigh => 'High · 50–74';
+
+  @override
+  String get mapRiskLegendCritical => 'Critical · 75–100';
+
+  @override
+  String get mapRiskUnavailable => 'Couldn\'t get risk data.';
+
+  @override
+  String mapRiskRegionTap(String region, int score, String level) {
+    return '$region: $score/100, $level';
+  }
+
+  @override
+  String get reportPanelNotEmergency =>
+      'This report is not passed to emergency services; in an emergency, call 112.';
+
+  @override
+  String get reportPanelTypeLabel => 'Report type';
+
+  @override
+  String get reportTypeFire => 'Fire sighting';
+
+  @override
+  String get reportTypeMissingFire => 'Fire not shown in the app';
+
+  @override
+  String get reportTypeWrongInfo => 'Wrong information/app error';
+
+  @override
+  String get reportPanelWrongInfoHint =>
+      'Tell us what is wrong: which screen, what you saw, what it should be.';
+
+  @override
+  String get reportPanelWrongInfoNeedText => 'Please describe what is wrong.';
+
+  @override
+  String get reportPanelWrongInfoSent => 'Report received. Thank you.';
+
+  @override
+  String get riskTabPlaces => 'My Places';
+
+  @override
+  String get riskPointBack => 'Back to My Places';
+
+  @override
+  String get riskPointAdviceTitle => 'Advice';
+
+  @override
+  String get riskPointWhyTitle => 'Why this level';
+
+  @override
+  String get riskPointNearbyTitle => 'Nearby detections';
+
+  @override
+  String riskPointNearby(int km, int count) {
+    return '$count satellite detections within $km km in the last 24 hours';
+  }
+
+  @override
+  String riskPointNearbyNone(int km) {
+    return 'No satellite detections within $km km in the last 24 hours. This does not mean there is no fire.';
+  }
+
+  @override
+  String get riskPointNearbyUnknown =>
+      'Nearby satellite detections are unknown right now; the score uses the weather only.';
+
+  @override
+  String riskPointCalculatedAt(String time) {
+    return 'Calculated: $time';
+  }
+
+  @override
+  String get riskPointUnavailable =>
+      'Risk can\'t be calculated right now. Try again.';
+
+  @override
+  String get riskCopernicusTitle => 'Copernicus fire danger index';
+
+  @override
+  String get riskCopernicusNote =>
+      'Separate from the FireWatch risk score, based on a weather model; it does not feed into the score.';
+
+  @override
+  String get riskCopernicusAttribution =>
+      '© European Union, Copernicus EFFIS · CC BY 4.0';
 }

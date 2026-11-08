@@ -41,9 +41,9 @@ String riskAdvice(AppLocalizations l10n, num score) =>
 
 String displayRegionName(AppLocalizations l10n, String region) {
   switch (region) {
-    case 'Ic Anadolu': return l10n.regionIcAnadolu;
-    case 'Dogu Anadolu': return l10n.regionDoguAnadolu;
-    case 'Guneydogu Anadolu': return l10n.regionGuneydoguAnadolu;
+    case 'Ic Anadolu' || 'İç Anadolu': return l10n.regionIcAnadolu;
+    case 'Dogu Anadolu' || 'Doğu Anadolu': return l10n.regionDoguAnadolu;
+    case 'Guneydogu Anadolu' || 'Güneydoğu Anadolu': return l10n.regionGuneydoguAnadolu;
     case 'Ege': return l10n.regionEge;
     case 'Akdeniz': return l10n.regionAkdeniz;
     case 'Marmara': return l10n.regionMarmara;

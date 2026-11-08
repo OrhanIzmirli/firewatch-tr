@@ -27,7 +27,12 @@ import '../../models/persistent_heat_source.dart';
 import '../../models/fire_point.dart';
 import '../../models/annual_province_data.dart';
 import '../../models/tracked_place.dart';
+import '../../models/detection_status.dart';
 import '../../services/fwi_point_service.dart';
+import '../../services/risk_data_cache.dart';
+import '../../core/utils/risk_display.dart';
+import '../../shared/widgets/detection_status_card.dart';
+import 'widgets/region_risk_layer.dart';
 import '../../services/tracked_places_provider.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/render_api_service.dart';
@@ -116,7 +121,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final enabled = !_showAnnualHistory;
     setState(() {
       _showAnnualHistory = enabled;
-      if (enabled) _showRiskLayer = false;
+      if (enabled) {
+        _showFwiLayer = false;
+        _showRegionRisk = false;
+      }
     });
     if (!enabled || _annualData != null || _annualLoading) return;
     setState(() {
@@ -187,7 +195,18 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// The EFFIS fire-danger (FWI) raster. An on/off overlay, not a third
   /// position of the events/detections choice: a danger *forecast* composes
   /// with either fire layer and must never read as a detection itself.
-  bool _showRiskLayer = false;
+  bool _showFwiLayer = false;
+
+  /// The FireWatch risk score by region: the map's "Risk" layer.
+  bool _showRegionRisk = false;
+  bool _regionRiskFailed = false;
+  Map<String, int> _regionScores = const {};
+
+  /// Either colour layer is on, so markers need the high-contrast style.
+  bool get _showRiskLayer => _showFwiLayer || _showRegionRisk;
+
+  DetectionStatus? _detectionStatus;
+  bool _statusCardDismissed = false;
 
   /// Overlay opacity. 0.55 keeps the base map readable underneath while the
   /// danger classes stay clearly distinguishable.
@@ -386,10 +405,72 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   void _toggleRiskLayer() {
     setState(() {
-      _showRiskLayer = !_showRiskLayer;
-      if (_showRiskLayer) _showAnnualHistory = false;
+      _showFwiLayer = !_showFwiLayer;
+      if (_showFwiLayer) {
+        _showAnnualHistory = false;
+        _showRegionRisk = false;
+      }
     });
-    if (_showRiskLayer) _probeForecastDays();
+    if (_showFwiLayer) _probeForecastDays();
+  }
+
+  Future<void> _toggleRegionRisk() async {
+    final enabled = !_showRegionRisk;
+    setState(() {
+      _showRegionRisk = enabled;
+      if (enabled) {
+        _showFwiLayer = false;
+        _showAnnualHistory = false;
+        _statusCardDismissed = true;
+        _regionRiskFailed = false;
+      }
+    });
+    if (!enabled) return;
+    try {
+      _annualData ??= await AnnualProvinceData.load();
+      await RiskDataCache.instance.warmUp();
+      final scores = <String, int>{
+        for (final row in RiskDataCache.instance.regions)
+          if (row['general_risk_score'] is num)
+            foldRegionName('${row['region']}'): (row['general_risk_score'] as num).toInt(),
+      };
+      if (mounted) {
+        setState(() {
+          _regionScores = scores;
+          _regionRiskFailed = scores.isEmpty;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _regionRiskFailed = true);
+    }
+  }
+
+  void _showRegionRiskSnack(AppLocalizations l10n, String region, int score) {
+    final name = RiskDataCache.instance.regions
+        .map((r) => '${r['region']}')
+        .firstWhere((r) => foldRegionName(r) == region, orElse: () => region);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(l10n.mapRiskRegionTap(
+          displayRegionName(l10n, name),
+          score,
+          riskLevelLabel(l10n, riskLevelForScore(score)),
+        )),
+      ));
+  }
+
+  Future<void> _loadDetectionStatus() async {
+    final status = await _renderApi.fetchDetectionStatus();
+    if (mounted) setState(() => _detectionStatus = status);
+  }
+
+  void _showLast7Days() {
+    setState(() {
+      _incidentFilter = IncidentFilter.all;
+      _statusCardDismissed = true;
+    });
+    _setLayer(showIncidents: true);
   }
 
   void _openPlacesSheet() {
@@ -495,6 +576,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// view in charge rather than showing an error, so adding events cannot
   /// regress the map that already worked.
   Future<void> _loadIncidents() async {
+    _loadDetectionStatus();
     final incidents = await _renderApi.fetchIncidents(days: 7, limit: 300);
     if (!mounted) return;
     final fellBack = incidents.isEmpty && _showIncidents;
@@ -529,6 +611,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     setState(() => _incidentFilter = filter);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_filterPrefKey, filter.storageValue);
+  }
+
+  /// Quiet: the card, unless the map is showing events anyway. A problem
+  /// with the data: the card whatever the map shows, until it is closed.
+  bool _showDetectionCard(DetectionStatus status) {
+    if (_statusCardDismissed || status.kind == DetectionStatusKind.strong) return false;
+    if (status.kind != DetectionStatusKind.none) return true;
+    // Never beside the banner counting strong detections.
+    return _visibleIncidents.isEmpty && _strongUnverifiedCount == 0;
   }
 
   List<FireIncident> get _visibleIncidents =>
@@ -1596,7 +1687,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               // danger paints the ground, detections stay on top. Built only
               // while the risk toggle is on, so no WMS request ever leaves
               // the device with the layer off.
-              if (_showRiskLayer)
+              if (_showRegionRisk && _annualData != null && _regionScores.isNotEmpty)
+                RegionRiskLayer(
+                  areas: _annualData!.areas,
+                  scores: _regionScores,
+                  onRegionTap: (region, score) => _showRegionRiskSnack(l10n, region, score),
+                ),
+              if (_showFwiLayer)
                 Opacity(
                   opacity: _riskOpacity,
                   child: TileLayer(
@@ -1749,8 +1846,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (_incidents.isNotEmpty)
-                MapLayerBar(
+              MapLayerBar(
                     children: [
                       _LayerChip(
                         label: l10n.incidentToggleShowShort,
@@ -1765,9 +1861,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         onTap: () => _setLayer(showIncidents: false),
                       ),
                       _LayerChip(
-                        label: l10n.riskLayerToggle,
+                        key: const Key('mapRiskChip'),
+                        label: l10n.mapRiskLayer,
                         icon: Icons.thermostat_rounded,
-                        selected: _showRiskLayer,
+                        selected: _showRegionRisk,
+                        onTap: _toggleRegionRisk,
+                      ),
+                      _LayerChip(
+                        label: l10n.riskLayerToggle,
+                        icon: Icons.public_rounded,
+                        selected: _showFwiLayer,
                         onTap: _toggleRiskLayer,
                       ),
                       _LayerChip(
@@ -1820,6 +1923,45 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     ),
                   ),
                 ),
+              ],
+              if (_showRegionRisk) ...[
+                const SizedBox(height: 6),
+                GlassPanel(
+                  key: const Key('mapRiskNotFire'),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                  radius: AppSpacing.cardRadius,
+                  child: Text(
+                    _regionRiskFailed ? l10n.mapRiskUnavailable : l10n.riskColorsNotFire,
+                    style: GoogleFonts.ibmPlexSans(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      color: _regionRiskFailed ? AppColors.warning : titleColor,
+                    ),
+                  ),
+                ),
+              ],
+              if (_detectionStatus case final status?) ...[
+                const SizedBox(height: 6),
+                if (_showDetectionCard(status))
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.46),
+                    child: SingleChildScrollView(
+                      child: DetectionStatusCard(
+                        status: status,
+                        onRetry: _refreshMap,
+                        onDismiss: () => setState(() => _statusCardDismissed = true),
+                        onReport: () => showReportFirePanel(context, initialType: ReportType.missingFire),
+                        onShowLast7Days: status.kind == DetectionStatusKind.unavailable ? null : _showLast7Days,
+                        onOpenRisk: _showRegionRisk ? null : _toggleRegionRisk,
+                      ),
+                    ),
+                  )
+                else
+                  GlassPanel(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    radius: AppSpacing.cardRadius,
+                    child: DetectionFreshnessLine(status: status),
+                  ),
               ],
               if (_showAnnualHistory) ...[
                 const SizedBox(height: 6),
@@ -1877,7 +2019,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     );
                     // Refresh which days are published every time the panel
                     // opens — an unpublished day flips when the run lands.
-                    if (_isLayersPanelOpen && _showRiskLayer) {
+                    if (_isLayersPanelOpen && _showFwiLayer) {
                       _probeForecastDays();
                     }
                   },
@@ -1917,7 +2059,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             child: OsmAttribution(
               extra: [
                 if (CartoBasemap.configured) '© CARTO',
-                if (_showRiskLayer) l10n.riskAttribution,
+                if (_showFwiLayer) l10n.riskAttribution,
               ],
             ),
           ),
@@ -2051,7 +2193,25 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   ),
                 ],
               ),
-              if (_showRiskLayer) ...[
+              if (_showRegionRisk) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(l10n.mapRiskLegendTitle, style: sectionStyle),
+                const SizedBox(height: 6),
+                _LegendRow(color: colorForApiRiskLevel('Low'), label: l10n.mapRiskLegendLow, textColor: titleColor),
+                const SizedBox(height: 5),
+                _LegendRow(color: colorForApiRiskLevel('Medium'), label: l10n.mapRiskLegendMedium, textColor: titleColor),
+                const SizedBox(height: 5),
+                _LegendRow(color: colorForApiRiskLevel('High'), label: l10n.mapRiskLegendHigh, textColor: titleColor),
+                const SizedBox(height: 5),
+                _LegendRow(color: colorForApiRiskLevel('Critical'), label: l10n.mapRiskLegendCritical, textColor: titleColor),
+                const SizedBox(height: 6),
+                Text(
+                  l10n.riskColorsNotFire,
+                  style: GoogleFonts.ibmPlexSans(fontSize: 10.5, height: 1.35, fontWeight: FontWeight.w700, color: titleColor),
+                ),
+                Divider(height: AppSpacing.lg, color: titleColor.withValues(alpha: 0.12)),
+              ],
+              if (_showFwiLayer) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(l10n.riskLegendTitle, style: sectionStyle),
                 const SizedBox(height: 6),
@@ -2175,7 +2335,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   textColor: titleColor,
                 ),
               ],
-              if (_showRiskLayer) ...[
+              if (_showFwiLayer) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   l10n.riskAttribution,
@@ -2912,6 +3072,7 @@ class _LayerChip extends StatelessWidget {
   final VoidCallback onTap;
 
   const _LayerChip({
+    super.key,
     required this.label,
     required this.icon,
     required this.selected,

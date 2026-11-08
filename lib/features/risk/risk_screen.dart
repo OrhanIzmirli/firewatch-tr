@@ -371,6 +371,7 @@ class _RiskScreenState extends State<RiskScreen> {
                   formulaLine(Icons.water_drop_outlined, l10n.riskInfoFormulaHumidity),
                   formulaLine(Icons.air_rounded, l10n.riskInfoFormulaWind),
                   formulaLine(Icons.local_fire_department_rounded, l10n.riskInfoFormulaFireCount),
+                  formulaLine(Icons.wb_sunny_outlined, l10n.riskInfoFormulaHeatBonus),
                   const SizedBox(height: AppSpacing.lg),
                   Text(l10n.riskInfoSourcesTitle,
                       style: GoogleFonts.ibmPlexSans(fontSize: 14, fontWeight: FontWeight.w700, color: titleColor)),

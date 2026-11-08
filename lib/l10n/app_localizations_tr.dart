@@ -177,7 +177,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.';
 
   @override
-  String get homeLiveSummary => 'Canlı Durum Özeti';
+  String get homeLiveSummary => 'Güncel Durum Özeti';
 
   @override
   String get homeHeaderTitle => 'Türkiye Termal Anomali Takibi';
@@ -187,7 +187,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.';
 
   @override
-  String get homeNasaLiveData => 'NASA FIRMS • Canlı Veri';
+  String get homeNasaLiveData => 'NASA FIRMS • Uydu Verisi';
 
   @override
   String get homeOutsideTurkeyLocation => 'Yurt dışı konumu';
@@ -213,7 +213,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeOverview => 'Genel Bakış';
 
   @override
-  String get homeOverviewSubtitle => 'NASA FIRMS anlık verisi';
+  String get homeOverviewSubtitle => 'NASA FIRMS uydu verisi';
 
   @override
   String homeOverviewUniqueCount(int count) {
@@ -351,7 +351,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapTitleDetections => 'Termal Tespit Haritası';
 
   @override
-  String get mapLiveMap => 'Canlı Harita';
+  String get mapLiveMap => 'Güncel Harita';
 
   @override
   String get mapConfidenceFilterActive =>
@@ -371,7 +371,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapArea => 'Harita Alanı';
 
   @override
-  String get mapAreaSubtitle => 'NASA FIRMS canlı marker görünümü';
+  String get mapAreaSubtitle => 'NASA FIRMS işaret görünümü';
 
   @override
   String get mapGoToMe => 'Bana Git';
@@ -380,7 +380,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapNearbyFires => 'Yakınımdaki Termal Tespitler';
 
   @override
-  String get mapNearbyFiresSubtitle => 'Konumuna en yakın canlı tespitler';
+  String get mapNearbyFiresSubtitle => 'Konumuna en yakın güncel tespitler';
 
   @override
   String get mapReport => 'Raporla';
@@ -498,7 +498,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsBackgroundSubtitle =>
-      'Uygulama kapalıyken bile 15 dakikada bir yangın kontrolü yapılsın';
+      'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol et (Android bunu geciktirebilir)';
 
   @override
   String get notificationsEnableBackground => 'Arka Plan Takibini Aç';
@@ -1014,7 +1014,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesSatelliteBody =>
-      'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.';
+      'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP 2 Kasım 2026\'da veri vermeyi bıraktı) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.';
 
   @override
   String get dataSourcesGroupingTitle => 'Olaylar — hesaplanan';
@@ -1028,7 +1028,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesDerivedBody =>
-      'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: yangın o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.';
+      'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: ısı kaynağı o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.';
 
   @override
   String get dataSourcesNotKnownTitle => 'Bilinmeyen';
@@ -1111,14 +1111,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskTitle => 'Risk Analizi';
 
   @override
-  String get riskLiveView => 'Canlı Risk Görünümü';
+  String get riskLiveView => 'Güncel Risk Görünümü';
 
   @override
   String get riskSummaryTitle => 'Türkiye Yangın Risk Özeti';
 
   @override
   String get riskSummarySubtitle =>
-      'Open-Meteo / MET Norway hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.';
+      'Open-Meteo / MET Norway hava verisi ve NASA FIRMS uydu tespitleriyle yaklaşık 3 saatte bir hesaplanır. Her bölgenin havası tek bir temsilî noktadan alınır.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -1290,7 +1290,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsTitle => 'Haberler';
 
   @override
-  String get newsLiveFeed => 'Canlı Bilgi Akışı';
+  String get newsLiveFeed => 'Haber Akışı';
 
   @override
   String get newsCenterTitle => 'Yangın Haber Merkezi';
@@ -1427,7 +1427,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportPanelFireReport => 'Yangın bildirimi';
 
   @override
-  String get reportPanelVerifiedTitle => 'Rapor Doğrulandı';
+  String get reportPanelVerifiedTitle => 'Uydu Tespitiyle Eşleşti';
 
   @override
   String get reportPanelReceivedTitle => '⏳ Rapor Alındı';
@@ -1452,7 +1452,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelSubtitle =>
-      'GPS ile konumunuzu alın ve yangını bildirin. NASA verisiyle otomatik doğrulanacak.';
+      'GPS ile konumunuzu alın ve yangını bildirin. Bildiriminiz yakındaki NASA uydu tespitleriyle karşılaştırılır.';
 
   @override
   String get reportPanelLocation => 'Konum';
@@ -1539,18 +1539,18 @@ class AppLocalizationsTr extends AppLocalizations {
       'Pin konumunu ayarlamak için haritaya dokunun';
 
   @override
-  String get reportPanelSuccessVerifiedTitle => 'Bildirim Doğrulandı';
+  String get reportPanelSuccessVerifiedTitle => 'Uydu Tespitiyle Eşleşti';
 
   @override
   String get reportPanelSuccessReceivedTitle => 'Bildirim Alındı';
 
   @override
   String get reportPanelSuccessVerifiedBody =>
-      'Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.';
+      'Bildirdiğiniz yerin 10 km yakınında son 24 saatte NASA uydu ısı tespiti var. Bu, yangını tek başına doğrulamaz.';
 
   @override
   String get reportPanelSuccessReceivedBody =>
-      'Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.';
+      'Bildiriminiz kaydedildi. Yakınında son 24 saatte uydu ısı tespiti bulunmadı; bu, yangın olmadığı anlamına gelmez.';
 
   @override
   String reportPanelReportIdLabel(String id) {
@@ -1564,11 +1564,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelResponseTimeVerified =>
-      'Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.';
+      'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.';
 
   @override
   String get reportPanelResponseTimeReceived =>
-      'Eğer bu aktif bir acil durumsa lütfen doğrudan 112\'yi de arayın.';
+      'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.';
 
   @override
   String get reportPanelShare => 'Paylaş';
@@ -1924,7 +1924,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get fireEventLiveDetectionTitle => 'Canlı Termal Tespit';
+  String get fireEventLiveDetectionTitle => 'Güncel Termal Tespit';
 
   @override
   String get fireEventStatusActive => 'Aktif';
@@ -2119,7 +2119,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkMapDesc =>
-      'Haritadaki alevli işaretler NASA uydu verisiyle tespit edilen canlı yangın noktalarını gösterir. Bir işarete dokunarak detayları görebilir, buradan yeni bir yangın da bildirebilirsin.';
+      'Haritadaki işaretler NASA uydularının tespit ettiği ısı noktalarıdır; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilir, buradan yeni bir yangın da bildirebilirsin.';
 
   @override
   String get coachMarkRiskTitle => 'Risk Seviyeleri';
@@ -2140,7 +2140,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkNotificationsDesc =>
-      'Yakınındaki yangınlar için anlık bildirim al ve otomatik taramayı buradan başlat.';
+      'Yakınındaki uydu ısı tespitleri için bildirim al ve otomatik taramayı buradan başlat.';
 
   @override
   String get riskTabTurkeyOverview => 'Türkiye Geneli';
@@ -2297,14 +2297,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskInfoFormulaFireCount =>
-      'NASA Yangın Sayısı (en fazla 20 puan)';
+      'Son 24 saatteki uydu ısı olayı sayısı (en fazla 20 puan)';
 
   @override
   String get riskInfoSourcesTitle => 'Veri Kaynakları';
 
   @override
   String get riskInfoSourcesBody =>
-      'NASA FIRMS uydu verisi, Open-Meteo (yedek: MET Norway) hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.';
+      'NASA FIRMS uydu verisi ve Open-Meteo (yedek: MET Norway) hava durumu verisi kullanılarak hesaplanır. Hava verisi her bölge için tek bir temsilî noktadan alınır; haberler puana katılmaz.';
 
   @override
   String get riskInfoUpdateFrequencyTitle => 'Güncelleme Sıklığı';
@@ -2315,15 +2315,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeInfo =>
-      'Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.';
+      'Veriler NASA FIRMS uydu tespitlerinden alınır; sunucu yaklaşık 30 dakikada bir yeni veri çeker.';
 
   @override
   String get trustMapInfo =>
-      'Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.';
+      'Haritadaki işaretler VIIRS ve MODIS uydu cihazlarının tespit ettiği termal anomalileri gösterir.';
 
   @override
   String get trustRiskInfo =>
-      'Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.';
+      'Risk skorları yaklaşık 3 saatte bir hava durumu ve NASA uydu tespitlerinden hesaplanır.';
 
   @override
   String get trustNewsInfo =>
@@ -2331,7 +2331,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsInfo =>
-      'Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.';
+      'Konumunuza 50 km içinde uydu ısı tespiti olduğunda bildirim gönderilir.';
 
   @override
   String get trustCardLabel => 'Veri Kaynağı Hakkında';
@@ -2354,7 +2354,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeSource =>
-      'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.';
+      'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir. Sunucu yaklaşık 30 dakikada bir yeni veri çeker; uydu geçişleri ve NASA\'nın işleme süresi nedeniyle bir tespit birkaç saat gecikebilir.';
 
   @override
   String get trustHomeInterpret =>
@@ -2370,7 +2370,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapSource =>
-      'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API\'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.';
+      'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır.';
 
   @override
   String get trustMapInterpret =>
@@ -2457,18 +2457,18 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get smartLocationHintForest => 'ormanlık, yüksek riskli bir bölgede';
+  String get smartLocationHintForest => 'ormanlık alanı geniş bir ilde';
 
   @override
-  String get smartLocationHintCoastal => 'kıyı bölgesinde';
+  String get smartLocationHintCoastal => 'güneybatı kıyı kuşağında';
 
   @override
   String get smartLocationHintUrban =>
-      'kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir';
+      'kentleşmesi yoğun bir ilde; yapı yangını veya endüstriyel ısı kaynağı olabilir';
 
   @override
   String get smartLocationHintAgricultural =>
-      'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır';
+      'tarımın yoğun olduğu bir ilde; anız yakımı da bu tür ısı izi bırakır';
 
   @override
   String get smartFrpHigh =>
@@ -2476,7 +2476,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String smartPixelFootprint(int hectares) {
-    return 'Uydu pikseli ~$hectares hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.';
+    return 'Uydu pikseli ~$hectares hektar; ısı kaynağı bu alanın içinde, gerçek boyutu bilinmiyor.';
   }
 
   @override
@@ -2548,7 +2548,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tooltipSatelliteViirsBody =>
-      'VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.';
+      'VIIRS: NOAA-20 ve NOAA-21 uyduları, Türkiye üzerinden günde birkaç kez geçer. (Suomi NPP 2 Kasım 2026\'da veri vermeyi bıraktı.)';
 
   @override
   String get tooltipSatelliteModisBody =>
@@ -2582,7 +2582,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkMapMarkersDesc =>
-      'Haritadaki alev ikonları NASA uydusundan gelen canlı yangın tespitlerini gösterir. Bir işarete dokunarak detayları görebilirsin.';
+      'Haritadaki işaretler NASA uydularından gelen ısı tespitleridir; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilirsin.';
 
   @override
   String get coachMarkMapClustersTitle => 'Küme Sayıları';
@@ -2603,7 +2603,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkMapNearbyDesc =>
-      'Bu bölüm, konumuna en yakın canlı yangın tespitlerini mesafe sırasına göre listeler.';
+      'Bu bölüm, konumuna en yakın uydu ısı tespitlerini mesafe sırasına göre listeler.';
 
   @override
   String get coachMarkNewsFeaturedTitle => 'Öne Çıkan Haber';
@@ -2638,14 +2638,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkNotifPermissionDesc =>
-      'Yakınındaki yangınlar için anlık bildirim alabilmek üzere izin ver.';
+      'Yakınındaki uydu ısı tespitleri için bildirim alabilmek üzere izin ver.';
 
   @override
   String get coachMarkNotifScanTitle => 'Şimdi Tara';
 
   @override
   String get coachMarkNotifScanDesc =>
-      'Konumunun 50 km çevresinde canlı yangın olup olmadığını anında kontrol et.';
+      'Konumunun 50 km çevresinde uydu ısı tespiti olup olmadığını kontrol et.';
 
   @override
   String get coachMarkNotifMonitoringTitle => 'Otomatik Tarama';
@@ -2940,12 +2940,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String incidentNoDetectionFor(String hours) {
-    return 'Yangın tespit edildi, $hours saattir görülmüyor';
+    return 'Isı tespit edildi, $hours saattir görülmüyor';
   }
 
   @override
   String incidentNoDetectionLowConfidence(String hours) {
-    return 'Yangın tespit edildi, $hours saattir görülmüyor (düşük güvenilirlik)';
+    return 'Isı tespit edildi, $hours saattir görülmüyor (düşük güvenilirlik)';
   }
 
   @override
@@ -3771,4 +3771,8 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get osmTileAttribution => '© OpenStreetMap katkıcıları';
+
+  @override
+  String get riskInfoFormulaHeatBonus =>
+      'Sıcak ve kuru hava birlikteyse ek puan (en fazla 20 puan)';
 }

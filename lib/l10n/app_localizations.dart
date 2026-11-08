@@ -419,7 +419,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLiveSummary.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Durum Özeti'**
+  /// **'Güncel Durum Özeti'**
   String get homeLiveSummary;
 
   /// No description provided for @homeHeaderTitle.
@@ -437,7 +437,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNasaLiveData.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS • Canlı Veri'**
+  /// **'NASA FIRMS • Uydu Verisi'**
   String get homeNasaLiveData;
 
   /// No description provided for @homeOutsideTurkeyLocation.
@@ -485,7 +485,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeOverviewSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS anlık verisi'**
+  /// **'NASA FIRMS uydu verisi'**
   String get homeOverviewSubtitle;
 
   /// No description provided for @homeOverviewUniqueCount.
@@ -725,7 +725,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapLiveMap.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Harita'**
+  /// **'Güncel Harita'**
   String get mapLiveMap;
 
   /// No description provided for @mapConfidenceFilterActive.
@@ -761,7 +761,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapAreaSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS canlı marker görünümü'**
+  /// **'NASA FIRMS işaret görünümü'**
   String get mapAreaSubtitle;
 
   /// No description provided for @mapGoToMe.
@@ -779,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapNearbyFiresSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumuna en yakın canlı tespitler'**
+  /// **'Konumuna en yakın güncel tespitler'**
   String get mapNearbyFiresSubtitle;
 
   /// No description provided for @mapReport.
@@ -995,7 +995,7 @@ abstract class AppLocalizations {
   /// No description provided for @notificationsBackgroundSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama kapalıyken bile 15 dakikada bir yangın kontrolü yapılsın'**
+  /// **'Uygulama kapalıyken yaklaşık 15 dakikada bir uydu tespitlerini kontrol et (Android bunu geciktirebilir)'**
   String get notificationsBackgroundSubtitle;
 
   /// No description provided for @notificationsEnableBackground.
@@ -1889,7 +1889,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesSatelliteBody.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.'**
+  /// **'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP 2 Kasım 2026\'da veri vermeyi bıraktı) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.'**
   String get dataSourcesSatelliteBody;
 
   /// No description provided for @dataSourcesGroupingTitle.
@@ -1913,7 +1913,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesDerivedBody.
   ///
   /// In tr, this message translates to:
-  /// **'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: yangın o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.'**
+  /// **'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: ısı kaynağı o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.'**
   String get dataSourcesDerivedBody;
 
   /// No description provided for @dataSourcesNotKnownTitle.
@@ -2063,7 +2063,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskLiveView.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Risk Görünümü'**
+  /// **'Güncel Risk Görünümü'**
   String get riskLiveView;
 
   /// No description provided for @riskSummaryTitle.
@@ -2075,7 +2075,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskSummarySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Open-Meteo / MET Norway hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.'**
+  /// **'Open-Meteo / MET Norway hava verisi ve NASA FIRMS uydu tespitleriyle yaklaşık 3 saatte bir hesaplanır. Her bölgenin havası tek bir temsilî noktadan alınır.'**
   String get riskSummarySubtitle;
 
   /// No description provided for @riskHighestRisk.
@@ -2375,7 +2375,7 @@ abstract class AppLocalizations {
   /// No description provided for @newsLiveFeed.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Bilgi Akışı'**
+  /// **'Haber Akışı'**
   String get newsLiveFeed;
 
   /// No description provided for @newsCenterTitle.
@@ -2627,7 +2627,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelVerifiedTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Rapor Doğrulandı'**
+  /// **'Uydu Tespitiyle Eşleşti'**
   String get reportPanelVerifiedTitle;
 
   /// No description provided for @reportPanelReceivedTitle.
@@ -2669,7 +2669,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'GPS ile konumunuzu alın ve yangını bildirin. NASA verisiyle otomatik doğrulanacak.'**
+  /// **'GPS ile konumunuzu alın ve yangını bildirin. Bildiriminiz yakındaki NASA uydu tespitleriyle karşılaştırılır.'**
   String get reportPanelSubtitle;
 
   /// No description provided for @reportPanelLocation.
@@ -2831,7 +2831,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelSuccessVerifiedTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirim Doğrulandı'**
+  /// **'Uydu Tespitiyle Eşleşti'**
   String get reportPanelSuccessVerifiedTitle;
 
   /// No description provided for @reportPanelSuccessReceivedTitle.
@@ -2843,13 +2843,13 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelSuccessVerifiedBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.'**
+  /// **'Bildirdiğiniz yerin 10 km yakınında son 24 saatte NASA uydu ısı tespiti var. Bu, yangını tek başına doğrulamaz.'**
   String get reportPanelSuccessVerifiedBody;
 
   /// No description provided for @reportPanelSuccessReceivedBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.'**
+  /// **'Bildiriminiz kaydedildi. Yakınında son 24 saatte uydu ısı tespiti bulunmadı; bu, yangın olmadığı anlamına gelmez.'**
   String get reportPanelSuccessReceivedBody;
 
   /// No description provided for @reportPanelReportIdLabel.
@@ -2867,13 +2867,13 @@ abstract class AppLocalizations {
   /// No description provided for @reportPanelResponseTimeVerified.
   ///
   /// In tr, this message translates to:
-  /// **'Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.'**
+  /// **'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.'**
   String get reportPanelResponseTimeVerified;
 
   /// No description provided for @reportPanelResponseTimeReceived.
   ///
   /// In tr, this message translates to:
-  /// **'Eğer bu aktif bir acil durumsa lütfen doğrudan 112\'yi de arayın.'**
+  /// **'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.'**
   String get reportPanelResponseTimeReceived;
 
   /// No description provided for @reportPanelShare.
@@ -3460,7 +3460,7 @@ abstract class AppLocalizations {
   /// No description provided for @fireEventLiveDetectionTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Canlı Termal Tespit'**
+  /// **'Güncel Termal Tespit'**
   String get fireEventLiveDetectionTitle;
 
   /// No description provided for @fireEventStatusActive.
@@ -3797,7 +3797,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki alevli işaretler NASA uydu verisiyle tespit edilen canlı yangın noktalarını gösterir. Bir işarete dokunarak detayları görebilir, buradan yeni bir yangın da bildirebilirsin.'**
+  /// **'Haritadaki işaretler NASA uydularının tespit ettiği ısı noktalarıdır; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilir, buradan yeni bir yangın da bildirebilirsin.'**
   String get coachMarkMapDesc;
 
   /// No description provided for @coachMarkRiskTitle.
@@ -3833,7 +3833,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotificationsDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki yangınlar için anlık bildirim al ve otomatik taramayı buradan başlat.'**
+  /// **'Yakınındaki uydu ısı tespitleri için bildirim al ve otomatik taramayı buradan başlat.'**
   String get coachMarkNotificationsDesc;
 
   /// No description provided for @riskTabTurkeyOverview.
@@ -4097,7 +4097,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskInfoFormulaFireCount.
   ///
   /// In tr, this message translates to:
-  /// **'NASA Yangın Sayısı (en fazla 20 puan)'**
+  /// **'Son 24 saatteki uydu ısı olayı sayısı (en fazla 20 puan)'**
   String get riskInfoFormulaFireCount;
 
   /// No description provided for @riskInfoSourcesTitle.
@@ -4109,7 +4109,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskInfoSourcesBody.
   ///
   /// In tr, this message translates to:
-  /// **'NASA FIRMS uydu verisi, Open-Meteo (yedek: MET Norway) hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.'**
+  /// **'NASA FIRMS uydu verisi ve Open-Meteo (yedek: MET Norway) hava durumu verisi kullanılarak hesaplanır. Hava verisi her bölge için tek bir temsilî noktadan alınır; haberler puana katılmaz.'**
   String get riskInfoSourcesBody;
 
   /// No description provided for @riskInfoUpdateFrequencyTitle.
@@ -4127,19 +4127,19 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeInfo.
   ///
   /// In tr, this message translates to:
-  /// **'Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.'**
+  /// **'Veriler NASA FIRMS uydu tespitlerinden alınır; sunucu yaklaşık 30 dakikada bir yeni veri çeker.'**
   String get trustHomeInfo;
 
   /// No description provided for @trustMapInfo.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.'**
+  /// **'Haritadaki işaretler VIIRS ve MODIS uydu cihazlarının tespit ettiği termal anomalileri gösterir.'**
   String get trustMapInfo;
 
   /// No description provided for @trustRiskInfo.
   ///
   /// In tr, this message translates to:
-  /// **'Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.'**
+  /// **'Risk skorları yaklaşık 3 saatte bir hava durumu ve NASA uydu tespitlerinden hesaplanır.'**
   String get trustRiskInfo;
 
   /// No description provided for @trustNewsInfo.
@@ -4151,7 +4151,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsInfo.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.'**
+  /// **'Konumunuza 50 km içinde uydu ısı tespiti olduğunda bildirim gönderilir.'**
   String get trustAlertsInfo;
 
   /// No description provided for @trustCardLabel.
@@ -4193,7 +4193,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustHomeSource.
   ///
   /// In tr, this message translates to:
-  /// **'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.'**
+  /// **'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir. Sunucu yaklaşık 30 dakikada bir yeni veri çeker; uydu geçişleri ve NASA\'nın işleme süresi nedeniyle bir tespit birkaç saat gecikebilir.'**
   String get trustHomeSource;
 
   /// No description provided for @trustHomeInterpret.
@@ -4217,7 +4217,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustMapSource.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API\'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.'**
+  /// **'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır.'**
   String get trustMapSource;
 
   /// No description provided for @trustMapInterpret.
@@ -4343,25 +4343,25 @@ abstract class AppLocalizations {
   /// No description provided for @smartLocationHintForest.
   ///
   /// In tr, this message translates to:
-  /// **'ormanlık, yüksek riskli bir bölgede'**
+  /// **'ormanlık alanı geniş bir ilde'**
   String get smartLocationHintForest;
 
   /// No description provided for @smartLocationHintCoastal.
   ///
   /// In tr, this message translates to:
-  /// **'kıyı bölgesinde'**
+  /// **'güneybatı kıyı kuşağında'**
   String get smartLocationHintCoastal;
 
   /// No description provided for @smartLocationHintUrban.
   ///
   /// In tr, this message translates to:
-  /// **'kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir'**
+  /// **'kentleşmesi yoğun bir ilde; yapı yangını veya endüstriyel ısı kaynağı olabilir'**
   String get smartLocationHintUrban;
 
   /// No description provided for @smartLocationHintAgricultural.
   ///
   /// In tr, this message translates to:
-  /// **'tarım arazisinde; anız yakımı da bu tür ısı izi bırakır'**
+  /// **'tarımın yoğun olduğu bir ilde; anız yakımı da bu tür ısı izi bırakır'**
   String get smartLocationHintAgricultural;
 
   /// No description provided for @smartFrpHigh.
@@ -4373,7 +4373,7 @@ abstract class AppLocalizations {
   /// No description provided for @smartPixelFootprint.
   ///
   /// In tr, this message translates to:
-  /// **'Uydu pikseli ~{hectares} hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.'**
+  /// **'Uydu pikseli ~{hectares} hektar; ısı kaynağı bu alanın içinde, gerçek boyutu bilinmiyor.'**
   String smartPixelFootprint(int hectares);
 
   /// No description provided for @smartAreaLarge.
@@ -4475,7 +4475,7 @@ abstract class AppLocalizations {
   /// No description provided for @tooltipSatelliteViirsBody.
   ///
   /// In tr, this message translates to:
-  /// **'VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.'**
+  /// **'VIIRS: NOAA-20 ve NOAA-21 uyduları, Türkiye üzerinden günde birkaç kez geçer. (Suomi NPP 2 Kasım 2026\'da veri vermeyi bıraktı.)'**
   String get tooltipSatelliteViirsBody;
 
   /// No description provided for @tooltipSatelliteModisBody.
@@ -4529,7 +4529,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapMarkersDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Haritadaki alev ikonları NASA uydusundan gelen canlı yangın tespitlerini gösterir. Bir işarete dokunarak detayları görebilirsin.'**
+  /// **'Haritadaki işaretler NASA uydularından gelen ısı tespitleridir; her biri yangın olmayabilir. Bir işarete dokunarak ayrıntıları görebilirsin.'**
   String get coachMarkMapMarkersDesc;
 
   /// No description provided for @coachMarkMapClustersTitle.
@@ -4565,7 +4565,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkMapNearbyDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bu bölüm, konumuna en yakın canlı yangın tespitlerini mesafe sırasına göre listeler.'**
+  /// **'Bu bölüm, konumuna en yakın uydu ısı tespitlerini mesafe sırasına göre listeler.'**
   String get coachMarkMapNearbyDesc;
 
   /// No description provided for @coachMarkNewsFeaturedTitle.
@@ -4625,7 +4625,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifPermissionDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınındaki yangınlar için anlık bildirim alabilmek üzere izin ver.'**
+  /// **'Yakınındaki uydu ısı tespitleri için bildirim alabilmek üzere izin ver.'**
   String get coachMarkNotifPermissionDesc;
 
   /// No description provided for @coachMarkNotifScanTitle.
@@ -4637,7 +4637,7 @@ abstract class AppLocalizations {
   /// No description provided for @coachMarkNotifScanDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunun 50 km çevresinde canlı yangın olup olmadığını anında kontrol et.'**
+  /// **'Konumunun 50 km çevresinde uydu ısı tespiti olup olmadığını kontrol et.'**
   String get coachMarkNotifScanDesc;
 
   /// No description provided for @coachMarkNotifMonitoringTitle.
@@ -5159,13 +5159,13 @@ abstract class AppLocalizations {
   /// No description provided for @incidentNoDetectionFor.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tespit edildi, {hours} saattir görülmüyor'**
+  /// **'Isı tespit edildi, {hours} saattir görülmüyor'**
   String incidentNoDetectionFor(String hours);
 
   /// No description provided for @incidentNoDetectionLowConfidence.
   ///
   /// In tr, this message translates to:
-  /// **'Yangın tespit edildi, {hours} saattir görülmüyor (düşük güvenilirlik)'**
+  /// **'Isı tespit edildi, {hours} saattir görülmüyor (düşük güvenilirlik)'**
   String incidentNoDetectionLowConfidence(String hours);
 
   /// No description provided for @incidentDurationOngoing.
@@ -6535,6 +6535,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'© OpenStreetMap katkıcıları'**
   String get osmTileAttribution;
+
+  /// No description provided for @riskInfoFormulaHeatBonus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıcak ve kuru hava birlikteyse ek puan (en fazla 20 puan)'**
+  String get riskInfoFormulaHeatBonus;
 }
 
 class _AppLocalizationsDelegate

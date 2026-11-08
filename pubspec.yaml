@@ -46,6 +46,10 @@ dependencies:
   flutter_secure_storage: ^10.3.1
   package_info_plus: ^9.0.1
   workmanager: ^0.6.0
+  firebase_auth: ^6.7.1
+  cloud_firestore: ^6.10.2
+  google_sign_in: ^7.2.0
+  shared_preferences_android: ^2.5.4
 
 
 dev_dependencies:
@@ -66,6 +70,7 @@ flutter:
   assets:
     - assets/data/il_sinirlari.geojson
     - assets/data/il_yil_veri.json
+    - assets/data/nature_facts.json
     - assets/images/forest-fire.jpg
     - assets/icon/app_icon.png
     - assets/data/turkey_places.json

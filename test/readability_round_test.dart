@@ -202,10 +202,10 @@ void main() {
   });
 
   group('bottom bar', () {
-    const labels = ['Ana Sayfa', 'Harita', 'Risk', 'Haberler', 'Doğa'];
+    const labels = ['Ana Sayfa', 'Harita', 'Risk', 'Haberler'];
     for (final width in [360.0, 411.0]) {
       for (final scale in [1.0, 1.3]) {
-        testWidgets('five tabs at ${width.toInt()} dp, text x$scale', (t) async {
+        testWidgets('four tabs at ${width.toInt()} dp, text x$scale', (t) async {
           t.view.physicalSize = Size(width, 800) * 2;
           t.view.devicePixelRatio = 2;
           addTearDown(t.view.reset);
@@ -224,7 +224,7 @@ void main() {
           for (final l in labels) {
             expect(find.text(l), findsOneWidget);
             final text = t.widget<RichText>(find.descendant(of: find.text(l), matching: find.byType(RichText)));
-            expect(text.textScaler.scale(10) / 10, lessThanOrEqualTo(width < 400 ? 1.1 : 1.3));
+            expect(text.textScaler.scale(10) / 10, lessThanOrEqualTo(width / labels.length < 82 ? 1.1 : 1.3));
           }
         });
       }
@@ -232,9 +232,9 @@ void main() {
 
     test('alerts left the bar and moved to a bell on every tab', () {
       final shell = File('lib/features/home/main_shell_screen.dart').readAsStringSync();
-      expect(RegExp('NavigationDestination\\(').allMatches(shell).length, 5);
+      expect(RegExp('NavigationDestination\\(').allMatches(shell).length, 4);
       expect(shell, isNot(contains('navAlerts')));
-      for (final f in ['home/home_screen', 'map/map_screen', 'risk/risk_screen', 'news/news_screen', 'nature/nature_screen']) {
+      for (final f in ['home/home_screen', 'map/map_screen', 'risk/risk_screen', 'news/news_screen']) {
         expect(File('lib/features/$f.dart').readAsStringSync(), contains('AlertsBell()'), reason: f);
       }
       expect(File('lib/router/app_router.dart').readAsStringSync(), contains("path: '/alerts'"));
@@ -248,10 +248,13 @@ void main() {
       expect(m, isNot(contains('commonTemperature')));
       expect(m, contains('commonAllTechnical'));
     });
-    test('home: your place and places above the grid; only recent news counts as new', () {
+    test('home: safety, Fidan, places, then the simple cards; only recent news counts as new', () {
       final h = read('lib/features/home/home_screen.dart');
       expect(h.indexOf('_TodayCard('), lessThan(h.indexOf('TrackedPlacesSection(')));
-      expect(h.indexOf('TrackedPlacesSection('), lessThan(h.lastIndexOf('GridView.count')));
+      expect(h.indexOf('_TodayCard('), lessThan(h.indexOf('FidanHomeCard(')));
+      expect(h.indexOf('FidanHomeCard('), lessThan(h.indexOf('TrackedPlacesSection(')));
+      expect(h.indexOf('TrackedPlacesSection('), lessThan(h.lastIndexOf('GridView.count')), reason: 'the info cards stay, below the personal part');
+      expect(h, contains('recentPoints.take(5)'), reason: 'a short detection list stays');
       expect(h, contains('publishedWithin(const Duration(hours: 72))'));
       expect(h, isNot(contains('homeLast24hStrongestPower')));
       expect(h, isNot(contains('commonTemperature')));
@@ -263,12 +266,12 @@ void main() {
       expect(data['homeOverviewNewsNoFresh'], 'Yeni haber yok');
       expect(data['durationDaysHours'], '{days} gün {hours} saat');
     });
-    test('the TR strings address the reader as siz', () {
+    test('the TR strings address the reader as siz, except in the Fidan voice', () {
       final data = jsonDecode(read('lib/l10n/app_tr.arb').replaceFirst('﻿', '')) as Map<String, dynamic>;
       final informal = RegExp(r'\b(yapabilirsin|edebilirsin|görürsen|istediğin|konumuna|seni|sana)\b');
       final bad = [
         for (final e in data.entries)
-          if (!e.key.startsWith('@') && e.value is String && informal.hasMatch(e.value as String)) e.key,
+          if (!e.key.startsWith('@') && !e.key.startsWith('fidan') && e.value is String && informal.hasMatch(e.value as String)) e.key,
       ];
       expect(bad, isEmpty);
     });

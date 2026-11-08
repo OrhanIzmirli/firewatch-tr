@@ -1120,7 +1120,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskSummarySubtitle =>
-      'Open-Meteo / MET Norway hava verisi ve NASA FIRMS uydu tespitleriyle yaklaşık 3 saatte bir hesaplanır. Her bölgenin havası tek bir temsilî noktadan alınır.';
+      'Hava durumu ve uydu tespitlerine göre yaklaşık 3 saatte bir hesaplanır.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -4269,7 +4269,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get natureOnDevice =>
-      'İlerlemeniz yalnızca bu telefonda saklanır, sunucuya gönderilmez. Uygulamayı silerseniz kaybolur.';
+      'İlerlemeniz bu telefonda saklanır. Google ile giriş yaparsanız telefonlar arasında sizinle gelir. Konumunuz ve Yerlerim bu kayda hiç girmez.';
 
   @override
   String get natureReminder => 'Günlük hatırlatma';
@@ -4299,4 +4299,232 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get natureReminderTime => 'Saat';
+
+  @override
+  String get fidanName => 'Fidan';
+
+  @override
+  String get fidanStage0 => 'Tohum';
+
+  @override
+  String get fidanStage1 => 'Filiz';
+
+  @override
+  String get fidanStage2 => 'Fidan';
+
+  @override
+  String get fidanStage3 => 'Genç ağaç';
+
+  @override
+  String get fidanStage4 => 'Çiçekli ağaç';
+
+  @override
+  String get fidanStage5 => 'Meyveli ağaç';
+
+  @override
+  String get fidanDone => 'Yaptım ✓';
+
+  @override
+  String get fidanTaskDone => 'Bugünkü görev tamam! Yarın yenisi gelecek.';
+
+  @override
+  String get fidanContinueLessons => 'Derslere devam et';
+
+  @override
+  String get fidanDidYouKnow => '💡 Biliyor muydun?';
+
+  @override
+  String get fidanThirsty => 'Fidan seni bekliyor 💧';
+
+  @override
+  String get fidanThirstyBody => 'Biraz susadı, o kadar. Hazır olunca gel.';
+
+  @override
+  String get fidanPath => 'Fidan’ın yolu';
+
+  @override
+  String get fidanMoreLessons => 'Yeni dersler yolda';
+
+  @override
+  String get fidanNewApple => 'Yeni elma! 🍎';
+
+  @override
+  String get fidanRewardTask => 'Harika iş! Fidan çok mutlu.';
+
+  @override
+  String get fidanRewardLesson => 'Dersi bitirdin. Fidan çok mutlu.';
+
+  @override
+  String get fidanContinue => 'Devam et';
+
+  @override
+  String get fidanCorrect => 'Doğru! 🎉';
+
+  @override
+  String get fidanWrong => 'Bir daha düşün.';
+
+  @override
+  String get fidanFullGrown =>
+      '🎉 Fidan kocaman bir meyve ağacı oldu! Ona çok iyi baktın.';
+
+  @override
+  String get fidanNoApples =>
+      'Henüz elma yok. Bir ders bitir, ilk elman gelsin!';
+
+  @override
+  String get fidanShare => 'Ağacımı paylaş';
+
+  @override
+  String get fidanReminderChannel => 'Doğa notları';
+
+  @override
+  String get fidanAccount => 'Hesap';
+
+  @override
+  String get fidanAccountNone =>
+      'Telefon değişince ağacın seninle gelsin. Zorunlu değil.';
+
+  @override
+  String get fidanContinueGoogle => 'Google ile devam et';
+
+  @override
+  String get fidanSignInTitle => 'Ağacınız sizinle gelsin';
+
+  @override
+  String get fidanSignInBody =>
+      'Telefon değişince ilerlemeniz kaybolmaz. Hesap açmak zorunlu değil.';
+
+  @override
+  String get fidanSavedList =>
+      'Kaydedilenler: seri, XP, elmalar, dersler ve ağacınız.';
+
+  @override
+  String get fidanNeverSaved => 'Konumunuz ve Yerlerim asla kaydedilmez.';
+
+  @override
+  String get fidanCanDelete =>
+      'Hesabınızı ve ilerlemenizi istediğiniz an silebilirsiniz.';
+
+  @override
+  String get fidanUnder13 =>
+      '13 yaşından küçükseniz bir yetişkinle birlikte kullanın.';
+
+  @override
+  String get fidanSkip => 'Şimdilik geç';
+
+  @override
+  String get fidanSignInFailed =>
+      'Google ile giriş şu an yapılamıyor. Daha sonra tekrar deneyin.';
+
+  @override
+  String get fidanSignedIn => 'Google ile giriş yapıldı';
+
+  @override
+  String get fidanSignOut => 'Çıkış yap';
+
+  @override
+  String get fidanDeleteAccount => 'Hesabı ve ilerlememi sil';
+
+  @override
+  String get fidanDeleteAccountBody =>
+      'Hesabınız, buluttaki ilerlemeniz ve bu telefondaki ağacınız silinir. Bu işlem geri alınamaz.';
+
+  @override
+  String get fidanDeleted => 'Hesabınız ve ilerlemeniz silindi.';
+
+  @override
+  String get newsReadAtSource => 'Haberi kaynağında oku';
+
+  @override
+  String get newsFireStory => 'Yangının hikâyesi';
+
+  @override
+  String get newsInProvince => 'İlinizdeki haberler';
+
+  @override
+  String get newsStageStarted => 'Başladı';
+
+  @override
+  String get newsStageControlled => 'Kontrol altına alındı';
+
+  @override
+  String get newsStageOut => 'Söndürüldü';
+
+  @override
+  String get newsStageRestoration => 'Ağaçlandırma ve yenileme';
+
+  @override
+  String get newsStoryNote =>
+      'Yalnızca bu yangınla eşleşen gerçek haberler gösterilir. Haber bulunmayan adımlar görünmez.';
+
+  @override
+  String get newsStoryOther => 'Diğer haberler';
+
+  @override
+  String fidanXpTotal(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String fidanXpGain(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String fidanGrew(String stage) {
+    return 'Fidan büyüdü: $stage!';
+  }
+
+  @override
+  String fidanWeekGoal(int done, int goal) {
+    return 'Bu hafta $done/$goal gün';
+  }
+
+  @override
+  String fidanAppleLesson(String lesson) {
+    return '🍎 “$lesson” dersini bitirdin';
+  }
+
+  @override
+  String fidanAppleWeek(String week) {
+    return '🍎 $week haftasında hedefine ulaştın';
+  }
+
+  @override
+  String fidanShareCard(int days) {
+    return 'Ağacım $days günlük 🍎';
+  }
+
+  @override
+  String newsImageCredit(String date) {
+    return 'Görüntü: NASA · $date';
+  }
+
+  @override
+  String newsSameFire(int count) {
+    return 'Bu yangınla ilgili $count haber';
+  }
+
+  @override
+  String newsCount(int count) {
+    return '$count haber';
+  }
+
+  @override
+  String get homeGridLast24h => 'Son 24 saat';
+
+  @override
+  String get homeGridNear => '100 km içinde';
+
+  @override
+  String get homeGridNationwide => 'Türkiye geneli';
+
+  @override
+  String get homeGridNews => 'Son 72 saat';
+
+  @override
+  String get homeGridLocationOff => 'Konum kapalı';
+
+  @override
+  String get fidanLocked => 'Önce önceki dersi bitir.';
 }

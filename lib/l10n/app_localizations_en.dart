@@ -1124,7 +1124,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskSummarySubtitle =>
-      'Calculated about every 3 hours from Open-Meteo / MET Norway weather and NASA FIRMS satellite detections. Each region\'s weather comes from one representative point.';
+      'Calculated about every 3 hours from weather and satellite detections.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -4226,7 +4226,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String natureStreak(int days) {
-    return '$days days';
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -4281,7 +4287,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get natureOnDevice =>
-      'Your progress is stored only on this phone and is not sent to any server. It is lost if you delete the app.';
+      'Your progress is kept on this phone. If you sign in with Google it comes with you between phones. Your location and My Places are never part of it.';
 
   @override
   String get natureReminder => 'Daily reminder';
@@ -4311,4 +4317,233 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get natureReminderTime => 'Time';
+
+  @override
+  String get fidanName => 'Fidan';
+
+  @override
+  String get fidanStage0 => 'Seed';
+
+  @override
+  String get fidanStage1 => 'Sprout';
+
+  @override
+  String get fidanStage2 => 'Sapling';
+
+  @override
+  String get fidanStage3 => 'Young tree';
+
+  @override
+  String get fidanStage4 => 'Blossoming tree';
+
+  @override
+  String get fidanStage5 => 'Fruit tree';
+
+  @override
+  String get fidanDone => 'Done ✓';
+
+  @override
+  String get fidanTaskDone => 'Today’s task is done! A new one comes tomorrow.';
+
+  @override
+  String get fidanContinueLessons => 'Continue lessons';
+
+  @override
+  String get fidanDidYouKnow => '💡 Did you know?';
+
+  @override
+  String get fidanThirsty => 'Fidan is waiting for you 💧';
+
+  @override
+  String get fidanThirstyBody =>
+      'A little thirsty, that’s all. Come back when you’re ready.';
+
+  @override
+  String get fidanPath => 'Fidan’s path';
+
+  @override
+  String get fidanMoreLessons => 'New lessons are on the way';
+
+  @override
+  String get fidanNewApple => 'A new apple! 🍎';
+
+  @override
+  String get fidanRewardTask => 'Great job! Fidan is very happy.';
+
+  @override
+  String get fidanRewardLesson =>
+      'You finished the lesson. Fidan is very happy.';
+
+  @override
+  String get fidanContinue => 'Continue';
+
+  @override
+  String get fidanCorrect => 'Correct! 🎉';
+
+  @override
+  String get fidanWrong => 'Think again.';
+
+  @override
+  String get fidanFullGrown =>
+      '🎉 Fidan has grown into a big fruit tree! You took great care of it.';
+
+  @override
+  String get fidanNoApples =>
+      'No apples yet. Finish a lesson to get your first one!';
+
+  @override
+  String get fidanShare => 'Share my tree';
+
+  @override
+  String get fidanReminderChannel => 'Nature notes';
+
+  @override
+  String get fidanAccount => 'Account';
+
+  @override
+  String get fidanAccountNone =>
+      'Keep your tree when you change phones. Optional.';
+
+  @override
+  String get fidanContinueGoogle => 'Continue with Google';
+
+  @override
+  String get fidanSignInTitle => 'Keep your tree with you';
+
+  @override
+  String get fidanSignInBody =>
+      'Your progress stays when you change phones. An account is not required.';
+
+  @override
+  String get fidanSavedList =>
+      'Saved: streak, XP, apples, lessons and your tree.';
+
+  @override
+  String get fidanNeverSaved => 'Your location and My Places are never saved.';
+
+  @override
+  String get fidanCanDelete =>
+      'You can delete your account and progress at any time.';
+
+  @override
+  String get fidanUnder13 => 'If you are under 13, use this with an adult.';
+
+  @override
+  String get fidanSkip => 'Not now';
+
+  @override
+  String get fidanSignInFailed =>
+      'Google sign-in is not available right now. Please try again later.';
+
+  @override
+  String get fidanSignedIn => 'Signed in with Google';
+
+  @override
+  String get fidanSignOut => 'Sign out';
+
+  @override
+  String get fidanDeleteAccount => 'Delete my account and progress';
+
+  @override
+  String get fidanDeleteAccountBody =>
+      'Your account, your progress in the cloud and your tree on this phone are deleted. This cannot be undone.';
+
+  @override
+  String get fidanDeleted => 'Your account and progress were deleted.';
+
+  @override
+  String get newsReadAtSource => 'Read at the source';
+
+  @override
+  String get newsFireStory => 'The story of the fire';
+
+  @override
+  String get newsInProvince => 'News from your province';
+
+  @override
+  String get newsStageStarted => 'Started';
+
+  @override
+  String get newsStageControlled => 'Brought under control';
+
+  @override
+  String get newsStageOut => 'Put out';
+
+  @override
+  String get newsStageRestoration => 'Replanting and recovery';
+
+  @override
+  String get newsStoryNote =>
+      'Only real news matched to this fire is shown. A step with no news does not appear.';
+
+  @override
+  String get newsStoryOther => 'Other news';
+
+  @override
+  String fidanXpTotal(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String fidanXpGain(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String fidanGrew(String stage) {
+    return 'Fidan grew: $stage!';
+  }
+
+  @override
+  String fidanWeekGoal(int done, int goal) {
+    return 'This week $done/$goal days';
+  }
+
+  @override
+  String fidanAppleLesson(String lesson) {
+    return '🍎 You finished “$lesson”';
+  }
+
+  @override
+  String fidanAppleWeek(String week) {
+    return '🍎 You met your goal in the week of $week';
+  }
+
+  @override
+  String fidanShareCard(int days) {
+    return 'My tree is $days days old 🍎';
+  }
+
+  @override
+  String newsImageCredit(String date) {
+    return 'Image: NASA · $date';
+  }
+
+  @override
+  String newsSameFire(int count) {
+    return '$count stories about this fire';
+  }
+
+  @override
+  String newsCount(int count) {
+    return '$count stories';
+  }
+
+  @override
+  String get homeGridLast24h => 'Last 24 hours';
+
+  @override
+  String get homeGridNear => 'Within 100 km';
+
+  @override
+  String get homeGridNationwide => 'All of Türkiye';
+
+  @override
+  String get homeGridNews => 'Last 72 hours';
+
+  @override
+  String get homeGridLocationOff => 'Location off';
+
+  @override
+  String get fidanLocked => 'Finish the previous lesson first.';
 }

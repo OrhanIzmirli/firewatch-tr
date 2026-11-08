@@ -12,6 +12,10 @@ class NewsItem {
   final String sourceUrl;
   final String imageUrl;
   final String sourceLogoUrl;
+
+  /// Province named in the headline, and our NASA picture of it that day.
+  final String province;
+  final String thumbPath;
   final String publishedAt;
   final String summary;
   final String category;
@@ -40,6 +44,8 @@ class NewsItem {
     required this.sourceUrl,
     this.imageUrl = '',
     this.sourceLogoUrl = '',
+    this.province = '',
+    this.thumbPath = '',
     required this.publishedAt,
     required this.summary,
     required this.category,
@@ -80,6 +86,8 @@ class NewsItem {
         'source_url': sourceUrl,
         'image_url': imageUrl,
         'source_logo_url': sourceLogoUrl,
+        'province': province,
+        'thumb_path': thumbPath,
         'published_at': publishedAt,
         'summary': summary,
         'category': category,
@@ -106,6 +114,8 @@ class NewsItem {
       sourceUrl: json['source_url'] ?? '',
       imageUrl: (json['image_url'] ?? json['imageUrl'] ?? json['thumbnail'] ?? '').toString(),
       sourceLogoUrl: (json['source_logo_url'] ?? json['sourceLogoUrl'] ?? '').toString(),
+      province: json['province']?.toString() ?? '',
+      thumbPath: json['thumb_path']?.toString() ?? '',
       publishedAt: json['published_at'] ?? '',
       summary: json['summary'] ?? '',
       category: json['category'] ?? 'News',

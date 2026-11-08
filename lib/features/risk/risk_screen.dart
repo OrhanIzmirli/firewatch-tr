@@ -468,7 +468,7 @@ class _RiskScreenState extends State<RiskScreen> {
                     l10n.riskPreviousScore('${region['previous_risk_score']}'),
                     style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
                   ),
-                if (DateTime.tryParse(region['date']?.toString() ?? '') case final calculated?)
+                if (DateTime.tryParse((region['created_at'] ?? region['date'])?.toString() ?? '') case final calculated?)
                   Text(
                     l10n.riskCalculatedAt(_formatDateTime(calculated)),
                     style: GoogleFonts.ibmPlexSans(fontSize: 12, color: secondaryTextColor),
@@ -579,7 +579,7 @@ class _RiskScreenState extends State<RiskScreen> {
 
     DateTime? lastCalculated;
     for (final region in _regions) {
-      final parsed = DateTime.tryParse(region['date']?.toString() ?? '');
+      final parsed = DateTime.tryParse((region['created_at'] ?? region['date'])?.toString() ?? '');
       if (parsed != null && (lastCalculated == null || parsed.isAfter(lastCalculated))) {
         lastCalculated = parsed;
       }

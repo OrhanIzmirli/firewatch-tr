@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // One document per person, reachable only by that person, holding only
+    // Fidan progress. No location or places field can ever be written here.
+    match /users/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['days', 'lessons', 'shares', 'observations', 'longestStreak', 'updatedAt'])
+        && request.resource.data.days is map
+        && request.resource.data.lessons is list
+        && request.resource.data.shares is int
+        && request.resource.data.observations is int
+        && request.resource.data.longestStreak is int;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

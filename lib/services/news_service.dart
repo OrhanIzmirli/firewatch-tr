@@ -19,6 +19,52 @@ class RelatedNews {
       );
 }
 
+class NewsStoryItem {
+  final int id;
+  final String title;
+  final String source;
+  final String url;
+  final String publishedAt;
+  final String? stage;
+  final String logoUrl;
+  const NewsStoryItem({required this.id, required this.title, required this.source, required this.url, required this.publishedAt, required this.stage, required this.logoUrl});
+
+  factory NewsStoryItem.fromJson(Map<String, dynamic> j) => NewsStoryItem(
+        id: (j['id'] as num).toInt(),
+        title: '${j['title']}',
+        source: '${j['source'] ?? ''}',
+        url: '${j['source_url'] ?? ''}',
+        publishedAt: '${j['published_at'] ?? ''}',
+        stage: j['stage'] as String?,
+        logoUrl: '${j['source_logo_url'] ?? ''}',
+      );
+}
+
+/// Headlines about one fire, oldest first.
+class NewsStory {
+  final String id;
+  final String province;
+  final int count;
+  final List<String> stages;
+  final List<NewsStoryItem> items;
+  const NewsStory({required this.id, required this.province, required this.count, required this.stages, required this.items});
+
+  bool get isTimeline => stages.length >= 2;
+
+  String get thumbPath {
+    final d = items.last.publishedAt;
+    return d.length < 10 ? '' : '/api/news/thumb/${Uri.encodeComponent(province)}/${d.substring(0, 10)}';
+  }
+
+  factory NewsStory.fromJson(Map<String, dynamic> j) => NewsStory(
+        id: '${j['id']}',
+        province: '${j['province']}',
+        count: (j['count'] as num).toInt(),
+        stages: [for (final s in j['stages'] as List) '$s'],
+        items: [for (final i in j['items'] as List) NewsStoryItem.fromJson(Map<String, dynamic>.from(i as Map))],
+      );
+}
+
 class NewsService {
   // Same rationale as FireApiService: no per-instance state, so share one
   // instance (and Dio/HTTP client) across every call site instead of each
@@ -84,6 +130,11 @@ class NewsService {
   }
 
   // TEK HABERİ GET
+  Future<List<NewsStory>> fetchStories() async {
+    final response = await _dio.get('/news/stories');
+    return [for (final s in response.data['data'] as List) NewsStory.fromJson(Map<String, dynamic>.from(s as Map))];
+  }
+
   Future<NewsItem?> fetchNewsById(String id) async {
     try {
       final response = await _dio.get('/news/$id');

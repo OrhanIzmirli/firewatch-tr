@@ -1,6 +1,6 @@
-/// Everything shown in the Nature tab that states a fact. Each fact carries
-/// the page it came from, and every page below was opened and checked on
-/// 8 November 2026. Add nothing here without doing the same.
+/// Lessons and tasks in the Fidan section. Written so a child can follow
+/// them; each claim carries the page it came from, and every page below was
+/// opened and checked on 8 November 2026. Add nothing without doing the same.
 library;
 
 class Bi {
@@ -44,31 +44,12 @@ const ogmStats = NatureSource(
 );
 const inaturalist = NatureSource('iNaturalist', 'https://www.inaturalist.org/');
 
-class NatureFact {
-  final Bi text;
-  final NatureSource source;
-  const NatureFact(this.text, this.source);
-}
-
-const List<NatureFact> natureFacts = [
-  NatureFact(Bi('Bulut, yoğun duman veya ağaç örtüsü bir yangını uydudan tamamen gizleyebilir.', 'Cloud, heavy smoke or tree canopy can hide a fire from satellites completely.'), nasaFaq),
-  NatureFact(Bi('Çok küçük veya düşük sıcaklıktaki yangınları uydular tespit edemeyebilir.', 'Satellites may not detect fires that are very small or cool.'), nasaFaq),
-  NatureFact(Bi('Sıcak kül, FAO’nun yangın nedenleri listesinde yer alır.', 'Hot ashes are on the FAO list of causes of vegetation fires.'), faoFire),
-  NatureFact(Bi('Sigara izmariti tamamen söndürülmeden atılmamalıdır.', 'Cigarette ends should not be thrown away before they are fully out.'), ogmMugla),
-  NatureFact(Bi('Odun ve kozalak gibi malzemeleri evlerden uzakta istiflemek yangın önlemlerindendir.', 'Stacking wood and cones away from houses is one of the fire precautions.'), ogmMugla),
-  NatureFact(Bi('Kastamonu’daki bir araştırmada yerdeki örtüyü yakan yangından sonra karaçam baskın tür olarak kaldı.', 'In a Kastamonu study, black pine stayed dominant after a surface fire.'), forestJournal),
-  NatureFact(Bi('Aynı araştırmada ağaç tepelerine çıkan yangının alanında baskın bitki defne yapraklı laden oldu.', 'In the same study, a rockrose shrub (Cistus laurifolius) was dominant where the fire reached the treetops.'), forestJournal),
-  NatureFact(Bi('Soma’da 2024’te yanan 701 hektar ormanda OGM üç yöntem açıkladı: doğal gençleştirme, yapay gençleştirme ve ağaçlandırma.', 'For the 701 hectares of forest burned in Soma in 2024, OGM announced three methods: natural regeneration, artificial regeneration and afforestation.'), ogmSoma),
-  NatureFact(Bi('2016-2025 arasında en çok alanın yandığı yıl 2021 oldu: 139.503 hektar.', 'Between 2016 and 2025, the year with the most burned area was 2021: 139,503 hectares.'), ogmStats),
-  NatureFact(Bi('2016-2025 arasında en çok yangın çıkan yıl 2024 oldu: 3.797 yangın.', 'Between 2016 and 2025, the year with the most fires was 2024: 3,797 fires.'), ogmStats),
-  NatureFact(Bi('2016-2025 arasında en az alanın yandığı yıl 2018 oldu: 5.644 hektar.', 'Between 2016 and 2025, the year with the least burned area was 2018: 5,644 hectares.'), ogmStats),
-];
-
 class LessonCard {
+  final String emoji;
   final Bi title;
   final Bi body;
   final List<NatureSource> sources;
-  const LessonCard(this.title, this.body, this.sources);
+  const LessonCard(this.emoji, this.title, this.body, this.sources);
 }
 
 class QuizQuestion {
@@ -91,53 +72,53 @@ class NatureLesson {
 const List<NatureLesson> natureLessons = [
   NatureLesson(
     'see_fire',
-    Bi('Yangın görürseniz', 'If you see a fire'),
+    Bi('Yangın görürsen', 'If you see a fire'),
     [
-      LessonCard(Bi('Önce arayın', 'Call first'), Bi('Ateş veya duman görürseniz 112 acil çağrıyı arayın. 177 orman yangını hattını da arayabilirsiniz.', 'If you see fire or smoke, call 112 emergency. You can also call the 177 forest fire line.'), [ogmKonya]),
-      LessonCard(Bi('Haritaya bakıp beklemeyin', 'Do not wait for the map'), Bi('Bulut, yoğun duman veya ağaç örtüsü yangını uydudan gizleyebilir. Haritada görünmemesi yangın olmadığı anlamına gelmez.', 'Cloud, heavy smoke or tree canopy can hide a fire from satellites. Not being on the map does not mean there is no fire.'), [nasaFaq]),
-      LessonCard(Bi('Araçların yolunu kapatmayın', 'Keep the way clear'), Bi('Söndürme araçlarının köy içinden geçmesini engelleyecek şeylerden kaçının.', 'Avoid anything that would stop firefighting vehicles passing through the village.'), [ogmMugla]),
-      LessonCard(Bi('Talimatlara uyun', 'Follow instructions'), Bi('Yangın evlere yaklaşırsa kapı ve pencereleri kapatın. Görevlilerin talimatlarına göre hareket edin.', 'If a fire comes near houses, close doors and windows. Act on the instructions of the officials.'), [ogmMugla]),
+      LessonCard('📞', Bi('Önce ara', 'Call first'), Bi('Ateş ya da duman görürsen hemen 112’yi ara. 177 orman yangını hattını da arayabilirsin.', 'If you see fire or smoke, call 112 right away. You can also call the 177 forest fire line.'), [ogmKonya]),
+      LessonCard('☁️🛰️', Bi('Uydu her şeyi göremez', 'Satellites cannot see everything'), Bi('Bulut ya da kalın duman, yangını uydudan saklayabilir.', 'Clouds or thick smoke can hide a fire from satellites.'), [nasaFaq]),
+      LessonCard('🚒', Bi('Yolu açık bırak', 'Keep the way clear'), Bi('Söndürme araçları köyden geçebilsin. Yollarını kapatma.', 'Firefighting vehicles must be able to pass through the village. Do not block their way.'), [ogmMugla]),
+      LessonCard('🚪', Bi('Görevlileri dinle', 'Listen to the officials'), Bi('Yangın evlere yaklaşırsa kapı ve pencereleri kapat. Görevliler ne derse onu yap.', 'If a fire comes near houses, close doors and windows. Do what the officials say.'), [ogmMugla]),
     ],
     [
-      QuizQuestion(Bi('Ormanda duman gördünüz. Önce ne yaparsınız?', 'You see smoke in a forest. What do you do first?'), [Bi('112’yi ararım', 'I call 112'), Bi('Haritada var mı diye bakarım', 'I check whether it is on the map'), Bi('Yaklaşıp fotoğraf çekerim', 'I go closer to take a photo')], 0, Bi('Önce arayın. Uydular her yangını göremez.', 'Call first. Satellites cannot see every fire.'), ogmKonya),
-      QuizQuestion(Bi('Haritada tespit görünmüyor. Bu ne demek?', 'The map shows no detection. What does that mean?'), [Bi('Orada yangın yoktur', 'There is no fire there'), Bi('Uydular orada bir şey tespit etmedi', 'Satellites detected nothing there'), Bi('Yangın söndürülmüştür', 'The fire has been put out')], 1, Bi('Uydular bir yangını bulut veya duman yüzünden göremeyebilir.', 'Satellites can miss a fire because of cloud or smoke.'), nasaFaq),
+      QuizQuestion(Bi('Ormanda duman gördün. Önce ne yaparsın?', 'You see smoke in a forest. What do you do first?'), [Bi('112’yi ararım', 'I call 112'), Bi('Haritaya bakarım', 'I check the map'), Bi('Yaklaşıp fotoğraf çekerim', 'I go closer to take a photo')], 0, Bi('Önce ara. Uydular her yangını göremez.', 'Call first. Satellites cannot see every fire.'), ogmKonya),
+      QuizQuestion(Bi('Haritada tespit yoksa, orada kesin yangın yok mu demektir?', 'If the map shows no detection, does that mean there is surely no fire?'), [Bi('Evet, kesin yoktur', 'Yes, surely none'), Bi('Hayır, uydu göremeyebilir', 'No, the satellite may not see it')], 1, Bi('Bulut ya da duman yangını saklayabilir.', 'Clouds or smoke can hide a fire.'), nasaFaq),
     ],
   ),
   NatureLesson(
     'how_fires_start',
     Bi('Yangınlar nasıl başlar?', 'How fires start'),
     [
-      LessonCard(Bi('Küçük bir kor yeter', 'A small ember is enough'), Bi('FAO’nun yangın nedenleri listesinde sigara, sıcak kül ve havai fişek gibi kor taşıyan şeyler var.', 'The FAO list of causes includes glowing objects such as cigarettes, hot ashes and fireworks.'), [faoFire]),
-      LessonCard(Bi('İzmarit', 'Cigarette ends'), Bi('Sigara izmaritini tamamen söndürmeden atmayın.', 'Do not throw a cigarette end away before it is fully out.'), [ogmMugla]),
-      LessonCard(Bi('Evin çevresi', 'Around the house'), Bi('Odun, kozalak ve benzeri malzemeleri evlerden uzakta istifleyin.', 'Stack wood, cones and similar materials away from houses.'), [ogmMugla]),
+      LessonCard('✨', Bi('Küçük bir kor yeter', 'A small ember is enough'), Bi('Sigara, sıcak kül ve havai fişek yangın çıkarabilir.', 'Cigarettes, hot ashes and fireworks can start a fire.'), [faoFire]),
+      LessonCard('🚬', Bi('İzmarit', 'Cigarette ends'), Bi('Sigara izmariti iyice sönmeden atılmaz.', 'A cigarette end must not be thrown away before it is fully out.'), [ogmMugla]),
+      LessonCard('🪵', Bi('Evin çevresi', 'Around the house'), Bi('Odun ve kozalakları evden uzakta biriktir.', 'Keep wood and cones away from the house.'), [ogmMugla]),
     ],
     [
-      QuizQuestion(Bi('Hangisi yangın nedenleri listesinde yer alır?', 'Which of these is on the list of causes?'), [Bi('Sıcak kül', 'Hot ashes'), Bi('Yağmur suyu', 'Rainwater'), Bi('Taş duvar', 'A stone wall')], 0, Bi('Sıcak kül, kor taşıyan nedenler arasındadır.', 'Hot ashes are among the glowing causes.'), faoFire),
+      QuizQuestion(Bi('Hangisi yangın çıkarabilir?', 'Which of these can start a fire?'), [Bi('Sıcak kül', 'Hot ashes'), Bi('Yağmur suyu', 'Rainwater'), Bi('Taş duvar', 'A stone wall')], 0, Bi('Sıcak kül yangın çıkarabilir.', 'Hot ashes can start a fire.'), faoFire),
     ],
   ),
   NatureLesson(
     'after_fire',
     Bi('Yanan orman nasıl yenilenir?', 'How a burned forest recovers'),
     [
-      LessonCard(Bi('Yangının şiddeti sonucu değiştirir', 'Fire severity changes the outcome'), Bi('Kastamonu’daki bir araştırmada yerdeki örtüyü yakan yangından sonra karaçam baskın tür olarak kaldı.', 'In a Kastamonu study, black pine stayed dominant after a surface fire.'), [forestJournal]),
-      LessonCard(Bi('Tepe yangınından sonra', 'After a crown fire'), Bi('Aynı araştırmada ağaç tepelerine çıkan yangının alanında baskın bitki defne yapraklı laden oldu.', 'In the same study, a rockrose shrub was dominant where the fire reached the treetops.'), [forestJournal]),
-      LessonCard(Bi('Tek yöntem yok', 'There is no single method'), Bi('Soma’da 701 hektar orman için OGM şu planı açıkladı: 249 hektar doğal gençleştirme, 240 hektar yapay gençleştirme, 212 hektar ağaçlandırma.', 'For 701 hectares of forest in Soma, OGM announced: 249 hectares natural regeneration, 240 artificial regeneration, 212 afforestation.'), [ogmSoma]),
-      LessonCard(Bi('Alan korunur', 'The area is protected'), Bi('OGM’ye göre Soma’daki saha, yeşil örtü yeniden oluşana kadar koruma altında tutulacak.', 'According to OGM, the Soma site will be protected until green cover forms again.'), [ogmSoma]),
+      LessonCard('🌲', Bi('Her yangın aynı değil', 'No two fires are the same'), Bi('Kastamonu’da yerdeki otları yakan bir yangından sonra en çok karaçam görüldü.', 'In Kastamonu, black pine was the most common tree after a fire that burned the ground.'), [forestJournal]),
+      LessonCard('🌿', Bi('Tepeler yanınca', 'When the treetops burn'), Bi('Ağaç tepeleri de yanan yerde en çok laden adlı çalı görüldü.', 'Where the treetops burned too, a shrub called rockrose was the most common.'), [forestJournal]),
+      LessonCard('🌱', Bi('Üç yol var', 'There are three ways'), Bi('Soma’da yanan orman için üç yol seçildi: Orman kendi yenilensin, insanlar yardım etsin, yeni ağaç dikilsin.', 'Three ways were chosen for the burned forest in Soma: let it renew itself, help it along, and plant new trees.'), [ogmSoma]),
+      LessonCard('🛡️', Bi('Alan korunur', 'The area is protected'), Bi('Soma’daki alan yeniden yeşerene kadar korunacak.', 'The area in Soma will be protected until it is green again.'), [ogmSoma]),
     ],
     [
-      QuizQuestion(Bi('Yanan bir alan için hangisi doğru?', 'Which is true of a burned area?'), [Bi('Yangının şiddetine göre sonuç değişebilir', 'The outcome can differ with fire severity'), Bi('Her alan aynı ormana döner', 'Every area returns to the same forest'), Bi('Yanan alana hiçbir şey yapılmaz', 'Nothing is ever done on a burned area')], 0, Bi('Yangının şiddeti sonrasında gelen bitkileri etkiler.', 'Fire severity affects which plants come back.'), forestJournal),
+      QuizQuestion(Bi('Yanan bir orman için hangisi doğru?', 'Which is true of a burned forest?'), [Bi('Yangına göre sonuç değişebilir', 'The result can differ from fire to fire'), Bi('Hepsi aynı ormana döner', 'All return to the same forest'), Bi('Hiçbir şey yapılmaz', 'Nothing is ever done')], 0, Bi('Yangın ne kadar güçlüyse sonrası da ona göre değişir.', 'What comes after depends on how strong the fire was.'), forestJournal),
     ],
   ),
   NatureLesson(
     'turkey_numbers',
     Bi('Türkiye’de yangın sayıları', 'Fire numbers in Türkiye'),
     [
-      LessonCard(Bi('En büyük yıl', 'The largest year'), Bi('2016-2025 arasında en çok alanın yandığı yıl 2021: 139.503 hektar.', 'Between 2016 and 2025, the year with the most burned area was 2021: 139,503 hectares.'), [ogmStats]),
-      LessonCard(Bi('Yangın sayısı ve alan aynı şey değil', 'Number of fires is not burned area'), Bi('En çok yangın 2024’te çıktı (3.797), ama o yıl yanan alan 27.485 hektardı.', 'The most fires were in 2024 (3,797), but the burned area that year was 27,485 hectares.'), [ogmStats]),
-      LessonCard(Bi('Yıllar çok değişir', 'Years differ widely'), Bi('En az alanın yandığı yıl 2018: 5.644 hektar. 2025’te 81.473 hektar yandı.', 'The least burned area was in 2018: 5,644 hectares. In 2025, 81,473 hectares burned.'), [ogmStats]),
+      LessonCard('🔥', Bi('En büyük yıl', 'The biggest year'), Bi('2016 ile 2025 arasında en çok orman 2021’de yandı.', 'Between 2016 and 2025, the most forest burned in 2021.'), [ogmStats]),
+      LessonCard('🔢', Bi('Çok yangın, büyük yangın değil', 'Many fires are not big fires'), Bi('En çok yangın 2024’te çıktı. Ama en çok orman o yıl yanmadı.', 'The most fires started in 2024. But that was not the year the most forest burned.'), [ogmStats]),
+      LessonCard('📉', Bi('Yıllar çok değişir', 'Years differ a lot'), Bi('En az alan 2018’de yandı. 2025’te bunun 14 katından fazlası yandı.', 'The least land burned in 2018. In 2025, more than 14 times that burned.'), [ogmStats]),
     ],
     [
-      QuizQuestion(Bi('En çok yangın çıkan yıl, en çok alanın yandığı yıl mıdır?', 'Is the year with the most fires also the year with the most burned area?'), [Bi('Her zaman evet', 'Always yes'), Bi('Hayır, 2016-2025 verisinde farklı yıllar', 'No, in the 2016-2025 data they are different years')], 1, Bi('En çok yangın 2024’te, en çok yanan alan 2021’de.', 'Most fires in 2024, most burned area in 2021.'), ogmStats),
+      QuizQuestion(Bi('En çok yangın çıkan yıl, en çok orman yanan yıl mı?', 'Is the year with the most fires also the year the most forest burned?'), [Bi('Her zaman evet', 'Always yes'), Bi('Hayır, farklı yıllar', 'No, they are different years')], 1, Bi('En çok yangın 2024’te, en çok yanan alan 2021’de.', 'Most fires in 2024, most land burned in 2021.'), ogmStats),
     ],
   ),
 ];
@@ -147,23 +128,21 @@ enum NatureTaskKind { shareRisk, shareFact, burnedArea, citizenScience, doLesson
 class NatureTask {
   final String id;
   final NatureTaskKind kind;
+  final Bi title;
   final Bi text;
   final NatureSource? source;
   final Set<int>? months;
-  const NatureTask(this.id, this.kind, this.text, {this.source, this.months});
+  const NatureTask(this.id, this.kind, this.title, this.text, {this.source, this.months});
 }
 
-/// Data-linked first; a task saying only "be good" does not belong here.
 /// None of them asks anyone to go near a fire, and reporting a fire or
 /// calling 112 is never a task or a reward.
 const List<NatureTask> natureTasks = [
-  NatureTask('share_risk', NatureTaskKind.shareRisk, Bi('Bölgenizin bugünkü yangın riskini bir yakınınızla paylaştınız mı?', 'Did you share your region’s fire risk today with someone close?')),
-  NatureTask('share_fact', NatureTaskKind.shareFact, Bi('Günün doğa bilgisini kaynağıyla birlikte paylaştınız mı?', 'Did you share today’s nature fact with its source?')),
-  NatureTask('burned_area', NatureTaskKind.burnedArea, Bi('İlinizin yanan alan geçmişine haritadaki Geçmiş yıllar katmanından baktınız mı?', 'Did you check your province’s burned-area history on the map’s Past years layer?')),
-  NatureTask('inat', NatureTaskKind.citizenScience, Bi('Gördüğünüz bir bitki veya hayvanı iNaturalist’e eklediniz mi? Gözlemler bilim insanlarının kullandığı açık veriye dönüşür.', 'Did you add a plant or animal you saw to iNaturalist? Observations become open data used by scientists.'), source: inaturalist),
-  NatureTask('lesson', NatureTaskKind.doLesson, Bi('Bugün kısa bir ders bitirdiniz mi?', 'Did you finish a short lesson today?')),
-  NatureTask('wood', NatureTaskKind.prevention, Bi('Evinizin çevresindeki odun ve kozalakları evden uzağa aldınız mı?', 'Did you move wood and cones away from your house?'), source: ogmMugla, months: {5, 6, 7, 8, 9, 10}),
-  NatureTask('ash', NatureTaskKind.prevention, Bi('Soba veya şömine külünü tamamen soğuduğundan emin olduktan sonra mı attınız?', 'Did you make sure stove or fireplace ash was fully cold before throwing it away?'), source: faoFire, months: {11, 12, 1, 2, 3}),
+  NatureTask('share_risk', NatureTaskKind.shareRisk, Bi('📣 Riski bir yakınına söyle!', '📣 Tell someone about the risk!'), Bi('Bölgenin bugünkü yangın riskini bir yakınınla paylaş.', 'Share today’s fire risk for your region with someone close.')),
+  NatureTask('share_fact', NatureTaskKind.shareFact, Bi('💡 Bir bilgi paylaş!', '💡 Share a fact!'), Bi('Bugünün bilgisini kaynağıyla birine gönder.', 'Send today’s fact and its source to someone.')),
+  NatureTask('burned_area', NatureTaskKind.burnedArea, Bi('🗺️ İlinin geçmişine bak!', '🗺️ Look at your province’s past!'), Bi('Haritadaki Geçmiş yıllar katmanını aç.', 'Open the Past years layer on the map.')),
+  NatureTask('inat', NatureTaskKind.citizenScience, Bi('🦋 Bir canlı fotoğrafla!', '🦋 Photograph a living thing!'), Bi('Gördüğün bir bitki ya da böceği bir büyüğünle iNaturalist’e ekle.', 'Add a plant or insect you saw to iNaturalist with an adult.'), source: inaturalist),
+  NatureTask('lesson', NatureTaskKind.doLesson, Bi('📚 Bir ders bitir!', '📚 Finish a lesson!'), Bi('Kısa bir ders yap, yeni bir elma kazan.', 'Do a short lesson and win a new apple.')),
+  NatureTask('wood', NatureTaskKind.prevention, Bi('🪵 Odunları evden uzağa al!', '🪵 Move the wood away from the house!'), Bi('Odun ve kozalakları evden uzakta biriktir.', 'Keep wood and cones away from the house.'), source: ogmMugla, months: {5, 6, 7, 8, 9, 10}),
+  NatureTask('ash', NatureTaskKind.prevention, Bi('🔥 Külü soğumadan atma!', '🔥 Do not throw away hot ash!'), Bi('Sıcak kül yangın çıkarabilir. İyice soğumasını bekle, sonra at.', 'Hot ash can start a fire. Wait until it is fully cold, then throw it away.'), source: faoFire, months: {11, 12, 1, 2, 3}),
 ];
-
-enum WeeklyGoal { days, lesson, shares }

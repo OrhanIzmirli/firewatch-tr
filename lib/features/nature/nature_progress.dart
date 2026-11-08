@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_android/shared_preferences_android.dart';
 
 import 'nature_content.dart';
+import 'tree.dart';
 
-/// All Nature progress. It lives only on this phone and is never sent
-/// anywhere; deleting the app or using "delete" below removes it.
+/// All Fidan progress. Kept on this phone, in a file of its own so that
+/// Android backup can take this file and nothing else. It reaches the cloud
+/// only for someone who signs in with Google, and then only [cloudJson].
 class NatureProgress {
   /// 'yyyy-MM-dd' to true (did it) or false (not today). Both keep the day.
   final Map<String, bool> days;
@@ -139,16 +143,6 @@ NatureTask taskFor(DateTime today, {required bool swapped}) {
   return pool[(dayNumber + (swapped ? 1 : 0)) % pool.length];
 }
 
-NatureFact factFor(DateTime today) {
-  final dayNumber = DateTime.utc(today.year, today.month, today.day).millisecondsSinceEpoch ~/ 86400000;
-  return natureFacts[dayNumber % natureFacts.length];
-}
-
-WeeklyGoal goalFor(DateTime today) {
-  final week = _monday(today).toUtc().millisecondsSinceEpoch ~/ (7 * 86400000);
-  return WeeklyGoal.values[week % WeeklyGoal.values.length];
-}
-
 /// The next reminders, one a day at most. Today is left out when its task
 /// is already marked or the time has passed. Only a week is ever queued, so
 /// someone who stops opening the tab stops being reminded.
@@ -162,34 +156,150 @@ List<DateTime> reminderTimes(DateTime now, {required int hour, required int minu
   return out;
 }
 
-enum NatureBadge { firstStep, sevenDays, thirtyDays, fourSeasons, curious, knowledgeable, sharer, observer }
+/// Days the task was really done; an old "not today" keeps the streak only.
+int activeDays(NatureProgress p) => p.days.values.where((done) => done).length;
 
-Set<NatureBadge> earnedBadges(NatureProgress p) {
-  int season(String key) => ((int.parse(key.substring(5, 7)) % 12) / 3).floor();
-  final allLessons = natureLessons.every((l) => p.lessons.contains(l.id));
-  return {
-    if (p.days.isNotEmpty) NatureBadge.firstStep,
-    if (p.days.length >= 7) NatureBadge.sevenDays,
-    if (p.days.length >= 30) NatureBadge.thirtyDays,
-    if (p.days.keys.map(season).toSet().length == 4) NatureBadge.fourSeasons,
-    if (p.lessons.length >= 2) NatureBadge.curious,
-    if (allLessons) NatureBadge.knowledgeable,
-    if (p.shares >= 5) NatureBadge.sharer,
-    if (p.observations >= 3) NatureBadge.observer,
-  };
+/// Ten for a task, twenty for a lesson, five for a share or an observation.
+int xpOf(NatureProgress p) => activeDays(p) * 10 + p.lessons.length * 20 + p.shares * 5 + p.observations * 5;
+
+/// 0 seed, 1 sprout, 2 sapling, 3 young tree, 4 in blossom, 5 with fruit.
+int treeStage(NatureProgress p) {
+  final n = activeDays(p);
+  if (n >= 90) return 5;
+  if (n >= 60) return 4;
+  if (n >= 30) return 3;
+  if (n >= 7) return 2;
+  return n > 0 || p.lessons.isNotEmpty ? 1 : 0;
+}
+
+const weeklyGoalDays = 4;
+
+Season seasonOf(DateTime d) => switch (d.month) {
+      12 || 1 || 2 => Season.winter,
+      3 || 4 || 5 => Season.spring,
+      6 || 7 || 8 => Season.summer,
+      _ => Season.autumn,
+    };
+
+/// Three days without water. The tree only looks a little thirsty; it never dies.
+bool isThirsty(NatureProgress p, DateTime today) {
+  if (p.days.isEmpty) return false;
+  return !List.generate(3, (i) => DateTime(today.year, today.month, today.day - i)).any((d) => p.days[dayKey(d)] == true);
+}
+
+class Apple {
+  final String id;
+
+  /// A lesson id, or null when the apple is for a week's goal.
+  final String? lesson;
+
+  /// 'yyyy-MM-dd' of the Monday, for a week's goal.
+  final String? week;
+  const Apple.lesson(String this.lesson)
+      : id = 'lesson:$lesson',
+        week = null;
+  const Apple.week(String this.week)
+      : id = 'week:$week',
+        lesson = null;
+}
+
+/// One apple per finished lesson and per week with the goal met.
+List<Apple> applesOf(NatureProgress p) {
+  final perWeek = <String, int>{};
+  for (final e in p.days.entries) {
+    if (!e.value) continue;
+    final week = dayKey(_monday(DateTime.parse(e.key)));
+    perWeek[week] = (perWeek[week] ?? 0) + 1;
+  }
+  final weeks = perWeek.entries.where((e) => e.value >= weeklyGoalDays).map((e) => e.key).toList()..sort();
+  return [for (final l in natureLessons) if (p.lessons.contains(l.id)) Apple.lesson(l.id), for (final w in weeks) Apple.week(w)];
+}
+
+/// The only fields that ever reach the cloud. Province, reminder settings
+/// and anything about location stay on the phone.
+Map<String, dynamic> cloudJson(NatureProgress p) => {
+      'days': p.days,
+      'lessons': p.lessons.toList()..sort(),
+      'shares': p.shares,
+      'observations': p.observations,
+      'longestStreak': p.longestStreak,
+    };
+
+/// Nothing earned on either phone is lost: days and lessons add up, counts
+/// keep the larger value, and a day done on one phone stays done.
+NatureProgress mergeProgress(NatureProgress local, Map<String, dynamic> remote) {
+  final other = NatureProgress.fromJson(remote);
+  final days = {...other.days};
+  local.days.forEach((k, v) => days[k] = v || (days[k] ?? false));
+  int max(int a, int b) => a > b ? a : b;
+  return local.copyWith(
+    days: days,
+    lessons: {...local.lessons, ...other.lessons},
+    shares: max(local.shares, other.shares),
+    observations: max(local.observations, other.observations),
+    longestStreak: max(local.longestStreak, other.longestStreak),
+  );
+}
+
+abstract class NatureStorage {
+  Future<String?> read();
+  Future<void> write(String value);
+  Future<void> clear();
+}
+
+/// `nature_progress.xml`, the one file the backup rules include.
+class _AndroidFileStorage implements NatureStorage {
+  static const _key = 'progress';
+  final _prefs = SharedPreferencesAsync(
+    options: const SharedPreferencesAsyncAndroidOptions(
+      backend: SharedPreferencesAndroidBackendLibrary.SharedPreferences,
+      originalSharedPreferencesOptions: AndroidSharedPreferencesStoreOptions(fileName: 'nature_progress'),
+    ),
+  );
+  @override
+  Future<String?> read() => _prefs.getString(_key);
+  @override
+  Future<void> write(String value) => _prefs.setString(_key, value);
+  @override
+  Future<void> clear() => _prefs.remove(_key);
+}
+
+class _PrefsStorage implements NatureStorage {
+  static const _key = 'nature_progress_file';
+  @override
+  Future<String?> read() async => (await SharedPreferences.getInstance()).getString(_key);
+  @override
+  Future<void> write(String value) async => (await SharedPreferences.getInstance()).setString(_key, value);
+  @override
+  Future<void> clear() async => (await SharedPreferences.getInstance()).remove(_key);
 }
 
 class NatureStore extends ChangeNotifier {
   NatureStore._();
   static final NatureStore instance = NatureStore._();
-  static const _key = 'nature_progress_v1';
+
+  /// Where progress lived before it had a file of its own.
+  static const _legacyKey = 'nature_progress_v1';
+
+  NatureStorage storage = !kIsWeb && Platform.isAndroid ? _AndroidFileStorage() : _PrefsStorage();
+
+  /// Called after every change; the signed-in account uses it to sync.
+  void Function(NatureProgress)? onSaved;
 
   NatureProgress progress = const NatureProgress();
   bool loaded = false;
 
   Future<void> load() async {
-    final raw = (await SharedPreferences.getInstance()).getString(_key);
     try {
+      var raw = await storage.read();
+      if (raw == null) {
+        final prefs = await SharedPreferences.getInstance();
+        raw = prefs.getString(_legacyKey);
+        if (raw != null) {
+          await storage.write(raw);
+          await prefs.remove(_legacyKey);
+        }
+      }
       if (raw != null) progress = NatureProgress.fromJson(jsonDecode(raw) as Map<String, dynamic>);
     } catch (_) {
       progress = const NatureProgress();
@@ -203,7 +313,15 @@ class NatureStore extends ChangeNotifier {
     final streak = currentStreak(next.days, today);
     progress = streak > next.longestStreak ? next.copyWith(longestStreak: streak) : next;
     notifyListeners();
-    await (await SharedPreferences.getInstance()).setString(_key, jsonEncode(progress.toJson()));
+    await storage.write(jsonEncode(progress.toJson()));
+    onSaved?.call(progress);
+  }
+
+  /// A merge from the cloud; saved here but not sent straight back.
+  Future<void> replace(NatureProgress next) async {
+    progress = next;
+    notifyListeners();
+    await storage.write(jsonEncode(progress.toJson()));
   }
 
   Future<void> mark(DateTime today, bool done) =>
@@ -216,6 +334,7 @@ class NatureStore extends ChangeNotifier {
   Future<void> deleteAll() async {
     progress = const NatureProgress();
     notifyListeners();
-    await (await SharedPreferences.getInstance()).remove(_key);
+    await storage.clear();
+    await (await SharedPreferences.getInstance()).remove(_legacyKey);
   }
 }

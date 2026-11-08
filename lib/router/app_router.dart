@@ -10,6 +10,7 @@ import '../features/home/main_shell_screen.dart';
 import '../features/language_selection/language_selection_screen.dart';
 import '../features/location_permission/location_permission_screen.dart';
 import '../features/news/news_detail_screen.dart';
+import '../features/nature/fidan_screen.dart';
 import '../features/notification_permission/notification_permission_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/risk/risk_screen.dart';
@@ -61,6 +62,7 @@ class AppRouter {
           if (query['tab'] == 'settings') return '/settings';
           // Alerts used to be a tab; old links and notification taps land here.
           if (query['tab'] == 'alerts' || query['section'] == 'alerts') return '/alerts';
+          if (query['tab'] == 'nature') return '/fidan';
           return null;
         },
         // NoTransitionPage: these routes only ever swap between the same
@@ -79,7 +81,6 @@ class AppRouter {
             case 'map': initialIndex = 1; break;
             case 'risk': initialIndex = 2; break;
             case 'news': initialIndex = 3; break;
-            case 'nature': initialIndex = 4; break;
             default: initialIndex = 0;
           }
           return NoTransitionPage(child: MainShellScreen(initialIndex: initialIndex));
@@ -164,6 +165,7 @@ class AppRouter {
         path: '/safety-guide',
         builder: (context, state) => const SafetyGuideScreen(),
       ),
+      GoRoute(path: '/fidan', builder: (context, state) => const FidanScreen()),
       GoRoute(
         path: '/alerts',
         builder: (context, state) => const NotificationsScreen(),

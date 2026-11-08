@@ -2075,7 +2075,7 @@ abstract class AppLocalizations {
   /// No description provided for @riskSummarySubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Open-Meteo / MET Norway hava verisi ve NASA FIRMS uydu tespitleriyle yaklaşık 3 saatte bir hesaplanır. Her bölgenin havası tek bir temsilî noktadan alınır.'**
+  /// **'Hava durumu ve uydu tespitlerine göre yaklaşık 3 saatte bir hesaplanır.'**
   String get riskSummarySubtitle;
 
   /// No description provided for @riskHighestRisk.
@@ -7355,7 +7355,7 @@ abstract class AppLocalizations {
   /// No description provided for @natureOnDevice.
   ///
   /// In tr, this message translates to:
-  /// **'İlerlemeniz yalnızca bu telefonda saklanır, sunucuya gönderilmez. Uygulamayı silerseniz kaybolur.'**
+  /// **'İlerlemeniz bu telefonda saklanır. Google ile giriş yaparsanız telefonlar arasında sizinle gelir. Konumunuz ve Yerlerim bu kayda hiç girmez.'**
   String get natureOnDevice;
 
   /// No description provided for @natureReminder.
@@ -7411,6 +7411,402 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Saat'**
   String get natureReminderTime;
+
+  /// No description provided for @fidanName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fidan'**
+  String get fidanName;
+
+  /// No description provided for @fidanStage0.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tohum'**
+  String get fidanStage0;
+
+  /// No description provided for @fidanStage1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Filiz'**
+  String get fidanStage1;
+
+  /// No description provided for @fidanStage2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fidan'**
+  String get fidanStage2;
+
+  /// No description provided for @fidanStage3.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genç ağaç'**
+  String get fidanStage3;
+
+  /// No description provided for @fidanStage4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çiçekli ağaç'**
+  String get fidanStage4;
+
+  /// No description provided for @fidanStage5.
+  ///
+  /// In tr, this message translates to:
+  /// **'Meyveli ağaç'**
+  String get fidanStage5;
+
+  /// No description provided for @fidanDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaptım ✓'**
+  String get fidanDone;
+
+  /// No description provided for @fidanTaskDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünkü görev tamam! Yarın yenisi gelecek.'**
+  String get fidanTaskDone;
+
+  /// No description provided for @fidanContinueLessons.
+  ///
+  /// In tr, this message translates to:
+  /// **'Derslere devam et'**
+  String get fidanContinueLessons;
+
+  /// No description provided for @fidanDidYouKnow.
+  ///
+  /// In tr, this message translates to:
+  /// **'💡 Biliyor muydun?'**
+  String get fidanDidYouKnow;
+
+  /// No description provided for @fidanThirsty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fidan seni bekliyor 💧'**
+  String get fidanThirsty;
+
+  /// No description provided for @fidanThirstyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz susadı, o kadar. Hazır olunca gel.'**
+  String get fidanThirstyBody;
+
+  /// No description provided for @fidanPath.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fidan’ın yolu'**
+  String get fidanPath;
+
+  /// No description provided for @fidanMoreLessons.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni dersler yolda'**
+  String get fidanMoreLessons;
+
+  /// No description provided for @fidanNewApple.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni elma! 🍎'**
+  String get fidanNewApple;
+
+  /// No description provided for @fidanRewardTask.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harika iş! Fidan çok mutlu.'**
+  String get fidanRewardTask;
+
+  /// No description provided for @fidanRewardLesson.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dersi bitirdin. Fidan çok mutlu.'**
+  String get fidanRewardLesson;
+
+  /// No description provided for @fidanContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam et'**
+  String get fidanContinue;
+
+  /// No description provided for @fidanCorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru! 🎉'**
+  String get fidanCorrect;
+
+  /// No description provided for @fidanWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir daha düşün.'**
+  String get fidanWrong;
+
+  /// No description provided for @fidanFullGrown.
+  ///
+  /// In tr, this message translates to:
+  /// **'🎉 Fidan kocaman bir meyve ağacı oldu! Ona çok iyi baktın.'**
+  String get fidanFullGrown;
+
+  /// No description provided for @fidanNoApples.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz elma yok. Bir ders bitir, ilk elman gelsin!'**
+  String get fidanNoApples;
+
+  /// No description provided for @fidanShare.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ağacımı paylaş'**
+  String get fidanShare;
+
+  /// No description provided for @fidanReminderChannel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğa notları'**
+  String get fidanReminderChannel;
+
+  /// No description provided for @fidanAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap'**
+  String get fidanAccount;
+
+  /// No description provided for @fidanAccountNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon değişince ağacın seninle gelsin. Zorunlu değil.'**
+  String get fidanAccountNone;
+
+  /// No description provided for @fidanContinueGoogle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile devam et'**
+  String get fidanContinueGoogle;
+
+  /// No description provided for @fidanSignInTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ağacınız sizinle gelsin'**
+  String get fidanSignInTitle;
+
+  /// No description provided for @fidanSignInBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon değişince ilerlemeniz kaybolmaz. Hesap açmak zorunlu değil.'**
+  String get fidanSignInBody;
+
+  /// No description provided for @fidanSavedList.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilenler: seri, XP, elmalar, dersler ve ağacınız.'**
+  String get fidanSavedList;
+
+  /// No description provided for @fidanNeverSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz ve Yerlerim asla kaydedilmez.'**
+  String get fidanNeverSaved;
+
+  /// No description provided for @fidanCanDelete.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınızı ve ilerlemenizi istediğiniz an silebilirsiniz.'**
+  String get fidanCanDelete;
+
+  /// No description provided for @fidanUnder13.
+  ///
+  /// In tr, this message translates to:
+  /// **'13 yaşından küçükseniz bir yetişkinle birlikte kullanın.'**
+  String get fidanUnder13;
+
+  /// No description provided for @fidanSkip.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdilik geç'**
+  String get fidanSkip;
+
+  /// No description provided for @fidanSignInFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile giriş şu an yapılamıyor. Daha sonra tekrar deneyin.'**
+  String get fidanSignInFailed;
+
+  /// No description provided for @fidanSignedIn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile giriş yapıldı'**
+  String get fidanSignedIn;
+
+  /// No description provided for @fidanSignOut.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış yap'**
+  String get fidanSignOut;
+
+  /// No description provided for @fidanDeleteAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabı ve ilerlememi sil'**
+  String get fidanDeleteAccount;
+
+  /// No description provided for @fidanDeleteAccountBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınız, buluttaki ilerlemeniz ve bu telefondaki ağacınız silinir. Bu işlem geri alınamaz.'**
+  String get fidanDeleteAccountBody;
+
+  /// No description provided for @fidanDeleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınız ve ilerlemeniz silindi.'**
+  String get fidanDeleted;
+
+  /// No description provided for @newsReadAtSource.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haberi kaynağında oku'**
+  String get newsReadAtSource;
+
+  /// No description provided for @newsFireStory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangının hikâyesi'**
+  String get newsFireStory;
+
+  /// No description provided for @newsInProvince.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlinizdeki haberler'**
+  String get newsInProvince;
+
+  /// No description provided for @newsStageStarted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başladı'**
+  String get newsStageStarted;
+
+  /// No description provided for @newsStageControlled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol altına alındı'**
+  String get newsStageControlled;
+
+  /// No description provided for @newsStageOut.
+  ///
+  /// In tr, this message translates to:
+  /// **'Söndürüldü'**
+  String get newsStageOut;
+
+  /// No description provided for @newsStageRestoration.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ağaçlandırma ve yenileme'**
+  String get newsStageRestoration;
+
+  /// No description provided for @newsStoryNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnızca bu yangınla eşleşen gerçek haberler gösterilir. Haber bulunmayan adımlar görünmez.'**
+  String get newsStoryNote;
+
+  /// No description provided for @newsStoryOther.
+  ///
+  /// In tr, this message translates to:
+  /// **'Diğer haberler'**
+  String get newsStoryOther;
+
+  /// No description provided for @fidanXpTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'{xp} XP'**
+  String fidanXpTotal(int xp);
+
+  /// No description provided for @fidanXpGain.
+  ///
+  /// In tr, this message translates to:
+  /// **'+{xp} XP'**
+  String fidanXpGain(int xp);
+
+  /// No description provided for @fidanGrew.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fidan büyüdü: {stage}!'**
+  String fidanGrew(String stage);
+
+  /// No description provided for @fidanWeekGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta {done}/{goal} gün'**
+  String fidanWeekGoal(int done, int goal);
+
+  /// No description provided for @fidanAppleLesson.
+  ///
+  /// In tr, this message translates to:
+  /// **'🍎 “{lesson}” dersini bitirdin'**
+  String fidanAppleLesson(String lesson);
+
+  /// No description provided for @fidanAppleWeek.
+  ///
+  /// In tr, this message translates to:
+  /// **'🍎 {week} haftasında hedefine ulaştın'**
+  String fidanAppleWeek(String week);
+
+  /// No description provided for @fidanShareCard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ağacım {days} günlük 🍎'**
+  String fidanShareCard(int days);
+
+  /// No description provided for @newsImageCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görüntü: NASA · {date}'**
+  String newsImageCredit(String date);
+
+  /// No description provided for @newsSameFire.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yangınla ilgili {count} haber'**
+  String newsSameFire(int count);
+
+  /// No description provided for @newsCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} haber'**
+  String newsCount(int count);
+
+  /// No description provided for @homeGridLast24h.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saat'**
+  String get homeGridLast24h;
+
+  /// No description provided for @homeGridNear.
+  ///
+  /// In tr, this message translates to:
+  /// **'100 km içinde'**
+  String get homeGridNear;
+
+  /// No description provided for @homeGridNationwide.
+  ///
+  /// In tr, this message translates to:
+  /// **'Türkiye geneli'**
+  String get homeGridNationwide;
+
+  /// No description provided for @homeGridNews.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 72 saat'**
+  String get homeGridNews;
+
+  /// No description provided for @homeGridLocationOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum kapalı'**
+  String get homeGridLocationOff;
+
+  /// No description provided for @fidanLocked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce önceki dersi bitir.'**
+  String get fidanLocked;
 }
 
 class _AppLocalizationsDelegate

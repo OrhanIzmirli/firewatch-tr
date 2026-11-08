@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and below. Same rule as nature_data_extraction_rules.xml. -->
+<full-backup-content>
+    <include domain="sharedpref" path="nature_progress.xml" />
+</full-backup-content>

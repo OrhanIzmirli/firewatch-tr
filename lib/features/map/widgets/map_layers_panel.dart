@@ -204,6 +204,7 @@ class _LayerPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget row(Iterable<Color> cells) => Expanded(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               for (final c in cells)
                 Expanded(child: Padding(padding: const EdgeInsets.all(0.5), child: ColoredBox(color: c))),

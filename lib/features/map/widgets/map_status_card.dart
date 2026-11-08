@@ -122,7 +122,9 @@ class MapStatusCard extends StatelessWidget {
             key: const Key('mapStatusBody'),
             style: GoogleFonts.ibmPlexSans(fontSize: 14.5, height: 1.35, fontWeight: FontWeight.w700, color: title),
           ),
-          const Padding(padding: EdgeInsets.only(top: 6), child: FactLine(place: 'map')),
+          // With large text the card must still show 112 without scrolling.
+          if (MediaQuery.textScalerOf(context).scale(10) <= 11)
+            const Padding(padding: EdgeInsets.only(top: 6), child: FactLine(place: 'map')),
           if (freshness == SystemFreshness.unavailable && onRetry != null)
             TextButton.icon(
               key: const Key('mapStatusRetry'),

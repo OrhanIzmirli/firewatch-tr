@@ -263,8 +263,9 @@ class _LessonPathScreenState extends State<LessonPathScreen> {
                       ],
                       if (current >= 0)
                         Positioned(
-                          left: (pts[current].dx - 130).clamp(0.0, w - 84),
-                          top: pts[current].dy + 44,
+                          // Beside the glowing stop, on the side its label does not use.
+                          left: pts[current].dx < w / 2 ? 2 : (pts[current].dx + 46).clamp(0.0, w - 72),
+                          top: pts[current].dy - 36,
                           child: TreeView(stage: treeStage(p), season: seasonOf(today), mood: Mood.happy, flowers: sectionsDone(p).length, size: 84),
                         ),
                     ],

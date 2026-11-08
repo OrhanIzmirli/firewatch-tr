@@ -6,6 +6,17 @@ import '../../l10n/app_localizations.dart';
 /// the /api/risk/summary backend endpoint. Used by any screen that shows
 /// risk-region data (Risk screen, Home screen overview cards, ...).
 
+/// Two missed runs of the 3-hourly calculator, as on the server.
+const Duration kRiskStaleAfter = Duration(hours: 6);
+
+/// A score too old to read as the current risk: the server says so, or a
+/// saved copy has aged past the limit since it was fetched.
+bool isRiskRowStale(Map<String, dynamic> row, {DateTime? now}) {
+  if (row['is_stale'] == true) return true;
+  final at = DateTime.tryParse('${row['created_at'] ?? ''}');
+  return at != null && (now ?? DateTime.now()).difference(at) > kRiskStaleAfter;
+}
+
 /// The single source of the risk bands: 0-24 Low, 25-49 Medium, 50-74 High,
 /// 75-100 Critical — the same cutoffs the backend uses for risk_level.
 /// Lower bound inclusive. Scores are indices, never probabilities.

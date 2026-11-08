@@ -2380,7 +2380,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustRiskSource =>
-      'Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.';
+      'Hava durumu verileri meteoroloji servislerinden alınır ve bölge puanları yaklaşık 3 saatte bir hesaplanır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.';
 
   @override
   String get trustRiskInterpret =>
@@ -2396,7 +2396,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustNewsSource =>
-      'Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.';
+      'Başlıklar, haber sitelerinin herkese açık RSS beslemelerinden ve resmî kurum sayfalarından yaklaşık 2 saatte bir toplanır.';
 
   @override
   String get trustNewsInterpret =>
@@ -3408,6 +3408,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskDataStale => 'Veri eski';
 
   @override
+  String get riskLastKnownView => 'Son bilinen risk';
+
+  @override
+  String get homeLastKnownDetections => 'Son bilinen uydu tespitleri';
+
+  @override
+  String get mapNearbyFiresSubtitleStale =>
+      'Konumunuza en yakın son bilinen tespitler';
+
+  @override
+  String natureShareRiskStale(String region, String level, int score) {
+    return '$region bölgesinde son bilinen yangın riski: $level ($score/100). Bu veri eski. Yangın görürseniz önce 112’yi arayın. FireWatch TR';
+  }
+
+  @override
   String riskCalculatedAt(String date) {
     return 'Hesaplama: $date';
   }
@@ -4177,7 +4192,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapStatusShowPoints => 'Noktaları göster';
 
   @override
-  String get mapLayerRiskDesc => 'Bölgelere göre bugünkü yangın riski.';
+  String get mapLayerRiskDesc => 'Bölgelere göre son hesaplanan yangın riski.';
 
   @override
   String get mapLayerAnnualDesc => 'İllere göre geçmiş yıllarda yanan alan.';

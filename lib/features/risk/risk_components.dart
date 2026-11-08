@@ -115,9 +115,6 @@ class RiskBreakdown {
   });
 }
 
-/// The server marks a score that is too old to read as the current risk.
-bool isRiskRowStale(Map<String, dynamic> row) => row['is_stale'] == true;
-
 num? _number(Object? value) => value is num ? value : num.tryParse('$value');
 
 /// Reads a row of /risk/summary or the answer of /risk/point.

@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
-import 'risk_components.dart';
 import '../../core/config/api_config.dart';
 import '../../core/config/feature_flags.dart';
 import '../../core/constants/app_spacing.dart';
@@ -490,6 +489,7 @@ class _RiskScreenState extends State<RiskScreen> {
     final avgRiskScore = _avgRisk.round();
     final trendDelta = riskTrendDelta(_regions);
 
+    final anyRegionStale = _regions.any(isRiskRowStale);
     DateTime? lastCalculated;
     for (final region in _regions) {
       final parsed = DateTime.tryParse((region['created_at'] ?? region['date'])?.toString() ?? '');
@@ -562,9 +562,18 @@ class _RiskScreenState extends State<RiskScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         StatusChip(
-                          label: _showingCached ? l10n.riskSavedView : l10n.riskLiveView,
-                          icon: _showingCached ? Icons.cloud_off_rounded : Icons.auto_graph_rounded,
-                          color: _showingCached ? AppColors.warning : null,
+                          key: const Key('riskViewChip'),
+                          label: _showingCached
+                              ? l10n.riskSavedView
+                              : anyRegionStale
+                                  ? l10n.riskLastKnownView
+                                  : l10n.riskLiveView,
+                          icon: _showingCached
+                              ? Icons.cloud_off_rounded
+                              : anyRegionStale
+                                  ? Icons.history_rounded
+                                  : Icons.auto_graph_rounded,
+                          color: _showingCached || anyRegionStale ? AppColors.warning : null,
                         ),
                         if (_showingCached) ...[
                           const SizedBox(height: AppSpacing.sm),
@@ -590,7 +599,7 @@ class _RiskScreenState extends State<RiskScreen> {
                               ),
                             ],
                           ),
-                          if (_regions.any(isRiskRowStale))
+                          if (anyRegionStale)
                             Text(
                               l10n.riskDataStale,
                               key: const Key('riskDataStale'),

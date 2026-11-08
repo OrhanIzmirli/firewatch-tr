@@ -10,6 +10,7 @@ import 'fire_api_service.dart';
 import 'notification_service.dart';
 import 'device_position.dart';
 import 'render_api_service.dart';
+import '../shared/widgets/system_status_line.dart';
 
 class FireMonitoringService {
   FireMonitoringService._();
@@ -94,7 +95,11 @@ class FireMonitoringService {
       final fires = await _fireApiService.fetchTurkeyFires();
 
       if (fires.isEmpty) {
-        statusNotifier.value = l10n.monitorStatusNoActiveFires;
+        // "No detections" may only be said about data that is known to be recent.
+        final status = await RenderApiService().fetchDetectionStatus();
+        statusNotifier.value = detectionsOutdated(status, DateTime.now())
+            ? l10n.detectionStaleTitle
+            : l10n.monitorStatusNoActiveFires;
         nearbyMatchesNotifier.value = <FirePoint>[];
         return;
       }

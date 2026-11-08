@@ -10,12 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/detection_status.dart';
 import '../../models/fire_point.dart';
 import '../../services/background_task_service.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../services/notification_service.dart';
+import '../../services/render_api_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
@@ -23,6 +25,7 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/system_status_line.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
 import '../../services/location_disclosure.dart';
@@ -47,6 +50,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   List<FirePoint> _highRiskFires = [];
 
   final FireApiService _fireApiService = FireApiService();
+  DetectionStatus? _detectionStatus;
   FireMonitoringService get _monitor => FireMonitoringService.instance;
 
   @override
@@ -92,6 +96,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Future<void> _loadFires() async {
     if (mounted) setState(() => _fireLoading = true);
+    RenderApiService().fetchDetectionStatus().then((status) {
+      if (mounted) setState(() => _detectionStatus = status);
+    }).catchError((Object _) {});
     try {
       final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
@@ -320,7 +327,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               StatusChip(
                                 label: _highRiskFires.isNotEmpty
                                     ? l10n.notificationsNewAlerts(_highRiskFires.length)
-                                    : l10n.notificationsUpToDate,
+                                    : detectionsOutdated(_detectionStatus, DateTime.now())
+                                        ? l10n.riskDataStale
+                                        : l10n.notificationsUpToDate,
                                 icon: Icons.notifications_active_rounded,
                               ),
                               const SizedBox(height: AppSpacing.lg),
@@ -525,7 +534,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           const SkeletonListLoader(count: 3)
                         else if (_highRiskFires.isEmpty)
                           GlassPanel(
-                            child: Text(l10n.notificationsNoHighRisk,
+                            child: Text(
+                                detectionsOutdated(_detectionStatus, DateTime.now())
+                                    ? '${l10n.detectionStaleTitle} ${l10n.detectionStaleBody}'
+                                    : l10n.notificationsNoHighRisk,
                                 style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
                           )
                         else

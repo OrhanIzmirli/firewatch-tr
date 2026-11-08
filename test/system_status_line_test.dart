@@ -18,6 +18,13 @@ void main() {
   final now = DateTime(2026, 11, 8, 12, 40);
   DetectionStatus quiet(Duration age) => DetectionStatus(kind: DetectionStatusKind.none, lastUpdateAt: now.subtract(age));
 
+  test('detectionsOutdated stays quiet until the status is known', () {
+    expect(detectionsOutdated(null, now), isFalse);
+    expect(detectionsOutdated(quiet(const Duration(minutes: 30)), now), isFalse);
+    expect(detectionsOutdated(quiet(const Duration(hours: 3)), now), isTrue);
+    expect(detectionsOutdated(const DetectionStatus(kind: DetectionStatusKind.unavailable), now), isTrue);
+  });
+
   group('systemFreshness', () {
     test('recent data is fresh, whether or not anything was detected', () {
       expect(systemFreshness(quiet(const Duration(minutes: 10)), now), SystemFreshness.fresh);

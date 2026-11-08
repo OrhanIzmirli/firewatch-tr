@@ -505,7 +505,8 @@ class FirePoint {
       riskRegionKey,
     );
     final regionScore = regionRisk?['general_risk_score'] as int?;
-    if (regionScore != null) {
+    // An old score is not "the region's current score": left out.
+    if (regionScore != null && !isRiskRowStale(regionRisk!)) {
       sentences.add(switch (riskLevelForScore(regionScore)) {
         'Critical' || 'High' => l10n.smartSpreadDangerous,
         'Medium' => l10n.smartSpreadModerate,

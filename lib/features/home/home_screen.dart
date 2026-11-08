@@ -10,7 +10,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
-import '../risk/risk_components.dart';
 import '../../core/config/api_config.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/auto_refresh.dart';
@@ -532,6 +531,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // confidence (e.g. "79") the same way markers/badges do elsewhere.
     // NASA's feed reaches back about two days; the cards say "last 24 hours".
     final now = DateTime.now().toUtc();
+    final outdated = detectionsOutdated(_detectionStatus, DateTime.now());
     final recentPoints = _firePoints.where((p) {
       final seen = p.detectionDateTimeUtc;
       return seen != null && now.difference(seen) <= const Duration(hours: 24);
@@ -667,7 +667,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 childAspectRatio: _cardRatio(context),
                 children: [
                   SmartOverviewCard(
-                    title: l10n.homeOverviewActiveFiresTitle,
+                    title: outdated ? l10n.homeLastKnownDetections : l10n.homeOverviewActiveFiresTitle,
                     value: activeFireCount.toString(),
                     subtitle: l10n.homeGridLast24h,
                     icon: Icons.local_fire_department_rounded,
@@ -734,7 +734,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
             const SizedBox(height: AppSpacing.xl),
             SectionHeader(
-              title: l10n.homeActiveThermalPoints,
+              title: outdated ? l10n.homeLastKnownDetections : l10n.homeActiveThermalPoints,
               icon: const FaIcon(FontAwesomeIcons.fireFlameCurved),
               trailing: TextButton(onPressed: () => context.go('/map'), child: Text(l10n.homeSeeOnMap)),
             ),

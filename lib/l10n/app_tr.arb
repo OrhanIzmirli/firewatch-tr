@@ -968,12 +968,12 @@
   "trustMapAction": "Ayrıntılar için işarete dokunun. Yangını kendiniz görürseniz önce 112'yi arayın, sonra Raporla'yı kullanın.",
 
   "trustRiskMeaning": "Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son uydu tespitlerini birleştiren bir endekstir; yangın çıkıp çıkmayacağını söylemez, garanti vermez.",
-  "trustRiskSource": "Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.",
+  "trustRiskSource": "Hava durumu verileri meteoroloji servislerinden alınır ve bölge puanları yaklaşık 3 saatte bir hesaplanır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.",
   "trustRiskInterpret": "Bölgenizin puanını listede Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.",
   "trustRiskAction": "Bölgeniz Kritik veya Yüksek risk gösteriyorsa açık ateşten kaçının ve herhangi bir dumanı hemen bildirin. Kişiselleştirilmiş bir döküm için \"Konumum\" sekmesine geçin.",
 
   "trustNewsMeaning": "Başlıklar yalnızca orman yangını, afet ve acil durumla ilgili haberleri tutacak şekilde otomatik olarak filtrelenir — ilgisiz siyasi veya spor haberleri hariç tutulur.",
-  "trustNewsSource": "Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.",
+  "trustNewsSource": "Başlıklar, haber sitelerinin herkese açık RSS beslemelerinden ve resmî kurum sayfalarından yaklaşık 2 saatte bir toplanır.",
   "trustNewsInterpret": "\"Son Dakika\" rozeti, makalenin çok yakın zamanda yayınlandığı anlamına gelir — orman yangını durumları hızla değişebileceğinden yayın saatini her zaman kontrol edin.",
   "trustNewsAction": "İngilizce olmayan makaleleri okumak için Çevir düğmesini kullanın veya bir haberdeki \"İlgili Yangınlar\"a dokunarak doğrudan o konuma haritada gidin.",
 
@@ -1311,6 +1311,11 @@
     "placeholders": { "score": { "type": "String" } }
   },
   "riskDataStale": "Veri eski",
+  "riskLastKnownView": "Son bilinen risk",
+  "homeLastKnownDetections": "Son bilinen uydu tespitleri",
+  "mapNearbyFiresSubtitleStale": "Konumunuza en yakın son bilinen tespitler",
+  "natureShareRiskStale": "{region} bölgesinde son bilinen yangın riski: {level} ({score}/100). Bu veri eski. Yangın görürseniz önce 112’yi arayın. FireWatch TR",
+  "@natureShareRiskStale": {"placeholders": {"region": {"type": "String"}, "level": {"type": "String"}, "score": {"type": "int"}}},
   "riskCalculatedAt": "Hesaplama: {date}",
   "@riskCalculatedAt": {
     "placeholders": { "date": { "type": "String" } }
@@ -1577,7 +1582,7 @@
   "mapStatusOtherLine": "Tarım/sanayi alanlarında {count} tespit var",
   "@mapStatusOtherLine": {"placeholders": {"count": {"type": "int"}}},
   "mapStatusShowPoints": "Noktaları göster",
-  "mapLayerRiskDesc": "Bölgelere göre bugünkü yangın riski.",
+  "mapLayerRiskDesc": "Bölgelere göre son hesaplanan yangın riski.",
   "mapLayerAnnualDesc": "İllere göre geçmiş yıllarda yanan alan.",
   "mapAnnualNote": "{year} yılında yanan alan. Bugünkü yangınları göstermez.",
   "@mapAnnualNote": {"placeholders": {"year": {"type": "String"}}},

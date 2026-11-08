@@ -156,6 +156,9 @@ void main() {
     expect(isRiskRowStale({'is_stale': true}), isTrue);
     expect(isRiskRowStale({'is_stale': false}), isFalse);
     expect(isRiskRowStale({}), isFalse);
+    final now = DateTime.utc(2026, 11, 8, 12);
+    expect(isRiskRowStale({'created_at': '2026-11-08T06:30:00Z'}, now: now), isFalse);
+    expect(isRiskRowStale({'created_at': '2026-11-08T05:30:00Z'}, now: now), isTrue, reason: 'a saved copy ages too');
   });
 
   group('RiskRegionList', () {
@@ -226,6 +229,13 @@ void main() {
   });
 
   group('source guards', () {
+    test('old risk is never titled as current', () {
+      final risk = File('lib/features/risk/risk_screen.dart').readAsStringSync();
+      expect(risk, contains(RegExp(r'anyRegionStale\s+\? l10n\.riskLastKnownView')));
+      final share = File('lib/features/nature/fidan_screen.dart').readAsStringSync();
+      expect(share, contains('isRiskRowStale(risk) ? l10n.natureShareRiskStale'));
+    });
+
     final src = File('lib/features/risk/risk_screen.dart').readAsStringSync();
 
     test('derived indicators and the duplicate sections are gone', () {

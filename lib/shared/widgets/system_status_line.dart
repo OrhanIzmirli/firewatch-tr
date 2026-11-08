@@ -26,6 +26,11 @@ SystemFreshness systemFreshness(DetectionStatus? status, DateTime now) {
   return now.difference(at) > kSystemStaleAfter ? SystemFreshness.stale : SystemFreshness.fresh;
 }
 
+/// The satellite data on screen cannot be called current. False until the
+/// status is known, so a loading screen does not flash a warning.
+bool detectionsOutdated(DetectionStatus? status, DateTime now) =>
+    status != null && systemFreshness(status, now) != SystemFreshness.fresh;
+
 /// HH:MM, with the date in front when it was not today.
 String _lastCheck(DateTime at, DateTime now) {
   String two(int n) => n.toString().padLeft(2, '0');

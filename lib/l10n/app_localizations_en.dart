@@ -2386,7 +2386,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustRiskSource =>
-      'Weather data is pulled from live meteorological feeds; fire counts factor in recent NASA FIRMS detections for each region.';
+      'Weather data comes from meteorological services and regional scores are calculated about every 3 hours; fire counts factor in recent NASA FIRMS detections for each region.';
 
   @override
   String get trustRiskInterpret =>
@@ -2402,7 +2402,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustNewsSource =>
-      'Articles are aggregated from 9 established Turkish news outlets via their public RSS feeds, refreshed continuously throughout the day.';
+      'Headlines are collected about every 2 hours from news sites\' public RSS feeds and official agency pages.';
 
   @override
   String get trustNewsInterpret =>
@@ -3415,6 +3415,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskDataStale => 'Data is out of date';
 
   @override
+  String get riskLastKnownView => 'Last known risk';
+
+  @override
+  String get homeLastKnownDetections => 'Last known satellite detections';
+
+  @override
+  String get mapNearbyFiresSubtitleStale =>
+      'Last known detections closest to your location';
+
+  @override
+  String natureShareRiskStale(String region, String level, int score) {
+    return 'Last known fire risk in $region: $level ($score/100). This data is out of date. If you see a fire, call 112 first. FireWatch TR';
+  }
+
+  @override
   String riskCalculatedAt(String date) {
     return 'Calculated: $date';
   }
@@ -4188,7 +4203,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapStatusShowPoints => 'Show points';
 
   @override
-  String get mapLayerRiskDesc => 'Today\'s fire risk by region.';
+  String get mapLayerRiskDesc => 'Latest calculated fire risk by region.';
 
   @override
   String get mapLayerAnnualDesc => 'Burned area by province in past years.';

@@ -471,7 +471,7 @@ class _FidanScreenState extends State<FidanScreen> {
         return button(
           l10n.natureShare,
           Icons.share_rounded,
-          () => _shareText(l10n.natureShareRisk(displayRegionName(l10n, '${risk['region']}'), riskLevelLabel(l10n, riskLevelForScore(score)), score)),
+          () => _shareText((isRiskRowStale(risk) ? l10n.natureShareRiskStale : l10n.natureShareRisk)(displayRegionName(l10n, '${risk['region']}'), riskLevelLabel(l10n, riskLevelForScore(score)), score)),
         );
       case NatureTaskKind.shareFact:
         final f = _fact;

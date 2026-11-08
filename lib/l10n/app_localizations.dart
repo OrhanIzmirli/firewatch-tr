@@ -4235,7 +4235,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustRiskSource.
   ///
   /// In tr, this message translates to:
-  /// **'Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.'**
+  /// **'Hava durumu verileri meteoroloji servislerinden alınır ve bölge puanları yaklaşık 3 saatte bir hesaplanır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.'**
   String get trustRiskSource;
 
   /// No description provided for @trustRiskInterpret.
@@ -4259,7 +4259,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustNewsSource.
   ///
   /// In tr, this message translates to:
-  /// **'Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.'**
+  /// **'Başlıklar, haber sitelerinin herkese açık RSS beslemelerinden ve resmî kurum sayfalarından yaklaşık 2 saatte bir toplanır.'**
   String get trustNewsSource;
 
   /// No description provided for @trustNewsInterpret.
@@ -5931,6 +5931,30 @@ abstract class AppLocalizations {
   /// **'Veri eski'**
   String get riskDataStale;
 
+  /// No description provided for @riskLastKnownView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bilinen risk'**
+  String get riskLastKnownView;
+
+  /// No description provided for @homeLastKnownDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bilinen uydu tespitleri'**
+  String get homeLastKnownDetections;
+
+  /// No description provided for @mapNearbyFiresSubtitleStale.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuza en yakın son bilinen tespitler'**
+  String get mapNearbyFiresSubtitleStale;
+
+  /// No description provided for @natureShareRiskStale.
+  ///
+  /// In tr, this message translates to:
+  /// **'{region} bölgesinde son bilinen yangın riski: {level} ({score}/100). Bu veri eski. Yangın görürseniz önce 112’yi arayın. FireWatch TR'**
+  String natureShareRiskStale(String region, String level, int score);
+
   /// No description provided for @riskCalculatedAt.
   ///
   /// In tr, this message translates to:
@@ -7176,7 +7200,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapLayerRiskDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Bölgelere göre bugünkü yangın riski.'**
+  /// **'Bölgelere göre son hesaplanan yangın riski.'**
   String get mapLayerRiskDesc;
 
   /// No description provided for @mapLayerAnnualDesc.

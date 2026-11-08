@@ -224,6 +224,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// The FireWatch risk score by region: the map's "Risk" layer.
   bool _showRegionRisk = false;
   bool _regionRiskFailed = false;
+  bool _regionRiskStale = false;
   Map<String, int> _regionScores = const {};
 
   DetectionStatus? _detectionStatus;
@@ -442,6 +443,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         _updateLayers(() {
           _regionScores = scores;
           _regionRiskFailed = scores.isEmpty;
+          _regionRiskStale = RiskDataCache.instance.regions.any(isRiskRowStale);
         });
       }
     } catch (_) {
@@ -1794,8 +1796,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               if (_showRegionRisk)
                 _overlayNote(
                   const Key('mapRiskNotFire'),
-                  _regionRiskFailed ? l10n.mapRiskUnavailable : l10n.riskColorsNotFire,
-                  _regionRiskFailed ? AppColors.warning : titleColor,
+                  _regionRiskFailed
+                      ? l10n.mapRiskUnavailable
+                      : _regionRiskStale
+                          ? '${l10n.riskDataStale} · ${l10n.riskColorsNotFire}'
+                          : l10n.riskColorsNotFire,
+                  _regionRiskFailed || _regionRiskStale ? AppColors.warning : titleColor,
                 ),
               if (_showAnnualHistory)
                 _overlayNote(
@@ -2223,7 +2229,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               SectionHeader(
                 key: CoachMarkKeys.mapNearbyFiresSection,
                 title: l10n.mapNearbyFires,
-                subtitle: l10n.mapNearbyFiresSubtitle,
+                subtitle: detectionsOutdated(_detectionStatus, DateTime.now()) ? l10n.mapNearbyFiresSubtitleStale : l10n.mapNearbyFiresSubtitle,
                 icon: const Icon(Icons.near_me_rounded),
               ),
               const SizedBox(height: AppSpacing.md),

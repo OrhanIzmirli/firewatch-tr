@@ -30,6 +30,11 @@ void main() {
     'Ceylanpınar': (36.85, 40.05),
     'Cizre': (37.33, 42.19),
     'Hakkari': (37.58, 43.74),
+    // Hakkari's south-east corner dips to about 37.0°N; an older
+    // "east of 44°E, south of 37.5°N is Iraq" rule dropped it, and
+    // "east of 44.5°E is Iran" dropped Esendere.
+    'Yüksekova south (Hakkari)': (37.30, 44.60),
+    'Esendere': (37.72, 44.60),
   };
   const foreign = <String, (double, double)>{
     'Lesbos (Mytilene)': (39.10, 26.55),
@@ -42,6 +47,10 @@ void main() {
     'Svilengrad (BG)': (41.77, 26.20),
     'Burgas (BG)': (42.50, 27.47),
     'Orestiada west bank (GR)': (41.50, 26.30),
+    // Real NASA rows from 7-8 Nov 2026 that passed the older boxes.
+    'Didymoteicho side (GR)': (41.44704, 26.49238),
+    'Zakho side (IQ) 1': (37.0779, 42.55581),
+    'Zakho side (IQ) 2': (37.08312, 42.54362),
     'Idlib (SY)': (35.93, 36.63),
     'Afrin (SY)': (36.51, 36.87),
     'Tell Abyad (SY)': (36.60, 38.95),

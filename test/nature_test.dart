@@ -140,6 +140,30 @@ void main() {
     });
   });
 
+  group('reminder', () {
+    final morning = DateTime(2026, 11, 8, 9);
+    test('at the chosen time, one a day, a week ahead', () {
+      final t = reminderTimes(morning, hour: 20, minute: 30, doneToday: false);
+      expect(t.length, 7);
+      expect(t.first, DateTime(2026, 11, 8, 20, 30));
+      expect(t.last, DateTime(2026, 11, 14, 20, 30));
+      expect(t.map((d) => dayKey(d)).toSet().length, 7);
+    });
+    test('not today once the task is marked', () {
+      final t = reminderTimes(morning, hour: 20, minute: 30, doneToday: true);
+      expect(t.first, DateTime(2026, 11, 9, 20, 30));
+      expect(t.length, 7);
+    });
+    test('not today once the time has passed', () {
+      expect(reminderTimes(DateTime(2026, 11, 8, 21), hour: 20, minute: 30, doneToday: false).first, DateTime(2026, 11, 9, 20, 30));
+    });
+    test('the time is kept', () {
+      final p = NatureProgress.fromJson(const NatureProgress(reminderHour: 7, reminderMinute: 45).toJson());
+      expect((p.reminderHour, p.reminderMinute), (7, 45));
+      expect((const NatureProgress().reminderHour, const NatureProgress().reminderMinute), (19, 0));
+    });
+  });
+
   group('privacy and defaults', () {
     test('the reminder is off until asked for', () {
       expect(const NatureProgress().reminder, isFalse);

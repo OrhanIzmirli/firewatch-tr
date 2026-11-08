@@ -9,6 +9,7 @@ import 'package:firewatch_tr/models/detection_status.dart';
 import 'package:firewatch_tr/models/fire_incident.dart';
 import 'package:firewatch_tr/shared/coach_mark_keys.dart';
 import 'package:firewatch_tr/shared/widgets/coach_mark_overlay.dart';
+import 'package:firewatch_tr/shared/widgets/bottom_bar_fit.dart';
 import 'package:firewatch_tr/shared/widgets/detection_safety_notice.dart';
 import 'package:firewatch_tr/shared/widgets/related_news_section.dart';
 import 'package:firewatch_tr/services/news_service.dart';
@@ -197,6 +198,46 @@ void main() {
     });
     test('keys exist', () {
       expect(CoachMarkKeys.mapNavIcon, isNotNull);
+    });
+  });
+
+  group('bottom bar', () {
+    const labels = ['Ana Sayfa', 'Harita', 'Risk', 'Haberler', 'Doğa'];
+    for (final width in [360.0, 411.0]) {
+      for (final scale in [1.0, 1.3]) {
+        testWidgets('five tabs at ${width.toInt()} dp, text x$scale', (t) async {
+          t.view.physicalSize = Size(width, 800) * 2;
+          t.view.devicePixelRatio = 2;
+          addTearDown(t.view.reset);
+          await t.pumpWidget(app(Align(
+            alignment: Alignment.bottomCenter,
+            child: BottomBarFit(
+              tabs: labels.length,
+              child: NavigationBar(
+                selectedIndex: 0,
+                destinations: [for (final l in labels) NavigationDestination(icon: const Icon(Icons.circle), label: l)],
+              ),
+            ),
+          ), scale: scale));
+          await t.pump();
+          expect(t.takeException(), isNull);
+          for (final l in labels) {
+            expect(find.text(l), findsOneWidget);
+            final text = t.widget<RichText>(find.descendant(of: find.text(l), matching: find.byType(RichText)));
+            expect(text.textScaler.scale(10) / 10, lessThanOrEqualTo(width < 400 ? 1.1 : 1.3));
+          }
+        });
+      }
+    }
+
+    test('alerts left the bar and moved to a bell on every tab', () {
+      final shell = File('lib/features/home/main_shell_screen.dart').readAsStringSync();
+      expect(RegExp('NavigationDestination\\(').allMatches(shell).length, 5);
+      expect(shell, isNot(contains('navAlerts')));
+      for (final f in ['home/home_screen', 'map/map_screen', 'risk/risk_screen', 'news/news_screen', 'nature/nature_screen']) {
+        expect(File('lib/features/$f.dart').readAsStringSync(), contains('AlertsBell()'), reason: f);
+      }
+      expect(File('lib/router/app_router.dart').readAsStringSync(), contains("path: '/alerts'"));
     });
   });
 

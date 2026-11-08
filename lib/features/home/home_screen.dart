@@ -51,6 +51,7 @@ import '../../core/utils/detection_summary.dart';
 import '../../services/point_risk_service.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/alerts_bell.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -727,6 +728,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: Text(l10n.appName, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
+          const AlertsBell(),
           IconButton(tooltip: l10n.navSettings, icon: const Icon(Icons.settings_outlined), onPressed: () => context.push('/settings')),
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadData),
         ],

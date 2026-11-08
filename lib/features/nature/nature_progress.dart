@@ -17,6 +17,8 @@ class NatureProgress {
   final String? swappedOn;
   final bool hideStreak;
   final bool reminder;
+  final int reminderHour;
+  final int reminderMinute;
   final String? plate;
 
   const NatureProgress({
@@ -28,6 +30,8 @@ class NatureProgress {
     this.swappedOn,
     this.hideStreak = false,
     this.reminder = false,
+    this.reminderHour = 19,
+    this.reminderMinute = 0,
     this.plate,
   });
 
@@ -40,6 +44,8 @@ class NatureProgress {
     String? swappedOn,
     bool? hideStreak,
     bool? reminder,
+    int? reminderHour,
+    int? reminderMinute,
     String? plate,
   }) =>
       NatureProgress(
@@ -51,6 +57,8 @@ class NatureProgress {
         swappedOn: swappedOn ?? this.swappedOn,
         hideStreak: hideStreak ?? this.hideStreak,
         reminder: reminder ?? this.reminder,
+        reminderHour: reminderHour ?? this.reminderHour,
+        reminderMinute: reminderMinute ?? this.reminderMinute,
         plate: plate ?? this.plate,
       );
 
@@ -63,6 +71,8 @@ class NatureProgress {
         'swappedOn': swappedOn,
         'hideStreak': hideStreak,
         'reminder': reminder,
+        'reminderHour': reminderHour,
+        'reminderMinute': reminderMinute,
         'plate': plate,
       };
 
@@ -75,6 +85,8 @@ class NatureProgress {
         swappedOn: j['swappedOn'] as String?,
         hideStreak: j['hideStreak'] == true,
         reminder: j['reminder'] == true,
+        reminderHour: (j['reminderHour'] as num?)?.toInt() ?? 19,
+        reminderMinute: (j['reminderMinute'] as num?)?.toInt() ?? 0,
         plate: j['plate'] as String?,
       );
 }
@@ -135,6 +147,19 @@ NatureFact factFor(DateTime today) {
 WeeklyGoal goalFor(DateTime today) {
   final week = _monday(today).toUtc().millisecondsSinceEpoch ~/ (7 * 86400000);
   return WeeklyGoal.values[week % WeeklyGoal.values.length];
+}
+
+/// The next reminders, one a day at most. Today is left out when its task
+/// is already marked or the time has passed. Only a week is ever queued, so
+/// someone who stops opening the tab stops being reminded.
+List<DateTime> reminderTimes(DateTime now, {required int hour, required int minute, required bool doneToday, int count = 7}) {
+  final out = <DateTime>[];
+  for (var i = 0; out.length < count; i++) {
+    final at = DateTime(now.year, now.month, now.day + i, hour, minute);
+    if (i == 0 && (doneToday || !at.isAfter(now))) continue;
+    out.add(at);
+  }
+  return out;
 }
 
 enum NatureBadge { firstStep, sevenDays, thirtyDays, fourSeasons, curious, knowledgeable, sharer, observer }

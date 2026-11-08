@@ -25,6 +25,7 @@ import '../models/fire_event.dart';
 import '../models/fire_incident.dart';
 import '../models/news_item.dart';
 import '../features/tracked_places/tracked_places_screen.dart';
+import '../features/notifications/notifications_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -55,7 +56,13 @@ class AppRouter {
       ),
       GoRoute(
         path: '/app',
-        redirect: (context, state) => state.uri.queryParameters['tab'] == 'settings' ? '/settings' : null,
+        redirect: (context, state) {
+          final query = state.uri.queryParameters;
+          if (query['tab'] == 'settings') return '/settings';
+          // Alerts used to be a tab; old links and notification taps land here.
+          if (query['tab'] == 'alerts' || query['section'] == 'alerts') return '/alerts';
+          return null;
+        },
         // NoTransitionPage: these routes only ever swap between the same
         // MainShellScreen at a different tab index (via context.go, never
         // push), so there's no "previous screen" to animate away from.
@@ -72,8 +79,7 @@ class AppRouter {
             case 'map': initialIndex = 1; break;
             case 'risk': initialIndex = 2; break;
             case 'news': initialIndex = 3; break;
-            case 'alerts': initialIndex = 4; break;
-            case 'nature': initialIndex = 5; break;
+            case 'nature': initialIndex = 4; break;
             default: initialIndex = 0;
           }
           return NoTransitionPage(child: MainShellScreen(initialIndex: initialIndex));
@@ -157,6 +163,10 @@ class AppRouter {
       GoRoute(
         path: '/safety-guide',
         builder: (context, state) => const SafetyGuideScreen(),
+      ),
+      GoRoute(
+        path: '/alerts',
+        builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
         path: '/emergency',

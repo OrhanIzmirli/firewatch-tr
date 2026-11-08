@@ -36,6 +36,7 @@ import '../../shared/widgets/color_dot.dart';
 import 'widgets/tracked_places_section.dart';
 import '../../shared/widgets/app_sheet.dart';
 import '../../shared/widgets/related_news_section.dart';
+import '../../shared/widgets/alerts_bell.dart';
 
 enum _RiskTab { overview, myLocation, places }
 
@@ -591,6 +592,7 @@ class _RiskScreenState extends State<RiskScreen> {
       appBar: AppBar(
         title: Text(l10n.riskTitle, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
+          const AlertsBell(),
           IconButton(
             key: CoachMarkKeys.riskInfoButton,
             icon: const Icon(Icons.info_outline_rounded),

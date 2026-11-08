@@ -4275,7 +4275,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get natureReminder => 'Günlük hatırlatma';
 
   @override
-  String get natureReminderDesc => 'Günde en fazla bir kez';
+  String get natureReminderDesc =>
+      'Günde en fazla bir kez. O gün görevinizi işaretlediyseniz gönderilmez.';
 
   @override
   String get natureReminderText => 'Bugünün doğa görevi hazır.';
@@ -4295,4 +4296,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get natureFinish => 'Bitir';
+
+  @override
+  String get natureReminderTime => 'Saat';
 }

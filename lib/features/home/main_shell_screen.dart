@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/theme/app_theme.dart';
 import '../../models/fire_incident.dart';
-import '../../services/fire_monitoring_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../map/map_screen.dart';
 import '../news/news_screen.dart';
-import '../notifications/notifications_screen.dart';
 import '../risk/risk_screen.dart';
 import 'home_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
 import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/bottom_bar_fit.dart';
 import '../nature/nature_screen.dart';
 
 class MainShellScreen extends StatefulWidget {
@@ -42,7 +40,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex.clamp(0, 5);
+    _currentIndex = widget.initialIndex.clamp(0, 4);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _maybePromptForRating(),
     );
@@ -94,7 +92,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void didUpdateWidget(covariant MainShellScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialIndex != widget.initialIndex) {
-      _currentIndex = widget.initialIndex.clamp(0, 5);
+      _currentIndex = widget.initialIndex.clamp(0, 4);
     }
   }
 
@@ -114,33 +112,13 @@ class _MainShellScreenState extends State<MainShellScreen> {
     ),
     const RiskScreen(),
     const NewsScreen(),
-    const NotificationsScreen(),
     const NatureScreen(),
   ];
 
-  Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
-    final icon = Icon(
-      selected ? Icons.notifications : Icons.notifications_none,
-    );
-    final child = unreadCount <= 0
-        ? icon
-        : Badge(
-            // A live counter: tabular figures so the badge width is stable
-            // while the count changes.
-            label: Text(
-              unreadCount > 9 ? '9+' : '$unreadCount',
-              style: AppTheme.mono(size: 11, weight: FontWeight.w600),
-            ),
-            child: icon,
-          );
-    return key == null ? child : KeyedSubtree(key: key, child: child);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List>(
-      valueListenable: FireMonitoringService.instance.nearbyMatchesNotifier,
-      builder: (context, nearbyMatches, _) {
+    return Builder(
+      builder: (context) {
         final l10n = AppLocalizations.of(context)!;
         final destinations = [
           NavigationDestination(
@@ -167,15 +145,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: l10n.navNews,
           ),
           NavigationDestination(
-            icon: _alertsIcon(
-              false,
-              nearbyMatches.length,
-              key: CoachMarkKeys.alertsNavIcon,
-            ),
-            selectedIcon: _alertsIcon(true, nearbyMatches.length),
-            label: l10n.navAlerts,
-          ),
-          NavigationDestination(
             icon: const Icon(Icons.eco_outlined),
             selectedIcon: const Icon(Icons.eco),
             label: l10n.navNature,
@@ -195,12 +164,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 _visitedTabs.contains(i) ? screen : const SizedBox.shrink(),
             ],
           ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: _currentIndex,
-            onDestinationSelected: (index) {
-              setState(() => _currentIndex = index);
-            },
-            destinations: destinations,
+          bottomNavigationBar: BottomBarFit(
+            tabs: destinations.length,
+            child: NavigationBar(
+              selectedIndex: _currentIndex,
+              onDestinationSelected: (index) {
+                setState(() => _currentIndex = index);
+              },
+              destinations: destinations,
+            ),
           ),
         );
       },

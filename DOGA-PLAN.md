@@ -536,4 +536,4 @@ Sekme uygulandı. Kaynaklar yeniden açılıp kontrol edildi; aşağıdakiler i�
 | Kuş besleme görevleri | Türkiye kaynağı yok |
 | Etkinlikler ve gelişmeler | Backend ve yayın izni yok; uydurma etkinlik olmaması için bölüm eklenmedi |
 
-Hatırlatma, seçilebilir saat yerine günde bir kez çalışan basit yerel bildirimdir ve o gün görev işaretlense de gönderilir.
+Hatırlatma yereldir, saati Doğa ayarlarından seçilir, o gün görev işaretlendiyse gönderilmez. En çok bir haftalık sıra kurulur; sekme bir hafta açılmazsa durur.

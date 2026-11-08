@@ -4287,7 +4287,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get natureReminder => 'Daily reminder';
 
   @override
-  String get natureReminderDesc => 'At most once a day';
+  String get natureReminderDesc =>
+      'At most once a day. Not sent if you have already marked today\'s task.';
 
   @override
   String get natureReminderText => 'Today\'s nature task is ready.';
@@ -4307,4 +4308,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get natureFinish => 'Finish';
+
+  @override
+  String get natureReminderTime => 'Time';
 }

@@ -28,6 +28,7 @@ import 'widgets/news_card.dart';
 import 'widgets/news_event_actions.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
+import '../../shared/widgets/alerts_bell.dart';
 
 enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
 
@@ -430,6 +431,7 @@ class _NewsScreenState extends State<NewsScreen> {
           style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
         actions: [
+          const AlertsBell(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: _loadNews,

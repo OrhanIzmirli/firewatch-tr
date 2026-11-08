@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -13,6 +15,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/risk_data_cache.dart';
+import '../../shared/widgets/alerts_bell.dart';
 import '../../shared/widgets/app_sheet.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
 import '../../shared/widgets/glass_panel.dart';
@@ -76,25 +79,43 @@ Future<List<NatureProvince>> loadNatureProvinces({AssetBundle? bundle}) async {
 /// At most one a day, off until asked for, and not an alert: it never goes
 /// into the alerts inbox and has its own channel that can be turned off.
 class NatureReminder {
-  static const _id = 7301;
+  static const _firstId = 7301;
+  static const _ids = 8;
   static final _plugin = FlutterLocalNotificationsPlugin();
 
-  static Future<bool> enable(String title) async {
+  static const _details = NotificationDetails(
+    android: AndroidNotificationDetails('firewatch_nature', 'Doğa', importance: Importance.low, priority: Priority.low),
+  );
+
+  static Future<bool> requestPermission() async {
     final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-    final granted = await android?.requestNotificationsPermission() ?? true;
-    if (!granted) return false;
-    await _plugin.periodicallyShow(
-      _id,
-      null,
-      title,
-      RepeatInterval.daily,
-      const NotificationDetails(android: AndroidNotificationDetails('firewatch_nature', 'Doğa', importance: Importance.low, priority: Priority.low)),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    );
-    return true;
+    return await android?.requestNotificationsPermission() ?? true;
   }
 
-  static Future<void> disable() => _plugin.cancel(_id);
+  /// Replaces whatever is queued with what [p] calls for now.
+  static Future<void> sync(NatureProgress p, String title, {DateTime? now}) async {
+    try {
+      for (var i = 0; i < _ids; i++) {
+        await _plugin.cancel(_firstId + i);
+      }
+      if (!p.reminder) return;
+      final at = now ?? DateTime.now();
+      final times = reminderTimes(at, hour: p.reminderHour, minute: p.reminderMinute, doneToday: p.days.containsKey(dayKey(at)));
+      for (final (i, t) in times.indexed) {
+        await _plugin.zonedSchedule(
+          _firstId + i,
+          null,
+          title,
+          tz.TZDateTime.from(t.toUtc(), tz.UTC),
+          _details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('Nature reminder: $e');
+    }
+  }
 }
 
 class NatureScreen extends StatefulWidget {
@@ -116,7 +137,9 @@ class _NatureScreenState extends State<NatureScreen> {
   void initState() {
     super.initState();
     _store.addListener(_changed);
-    _store.load();
+    _store.load().then((_) {
+      if (mounted && _store.progress.reminder) _syncReminder();
+    });
     RiskDataCache.instance.warmUp().then((_) => _changed());
     loadNatureProvinces().then((p) {
       if (mounted) setState(() => _provinces = p);
@@ -131,6 +154,14 @@ class _NatureScreenState extends State<NatureScreen> {
 
   void _changed() {
     if (mounted) setState(() {});
+  }
+
+  Future<void> _syncReminder() =>
+      NatureReminder.sync(_store.progress, AppLocalizations.of(context)!.natureReminderText);
+
+  Future<void> _answer(bool done) async {
+    await _store.mark(_today, done);
+    if (mounted && _store.progress.reminder) await _syncReminder();
   }
 
   NatureProvince? get _province {
@@ -234,7 +265,7 @@ class _NatureScreenState extends State<NatureScreen> {
                 child: FilledButton(
                   key: const Key('natureYes'),
                   style: FilledButton.styleFrom(backgroundColor: natureGreen, foregroundColor: AppColors.white),
-                  onPressed: () => _store.mark(_today, true),
+                  onPressed: () => _answer(true),
                   child: Text(l10n.natureYes),
                 ),
               ),
@@ -242,7 +273,7 @@ class _NatureScreenState extends State<NatureScreen> {
               Expanded(
                 child: OutlinedButton(
                   key: const Key('natureNo'),
-                  onPressed: () => _store.mark(_today, false),
+                  onPressed: () => _answer(false),
                   child: Text(l10n.natureNo),
                 ),
               ),
@@ -320,7 +351,7 @@ class _NatureScreenState extends State<NatureScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.navNature, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
-        actions: [IconButton(key: const Key('natureSettings'), tooltip: l10n.navSettings, icon: const Icon(Icons.tune_rounded), onPressed: _openSettings)],
+        actions: [const AlertsBell(), IconButton(key: const Key('natureSettings'), tooltip: l10n.navSettings, icon: const Icon(Icons.tune_rounded), onPressed: _openSettings)],
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -434,8 +465,8 @@ class _NatureSettingsState extends State<_NatureSettings> {
       ),
     );
     if (ok != true) return;
-    await NatureReminder.disable();
     await _store.deleteAll();
+    await NatureReminder.sync(_store.progress, l10n.natureReminderText);
     if (mounted) setState(() {});
   }
 
@@ -458,13 +489,22 @@ class _NatureSettingsState extends State<_NatureSettings> {
           subtitle: Text(l10n.natureReminderDesc),
           value: p.reminder,
           onChanged: (on) async {
-            if (on) {
-              final ok = await NatureReminder.enable(l10n.natureReminderText);
-              await _store.save(p.copyWith(reminder: ok));
-            } else {
-              await NatureReminder.disable();
-              await _store.save(p.copyWith(reminder: false));
-            }
+            final allowed = !on || await NatureReminder.requestPermission();
+            await _store.save(p.copyWith(reminder: on && allowed));
+            await NatureReminder.sync(_store.progress, l10n.natureReminderText);
+            if (mounted) setState(() {});
+          },
+        ),
+        ListTile(
+          key: const Key('natureReminderTime'),
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.natureReminderTime),
+          trailing: Text('${p.reminderHour.toString().padLeft(2, '0')}:${p.reminderMinute.toString().padLeft(2, '0')}'),
+          onTap: () async {
+            final picked = await showTimePicker(context: context, initialTime: TimeOfDay(hour: p.reminderHour, minute: p.reminderMinute));
+            if (picked == null) return;
+            await _store.save(_store.progress.copyWith(reminderHour: picked.hour, reminderMinute: picked.minute));
+            await NatureReminder.sync(_store.progress, l10n.natureReminderText);
             if (mounted) setState(() {});
           },
         ),

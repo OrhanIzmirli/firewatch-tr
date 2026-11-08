@@ -7367,7 +7367,7 @@ abstract class AppLocalizations {
   /// No description provided for @natureReminderDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Günde en fazla bir kez'**
+  /// **'Günde en fazla bir kez. O gün görevinizi işaretlediyseniz gönderilmez.'**
   String get natureReminderDesc;
 
   /// No description provided for @natureReminderText.
@@ -7405,6 +7405,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bitir'**
   String get natureFinish;
+
+  /// No description provided for @natureReminderTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saat'**
+  String get natureReminderTime;
 }
 
 class _AppLocalizationsDelegate

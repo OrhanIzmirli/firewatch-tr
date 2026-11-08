@@ -1542,11 +1542,12 @@
   "natureBadgeObserver": "Observer",
   "natureOnDevice": "Your progress is stored only on this phone and is not sent to any server. It is lost if you delete the app.",
   "natureReminder": "Daily reminder",
-  "natureReminderDesc": "At most once a day",
+  "natureReminderDesc": "At most once a day. Not sent if you have already marked today's task.",
   "natureReminderText": "Today's nature task is ready.",
   "natureShowStreak": "Show streak",
   "natureDeleteTitle": "Delete my Nature data",
   "natureDeleteBody": "Your tasks, streak, lessons and badges will be deleted from this phone. This cannot be undone.",
   "natureDeleteConfirm": "Delete",
-  "natureFinish": "Finish"
+  "natureFinish": "Finish",
+  "natureReminderTime": "Time"
 }

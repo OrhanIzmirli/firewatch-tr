@@ -62,6 +62,7 @@ import '../tracked_places/add_tracked_place_flow.dart';
 import '../../services/device_position.dart';
 import '../../shared/widgets/app_sheet.dart';
 import '../../core/utils/detection_summary.dart';
+import '../../shared/widgets/alerts_bell.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   final double? focusLat;
@@ -1528,6 +1529,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           _screenTitle(l10n),
           style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
+        actions: const [AlertsBell()],
       ),
       // The map is the screen, not a card on it. Everything that explains the
       // map -- what a detection is, what to do about one, what is near you --

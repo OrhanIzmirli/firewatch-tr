@@ -1615,11 +1615,12 @@
   "natureBadgeObserver": "Gözlemci",
   "natureOnDevice": "İlerlemeniz yalnızca bu telefonda saklanır, sunucuya gönderilmez. Uygulamayı silerseniz kaybolur.",
   "natureReminder": "Günlük hatırlatma",
-  "natureReminderDesc": "Günde en fazla bir kez",
+  "natureReminderDesc": "Günde en fazla bir kez. O gün görevinizi işaretlediyseniz gönderilmez.",
   "natureReminderText": "Bugünün doğa görevi hazır.",
   "natureShowStreak": "Seriyi göster",
   "natureDeleteTitle": "Doğa verilerimi sil",
   "natureDeleteBody": "Görevleriniz, seriniz, dersleriniz ve rozetleriniz bu telefondan silinir. Bu işlem geri alınamaz.",
   "natureDeleteConfirm": "Sil",
-  "natureFinish": "Bitir"
+  "natureFinish": "Bitir",
+  "natureReminderTime": "Saat"
 }

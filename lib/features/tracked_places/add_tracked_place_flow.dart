@@ -14,10 +14,8 @@ import '../../services/location_disclosure.dart';
 import '../../services/tracked_places_api.dart';
 import '../../services/tracked_places_provider.dart';
 import '../../shared/widgets/carto_basemap.dart';
-import 'place_picker_screen.dart';
+import 'place_search_screen.dart';
 import '../../services/device_position.dart';
-
-enum _Source { map, myLocation }
 
 String trackedPlacesErrorText(AppLocalizations l10n, TrackedPlacesError error) {
   switch (error) {
@@ -51,35 +49,15 @@ Future<TrackedPlace?> showAddTrackedPlaceFlow(BuildContext context, {LatLng? ini
   if (!accepted || !context.mounted) return null;
 
   var point = initialPoint;
+  String? suggestedName;
   if (point == null) {
-    final source = await showModalBottomSheet<_Source>(
-      context: context,
-      useSafeArea: true,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              key: const Key('trackedSourceMap'),
-              leading: const Icon(Icons.map_outlined),
-              title: Text(l10n.trackedPlacesSourceMap),
-              onTap: () => Navigator.of(sheetContext).pop(_Source.map),
-            ),
-            ListTile(
-              key: const Key('trackedSourceMyLocation'),
-              leading: const Icon(Icons.my_location_rounded),
-              title: Text(l10n.trackedPlacesSourceMyLocation),
-              onTap: () => Navigator.of(sheetContext).pop(_Source.myLocation),
-            ),
-          ],
-        ),
-      ),
+    final choice = await Navigator.of(context).push<Object>(
+      MaterialPageRoute(builder: (_) => const PlaceSearchScreen()),
     );
-    if (source == null || !context.mounted) return null;
-    if (source == _Source.map) {
-      point = await Navigator.of(context).push<LatLng>(
-        MaterialPageRoute(builder: (_) => const PlacePickerScreen()),
-      );
+    if (choice == null || !context.mounted) return null;
+    if (choice is PlaceChoice) {
+      point = choice.point;
+      suggestedName = choice.suggestedName;
     } else {
       point = await _currentPoint(context);
       if (point == null && context.mounted) {
@@ -93,12 +71,22 @@ Future<TrackedPlace?> showAddTrackedPlaceFlow(BuildContext context, {LatLng? ini
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
-    builder: (_) => AddTrackedPlaceForm(point: point!),
+    builder: (_) => AddTrackedPlaceForm(point: point!, initialName: suggestedName),
   );
   if (place != null && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.trackedPlacesSaved(place.name))));
   }
   return place;
+}
+
+/// The settings of a place: name, radius, both switches, delete.
+Future<void> showEditTrackedPlace(BuildContext context, TrackedPlace place) {
+  return showModalBottomSheet<TrackedPlace>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => AddTrackedPlaceForm(point: LatLng(place.latitude, place.longitude), existing: place),
+  );
 }
 
 Future<LatLng?> _currentPoint(BuildContext context) async {
@@ -122,23 +110,63 @@ Future<LatLng?> _currentPoint(BuildContext context) async {
 /// Name and radius for [point], with a preview of the circle.
 class AddTrackedPlaceForm extends ConsumerStatefulWidget {
   final LatLng point;
+  final String? initialName;
 
-  const AddTrackedPlaceForm({super.key, required this.point});
+  /// Editing this place instead of adding a new one.
+  final TrackedPlace? existing;
+
+  const AddTrackedPlaceForm({super.key, required this.point, this.initialName, this.existing});
 
   @override
   ConsumerState<AddTrackedPlaceForm> createState() => _AddTrackedPlaceFormState();
 }
 
 class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
-  final _name = TextEditingController();
-  int _radiusKm = 10;
+  late final _name = TextEditingController(text: widget.existing?.name ?? _fit(widget.initialName));
+  late int _radiusKm = widget.existing?.radiusKm ?? 10;
+  late bool _notifyHeat = widget.existing?.notifyHeat ?? true;
+  late bool _notifyRisk = widget.existing?.notifyRisk ?? true;
   bool _saving = false;
   String? _error;
+
+  static String _fit(String? name) {
+    if (name == null) return '';
+    return name.length > TrackedPlace.nameMaxLength ? name.substring(0, TrackedPlace.nameMaxLength) : name;
+  }
 
   @override
   void dispose() {
     _name.dispose();
     super.dispose();
+  }
+
+  Future<void> _delete() async {
+    final l10n = AppLocalizations.of(context)!;
+    final place = widget.existing!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.trackedPlacesDeleteTitle(place.name)),
+        content: Text(l10n.trackedPlacesDeleteBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),
+          FilledButton(
+            key: const Key('trackedPlaceDeleteConfirm'),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.trackedPlacesDelete),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    final notifier = ref.read(trackedPlacesProvider.notifier);
+    final removed = await notifier.remove(place);
+    if (!mounted) return;
+    if (removed) {
+      Navigator.of(context).pop();
+    } else {
+      setState(() => _error = trackedPlacesErrorText(l10n, ref.read(trackedPlacesProvider).lastError ?? TrackedPlacesError.unknown));
+    }
   }
 
   Future<void> _save() async {
@@ -152,13 +180,36 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
       _saving = true;
       _error = null;
     });
+    final notifier = ref.read(trackedPlacesProvider.notifier);
+    final existing = widget.existing;
+    if (existing != null) {
+      final ok = await notifier.edit(
+        existing,
+        name: name == existing.name ? null : name,
+        radiusKm: _radiusKm == existing.radiusKm ? null : _radiusKm,
+        notifyHeat: _notifyHeat == existing.notifyHeat ? null : _notifyHeat,
+        notifyRisk: _notifyRisk == existing.notifyRisk ? null : _notifyRisk,
+      );
+      if (!mounted) return;
+      if (ok) {
+        Navigator.of(context).pop();
+      } else {
+        setState(() {
+          _saving = false;
+          _error = trackedPlacesErrorText(l10n, ref.read(trackedPlacesProvider).lastError ?? TrackedPlacesError.unknown);
+        });
+      }
+      return;
+    }
     try {
-      final place = await ref.read(trackedPlacesProvider.notifier).add(
-            name: name,
-            latitude: widget.point.latitude,
-            longitude: widget.point.longitude,
-            radiusKm: _radiusKm,
-          );
+      final place = await notifier.add(
+        name: name,
+        latitude: widget.point.latitude,
+        longitude: widget.point.longitude,
+        radiusKm: _radiusKm,
+        notifyHeat: _notifyHeat,
+        notifyRisk: _notifyRisk,
+      );
       if (mounted) Navigator.of(context).pop(place);
     } on TrackedPlacesException catch (e) {
       if (mounted) {
@@ -182,7 +233,7 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(l10n.trackedPlacesAdd, style: Theme.of(context).textTheme.titleLarge),
+            Text(widget.existing == null ? l10n.trackedPlacesAdd : l10n.trackedPlacesEditTitle, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: AppSpacing.md),
             ClipRRect(
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -248,7 +299,23 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
               selected: {_radiusKm},
               onSelectionChanged: _saving ? null : (s) => setState(() => _radiusKm = s.first),
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
+            SwitchListTile(
+              key: const Key('trackedNotifyHeat'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.trackedPlacesNotifyHeat),
+              value: _notifyHeat,
+              onChanged: _saving ? null : (v) => setState(() => _notifyHeat = v),
+            ),
+            SwitchListTile(
+              key: const Key('trackedNotifyRisk'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.trackedPlacesNotifyRisk),
+              subtitle: Text(l10n.trackedPlacesNotifyRiskDesc),
+              value: _notifyRisk,
+              onChanged: _saving ? null : (v) => setState(() => _notifyRisk = v),
+            ),
+            const SizedBox(height: AppSpacing.sm),
             Text(l10n.trackedPlacesApproxNote, style: Theme.of(context).textTheme.bodySmall),
             if (_error != null) ...[
               const SizedBox(height: AppSpacing.sm),
@@ -267,6 +334,15 @@ class _AddTrackedPlaceFormState extends ConsumerState<AddTrackedPlaceForm> {
                   ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.2))
                   : Text(l10n.trackedPlacesSave),
             ),
+            if (widget.existing != null) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TextButton.icon(
+                key: const Key('trackedPlaceDelete'),
+                onPressed: _saving ? null : _delete,
+                icon: const Icon(Icons.delete_outline_rounded),
+                label: Text(l10n.trackedPlacesDelete),
+              ),
+            ],
           ],
         ),
       ),

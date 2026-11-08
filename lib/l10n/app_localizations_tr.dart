@@ -1056,7 +1056,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesPlacesBody =>
-      'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.';
+      'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir. Adres ve mahalle aramaları OpenStreetMap Nominatim ile yapılır; yazdığın metin saklanmaz, sonuçlar metnin geri çevrilemez özetiyle en fazla 7 gün önbellekte tutulur.';
 
   @override
   String get dataSourcesFwiTitle =>
@@ -1690,21 +1690,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locDisclosureNotNow => 'Şimdi değil';
 
   @override
-  String get trackedPlacesTitle => 'Takip ettiğim yerler';
+  String get trackedPlacesTitle => 'Yerlerim';
 
   @override
   String get trackedPlacesSubtitle =>
-      'Yarıçap içinde yeni uydu ısı tespiti olunca bildirim al';
+      'Yakında ısı tespiti ya da yüksek yangın tehlikesi olunca bildirim al';
 
   @override
   String get trackedPlacesEmpty =>
-      'Henüz takip ettiğin bir yer yok. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.';
+      'Henüz yer eklemedin. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.';
 
   @override
   String get trackedPlacesAdd => 'Yer ekle';
 
   @override
-  String get trackedPlacesFull => 'En fazla 5 yer takip edebilirsin.';
+  String get trackedPlacesFull => 'En fazla 5 yer ekleyebilirsin.';
 
   @override
   String trackedPlacesRadius(int km) {
@@ -1767,7 +1767,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String trackedPlacesSaved(String name) {
-    return '\"$name\" takip ediliyor.';
+    return '\"$name\" Yerlerim\'e eklendi.';
   }
 
   @override
@@ -1796,31 +1796,31 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trackedPlacesMigrateTitle =>
-      'Kayıtlı pin\'lerini takip etmek ister misin?';
+      'Kayıtlı yerlerini Yerlerim\'e taşımak ister misin?';
 
   @override
   String trackedPlacesMigrateBody(int count) {
-    return '$count kayıtlı pin\'in var. Takip edilen yere dönüştürürsen 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.';
+    return '$count kayıtlı yerin var. Taşırsan 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.';
   }
 
   @override
-  String get trackedPlacesMigrateAccept => 'Dönüştür';
+  String get trackedPlacesMigrateAccept => 'Taşı';
 
   @override
   String trackedPlacesMigrateDone(int count) {
-    return '$count yer takip ediliyor.';
+    return '$count yer eklendi.';
   }
 
   @override
   String get locDisclosureTracked =>
-      'Takip ettiğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.';
+      'Yerlerim\'e eklediğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.';
 
   @override
   String get notifPlacesChannelName => 'Takip ettiğim yerler';
 
   @override
   String get notifPlacesChannelDescription =>
-      'Takip ettiğin yerlerin yakınındaki uydu ısı tespitleri';
+      'Yerlerim\'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın tehlikesi';
 
   @override
   String get settingsDeleteLocation => 'Konum verimi sil';
@@ -3775,4 +3775,63 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get riskInfoFormulaHeatBonus =>
       'Sıcak ve kuru hava birlikteyse ek puan (en fazla 20 puan)';
+
+  @override
+  String myPlacesRiskLine(String level) {
+    return 'Yangın tehlikesi: $level';
+  }
+
+  @override
+  String myPlacesDetections24h(int count) {
+    return 'Son 24 saatte $count tespit';
+  }
+
+  @override
+  String get myPlacesNoDetections => 'Son 24 saatte yakında tespit yok';
+
+  @override
+  String get myPlacesRiskNote =>
+      'Yangın tehlikesi, Copernicus\'un bölgesel hava tahminidir (FWI). Tespit olmaması yangın olmadığı anlamına gelmez.';
+
+  @override
+  String get trackedPlacesEditTitle => 'Yeri düzenle';
+
+  @override
+  String get trackedPlacesNotifyHeat =>
+      'Yakında yeni ısı tespiti olunca bildir';
+
+  @override
+  String get trackedPlacesNotifyRisk => 'Yangın tehlikesi yükselince bildir';
+
+  @override
+  String get trackedPlacesNotifyRiskDesc =>
+      'Yüksek veya üzerine çıkınca, günde en fazla bir kez';
+
+  @override
+  String get placeSearchHint => 'İl, ilçe, mahalle ya da adres';
+
+  @override
+  String get placeSearchButton => 'Ara';
+
+  @override
+  String get placeSearchRemote => 'Mahalle veya adres olarak ara';
+
+  @override
+  String get placeSearchNoResults =>
+      'Sonuç bulunamadı. Haritadan seçebilirsin.';
+
+  @override
+  String get placeSearchFailed =>
+      'Arama şu an yapılamıyor. Haritadan seçebilirsin.';
+
+  @override
+  String get placeSearchTooShort => 'En az 3 harf yaz.';
+
+  @override
+  String get placeSearchPrivacy =>
+      'İl ve ilçe aramaları telefonunda yapılır. Mahalle ve adres aramaları sunucumuz üzerinden OpenStreetMap\'e iletilir; yazdığın metin saklanmaz.';
+
+  @override
+  String get placeSearchAttribution =>
+      'Arama sonuçları © OpenStreetMap katkıcıları (Nominatim)';
 }

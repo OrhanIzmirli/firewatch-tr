@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/l10n_lookup.dart';
+import '../models/place_search_result.dart';
 import '../models/tracked_place.dart';
 import 'tracked_places_api.dart';
 
@@ -111,22 +112,39 @@ class TrackedPlacesNotifier extends StateNotifier<TrackedPlacesState> {
     required double latitude,
     required double longitude,
     required int radiusKm,
+    bool notifyHeat = true,
+    bool notifyRisk = true,
   }) async {
     if (state.isFull) throw const TrackedPlacesException(TrackedPlacesError.placeLimit);
-    final place = await _api.add(name: name, latitude: latitude, longitude: longitude, radiusKm: radiusKm);
+    final place = await _api.add(
+      name: name,
+      latitude: latitude,
+      longitude: longitude,
+      radiusKm: radiusKm,
+      notifyHeat: notifyHeat,
+      notifyRisk: notifyRisk,
+    );
     final places = [...state.places, place];
     await _writeCache(places);
     if (mounted) state = state.copyWith(places: places, unavailable: false, clearError: true);
     return place;
   }
 
-  Future<bool> setNotify(TrackedPlace place, bool value) async {
+  /// Neighbourhood or address search; throws [TrackedPlacesException].
+  Future<List<PlaceSearchResult>> search(String query) => _api.search(query);
+
+  /// Changes a place on the server. The switches move at once and go back if
+  /// the server refuses.
+  Future<bool> edit(TrackedPlace place, {String? name, int? radiusKm, bool? notifyHeat, bool? notifyRisk}) async {
     final before = state.places;
     state = state.copyWith(
-      places: [for (final p in before) p.id == place.id ? p.copyWith(notifyHeat: value) : p],
+      places: [
+        for (final p in before)
+          p.id == place.id ? p.copyWith(name: name, radiusKm: radiusKm, notifyHeat: notifyHeat, notifyRisk: notifyRisk) : p,
+      ],
     );
     try {
-      final updated = await _api.setNotify(place.id, value);
+      final updated = await _api.update(place.id, name: name, radiusKm: radiusKm, notifyHeat: notifyHeat, notifyRisk: notifyRisk);
       final places = [for (final p in state.places) p.id == place.id ? updated : p];
       await _writeCache(places);
       if (mounted) state = state.copyWith(places: places);

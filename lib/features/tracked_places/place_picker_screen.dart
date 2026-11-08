@@ -15,7 +15,13 @@ import '../../shared/widgets/carto_basemap.dart';
 class PlacePickerScreen extends StatefulWidget {
   final LatLng? initialCenter;
 
-  const PlacePickerScreen({super.key, this.initialCenter});
+  /// How close to start; a search result opens close enough to adjust.
+  final double? initialZoom;
+
+  /// What was searched for, shown above the map.
+  final String? label;
+
+  const PlacePickerScreen({super.key, this.initialCenter, this.initialZoom, this.label});
 
   @override
   State<PlacePickerScreen> createState() => _PlacePickerScreenState();
@@ -36,7 +42,7 @@ class _PlacePickerScreenState extends State<PlacePickerScreen> {
             mapController: _controller,
             options: MapOptions(
               initialCenter: _center,
-              initialZoom: widget.initialCenter != null ? 11 : 5.6,
+              initialZoom: widget.initialZoom ?? (widget.initialCenter != null ? 11 : 5.6),
               minZoom: 4,
               maxZoom: 16,
               onPositionChanged: (camera, _) => _center = camera.center,
@@ -74,7 +80,7 @@ class _PlacePickerScreenState extends State<PlacePickerScreen> {
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.md),
-                child: Text(l10n.trackedPlacesPickerHint),
+                child: Text(widget.label == null ? l10n.trackedPlacesPickerHint : '${widget.label}\n${l10n.trackedPlacesPickerHint}'),
               ),
             ),
           ),

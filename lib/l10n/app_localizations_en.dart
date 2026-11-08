@@ -1061,7 +1061,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesPlacesBody =>
-      'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data.';
+      'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data. Address and neighbourhood searches use OpenStreetMap Nominatim; what you type is not stored, and results are cached for up to 7 days under an irreversible hash of the text.';
 
   @override
   String get dataSourcesFwiTitle => 'Fire danger map (FWI) — a separate source';
@@ -1694,21 +1694,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locDisclosureNotNow => 'Not now';
 
   @override
-  String get trackedPlacesTitle => 'My places';
+  String get trackedPlacesTitle => 'My Places';
 
   @override
   String get trackedPlacesSubtitle =>
-      'Get notified of new satellite heat detections within the radius';
+      'Get alerts for heat detected nearby or high fire danger';
 
   @override
   String get trackedPlacesEmpty =>
-      'You\'re not tracking any places yet. Add up to 5, like your home or summer house.';
+      'No places yet. Add up to 5, such as your home, summer house or orchard.';
 
   @override
   String get trackedPlacesAdd => 'Add place';
 
   @override
-  String get trackedPlacesFull => 'You can track up to 5 places.';
+  String get trackedPlacesFull => 'You can add up to 5 places.';
 
   @override
   String trackedPlacesRadius(int km) {
@@ -1771,7 +1771,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String trackedPlacesSaved(String name) {
-    return 'Now tracking \"$name\".';
+    return '\"$name\" added to My Places.';
   }
 
   @override
@@ -1799,31 +1799,32 @@ class AppLocalizationsEn extends AppLocalizations {
       'The location is stored on the server at about 1 km precision. Alerts are satellite heat detections, not confirmed fires.';
 
   @override
-  String get trackedPlacesMigrateTitle => 'Track your saved pins?';
+  String get trackedPlacesMigrateTitle =>
+      'Move your saved places to My Places?';
 
   @override
   String trackedPlacesMigrateBody(int count) {
-    return 'You have $count saved pins. Convert them to tracked places to get notified of new satellite heat detections within 10 km.';
+    return 'You have $count saved places. Move them to get alerts for new satellite heat detections within 10 km.';
   }
 
   @override
-  String get trackedPlacesMigrateAccept => 'Convert';
+  String get trackedPlacesMigrateAccept => 'Move';
 
   @override
   String trackedPlacesMigrateDone(int count) {
-    return 'Tracking $count places.';
+    return '$count places added.';
   }
 
   @override
   String get locDisclosureTracked =>
-      'For places you track, the name, the location rounded to about 1 km and the radius are stored on our server. Delete one from the list, or all of them with Settings → Delete my location data.';
+      'For places in My Places, the name, the location rounded to about 1 km and the radius are stored on our server. Delete one from the list, or all of them with Settings → Delete my location data.';
 
   @override
   String get notifPlacesChannelName => 'My places';
 
   @override
   String get notifPlacesChannelDescription =>
-      'Satellite heat detections near the places you track';
+      'Satellite heat detections near your places and fire danger there';
 
   @override
   String get settingsDeleteLocation => 'Delete my location data';
@@ -3786,4 +3787,63 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get riskInfoFormulaHeatBonus =>
       'Extra points when heat and dry air coincide (max 20 pts)';
+
+  @override
+  String myPlacesRiskLine(String level) {
+    return 'Fire danger: $level';
+  }
+
+  @override
+  String myPlacesDetections24h(int count) {
+    return '$count detections in the last 24 hours';
+  }
+
+  @override
+  String get myPlacesNoDetections =>
+      'No detections nearby in the last 24 hours';
+
+  @override
+  String get myPlacesRiskNote =>
+      'Fire danger is Copernicus\'s regional weather forecast (FWI). No detection does not mean no fire.';
+
+  @override
+  String get trackedPlacesEditTitle => 'Edit place';
+
+  @override
+  String get trackedPlacesNotifyHeat => 'Notify me of new heat detected nearby';
+
+  @override
+  String get trackedPlacesNotifyRisk => 'Notify me when fire danger rises';
+
+  @override
+  String get trackedPlacesNotifyRiskDesc =>
+      'When it reaches High or above, at most once a day';
+
+  @override
+  String get placeSearchHint => 'Province, district, neighbourhood or address';
+
+  @override
+  String get placeSearchButton => 'Search';
+
+  @override
+  String get placeSearchRemote => 'Search as a neighbourhood or address';
+
+  @override
+  String get placeSearchNoResults =>
+      'Nothing found. You can pick it on the map.';
+
+  @override
+  String get placeSearchFailed =>
+      'Search isn\'t available right now. You can pick it on the map.';
+
+  @override
+  String get placeSearchTooShort => 'Type at least 3 letters.';
+
+  @override
+  String get placeSearchPrivacy =>
+      'Province and district searches stay on your phone. Neighbourhood and address searches go through our server to OpenStreetMap; what you type is not stored.';
+
+  @override
+  String get placeSearchAttribution =>
+      'Search results © OpenStreetMap contributors (Nominatim)';
 }

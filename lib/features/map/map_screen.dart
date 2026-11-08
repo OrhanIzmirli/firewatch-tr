@@ -26,9 +26,9 @@ import '../../models/fire_incident.dart';
 import '../../models/persistent_heat_source.dart';
 import '../../models/fire_point.dart';
 import '../../models/annual_province_data.dart';
-import '../../models/saved_place.dart';
+import '../../models/tracked_place.dart';
 import '../../services/fwi_point_service.dart';
-import '../../services/saved_places_provider.dart';
+import '../../services/tracked_places_provider.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/render_api_service.dart';
 import '../../services/fire_mapper.dart';
@@ -52,7 +52,7 @@ import 'widgets/map_layer_bar.dart';
 import 'widgets/marker_list_cache.dart';
 import 'widgets/incident_sheet.dart';
 import 'widgets/annual_province_layer.dart';
-import 'widgets/saved_places_sheet.dart';
+import 'widgets/my_places_sheet.dart';
 import '../../services/location_disclosure.dart';
 import '../tracked_places/add_tracked_place_flow.dart';
 import '../../services/device_position.dart';
@@ -95,10 +95,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// to float separately — the merged legend, the FWI day picker, opacity and
   /// attribution — and starts closed: the map is the product, not the panel.
   bool _isLayersPanelOpen = false;
-
-  /// True while the user is placing a pin: the next map tap saves a place
-  /// instead of doing nothing. Entered from the places sheet only.
-  bool _pinDropMode = false;
 
   /// Whether the camera is currently zoomed to a saved place, which is what
   /// makes the one-tap "all of Türkiye" reset appear in the bottom bar.
@@ -397,31 +393,32 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 
   void _openPlacesSheet() {
-    final l10n = AppLocalizations.of(context)!;
-    SavedPlacesSheet.show(
+    MyPlacesSheet.show(
       context,
-      dateParam: _fwiDateParam,
-      dayLabel: _riskDayLabel(l10n, _riskDayOffset),
-      incidents: _incidents,
+      detectionCount: (place) => _incidents
+          .where((i) =>
+              !i.looksLikeFixedSource &&
+              i.hoursSinceLastDetection <= 24 &&
+              place.isWithinRadius(i.latitude, i.longitude))
+          .length,
       onFocusPlace: (place) => _focusPlaces([place]),
       onShowAll: _focusPlaces,
-      onStartPinDrop: () => setState(() => _pinDropMode = true),
     );
   }
 
   /// Zooms to the box covering every given place — one place zooms to that
   /// place, "show all" zooms to the union.
-  void _focusPlaces(List<SavedPlace> places) {
+  void _focusPlaces(List<TrackedPlace> places) {
     if (places.isEmpty) return;
-    var west = places.first.west;
-    var south = places.first.south;
-    var east = places.first.east;
-    var north = places.first.north;
-    for (final p in places.skip(1)) {
-      west = math.min(west, p.west);
-      south = math.min(south, p.south);
-      east = math.max(east, p.east);
-      north = math.max(north, p.north);
+    var west = double.infinity;
+    var south = double.infinity;
+    var east = -double.infinity;
+    var north = -double.infinity;
+    for (final p in places) {
+      west = math.min(west, p.longitude - p.lngSpanDegrees);
+      south = math.min(south, p.latitude - p.latSpanDegrees);
+      east = math.max(east, p.longitude + p.lngSpanDegrees);
+      north = math.max(north, p.latitude + p.latSpanDegrees);
     }
     _mapController.fitCamera(
       CameraFit.bounds(
@@ -436,42 +433,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void _resetTurkeyView() {
     _mapController.move(const LatLng(38.2, 35.0), 5.6);
     setState(() => _isPlaceFocused = false);
-  }
-
-  /// The tap that lands while pin-drop mode is armed: name it, save it,
-  /// return to the places sheet so the new entry is visibly there.
-  Future<void> _handlePinDrop(LatLng point) async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() => _pinDropMode = false);
-    final controller = TextEditingController(text: l10n.placesPinDefaultName);
-    final name = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.placesPinNameTitle),
-        content: TextField(controller: controller, autofocus: true),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: Text(l10n.commonSave),
-          ),
-        ],
-      ),
-    );
-    controller.dispose();
-    if (name == null || name.isEmpty || !mounted) return;
-    await ref.read(savedPlacesProvider.notifier).add(
-          SavedPlace.pin(
-            id: 'pin-${DateTime.now().millisecondsSinceEpoch}',
-            name: name,
-            lat: point.latitude,
-            lng: point.longitude,
-          ),
-        );
-    if (mounted) _openPlacesSheet();
   }
 
   /// The date the FWI layer shows, as the WMS `TIME` value. TIME is
@@ -1596,12 +1557,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   _zoom.value = camera.zoom;
                 }
               },
-              onTap: (tapPosition, point) {
-                if (_pinDropMode) _handlePinDrop(point);
-              },
-              // Long-press: follow this point ("Takip ettiğim yerler").
+              // Long-press: add this point to "Yerlerim".
               onLongPress: (tapPosition, point) {
-                if (!_pinDropMode) showAddTrackedPlaceFlow(context, initialPoint: point);
+                showAddTrackedPlaceFlow(context, initialPoint: point);
               },
             ),
             children: [
@@ -1683,10 +1641,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               // my pin" would land on anonymous terrain.
               MarkerLayer(
                 markers: [
-                  for (final place in ref.watch(savedPlacesProvider))
-                    if (place.kind == SavedPlaceKind.pin)
+                  for (final place in ref.watch(trackedPlacesProvider).places)
                       Marker(
-                        point: LatLng(place.lat, place.lng),
+                        point: LatLng(place.latitude, place.longitude),
                         width: 36,
                         height: 36,
                         child: const Icon(
@@ -1867,44 +1824,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               if (_showAnnualHistory) ...[
                 const SizedBox(height: 6),
                 _buildAnnualStrip(l10n, titleColor),
-              ],
-              if (_pinDropMode) ...[
-                const SizedBox(height: 6),
-                GlassPanel(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md,
-                    vertical: AppSpacing.sm,
-                  ),
-                  radius: AppSpacing.cardRadius,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.push_pin_rounded,
-                        size: 16,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Text(
-                        l10n.placesDropPinHint,
-                        style: GoogleFonts.ibmPlexSans(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w600,
-                          color: titleColor,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      InkWell(
-                        onTap: () => setState(() => _pinDropMode = false),
-                        child: Icon(
-                          Icons.close_rounded,
-                          size: 16,
-                          color: titleColor.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
               if (_errorMessage != null) ...[
                 const SizedBox(height: 6),

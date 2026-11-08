@@ -1961,7 +1961,7 @@ abstract class AppLocalizations {
   /// No description provided for @dataSourcesPlacesBody.
   ///
   /// In tr, this message translates to:
-  /// **'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.'**
+  /// **'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir. Adres ve mahalle aramaları OpenStreetMap Nominatim ile yapılır; yazdığın metin saklanmaz, sonuçlar metnin geri çevrilemez özetiyle en fazla 7 gün önbellekte tutulur.'**
   String get dataSourcesPlacesBody;
 
   /// No description provided for @dataSourcesFwiTitle.
@@ -3076,19 +3076,19 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Takip ettiğim yerler'**
+  /// **'Yerlerim'**
   String get trackedPlacesTitle;
 
   /// No description provided for @trackedPlacesSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Yarıçap içinde yeni uydu ısı tespiti olunca bildirim al'**
+  /// **'Yakında ısı tespiti ya da yüksek yangın tehlikesi olunca bildirim al'**
   String get trackedPlacesSubtitle;
 
   /// No description provided for @trackedPlacesEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz takip ettiğin bir yer yok. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.'**
+  /// **'Henüz yer eklemedin. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsin.'**
   String get trackedPlacesEmpty;
 
   /// No description provided for @trackedPlacesAdd.
@@ -3100,7 +3100,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesFull.
   ///
   /// In tr, this message translates to:
-  /// **'En fazla 5 yer takip edebilirsin.'**
+  /// **'En fazla 5 yer ekleyebilirsin.'**
   String get trackedPlacesFull;
 
   /// No description provided for @trackedPlacesRadius.
@@ -3208,7 +3208,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesSaved.
   ///
   /// In tr, this message translates to:
-  /// **'\"{name}\" takip ediliyor.'**
+  /// **'\"{name}\" Yerlerim\'e eklendi.'**
   String trackedPlacesSaved(String name);
 
   /// No description provided for @trackedPlacesErrorOutside.
@@ -3256,31 +3256,31 @@ abstract class AppLocalizations {
   /// No description provided for @trackedPlacesMigrateTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Kayıtlı pin\'lerini takip etmek ister misin?'**
+  /// **'Kayıtlı yerlerini Yerlerim\'e taşımak ister misin?'**
   String get trackedPlacesMigrateTitle;
 
   /// No description provided for @trackedPlacesMigrateBody.
   ///
   /// In tr, this message translates to:
-  /// **'{count} kayıtlı pin\'in var. Takip edilen yere dönüştürürsen 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.'**
+  /// **'{count} kayıtlı yerin var. Taşırsan 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsın.'**
   String trackedPlacesMigrateBody(int count);
 
   /// No description provided for @trackedPlacesMigrateAccept.
   ///
   /// In tr, this message translates to:
-  /// **'Dönüştür'**
+  /// **'Taşı'**
   String get trackedPlacesMigrateAccept;
 
   /// No description provided for @trackedPlacesMigrateDone.
   ///
   /// In tr, this message translates to:
-  /// **'{count} yer takip ediliyor.'**
+  /// **'{count} yer eklendi.'**
   String trackedPlacesMigrateDone(int count);
 
   /// No description provided for @locDisclosureTracked.
   ///
   /// In tr, this message translates to:
-  /// **'Takip ettiğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.'**
+  /// **'Yerlerim\'e eklediğin yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsin.'**
   String get locDisclosureTracked;
 
   /// No description provided for @notifPlacesChannelName.
@@ -3292,7 +3292,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifPlacesChannelDescription.
   ///
   /// In tr, this message translates to:
-  /// **'Takip ettiğin yerlerin yakınındaki uydu ısı tespitleri'**
+  /// **'Yerlerim\'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın tehlikesi'**
   String get notifPlacesChannelDescription;
 
   /// No description provided for @settingsDeleteLocation.
@@ -6541,6 +6541,102 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Sıcak ve kuru hava birlikteyse ek puan (en fazla 20 puan)'**
   String get riskInfoFormulaHeatBonus;
+
+  /// No description provided for @myPlacesRiskLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın tehlikesi: {level}'**
+  String myPlacesRiskLine(String level);
+
+  /// No description provided for @myPlacesDetections24h.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte {count} tespit'**
+  String myPlacesDetections24h(int count);
+
+  /// No description provided for @myPlacesNoDetections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 24 saatte yakında tespit yok'**
+  String get myPlacesNoDetections;
+
+  /// No description provided for @myPlacesRiskNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın tehlikesi, Copernicus\'un bölgesel hava tahminidir (FWI). Tespit olmaması yangın olmadığı anlamına gelmez.'**
+  String get myPlacesRiskNote;
+
+  /// No description provided for @trackedPlacesEditTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeri düzenle'**
+  String get trackedPlacesEditTitle;
+
+  /// No description provided for @trackedPlacesNotifyHeat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yakında yeni ısı tespiti olunca bildir'**
+  String get trackedPlacesNotifyHeat;
+
+  /// No description provided for @trackedPlacesNotifyRisk.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yangın tehlikesi yükselince bildir'**
+  String get trackedPlacesNotifyRisk;
+
+  /// No description provided for @trackedPlacesNotifyRiskDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek veya üzerine çıkınca, günde en fazla bir kez'**
+  String get trackedPlacesNotifyRiskDesc;
+
+  /// No description provided for @placeSearchHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl, ilçe, mahalle ya da adres'**
+  String get placeSearchHint;
+
+  /// No description provided for @placeSearchButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ara'**
+  String get placeSearchButton;
+
+  /// No description provided for @placeSearchRemote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mahalle veya adres olarak ara'**
+  String get placeSearchRemote;
+
+  /// No description provided for @placeSearchNoResults.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonuç bulunamadı. Haritadan seçebilirsin.'**
+  String get placeSearchNoResults;
+
+  /// No description provided for @placeSearchFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arama şu an yapılamıyor. Haritadan seçebilirsin.'**
+  String get placeSearchFailed;
+
+  /// No description provided for @placeSearchTooShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'En az 3 harf yaz.'**
+  String get placeSearchTooShort;
+
+  /// No description provided for @placeSearchPrivacy.
+  ///
+  /// In tr, this message translates to:
+  /// **'İl ve ilçe aramaları telefonunda yapılır. Mahalle ve adres aramaları sunucumuz üzerinden OpenStreetMap\'e iletilir; yazdığın metin saklanmaz.'**
+  String get placeSearchPrivacy;
+
+  /// No description provided for @placeSearchAttribution.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arama sonuçları © OpenStreetMap katkıcıları (Nominatim)'**
+  String get placeSearchAttribution;
 }
 
 class _AppLocalizationsDelegate

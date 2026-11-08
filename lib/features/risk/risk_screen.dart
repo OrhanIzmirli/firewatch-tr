@@ -26,7 +26,6 @@ import '../../shared/widgets/smart_overview_card.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/turkey_risk_heatmap.dart';
-import 'widgets/tracked_places_section.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
 
@@ -764,8 +763,6 @@ class _RiskScreenState extends State<RiskScreen> {
                         if (data != null) _showRegionDetail(context, data);
                       },
                     ),
-                    const SizedBox(height: AppSpacing.xxl),
-                    const TrackedPlacesSection(),
                   ]
                   else ...[
                   SectionHeader(

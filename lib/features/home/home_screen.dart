@@ -24,8 +24,10 @@ import '../../models/fire_point.dart';
 import '../../models/incident_summary.dart';
 import '../../models/persistent_heat_source.dart';
 import '../../models/news_item.dart';
+import '../../models/tracked_place.dart';
 import '../../services/fire_api_service.dart';
 import 'widgets/recent_alerts.dart';
+import '../risk/widgets/tracked_places_section.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/news_service.dart';
 import '../../services/render_api_service.dart';
@@ -72,6 +74,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   List<NewsItem> _topNews = [];
   List<FirePoint> _firePoints = [];
+
+  /// Satellite detections in the last 24 hours inside a place's radius.
+  int _detectionsNear(TrackedPlace place) {
+    final since = DateTime.now().toUtc().subtract(const Duration(hours: 24));
+    return _firePoints.where((p) {
+      final at = p.detectionDateTimeUtc;
+      return at != null && at.isAfter(since) && place.isWithinRadius(p.latitude, p.longitude);
+    }).length;
+  }
   List<Map<String, dynamic>> _regions = [];
   Position? _userPosition;
   String? _myCity;
@@ -682,6 +693,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const RecentAlerts(),
+            const SizedBox(height: AppSpacing.md),
+            TrackedPlacesSection(detectionCount: _detectionsNear),
+            const SizedBox(height: AppSpacing.lg),
             if (_firesSlowLoading) const SlowLoadingBanner(),
             // ── Header ──────────────────────────────────────
             GlassPanel(

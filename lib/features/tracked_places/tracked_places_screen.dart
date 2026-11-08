@@ -15,7 +15,7 @@ class TrackedPlacesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    void back() => context.go('/app?tab=risk');
+    void back() => context.go('/app');
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {

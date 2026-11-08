@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../core/config/api_config.dart';
+import '../models/place_search_result.dart';
 import '../models/tracked_place.dart';
 import 'place_identity.dart';
 
@@ -110,6 +111,7 @@ class TrackedPlacesApi {
     required double longitude,
     required int radiusKm,
     bool notifyHeat = true,
+    bool notifyRisk = true,
   }) =>
       _withDevice((auth) async {
         final r = await _dio.post('/places', options: auth, data: {
@@ -118,14 +120,42 @@ class TrackedPlacesApi {
           'longitude': longitude,
           'radius_km': radiusKm,
           'notify_heat': notifyHeat,
+          'notify_risk': notifyRisk,
         });
         return TrackedPlace.fromJson(r.data['data'] as Map<String, dynamic>);
       });
 
-  Future<TrackedPlace> setNotify(String id, bool notifyHeat) => _withDevice((auth) async {
-        final r = await _dio.patch('/places/$id', options: auth, data: {'notify_heat': notifyHeat});
+  /// Changes only the fields given. A place's position cannot change.
+  Future<TrackedPlace> update(
+    String id, {
+    String? name,
+    int? radiusKm,
+    bool? notifyHeat,
+    bool? notifyRisk,
+  }) =>
+      _withDevice((auth) async {
+        final r = await _dio.patch('/places/$id', options: auth, data: {
+          'name': ?name,
+          'radius_km': ?radiusKm,
+          'notify_heat': ?notifyHeat,
+          'notify_risk': ?notifyRisk,
+        });
         return TrackedPlace.fromJson(r.data['data'] as Map<String, dynamic>);
       });
+
+  /// Neighbourhood or address search. The text goes in the body, never the
+  /// URL. Needs no device identity: searching stores nothing about the user.
+  Future<List<PlaceSearchResult>> search(String query) async {
+    try {
+      final r = await _dio.post('/places/search', data: {'q': query});
+      return (r.data['data'] as List).cast<Map<String, dynamic>>().map(PlaceSearchResult.fromJson).toList();
+    } on DioException catch (e) {
+      throw _map(e);
+    } on Object catch (e) {
+      if (kDebugMode) debugPrint('places: unexpected search response: $e');
+      throw const TrackedPlacesException(TrackedPlacesError.unknown);
+    }
+  }
 
   Future<void> remove(String id) => _withDevice((auth) async {
         await _dio.delete('/places/$id', options: auth);

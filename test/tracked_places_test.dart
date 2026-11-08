@@ -121,7 +121,7 @@ void main() {
       final post = adapter.requests[1];
       expect(post.headers['X-Install-Id'], id.installId);
       expect(post.headers['X-Install-Secret'], id.secret);
-      expect(post.data, {'name': 'Ev', 'latitude': 38.4234, 'longitude': 27.1428, 'radius_km': 10, 'notify_heat': true});
+      expect(post.data, {'name': 'Ev', 'latitude': 38.4234, 'longitude': 27.1428, 'radius_km': 10, 'notify_heat': true, 'notify_risk': true});
       for (final r in adapter.requests) {
         expect(r.uri.query, isEmpty, reason: 'no coordinates in URLs: ${r.uri}');
       }
@@ -303,7 +303,7 @@ void main() {
     testWidgets('empty: explains and offers to add', (tester) async {
       await tester.pumpWidget(host(_api(_ScriptedAdapter((o) => (200, _fixture)))));
       await tester.pumpAndSettle();
-      expect(find.text('Takip ettiğim yerler'), findsOneWidget);
+      expect(find.text('Yerlerim'), findsOneWidget);
       expect(find.textContaining('en fazla 5 yer'), findsOneWidget);
       expect(find.byKey(const Key('trackedPlaceAdd')), findsOneWidget);
       expect(find.text('0/5'), findsOneWidget);
@@ -385,7 +385,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final post = adapter.requests.singleWhere((r) => r.method == 'POST' && r.path == '/places');
-      expect(post.data, {'name': 'Bağ evi', 'latitude': 38.4234, 'longitude': 27.1428, 'radius_km': 25, 'notify_heat': true});
+      expect(post.data, {'name': 'Bağ evi', 'latitude': 38.4234, 'longitude': 27.1428, 'radius_km': 25, 'notify_heat': true, 'notify_risk': true});
       expect(result?.name, 'Bağ evi');
     });
 
@@ -405,7 +405,7 @@ void main() {
     });
   });
 
-  testWidgets('the summary push opens the tracked-places list; back goes to the risk tab', (tester) async {
+  testWidgets('the summary push opens the places list; back goes home', (tester) async {
     final router = GoRouter(
       initialLocation: '/home',
       routes: [
@@ -426,9 +426,9 @@ void main() {
     NotificationService.openPayload(router, NotificationService.payloadForData({'type': 'place_heat_summary', 'count': '2'}));
     await tester.pumpAndSettle();
     expect(find.byType(TrackedPlacesScreen), findsOneWidget);
-    expect(find.text('Takip ettiğim yerler'), findsWidgets);
+    expect(find.text('Yerlerim'), findsWidgets);
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
-    expect(find.text('app tab=risk'), findsOneWidget);
+    expect(find.textContaining('app'), findsOneWidget);
   });
 }

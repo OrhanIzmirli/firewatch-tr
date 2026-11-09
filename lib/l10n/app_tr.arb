@@ -1312,6 +1312,13 @@
     "placeholders": { "score": { "type": "String" } }
   },
   "riskDataStale": "Veri eski",
+  "updateRequiredTitle": "Güncellemeniz gerekiyor",
+  "updateRequiredBody": "Uygulamanın bu sürümü artık desteklenmiyor. Devam etmek için güncelleyin.",
+  "updateNow": "Güncelle",
+  "updateStoreFailed": "Google Play açılamadı. Uygulamayı Play Store'dan güncelleyin.",
+  "updateReady": "Güncelleme hazır.",
+  "updateRestart": "Yeniden başlat",
+  "settingsRateApp": "Uygulamayı değerlendir",
   "riskLastKnownView": "Son bilinen risk",
   "homeLastKnownDetections": "Son bilinen uydu tespitleri",
   "mapNearbyFiresSubtitleStale": "Konumunuza en yakın son bilinen tespitler",

@@ -20,6 +20,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/risk_display.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/review_prompt.dart';
 import '../../services/risk_data_cache.dart';
 import '../../shared/widgets/app_sheet.dart';
 import '../../shared/widgets/detection_safety_notice.dart';
@@ -417,6 +418,7 @@ class _FidanScreenState extends State<FidanScreen> {
           grewTo: treeStage(after) > treeStage(before) ? treeStage(after) : null,
           message: l10n.fidanRewardTask,
           today: _today,
+          mayAskReview: treeStage(after) > treeStage(before),
         ),
       ),
     );

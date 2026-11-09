@@ -1,3 +1,4 @@
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:dio/dio.dart';
 import '../models/detection_status.dart';
 import 'package:flutter/foundation.dart';
@@ -68,6 +69,16 @@ class RenderApiService {
   // PUSH NOTIFICATION TOKEN KAYDET (isteğe bağlı konum ile — bölgesel
   // uyarıların hedeflenebilmesi için backend'de fcm_tokens.latitude/
   // longitude alanlarını doldurur)
+  /// "FireWatch TR/1.2.0+8": lets the server tell which installs are old.
+  Future<String> _deviceInfo() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      return 'FireWatch TR/${info.version}+${info.buildNumber}';
+    } catch (_) {
+      return 'FireWatch TR App';
+    }
+  }
+
   Future<bool> subscribeToNotifications(
     String token, {
     double? latitude,
@@ -81,7 +92,7 @@ class RenderApiService {
         '/notify/subscribe',
         data: {
           'token': token,
-          'device_info': 'FireWatch TR App',
+          'device_info': await _deviceInfo(),
           'latitude': ?latitude,
           'longitude': ?longitude,
           // Omitted entirely when null so the backend leaves whatever scope is

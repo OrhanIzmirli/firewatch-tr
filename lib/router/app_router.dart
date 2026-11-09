@@ -23,21 +23,37 @@ import '../features/settings/settings_screen.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/watchlist/watchlist_screen.dart';
 import '../models/fire_event.dart';
+import '../features/update/force_update_screen.dart';
 import '../models/fire_incident.dart';
+import '../services/app_update_gate.dart';
 import '../models/news_item.dart';
 import '../features/tracked_places/tracked_places_screen.dart';
 import '../features/notifications/notifications_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
+/// Where a forced update sends a route, or null to leave it alone. The
+/// emergency page stays open: an old version must not hide it.
+String? forcedUpdateRedirect({required bool required, required String location}) {
+  if (!required) return null;
+  return const {'/update-required', '/emergency'}.contains(location) ? null : '/update-required';
+}
+
 class AppRouter {
   static final GoRouter router = GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: '/',
+    refreshListenable: AppUpdateGate.instance,
+    redirect: (context, state) =>
+        forcedUpdateRedirect(required: AppUpdateGate.instance.updateRequired, location: state.matchedLocation),
     routes: [
       GoRoute(
         path: '/',
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/update-required',
+        builder: (context, state) => const ForceUpdateScreen(),
       ),
       GoRoute(
         path: '/language-selection',

@@ -50,6 +50,8 @@ dependencies:
   cloud_firestore: ^6.10.2
   google_sign_in: ^7.2.0
   shared_preferences_android: ^2.5.4
+  in_app_update: ^5.0.0
+  in_app_review: ^2.0.12
 
 
 dev_dependencies:

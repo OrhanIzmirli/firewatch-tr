@@ -13,6 +13,7 @@ import 'render_api_service.dart';
 import 'tracked_places_api.dart';
 import 'tracked_places_provider.dart';
 import 'alert_inbox.dart';
+import 'alert_preference.dart';
 
 class NotificationService {
   NotificationService._();
@@ -126,7 +127,9 @@ class NotificationService {
     _fcm.onTokenRefresh.listen((newToken) async {
       if (newToken.isEmpty) return;
       try {
-        await _renderApi.subscribeToNotifications(newToken);
+        // A new token is a new server row: it has to start in the user's state.
+        final prefs = await SharedPreferences.getInstance();
+        await _renderApi.subscribeToNotifications(newToken, isActive: alertsWanted(prefs));
         await TrackedPlacesApi().updateDevice(fcmToken: newToken);
       } catch (e) {
         if (kDebugMode) debugPrint('Token refresh registration failed: $e');
@@ -183,7 +186,15 @@ class NotificationService {
     try {
       final token = await _fcm.getToken();
       if (token != null && token.isNotEmpty) {
-        await _renderApi.subscribeToNotifications(token);
+        final prefs = await SharedPreferences.getInstance();
+        final registered = await _renderApi.subscribeToNotifications(
+          token,
+          isActive: startupActiveFlag(
+            wanted: alertsWanted(prefs),
+            synced: prefs.getBool(kAlertsSyncedKey) ?? false,
+          ),
+        );
+        if (registered) await prefs.setBool(kAlertsSyncedKey, true);
       }
 
       // Tracked places: the server deletes an install it hasn't seen for 90
@@ -290,6 +301,8 @@ class NotificationService {
     double? latitude,
     double? longitude,
   }) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(kAlertsWantedKey, active);
     final token = await _fcm.getToken();
     if (token == null || token.isEmpty) return;
     if (active) {
@@ -297,6 +310,7 @@ class NotificationService {
         token,
         latitude: latitude,
         longitude: longitude,
+        isActive: true,
       );
     } else {
       await _renderApi.setNotificationActive(token, false);
@@ -326,8 +340,7 @@ class NotificationService {
     final token = await _fcm.getToken();
     if (token == null || token.isEmpty) return null;
     final prefs = await SharedPreferences.getInstance();
-    final pushEnabled = prefs.getBool('settings_push_notifications') ?? true;
-    return _renderApi.readServerScope(token, isActive: pushEnabled);
+    return _renderApi.readServerScope(token, isActive: alertsWanted(prefs));
   }
 
   /// Pushes the user's alert-scope choice to the backend so targeted fire
@@ -342,9 +355,11 @@ class NotificationService {
     final token = await _fcm.getToken();
     if (token == null || token.isEmpty) return false;
 
+    // Choosing a scope says what to send, not to start sending.
+    final wanted = alertsWanted(await SharedPreferences.getInstance());
     final patched = await _renderApi.setNotificationActive(
       token,
-      true,
+      wanted,
       alertScope: scope,
       regionKey: regionKey,
       cityId: cityId,
@@ -356,6 +371,7 @@ class NotificationService {
       alertScope: scope,
       regionKey: regionKey,
       cityId: cityId,
+      isActive: wanted,
     );
   }
 

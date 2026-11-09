@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/render_api_service.dart';
+import '../../services/settings_provider.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
@@ -183,6 +185,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   /// region-targeted server pushes have somewhere to match against.
   Future<void> _startAutoMonitoring() async {
     final l10n = AppLocalizations.of(context)!;
+    final settings = ProviderScope.containerOf(context, listen: false).read(settingsProvider.notifier);
 
     // This flow stores the (rounded) location on the server, so the
     // explanation comes first even when the permission was granted before.
@@ -252,6 +255,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, true);
+    await settings.recordPushPreference(true);
 
     if (!mounted) return;
     setState(() => _isBusy = false);
@@ -267,6 +271,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Future<void> _stopAutoMonitoring() async {
+    final settings = ProviderScope.containerOf(context, listen: false).read(settingsProvider.notifier);
     setState(() => _isBusy = true);
 
     await _monitor.stopMonitoring();
@@ -276,6 +281,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, false);
+    // Stopping turns server alerts off, so the Settings switch must say so.
+    await settings.recordPushPreference(false);
 
     if (!mounted) return;
     setState(() => _isBusy = false);

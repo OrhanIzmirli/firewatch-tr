@@ -2648,6 +2648,12 @@ abstract class AppLocalizations {
   /// **'Rapor gönderilemedi. İnternet bağlantınızı kontrol edin.'**
   String get reportPanelSubmitFailed;
 
+  /// No description provided for @reportPanelPhotoSkipped.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir fotoğraf okunamadığı için rapora eklenmedi.'**
+  String get reportPanelPhotoSkipped;
+
   /// No description provided for @reportPanelOk.
   ///
   /// In tr, this message translates to:
@@ -3310,7 +3316,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDeleteLocationConfirmBody.
   ///
   /// In tr, this message translates to:
-  /// **'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; il veya bölge seçmediyseniz bundan sonra tüm bölgelerin risk uyarılarını alabilirsiniz. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.'**
+  /// **'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; konum olmadan yalnız seçtiğiniz il veya bölgenin, Tüm Türkiye\'yi seçtiyseniz ülke genelinin uyarılarını alırsınız. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.'**
   String get settingsDeleteLocationConfirmBody;
 
   /// No description provided for @settingsDeleteLocationConfirm.

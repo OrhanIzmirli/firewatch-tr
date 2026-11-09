@@ -1147,6 +1147,7 @@
   "incidentsSectionTitle": "Satellite Events",
   "incidentsSectionSubtitle": "Satellite detections grouped into events",
   "incidentStatusActive": "Recent detection",
+  "incidentStatusLastKnown": "Last known detection",
   "incidentStatusAwaiting": "No longer seen",
   "incidentStatusLowConfidence": "Low confidence",
   "incidentDetectedHoursAgo": "Detected within the last {hours} hours",

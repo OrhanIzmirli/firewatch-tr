@@ -1024,6 +1024,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           context,
           incident: incident,
           cityName: _cityNameFor(incident),
+          outdated: detectionsOutdated(_detectionStatus, DateTime.now()),
         ),
         child: ValueListenableBuilder<double>(
           valueListenable: _zoom,
@@ -1968,7 +1969,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   /// stacking both produced "low confidence" twice, meaning two different
   /// things.
   Widget _buildMarkerLegend(AppLocalizations l10n, Color textColor) {
-    if (_showIncidents) return const IncidentLegend();
+    if (_showIncidents) return IncidentLegend(outdated: detectionsOutdated(_detectionStatus, DateTime.now()));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

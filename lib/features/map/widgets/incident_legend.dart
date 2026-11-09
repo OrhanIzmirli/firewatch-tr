@@ -13,7 +13,9 @@ import '../../../models/fire_incident.dart';
 /// that is not a fire category; there is deliberately no "extinguished"
 /// row — that state cannot be derived from satellite data.
 class IncidentLegend extends StatelessWidget {
-  const IncidentLegend({super.key});
+  final bool outdated;
+
+  const IncidentLegend({super.key, this.outdated = false});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class IncidentLegend extends StatelessWidget {
                 Icon(status.icon, size: 16, color: status.color),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  status.label(l10n),
+                  status.label(l10n, outdated: outdated),
                   style: GoogleFonts.ibmPlexSans(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

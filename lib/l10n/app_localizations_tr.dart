@@ -2923,6 +2923,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get incidentStatusActive => 'Güncel tespit';
 
   @override
+  String get incidentStatusLastKnown => 'Son bilinen tespit';
+
+  @override
   String get incidentStatusAwaiting => 'Artık görülmüyor';
 
   @override

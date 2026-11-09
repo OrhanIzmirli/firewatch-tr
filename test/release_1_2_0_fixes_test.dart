@@ -24,6 +24,7 @@ import 'package:firewatch_tr/services/app_version.dart';
 import 'package:firewatch_tr/services/device_position.dart';
 import 'package:firewatch_tr/services/fire_api_service.dart';
 import 'package:firewatch_tr/services/notification_service.dart';
+import 'package:firewatch_tr/features/map/widgets/incident_legend.dart';
 import 'package:firewatch_tr/shared/widgets/detection_safety_notice.dart';
 
 Widget _app(Widget child, {Locale locale = const Locale('tr')}) => MaterialApp(
@@ -83,6 +84,49 @@ void main() {
       expect(find.byType(DetectionSafetyNotice), findsOneWidget);
       expect(find.text(tr.emergencyCall112), findsOneWidget);
       expect(tr.incidentPanelTitle, isNot(contains('Yangın')));
+    });
+
+    testWidgets('old satellite data: a recent incident reads as last known', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      final incident = FireIncident.fromJson({
+        'id': 1,
+        'first_detected_at': DateTime.now().subtract(const Duration(hours: 5)).toIso8601String(),
+        'last_detected_at': DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
+        'latitude': 36.9,
+        'longitude': 30.7,
+        'detection_count': 4,
+        'overpass_count': 2,
+        'satellite': {'state': 'detected_recently', 'hours_since_last_detection': 1},
+      });
+      await tester.pumpWidget(_app(IncidentSheet(incident: incident, cityName: 'Antalya', outdated: true)));
+      await tester.pumpAndSettle();
+      expect(find.text(tr.incidentStatusLastKnown), findsOneWidget);
+      expect(find.text(tr.incidentStatusActive), findsNothing);
+
+      await tester.pumpWidget(_app(IncidentSheet(incident: incident, cityName: 'Antalya')));
+      await tester.pumpAndSettle();
+      expect(find.text(tr.incidentStatusActive), findsOneWidget);
+    });
+
+    testWidgets('the map legend follows the same rule', (tester) async {
+      await tester.pumpWidget(_app(const IncidentLegend(outdated: true)));
+      await tester.pumpAndSettle();
+      expect(find.text('Son bilinen tespit'), findsOneWidget);
+      expect(find.text('Güncel tespit'), findsNothing);
+      expect(IncidentStatus.lowConfidence.label(tr, outdated: true), IncidentStatus.lowConfidence.label(tr));
+      expect(IncidentStatus.activeDetection.label(en, outdated: true), 'Last known detection');
+
+      await tester.pumpWidget(_app(const IncidentLegend()));
+      await tester.pumpAndSettle();
+      expect(find.text('Güncel tespit'), findsOneWidget);
+    });
+
+    test('the map passes the data age to the legend and the sheet', () {
+      final map = File('lib/features/map/map_screen.dart').readAsStringSync();
+      expect(map, contains('IncidentLegend(outdated: detectionsOutdated('));
+      expect(map, contains(RegExp(r'cityName: _cityNameFor\(incident\),\s+outdated: detectionsOutdated\(')));
     });
 
     test('every map detail view embeds the shared notice', () {

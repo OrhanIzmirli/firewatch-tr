@@ -1147,6 +1147,7 @@
   "incidentsSectionTitle": "Uydu Olayları",
   "incidentsSectionSubtitle": "Uydu tespitleri olaylara gruplanmış",
   "incidentStatusActive": "Güncel tespit",
+  "incidentStatusLastKnown": "Son bilinen tespit",
   "incidentStatusAwaiting": "Artık görülmüyor",
   "incidentStatusLowConfidence": "Düşük güvenilirlik",
   "incidentDetectedHoursAgo": "Son {hours} saat içinde tespit edildi",

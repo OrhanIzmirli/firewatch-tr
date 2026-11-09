@@ -5132,6 +5132,12 @@ abstract class AppLocalizations {
   /// **'Güncel tespit'**
   String get incidentStatusActive;
 
+  /// No description provided for @incidentStatusLastKnown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bilinen tespit'**
+  String get incidentStatusLastKnown;
+
   /// No description provided for @incidentStatusAwaiting.
   ///
   /// In tr, this message translates to:

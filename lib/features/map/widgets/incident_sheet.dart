@@ -24,17 +24,21 @@ class IncidentSheet extends StatelessWidget {
   final FireIncident incident;
   final String? cityName;
 
-  const IncidentSheet({super.key, required this.incident, this.cityName});
+  /// The satellite data behind this incident cannot be called current.
+  final bool outdated;
+
+  const IncidentSheet({super.key, required this.incident, this.cityName, this.outdated = false});
 
   static Future<void> show(
     BuildContext context, {
     required FireIncident incident,
     String? cityName,
+    bool outdated = false,
   }) {
     return showAppSheet(
       context,
       bare: true,
-      builder: (_) => IncidentSheet(incident: incident, cityName: cityName),
+      builder: (_) => IncidentSheet(incident: incident, cityName: cityName, outdated: outdated),
     );
   }
 
@@ -73,7 +77,7 @@ class IncidentSheet extends StatelessWidget {
             const SheetHeader(),
             const SizedBox(height: AppSpacing.xl),
 
-            _StatusHeader(status: status, titleColor: titleColor),
+            _StatusHeader(status: status, titleColor: titleColor, outdated: outdated),
             const SizedBox(height: AppSpacing.lg),
             Text(
               detectionSummaryText(
@@ -297,7 +301,9 @@ class _StatusHeader extends StatelessWidget {
   final IncidentStatus status;
   final Color titleColor;
 
-  const _StatusHeader({required this.status, required this.titleColor});
+  final bool outdated;
+
+  const _StatusHeader({required this.status, required this.titleColor, required this.outdated});
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +335,7 @@ class _StatusHeader extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                status.label(l10n),
+                status.label(l10n, outdated: outdated),
                 style: GoogleFonts.ibmPlexSans(
                   fontSize: 19,
                   fontWeight: FontWeight.w800,

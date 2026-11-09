@@ -2929,6 +2929,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentStatusActive => 'Recent detection';
 
   @override
+  String get incidentStatusLastKnown => 'Last known detection';
+
+  @override
   String get incidentStatusAwaiting => 'No longer seen';
 
   @override

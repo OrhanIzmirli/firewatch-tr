@@ -627,10 +627,12 @@ extension IncidentStatusStyle on IncidentStatus {
     }
   }
 
-  String label(AppLocalizations l10n) {
+  /// [outdated]: the satellite data cannot be called current, so a
+  /// "recent" incident is only the last one known.
+  String label(AppLocalizations l10n, {bool outdated = false}) {
     switch (this) {
       case IncidentStatus.activeDetection:
-        return l10n.incidentStatusActive;
+        return outdated ? l10n.incidentStatusLastKnown : l10n.incidentStatusActive;
       case IncidentStatus.awaitingConfirmation:
         return l10n.incidentStatusAwaiting;
       case IncidentStatus.lowConfidence:

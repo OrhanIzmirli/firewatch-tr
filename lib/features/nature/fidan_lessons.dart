@@ -12,7 +12,10 @@ class FidanRewardScreen extends StatefulWidget {
 
   /// Set when this finish was the very last lesson.
   final bool allDone;
-  const FidanRewardScreen({super.key, required this.xp, required this.newApple, required this.grewTo, required this.message, required this.today, this.sectionTitle, this.allDone = false});
+
+  /// A good moment to ask for a Play review. Nothing depends on the answer.
+  final bool mayAskReview;
+  const FidanRewardScreen({super.key, required this.xp, required this.newApple, required this.grewTo, required this.message, required this.today, this.sectionTitle, this.allDone = false, this.mayAskReview = false});
 
   @override
   State<FidanRewardScreen> createState() => _FidanRewardScreenState();
@@ -111,7 +114,7 @@ class _FidanRewardScreenState extends State<FidanRewardScreen> with SingleTicker
                         ),
                       ),
                     ),
-                    BigGreenButton(l10n.fidanContinue, key: const Key('fidanRewardContinue'), onTap: () => Navigator.of(context).pop()),
+                    BigGreenButton(l10n.fidanContinue, key: const Key('fidanRewardContinue'), onTap: () { if (widget.mayAskReview) ReviewPrompt.maybeAsk(); Navigator.of(context).pop(); }),
                   ],
                 ),
               ),
@@ -518,6 +521,7 @@ class _NatureLessonScreenState extends State<NatureLessonScreen> {
           today: widget.today ?? DateTime.now(),
           sectionTitle: newSection?.title.of(lang),
           allDone: everything,
+          mayAskReview: treeStage(after) > treeStage(before) || (!replay && after.lessons.length >= 3),
         ),
       ),
     );

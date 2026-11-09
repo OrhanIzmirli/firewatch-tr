@@ -3411,6 +3411,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskDataStale => 'Veri eski';
 
   @override
+  String get updateRequiredTitle => 'Güncellemeniz gerekiyor';
+
+  @override
+  String get updateRequiredBody =>
+      'Uygulamanın bu sürümü artık desteklenmiyor. Devam etmek için güncelleyin.';
+
+  @override
+  String get updateNow => 'Güncelle';
+
+  @override
+  String get updateStoreFailed =>
+      'Google Play açılamadı. Uygulamayı Play Store\'dan güncelleyin.';
+
+  @override
+  String get updateReady => 'Güncelleme hazır.';
+
+  @override
+  String get updateRestart => 'Yeniden başlat';
+
+  @override
+  String get settingsRateApp => 'Uygulamayı değerlendir';
+
+  @override
   String get riskLastKnownView => 'Son bilinen risk';
 
   @override

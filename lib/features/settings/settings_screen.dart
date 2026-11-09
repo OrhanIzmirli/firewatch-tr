@@ -11,6 +11,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/app_version.dart';
+import '../../services/review_prompt.dart';
 import '../../services/locale_provider.dart';
 import '../../services/notification_service.dart';
 import '../../services/tracked_places_provider.dart';
@@ -391,6 +392,12 @@ class SettingsScreen extends ConsumerWidget {
             GlassPanel(
                   child: Column(
                     children: [
+                      _LegalLinkTile(
+                        key: const Key('settingsRateApp'),
+                        icon: Icons.star_outline_rounded,
+                        label: l10n.settingsRateApp,
+                        onTap: () => ReviewPrompt.openStore(),
+                      ),
                       _LegalLinkTile(
                         icon: Icons.privacy_tip_outlined,
                         label: l10n.settingsPrivacyPolicy,

@@ -3418,6 +3418,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskDataStale => 'Data is out of date';
 
   @override
+  String get updateRequiredTitle => 'You need to update';
+
+  @override
+  String get updateRequiredBody =>
+      'This version of the app is no longer supported. Update to continue.';
+
+  @override
+  String get updateNow => 'Update';
+
+  @override
+  String get updateStoreFailed =>
+      'Google Play could not be opened. Update the app from the Play Store.';
+
+  @override
+  String get updateReady => 'Update ready.';
+
+  @override
+  String get updateRestart => 'Restart';
+
+  @override
+  String get settingsRateApp => 'Rate the app';
+
+  @override
   String get riskLastKnownView => 'Last known risk';
 
   @override

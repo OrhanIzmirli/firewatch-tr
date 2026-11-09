@@ -5937,6 +5937,48 @@ abstract class AppLocalizations {
   /// **'Veri eski'**
   String get riskDataStale;
 
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncellemeniz gerekiyor'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamanın bu sürümü artık desteklenmiyor. Devam etmek için güncelleyin.'**
+  String get updateRequiredBody;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncelle'**
+  String get updateNow;
+
+  /// No description provided for @updateStoreFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google Play açılamadı. Uygulamayı Play Store\'dan güncelleyin.'**
+  String get updateStoreFailed;
+
+  /// No description provided for @updateReady.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncelleme hazır.'**
+  String get updateReady;
+
+  /// No description provided for @updateRestart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeniden başlat'**
+  String get updateRestart;
+
+  /// No description provided for @settingsRateApp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamayı değerlendir'**
+  String get settingsRateApp;
+
   /// No description provided for @riskLastKnownView.
   ///
   /// In tr, this message translates to:

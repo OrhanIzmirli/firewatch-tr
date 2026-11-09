@@ -14,10 +14,12 @@ import 'core/utils/map_tiles.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
+import 'services/app_update_gate.dart';
 import 'services/background_task_service.dart';
 import 'services/fire_monitoring_service.dart';
 import 'services/locale_provider.dart';
 import 'services/notification_service.dart';
+import 'services/review_prompt.dart';
 import 'services/risk_data_cache.dart';
 import 'services/settings_provider.dart';
 
@@ -56,6 +58,8 @@ Future<void> main() async {
   // above), which is all these services need to be safe to construct.
   if (!kIsWeb) {
     unawaited(_initializeBackgroundServices());
+    unawaited(ReviewPrompt.noteAppOpen());
+    if (defaultTargetPlatform == TargetPlatform.android) unawaited(AppUpdateGate.instance.check());
   }
 }
 
@@ -104,6 +108,7 @@ class FireWatchApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: settings.darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       routerConfig: AppRouter.router,
+      scaffoldMessengerKey: AppUpdateGate.messengerKey,
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [

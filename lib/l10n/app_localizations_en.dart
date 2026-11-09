@@ -1448,6 +1448,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t submit the report. Check your internet connection.';
 
   @override
+  String get reportPanelPhotoSkipped =>
+      'A photo couldn\'t be read, so it wasn\'t added to the report.';
+
+  @override
   String get reportPanelOk => 'OK';
 
   @override
@@ -1835,7 +1839,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsDeleteLocationConfirmBody =>
-      'Your approximate location and all your tracked places on our server are deleted immediately. Notifications stay on; if you haven\'t picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.';
+      'Your approximate location and all your tracked places on our server are deleted immediately. Notifications stay on; without a location you only get alerts for the province or region you picked, or for all of Turkey if you chose that. If you start automatic monitoring again, your location is stored again.';
 
   @override
   String get settingsDeleteLocationConfirm => 'Delete';

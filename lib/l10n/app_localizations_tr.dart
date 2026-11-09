@@ -1443,6 +1443,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Rapor gönderilemedi. İnternet bağlantınızı kontrol edin.';
 
   @override
+  String get reportPanelPhotoSkipped =>
+      'Bir fotoğraf okunamadığı için rapora eklenmedi.';
+
+  @override
   String get reportPanelOk => 'Tamam';
 
   @override
@@ -1831,7 +1835,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsDeleteLocationConfirmBody =>
-      'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; il veya bölge seçmediyseniz bundan sonra tüm bölgelerin risk uyarılarını alabilirsiniz. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.';
+      'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; konum olmadan yalnız seçtiğiniz il veya bölgenin, Tüm Türkiye\'yi seçtiyseniz ülke genelinin uyarılarını alırsınız. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.';
 
   @override
   String get settingsDeleteLocationConfirm => 'Sil';

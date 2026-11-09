@@ -86,6 +86,7 @@ class RenderApiService {
     AlertScope? alertScope,
     String? regionKey,
     int? cityId,
+    bool? isActive,
   }) async {
     try {
       final response = await _dio.post(
@@ -93,6 +94,8 @@ class RenderApiService {
         data: {
           'token': token,
           'device_info': await _deviceInfo(),
+          // Omitted when null so the server keeps the user's on/off choice.
+          'is_active': ?isActive,
           'latitude': ?latitude,
           'longitude': ?longitude,
           // Omitted entirely when null so the backend leaves whatever scope is

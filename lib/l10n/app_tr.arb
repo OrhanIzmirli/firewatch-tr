@@ -576,6 +576,7 @@
     "placeholders": { "city": { "type": "String" } }
   },
   "reportPanelSubmitFailed": "Rapor gönderilemedi. İnternet bağlantınızı kontrol edin.",
+  "reportPanelPhotoSkipped": "Bir fotoğraf okunamadığı için rapora eklenmedi.",
   "reportPanelOk": "Tamam",
   "reportPanelNewReport": "Yeni Bildirim",
   "reportPanelTitle": "Yangın Raporla",
@@ -710,7 +711,7 @@
   "notifPlacesChannelDescription": "Yerlerim'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın riski",
   "settingsDeleteLocation": "Konum verimi sil",
   "settingsDeleteLocationConfirmTitle": "Konum veriniz silinsin mi?",
-  "settingsDeleteLocationConfirmBody": "Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; il veya bölge seçmediyseniz bundan sonra tüm bölgelerin risk uyarılarını alabilirsiniz. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.",
+  "settingsDeleteLocationConfirmBody": "Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; konum olmadan yalnız seçtiğiniz il veya bölgenin, Tüm Türkiye'yi seçtiyseniz ülke genelinin uyarılarını alırsınız. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.",
   "settingsDeleteLocationConfirm": "Sil",
   "settingsDeleteLocationDone": "Konum veriniz ve takip ettiğiniz yerler sunucudan silindi.",
   "settingsDeleteLocationFailed": "Konum veriniz silinemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.",

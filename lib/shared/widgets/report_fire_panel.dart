@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../core/utils/image_metadata.dart';
 import '../../core/utils/map_tiles.dart';
 import 'osm_attribution.dart';
 import '../../core/constants/app_colors.dart';
@@ -251,11 +252,29 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
     setState(() => _isSubmitting = true);
 
     try {
+      List<String>? photosBase64;
+      var photoSkipped = false;
+      if (_photos.isNotEmpty) {
+        setState(() => _isEncodingPhotos = true);
+        final cleaned = <String>[];
+        for (final photo in _photos) {
+          // Never the original: it can carry the phone's exact location.
+          final bytes = stripImageMetadata(await photo.readAsBytes());
+          if (bytes == null) {
+            photoSkipped = true;
+          } else {
+            cleaned.add(base64Encode(bytes));
+          }
+        }
+        if (cleaned.isNotEmpty) photosBase64 = cleaned;
+        if (mounted) setState(() => _isEncodingPhotos = false);
+      }
+
       final extraDetails = <String>[];
       if (_smokeVisible) extraDetails.add(l10n.reportPanelSmokeObserved);
       if (_windStrong) extraDetails.add(l10n.reportPanelStrongWindPresent);
       if (_nearSettlement) extraDetails.add(l10n.reportPanelNearSettlementNote);
-      if (_photos.isNotEmpty) extraDetails.add('${_photos.length} ${l10n.reportPanelPhotosLabel}');
+      if (photosBase64 != null) extraDetails.add('${photosBase64.length} ${l10n.reportPanelPhotosLabel}');
 
       final description = [
         if (_type == ReportType.missingFire) l10n.reportTypeMissingFire,
@@ -267,15 +286,6 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       final reporterName = !_isAnonymous && _nameController.text.isNotEmpty
           ? _nameController.text
           : l10n.commonAnonymous;
-
-      List<String>? photosBase64;
-      if (_photos.isNotEmpty) {
-        setState(() => _isEncodingPhotos = true);
-        photosBase64 = [
-          for (final photo in _photos) base64Encode(await photo.readAsBytes()),
-        ];
-        if (mounted) setState(() => _isEncodingPhotos = false);
-      }
 
       final response = await _dio.post(
         '$_backendUrl/api/fires/report',
@@ -303,6 +313,7 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
             _result = Map<String, dynamic>.from(response.data['data']);
             _stage = _Stage.success;
           });
+          if (photoSkipped) _showSnack(l10n.reportPanelPhotoSkipped);
         }
       }
     } catch (e) {

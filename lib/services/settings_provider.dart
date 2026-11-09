@@ -83,6 +83,13 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     unawaited(NotificationService.instance.setPushEnabled(value));
   }
 
+  /// For a flow that has already told the backend: only the switch follows.
+  Future<void> recordPushPreference(bool value) async {
+    state = state.copyWith(pushNotificationsEnabled: value);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_pushNotificationsKey, value);
+  }
+
   Future<void> toggleNearbyAlerts(bool value) async {
     state = state.copyWith(nearbyAlertsEnabled: value);
     final prefs = await SharedPreferences.getInstance();

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+. Only Fidan progress is ever backed up: no location, no places, no tokens. -->
+<data-extraction-rules>
+    <cloud-backup disableIfNoEncryptionCapabilities="true">
+        <include domain="sharedpref" path="nature_progress.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="nature_progress.xml" />
+    </device-transfer>
+</data-extraction-rules>

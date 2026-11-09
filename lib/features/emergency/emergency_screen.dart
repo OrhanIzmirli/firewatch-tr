@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../core/utils/emergency_call.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
@@ -13,15 +13,14 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
 import 'widgets/emergency_action_card.dart';
 import 'widgets/emergency_contact_card.dart';
+import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
 
 class EmergencyScreen extends StatelessWidget {
   const EmergencyScreen({super.key});
 
   Future<void> _call(String number) async {
-    final uri = Uri(scheme: 'tel', path: number);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
+    await openDialer(number);
   }
 
   Future<void> _shareLocation(BuildContext context) async {
@@ -31,10 +30,15 @@ class EmergencyScreen extends StatelessWidget {
       Position? position;
 
       if (permission == LocationPermission.denied) {
-        await Geolocator.requestPermission();
+        if (!context.mounted) return;
+        await LocationDisclosure.requestPermission(context);
       }
 
-      position = await Geolocator.getCurrentPosition();
+      position = await DevicePosition.current(
+        accuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 15),
+        maxLastKnownAge: const Duration(minutes: 5),
+      );
 
       final lat = position.latitude.toStringAsFixed(6);
       final lng = position.longitude.toStringAsFixed(6);

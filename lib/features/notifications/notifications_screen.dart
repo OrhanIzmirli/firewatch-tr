@@ -10,12 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../models/detection_status.dart';
 import '../../models/fire_point.dart';
 import '../../services/background_task_service.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
 import '../../services/notification_service.dart';
+import '../../services/render_api_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
@@ -23,8 +25,13 @@ import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/system_status_line.dart';
 import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
+import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../home/widgets/recent_alerts.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -43,6 +50,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   List<FirePoint> _highRiskFires = [];
 
   final FireApiService _fireApiService = FireApiService();
+  DetectionStatus? _detectionStatus;
   FireMonitoringService get _monitor => FireMonitoringService.instance;
 
   @override
@@ -88,6 +96,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Future<void> _loadFires() async {
     if (mounted) setState(() => _fireLoading = true);
+    RenderApiService().fetchDetectionStatus().then((status) {
+      if (mounted) setState(() => _detectionStatus = status);
+    }).catchError((Object _) {});
     try {
       final fires = await _fireApiService.fetchTurkeyFiresWithCities();
       await OfflineCacheService.instance.save(_cacheKey, fires.map((p) => p.toJson()).toList());
@@ -172,6 +183,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   /// region-targeted server pushes have somewhere to match against.
   Future<void> _startAutoMonitoring() async {
     final l10n = AppLocalizations.of(context)!;
+
+    // This flow stores the (rounded) location on the server, so the
+    // explanation comes first even when the permission was granted before.
+    final accepted = await LocationDisclosure.ensureAccepted(context, force: true);
+    if (!accepted || !mounted) return;
+
     setState(() => _isBusy = true);
 
     var permission = await Geolocator.checkPermission();
@@ -192,7 +209,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final wantsBackground = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.backgroundLocationDialogTitle),
+        title: DialogTitleWithClose(title: Text(l10n.backgroundLocationDialogTitle)),
         content: Text(l10n.backgroundLocationDialogBody),
         actions: [
           TextButton(
@@ -222,12 +239,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     Position? position;
     try {
-      position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
     } catch (_) {
       // Best-effort — subscription still proceeds without a location; the
       // device just won't be eligible for region-targeted server alerts.
@@ -283,6 +295,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Navigator.of(context).canPop() ? null : BackButton(onPressed: () => context.go('/app')),
         title: Text(l10n.notificationsTitle, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _loadFires),
@@ -314,7 +327,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               StatusChip(
                                 label: _highRiskFires.isNotEmpty
                                     ? l10n.notificationsNewAlerts(_highRiskFires.length)
-                                    : l10n.notificationsUpToDate,
+                                    : detectionsOutdated(_detectionStatus, DateTime.now())
+                                        ? l10n.riskDataStale
+                                        : l10n.notificationsUpToDate,
                                 icon: Icons.notifications_active_rounded,
                               ),
                               const SizedBox(height: AppSpacing.lg),
@@ -327,6 +342,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           ),
                         ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.06, end: 0),
 
+                        const SizedBox(height: AppSpacing.md),
+                        const RecentAlerts(),
                         const SizedBox(height: AppSpacing.md),
                         TrustInfoCardGroup(
                           meaning: l10n.trustAlertsMeaning,
@@ -517,7 +534,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           const SkeletonListLoader(count: 3)
                         else if (_highRiskFires.isEmpty)
                           GlassPanel(
-                            child: Text(l10n.notificationsNoHighRisk,
+                            child: Text(
+                                detectionsOutdated(_detectionStatus, DateTime.now())
+                                    ? '${l10n.detectionStaleTitle} ${l10n.detectionStaleBody}'
+                                    : l10n.notificationsNoHighRisk,
                                 style: GoogleFonts.ibmPlexSans(fontSize: 14, color: secondaryTextColor)),
                           )
                         else

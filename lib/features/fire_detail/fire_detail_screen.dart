@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/utils/turkish_text.dart';
 import '../../core/utils/wind_direction.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/fire_event.dart';
@@ -25,8 +24,10 @@ import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/color_dot.dart';
 import '../../shared/widgets/status_chip.dart';
+import '../../shared/widgets/detection_safety_notice.dart';
+import 'related_news.dart';
+import '../../shared/widgets/related_news_section.dart';
 
-enum _RelatedNewsTier { region, city, generic }
 
 class FireDetailScreen extends ConsumerStatefulWidget {
   final FireEvent fireEvent;
@@ -67,41 +68,11 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
     if (Localizations.localeOf(context).languageCode != 'en') return;
     _newsFuture?.then((items) {
       if (!mounted) return;
-      final (selected, _) = _selectRelatedNews(items, widget.fireEvent);
+      final (selected, _) = selectRelatedNews(items, widget.fireEvent);
       for (final item in selected) {
         _autoTranslateItem(item);
       }
     });
-  }
-
-  /// Picks up to 3 related news articles, preferring the most specific
-  /// match: (1) the article's relatedRegion matches the fire's region,
-  /// (2) the fire's city/region name appears in the article title, (3)
-  /// falls back to the most recent fire-related news already returned.
-  (List<NewsItem>, _RelatedNewsTier) _selectRelatedNews(
-    List<NewsItem> allNews,
-    FireEvent fire,
-  ) {
-    final fireRegionFold = foldTurkish(fire.regionNameTr);
-    final cityFold = foldTurkish(fire.city);
-
-    final regionMatches = allNews
-        .where((n) => foldTurkish(n.relatedRegion) == fireRegionFold)
-        .toList();
-    if (regionMatches.isNotEmpty) {
-      return (regionMatches.take(3).toList(), _RelatedNewsTier.region);
-    }
-
-    final titleMatches = allNews.where((n) {
-      final titleFold = foldTurkish(n.title);
-      return (cityFold.isNotEmpty && titleFold.contains(cityFold)) ||
-          titleFold.contains(fireRegionFold);
-    }).toList();
-    if (titleMatches.isNotEmpty) {
-      return (titleMatches.take(3).toList(), _RelatedNewsTier.city);
-    }
-
-    return (allNews.take(3).toList(), _RelatedNewsTier.generic);
   }
 
   Future<void> _autoTranslateItem(NewsItem item) async {
@@ -314,6 +285,12 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.08, end: 0),
 
+            const SizedBox(height: AppSpacing.lg),
+            DetectionSafetyNotice(
+              prominent: fire.riskTier == 'high' &&
+                  (fire.smartStatus == FireStatus.active || fire.smartStatus == FireStatus.likelyActive),
+            ),
+
             const SizedBox(height: AppSpacing.xxl),
 
             SectionHeader(
@@ -387,11 +364,6 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
               label: l10n.fireDetailAffectedArea,
               value: fire.affectedArea,
             ),
-            const SizedBox(height: AppSpacing.sm),
-            _InfoRow(
-              label: l10n.fireDetailFireRadiativePower,
-              value: _frpDisplayValue(l10n, fire.frp),
-            ),
 
             const SizedBox(height: AppSpacing.xxl),
             SectionHeader(
@@ -399,17 +371,48 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
               icon: const Icon(Icons.satellite_alt_outlined),
             ),
             const SizedBox(height: AppSpacing.md),
-            _ActionCard(text: l10n.detectionAboutViirs),
-            const SizedBox(height: AppSpacing.sm),
-            _ActionCard(
-              text: l10n.detectionConfidenceExplanation(fire.riskLevel),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            _ActionCard(
-              text: l10n.detectionFrpExplanation(fire.frp.toStringAsFixed(1)),
-            ),
-            const SizedBox(height: AppSpacing.sm),
             _ActionCard(text: l10n.detectionLimitations),
+            RelatedNewsSection(
+              city: fire.city,
+              from: DateTime.now().subtract(const Duration(days: 2)),
+              to: DateTime.now(),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            // The only place on this screen that speaks instrument.
+            ExpansionTile(
+              key: const Key('fireTechnicalDetails'),
+              tilePadding: EdgeInsets.zero,
+              title: Text(l10n.commonAllTechnical),
+              children: [
+                _InfoRow(
+                  label: l10n.fireDetailFireRadiativePower,
+                  value: _frpDisplayValue(l10n, fire.frp),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                if (fire.brightness > 0) ...[
+                  _InfoRow(
+                    label: l10n.fireDetailBrightness,
+                    value: '${(fire.brightness > 200 ? fire.brightness - 273.15 : fire.brightness).toStringAsFixed(1)}°C (${fire.brightness.toStringAsFixed(0)} K)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  _ActionCard(text: l10n.fireDetailBrightnessNote),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                for (final line in fire.technicalLines) ...[
+                  _ActionCard(text: line),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                _ActionCard(text: l10n.detectionAboutViirs),
+                const SizedBox(height: AppSpacing.sm),
+                _ActionCard(
+                  text: l10n.detectionConfidenceExplanation(fire.riskLevel),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _ActionCard(
+                  text: l10n.detectionFrpExplanation(fire.frp.toStringAsFixed(1)),
+                ),
+              ],
+            ),
 
             const SizedBox(height: AppSpacing.xxl),
 
@@ -503,7 +506,7 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                     ),
                   );
                 }
-                final (news, tier) = _selectRelatedNews(allNews, fire);
+                final (news, tier) = selectRelatedNews(allNews, fire);
                 if (news.isEmpty) {
                   return GlassPanel(
                     child: Text(
@@ -515,11 +518,13 @@ class _FireDetailScreenState extends ConsumerState<FireDetailScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (tier != _RelatedNewsTier.generic) ...[
+                    if (tier != RelatedNewsTier.generic) ...[
                       Text(
-                        tier == _RelatedNewsTier.city
-                            ? l10n.fireDetailRelatedToCity(fire.city)
-                            : l10n.fireDetailRegionalNews,
+                        tier == RelatedNewsTier.linked
+                            ? l10n.fireDetailLinkedNews
+                            : tier == RelatedNewsTier.city
+                                ? l10n.fireDetailRelatedToCity(fire.city)
+                                : l10n.fireDetailRegionalNews,
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

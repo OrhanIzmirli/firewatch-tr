@@ -3,6 +3,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/feedback_rate_limiter.dart';
 import '../../services/feedback_service.dart';
+import 'app_sheet.dart';
 
 void _showBlocked(BuildContext context, AppLocalizations l10n, int days) {
   ScaffoldMessenger.of(
@@ -22,10 +23,9 @@ Future<void> showFeedbackSheet(BuildContext context) async {
     return;
   }
   if (!context.mounted) return;
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
+  await showAppSheet<void>(
+    context,
+    scrollable: false,
     builder: (_) => const _FeedbackSheet(),
   );
 }
@@ -38,10 +38,9 @@ Future<void> showBugReportSheet(BuildContext context) async {
     return;
   }
   if (!context.mounted) return;
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
+  await showAppSheet<void>(
+    context,
+    scrollable: false,
     builder: (_) => const _BugReportSheet(),
   );
 }

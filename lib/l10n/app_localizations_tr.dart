@@ -144,7 +144,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get splashTagline => 'Yangınları takip et, güvende kal';
+  String get splashTagline => 'Yangınları takip edin, güvende kalın';
 
   @override
   String get onboardingSkip => 'Geç';
@@ -156,38 +156,38 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingContinue => 'Devam Et';
 
   @override
-  String get onboardingTitle1 => 'Aktif olayları takip et';
+  String get onboardingTitle1 => 'Aktif olayları takip edin';
 
   @override
   String get onboardingDesc1 =>
-      'Türkiye genelindeki yangın olaylarını tek ekranda takip et ve durum değişikliklerini hızlıca gör.';
+      'Türkiye genelindeki uydu tespitlerini tek ekranda takip edin ve durum değişikliklerini hızlıca görün.';
 
   @override
-  String get onboardingTitle2 => 'Yakınındaki bölgeleri gör';
+  String get onboardingTitle2 => 'Yakınınızdaki bölgeleri görün';
 
   @override
   String get onboardingDesc2 =>
-      'Harita ve bölge odaklı ekranlarla sana yakın olayları daha hızlı fark et.';
+      'Harita ve bölge odaklı ekranlarla size yakın olayları daha hızlı fark edin.';
 
   @override
-  String get onboardingTitle3 => 'Güvenlik yönlendirmeleri al';
+  String get onboardingTitle3 => 'Güvenlik yönlendirmeleri alın';
 
   @override
   String get onboardingDesc3 =>
-      'Risk seviyelerini incele, önerilen aksiyonları gör ve gerektiğinde hızlı hareket et.';
+      'Risk seviyelerini inceleyin, önerilen aksiyonları görün ve gerektiğinde hızlı hareket edin.';
 
   @override
-  String get homeLiveSummary => 'Canlı Durum Özeti';
+  String get homeLiveSummary => 'Güncel Durum Özeti';
 
   @override
-  String get homeHeaderTitle => 'Türkiye Termal Anomali Takibi';
+  String get homeHeaderTitle => 'Türkiye Uydu Tespitleri';
 
   @override
   String get homeHeaderSubtitle =>
-      'Aktif olayları takip et, risk seviyelerini gör ve güvenlik rehberine hızlıca ulaş.';
+      'Aktif olayları takip edin, risk seviyelerini görün ve güvenlik rehberine hızlıca ulaşın.';
 
   @override
-  String get homeNasaLiveData => 'NASA FIRMS • Canlı Veri';
+  String get homeNasaLiveData => 'NASA FIRMS • Uydu Verisi';
 
   @override
   String get homeOutsideTurkeyLocation => 'Yurt dışı konumu';
@@ -213,11 +213,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeOverview => 'Genel Bakış';
 
   @override
-  String get homeOverviewSubtitle => 'NASA FIRMS anlık verisi';
+  String get homeOverviewSubtitle => 'NASA FIRMS uydu verisi';
 
   @override
   String homeOverviewUniqueCount(int count) {
-    return '$count benzersiz termal anomali konumu tespit edildi';
+    return 'Uydular $count ayrı konumda tespit yaptı';
   }
 
   @override
@@ -230,7 +230,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeNominal => 'Normal';
 
   @override
-  String get homeOverviewActiveFiresTitle => 'Güncel Termal Anomaliler';
+  String get homeOverviewActiveFiresTitle => 'Güncel Uydu Tespitleri';
 
   @override
   String get homeOverviewActiveFiresSubtitle => 'Son 24 saatte tespit edildi';
@@ -248,7 +248,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu an Türkiye\'deki en yüksek risk';
 
   @override
-  String get homeOverviewNearbyTitle => 'Yakındaki Termal Tespitler';
+  String get homeOverviewNearbyTitle => 'Yakındaki Uydu Tespitleri';
 
   @override
   String homeOverviewNearbyValueWithLocation(int count) {
@@ -277,7 +277,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String homeOverviewNewsSubtitleUpdated(String timeAgo) {
-    return 'Son güncelleme: $timeAgo';
+    return 'Son haber: $timeAgo';
   }
 
   @override
@@ -291,17 +291,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String homeBreakingCount(int count) {
-    return '$count sıcak';
+    return '$count son dakika';
   }
 
   @override
   String get homeNewsLoading => 'Haber yükleniyor...';
 
   @override
-  String get homeActiveThermalPoints => 'Aktif Termal Noktalar';
+  String get homeActiveThermalPoints => 'Güncel Uydu Tespitleri';
 
   @override
-  String get homeActiveThermalSubtitle => 'NASA FIRMS • PostGIS şehir tespiti';
+  String get homeActiveThermalSubtitle => 'NASA uydu verisi';
 
   @override
   String get homeMap => 'Harita';
@@ -316,7 +316,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeSearchHint => 'Şehir veya bölge ara...';
 
   @override
-  String get homeNoActiveFires => 'Güncel termal anomali bulunamadı.';
+  String get homeNoActiveFires => 'Uydular şu an güncel bir tespit bildirmedi.';
 
   @override
   String homeFireRegionTitle(String region) {
@@ -342,16 +342,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapFetchError => 'Yangın verileri alınamadı.';
 
   @override
-  String get mapTitle => 'Termal Anomali Haritası';
+  String get mapTitle => 'Uydu Tespit Haritası';
 
   @override
   String get mapTitleEvents => 'Yangın Haritası';
 
   @override
-  String get mapTitleDetections => 'Termal Tespit Haritası';
+  String get mapTitleDetections => 'Uydu Tespit Haritası';
 
   @override
-  String get mapLiveMap => 'Canlı Harita';
+  String get mapLiveMap => 'Güncel Harita';
 
   @override
   String get mapConfidenceFilterActive =>
@@ -371,16 +371,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapArea => 'Harita Alanı';
 
   @override
-  String get mapAreaSubtitle => 'NASA FIRMS canlı marker görünümü';
+  String get mapAreaSubtitle => 'NASA FIRMS işaret görünümü';
 
   @override
   String get mapGoToMe => 'Bana Git';
 
   @override
-  String get mapNearbyFires => 'Yakınımdaki Termal Tespitler';
+  String get mapNearbyFires => 'Yakınımdaki Uydu Tespitleri';
 
   @override
-  String get mapNearbyFiresSubtitle => 'Konumuna en yakın canlı tespitler';
+  String get mapNearbyFiresSubtitle => 'Konumunuza en yakın güncel tespitler';
 
   @override
   String get mapReport => 'Raporla';
@@ -457,14 +457,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsFeedSubtitle =>
-      'Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip et.';
+      'Yakındaki olaylar, durum değişimleri ve saha güncellemelerini tek akışta takip edin.';
 
   @override
   String get notificationsTools => 'Bildirim Araçları';
 
   @override
   String get notificationsToolsSubtitle =>
-      'İzinleri ve otomatik termal anomali takibini yönet';
+      'İzinleri ve otomatik uydu tespiti takibini yönetin';
 
   @override
   String get notificationsPermissionGranted => 'İzin Var';
@@ -498,7 +498,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsBackgroundSubtitle =>
-      'Uygulama kapalıyken bile 15 dakikada bir yangın kontrolü yapılsın';
+      'Uygulama kapalıyken uydu tespitlerini aralıklarla kontrol edin. Android bu kontrolleri geciktirebilir, uydu verisi de saatlerce gecikebilir.';
 
   @override
   String get notificationsEnableBackground => 'Arka Plan Takibini Aç';
@@ -511,7 +511,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get backgroundLocationDialogBody =>
-      'FireWatch TR, uygulama kapalıyken de yakınındaki yangınları kontrol edip seni uyarabilmek için konumuna arka planda erişim istiyor. Bu izni vermezsen uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmen gerekir.';
+      'FireWatch TR, uygulama kapalıyken de yakınınızdaki yangınları kontrol edip sizi uyarabilmek için konumunuza arka planda erişim istiyor. Bu kontroller telefonunuzda yapılır; bu sırada konumunuz sunucuya gönderilmez. Bu izni vermezseniz uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmeniz gerekir.';
 
   @override
   String get backgroundLocationDialogConfirm => 'Devam Et';
@@ -527,11 +527,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get backgroundMonitoringDisabled => 'Arka plan takibi kapatıldı.';
 
   @override
-  String get notificationsNearbyLiveFires => 'Yakındaki Termal Tespitler';
+  String get notificationsNearbyLiveFires => 'Yakındaki Uydu Tespitleri';
 
   @override
   String get notificationsNearbyLiveFiresSubtitle =>
-      'Konumuna 50 km içinde bulunan noktalar';
+      'Konumunuza 50 km içinde bulunan noktalar';
 
   @override
   String notificationsDistanceAndTime(String distance, String timeAgo) {
@@ -558,15 +558,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsNoHighRisk =>
-      'Şu an yüksek güvenilirlikli termal anomali bulunmuyor.';
+      'Uydular şu an güçlü bir tespit bildirmedi.';
 
   @override
-  String get notificationsHighRiskDetectionTitle =>
-      'Yüksek Riskli Termal Tespit';
+  String get notificationsHighRiskDetectionTitle => 'Güçlü Uydu Tespiti';
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '$region bölgesinde ${temp}K ısı tespit edildi. Aktif yangın ihtimali yüksek.';
+    return 'Uydular $region bölgesinde güçlü bir ısı tespit etti (${temp}K). Doğrulanmadı.';
   }
 
   @override
@@ -588,26 +587,26 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get watchlistHeadingSubtitle =>
-      'Takip etmek istediğin yangın noktalarını burada saklayabilirsin.';
+      'Takip etmek istediğiniz uydu tespitlerini burada saklayabilirsiniz.';
 
   @override
   String get watchlistEmptyTitle => 'Henüz kaydedilmiş olay yok';
 
   @override
   String get watchlistEmptySubtitle =>
-      'Yangın detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsin.';
+      'Tespit detay ekranındaki Kaydet butonunu kullanarak ekleyebilirsiniz.';
 
   @override
   String get watchlistSavedPoints => 'Kaydedilen Noktalar';
 
   @override
   String watchlistSavedPointsSubtitle(int count) {
-    return '$count termal tespit takipte';
+    return '$count uydu tespiti takipte';
   }
 
   @override
   String watchlistSyncingTitle(int count) {
-    return '$count kaydedilmiş yangın noktası var.';
+    return '$count kaydedilmiş uydu tespiti var.';
   }
 
   @override
@@ -637,10 +636,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get emergencyQuickToolsSubtitle =>
-      'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda topla.';
+      'Acil durum anında hızlı erişim, temel hazırlık ve kritik yönlendirmeleri tek ekranda toplayın.';
 
   @override
-  String get emergencyStayReady => 'Hazır Kal';
+  String get emergencyStayReady => 'Hazır Kalın';
 
   @override
   String get emergencyStayReadyNote =>
@@ -668,19 +667,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get emergencyShareLocation => 'Konum Paylaş';
 
   @override
-  String get emergencyShareLocationSubtitle => 'Yakınlarına yer bildir';
+  String get emergencyShareLocationSubtitle => 'Yakınlarınıza yer bildirin';
 
   @override
   String get emergencyEvacuationPlan => 'Tahliye Planı';
 
   @override
-  String get emergencyEvacuationPlanSubtitle => 'Çıkış adımlarını gözden geçir';
+  String get emergencyEvacuationPlanSubtitle =>
+      'Çıkış adımlarını gözden geçirin';
 
   @override
   String get emergencyContactLines => 'Acil İletişim Hatları';
 
   @override
-  String get emergencyContactLinesSubtitle => 'Temel numaraları hazır tut';
+  String get emergencyContactLinesSubtitle => 'Temel numaraları hazır tutun';
 
   @override
   String get emergencyCallCenter => 'Acil Çağrı Merkezi';
@@ -713,7 +713,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get emergencyBagDocsSubtitle =>
-      'Kimlik, önemli evrak ve telefonunu tek yerde tut.';
+      'Kimlik, önemli evrak ve telefonunuzu tek yerde tutun.';
 
   @override
   String get emergencyBagSupplies => 'Su, ilaç ve şarj ekipmanı';
@@ -727,7 +727,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get emergencyBagMeetingPointSubtitle =>
-      'Ayrı düşme ihtimaline karşı önceden karar ver.';
+      'Ayrı düşme ihtimaline karşı önceden karar verin.';
 
   @override
   String get emergencyCommNote => 'İletişim Notu';
@@ -736,14 +736,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get emergencyCommNoteSubtitle => 'Panik anında kısa hareket planı';
 
   @override
-  String get emergencyStep1 => '1. Resmi uyarıları doğrula';
+  String get emergencyStep1 => '1. Resmi uyarıları doğrulayın';
 
   @override
-  String get emergencyStep2 => '2. Yakınlarını kısa mesajla haberdar et';
+  String get emergencyStep2 => '2. Yakınlarınızı kısa mesajla haberdar edin';
 
   @override
   String get emergencyStep3 =>
-      '3. Gerekliyse temel çantanı al ve güvenli çıkış rotasına yönel';
+      '3. Gerekliyse temel çantanızı alın ve güvenli çıkış rotasına yönelin';
 
   @override
   String get safetyGuideTitle => 'Güvenlik Rehberi';
@@ -756,7 +756,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get safetyGuideCenterSubtitle =>
-      'Yangın sırasında ne yapacağını hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.';
+      'Yangın sırasında ne yapacağınızı hızlıca görmek, tahliye mantığını anlamak ve doğru adımları takip etmek için hazırlanmış rehber ekranı.';
 
   @override
   String get safetyGuideQuickActions => 'Hızlı Aksiyonlar';
@@ -766,29 +766,30 @@ class AppLocalizationsTr extends AppLocalizations {
       'İlk bakışta kritik davranışlar';
 
   @override
-  String get safetyGuideReadyEvacuate => 'Tahliyeye Hazır Ol';
+  String get safetyGuideReadyEvacuate => 'Tahliyeye Hazır Olun';
 
   @override
-  String get safetyGuideReadyEvacuateSubtitle => 'Çıkış planını netleştir';
+  String get safetyGuideReadyEvacuateSubtitle => 'Çıkış planını netleştirin';
 
   @override
-  String get safetyGuideTakeSmokeSeriously => 'Dumanı Ciddiye Al';
+  String get safetyGuideTakeSmokeSeriously => 'Dumanı Ciddiye Alın';
 
   @override
   String get safetyGuideTakeSmokeSeriouslySubtitle =>
-      'Kapalı alana geç, maske kullan';
+      'Kapalı alana geçin, maske kullanın';
 
   @override
-  String get safetyGuideFollowOfficials => 'Yetkili Duyuruları İzle';
+  String get safetyGuideFollowOfficials => 'Yetkili Duyuruları İzleyin';
 
   @override
-  String get safetyGuideFollowOfficialsSubtitle => 'Resmi kaynakları takip et';
+  String get safetyGuideFollowOfficialsSubtitle =>
+      'Resmi kaynakları takip edin';
 
   @override
-  String get safetyGuideDontDelay => 'Geç Kalma';
+  String get safetyGuideDontDelay => 'Geç Kalmayın';
 
   @override
-  String get safetyGuideDontDelaySubtitle => 'Tahliye çağrısını bekletme';
+  String get safetyGuideDontDelaySubtitle => 'Tahliye çağrısını bekletmeyin';
 
   @override
   String get safetyGuideChecklist => 'Acil Kontrol Listesi';
@@ -798,34 +799,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get safetyGuideChecklist1Title =>
-      'Kimlik, telefon ve şarj aletini hazır tut';
+      'Kimlik, telefon ve şarj aletini hazır tutun';
 
   @override
   String get safetyGuideChecklist1Desc =>
-      'Zorunlu temel eşyaları tek yerde topla.';
+      'Zorunlu temel eşyaları tek yerde toplayın.';
 
   @override
   String get safetyGuideChecklist2Title =>
-      'Kapı ve pencere durumunu kontrol et';
+      'Kapı ve pencere durumunu kontrol edin';
 
   @override
   String get safetyGuideChecklist2Desc =>
-      'Duman girişini azaltmak için açık alanları gözden geçir.';
+      'Duman girişini azaltmak için açık alanları gözden geçirin.';
 
   @override
   String get safetyGuideChecklist3Title =>
-      'Aile / yakınlarınla buluşma planı belirle';
+      'Aile / yakınlarınızla buluşma planı belirleyin';
 
   @override
   String get safetyGuideChecklist3Desc =>
-      'Ayrı düşerseniz nerede buluşacağınızı önceden bil.';
+      'Ayrı düşerseniz nerede buluşacağınızı önceden bilin.';
 
   @override
-  String get safetyGuideChecklist4Title => 'Resmi tahliye rotasını takip et';
+  String get safetyGuideChecklist4Title => 'Resmi tahliye rotasını takip edin';
 
   @override
   String get safetyGuideChecklist4Desc =>
-      'Kendi başına riskli güzergah uydurma.';
+      'Kendi başınıza riskli güzergah uydurmayın.';
 
   @override
   String get safetyGuideDetailedGuide => 'Detaylı Rehber';
@@ -835,86 +836,87 @@ class AppLocalizationsTr extends AppLocalizations {
       'Senaryoya göre açılır bilgi kartları';
 
   @override
-  String get safetyGuideAtHomeTitle => 'Evdeysen ne yapmalısın?';
+  String get safetyGuideAtHomeTitle => 'Evdeyseniz ne yapmalısınız?';
 
   @override
   String get safetyGuideAtHome1 =>
-      'Duman yoğunluğu varsa kapı ve pencereleri kapalı tut.';
+      'Duman yoğunluğu varsa kapı ve pencereleri kapalı tutun.';
 
   @override
   String get safetyGuideAtHome2 =>
-      'Elektrik, gaz ve hızlı çıkış güzergahını kontrol et.';
+      'Elektrik, gaz ve hızlı çıkış güzergahını kontrol edin.';
 
   @override
   String get safetyGuideAtHome3 =>
-      'Tahliye çağrısı varsa eşyaları toplamaya çalışma, çıkışa odaklan.';
+      'Tahliye çağrısı varsa eşyaları toplamaya çalışmayın, çıkışa odaklanın.';
 
   @override
   String get safetyGuideAtHome4 =>
-      'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine al.';
+      'Evcil hayvanları mümkünse hızlıca güvenli taşıma düzenine alın.';
 
   @override
-  String get safetyGuideInCarTitle => 'Araçtayken ne yapmalısın?';
+  String get safetyGuideInCarTitle => 'Araçtayken ne yapmalısınız?';
 
   @override
-  String get safetyGuideInCar1 => 'Yoğun duman içinden geçmeye çalışma.';
+  String get safetyGuideInCar1 => 'Yoğun duman içinden geçmeye çalışmayın.';
 
   @override
   String get safetyGuideInCar2 =>
-      'Mümkünse güvenli açık alana veya yerleşim merkezine yönel.';
+      'Mümkünse güvenli açık alana veya yerleşim merkezine yönelin.';
 
   @override
   String get safetyGuideInCar3 =>
-      'Aracı kuru otların ve ağaç altlarının yanında bırakma.';
+      'Aracı kuru otların ve ağaç altlarının yanında bırakmayın.';
 
   @override
   String get safetyGuideInCar4 =>
-      'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerle.';
+      'Resmi yönlendirme varsa navigasyondan değil, duyurudan ilerleyin.';
 
   @override
-  String get safetyGuideOutsideTitle => 'Dışarıdaysan ne yapmalısın?';
+  String get safetyGuideOutsideTitle => 'Dışarıdaysanız ne yapmalısınız?';
 
   @override
   String get safetyGuideOutside1 =>
-      'Rüzgar yönünü gözlemle ve yangının önüne geçme.';
+      'Rüzgar yönünü gözlemleyin ve yangının önüne geçmeyin.';
 
   @override
   String get safetyGuideOutside2 =>
-      'Yüksek bitki örtüsünden ve dar vadilerden uzaklaş.';
+      'Yüksek bitki örtüsünden ve dar vadilerden uzaklaşın.';
 
   @override
   String get safetyGuideOutside3 =>
-      'Topluluk halinde hareket ediyorsan dağılmadan ilerle.';
+      'Topluluk halinde hareket ediyorsanız dağılmadan ilerleyin.';
 
   @override
   String get safetyGuideOutside4 =>
-      'Acil durumda açık, çıplak ve yanıcı olmayan alana çık.';
+      'Acil durumda açık, çıplak ve yanıcı olmayan alana çıkın.';
 
   @override
   String get safetyGuideEvacOrderTitle =>
-      'Tahliye emri geldiyse ne yapmalısın?';
+      'Tahliye emri geldiyse ne yapmalısınız?';
 
   @override
   String get safetyGuideEvacOrder1 =>
-      'Emri geciktirme, \"biraz daha bekleyeyim\" deme.';
+      'Emri geciktirmeyin, \"biraz daha bekleyeyim\" demeyin.';
 
   @override
   String get safetyGuideEvacOrder2 =>
-      'Sadece temel eşyaları al ve çıkışa odaklan.';
+      'Sadece temel eşyaları alın ve çıkışa odaklanın.';
 
   @override
   String get safetyGuideEvacOrder3 =>
-      'Yakınlarını tek tek arayıp vakit kaybetme, önceden plan kullan.';
+      'Yakınlarınızı tek tek arayıp vakit kaybetmeyin, önceden plan kullanın.';
 
   @override
   String get safetyGuideEvacOrder4 =>
-      'Yetkililerin toplama alanı duyurusunu takip et.';
+      'Yetkililerin toplama alanı duyurusunu takip edin.';
 
   @override
   String get safetyGuideEmergencyNumbers => 'Acil Numaralar';
 
   @override
-  String get safetyGuideEmergencyNumbersSubtitle => 'Hızlı erişim için not düş';
+  String get safetyGuideEmergencyNumbersSubtitle =>
+      'Hızlı erişim için not düşün';
 
   @override
   String get safetyGuideCallCenterSubtitle => 'Genel acil durum hattı';
@@ -929,7 +931,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get safetyGuideAfadLocal => 'AFAD / Yerel Yönlendirme';
 
   @override
-  String get safetyGuideAfadLocalNumber => 'Yerel duyuruları takip et';
+  String get safetyGuideAfadLocalNumber => 'Yerel duyuruları takip edin';
 
   @override
   String get safetyGuideAfadLocalSubtitle =>
@@ -946,27 +948,27 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsAppSettingsSubtitle =>
-      'Bildirimleri, konum tabanlı uyarıları ve uygulama davranışını buradan özelleştir.';
+      'Bildirimleri, konum tabanlı uyarıları ve uygulama davranışını buradan özelleştirin.';
 
   @override
   String get settingsNotifications => 'Bildirimler';
 
   @override
-  String get settingsNotificationsSubtitle => 'Uyarı tercihlerini yönet';
+  String get settingsNotificationsSubtitle => 'Uyarı tercihlerini yönetin';
 
   @override
   String get settingsPushNotifications => 'Push Bildirimleri';
 
   @override
   String get settingsPushNotificationsSubtitle =>
-      'Yeni olaylar ve önemli değişiklikler için bildirim al';
+      'Yeni olaylar ve önemli değişiklikler için bildirim alın';
 
   @override
   String get settingsNearbyAlerts => 'Yakındaki Olay Uyarıları';
 
   @override
   String get settingsNearbyAlertsSubtitle =>
-      'Konumuna yakın bölgelerde olay varsa öncelikli göster';
+      'Konumunuza yakın bölgelerde olay varsa öncelikli gösterin';
 
   @override
   String get settingsAppBehavior => 'Uygulama Davranışı';
@@ -978,20 +980,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsDarkMode => 'Koyu Tema';
 
   @override
-  String get settingsDarkModeSubtitle => 'Premium koyu görünümü aktif tut';
+  String get settingsDarkModeSubtitle => 'Premium koyu görünümü aktif tutun';
 
   @override
   String get settingsRefreshInterval => 'Veri Yenileme Aralığı';
 
   @override
   String get settingsRefreshIntervalSubtitle =>
-      'Saha verilerinin ne sıklıkla yenileneceğini seç';
+      'Saha verilerinin ne sıklıkla yenileneceğini seçin';
 
   @override
   String get settingsLanguage => 'Dil';
 
   @override
-  String get settingsLanguageSubtitle => 'Uygulama dilini seç';
+  String get settingsLanguageSubtitle => 'Uygulama dilini seçin';
 
   @override
   String get settingsLanguageTurkish => 'Türkçe';
@@ -1014,7 +1016,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesSatelliteBody =>
-      'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsin.';
+      'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP 2 Kasım 2026\'da veri vermeyi bıraktı) ve MODIS (Terra, Aqua). Uydular gün içinde birkaç kez geçer. Her tespit bir sıcak pikseldir: konum, ışıma gücü (FRP, megawatt), parlaklık sıcaklığı ve NASA\'nın güvenilirlik derecesi ölçülen değerlerdir. Bir olayın panelinde hangi ürünün kaç tespit verdiğini görebilirsiniz.';
 
   @override
   String get dataSourcesGroupingTitle => 'Olaylar — hesaplanan';
@@ -1028,7 +1030,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesDerivedBody =>
-      'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: yangın o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.';
+      'Yayılma yönü ve hızı, tespit deseninin merkezindeki kaymadan hesaplanır; yangının gerçek ilerleyişi farklı olabilir. \"Tespit pikseli ~N hektar\" uydunun çözünürlüğüdür, yanan alan değildir: ısı kaynağı o pikselin içindedir, gerçek boyutu bilinmiyor. Bu rakam uydunun bakış açısına göre büyür, yangına göre değil.';
 
   @override
   String get dataSourcesNotKnownTitle => 'Bilinmeyen';
@@ -1042,22 +1044,29 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dataSourcesWeatherBody =>
-      'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez.';
+      'Risk skorları hava durumu verisinden bölge genelinde hesaplanır. Tek bir yangına ait ölçüm değildir; o yangının nasıl davranacağını söylemez. Hava verisi Open-Meteo\'dan gelir (CC BY 4.0); Open-Meteo yanıt vermediğinde Norveç Meteoroloji Enstitüsü MET Norway\'in Locationforecast verisi kullanılır (NLOD 2.0 / CC BY 4.0). Sıcaklık, nem ve rüzgar iki kaynakta da aynı anlama gelir.';
+
+  @override
+  String get dataSourcesWeatherOpenMeteoCredit =>
+      'Weather data by Open-Meteo.com';
+
+  @override
+  String get dataSourcesWeatherMetCredit => 'Data from MET Norway';
 
   @override
   String get dataSourcesPlacesTitle => 'Yer verisi — il ve ilçe sınırları';
 
   @override
   String get dataSourcesPlacesBody =>
-      'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir.';
+      'Bölge seçimindeki il ve ilçe listesi, merkezleri ve sınır kutuları uygulamaya gömülüdür; ağdan çekilmez. İdari sınır ve yer verisi © OpenStreetMap katkıcıları, Açık Veri Tabanı Lisansı (ODbL) altındadır; adlar ve il üyeliği resmî il/ilçe listesiyle eşleştirilmiştir. Bu veri harita yakınlaştırma ve bildirim kapsamı içindir; yangın verisi değildir. Adres ve mahalle aramaları OpenStreetMap Nominatim ile yapılır; yazdığınız metin saklanmaz, sonuçlar metnin geri çevrilemez özetiyle en fazla 7 gün önbellekte tutulur.';
 
   @override
   String get dataSourcesFwiTitle =>
-      'Yangın tehlikesi haritası (FWI) — ayrı bir kaynak';
+      'Copernicus yangın tehlike indeksi (FWI) — ayrı bir kaynak';
 
   @override
   String get dataSourcesFwiBody =>
-      'Haritadaki risk katmanı Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir ve bugün dahil 10 güne kadar (9 gün ileriye) tahmin sunar; günün model koşusu yayımlanana dek son gün boş kalabilir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0).';
+      'Risk ekranındaki Copernicus göstergesi, Copernicus EFFIS\'in Yangın Hava Endeksi\'ni (FWI) gösterir. FWI sıcaklık, nem, rüzgar ve yağıştan hesaplanan bir tehlike göstergesidir: hava koşullarının bir yangını ne kadar besleyeceğini söyler, bir yangın olduğunu söylemez. Veri ECMWF\'nin küresel hava modelinden gelir. Uydu tespitlerinden tamamen ayrı bir kaynaktır; herhangi bir yangına ait ölçüm değildir. Veri: © European Union, Copernicus EFFIS (CC BY 4.0). FireWatch risk puanından ayrıdır ve puana katılmaz.';
 
   @override
   String get settingsAppInfo => 'Uygulama Bilgisi';
@@ -1072,9 +1081,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsInfoVersion => 'Sürüm';
 
   @override
-  String get settingsInfoVersionValue => 'v1.0.0';
-
-  @override
   String get settingsInfoPlatform => 'Platform';
 
   @override
@@ -1084,11 +1090,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsInfoPurpose => 'Amaç';
 
   @override
-  String get settingsInfoPurposeValue => 'Yangın odaklı disaster tracking';
+  String get settingsInfoPurposeValue => 'Yangın odaklı afet takibi';
 
   @override
   String get settingsFooterNote =>
-      'Tercihlerin cihazında saklanır ve uygulamayı her açtığında otomatik olarak uygulanır.';
+      'Tercihleriniz cihazınızda saklanır ve uygulamayı her açtığınızda otomatik olarak uygulanır.';
 
   @override
   String get settingsLegal => 'Yasal';
@@ -1107,14 +1113,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskTitle => 'Risk Analizi';
 
   @override
-  String get riskLiveView => 'Canlı Risk Görünümü';
+  String get riskLiveView => 'Güncel Risk Görünümü';
 
   @override
   String get riskSummaryTitle => 'Türkiye Yangın Risk Özeti';
 
   @override
   String get riskSummarySubtitle =>
-      'Open-Meteo hava verisi + NASA FIRMS uydu verisiyle hesaplanmış gerçek zamanlı risk analizi.';
+      'Hava durumu ve uydu tespitlerine göre yaklaşık 3 saatte bir hesaplanır.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -1225,7 +1231,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskEnvironmentalFactors => 'Çevresel Faktörler';
 
   @override
-  String get riskDrynessIndex => 'Kuruluk İndeksi';
+  String get riskDrynessIndex => 'Kuruluk göstergesi';
 
   @override
   String get riskDrynessVeryHigh => 'Çok yüksek';
@@ -1234,7 +1240,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskWindPressure => 'Rüzgar Baskısı';
 
   @override
-  String get riskVegetationDensity => 'Bitki Yoğunluğu';
+  String get riskVegetationDensity => 'Bitki baskısı';
 
   @override
   String get riskVegetationMediumHigh => 'Orta - Yüksek';
@@ -1274,26 +1280,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskNoteStrongWind(int wind) {
-    return 'Güçlü rüzgar (${wind}km/h)';
+    return 'Güçlü rüzgâr ($wind km/h)';
   }
 
   @override
   String riskNoteMediumWind(int wind) {
-    return 'Orta rüzgar (${wind}km/h)';
+    return 'Orta rüzgâr ($wind km/h)';
   }
 
   @override
   String get newsTitle => 'Haberler';
 
   @override
-  String get newsLiveFeed => 'Canlı Bilgi Akışı';
+  String get newsLiveFeed => 'Haber Akışı';
 
   @override
   String get newsCenterTitle => 'Yangın Haber Merkezi';
 
   @override
-  String get newsCenterSubtitle =>
-      'Saha güncellemeleri, risk uyarıları ve güvenlik odaklı gelişmeleri tek akışta takip et.';
+  String get newsCenterSubtitle => 'Yangınla ilgili son gelişmeler.';
 
   @override
   String get newsFeatured => 'Öne Çıkan Gelişme';
@@ -1305,7 +1310,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsCategories => 'Kategoriler';
 
   @override
-  String get newsCategoriesSubtitle => 'Akışı filtrele';
+  String get newsCategoriesSubtitle => 'Akışı filtreleyin';
 
   @override
   String get newsCategoryRisk => 'Risk';
@@ -1366,7 +1371,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newsContentFiltersTitle => 'Durum Filtreleri';
 
   @override
-  String get newsContentFiltersSubtitle => 'Neler olduğuna göre filtrele';
+  String get newsContentFiltersSubtitle => 'Neler olduğuna göre filtreleyin';
 
   @override
   String get newsFilterMyRegion => 'Bölgem';
@@ -1423,7 +1428,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportPanelFireReport => 'Yangın bildirimi';
 
   @override
-  String get reportPanelVerifiedTitle => 'Rapor Doğrulandı';
+  String get reportPanelVerifiedTitle => 'Uydu Tespitiyle Eşleşti';
 
   @override
   String get reportPanelReceivedTitle => '⏳ Rapor Alındı';
@@ -1448,7 +1453,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelSubtitle =>
-      'GPS ile konumunuzu alın ve yangını bildirin. NASA verisiyle otomatik doğrulanacak.';
+      'GPS ile konumunuzu alın ve yangını bildirin. Bildiriminiz yakındaki NASA uydu tespitleriyle karşılaştırılır.';
 
   @override
   String get reportPanelLocation => 'Konum';
@@ -1501,7 +1506,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelAnonymousToggleSubtitle =>
-      'İsminiz yetkililerle paylaşılmayacak';
+      'Adınız bildirimle birlikte kaydedilmez';
 
   @override
   String get reportPanelPhotosLabel => 'Fotoğraflar (isteğe bağlı)';
@@ -1535,18 +1540,18 @@ class AppLocalizationsTr extends AppLocalizations {
       'Pin konumunu ayarlamak için haritaya dokunun';
 
   @override
-  String get reportPanelSuccessVerifiedTitle => 'Bildirim Doğrulandı';
+  String get reportPanelSuccessVerifiedTitle => 'Uydu Tespitiyle Eşleşti';
 
   @override
   String get reportPanelSuccessReceivedTitle => 'Bildirim Alındı';
 
   @override
   String get reportPanelSuccessVerifiedBody =>
-      'Bildiriminiz NASA uydu verisiyle eşleşti ve doğrulandı olarak işaretlendi.';
+      'Bildirdiğiniz yerin 10 km yakınında son 24 saatte NASA uydu ısı tespiti var. Bu, yangını tek başına doğrulamaz.';
 
   @override
   String get reportPanelSuccessReceivedBody =>
-      'Bildiriminiz kaydedildi ve ekibimiz tarafından manuel incelemeyi bekliyor.';
+      'Bildiriminiz kaydedildi. Uydular son 24 saatte yakınında tespit yapmadı; bu, yangın olmadığı anlamına gelmez.';
 
   @override
   String reportPanelReportIdLabel(String id) {
@@ -1560,11 +1565,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportPanelResponseTimeVerified =>
-      'Burası aktif bir yangın bölgesi — acil durum ekipleri zaten bilgilendirildi.';
+      'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.';
 
   @override
   String get reportPanelResponseTimeReceived =>
-      'Eğer bu aktif bir acil durumsa lütfen doğrudan 112\'yi de arayın.';
+      'Bu bildirim acil durum ekiplerine iletilmez. Yangın görüyorsanız hemen 112\'yi arayın.';
 
   @override
   String get reportPanelShare => 'Paylaş';
@@ -1600,15 +1605,15 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şu anda burada gösterilecek bir şey bulunmuyor.';
 
   @override
-  String get notifPermTitle => 'Önemli uyarıları kaçırma';
+  String get notifPermTitle => 'Önemli uyarıları kaçırmayın';
 
   @override
   String get notifPermSubtitle =>
-      'Bildirim izniyle yakınındaki yangın olaylarını ve kritik durum değişikliklerini anında öğrenebilirsin.';
+      'Bildirim izniyle yakınınızdaki uydu tespitlerini ve önemli değişiklikleri anında öğrenebilirsiniz.';
 
   @override
   String get notifPermNote =>
-      'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.';
+      'Bu izin zorunlu değil. İsterseniz şimdilik atlayıp uygulamayı yine kullanabilirsiniz.';
 
   @override
   String get notifPermEnable => 'Bildirimleri Etkinleştir';
@@ -1621,40 +1626,223 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notifPermDenied =>
-      'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsin.';
+      'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsiniz.';
 
   @override
   String get locPermServiceOff =>
-      'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsin.';
+      'Konum servisi kapalı görünüyor. Yine de uygulamaya devam edebilirsiniz.';
 
   @override
   String get locPermDenied =>
-      'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsin.';
+      'Konum izni verilmedi. Şimdilik konumsuz devam edebilirsiniz.';
 
   @override
   String get locPermDeniedForever =>
-      'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsin.';
+      'Konum izni kalıcı olarak reddedilmiş. Ayarlardan açabilirsiniz.';
 
   @override
   String get locPermError =>
-      'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsin.';
+      'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsiniz.';
 
   @override
-  String get locPermTitle => 'Yakınındaki olayları gösterelim';
+  String get locPermTitle => 'Yakınınızdaki olayları gösterelim';
 
   @override
   String get locPermSubtitle =>
-      'Konum erişimiyle sana yakın yangın olaylarını, riskli bölgeleri ve daha ilgili bildirimleri gösterebiliriz.';
+      'Konumunuzla yakınınızdaki uydu tespitlerini ve çevrenizdeki riski gösterebiliriz. Mesafeler telefonunuzda hesaplanır.';
 
   @override
   String get locPermNote =>
-      'Bu izin zorunlu değil. İstersen şimdilik atlayıp uygulamayı yine kullanabilirsin.';
+      'Bildirimler için otomatik taramayı başlatırsanız konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır; bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil ile hemen silinir. Bu izin zorunlu değil, şimdilik atlayabilirsiniz.';
 
   @override
   String get locPermEnable => 'Konumu Etkinleştir';
 
   @override
   String get locPermSkip => 'Şimdilik Geç';
+
+  @override
+  String get locDisclosureTitle => 'Konumunuzu nasıl kullanıyoruz?';
+
+  @override
+  String get locDisclosureOnDevice =>
+      'Yakınınızdaki uydu tespitlerine olan mesafe telefonunuzda hesaplanır.';
+
+  @override
+  String get locDisclosureNearestCity =>
+      'Bulunduğunuz ili göstermek için konumunuz, riski hesaplamak için yaklaşık 10 km\'ye yuvarlanmış konumunuz sunucumuza gönderilir; bu sorgular saklanmaz.';
+
+  @override
+  String get locDisclosureStored =>
+      'Bildirimler için otomatik taramayı başlatırsanız, bölgenizle ilgili uyarı gönderebilmek için konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumunuz saklanmaz.';
+
+  @override
+  String get locDisclosureDelete =>
+      'Bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil\'e dokunduğunuzda hemen silinir. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir.';
+
+  @override
+  String get locDisclosureOptional =>
+      'Konum izni zorunlu değil; uygulamayı konumsuz da kullanabilir, izni istediğiniz zaman telefon ayarlarından kaldırabilirsiniz.';
+
+  @override
+  String get locDisclosureContinue => 'Devam et';
+
+  @override
+  String get locDisclosureNotNow => 'Şimdi değil';
+
+  @override
+  String get trackedPlacesTitle => 'Yerlerim';
+
+  @override
+  String get trackedPlacesSubtitle =>
+      'Yakında ısı tespiti olunca ya da yangın riski yükselince bildirim alın';
+
+  @override
+  String get trackedPlacesEmpty =>
+      'Henüz yer eklemediniz. Ev, yazlık ya da bağ evi gibi en fazla 5 yer ekleyebilirsiniz.';
+
+  @override
+  String get trackedPlacesAdd => 'Yer ekle';
+
+  @override
+  String get trackedPlacesFull => 'En fazla 5 yer ekleyebilirsiniz.';
+
+  @override
+  String trackedPlacesRadius(int km) {
+    return '$km km yarıçap';
+  }
+
+  @override
+  String trackedPlacesLastAlert(String date) {
+    return 'Son uyarı: $date';
+  }
+
+  @override
+  String get trackedPlacesNoAlertYet => 'Henüz uyarı yok';
+
+  @override
+  String get trackedPlacesNotifyTooltip => 'Bu yer için bildirimler';
+
+  @override
+  String trackedPlacesDeleteTitle(String name) {
+    return '\"$name\" silinsin mi?';
+  }
+
+  @override
+  String get trackedPlacesDeleteBody =>
+      'Bu yer ve uyarı kayıtları sunucudan silinir.';
+
+  @override
+  String get trackedPlacesDelete => 'Sil';
+
+  @override
+  String get trackedPlacesUnavailable => 'Bu özellik yakında açılacak.';
+
+  @override
+  String get trackedPlacesLoadFailed =>
+      'Yerler yüklenemedi. Son kaydedilen liste gösteriliyor.';
+
+  @override
+  String get trackedPlacesSourceMap => 'Haritadan seç';
+
+  @override
+  String get trackedPlacesSourceMyLocation => 'Konumumu ekle';
+
+  @override
+  String get trackedPlacesLocationFailed => 'Konum alınamadı.';
+
+  @override
+  String get trackedPlacesNameLabel => 'Yer adı';
+
+  @override
+  String get trackedPlacesNameHint => 'ör. Ev, Yazlık';
+
+  @override
+  String get trackedPlacesNameRequired => 'Bir ad girin.';
+
+  @override
+  String get trackedPlacesRadiusLabel => 'Yarıçap';
+
+  @override
+  String get trackedPlacesSave => 'Kaydet';
+
+  @override
+  String trackedPlacesSaved(String name) {
+    return '\"$name\" Yerlerim\'e eklendi.';
+  }
+
+  @override
+  String get trackedPlacesErrorOutside => 'Bu nokta Türkiye sınırları dışında.';
+
+  @override
+  String get trackedPlacesErrorNetwork =>
+      'Kaydedilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.';
+
+  @override
+  String get trackedPlacesErrorGeneric => 'Bir sorun oluştu, tekrar deneyin.';
+
+  @override
+  String get trackedPlacesPickerTitle => 'Konumu seç';
+
+  @override
+  String get trackedPlacesPickerHint =>
+      'Haritayı kaydırıp işaretçiyi yerin üzerine getirin ya da haritaya uzun basın.';
+
+  @override
+  String get trackedPlacesPickerConfirm => 'Bu konumu kullan';
+
+  @override
+  String get trackedPlacesApproxNote =>
+      'Konum sunucuda yaklaşık 1 km hassasiyetle saklanır. Bildirimler doğrulanmış yangın bildirmez: uydu ısı tespitine ya da risk puanına dayanır.';
+
+  @override
+  String get trackedPlacesMigrateTitle =>
+      'Kayıtlı yerlerinizi Yerlerim\'e taşımak ister misiniz?';
+
+  @override
+  String trackedPlacesMigrateBody(int count) {
+    return '$count kayıtlı yeriniz var. Taşırsanız 10 km içindeki yeni uydu ısı tespitlerinde bildirim alırsınız.';
+  }
+
+  @override
+  String get trackedPlacesMigrateAccept => 'Taşı';
+
+  @override
+  String trackedPlacesMigrateDone(int count) {
+    return '$count yer eklendi.';
+  }
+
+  @override
+  String get locDisclosureTracked =>
+      'Yerlerim\'e eklediğiniz yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsiniz.';
+
+  @override
+  String get notifPlacesChannelName => 'Takip ettiğim yerler';
+
+  @override
+  String get notifPlacesChannelDescription =>
+      'Yerlerim\'deki yerlerin yakınındaki uydu ısı tespitleri ve yangın riski';
+
+  @override
+  String get settingsDeleteLocation => 'Konum verimi sil';
+
+  @override
+  String get settingsDeleteLocationConfirmTitle => 'Konum veriniz silinsin mi?';
+
+  @override
+  String get settingsDeleteLocationConfirmBody =>
+      'Sunucuda saklanan yaklaşık konumunuz ve takip ettiğiniz tüm yerler hemen silinir. Bildirimleriniz açık kalır; il veya bölge seçmediyseniz bundan sonra tüm bölgelerin risk uyarılarını alabilirsiniz. Otomatik taramayı yeniden başlatırsanız konumunuz tekrar kaydedilir.';
+
+  @override
+  String get settingsDeleteLocationConfirm => 'Sil';
+
+  @override
+  String get settingsDeleteLocationDone =>
+      'Konum veriniz ve takip ettiğiniz yerler sunucudan silindi.';
+
+  @override
+  String get settingsDeleteLocationFailed =>
+      'Konum veriniz silinemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.';
 
   @override
   String get compassNorth => 'K';
@@ -1670,34 +1858,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Termal sensör ${temp}K ısı tespit etti. Aktif yangın ihtimali yüksek, bölgeye yaklaşma.';
+    return 'Uydular ${temp}K ısı tespit etti. Doğrulanmadı. Bölgeye yaklaşmayın.';
   }
 
   @override
   String get riskReasonHighNoTemp =>
-      'Yüksek güven seviyesinde termal anomali tespit edildi. Aktif yangın olabilir.';
+      'Uydular güçlü bir tespit yaptı. Doğrulanmadı.';
 
   @override
   String riskReasonMediumWithTemp(String temp) {
-    return 'Termal sensör ${temp}K ısı ölçtü. Anız yakma, tarım faaliyeti veya erken evre yangın olabilir.';
+    return 'Uydular ${temp}K ısı tespit etti. Nedeni doğrulanmadı.';
   }
 
   @override
   String get riskReasonMediumNoTemp =>
-      'Orta düzey termal anomali. Bölge izleme altında tutulmalı.';
+      'Uydular orta düzeyde bir tespit yaptı. Doğrulanmadı.';
 
   @override
   String riskReasonLowWithTemp(String temp) {
-    return 'Düşük ısı değeri (${temp}K). Sanayi, seracılık veya doğal ısı kaynağı olabilir.';
+    return 'Uydular düşük bir ısı tespit etti (${temp}K). Nedeni doğrulanmadı.';
   }
 
   @override
   String get riskReasonLowNoTemp =>
-      'Düşük seviye termal aktivite. Takip önerilir.';
+      'Uydular zayıf bir tespit yaptı. Takip önerilir.';
 
   @override
   String get fireGeneratedDescHigh =>
-      'Yüksek yoğunluklu termal aktivite. Aktif yangın olasılığı ciddi.';
+      'Uydular güçlü bir ısı tespit etti. Doğrulanmadı.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1705,39 +1893,39 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get fireGeneratedDescLow =>
-      'Düşük seviye termal aktivite. Takip önerilir.';
+      'Uydular zayıf bir tespit yaptı. Takip önerilir.';
 
   @override
   String get fireRecommendedActionHigh =>
-      'Bölgeden uzak dur, resmi yönlendirmeleri takip et ve tahliye hazırlığını yap.';
+      'Bölgeden uzak durun, resmi yönlendirmeleri takip edin ve tahliye hazırlığını yapın.';
 
   @override
   String get fireRecommendedActionMedium =>
-      'Gelişmeleri takip et, bölgeye gereksiz yaklaşma.';
+      'Gelişmeleri takip edin, bölgeye gereksiz yaklaşmayın.';
 
   @override
   String get fireRecommendedActionLow =>
-      'Şu an acil aksiyon gerekmiyor, bölgeyi takip et.';
+      'Şu an acil aksiyon gerekmiyor, bölgeyi takip edin.';
 
   @override
-  String get fireStatusActive => 'Muhtemel Yangın';
+  String get fireStatusActive => 'Çok Güçlü Tespit';
 
   @override
-  String get fireStatusLikelyActive => 'Yüksek Isı Anomalisi';
+  String get fireStatusLikelyActive => 'Güçlü Tespit';
 
   @override
   String get fireStatusMonitoring => 'İzleniyor';
 
   @override
-  String get fireStatusHistorical => 'Geçmiş Tespit';
+  String get fireStatusHistorical => 'Artık görülmüyor';
 
   @override
   String fireEventRegionTitle(String city) {
-    return '$city Bölgesi Termal Tespiti';
+    return '$city Bölgesi Uydu Tespiti';
   }
 
   @override
-  String get fireEventLiveDetectionTitle => 'Canlı Termal Tespit';
+  String get fireEventLiveDetectionTitle => 'Güncel Uydu Tespiti';
 
   @override
   String get fireEventStatusActive => 'Aktif';
@@ -1752,14 +1940,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fireEventSpreadHigh => 'Yüksek — aktif izleme gerekli';
 
   @override
-  String get fireEventSpreadMedium => 'Orta — dikkatli takip et';
+  String get fireEventSpreadMedium => 'Orta — dikkatli takip edin';
 
   @override
   String get fireEventSpreadLow => 'Düşük';
 
   @override
   String fireDetailAreaMeasured(int hectares) {
-    return 'Tespit pikseli ~$hectares hektar (yangının kendisi değil)';
+    return 'Uydunun gördüğü alan ~$hectares hektar (yangının kendisi değil)';
   }
 
   @override
@@ -1819,11 +2007,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get frpIntensityVeryHigh => 'Çok yüksek yoğunluk';
-
-  @override
-  String fireEventTempLine(String temp, String kelvin) {
-    return 'Sıcaklık: $temp°C (Termal değer: ${kelvin}K)';
-  }
 
   @override
   String fireEventSatelliteLine(String satellite) {
@@ -1911,7 +2094,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get newsTranslatedCaption =>
-      'Türkçeden çevrildi • Tam çeviri için dokun';
+      'Türkçeden çevrildi • Tam çeviri için dokunun';
 
   @override
   String get coachMarksGotIt => 'Anladım';
@@ -1928,35 +2111,35 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get coachMarkMapTitle => 'Harita ve Yangın Noktaları';
+  String get coachMarkMapTitle => 'Harita ve Uydu Tespitleri';
 
   @override
   String get coachMarkMapDesc =>
-      'Haritadaki alevli işaretler NASA uydu verisiyle tespit edilen canlı yangın noktalarını gösterir. Bir işarete dokunarak detayları görebilir, buradan yeni bir yangın da bildirebilirsin.';
+      'Haritadaki işaretler NASA uydularının tespit ettiği ısı noktalarıdır; doğrulanmadı. Bir işarete dokunarak ayrıntıları görebilir, buradan yeni bir yangın da bildirebilirsiniz.';
 
   @override
   String get coachMarkRiskTitle => 'Risk Seviyeleri';
 
   @override
   String get coachMarkRiskDesc =>
-      'Her yangın noktası Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanı sağlar.';
+      'Her uydu tespiti Yüksek, Orta veya Düşük risk seviyesiyle etiketlenir. Bu etiketler bölgedeki tehlike derecesini hızlıca anlamanızı sağlar.';
 
   @override
   String get coachMarkWatchlistTitle => 'Kaydedilenler';
 
   @override
   String get coachMarkWatchlistDesc =>
-      'Takip etmek istediğin yangın noktalarını kaydet ve buradan hızlıca tekrar ulaş.';
+      'Takip etmek istediğiniz uydu tespitlerini kaydedin ve buradan hızlıca tekrar ulaşın.';
 
   @override
   String get coachMarkNotificationsTitle => 'Bildirimler';
 
   @override
   String get coachMarkNotificationsDesc =>
-      'Yakınındaki yangınlar için anlık bildirim al ve otomatik taramayı buradan başlat.';
+      'Yakınınızdaki uydu ısı tespitleri için bildirim alın ve otomatik taramayı buradan başlatın.';
 
   @override
-  String get riskTabTurkeyOverview => 'Türkiye Geneli';
+  String get riskTabTurkeyOverview => 'Türkiye geneli';
 
   @override
   String get riskTabMyLocation => 'Konumum';
@@ -1966,7 +2149,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskMyLocationPermissionDenied =>
-      'Konum izni verilmedi. Bölge risk bilgisini görmek için izin ver.';
+      'Konum izni verilmedi. Bölge risk bilgisini görmek için izin verin.';
 
   @override
   String get riskMyLocationServiceOff => 'Konum servisi kapalı. Lütfen açın.';
@@ -1984,7 +2167,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskMyLocationYourRegion(String city, String region) {
-    return 'Bölgen: $city ($region)';
+    return 'Bölgeniz: $city ($region)';
   }
 
   @override
@@ -2001,10 +2184,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskMyLocationMetricsTitle => 'Bölgenin Verileri';
 
   @override
-  String get riskChartTapHint => 'Detaylar için bir bölgeye dokun';
+  String get riskChartTapHint => 'Detaylar için bir bölgeye dokunun';
 
   @override
-  String get monitorStatusReady => 'Monitoring servisi hazır.';
+  String get monitorStatusReady => 'Otomatik takip hazır.';
 
   @override
   String get monitorStatusAlreadyRunning => 'Otomatik tarama zaten çalışıyor.';
@@ -2029,17 +2212,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get monitorStatusFetchingData => 'NASA FIRMS verisi çekiliyor...';
 
   @override
-  String get monitorStatusNoActiveFires =>
-      'Şu an termal anomali verisi bulunamadı.';
+  String get monitorStatusNoActiveFires => 'Uydular şu an tespit bildirmedi.';
 
   @override
   String monitorStatusNoNearbyFires(int count) {
-    return '50 km içinde termal tespit yok. ($count nokta tarandı)';
+    return 'Uydular 50 km içinde tespit etmedi. ($count nokta tarandı)';
   }
 
   @override
   String monitorStatusNearbyFiresFound(int count) {
-    return '50 km içinde $count termal tespit bulundu!';
+    return 'Uydular 50 km içinde $count tespit yaptı.';
   }
 
   @override
@@ -2056,11 +2238,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get notifNearbyFireTitle => 'Yakınında termal anomali tespit edildi';
+  String get notifNearbyFireTitle => 'Uydular yakınınızda tespit yaptı';
 
   @override
   String notifNearbyFireBody(String distance, int count) {
-    return '$distance içinde $count termal tespit bulundu.';
+    return '$distance içinde $count uydu tespiti var. Doğrulanmadı.';
   }
 
   @override
@@ -2075,7 +2257,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String riskMyLocationPostgisDistance(String distance) {
-    return 'PostGIS • $distance km uzaklıkta';
+    return '$distance km uzaklıkta';
   }
 
   @override
@@ -2110,14 +2292,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get riskInfoFormulaFireCount =>
-      'NASA Yangın Sayısı (en fazla 20 puan)';
+      'Son 24 saatteki uydu ısı olayı sayısı (en fazla 20 puan)';
 
   @override
   String get riskInfoSourcesTitle => 'Veri Kaynakları';
 
   @override
   String get riskInfoSourcesBody =>
-      'NASA FIRMS uydu verisi, Open-Meteo hava durumu verisi ve RSS haber akışları kullanılarak hesaplanır.';
+      'NASA FIRMS uydu verisi ve Open-Meteo (yedek: MET Norway) hava durumu verisi kullanılarak hesaplanır. Hava verisi her bölge için tek bir temsilî noktadan alınır; haberler puana katılmaz.';
 
   @override
   String get riskInfoUpdateFrequencyTitle => 'Güncelleme Sıklığı';
@@ -2128,15 +2310,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeInfo =>
-      'Veriler NASA FIRMS uydu görüntülerinden alınır, her 3 saatte bir güncellenir.';
+      'Veriler NASA FIRMS uydu tespitlerinden alınır; sunucu yaklaşık 30 dakikada bir yeni veri çeker.';
 
   @override
   String get trustMapInfo =>
-      'Yangın işaretleri VIIRS uydusu tarafından tespit edilen termal anomalileri gösterir.';
+      'Haritadaki işaretler uyduların yaptığı tespitleri gösterir.';
 
   @override
   String get trustRiskInfo =>
-      'Risk skorları gerçek zamanlı hava durumu ve NASA yangın verisinden hesaplanır.';
+      'Risk skorları yaklaşık 3 saatte bir hava durumu ve NASA uydu tespitlerinden hesaplanır.';
 
   @override
   String get trustNewsInfo =>
@@ -2144,7 +2326,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsInfo =>
-      'Konumunuza 50 km içinde yangın tespit edildiğinde bildirim gönderilir.';
+      'Konumunuza 50 km içinde uydu ısı tespiti olduğunda bildirim gönderilir.';
 
   @override
   String get trustCardLabel => 'Veri Kaynağı Hakkında';
@@ -2163,27 +2345,26 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustHomeMeaning =>
-      'Bu ekrandaki sayılar son 24 saatte uydudan tespit edilen termal anomalilerdir; doğrulanmış yangın değildir. Bazıları tarımsal yakma, endüstriyel ısı veya sıcak yüzey olabilir.';
+      'Bu ekrandaki sayılar uyduların son 24 saatte yaptığı tespitlerdir; doğrulanmadı. Bazıları tarımsal yakma, sanayi ısısı veya sıcak yüzey olabilir.';
 
   @override
   String get trustHomeSource =>
-      'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; VIIRS ve MODIS uydu geçişlerini birleştirir ve her 3 saatte bir güncellenir.';
+      'Veriler NASA FIRMS\'ten (Yangın Bilgi ve Kaynak Yönetim Sistemi) gelir; birkaç uydunun geçişlerini birleştirir. Sunucu yaklaşık 30 dakikada bir yeni veri çeker; uydu geçişleri ve NASA\'nın işleme süresi nedeniyle bir tespit birkaç saat gecikebilir.';
 
   @override
   String get trustHomeInterpret =>
-      'Yalnızca yüksek güvenilirlik, 30 MW üzeri FRP ve 350 K üzeri parlaklık koşullarının tümünü sağlayan tespitler Muhtemel Yangın olarak etiketlenir.';
+      'Yalnızca uydunun çok emin olduğu ve çok yüksek ısı ölçtüğü tespitler Çok Güçlü Tespit olarak etiketlenir.';
 
   @override
   String get trustHomeAction =>
-      'Güvenilirlik, FRP ve sınırlamaları görmek için tespite dokunun. Duman veya alev görürseniz resmi acil durum yönlendirmelerini izleyin.';
+      'Ayrıntılar için tespite dokunun. Duman veya alev görürseniz önce 112\'yi arayın.';
 
   @override
   String get trustMapMeaning =>
-      'Her işaretçi doğrulanmış yangın değil, uydu termal anomalisidir. Kırmızı Muhtemel Yangın; turuncu yüksek anomali; sarı nominal; gri düşük güvenilirliktir.';
+      'Her işaret bir uydu tespitidir; doğrulanmadı. Kırmızı çok güçlü, turuncu güçlü, sarı orta, gri zayıf tespittir.';
 
   @override
-  String get trustMapSource =>
-      'Yangın verileri NASA FIRMS\'ten (VIIRS ve MODIS uyduları) alınır. EFFIS (Kopernik Acil Durum Yönetim Servisi) API\'si yeniden erişime açıldığında ikincil doğrulama kaynağı olarak eklenecektir.';
+  String get trustMapSource => 'Uydu verileri NASA FIRMS\'ten alınır.';
 
   @override
   String get trustMapInterpret =>
@@ -2191,19 +2372,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustMapAction =>
-      'Güvenilirlik ve FRP için işaretçiye dokunun. Yangını doğrudan gözlemlerseniz Rapor Et\'i kullanın ve resmi talimatları izleyin.';
+      'Ayrıntılar için işarete dokunun. Yangını kendiniz görürseniz önce 112\'yi arayın, sonra Raporla\'yı kullanın.';
 
   @override
   String get trustRiskMeaning =>
-      'Risk puanı (0-100), sıcaklık, nem, rüzgar hızı ve kuraklığı birleştirerek orman yangını olasılığını tahmin eder — bu bir tahmindir, garanti değildir.';
+      'Risk puanı (0-100) sıcaklık, nem, rüzgâr ve bölgedeki son uydu tespitlerini birleştiren bir endekstir; yangın çıkıp çıkmayacağını söylemez, garanti vermez.';
 
   @override
   String get trustRiskSource =>
-      'Hava durumu verileri canlı meteorolojik kaynaklardan alınır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.';
+      'Hava durumu verileri meteoroloji servislerinden alınır ve bölge puanları yaklaşık 3 saatte bir hesaplanır; yangın sayıları her bölge için son NASA FIRMS tespitlerini hesaba katar.';
 
   @override
   String get trustRiskInterpret =>
-      'Bölgenizin puanını grafikte Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.';
+      'Bölgenizin puanını listede Türkiye ortalamasıyla karşılaştırın — ortalamanın önemli ölçüde üzerinde bir puan, izlenmesi gereken yükselmiş yerel koşullara işaret eder.';
 
   @override
   String get trustRiskAction =>
@@ -2215,7 +2396,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustNewsSource =>
-      'Makaleler, 9 köklü Türk haber kuruluşunun herkese açık RSS beslemeleri aracılığıyla toplanır ve gün boyunca sürekli güncellenir.';
+      'Başlıklar, haber sitelerinin herkese açık RSS beslemelerinden ve resmî kurum sayfalarından yaklaşık 2 saatte bir toplanır.';
 
   @override
   String get trustNewsInterpret =>
@@ -2227,15 +2408,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsMeaning =>
-      'Uyarılar, uydu 50 km içinde termal anomali tespit ettiğinde bildirim gönderir. Bunlar otomatik tespitlerdir, doğrulanmış olay raporları değildir.';
+      'Uyarılar, uydular 50 km içinde tespit yaptığında gönderilir. Bunlar otomatik tespitlerdir; doğrulanmadı.';
 
   @override
   String get trustAlertsSource =>
-      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla karşılaştırır.';
+      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla telefonunuzda karşılaştırır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak saklanır.';
 
   @override
   String get trustAlertsInterpret =>
-      'Güvenilirlik ısı anomalisine duyulan güveni anlatır; yangın kesinliği değildir. FRP ve parlaklığı birlikte değerlendirin.';
+      'Güven düzeyi, uydunun tespitten ne kadar emin olduğunu anlatır; yangın olduğunu doğrulamaz.';
 
   @override
   String get trustAlertsAction =>
@@ -2246,73 +2427,72 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String smartIntensityIntense(String location) {
-    return '$location yakınında yoğun bir termal anomali tespit edildi.';
+    return '$location yakınında uydular çok güçlü bir tespit yaptı.';
   }
 
   @override
   String smartIntensityHigh(String location) {
-    return '$location yakınında yüksek yoğunluklu bir termal anomali tespit edildi.';
+    return '$location yakınında uydular güçlü bir tespit yaptı.';
   }
 
   @override
   String smartIntensityModerate(String location) {
-    return '$location yakınında orta düzeyde termal aktivite tespit edildi.';
+    return '$location yakınında uydular orta düzeyde bir tespit yaptı.';
   }
 
   @override
   String smartIntensityEarly(String location) {
-    return '$location yakınında erken evre bir yangın veya için için yanan bitki örtüsü olabilir.';
+    return '$location yakınında uydular zayıf bir tespit yaptı; nedeni doğrulanmadı.';
   }
 
   @override
   String smartIntensityAnomaly(String location) {
-    return '$location yakınında bir termal anomali tespit edildi.';
+    return '$location yakınında uydular bir tespit yaptı.';
   }
 
   @override
-  String get smartLocationHintForest => 'ormanlık, yüksek riskli bir bölgede';
+  String get smartLocationHintForest => 'ormanlık alanı geniş bir ilde';
 
   @override
-  String get smartLocationHintCoastal => 'kıyı bölgesinde';
+  String get smartLocationHintCoastal => 'güneybatı kıyı kuşağında';
 
   @override
   String get smartLocationHintUrban =>
-      'kentsel alanda; yapısal bir yangın veya endüstriyel ısı kaynağı olabilir';
+      'kentleşmesi yoğun bir ilde; bina veya sanayi kaynaklı olabilir';
 
   @override
   String get smartLocationHintAgricultural =>
-      'tarım arazisinde; anız yakma ihtimali var';
+      'tarımın yoğun olduğu bir ilde; uydular anız yakımını da tespit eder';
 
   @override
-  String get smartFrpHigh =>
-      'Yüksek ısıl güç (FRP) değeri ciddi bir enerji yayılımına işaret ediyor.';
+  String get smartFrpHigh => 'Uydu bu noktada yüksek ısı ölçtü.';
 
   @override
   String smartPixelFootprint(int hectares) {
-    return 'Uydu pikseli ~$hectares hektar; yangın bu alanın içinde, gerçek boyutu bilinmiyor.';
+    return 'Uydu bu noktayı ~$hectares hektarlık bir alan olarak görür; ısının kaynağı bu alanın içindedir, gerçek boyutu bilinmiyor.';
   }
 
   @override
   String smartAreaLarge(int hectares) {
-    return 'Tahmini yangın alanı geniş (~$hectares hektar).';
+    return 'Uydunun tespit ettiği alan geniş (~$hectares hektar).';
   }
 
   @override
   String smartAreaMedium(int hectares) {
-    return 'Tahmini yangın alanı orta büyüklükte (~$hectares hektar).';
+    return 'Uydunun tespit ettiği alan orta büyüklükte (~$hectares hektar).';
   }
 
   @override
   String get smartConfidenceHigh =>
-      'NASA uydusu bu tespitten yüksek düzeyde emin.';
+      'NASA bu tespitten yüksek düzeyde emin; nedeni doğrulanmadı.';
 
   @override
   String get smartConfidenceMedium =>
-      'NASA bu termal anomaliyi nominal güvenilirlikte bildiriyor; doğrulama önerilir.';
+      'NASA bu tespiti orta güvenle bildiriyor; doğrulanmadı.';
 
   @override
   String get smartConfidenceLow =>
-      'Olası bir termal anomali — endüstriyel ısı veya yansıma olabilir, doğrulama gerekiyor.';
+      'Zayıf bir tespit; sanayi ısısı veya yansıma olabilir, doğrulanmadı.';
 
   @override
   String get smartSpreadDangerous =>
@@ -2333,7 +2513,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String smartTimeRecent(int hours, String satellite) {
-    return '$hours saat önce $satellite tarafından tespit edildi, hâlâ aktif olabilir.';
+    return '$hours saat önce $satellite tespit etti; güncel durumu doğrulanmadı.';
   }
 
   @override
@@ -2361,7 +2541,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tooltipSatelliteViirsBody =>
-      'VIIRS: Suomi NPP uydusu, Türkiye üzerinden günde 1-2 kez geçer.';
+      'VIIRS: NOAA-20 ve NOAA-21 uyduları, Türkiye üzerinden günde birkaç kez geçer. (Suomi NPP 2 Kasım 2026\'da veri vermeyi bıraktı.)';
 
   @override
   String get tooltipSatelliteModisBody =>
@@ -2391,32 +2571,32 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fireDetailRegionalNews => 'Bölgesel Haberler';
 
   @override
-  String get coachMarkMapMarkersTitle => 'Yangın İşaretleri';
+  String get coachMarkMapMarkersTitle => 'Uydu Tespit İşaretleri';
 
   @override
   String get coachMarkMapMarkersDesc =>
-      'Haritadaki alev ikonları NASA uydusundan gelen canlı yangın tespitlerini gösterir. Bir işarete dokunarak detayları görebilirsin.';
+      'Haritadaki işaretler NASA uydularından gelen ısı tespitleridir; doğrulanmadı. Bir işarete dokunarak ayrıntıları görebilirsiniz.';
 
   @override
   String get coachMarkMapClustersTitle => 'Küme Sayıları';
 
   @override
   String get coachMarkMapClustersDesc =>
-      'Birbirine yakın yangın noktaları bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.';
+      'Birbirine yakın uydu tespitleri bir araya toplanır ve üzerinde sayı gösteren bir daire olarak görünür. Yakınlaştırdıkça kümeler ayrışır.';
 
   @override
   String get coachMarkMapReportTitle => 'Yangın Bildir';
 
   @override
   String get coachMarkMapReportDesc =>
-      'Sağ alttaki butona dokunarak gördüğün bir yangını GPS konumunla birlikte bildirebilirsin.';
+      'Sağ alttaki butona dokunarak gördüğünüz bir yangını GPS konumunuzla birlikte bildirebilirsiniz.';
 
   @override
-  String get coachMarkMapNearbyTitle => 'Yakınımdaki Yangınlar';
+  String get coachMarkMapNearbyTitle => 'Yakınımdaki Uydu Tespitleri';
 
   @override
   String get coachMarkMapNearbyDesc =>
-      'Bu bölüm, konumuna en yakın canlı yangın tespitlerini mesafe sırasına göre listeler.';
+      'Bu bölüm, konumunuza en yakın uydu ısı tespitlerini mesafe sırasına göre listeler.';
 
   @override
   String get coachMarkNewsFeaturedTitle => 'Öne Çıkan Haber';
@@ -2430,70 +2610,70 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkNewsCategoryDesc =>
-      'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsin.';
+      'Haberleri Risk, Operasyon, Güvenlik veya Güncelleme kategorisine göre filtreleyebilirsiniz.';
 
   @override
   String get coachMarkNewsRegionTitle => 'Durum Filtreleri';
 
   @override
   String get coachMarkNewsRegionDesc =>
-      'Önem derecesine göre filtrele — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgeni gör.';
+      'Önem derecesine göre filtreleyin — kritik, aktif, izleniyor, bilgi — ya da sadece kendi bölgenizi görün.';
 
   @override
   String get coachMarkNewsListTitle => 'Habere Dokun';
 
   @override
   String get coachMarkNewsListDesc =>
-      'Bir habere dokunarak tam metnini oku; İngilizce moddaysan başlık ve özeti tek dokunuşla çevirebilirsin.';
+      'Bir habere dokunarak tam metnini okuyun; İngilizce moddaysanız başlık ve özeti tek dokunuşla çevirebilirsiniz.';
 
   @override
   String get coachMarkNotifPermissionTitle => 'Bildirim İzni';
 
   @override
   String get coachMarkNotifPermissionDesc =>
-      'Yakınındaki yangınlar için anlık bildirim alabilmek üzere izin ver.';
+      'Yakınınızdaki uydu ısı tespitleri için bildirim alabilmek üzere izin verin.';
 
   @override
   String get coachMarkNotifScanTitle => 'Şimdi Tara';
 
   @override
   String get coachMarkNotifScanDesc =>
-      'Konumunun 50 km çevresinde canlı yangın olup olmadığını anında kontrol et.';
+      'Konumunuzun 50 km çevresinde uydu ısı tespiti olup olmadığını kontrol edin.';
 
   @override
   String get coachMarkNotifMonitoringTitle => 'Otomatik Tarama';
 
   @override
   String get coachMarkNotifMonitoringDesc =>
-      'Uygulama açıkken yakındaki termal tespitleri düzenli kontrol etmek için otomatik izlemeyi başlat.';
+      'Uygulama açıkken yakındaki uydu tespitlerini düzenli kontrol etmek için otomatik izlemeyi başlatın.';
 
   @override
   String get coachMarkNotifAlertsTitle => 'Uyarı Kartları';
 
   @override
   String get coachMarkNotifAlertsDesc =>
-      'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsin.';
+      'Yüksek riskli tespitler burada listelenir; bir karta dokunarak tam detaya ulaşabilirsiniz.';
 
   @override
   String get coachMarkRiskScoreTitle => 'Risk Skoru';
 
   @override
   String get coachMarkRiskScoreDesc =>
-      '0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA yangın verisinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsin.';
+      '0-100 arası bu skor, sıcaklık, nem, rüzgar ve NASA uydu tespitlerinden hesaplanır. Nasıl hesaplandığını bilgi butonundan öğrenebilirsiniz.';
 
   @override
-  String get coachMarkRiskChartTitle => 'Bölgesel Dağılım';
+  String get coachMarkRiskChartTitle => 'Bölgeler';
 
   @override
   String get coachMarkRiskChartDesc =>
-      'Bir bölge çubuğuna dokunarak o bölgenin detaylı risk analizini görebilirsin.';
+      'Listeden bir bölgeye dokunarak o bölgenin detaylı risk analizini görebilirsiniz.';
 
   @override
   String get coachMarkRiskMyLocationTabTitle => 'Konumum';
 
   @override
   String get coachMarkRiskMyLocationTabDesc =>
-      'Bu sekmeye geçerek kendi bölgenin riskini Türkiye ortalamasıyla karşılaştır.';
+      'Bu sekmeye geçerek kendi bölgenizin riskini Türkiye ortalamasıyla karşılaştırın.';
 
   @override
   String get coachMarkRiskInfoTitle => 'Veri Kaynakları';
@@ -2507,37 +2687,37 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkWatchlistPurposeDesc =>
-      'Takip etmek istediğin yangın noktalarını burada bir arada tutabilirsin.';
+      'Takip etmek istediğiniz uydu tespitlerini burada bir arada tutabilirsiniz.';
 
   @override
   String get coachMarkWatchlistHowToAddTitle => 'Nasıl Eklenir?';
 
   @override
   String get coachMarkWatchlistHowToAddDesc =>
-      'Bir yangının detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsin.';
+      'Bir tespitin detay ekranındaki yer imi butonuna dokunarak onu buraya kaydedebilirsiniz.';
 
   @override
   String get coachMarkWatchlistClearTitle => 'Temizle';
 
   @override
   String get coachMarkWatchlistClearDesc =>
-      'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsin.';
+      'Üst köşedeki Temizle butonuyla tüm kayıtlı noktaları tek seferde kaldırabilirsiniz.';
 
   @override
-  String get detectionProbableFire => 'Muhtemel Yangın';
+  String get detectionProbableFire => 'Çok Güçlü Tespit';
 
   @override
-  String get detectionHighThermalAnomaly => 'Yüksek Isı Anomalisi';
+  String get detectionHighThermalAnomaly => 'Güçlü Tespit';
 
   @override
-  String get detectionThermalDetection => 'Termal Tespit';
+  String get detectionThermalDetection => 'Uydu Tespiti';
 
   @override
   String get detectionLowConfidence => 'Düşük Güvenilirlik';
 
   @override
   String get thermalAnomalyDisclaimer =>
-      'NASA uydusu termal anomalileri tespit eder. Yüksek güvenilirlikli tespitler aktif yangın göstergesi olabilir ancak endüstriyel ısı kaynakları da tespit edilebilir.';
+      'NASA uyduları ısı tespit eder. Tespitler doğrulanmadı; sanayi gibi yangın dışı kaynaklar da tespit edilebilir.';
 
   @override
   String get detectionAboutTitle => 'Bu tespit nedir?';
@@ -2564,20 +2744,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mapLegendTitle => 'Harita Lejantı';
 
   @override
-  String get legendProbableFire => 'Muhtemel Yangın';
+  String get legendProbableFire => 'Çok güçlü tespit';
 
   @override
-  String get legendHighThermal => 'Yüksek Isı Anomalisi';
+  String get legendHighThermal => 'Güçlü tespit';
 
   @override
   String get legendLowConfidence => 'Düşük Güvenilirlik';
 
   @override
   String get mapMarkerDisclaimerBefore =>
-      'Harita NASA uydu termal tespitlerini gösterir.';
+      'Harita NASA uydularının yaptığı tespitleri gösterir.';
 
   @override
-  String get mapMarkerDisclaimerAfter => 'işaretler aktif yangın olabilir.';
+  String get mapMarkerDisclaimerAfter =>
+      'işaretler en güçlü tespitlerdir; doğrulanmadı.';
 
   @override
   String get feedbackSend => 'Geri Bildirim Gönder';
@@ -2649,7 +2830,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get bugReportIntro =>
-      'Neyin yanlış gittiğini anlat — doğrudan ekibe iletilir.';
+      'Neyin yanlış gittiğini anlatın — doğrudan ekibe iletilir.';
 
   @override
   String get bugReportWhatHappened => 'Ne oldu?';
@@ -2668,34 +2849,35 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get coachMarkWatchlistTapDesc =>
-      'Kaydedilen bir yangına dokunarak güncel durumunu ve tam detaylarını görebilirsin.';
+      'Kaydedilen bir tespite dokunarak güncel durumunu ve tam detaylarını görebilirsiniz.';
 
   @override
   String get notificationScopeTitle => 'Bildirim Kapsamı';
 
   @override
   String get notificationScopeSubtitle =>
-      'Hangi yangınlar için uyarı almak istediğini seç.';
+      'Hangi yangınlar için uyarı almak istediğinizi seçin.';
 
   @override
   String get notificationScopeAll => 'Tüm Türkiye';
 
   @override
   String get notificationScopeAllDesc =>
-      'Ülke genelindeki tüm yangın uyarılarını al.';
+      'Ülke genelindeki tüm yangın uyarılarını alın.';
 
   @override
   String get notificationScopeRegion => 'Sadece bölgem';
 
   @override
   String get notificationScopeRegionDesc =>
-      'Yalnızca seçtiğin coğrafi bölgedeki yangınlar.';
+      'Yalnızca seçtiğiniz coğrafi bölgedeki yangınlar.';
 
   @override
   String get notificationScopeCity => 'Sadece ilim';
 
   @override
-  String get notificationScopeCityDesc => 'Yalnızca seçtiğin ildeki yangınlar.';
+  String get notificationScopeCityDesc =>
+      'Yalnızca seçtiğiniz ildeki yangınlar.';
 
   @override
   String get notificationScopeRegionLabel => 'Bölge';
@@ -2711,37 +2893,40 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String notificationScopeDetected(String name) {
-    return 'Konumundan algılandı: $name';
+    return 'Konumunuzdan algılandı: $name';
   }
 
   @override
-  String get notificationScopeDetecting => 'Konumun belirleniyor...';
+  String get notificationScopeDetecting => 'Konumunuz belirleniyor...';
 
   @override
   String get notificationScopeSaved => 'Bildirim kapsamı güncellendi.';
 
   @override
   String get notificationScopeSaveFailed =>
-      'Kapsam kaydedilemedi. İnternet bağlantını kontrol et.';
+      'Kapsam kaydedilemedi. İnternet bağlantınızı kontrol edin.';
 
   @override
   String get notificationScopeCitiesUnavailable => 'İl listesi yüklenemedi.';
 
   @override
   String get notificationScopeNarrowWarning =>
-      'Kapsamı daraltmak, seçtiğin alan dışındaki yangınlar için uyarı almayacağın anlamına gelir.';
+      'Kapsamı daraltmak, seçtiğiniz alan dışındaki yangınlar için uyarı almayacağınız anlamına gelir.';
 
   @override
-  String get incidentsSectionTitle => 'Yangın Olayları';
+  String get incidentsSectionTitle => 'Uydu Olayları';
 
   @override
   String get incidentsSectionSubtitle => 'Uydu tespitleri olaylara gruplanmış';
 
   @override
-  String get incidentStatusActive => 'Aktif tespit';
+  String get incidentStatusActive => 'Güncel tespit';
 
   @override
-  String get incidentStatusAwaiting => 'Tespit bekleniyor';
+  String get incidentStatusLastKnown => 'Son bilinen tespit';
+
+  @override
+  String get incidentStatusAwaiting => 'Artık görülmüyor';
 
   @override
   String get incidentStatusLowConfidence => 'Düşük güvenilirlik';
@@ -2753,12 +2938,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String incidentNoDetectionFor(String hours) {
-    return 'Yangın tespit edildi, $hours saattir görülmüyor';
+    return 'Isı tespit edildi, $hours saattir görülmüyor';
   }
 
   @override
   String incidentNoDetectionLowConfidence(String hours) {
-    return 'Yangın tespit edildi, $hours saattir görülmüyor (düşük güvenilirlik)';
+    return 'Isı tespit edildi, $hours saattir görülmüyor (düşük güvenilirlik)';
   }
 
   @override
@@ -2778,16 +2963,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get incidentHeatLabel => 'Isı şiddeti';
 
   @override
-  String get incidentHeatLow => 'Düşük';
+  String get incidentHeatLow => 'Zayıf';
 
   @override
   String get incidentHeatModerate => 'Orta';
 
   @override
-  String get incidentHeatHigh => 'Yüksek';
+  String get incidentHeatHigh => 'Güçlü';
 
   @override
-  String get incidentHeatVeryHigh => 'Çok yüksek';
+  String get incidentHeatVeryHigh => 'Çok güçlü';
 
   @override
   String get incidentSpreadTitle => 'Yayılma (tahmini)';
@@ -2815,18 +3000,18 @@ class AppLocalizationsTr extends AppLocalizations {
       'Uydunun ölçtüğü ısı yayımına göre. Söndürme çalışması olup olmadığı bu veriden anlaşılmaz.';
 
   @override
-  String get incidentToggleShow => 'Yangın olayları';
+  String get incidentToggleShow => 'Uydu olayları';
 
   @override
-  String get incidentToggleDetections => 'Olası yangın noktaları';
+  String get incidentToggleDetections => 'Doğrulanmamış uydu tespitleri';
 
   @override
   String get incidentLayerCaptionDetections =>
-      'Uydunun tek tek gördüğü sıcak noktalar; her biri yangın olmayabilir.';
+      'Uyduların tek tek yaptığı tespitler; doğrulanmadı.';
 
   @override
   String get incidentLayerCaptionEvents =>
-      'Aynı yangına ait tespitler tek bir olayda birleştirildi.';
+      'Uyduların aynı noktada yaptığı tespitler tek bir olayda birleştirildi.';
 
   @override
   String get incidentFilterActive => 'Aktif';
@@ -2836,9 +3021,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get incidentFilterAll => 'Tümü';
-
-  @override
-  String get riskLayerToggle => 'Risk (FWI)';
 
   @override
   String get incidentToggleShowShort => 'Olaylar';
@@ -2857,11 +3039,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get placesSubtitle =>
-      'Harita bu yerlere yakınlaşır; istersen bildirim kapsamın da bu yerlere daralır.';
+      'Harita bu yerlere yakınlaşır; isterseniz bildirim kapsamınız da bu yerlere daralır.';
 
   @override
   String get placesEmpty =>
-      'Henüz kayıtlı yer yok. İl veya ilçe ara, ya da haritaya iğne bırak.';
+      'Henüz kayıtlı yer yok. İl veya ilçe arayın, ya da haritaya iğne bırakın.';
 
   @override
   String get placesSearchHint => 'İl veya ilçe ara';
@@ -2870,10 +3052,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get placesDropPin => 'Haritaya iğne bırak';
 
   @override
-  String get placesDropPinHint => 'Kaydetmek istediğin noktaya dokun';
+  String get placesDropPinHint => 'Kaydetmek istediğiniz noktaya dokunun';
 
   @override
-  String get placesPinNameTitle => 'Yere bir ad ver';
+  String get placesPinNameTitle => 'Yere bir ad verin';
 
   @override
   String get placesPinDefaultName => 'Kayıtlı nokta';
@@ -2894,11 +3076,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get placesRiskNoData => 'Veri yok';
 
   @override
-  String placesRiskLine(String day) {
-    return 'FWI tehlikesi · $day';
-  }
-
-  @override
   String placesActiveDetections(int count) {
     return '$count aktif tespit';
   }
@@ -2912,42 +3089,28 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get placesResolutionNote =>
-      'FWI sınıfı, ECMWF\'nin küresel hava modelinden gelen bölgesel bir tahmindir; il ve ilçe ölçeğinde anlamlıdır, mahalle ölçeğinde ayrışmaz. Yakın iki yerin aynı sınıfı göstermesi verinin çözünürlüğüdür, hata değil.';
-
-  @override
   String get notificationScopePlaces => 'Kayıtlı yerlerim';
 
   @override
   String get notificationScopePlacesDesc =>
-      'Yalnızca harita ekranında kaydettiğin il, ilçe ve noktaların çevresindeki yangınlar.';
+      'Yalnızca harita ekranında kaydettiğiniz il, ilçe ve noktaların çevresindeki yangınlar.';
 
   @override
   String get notificationScopePlacesEmpty =>
-      'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsin.';
+      'Henüz kayıtlı yer yok. Harita ekranındaki Yerlerim panelinden ekleyebilirsiniz.';
 
   @override
   String notificationScopePlacesNote(int count) {
-    return '$count kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğin il/bölge kapsamını kullanmaya devam eder.';
+    return '$count kayıtlı yer izleniyor. Bu kapsam şimdilik bu cihazın kendi taramalarıyla uygulanır; sunucu bildirimleri son seçtiğiniz il/bölge kapsamını kullanmaya devam eder.';
   }
 
   @override
-  String get notifPlacesFireTitle => 'Kayıtlı yerinde yangın tespiti';
+  String get notifPlacesFireTitle => 'Kayıtlı yerinizin yakınında uydu tespiti';
 
   @override
   String notifPlacesFireBody(int count) {
-    return 'Kayıtlı yerlerinin çevresinde $count termal tespit var. Harita ekranından kontrol et.';
+    return 'Kayıtlı yerlerinizin çevresinde $count uydu tespiti var. Harita ekranından kontrol edin.';
   }
-
-  @override
-  String get riskLegendTitle => 'Yangın tehlikesi (FWI)';
-
-  @override
-  String get riskLegendNote =>
-      'Hava koşullarından hesaplanan bölgesel tehlike tahmini; uydu tespiti değildir.';
-
-  @override
-  String get riskLegendHide => 'Lejantı gizle';
 
   @override
   String get riskClassVeryLow => 'Çok düşük';
@@ -2968,29 +3131,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskClassExtreme => 'Aşırı';
 
   @override
-  String get riskOpacityLabel => 'Opaklık';
-
-  @override
-  String get riskDayToday => 'Bugün';
-
-  @override
-  String get riskDayTomorrow => 'Yarın';
-
-  @override
-  String get riskDayNotPublished =>
-      'Bu günün tahmini henüz yayımlanmadı. Günlük model koşusu geldiğinde açılır.';
-
-  @override
-  String get riskAttribution => '© European Union, Copernicus EFFIS';
-
-  @override
   String get homeLast24hTitle => 'Son 24 Saat';
 
   @override
   String get homeLast24hSubtitle => 'Uydu tespitlerinin özeti';
 
   @override
-  String get homeLast24hActiveTitle => 'Aktif tespit';
+  String get homeLast24hActiveTitle => 'Tekrarlanan tespit';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
@@ -2998,12 +3145,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong tanesi güçlü kanıtlı; son $hours saatte uyduyla görüldü';
-  }
-
-  @override
-  String get homeLast24hEndedTitle => 'Tespiti sona eren';
+  String get homeLast24hEndedTitle => 'Artık görülmeyen';
 
   @override
   String get homeLast24hEndedSubtitle => 'Söndüğü anlamına gelmez.';
@@ -3016,16 +3158,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'İlk tespitten bu yana, halen tespit ediliyor';
 
   @override
-  String get homeLast24hStrongestTitle => 'En şiddetli yangın';
-
-  @override
-  String homeLast24hStrongestPower(int mw) {
-    return '$mw MW';
-  }
+  String get homeLast24hStrongestTitle =>
+      'En güçlü uydu tespiti — doğrulanmadı';
 
   @override
   String get homeLast24hStrongestSubtitle =>
-      'Şu an en yüksek ısı gücü, halen tespit ediliyor';
+      'Uyduların şu an gördüğü en güçlü tespit';
 
   @override
   String homeLast24hStrongestSubtitleWithDuration(String duration) {
@@ -3034,16 +3172,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String durationHoursShort(int hours) {
-    return '$hours sa';
+    return '$hours saat';
   }
 
   @override
   String durationDaysHours(int days, int hours) {
-    return '$days g $hours sa';
+    return '$days gün $hours saat';
   }
 
   @override
-  String get incidentsEmpty => 'Bu aralıkta gruplanmış yangın olayı yok.';
+  String get incidentsEmpty => 'Bu aralıkta gruplanmış uydu olayı yok.';
 
   @override
   String incidentsCount(int count) {
@@ -3051,7 +3189,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get incidentPanelTitle => 'Yangın Olayı';
+  String get incidentPanelTitle => 'Uydu tespiti';
 
   @override
   String get incidentOfficialTitle => 'Resmî durum';
@@ -3117,7 +3255,1465 @@ class AppLocalizationsTr extends AppLocalizations {
   String get riskHeatUnavailable => 'Risk verisi şu an alınamıyor';
 
   @override
+  String riskRegionLevel(String region, String level) {
+    return '$region: $level';
+  }
+
+  @override
+  String riskHighestScoreLine(Object score) {
+    return 'En yüksek puan: $score/100';
+  }
+
+  @override
+  String get riskRegionsTitle => 'Bölgeler';
+
+  @override
+  String riskRegionWeather(String temp, String humidity, String wind) {
+    return '$temp°C · %$humidity nem · $wind km/h';
+  }
+
+  @override
+  String riskPercent(Object value) {
+    return '%$value';
+  }
+
+  @override
+  String get riskComponentsTitle => 'Puan nasıl oluştu?';
+
+  @override
+  String get riskComponentsTotal => 'Toplam';
+
+  @override
+  String get riskComponentsCapped => 'Puan en fazla 100 olabilir.';
+
+  @override
+  String get riskComponentsUnavailable => 'Puanın dökümü şu an gösterilemiyor.';
+
+  @override
+  String get riskComponentWindLabel => 'Rüzgâr';
+
+  @override
+  String get riskComponentTempMild =>
+      'Ilık hava bitkilerin nemini yavaşça azaltır.';
+
+  @override
+  String get riskComponentTempHot => 'Sıcak hava bitkileri hızla kurutur.';
+
+  @override
+  String get riskComponentHumidityMid =>
+      'Nem azaldıkça bitki örtüsü kurumaya başlar.';
+
+  @override
+  String get riskComponentHumidityLow =>
+      'Hava çok kuru; bitki örtüsü hızla kurur.';
+
+  @override
+  String get riskComponentWindMid => 'Rüzgâr kıvılcım ve alevleri taşıyabilir.';
+
+  @override
+  String get riskComponentWindHigh =>
+      'Güçlü rüzgâr ateşin yayılmasını hızlandırır.';
+
+  @override
+  String get riskComponentDetections =>
+      'Son 24 saatte bölgedeki uydu ısı tespitleri; her tespit yangın demek değildir.';
+
+  @override
+  String get riskComponentDetectionsNone =>
+      'Son 24 saatte bölgede uydu tespiti yok. Bu, yangın olmadığı anlamına gelmez.';
+
+  @override
+  String get riskComponentDetectionsUnknown =>
+      'Uydu tespit sayısı şu an alınamıyor.';
+
+  @override
+  String get riskComponentDetectionsChanged =>
+      'Puan, son hesaplamadaki sayıyla oluştu; sayı o zamandan beri değişti.';
+
+  @override
+  String riskComponentDetectionsValue(int count) {
+    return '$count tespit';
+  }
+
+  @override
+  String get riskComponentUnknownValue => 'Bilinmiyor';
+
+  @override
+  String get riskComponentBonus => 'Sıcak ve kuru hava';
+
+  @override
+  String get riskComponentBonusNote =>
+      'Sıcak ve kuru hava bir arada olduğu için ek puan.';
+
+  @override
+  String get riskExplainSum =>
+      'Puan, bu bileşenlerin toplamıdır (en fazla 100). Eşikler:';
+
+  @override
+  String riskExplainBonus(
+    int warmTemp,
+    int warmHumidity,
+    int warmPoints,
+    int hotTemp,
+    int hotHumidity,
+    int hotPoints,
+  ) {
+    return 'Sıcak ve kuru birlikte: $warmTemp°C üstü ve nem %$warmHumidity altı +$warmPoints; $hotTemp°C üstü ve nem %$hotHumidity altı +$hotPoints';
+  }
+
+  @override
   String riskHeatMapSemantics(int score, String level) {
-    return 'Türkiye yangın riski ısı haritası. Türkiye geneli risk skoru $score/100, $level.';
+    return 'Türkiye yangın riski bölge haritası. Türkiye geneli risk skoru $score/100, $level.';
+  }
+
+  @override
+  String get navRisk => 'Risk';
+
+  @override
+  String get riskAdviceCritical =>
+      'Açık alanda ateş yakmayın. Şüpheli dumanı 112’ye bildirin; resmi uyarıları izleyin.';
+
+  @override
+  String get riskAdviceHigh =>
+      'Açık alanda ateş yakmayın; kıvılcım çıkarabilecek işlerden kaçının.';
+
+  @override
+  String get riskAdviceMedium =>
+      'Kuru bitki örtüsü yakınında dikkatli olun; yerel uyarıları izleyin.';
+
+  @override
+  String get riskAdviceLow =>
+      'Risk düşük olsa da sıfır değildir. Ateşi ve izmaritleri doğaya bırakmayın.';
+
+  @override
+  String get riskScoreNotProbability =>
+      'Bu puan, yangın çıkıp çıkmayacağını söylemez.';
+
+  @override
+  String get riskScoresAreIndices =>
+      'Puanlar 0–100 arası bir endekstir; yangın çıkıp çıkmayacağını söylemez.';
+
+  @override
+  String riskNearbyFireCount(String count) {
+    return 'Son günlerde yakında $count uydu tespiti.';
+  }
+
+  @override
+  String get riskNearbyFireCountUnavailable =>
+      'Yakındaki son yangın sayısı henüz paylaşılmıyor.';
+
+  @override
+  String riskPreviousScore(String score) {
+    return 'Önceki puan: $score/100';
+  }
+
+  @override
+  String get riskDataStale => 'Veri eski';
+
+  @override
+  String get riskLastKnownView => 'Son bilinen risk';
+
+  @override
+  String get homeLastKnownDetections => 'Son bilinen uydu tespitleri';
+
+  @override
+  String get mapNearbyFiresSubtitleStale =>
+      'Konumunuza en yakın son bilinen tespitler';
+
+  @override
+  String natureShareRiskStale(String region, String level, int score) {
+    return '$region bölgesinde son bilinen yangın riski: $level ($score/100). Bu veri eski. Yangın görürseniz önce 112’yi arayın. FireWatch TR';
+  }
+
+  @override
+  String riskCalculatedAt(String date) {
+    return 'Hesaplama: $date';
+  }
+
+  @override
+  String get riskSavedView => 'Kaydedilmiş görünüm';
+
+  @override
+  String get riskServerUnreachable =>
+      'Sunucuya ulaşılamadı. Kaydedilmiş veriler gösteriliyor.';
+
+  @override
+  String riskServerUnreachableSavedAt(String date) {
+    return 'Sunucuya ulaşılamadı. Son kayıt: $date';
+  }
+
+  @override
+  String get riskRestorationCardTitle => 'Yangın kayıpları ve restorasyon';
+
+  @override
+  String get riskRestorationCardSubtitle =>
+      'Aylık yanan alan verilerini zaman içinde takip edin';
+
+  @override
+  String get riskHistoryCardTitle => 'Geçmiş yangınlar';
+
+  @override
+  String get riskHistoryCardSubtitle =>
+      'Geçmiş yangın alanları, tarihleri ve restorasyon güncellemeleri';
+
+  @override
+  String get riskDistrictMapCardTitle => 'İl / ilçe risk haritası';
+
+  @override
+  String get riskDistrictMapCardSubtitle =>
+      'İlçe düzeyinde risk puanları ve sıralama';
+
+  @override
+  String get newsTabFires => 'Yangınlar';
+
+  @override
+  String get newsTabRecovery => 'Yenilenme';
+
+  @override
+  String get newsTabSolidarity => 'Dayanışma';
+
+  @override
+  String get newsTabEvents => 'Etkinlikler';
+
+  @override
+  String get newsShowingSaved => 'Kaydedilmiş haberler gösteriliyor.';
+
+  @override
+  String get newsNoneInTab => 'Bu başlıkta henüz içerik yok.';
+
+  @override
+  String get newsEventJoin => 'Katıl';
+
+  @override
+  String get newsDonate => 'Bağış yap';
+
+  @override
+  String get newsAddToCalendar => 'Takvime ekle';
+
+  @override
+  String get newsCalendarFailed => 'Takvim uygulaması açılamadı.';
+
+  @override
+  String get newsLinkFailed => 'Bağlantı açılamadı.';
+
+  @override
+  String get annualLayerToggle => 'Geçmiş yıllar';
+
+  @override
+  String get annualLayerLoadError =>
+      'Geçmiş yıl dosyaları yüklenemedi. Tekrar denemek için katmanı kapatıp açın.';
+
+  @override
+  String get riskDrynessIndexDerived =>
+      'Kuruluk göstergesi (sıcaklık, nem ve rüzgârdan türetilir)';
+
+  @override
+  String get riskVegetationDensityDerived =>
+      'Bitki baskısı (sıcaklık ve rüzgârdan türetilir)';
+
+  @override
+  String get riskDrynessDerivation => 'Sıcaklık, nem ve rüzgârdan türetilir.';
+
+  @override
+  String annualPastYearChip(int year) {
+    return '$year · Geçmiş yıl';
+  }
+
+  @override
+  String get annualNoData => 'Veri yok';
+
+  @override
+  String get annualMetricOgmArea => 'OGM yanan alan';
+
+  @override
+  String get annualMetricOgmCount => 'OGM yangın sayısı';
+
+  @override
+  String get annualMetricSatellite => 'Uydu noktası';
+
+  @override
+  String get annualMetricEffisArea => 'EFFIS alan';
+
+  @override
+  String get annualMetricOgmAreaDesc =>
+      'OGM’nin kaydettiği yanan orman alanı. İl renkleri her zaman bu değere göre belirlenir.';
+
+  @override
+  String get annualMetricOgmCountDesc =>
+      'OGM’nin kaydettiği orman yangını sayısı.';
+
+  @override
+  String get annualMetricSatelliteDesc =>
+      'Uydu noktası yangın sayısı değildir. Orman ve maki alanındaki uydu tespitlerini gösterir.';
+
+  @override
+  String get annualMetricEffisAreaDesc =>
+      'EFFIS’in uydu görüntülerinden hesapladığı yanan alan. Küçük yangınların kapsamı OGM’den farklı olabilir.';
+
+  @override
+  String get annualMetricExplainTitle => 'Değerlerin açıklaması';
+
+  @override
+  String get annualMetricExplainHint =>
+      'Seçim yalnızca açıklamayı değiştirir; il rengi her zaman OGM yanan alanını gösterir.';
+
+  @override
+  String get annualProvinceNote =>
+      'Uydu noktası yangın sayısı değildir. İl dolguları yangının sınırını değil, il genelindeki yıllık toplamı gösterir.';
+
+  @override
+  String get annualLegendTitle => 'Geçmiş yıllar · yanan alan';
+
+  @override
+  String annualLegendTickMax(String value) {
+    return '≥ $value ha';
+  }
+
+  @override
+  String get annualLegendNote =>
+      'Koyu renk daha çok yanan alan demektir; boyanmayan illerin verisi yok. Bu katman bugünkü yangınları göstermez.';
+
+  @override
+  String get districtRiskRankingTitle => 'Risk sıralaması';
+
+  @override
+  String get districtRiskScoresNotProbability =>
+      'Puanlar yangın çıkıp çıkmayacağını söylemez.';
+
+  @override
+  String get districtRiskSampleBanner =>
+      'ÖRNEK VERİ · Sınırlar şematiktir; gerçek ilçe sınırları ve güncel risk değildir.';
+
+  @override
+  String get districtRiskLoadFailed =>
+      'İlçe risk verisi alınamadı. Yeniden denemek için dokunun.';
+
+  @override
+  String get districtRiskAllProvinces => 'Türkiye';
+
+  @override
+  String get districtRiskAllDistricts => 'Tüm ilçeler';
+
+  @override
+  String get districtRiskNoScore => 'Risk verisi yok';
+
+  @override
+  String get districtRiskOpenRanking => 'Risk sıralamasını aç';
+
+  @override
+  String get historyLoadFailed =>
+      'Geçmiş yangın verileri alınamadı. Yeniden denemek için dokunun.';
+
+  @override
+  String get historySourceOpenFailed => 'Kaynak açılamadı.';
+
+  @override
+  String get historySampleRecord =>
+      'ÖRNEK KAYIT — gerçek bir yangını temsil etmez.';
+
+  @override
+  String get historyAreaUnknown => 'Alan henüz bilinmiyor';
+
+  @override
+  String historyAreaPitches(String hectares, String pitches) {
+    return '$hectares hektar — yaklaşık $pitches futbol sahası.';
+  }
+
+  @override
+  String get historyPitchComparison =>
+      'Karşılaştırma: 105 × 68 m saha = 0,714 hektar.';
+
+  @override
+  String get historyAreaSource => 'Alan verisinin kaynağı';
+
+  @override
+  String get historyRestorationTitle => 'Restorasyon';
+
+  @override
+  String get historyNoRestoration =>
+      'Bu alan için kaynakla doğrulanmış restorasyon kaydı henüz yok. Bu, çalışma yapılmadığı anlamına gelmez.';
+
+  @override
+  String get historyComparisonSource => 'Karşılaştırmanın kaynağı';
+
+  @override
+  String get historyOpenAnnouncement => 'Resmi duyuruyu aç';
+
+  @override
+  String get historyCampaignsTitle => 'Değişim tek kişiyle başlar';
+
+  @override
+  String get historyNoCampaigns =>
+      'Doğrulanmış bir kampanya veya gönüllü etkinliği henüz eklenmedi.';
+
+  @override
+  String get historyPeriodThisSummer => 'Bu yaz';
+
+  @override
+  String get historyPeriodSinceLastSummer => 'Geçen yazdan beri';
+
+  @override
+  String get historyPeriodLast3Years => 'Son 3 yıl';
+
+  @override
+  String get historyPeriodCustom => 'Özel aralık';
+
+  @override
+  String get historyNoRecords => 'Seçilen aralıkta kayıt yok.';
+
+  @override
+  String get historySampleBanner =>
+      'ÖRNEK VERİ · Boyalı alanlar şematiktir; gerçek yangın sınırları değildir.';
+
+  @override
+  String get historySourceSample =>
+      'Kaynak: örnek veri. Canlı kaynak: NASA FIRMS (VIIRS/MODIS).';
+
+  @override
+  String get historySourceLive =>
+      'Kaynak: NASA FIRMS (VIIRS/MODIS) · uydu ısı tespitleri';
+
+  @override
+  String historyDetections(String count, String hours) {
+    return '$count tespit · $hours saat';
+  }
+
+  @override
+  String historyMaxFrp(String frp) {
+    return 'En yüksek ışınım gücü (FRP): $frp MW';
+  }
+
+  @override
+  String get historyFootprintNote =>
+      'Haritadaki şekil, uydunun ısı tespit ettiği yerlerin izidir (her tespitin çevresinde 188 m); yanan alanın sınırı değildir. Yanan alan ölçülmediği için alan gösterilmez. Anız ve tarım yangınları da dahildir.';
+
+  @override
+  String get historyNearestDistrictNote =>
+      'İlçe, olayın merkezine en yakın ilçe merkezine göre belirlendi; sınıra yakın olaylarda komşu ilçe olabilir.';
+
+  @override
+  String get historyOpenFirmsMap => 'NASA FIRMS haritasını aç';
+
+  @override
+  String get historyFirmsAttribution =>
+      'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
+
+  @override
+  String get detectionNotConfirmedNotice =>
+      'Bu bir uydu ısı tespitidir, doğrulanmış yangın değildir. Yangın ya da duman görürseniz hemen 112\'yi arayın.';
+
+  @override
+  String get riskFactorTempHintNone =>
+      '25°C altındaki sıcaklık risk puanını artırmaz.';
+
+  @override
+  String riskFactorTempHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: sıcak hava bitkilerin daha hızlı nem kaybetmesine yol açar.';
+  }
+
+  @override
+  String get riskFactorHumidityHintNone =>
+      '%50 üzerindeki nem risk puanını artırmaz; nemli bitki örtüsü daha zor tutuşur.';
+
+  @override
+  String riskFactorHumidityHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: düşük nem yanıcı bitki örtüsünü kurutur.';
+  }
+
+  @override
+  String get riskFactorWindHintNone =>
+      '10 km/h altındaki rüzgâr risk puanını artırmaz.';
+
+  @override
+  String riskFactorWindHint(int points, int max) {
+    return 'Risk puanına +$points/$max ekler: rüzgâr alevleri ve kıvılcımları taşıyabilir.';
+  }
+
+  @override
+  String riskNoteLightWind(int wind) {
+    return 'Hafif rüzgâr ($wind km/h)';
+  }
+
+  @override
+  String get newsFeaturedSubtitleLatest => 'En güncel başlık';
+
+  @override
+  String get homeBriefRiskLoading => 'Bölgesel risk verisi yükleniyor.';
+
+  @override
+  String get homeBriefRiskUnavailable =>
+      'Bölgesel risk verisi şu an alınamadı.';
+
+  @override
+  String homeBriefRiskHighest(String region, int score) {
+    return 'En yüksek bölgesel risk $region bölgesinde: $score/100.';
+  }
+
+  @override
+  String homeBriefNationwide(int count) {
+    return '$count önemli uydu tespiti Türkiye genelinde izleniyor.';
+  }
+
+  @override
+  String get homeBriefNoneNearby =>
+      '100 km çevrenizde önemli bir tespit görünmüyor.';
+
+  @override
+  String homeBriefNearby(int count) {
+    return '100 km çevrenizde $count tespit var; haritadan ayrıntıları kontrol edin.';
+  }
+
+  @override
+  String get homeBriefTitle => 'Bugün ne bilmeliyim?';
+
+  @override
+  String get homeBriefSubtitle => 'Kısa durum özeti';
+
+  @override
+  String get homeBriefViewRisk => 'Riski incele';
+
+  @override
+  String get homeBriefOpenMap => 'Haritayı aç';
+
+  @override
+  String get dataSourcesBordersTitle => 'İl sınırları';
+
+  @override
+  String get dataSourcesBordersBody =>
+      'Haritadaki \"Geçmiş yıllar\" katmanında çizilen 81 il sınırı ve sunucunun bir tespiti hangi ile atadığı aynı dosyadan gelir: geoBoundaries (gbOpen, TUR ADM1), OpenStreetMap verisinden türetilmiştir. Sınırlar sadeleştirilmiştir; il sınırına çok yakın bir nokta komşu ile düşebilir. Denizdeki ya da sınır dışındaki noktalar en yakın ile atanır.';
+
+  @override
+  String get dataSourcesBordersGeoBoundariesCredit =>
+      'İl sınırları: geoBoundaries';
+
+  @override
+  String get annualLayerProvenance =>
+      'Yıllık il toplamları kaynak veri setinde hesaplanmıştır (OGM orman yangını istatistikleri; NASA FIRMS VIIRS S-NPP ve ESA WorldCover 2021; EFFIS). Veri setinin kendi beyanına göre uydu noktası sayıları GADM 4.1 il sınırlarıyla hesaplanmıştır. Haritada çizilen il sınırları geoBoundaries / OpenStreetMap\'tir.';
+
+  @override
+  String get osmAttribution => '© OpenStreetMap katkıcıları, ODbL';
+
+  @override
+  String get odblLicenseLink => 'ODbL 1.0 lisansı';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Tespit güveni: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Tespit güveni';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'NASA\'nın güven düzeyi, tespitin gücü, 20 km içindeki tekrar eden tespitler ve tespitin ne kadar yeni olduğundan hesaplanır. Hava durumu bu puana katılmaz.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'Bu puan bir uydu tespitinin ne kadar belirgin olduğunu gösterir. Orada yangın olduğunu doğrulamaz.';
+
+  @override
+  String get mapStrongUnverifiedReason =>
+      'Uydular tek geçişte güçlü bir tespit yaptı; doğrulanmadı.';
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    return '$count güçlü, doğrulanmamış tespit — Noktalar\'da görün';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Çoklu geçiş tespiti';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Uydular aynı noktada en az iki ayrı geçişte güçlü tespit yaptı. Bu, yangın olduğunu doğrulamaz.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'En az 2 uydu geçişi; $weaker zayıf tespit daha Noktalar katmanında';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count tekrarlanan tespit (en az 2 uydu geçişi); haritada $weaker tek geçişli ya da zayıf tespit daha var. Hiçbiri doğrulanmadı.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Resmî bilgi: söndürüldü — uydu hâlâ ısı görüyor';
+
+  @override
+  String get fireDetailLinkedNews => 'Bu yangınla ilişkilendirilen haberler';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap katkıcıları';
+
+  @override
+  String get riskInfoFormulaHeatBonus =>
+      'Sıcak ve kuru hava birlikteyse ek puan (en fazla 20 puan)';
+
+  @override
+  String myPlacesRiskLine(String level, int score) {
+    return 'Yangın riski: $level ($score/100)';
+  }
+
+  @override
+  String myPlacesDetections24h(int count) {
+    return 'Son 24 saatte $count tespit';
+  }
+
+  @override
+  String get myPlacesNoDetections => 'Son 24 saatte yakında tespit yok';
+
+  @override
+  String get myPlacesRiskNote =>
+      'Risk, hava koşulları ve yakın uydu tespitlerinden hesaplanan bir puandır. Tespit olmaması yangın olmadığı anlamına gelmez.';
+
+  @override
+  String get trackedPlacesEditTitle => 'Yeri düzenle';
+
+  @override
+  String get trackedPlacesNotifyHeat =>
+      'Yakında yeni ısı tespiti olunca bildir';
+
+  @override
+  String get trackedPlacesNotifyRisk => 'Yangın riski yükselince bildir';
+
+  @override
+  String get trackedPlacesNotifyRiskDesc =>
+      'Yüksek veya Kritik\'e çıkınca, günde en fazla bir kez';
+
+  @override
+  String get placeSearchHint => 'İl, ilçe, mahalle ya da adres';
+
+  @override
+  String get placeSearchButton => 'Ara';
+
+  @override
+  String get placeSearchRemote => 'Mahalle veya adres olarak ara';
+
+  @override
+  String get placeSearchNoResults =>
+      'Sonuç bulunamadı. Haritadan seçebilirsiniz.';
+
+  @override
+  String get placeSearchFailed =>
+      'Arama şu an yapılamıyor. Haritadan seçebilirsiniz.';
+
+  @override
+  String get placeSearchTooShort => 'En az 3 harf yazın.';
+
+  @override
+  String get placeSearchPrivacy =>
+      'İl ve ilçe aramaları telefonunuzda yapılır. Mahalle ve adres aramaları sunucumuz üzerinden OpenStreetMap\'e iletilir; yazdığınız metin saklanmaz.';
+
+  @override
+  String get placeSearchAttribution =>
+      'Arama sonuçları © OpenStreetMap katkıcıları (Nominatim)';
+
+  @override
+  String get detectionNoneTitle =>
+      'Son 24 saatte uydular Türkiye\'de orman ve doğal alanlarda güçlü bir ısı tespit etmedi.';
+
+  @override
+  String get detectionLimitNote =>
+      'Uydular küçük veya bulut altındaki yangınları göremeyebilir.';
+
+  @override
+  String detectionLastUpdate(String time) {
+    return 'Son güncelleme: $time';
+  }
+
+  @override
+  String get detectionStaleTitle => 'Uydu verisi güncel değil.';
+
+  @override
+  String get detectionStaleBody =>
+      'Bu yüzden şu an tespit olup olmadığını söyleyemiyoruz.';
+
+  @override
+  String get detectionUnavailableTitle => 'Uydu verisi alınamadı.';
+
+  @override
+  String get detectionUnavailableBody =>
+      'Bu, tespit olmadığı anlamına gelmez. Bağlantınızı kontrol edip yeniden deneyin.';
+
+  @override
+  String get detectionCall112Line => 'Yangın görürseniz önce 112\'yi arayın.';
+
+  @override
+  String get detectionReportLine =>
+      'Uygulamada görünmeyen bir yangın ya da bir hata fark ederseniz Raporla ile bize bildirin.';
+
+  @override
+  String get detectionReportButton => 'Raporla';
+
+  @override
+  String get detectionShowLast7Days => 'Son 7 günü göster';
+
+  @override
+  String get detectionOpenRisk => 'Risk katmanını aç';
+
+  @override
+  String detectionLatest(String when, String city) {
+    return 'En son tespit: $when, $city';
+  }
+
+  @override
+  String detectionLatestNoCity(String when) {
+    return 'En son tespit: $when';
+  }
+
+  @override
+  String detectionDaysAgo(int days) {
+    return '$days gün önce';
+  }
+
+  @override
+  String detectionHoursAgo(int hours) {
+    return '$hours saat önce';
+  }
+
+  @override
+  String get detectionJustNow => 'bir saatten kısa süre önce';
+
+  @override
+  String get riskColorsNotFire =>
+      'Renkler yangın değil, yangın çıkma riskidir.';
+
+  @override
+  String get mapRiskLayer => 'Risk';
+
+  @override
+  String get mapRiskLegendTitle => 'Risk puanı (bölgelere göre)';
+
+  @override
+  String get mapRiskLegendLow => 'Düşük · 0–24';
+
+  @override
+  String get mapRiskLegendMedium => 'Orta · 25–49';
+
+  @override
+  String get mapRiskLegendHigh => 'Yüksek · 50–74';
+
+  @override
+  String get mapRiskLegendCritical => 'Kritik · 75–100';
+
+  @override
+  String get mapRiskUnavailable => 'Risk verisi alınamadı.';
+
+  @override
+  String mapRiskRegionTap(String region, int score, String level) {
+    return '$region: $score/100, $level';
+  }
+
+  @override
+  String get reportPanelNotEmergency =>
+      'Bu bildirim acil servislere iletilmez; acil durumda 112\'yi arayın.';
+
+  @override
+  String get reportPanelTypeLabel => 'Bildirim türü';
+
+  @override
+  String get reportTypeFire => 'Yangın gözlemi';
+
+  @override
+  String get reportTypeMissingFire => 'Uygulamada görünmeyen yangın';
+
+  @override
+  String get reportTypeWrongInfo => 'Hatalı bilgi/uygulama hatası';
+
+  @override
+  String get reportPanelWrongInfoHint =>
+      'Neyin hatalı olduğunu yazın: hangi ekran, ne gördünüz, ne olmalıydı?';
+
+  @override
+  String get reportPanelWrongInfoNeedText =>
+      'Lütfen neyin hatalı olduğunu yazın.';
+
+  @override
+  String get reportPanelWrongInfoSent => 'Bildiriminiz alındı. Teşekkürler.';
+
+  @override
+  String get riskTabPlaces => 'Yerlerim';
+
+  @override
+  String get riskPointBack => 'Yerlerim\'e dön';
+
+  @override
+  String get riskPointAdviceTitle => 'Öneriler';
+
+  @override
+  String get riskPointWhyTitle => 'Neden bu seviye';
+
+  @override
+  String get riskPointNearbyTitle => 'Yakın tespitler';
+
+  @override
+  String riskPointNearby(int km, int count) {
+    return '$km km içinde son 24 saatte $count uydu tespiti';
+  }
+
+  @override
+  String riskPointNearbyNone(int km) {
+    return '$km km içinde son 24 saatte uydu tespiti yok. Bu, yangın olmadığı anlamına gelmez.';
+  }
+
+  @override
+  String get riskPointNearbyUnknown =>
+      'Yakın uydu tespitleri şu an bilinmiyor; puan yalnızca hava koşullarından hesaplandı.';
+
+  @override
+  String riskPointCalculatedAt(String time) {
+    return 'Hesaplanma: $time';
+  }
+
+  @override
+  String get riskPointUnavailable =>
+      'Risk şu an hesaplanamadı. Yeniden deneyin.';
+
+  @override
+  String get riskCopernicusTitle => 'Copernicus yangın tehlike indeksi';
+
+  @override
+  String get riskCopernicusNote =>
+      'FireWatch risk puanından ayrı, hava modeline dayalı bir göstergedir; puana katılmaz.';
+
+  @override
+  String get riskCopernicusAttribution =>
+      '© European Union, Copernicus EFFIS · CC BY 4.0';
+
+  @override
+  String get commonDetails => 'Detaylar';
+
+  @override
+  String incidentPeakPowerDetail(String mw) {
+    return 'En yüksek ışıma gücü (FRP): $mw MW';
+  }
+
+  @override
+  String get commonAllTechnical => 'Tüm teknik bilgiler';
+
+  @override
+  String dsStrong(String city) {
+    return 'Uydular $city yakınında güçlü bir yangın izi tespit etti.';
+  }
+
+  @override
+  String get dsStrongNoCity => 'Uydular güçlü bir yangın izi tespit etti.';
+
+  @override
+  String dsNormal(String city) {
+    return 'Uydular $city yakınında bir yangın izi tespit etti.';
+  }
+
+  @override
+  String get dsNormalNoCity => 'Uydular bir yangın izi tespit etti.';
+
+  @override
+  String get dsNotVerified => 'Henüz doğrulanmadı.';
+
+  @override
+  String get dsNewsVerified => 'Haberlerde doğrulandı.';
+
+  @override
+  String get dsFarmland => 'Tarım alanı olduğu için anız yakma da olabilir.';
+
+  @override
+  String get dsBuilt =>
+      'Sanayi veya yerleşim alanı olduğu için sabit bir ısı kaynağı da olabilir.';
+
+  @override
+  String get dsSeenJustNow => 'Az önce görüldü.';
+
+  @override
+  String dsSeenHours(int hours) {
+    return '$hours saat önce görüldü.';
+  }
+
+  @override
+  String dsSeenDays(int days) {
+    return '$days gün önce görüldü.';
+  }
+
+  @override
+  String lastSeenHours(int hours) {
+    return 'Son görülme: $hours saat önce';
+  }
+
+  @override
+  String lastSeenDays(int days) {
+    return 'Son görülme: $days gün önce';
+  }
+
+  @override
+  String incidentSeenPasses(int passes) {
+    return 'Uydular bu noktayı $passes ayrı geçişte gördü.';
+  }
+
+  @override
+  String get incidentSeenOnce => 'Uydular bu noktayı bir kez gördü.';
+
+  @override
+  String get newsVerifiedLabel => 'Haberlerde doğrulandı';
+
+  @override
+  String get relatedNewsTitle => 'İlgili haberler';
+
+  @override
+  String get mapPointFarmland => 'Tarım alanında — anız yakma olabilir';
+
+  @override
+  String get mapPointBuilt =>
+      'Sanayi veya yerleşim alanında — sabit ısı kaynağı olabilir';
+
+  @override
+  String systemStatusFresh(String time) {
+    return 'Sistem çalışıyor · Son kontrol: $time';
+  }
+
+  @override
+  String systemStatusStale(String time) {
+    return 'Uydu verisi güncel değil · Son kontrol: $time';
+  }
+
+  @override
+  String get mapStatusNoneBody =>
+      'Son 24 saatte uydular orman alanlarında yangın tespit etmedi.';
+
+  @override
+  String mapStatusStrongBody(int count) {
+    return 'Son 24 saatte uydular orman alanlarında $count güçlü tespit yaptı. Bunlar şu an Olaylar\'da görünmüyor; Noktalar\'a bakabilirsiniz.';
+  }
+
+  @override
+  String mapStatusOtherLine(int count) {
+    return 'Tarım/sanayi alanlarında $count tespit var';
+  }
+
+  @override
+  String get mapStatusShowPoints => 'Noktaları göster';
+
+  @override
+  String get mapLayerRiskDesc => 'Bölgelere göre son hesaplanan yangın riski.';
+
+  @override
+  String get mapLayerAnnualDesc => 'İllere göre geçmiş yıllarda yanan alan.';
+
+  @override
+  String mapAnnualNote(String year) {
+    return '$year yılında yanan alan. Bugünkü yangınları göstermez.';
+  }
+
+  @override
+  String get mapSourcesLink => 'Kaynaklar';
+
+  @override
+  String detectionOtherLine(int count) {
+    return 'Tarım ve sanayi alanlarında $count güçlü tespit var; bunlar Noktalar katmanında.';
+  }
+
+  @override
+  String get fireDetailBrightness =>
+      'Uydunun ölçtüğü yüzey parlaklık sıcaklığı';
+
+  @override
+  String get fireDetailBrightnessNote =>
+      'Bu, hava sıcaklığı değildir. Uydunun yerden aldığı ısı ölçümüdür; yangının sıcaklığını göstermez.';
+
+  @override
+  String get homeTodayTitle => 'Konumunuzda bugün';
+
+  @override
+  String get homeNearbyNone => '25 km içinde uydular güçlü bir tespit yapmadı.';
+
+  @override
+  String homeNearbySome(int count) {
+    return '25 km içinde uydular $count güçlü tespit yaptı.';
+  }
+
+  @override
+  String homeWind(String speed) {
+    return 'Rüzgâr: $speed km/s';
+  }
+
+  @override
+  String get homeLocationNeeded =>
+      'Konumunuzu açarsanız buradaki riski görürsünüz.';
+
+  @override
+  String get homeLocationOutside => 'Konumunuz Türkiye dışında görünüyor.';
+
+  @override
+  String get homeLocationEnable => 'Konumu aç';
+
+  @override
+  String get homeRiskUnavailable => 'Risk şu an hesaplanamadı.';
+
+  @override
+  String homeTurkeyLine(int natural, int other) {
+    return 'Son 24 saat: orman ve doğal alanda $natural güçlü tespit, tarım ve sanayi alanında $other.';
+  }
+
+  @override
+  String get homeSeeOnMap => 'Haritada gör';
+
+  @override
+  String get homeNewsTitle => 'Haberler';
+
+  @override
+  String get newsNewBadge => 'Yeni';
+
+  @override
+  String get coachMarksDisableAll => 'Tüm ipuçlarını kapat';
+
+  @override
+  String get settingsTipsTitle => 'İpuçları';
+
+  @override
+  String get settingsTipsSubtitle => 'Ekranlardaki kısa ipuçlarını göster';
+
+  @override
+  String get pageAboutLink => 'Bu sayfa hakkında';
+
+  @override
+  String get dataSourcesLandCoverTitle => 'Arazi örtüsü';
+
+  @override
+  String get dataSourcesLandCoverBody =>
+      'Bir tespitin orman, tarım veya sanayi alanında olduğu ESA WorldCover 2021 haritasından, çevresindeki 750 metrelik alana bakılarak belirlenir. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Lisans: CC BY 4.0.';
+
+  @override
+  String get homeOverviewNewsNoFresh => 'Yeni haber yok';
+
+  @override
+  String get navNature => 'Doğa';
+
+  @override
+  String natureSource(String name) {
+    return 'Kaynak: $name';
+  }
+
+  @override
+  String get natureTodayTask => 'Bugünün görevi';
+
+  @override
+  String get natureTaskSaved =>
+      'Kaydedildi. Yarın yeni bir görev burada olacak.';
+
+  @override
+  String get natureYes => 'Yaptım';
+
+  @override
+  String get natureNo => 'Bugün değil';
+
+  @override
+  String get natureAnotherTask => 'Başka görev';
+
+  @override
+  String get natureShare => 'Paylaş';
+
+  @override
+  String get naturePickProvince => 'İlinizi seçin';
+
+  @override
+  String get natureProvince => 'İliniz';
+
+  @override
+  String get natureOpenInat => 'iNaturalist\'i aç';
+
+  @override
+  String natureProvinceStat(
+    String province,
+    int year,
+    int hectares,
+    int fires,
+  ) {
+    return 'OGM verisine göre $province: $year yılında $hectares hektar, $fires yangın.';
+  }
+
+  @override
+  String natureShareRisk(String region, String level, int score) {
+    return 'Bugün $region bölgesinde yangın riski: $level ($score/100). Yangın görürseniz önce 112’yi arayın. FireWatch TR';
+  }
+
+  @override
+  String natureStreak(int days) {
+    return '$days gün';
+  }
+
+  @override
+  String get natureWeeklyChallenge => 'Haftanın hedefi';
+
+  @override
+  String get natureGoalDays => 'Bu hafta 4 gün görevinize bakın';
+
+  @override
+  String get natureGoalLesson => 'Bir ders bitirin';
+
+  @override
+  String get natureGoalShares => 'İki bilgi veya risk kartı paylaşın';
+
+  @override
+  String get natureFactTitle => 'Günün doğa bilgisi';
+
+  @override
+  String get natureLessons => 'Kısa dersler';
+
+  @override
+  String natureLessonLength(int cards) {
+    return '$cards kart';
+  }
+
+  @override
+  String get natureBadges => 'Rozetler';
+
+  @override
+  String get natureBadgeFirst => 'İlk adım';
+
+  @override
+  String get natureBadgeSeven => 'Yedi gün';
+
+  @override
+  String get natureBadgeThirty => 'Otuz gün';
+
+  @override
+  String get natureBadgeSeasons => 'Dört mevsim';
+
+  @override
+  String get natureBadgeCurious => 'Meraklı';
+
+  @override
+  String get natureBadgeAllLessons => 'Bilgi sahibi';
+
+  @override
+  String get natureBadgeSharer => 'Paylaşan';
+
+  @override
+  String get natureBadgeObserver => 'Gözlemci';
+
+  @override
+  String get natureOnDevice =>
+      'İlerlemeniz bu telefonda saklanır. Google ile giriş yaparsanız telefonlar arasında sizinle gelir. Konumunuz ve Yerlerim bu kayda hiç girmez.';
+
+  @override
+  String get natureReminder => 'Günlük hatırlatma';
+
+  @override
+  String get natureReminderDesc =>
+      'Günde en fazla bir kez. O gün görevinizi işaretlediyseniz gönderilmez.';
+
+  @override
+  String get natureReminderText => 'Bugünün doğa görevi hazır.';
+
+  @override
+  String get natureShowStreak => 'Seriyi göster';
+
+  @override
+  String get natureDeleteTitle => 'Doğa verilerimi sil';
+
+  @override
+  String get natureDeleteBody =>
+      'Görevleriniz, seriniz, dersleriniz ve rozetleriniz bu telefondan silinir. Bu işlem geri alınamaz.';
+
+  @override
+  String get natureDeleteConfirm => 'Sil';
+
+  @override
+  String get natureFinish => 'Bitir';
+
+  @override
+  String get natureReminderTime => 'Saat';
+
+  @override
+  String get fidanName => 'Fidan';
+
+  @override
+  String get fidanStage0 => 'Tohum';
+
+  @override
+  String get fidanStage1 => 'Filiz';
+
+  @override
+  String get fidanStage2 => 'Fidan';
+
+  @override
+  String get fidanStage3 => 'Genç ağaç';
+
+  @override
+  String get fidanStage4 => 'Çiçekli ağaç';
+
+  @override
+  String get fidanStage5 => 'Meyveli ağaç';
+
+  @override
+  String get fidanDone => 'Yaptım ✓';
+
+  @override
+  String get fidanTaskDone => 'Bugünkü görev tamam! Yarın yenisi gelecek.';
+
+  @override
+  String get fidanContinueLessons => 'Derslere devam et';
+
+  @override
+  String get fidanDidYouKnow => '💡 Biliyor muydun?';
+
+  @override
+  String get fidanThirsty => 'Fidan seni bekliyor 💧';
+
+  @override
+  String get fidanThirstyBody => 'Biraz susadı, o kadar. Hazır olunca gel.';
+
+  @override
+  String get fidanPath => 'Fidan’ın yolu';
+
+  @override
+  String get fidanNewApple => 'Yeni elma! 🍎';
+
+  @override
+  String get fidanRewardTask => 'Harika iş! Fidan çok mutlu.';
+
+  @override
+  String get fidanRewardLesson => 'Dersi bitirdin. Fidan çok mutlu.';
+
+  @override
+  String get fidanContinue => 'Devam et';
+
+  @override
+  String get fidanCorrect => 'Doğru! 🎉';
+
+  @override
+  String get fidanFullGrown =>
+      '🎉 Fidan kocaman bir meyve ağacı oldu! Ona çok iyi baktın.';
+
+  @override
+  String get fidanNoApples =>
+      'Henüz elma yok. Bir ders bitir, ilk elman gelsin!';
+
+  @override
+  String get fidanShare => 'Ağacımı paylaş';
+
+  @override
+  String get fidanReminderChannel => 'Doğa notları';
+
+  @override
+  String get fidanAccount => 'Hesap';
+
+  @override
+  String get fidanAccountNone =>
+      'Telefon değişince ağacın seninle gelsin. Zorunlu değil.';
+
+  @override
+  String get fidanContinueGoogle => 'Google ile devam et';
+
+  @override
+  String get fidanSignInTitle => 'Ağacınız sizinle gelsin';
+
+  @override
+  String get fidanSignInBody =>
+      'Telefon değişince ilerlemeniz kaybolmaz. Hesap açmak zorunlu değil.';
+
+  @override
+  String get fidanSavedList =>
+      'Kaydedilenler: seri, XP, elmalar, dersler ve ağacınız.';
+
+  @override
+  String get fidanNeverSaved => 'Konumunuz ve Yerlerim asla kaydedilmez.';
+
+  @override
+  String get fidanCanDelete =>
+      'Hesabınızı ve ilerlemenizi istediğiniz an silebilirsiniz.';
+
+  @override
+  String get fidanUnder13 =>
+      '13 yaşından küçükseniz bir yetişkinle birlikte kullanın.';
+
+  @override
+  String get fidanSkip => 'Şimdilik geç';
+
+  @override
+  String get fidanSignInFailed =>
+      'Google ile giriş şu an yapılamıyor. Daha sonra tekrar deneyin.';
+
+  @override
+  String get fidanSignedIn => 'Google ile giriş yapıldı';
+
+  @override
+  String get fidanSignOut => 'Çıkış yap';
+
+  @override
+  String get fidanDeleteAccount => 'Hesabı ve ilerlememi sil';
+
+  @override
+  String get fidanDeleteAccountBody =>
+      'Hesabınız, buluttaki ilerlemeniz ve bu telefondaki ağacınız silinir. Bu işlem geri alınamaz.';
+
+  @override
+  String get fidanDeleted => 'Hesabınız ve ilerlemeniz silindi.';
+
+  @override
+  String get newsReadAtSource => 'Haberi kaynağında oku';
+
+  @override
+  String get newsFireStory => 'Yangının hikâyesi';
+
+  @override
+  String get newsInProvince => 'İlinizdeki haberler';
+
+  @override
+  String get newsStageStarted => 'Başladı';
+
+  @override
+  String get newsStageControlled => 'Kontrol altına alındı';
+
+  @override
+  String get newsStageOut => 'Söndürüldü';
+
+  @override
+  String get newsStageRestoration => 'Ağaçlandırma ve yenileme';
+
+  @override
+  String get newsStoryNote =>
+      'Yalnızca bu yangınla eşleşen gerçek haberler gösterilir. Haber bulunmayan adımlar görünmez.';
+
+  @override
+  String get newsStoryOther => 'Diğer haberler';
+
+  @override
+  String fidanXpTotal(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String fidanXpGain(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String fidanGrew(String stage) {
+    return 'Fidan büyüdü: $stage!';
+  }
+
+  @override
+  String fidanWeekGoal(int done, int goal) {
+    return 'Bu hafta $done/$goal gün';
+  }
+
+  @override
+  String fidanAppleLesson(String lesson) {
+    return '🍎 “$lesson” dersini bitirdin';
+  }
+
+  @override
+  String fidanAppleWeek(String week) {
+    return '🍎 $week haftasında hedefine ulaştın';
+  }
+
+  @override
+  String fidanShareCard(int days) {
+    return 'Ağacım $days günlük 🍎';
+  }
+
+  @override
+  String newsImageCredit(String date) {
+    return 'Görüntü: NASA · $date';
+  }
+
+  @override
+  String newsSameFire(int count) {
+    return 'Bu yangınla ilgili $count haber';
+  }
+
+  @override
+  String newsCount(int count) {
+    return '$count haber';
+  }
+
+  @override
+  String get homeGridLast24h => 'Son 24 saat';
+
+  @override
+  String get homeGridNear => '100 km içinde';
+
+  @override
+  String get homeGridNationwide => 'Türkiye geneli';
+
+  @override
+  String get homeGridNews => 'Son 72 saat';
+
+  @override
+  String get homeGridLocationOff => 'Konum kapalı';
+
+  @override
+  String get fidanLocked => 'Önce önceki dersi bitir.';
+
+  @override
+  String get factAnother => 'Başka bir bilgi';
+
+  @override
+  String get newsNoneRecent => 'Son 30 günde yeni haber yok.';
+
+  @override
+  String get settingsNatureNotesSubtitle =>
+      'Haftada 2-3 kısa bilgi. Yangın uyarılarından ayrı.';
+
+  @override
+  String get settingsNatureNotesSample => 'Örnek gönder';
+
+  @override
+  String newsArchive(int count) {
+    return 'Arşiv ($count haber)';
+  }
+
+  @override
+  String get fidanReplay => 'Tekrar et';
+
+  @override
+  String get fidanRewardReplay =>
+      'Tekrar ettin. Bilgiler aklında daha iyi kaldı!';
+
+  @override
+  String get fidanSectionReward => 'Bölüm ödülü';
+
+  @override
+  String get fidanAllDone => 'Tüm dersleri bitirdin!';
+
+  @override
+  String get fidanAlmost => 'Az kaldı!';
+
+  @override
+  String get fidanCheck => 'Kontrol et';
+
+  @override
+  String get fidanOrderHelp => 'Sürükle ya da oklarla sırala.';
+
+  @override
+  String get fidanMatchHelp => 'Önce soldan, sonra sağdan bir karta dokun.';
+
+  @override
+  String get fidanTrue => 'Doğru';
+
+  @override
+  String get fidanFalse => 'Yanlış';
+
+  @override
+  String get fidanMoveUp => 'Yukarı al';
+
+  @override
+  String get fidanMoveDown => 'Aşağı al';
+
+  @override
+  String fidanSectionDone(String section) {
+    return '“$section” bölümü tamam! Ağacına bir çiçek açtı.';
+  }
+
+  @override
+  String fidanReplayMode(int xp) {
+    return 'Tekrar modu: İstediğin dersi yeniden oyna, her tekrar +$xp XP.';
+  }
+
+  @override
+  String fidanAppleSection(String section) {
+    return '🍎 “$section” bölümünü bitirdin';
   }
 }

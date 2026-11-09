@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import 'app_sheet.dart';
 
 /// Small info icon that shows a short explanatory dialog on tap. Used next to
 /// technical readings (Kelvin temperature, confidence, satellite) that
@@ -30,7 +31,8 @@ class InfoIconButton extends StatelessWidget {
         final bodyColor = isDark ? AppColors.white.withValues(alpha: 0.78) : Colors.black.withValues(alpha: 0.68);
 
         return AlertDialog(
-          title: Text(title, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w800, color: titleColor)),
+          scrollable: true,
+          title: DialogTitleWithClose(title: Text(title, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w800, color: titleColor))),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

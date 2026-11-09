@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/utils/turkish_text.dart';
+import '../core/utils/risk_display.dart';
 import '../l10n/app_localizations.dart';
 import '../services/risk_data_cache.dart';
 
@@ -13,7 +14,11 @@ enum FireLocationType { forest, coastal, agricultural, urban, generic }
 /// a `low` confidence detection is always [historical] regardless of age.
 enum FireStatus { active, likelyActive, monitoring, historical }
 
-String fireStatusLabel(AppLocalizations l10n, FireStatus status) {
+String fireStatusLabel(AppLocalizations l10n, FireStatus status, {DateTime? seenAt}) {
+  if (status == FireStatus.historical && seenAt != null) {
+    final age = DateTime.now().toUtc().difference(seenAt.toUtc());
+    return age.inDays >= 1 ? l10n.lastSeenDays(age.inDays) : l10n.lastSeenHours(age.inHours);
+  }
   switch (status) {
     case FireStatus.active:
       return l10n.fireStatusActive;
@@ -500,14 +505,13 @@ class FirePoint {
       riskRegionKey,
     );
     final regionScore = regionRisk?['general_risk_score'] as int?;
-    if (regionScore != null) {
-      if (regionScore >= 60) {
-        sentences.add(l10n.smartSpreadDangerous);
-      } else if (regionScore >= 30) {
-        sentences.add(l10n.smartSpreadModerate);
-      } else {
-        sentences.add(l10n.smartSpreadLow);
-      }
+    // An old score is not "the region's current score": left out.
+    if (regionScore != null && !isRiskRowStale(regionRisk!)) {
+      sentences.add(switch (riskLevelForScore(regionScore)) {
+        'Critical' || 'High' => l10n.smartSpreadDangerous,
+        'Medium' => l10n.smartSpreadModerate,
+        _ => l10n.smartSpreadLow,
+      });
     }
 
     // 5. Time since detection.

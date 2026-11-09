@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/config/api_config.dart';
+import 'core/utils/map_tiles.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
@@ -21,6 +23,9 @@ import 'services/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // IBM Plex is bundled (assets/fonts); never fetch fonts at runtime — it
+  // failed offline and leaked a request to Google on first launch.
+  GoogleFonts.config.allowRuntimeFetching = false;
   if (kReleaseMode && !ApiConfig.backendBaseUrl.startsWith('https://')) {
     throw StateError('Release builds require an HTTPS backend URL.');
   }
@@ -36,6 +41,10 @@ Future<void> main() async {
   // Fire-and-forget: enriches fire descriptions once loaded, but must not
   // block the splash screen on a network call.
   RiskDataCache.instance.warmUp();
+
+  // Resolves the tile-cache directory (local disk, no network) so the first
+  // map already serves cached OSM tiles.
+  await MapTiles.init();
 
   runApp(const ProviderScope(child: FireWatchApp()));
 

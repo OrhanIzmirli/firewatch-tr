@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/theme/app_theme.dart';
 import '../../models/fire_incident.dart';
-import '../../services/fire_monitoring_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../map/map_screen.dart';
 import '../news/news_screen.dart';
-import '../notifications/notifications_screen.dart';
-import '../settings/settings_screen.dart';
+import '../risk/risk_screen.dart';
 import 'home_screen.dart';
+import '../nature/nature_notes.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/feedback_sheet.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/bottom_bar_fit.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -40,7 +40,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex.clamp(0, 4);
+    _currentIndex = widget.initialIndex.clamp(0, 3);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _maybePromptForRating(),
     );
@@ -71,7 +71,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     final open = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.ratingPromptTitle),
+        title: DialogTitleWithClose(title: Text(l10n.ratingPromptTitle)),
         content: Text(l10n.ratingPromptMessage),
         actions: [
           TextButton(
@@ -92,46 +92,42 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void didUpdateWidget(covariant MainShellScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialIndex != widget.initialIndex) {
-      _currentIndex = widget.initialIndex.clamp(0, 4);
+      _currentIndex = widget.initialIndex.clamp(0, 3);
     }
   }
+
+  /// Tabs opened so far in this session; only these are built.
+  final Set<int> _visitedTabs = {};
 
   List<Widget> get _screens => [
     const HomeScreen(),
     MapScreen(
+      // Tabs now stay alive; a new focus (a notification tap, a "show on
+      // map" link) must still land, so a different focus is a new map.
+      key: ValueKey('map:${widget.mapFocusLat}:${widget.mapFocusLng}:${widget.mapConfidenceFilter}:${widget.mapIncidentFilter}'),
       focusLat: widget.mapFocusLat,
       focusLng: widget.mapFocusLng,
       initialConfidenceFilter: widget.mapConfidenceFilter,
       initialIncidentFilter: widget.mapIncidentFilter,
     ),
+    const RiskScreen(),
     const NewsScreen(),
-    const NotificationsScreen(),
-    const SettingsScreen(),
   ];
 
-  Widget _alertsIcon(bool selected, int unreadCount, {Key? key}) {
-    final icon = Icon(
-      selected ? Icons.notifications : Icons.notifications_none,
-    );
-    final child = unreadCount <= 0
-        ? icon
-        : Badge(
-            // A live counter: tabular figures so the badge width is stable
-            // while the count changes.
-            label: Text(
-              unreadCount > 9 ? '9+' : '$unreadCount',
-              style: AppTheme.mono(size: 11, weight: FontWeight.w600),
-            ),
-            child: icon,
-          );
-    return key == null ? child : KeyedSubtree(key: key, child: child);
+  bool _notesSynced = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_notesSynced) return;
+    _notesSynced = true;
+    NatureNotes.sync(AppLocalizations.of(context)!, Localizations.localeOf(context).languageCode);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List>(
-      valueListenable: FireMonitoringService.instance.nearbyMatchesNotifier,
-      builder: (context, nearbyMatches, _) {
+    return Builder(
+      builder: (context) {
         final l10n = AppLocalizations.of(context)!;
         final destinations = [
           NavigationDestination(
@@ -148,34 +144,39 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: l10n.navMap,
           ),
           NavigationDestination(
+            icon: const Icon(Icons.shield_outlined),
+            selectedIcon: const Icon(Icons.shield),
+            label: l10n.navRisk,
+          ),
+          NavigationDestination(
             icon: const Icon(Icons.newspaper_outlined),
             selectedIcon: const Icon(Icons.newspaper),
             label: l10n.navNews,
           ),
-          NavigationDestination(
-            icon: _alertsIcon(
-              false,
-              nearbyMatches.length,
-              key: CoachMarkKeys.alertsNavIcon,
-            ),
-            selectedIcon: _alertsIcon(true, nearbyMatches.length),
-            label: l10n.navAlerts,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
-            selectedIcon: const Icon(Icons.settings),
-            label: l10n.navSettings,
-          ),
         ];
 
+        final screens = _screens;
+        _visitedTabs.add(_currentIndex);
         return Scaffold(
-          body: _screens[_currentIndex],
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: _currentIndex,
-            onDestinationSelected: (index) {
-              setState(() => _currentIndex = index);
-            },
-            destinations: destinations,
+          // Each tab is built the first time it is opened and then kept:
+          // recreating it on every switch refetched everything (Home alone
+          // made four API calls plus a location fix per visit).
+          body: IndexedStack(
+            index: _currentIndex,
+            children: [
+              for (final (i, screen) in screens.indexed)
+                _visitedTabs.contains(i) ? screen : const SizedBox.shrink(),
+            ],
+          ),
+          bottomNavigationBar: BottomBarFit(
+            tabs: destinations.length,
+            child: NavigationBar(
+              selectedIndex: _currentIndex,
+              onDestinationSelected: (index) {
+                setState(() => _currentIndex = index);
+              },
+              destinations: destinations,
+            ),
           ),
         );
       },

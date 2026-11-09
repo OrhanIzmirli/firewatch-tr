@@ -67,6 +67,13 @@ void main() {
       expect(usak.first.name, 'Uşak');
       expect(usak.first.kind, SavedPlaceKind.province);
 
+      // The former official name still finds the province.
+      for (final q in ['İçel', 'icel', 'Mersin']) {
+        final hits = await TurkeyPlacesService.instance.search(q);
+        expect(hits.first.name, 'Mersin', reason: q);
+        expect(hits.first.kind, SavedPlaceKind.province, reason: q);
+      }
+
       final kas = await TurkeyPlacesService.instance.search('Kaş');
       expect(
         kas.any(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/province_borders_credit.dart';
 import '../../shared/widgets/glass_panel.dart';
 
 /// Where every number in this app comes from, and what it does not mean.
@@ -75,6 +77,14 @@ class DataSourcesScreen extends StatelessWidget {
             body: l10n.dataSourcesWeatherBody,
             titleColor: titleColor,
             bodyColor: bodyColor,
+            // Both providers license their data CC BY 4.0 and ask for a
+            // credit with a link: Open-Meteo "Weather data by Open-Meteo.com"
+            // (open-meteo.com/en/license), MET Norway "Data from MET Norway"
+            // (api.met.no/doc/License, checked 2026-11-06).
+            links: [
+              (l10n.dataSourcesWeatherOpenMeteoCredit, 'https://open-meteo.com/'),
+              (l10n.dataSourcesWeatherMetCredit, 'https://api.met.no/'),
+            ],
           ),
           const SizedBox(height: AppSpacing.md),
           _Section(
@@ -83,6 +93,30 @@ class DataSourcesScreen extends StatelessWidget {
             body: l10n.dataSourcesFwiBody,
             titleColor: titleColor,
             bodyColor: bodyColor,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _Section(
+            icon: Icons.terrain_rounded,
+            title: l10n.dataSourcesLandCoverTitle,
+            body: l10n.dataSourcesLandCoverBody,
+            titleColor: titleColor,
+            bodyColor: bodyColor,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _Section(
+            icon: Icons.layers_outlined,
+            title: l10n.dataSourcesBordersTitle,
+            body: l10n.dataSourcesBordersBody,
+            titleColor: titleColor,
+            bodyColor: bodyColor,
+            // geoBoundaries gbOpen TUR ADM1 (TUR-ADM1-25984515) is built
+            // from OpenStreetMap, so OSM's ODbL governs it; checked
+            // 2026-11-07 against the geoBoundaries API metadata.
+            links: [
+              (l10n.dataSourcesBordersGeoBoundariesCredit, 'https://www.geoboundaries.org/'),
+              (l10n.osmAttribution, osmCopyrightUrl),
+              (l10n.odblLicenseLink, odblLicenseUrl),
+            ],
           ),
           const SizedBox(height: AppSpacing.md),
           _Section(
@@ -105,6 +139,8 @@ class _Section extends StatelessWidget {
   final String body;
   final Color titleColor;
   final Color bodyColor;
+  /// Credit lines that open the provider's site, as its licence asks.
+  final List<(String, String)> links;
 
   const _Section({
     required this.icon,
@@ -112,6 +148,7 @@ class _Section extends StatelessWidget {
     required this.body,
     required this.titleColor,
     required this.bodyColor,
+    this.links = const [],
   });
 
   @override
@@ -146,6 +183,21 @@ class _Section extends StatelessWidget {
               color: bodyColor,
             ),
           ),
+          if (links.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
+              child: Wrap(
+                spacing: AppSpacing.sm,
+                children: [
+                  for (final (label, url) in links)
+                    TextButton.icon(
+                      onPressed: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+                      icon: const Icon(Icons.open_in_new, size: 14),
+                      label: Text(label, style: GoogleFonts.ibmPlexSans(fontSize: 12)),
+                    ),
+                ],
+              ),
+            ),
         ],
       ),
     );

@@ -140,7 +140,7 @@ class _FeaturedNewsCardState extends State<FeaturedNewsCard> {
                   runSpacing: AppSpacing.sm,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    if (widget.item.isBreaking)
+                    if (widget.item.isBreakingNow())
                       StatusChip(
                         label: l10n.newsBreakingBadge,
                         icon: Icons.bolt_rounded,

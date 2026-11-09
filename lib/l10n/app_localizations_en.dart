@@ -160,7 +160,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingDesc1 =>
-      'Follow wildfire events across Turkey on a single screen and see status changes instantly.';
+      'Follow satellite detections across Türkiye on a single screen and see changes quickly.';
 
   @override
   String get onboardingTitle2 => 'See regions near you';
@@ -177,17 +177,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Review risk levels, see recommended actions, and act quickly when needed.';
 
   @override
-  String get homeLiveSummary => 'Live Status Summary';
+  String get homeLiveSummary => 'Latest Status Summary';
 
   @override
-  String get homeHeaderTitle => 'Turkey Thermal Anomaly Tracking';
+  String get homeHeaderTitle => 'Satellite Detections in Türkiye';
 
   @override
   String get homeHeaderSubtitle =>
       'Track active events, see risk levels, and quickly reach the safety guide.';
 
   @override
-  String get homeNasaLiveData => 'NASA FIRMS • Live Data';
+  String get homeNasaLiveData => 'NASA FIRMS • Satellite Data';
 
   @override
   String get homeOutsideTurkeyLocation => 'Outside Turkey';
@@ -213,11 +213,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeOverview => 'Overview';
 
   @override
-  String get homeOverviewSubtitle => 'NASA FIRMS live data';
+  String get homeOverviewSubtitle => 'NASA FIRMS satellite data';
 
   @override
   String homeOverviewUniqueCount(int count) {
-    return '$count unique thermal anomaly locations detected';
+    return 'Satellites made detections at $count separate locations';
   }
 
   @override
@@ -230,7 +230,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNominal => 'Nominal';
 
   @override
-  String get homeOverviewActiveFiresTitle => 'Recent Thermal Anomalies';
+  String get homeOverviewActiveFiresTitle => 'Recent Satellite Detections';
 
   @override
   String get homeOverviewActiveFiresSubtitle => 'Detected in last 24 hours';
@@ -248,7 +248,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Highest risk in Turkey right now';
 
   @override
-  String get homeOverviewNearbyTitle => 'Nearby Thermal Detections';
+  String get homeOverviewNearbyTitle => 'Nearby Satellite Detections';
 
   @override
   String homeOverviewNearbyValueWithLocation(int count) {
@@ -277,7 +277,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeOverviewNewsSubtitleUpdated(String timeAgo) {
-    return 'Last update: $timeAgo';
+    return 'Latest: $timeAgo';
   }
 
   @override
@@ -298,10 +298,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNewsLoading => 'Loading news...';
 
   @override
-  String get homeActiveThermalPoints => 'Active Thermal Points';
+  String get homeActiveThermalPoints => 'Recent Satellite Detections';
 
   @override
-  String get homeActiveThermalSubtitle => 'NASA FIRMS • PostGIS city detection';
+  String get homeActiveThermalSubtitle => 'NASA satellite data';
 
   @override
   String get homeMap => 'Map';
@@ -316,7 +316,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSearchHint => 'Search city or region...';
 
   @override
-  String get homeNoActiveFires => 'No recent thermal anomalies found.';
+  String get homeNoActiveFires =>
+      'Satellites report no recent detections right now.';
 
   @override
   String homeFireRegionTitle(String region) {
@@ -342,16 +343,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapFetchError => 'Could not fetch fire data.';
 
   @override
-  String get mapTitle => 'Thermal Anomaly Map';
+  String get mapTitle => 'Satellite Detection Map';
 
   @override
   String get mapTitleEvents => 'Fire Map';
 
   @override
-  String get mapTitleDetections => 'Thermal Detection Map';
+  String get mapTitleDetections => 'Satellite Detection Map';
 
   @override
-  String get mapLiveMap => 'Live Map';
+  String get mapLiveMap => 'Latest Map';
 
   @override
   String get mapConfidenceFilterActive =>
@@ -371,17 +372,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapArea => 'Map Area';
 
   @override
-  String get mapAreaSubtitle => 'NASA FIRMS live marker view';
+  String get mapAreaSubtitle => 'NASA FIRMS marker view';
 
   @override
   String get mapGoToMe => 'Go to Me';
 
   @override
-  String get mapNearbyFires => 'Thermal Detections Near Me';
+  String get mapNearbyFires => 'Satellite Detections Near Me';
 
   @override
   String get mapNearbyFiresSubtitle =>
-      'Live detections closest to your location';
+      'Latest detections closest to your location';
 
   @override
   String get mapReport => 'Report';
@@ -465,7 +466,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsToolsSubtitle =>
-      'Manage permission and automatic thermal-anomaly monitoring';
+      'Manage permission and automatic detection monitoring';
 
   @override
   String get notificationsPermissionGranted => 'Permission Granted';
@@ -500,7 +501,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsBackgroundSubtitle =>
-      'Check for fires every 15 minutes even when the app is closed';
+      'Check satellite detections at intervals while the app is closed. Android can delay these checks, and satellite data can be hours late.';
 
   @override
   String get notificationsEnableBackground => 'Enable Background Monitoring';
@@ -513,7 +514,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backgroundLocationDialogBody =>
-      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
+      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. These checks run on your phone; your location is not sent to the server during them. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
 
   @override
   String get backgroundLocationDialogConfirm => 'Continue';
@@ -529,7 +530,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backgroundMonitoringDisabled => 'Background monitoring disabled.';
 
   @override
-  String get notificationsNearbyLiveFires => 'Nearby Thermal Detections';
+  String get notificationsNearbyLiveFires => 'Nearby Satellite Detections';
 
   @override
   String get notificationsNearbyLiveFiresSubtitle =>
@@ -560,15 +561,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsNoHighRisk =>
-      'No high-confidence thermal anomalies right now.';
+      'Satellites report no strong detections right now.';
 
   @override
   String get notificationsHighRiskDetectionTitle =>
-      'High-Risk Thermal Detection';
+      'Strong Satellite Detection';
 
   @override
   String notificationsHighRiskDetectionBody(String region, String temp) {
-    return '${temp}K heat detected in the $region region. High likelihood of an active fire.';
+    return 'Satellites detected strong heat in the $region region (${temp}K). Not verified.';
   }
 
   @override
@@ -590,7 +591,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get watchlistHeadingSubtitle =>
-      'You can keep track of the fire points you want to follow here.';
+      'You can keep track of the satellite detections you want to follow here.';
 
   @override
   String get watchlistEmptyTitle => 'No saved events yet';
@@ -604,12 +605,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String watchlistSavedPointsSubtitle(int count) {
-    return '$count thermal detections being tracked';
+    return '$count satellite detections being tracked';
   }
 
   @override
   String watchlistSyncingTitle(int count) {
-    return 'You have $count saved fire points.';
+    return 'You have $count saved satellite detections.';
   }
 
   @override
@@ -1018,7 +1019,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesSatelliteBody =>
-      'NASA FIRMS. VIIRS (Suomi-NPP, NOAA-20, NOAA-21) and MODIS (Terra, Aqua), passing over several times a day. Each detection is one hot pixel: its position, radiative power (FRP, in megawatts), brightness temperature and NASA\'s own confidence tier are measured values. An event\'s panel lists which product contributed how many detections.';
+      'NASA FIRMS. VIIRS (NOAA-20, NOAA-21; Suomi-NPP stopped delivering data on 2 November 2026) and MODIS (Terra, Aqua), passing over several times a day. Each detection is one hot pixel: its position, radiative power (FRP, in megawatts), brightness temperature and NASA\'s own confidence tier are measured values. An event\'s panel lists which product contributed how many detections.';
 
   @override
   String get dataSourcesGroupingTitle => 'Events — computed';
@@ -1032,7 +1033,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesDerivedBody =>
-      'Spread direction and speed are computed from how the centre of the detection pattern shifted; the fire\'s real movement may differ. \"Detection pixel ~N hectares\" is the satellite\'s resolution, not the burnt area: the fire is somewhere inside that pixel and its real size is unknown. That figure grows with the satellite\'s viewing angle, not with the fire.';
+      'Spread direction and speed are computed from how the centre of the detection pattern shifted; the fire\'s real movement may differ. \"Detection pixel ~N hectares\" is the satellite\'s resolution, not the burnt area: the heat source is somewhere inside that pixel and its real size is unknown. That figure grows with the satellite\'s viewing angle, not with the fire.';
 
   @override
   String get dataSourcesNotKnownTitle => 'Not knowable';
@@ -1046,7 +1047,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesWeatherBody =>
-      'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave.';
+      'Risk scores are computed region-wide from weather data. They are not a measurement of any single fire and do not predict how one will behave. Weather comes from Open-Meteo (CC BY 4.0); when Open-Meteo does not answer, the Norwegian Meteorological Institute\'s MET Norway Locationforecast is used (NLOD 2.0 / CC BY 4.0). Temperature, humidity and wind mean the same from either source.';
+
+  @override
+  String get dataSourcesWeatherOpenMeteoCredit =>
+      'Weather data by Open-Meteo.com';
+
+  @override
+  String get dataSourcesWeatherMetCredit => 'Data from MET Norway';
 
   @override
   String get dataSourcesPlacesTitle =>
@@ -1054,14 +1062,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataSourcesPlacesBody =>
-      'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data.';
+      'The province and district list in place selection, their centres and bounding boxes are bundled with the app; nothing is fetched from the network. Administrative boundary and place data © OpenStreetMap contributors, under the Open Database License (ODbL); names and province membership are matched against the official province/district list. This data serves map zooming and alert scope; it is not fire data. Address and neighbourhood searches use OpenStreetMap Nominatim; what you type is not stored, and results are cached for up to 7 days under an irreversible hash of the text.';
 
   @override
-  String get dataSourcesFwiTitle => 'Fire danger map (FWI) — a separate source';
+  String get dataSourcesFwiTitle =>
+      'Copernicus fire danger index (FWI) — a separate source';
 
   @override
   String get dataSourcesFwiBody =>
-      'The risk layer on the map shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model and provides a forecast of up to 10 days, today included (9 days ahead); the last day can stay empty until the day\'s model run is published. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0).';
+      'The Copernicus indicator on the Risk screen shows Copernicus EFFIS\'s Fire Weather Index (FWI). FWI is a danger rating computed from temperature, humidity, wind and rain: it says how much the weather would feed a fire, not that a fire exists. The data comes from ECMWF\'s global weather model. It is an entirely separate source from the satellite detections and is not a measurement of any fire. Data: © European Union, Copernicus EFFIS (CC BY 4.0). It is separate from the FireWatch risk score and does not feed into it.';
 
   @override
   String get settingsAppInfo => 'App Information';
@@ -1074,9 +1083,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsInfoVersion => 'Version';
-
-  @override
-  String get settingsInfoVersionValue => 'v1.0.0';
 
   @override
   String get settingsInfoPlatform => 'Platform';
@@ -1111,14 +1117,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskTitle => 'Risk Analysis';
 
   @override
-  String get riskLiveView => 'Live Risk View';
+  String get riskLiveView => 'Latest Risk View';
 
   @override
   String get riskSummaryTitle => 'Turkey Wildfire Risk Summary';
 
   @override
   String get riskSummarySubtitle =>
-      'Real-time risk analysis calculated from Open-Meteo weather data and NASA FIRMS satellite data.';
+      'Calculated about every 3 hours from weather and satellite detections.';
 
   @override
   String riskHighestRisk(String region, int score) {
@@ -1229,7 +1235,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskEnvironmentalFactors => 'Environmental Factors';
 
   @override
-  String get riskDrynessIndex => 'Dryness Index';
+  String get riskDrynessIndex => 'Dryness indicator';
 
   @override
   String get riskDrynessVeryHigh => 'Very high';
@@ -1238,7 +1244,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskWindPressure => 'Wind Pressure';
 
   @override
-  String get riskVegetationDensity => 'Vegetation Density';
+  String get riskVegetationDensity => 'Vegetation pressure';
 
   @override
   String get riskVegetationMediumHigh => 'Medium - High';
@@ -1278,26 +1284,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskNoteStrongWind(int wind) {
-    return 'Strong wind (${wind}km/h)';
+    return 'Strong wind ($wind km/h)';
   }
 
   @override
   String riskNoteMediumWind(int wind) {
-    return 'Moderate wind (${wind}km/h)';
+    return 'Moderate wind ($wind km/h)';
   }
 
   @override
   String get newsTitle => 'News';
 
   @override
-  String get newsLiveFeed => 'Live News Feed';
+  String get newsLiveFeed => 'News Feed';
 
   @override
   String get newsCenterTitle => 'Wildfire News Center';
 
   @override
-  String get newsCenterSubtitle =>
-      'Track field updates, risk alerts, and safety-focused developments in one feed.';
+  String get newsCenterSubtitle => 'The latest on fires.';
 
   @override
   String get newsFeatured => 'Featured Story';
@@ -1428,7 +1433,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportPanelFireReport => 'Fire report';
 
   @override
-  String get reportPanelVerifiedTitle => 'Report Verified';
+  String get reportPanelVerifiedTitle => 'Matched a Satellite Detection';
 
   @override
   String get reportPanelReceivedTitle => '⏳ Report Received';
@@ -1453,7 +1458,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportPanelSubtitle =>
-      'Get your GPS location and report the fire. It will be auto-verified against NASA data.';
+      'Get your GPS location and report the fire. Your report is compared with nearby NASA satellite detections.';
 
   @override
   String get reportPanelLocation => 'Location';
@@ -1506,7 +1511,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportPanelAnonymousToggleSubtitle =>
-      'Your name won\'t be shared with authorities';
+      'Your name is not saved with the report';
 
   @override
   String get reportPanelPhotosLabel => 'Photos (optional)';
@@ -1540,18 +1545,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap the map to adjust the pin location';
 
   @override
-  String get reportPanelSuccessVerifiedTitle => 'Report Verified';
+  String get reportPanelSuccessVerifiedTitle => 'Matched a Satellite Detection';
 
   @override
   String get reportPanelSuccessReceivedTitle => 'Report Received';
 
   @override
   String get reportPanelSuccessVerifiedBody =>
-      'Your report matched NASA satellite data and has been marked as verified.';
+      'NASA satellites detected heat within 10 km of this spot in the last 24 hours. That alone does not confirm a fire.';
 
   @override
   String get reportPanelSuccessReceivedBody =>
-      'Your report was recorded and is pending manual review by our team.';
+      'Your report was saved. Satellites made no detections nearby in the last 24 hours; that does not mean there is no fire.';
 
   @override
   String reportPanelReportIdLabel(String id) {
@@ -1565,11 +1570,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportPanelResponseTimeVerified =>
-      'This is an active fire zone — emergency services have already been notified.';
+      'This report is not forwarded to emergency services. If you can see a fire, call 112 now.';
 
   @override
   String get reportPanelResponseTimeReceived =>
-      'If this is an active emergency, please also call 112 directly.';
+      'This report is not forwarded to emergency services. If you can see a fire, call 112 now.';
 
   @override
   String get reportPanelShare => 'Share';
@@ -1608,7 +1613,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifPermSubtitle =>
-      'With notification permission, you\'ll instantly learn about nearby wildfire events and critical status changes.';
+      'With notification permission, you\'ll hear about nearby satellite detections and important changes right away.';
 
   @override
   String get notifPermNote =>
@@ -1648,17 +1653,200 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locPermSubtitle =>
-      'With location access, we can show wildfire events, risky regions, and more relevant alerts near you.';
+      'With your location we can show satellite detections and the risk around you. Distances are calculated on your phone.';
 
   @override
   String get locPermNote =>
-      'This permission isn\'t required. You can skip it for now and still use the app.';
+      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km; it is deleted immediately when you turn notifications off or use Settings → Delete my location data. This permission isn\'t required, you can skip it for now.';
 
   @override
   String get locPermEnable => 'Enable Location';
 
   @override
   String get locPermSkip => 'Skip for Now';
+
+  @override
+  String get locDisclosureTitle => 'How we use your location';
+
+  @override
+  String get locDisclosureOnDevice =>
+      'Distance to nearby satellite detections is calculated on your phone.';
+
+  @override
+  String get locDisclosureNearestCity =>
+      'To show which province you are in, your location is sent to our server, and to calculate risk, your location rounded to about 10 km; these lookups are not stored.';
+
+  @override
+  String get locDisclosureStored =>
+      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km so we can send alerts for your area. Your exact location is never stored.';
+
+  @override
+  String get locDisclosureDelete =>
+      'It is deleted immediately when you turn notifications off or tap Settings → Delete my location data. If you don\'t open the app for 90 days, your record is deleted entirely.';
+
+  @override
+  String get locDisclosureOptional =>
+      'Location permission is optional; you can use the app without it and revoke it at any time in your phone\'s settings.';
+
+  @override
+  String get locDisclosureContinue => 'Continue';
+
+  @override
+  String get locDisclosureNotNow => 'Not now';
+
+  @override
+  String get trackedPlacesTitle => 'My Places';
+
+  @override
+  String get trackedPlacesSubtitle =>
+      'Get alerts for heat detected nearby or rising fire risk';
+
+  @override
+  String get trackedPlacesEmpty =>
+      'No places yet. Add up to 5, such as your home, summer house or orchard.';
+
+  @override
+  String get trackedPlacesAdd => 'Add place';
+
+  @override
+  String get trackedPlacesFull => 'You can add up to 5 places.';
+
+  @override
+  String trackedPlacesRadius(int km) {
+    return '$km km radius';
+  }
+
+  @override
+  String trackedPlacesLastAlert(String date) {
+    return 'Last alert: $date';
+  }
+
+  @override
+  String get trackedPlacesNoAlertYet => 'No alerts yet';
+
+  @override
+  String get trackedPlacesNotifyTooltip => 'Alerts for this place';
+
+  @override
+  String trackedPlacesDeleteTitle(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get trackedPlacesDeleteBody =>
+      'This place and its alert records are deleted from the server.';
+
+  @override
+  String get trackedPlacesDelete => 'Delete';
+
+  @override
+  String get trackedPlacesUnavailable => 'This feature is coming soon.';
+
+  @override
+  String get trackedPlacesLoadFailed =>
+      'Couldn\'t load your places. Showing the last saved list.';
+
+  @override
+  String get trackedPlacesSourceMap => 'Pick on map';
+
+  @override
+  String get trackedPlacesSourceMyLocation => 'Use my location';
+
+  @override
+  String get trackedPlacesLocationFailed => 'Couldn\'t get your location.';
+
+  @override
+  String get trackedPlacesNameLabel => 'Place name';
+
+  @override
+  String get trackedPlacesNameHint => 'e.g. Home, Summer house';
+
+  @override
+  String get trackedPlacesNameRequired => 'Enter a name.';
+
+  @override
+  String get trackedPlacesRadiusLabel => 'Radius';
+
+  @override
+  String get trackedPlacesSave => 'Save';
+
+  @override
+  String trackedPlacesSaved(String name) {
+    return '\"$name\" added to My Places.';
+  }
+
+  @override
+  String get trackedPlacesErrorOutside => 'This point is outside Turkey.';
+
+  @override
+  String get trackedPlacesErrorNetwork =>
+      'Couldn\'t save. Check your internet connection and try again.';
+
+  @override
+  String get trackedPlacesErrorGeneric => 'Something went wrong, try again.';
+
+  @override
+  String get trackedPlacesPickerTitle => 'Choose the location';
+
+  @override
+  String get trackedPlacesPickerHint =>
+      'Move the map to put the marker on the place, or long-press the map.';
+
+  @override
+  String get trackedPlacesPickerConfirm => 'Use this location';
+
+  @override
+  String get trackedPlacesApproxNote =>
+      'The location is stored on the server at about 1 km precision. Alerts do not report confirmed fires: they come from satellite heat detections or the risk score.';
+
+  @override
+  String get trackedPlacesMigrateTitle =>
+      'Move your saved places to My Places?';
+
+  @override
+  String trackedPlacesMigrateBody(int count) {
+    return 'You have $count saved places. Move them to get alerts for new satellite heat detections within 10 km.';
+  }
+
+  @override
+  String get trackedPlacesMigrateAccept => 'Move';
+
+  @override
+  String trackedPlacesMigrateDone(int count) {
+    return '$count places added.';
+  }
+
+  @override
+  String get locDisclosureTracked =>
+      'For places in My Places, the name, the location rounded to about 1 km and the radius are stored on our server. Delete one from the list, or all of them with Settings → Delete my location data.';
+
+  @override
+  String get notifPlacesChannelName => 'My places';
+
+  @override
+  String get notifPlacesChannelDescription =>
+      'Satellite heat detections near your places and fire risk there';
+
+  @override
+  String get settingsDeleteLocation => 'Delete my location data';
+
+  @override
+  String get settingsDeleteLocationConfirmTitle => 'Delete your location data?';
+
+  @override
+  String get settingsDeleteLocationConfirmBody =>
+      'Your approximate location and all your tracked places on our server are deleted immediately. Notifications stay on; if you haven\'t picked a province or region, you may receive risk alerts for all regions from now on. If you start automatic monitoring again, your location is stored again.';
+
+  @override
+  String get settingsDeleteLocationConfirm => 'Delete';
+
+  @override
+  String get settingsDeleteLocationDone =>
+      'Your location and tracked places were deleted from the server.';
+
+  @override
+  String get settingsDeleteLocationFailed =>
+      'Couldn\'t delete your location data. Check your internet connection and try again.';
 
   @override
   String get compassNorth => 'N';
@@ -1674,34 +1862,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskReasonHighWithTemp(String temp) {
-    return 'Thermal sensor detected ${temp}K heat. High likelihood of an active fire — stay away from the area.';
+    return 'Satellites detected ${temp}K heat. Not verified. Stay away from the area.';
   }
 
   @override
   String get riskReasonHighNoTemp =>
-      'A high-confidence thermal anomaly was detected. This may be an active fire.';
+      'Satellites made a strong detection. Not verified.';
 
   @override
   String riskReasonMediumWithTemp(String temp) {
-    return 'Thermal sensor measured ${temp}K heat. This could be stubble burning, farming activity, or an early-stage fire.';
+    return 'Satellites detected ${temp}K heat. Its cause is not verified.';
   }
 
   @override
   String get riskReasonMediumNoTemp =>
-      'A medium-level thermal anomaly. The area should be kept under observation.';
+      'Satellites made a medium-strength detection. Not verified.';
 
   @override
   String riskReasonLowWithTemp(String temp) {
-    return 'Low heat value (${temp}K). Could be industrial activity, greenhouses, or a natural heat source.';
+    return 'Satellites detected low heat (${temp}K). Its cause is not verified.';
   }
 
   @override
   String get riskReasonLowNoTemp =>
-      'Low-level thermal activity. Monitoring is recommended.';
+      'Satellites made a weak detection. Monitoring is recommended.';
 
   @override
   String get fireGeneratedDescHigh =>
-      'High-intensity thermal activity. Strong likelihood of an active fire.';
+      'Satellites detected strong heat. Not verified.';
 
   @override
   String get fireGeneratedDescMedium =>
@@ -1709,7 +1897,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fireGeneratedDescLow =>
-      'Low-level thermal activity. Monitoring is recommended.';
+      'Satellites made a weak detection. Monitoring is recommended.';
 
   @override
   String get fireRecommendedActionHigh =>
@@ -1724,24 +1912,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'No urgent action needed right now — keep an eye on the area.';
 
   @override
-  String get fireStatusActive => 'Probable Fire';
+  String get fireStatusActive => 'Very Strong Detection';
 
   @override
-  String get fireStatusLikelyActive => 'High Thermal Anomaly';
+  String get fireStatusLikelyActive => 'Strong Detection';
 
   @override
   String get fireStatusMonitoring => 'Monitoring';
 
   @override
-  String get fireStatusHistorical => 'Historical Detection';
+  String get fireStatusHistorical => 'No longer seen';
 
   @override
   String fireEventRegionTitle(String city) {
-    return '$city Region Thermal Detection';
+    return '$city Region Satellite Detection';
   }
 
   @override
-  String get fireEventLiveDetectionTitle => 'Live Thermal Detection';
+  String get fireEventLiveDetectionTitle => 'Recent Satellite Detection';
 
   @override
   String get fireEventStatusActive => 'Active';
@@ -1763,7 +1951,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String fireDetailAreaMeasured(int hectares) {
-    return 'Detection pixel ~$hectares hectares (not the fire itself)';
+    return 'Area seen by the satellite ~$hectares hectares (not the fire itself)';
   }
 
   @override
@@ -1823,11 +2011,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get frpIntensityVeryHigh => 'Very high intensity';
-
-  @override
-  String fireEventTempLine(String temp, String kelvin) {
-    return 'Temperature: $temp°C (Thermal value: ${kelvin}K)';
-  }
 
   @override
   String fireEventSatelliteLine(String satellite) {
@@ -1932,32 +2115,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get coachMarkMapTitle => 'Map & Fire Markers';
+  String get coachMarkMapTitle => 'Map and Satellite Detections';
 
   @override
   String get coachMarkMapDesc =>
-      'Flame markers on the map show live fire detections from NASA satellite data. Tap a marker to see details — you can also report a new fire from the map screen.';
+      'Markers on the map are heat detections from NASA satellites; not every one is a fire. Tap a marker to see details — you can also report a new fire from the map screen.';
 
   @override
   String get coachMarkRiskTitle => 'Risk Levels';
 
   @override
   String get coachMarkRiskDesc =>
-      'Every fire point is labeled High, Medium, or Low risk. These tags help you quickly understand how dangerous an area is.';
+      'Every satellite detection is labeled High, Medium, or Low risk. These tags help you quickly understand how dangerous an area is.';
 
   @override
   String get coachMarkWatchlistTitle => 'Watchlist';
 
   @override
   String get coachMarkWatchlistDesc =>
-      'Save fire points you want to keep an eye on, and quickly find them again here.';
+      'Save satellite detections you want to keep an eye on, and quickly find them again here.';
 
   @override
   String get coachMarkNotificationsTitle => 'Notifications';
 
   @override
   String get coachMarkNotificationsDesc =>
-      'Get instant alerts for fires near you, and start automatic scanning from here.';
+      'Get alerts for satellite heat detections near you, and start automatic scanning from here.';
 
   @override
   String get riskTabTurkeyOverview => 'Turkey Overview';
@@ -2009,7 +2192,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskChartTapHint => 'Tap a region for details';
 
   @override
-  String get monitorStatusReady => 'Monitoring service ready.';
+  String get monitorStatusReady => 'Automatic monitoring is ready.';
 
   @override
   String get monitorStatusAlreadyRunning =>
@@ -2036,16 +2219,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get monitorStatusNoActiveFires =>
-      'No thermal anomaly data found right now.';
+      'Satellites report no detections right now.';
 
   @override
   String monitorStatusNoNearbyFires(int count) {
-    return 'No thermal detections within 50 km. ($count points scanned)';
+    return 'Satellites detected nothing within 50 km. ($count points scanned)';
   }
 
   @override
   String monitorStatusNearbyFiresFound(int count) {
-    return '$count thermal detections found within 50 km!';
+    return 'Satellites made $count detections within 50 km.';
   }
 
   @override
@@ -2062,11 +2245,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notifNearbyFireTitle => 'Thermal anomaly detected nearby';
+  String get notifNearbyFireTitle => 'Satellites made a detection near you';
 
   @override
   String notifNearbyFireBody(String distance, int count) {
-    return '$count thermal detections found within $distance.';
+    return '$count satellite detections within $distance. Not verified.';
   }
 
   @override
@@ -2081,7 +2264,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String riskMyLocationPostgisDistance(String distance) {
-    return 'PostGIS • $distance km away';
+    return '$distance km away';
   }
 
   @override
@@ -2115,14 +2298,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskInfoFormulaWind => 'Wind (max 25 pts)';
 
   @override
-  String get riskInfoFormulaFireCount => 'NASA Fire Count (max 20 pts)';
+  String get riskInfoFormulaFireCount =>
+      'Satellite heat events in the last 24 hours (max 20 pts)';
 
   @override
   String get riskInfoSourcesTitle => 'Data Sources';
 
   @override
   String get riskInfoSourcesBody =>
-      'Calculated using NASA FIRMS satellite data, Open-Meteo weather data, and RSS news feeds.';
+      'Calculated using NASA FIRMS satellite data and Open-Meteo weather data (MET Norway as fallback). Weather comes from one representative point per region; news does not affect the score.';
 
   @override
   String get riskInfoUpdateFrequencyTitle => 'Update Frequency';
@@ -2133,15 +2317,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeInfo =>
-      'Data sourced from NASA FIRMS satellite imagery, updated every 3 hours.';
+      'Data comes from NASA FIRMS satellite detections; the server fetches new data about every 30 minutes.';
 
   @override
-  String get trustMapInfo =>
-      'Fire markers show thermal anomalies detected by the VIIRS satellite.';
+  String get trustMapInfo => 'Markers show detections made by satellites.';
 
   @override
   String get trustRiskInfo =>
-      'Risk scores are calculated from real-time weather and NASA fire data.';
+      'Risk scores are calculated about every 3 hours from weather and NASA satellite detections.';
 
   @override
   String get trustNewsInfo =>
@@ -2149,7 +2332,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsInfo =>
-      'Notifications are sent when a fire is detected within 50km of your location.';
+      'Notifications are sent when satellites detect heat within 50 km of your location.';
 
   @override
   String get trustCardLabel => 'About This Data';
@@ -2168,27 +2351,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustHomeMeaning =>
-      'Counts are satellite thermal anomalies from the last 24 hours, not confirmed wildfires. Some may be agricultural burns, industrial heat, or hot surfaces.';
+      'Counts are detections made by satellites in the last 24 hours; they are not verified. Some may be agricultural burns, industrial heat or hot surfaces.';
 
   @override
   String get trustHomeSource =>
-      'Data comes from NASA FIRMS (Fire Information for Resource Management System), combining VIIRS and MODIS satellite passes, refreshed every 3 hours.';
+      'Data comes from NASA FIRMS (Fire Information for Resource Management System), combining passes of several satellites. The server fetches new data about every 30 minutes; satellite passes and NASA\'s processing time can delay a detection by a few hours.';
 
   @override
   String get trustHomeInterpret =>
-      'Only a high-confidence detection above 30 MW FRP and 350 K is labelled Probable Fire. All other points remain thermal anomalies.';
+      'Only detections the satellite is very sure of, with very high heat, are labelled Very Strong Detection.';
 
   @override
   String get trustHomeAction =>
-      'Tap a detection for confidence, FRP, and limitations. If you see smoke or flames, follow official emergency guidance and report what you observe.';
+      'Tap a detection for more. If you see smoke or flames, call 112 first.';
 
   @override
   String get trustMapMeaning =>
-      'Each marker is a satellite thermal anomaly, not a confirmed fire. Red means Probable Fire; orange high anomaly; yellow nominal; gray low confidence.';
+      'Each marker is a satellite detection; it is not verified. Red is very strong, orange strong, yellow medium, grey weak.';
 
   @override
-  String get trustMapSource =>
-      'Fire data sourced from NASA FIRMS (VIIRS & MODIS satellites). Secondary verification via EFFIS (Copernicus Emergency Management Service) will be added when their API is restored.';
+  String get trustMapSource => 'Satellite data comes from NASA FIRMS.';
 
   @override
   String get trustMapInterpret =>
@@ -2196,19 +2378,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustMapAction =>
-      'Tap a marker to review confidence and FRP. If you personally observe a fire, use Report and follow official emergency instructions.';
+      'Tap a marker for more. If you see a fire yourself, call 112 first, then use Report.';
 
   @override
   String get trustRiskMeaning =>
-      'The risk score (0-100) estimates wildfire likelihood by combining temperature, humidity, wind speed, and dryness — it is a forecast, not a guarantee.';
+      'The risk score (0-100) is an index combining temperature, humidity, wind and recent satellite detections in the region. It does not say whether a fire will start and is not a guarantee.';
 
   @override
   String get trustRiskSource =>
-      'Weather data is pulled from live meteorological feeds; fire counts factor in recent NASA FIRMS detections for each region.';
+      'Weather data comes from meteorological services and regional scores are calculated about every 3 hours; fire counts factor in recent NASA FIRMS detections for each region.';
 
   @override
   String get trustRiskInterpret =>
-      'Compare your region\'s score to the Turkey average on the chart — a score significantly above average signals elevated local conditions worth monitoring.';
+      'Compare your region\'s score to the Turkey average in the list — a score significantly above average signals elevated local conditions worth monitoring.';
 
   @override
   String get trustRiskAction =>
@@ -2220,7 +2402,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustNewsSource =>
-      'Articles are aggregated from 9 established Turkish news outlets via their public RSS feeds, refreshed continuously throughout the day.';
+      'Headlines are collected about every 2 hours from news sites\' public RSS feeds and official agency pages.';
 
   @override
   String get trustNewsInterpret =>
@@ -2232,15 +2414,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsMeaning =>
-      'Alerts notify you when a satellite detects a thermal anomaly within 50 km. They are automated, not verified incident reports.';
+      'Alerts are sent when satellites make a detection within 50 km. They are automated and not verified.';
 
   @override
   String get trustAlertsSource =>
-      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location.';
+      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location on your phone. For regional alerts from our server, your location is stored rounded to about 1 km when you start automatic monitoring.';
 
   @override
   String get trustAlertsInterpret =>
-      'Confidence describes confidence in a heat anomaly, not certainty that it is a fire. Check FRP and brightness together.';
+      'Confidence says how sure the satellite is of the detection. It does not verify a fire.';
 
   @override
   String get trustAlertsAction =>
@@ -2251,73 +2433,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String smartIntensityIntense(String location) {
-    return 'An intense thermal anomaly was detected near $location.';
+    return 'Satellites made a very strong detection near $location.';
   }
 
   @override
   String smartIntensityHigh(String location) {
-    return 'A high-intensity thermal anomaly was detected near $location.';
+    return 'Satellites made a strong detection near $location.';
   }
 
   @override
   String smartIntensityModerate(String location) {
-    return 'Moderate thermal activity was detected near $location.';
+    return 'Satellites made a medium-strength detection near $location.';
   }
 
   @override
   String smartIntensityEarly(String location) {
-    return 'This may be an early-stage fire or smoldering vegetation near $location.';
+    return 'Satellites made a weak detection near $location; its cause is not verified.';
   }
 
   @override
   String smartIntensityAnomaly(String location) {
-    return 'A thermal anomaly was detected near $location.';
+    return 'Satellites made a detection near $location.';
   }
 
   @override
-  String get smartLocationHintForest => 'a high-risk forest area';
+  String get smartLocationHintForest => 'in a province with extensive forest';
 
   @override
-  String get smartLocationHintCoastal => 'a coastal area';
+  String get smartLocationHintCoastal => 'in the south-western coastal belt';
 
   @override
   String get smartLocationHintUrban =>
-      'an urban area — could be a structure fire or industrial heat source';
+      'in a heavily urbanised province; the source may be a building or industry';
 
   @override
   String get smartLocationHintAgricultural =>
-      'farmland — possible crop or stubble burning';
+      'in a heavily agricultural province; satellites also detect stubble burning';
 
   @override
-  String get smartFrpHigh =>
-      'A high Fire Radiative Power (FRP) reading indicates significant energy release.';
+  String get smartFrpHigh => 'The satellite measured high heat at this spot.';
 
   @override
   String smartPixelFootprint(int hectares) {
-    return 'The satellite pixel is ~$hectares hectares; the fire is somewhere inside it and its real size is unknown.';
+    return 'The satellite sees this spot as an area of ~$hectares hectares; the heat is somewhere inside it and its real size is unknown.';
   }
 
   @override
   String smartAreaLarge(int hectares) {
-    return 'Estimated fire area is large (~$hectares hectares).';
+    return 'The area detected by the satellite is large (~$hectares hectares).';
   }
 
   @override
   String smartAreaMedium(int hectares) {
-    return 'Estimated fire area is medium-sized (~$hectares hectares).';
+    return 'The area detected by the satellite is medium-sized (~$hectares hectares).';
   }
 
   @override
   String get smartConfidenceHigh =>
-      'NASA has high confidence this is a real thermal anomaly; its cause is not confirmed.';
+      'NASA is highly confident in this detection; its cause is not verified.';
 
   @override
   String get smartConfidenceMedium =>
-      'NASA reports nominal confidence in this thermal anomaly; verification is recommended.';
+      'NASA reports this detection with medium confidence; it is not verified.';
 
   @override
   String get smartConfidenceLow =>
-      'A possible thermal anomaly — could be industrial heat or reflection, verification needed.';
+      'A weak detection; it may be industrial heat or a reflection, and it is not verified.';
 
   @override
   String get smartSpreadDangerous =>
@@ -2338,7 +2519,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String smartTimeRecent(int hours, String satellite) {
-    return 'Detected $hours hours ago by $satellite — may still be active.';
+    return 'Detected $hours hours ago by $satellite; its current state is not verified.';
   }
 
   @override
@@ -2366,7 +2547,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tooltipSatelliteViirsBody =>
-      'VIIRS: Suomi NPP satellite, passes over Turkey 1-2 times a day.';
+      'VIIRS: the NOAA-20 and NOAA-21 satellites pass over Türkiye several times a day. (Suomi NPP stopped delivering data on 2 November 2026.)';
 
   @override
   String get tooltipSatelliteModisBody =>
@@ -2396,11 +2577,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fireDetailRegionalNews => 'Regional News';
 
   @override
-  String get coachMarkMapMarkersTitle => 'Fire Markers';
+  String get coachMarkMapMarkersTitle => 'Satellite Detection Markers';
 
   @override
   String get coachMarkMapMarkersDesc =>
-      'Flame icons on the map show live fire detections from NASA satellites. Tap one to see details.';
+      'Markers on the map are heat detections from NASA satellites; not every one is a fire. Tap one to see details.';
 
   @override
   String get coachMarkMapClustersTitle => 'Cluster Numbers';
@@ -2417,11 +2598,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap the button in the bottom right to report a fire you\'ve spotted, along with your GPS location.';
 
   @override
-  String get coachMarkMapNearbyTitle => 'Fires Near Me';
+  String get coachMarkMapNearbyTitle => 'Satellite Detections Near Me';
 
   @override
   String get coachMarkMapNearbyDesc =>
-      'This section lists the live fire detections closest to your location, sorted by distance.';
+      'This section lists the satellite heat detections closest to your location, sorted by distance.';
 
   @override
   String get coachMarkNewsFeaturedTitle => 'Featured Story';
@@ -2456,21 +2637,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkNotifPermissionDesc =>
-      'Grant permission to get instant alerts about fires near you.';
+      'Grant permission to get alerts about satellite heat detections near you.';
 
   @override
   String get coachMarkNotifScanTitle => 'Scan Now';
 
   @override
   String get coachMarkNotifScanDesc =>
-      'Instantly check whether there are live fires within 50 km of your location.';
+      'Check whether satellites have detected heat within 50 km of your location.';
 
   @override
   String get coachMarkNotifMonitoringTitle => 'Auto Monitoring';
 
   @override
   String get coachMarkNotifMonitoringDesc =>
-      'Start auto monitoring to periodically check nearby thermal detections while the app is open.';
+      'Start auto monitoring to periodically check nearby satellite detections while the app is open.';
 
   @override
   String get coachMarkNotifAlertsTitle => 'Alert Cards';
@@ -2484,14 +2665,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkRiskScoreDesc =>
-      'This 0-100 score is calculated from temperature, humidity, wind, and NASA fire data. Tap the info button to see exactly how.';
+      'This 0-100 score is calculated from temperature, humidity, wind, and NASA satellite detections. Tap the info button to see exactly how.';
 
   @override
-  String get coachMarkRiskChartTitle => 'Regional Distribution';
+  String get coachMarkRiskChartTitle => 'Regions';
 
   @override
   String get coachMarkRiskChartDesc =>
-      'Tap a region\'s bar to see that region\'s detailed risk breakdown.';
+      'Tap a region in the list to see that region\'s detailed risk breakdown.';
 
   @override
   String get coachMarkRiskMyLocationTabTitle => 'My Location';
@@ -2512,14 +2693,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkWatchlistPurposeDesc =>
-      'Keep the fire points you want to follow all in one place here.';
+      'Keep the satellite detections you want to follow all in one place here.';
 
   @override
   String get coachMarkWatchlistHowToAddTitle => 'How to Add';
 
   @override
   String get coachMarkWatchlistHowToAddDesc =>
-      'Tap the bookmark button on a fire\'s detail screen to save it here.';
+      'Tap the bookmark button on a detection\'s detail screen to save it here.';
 
   @override
   String get coachMarkWatchlistClearTitle => 'Clear';
@@ -2529,20 +2710,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use the Clear button in the top corner to remove all saved points at once.';
 
   @override
-  String get detectionProbableFire => 'Probable Fire';
+  String get detectionProbableFire => 'Very Strong Detection';
 
   @override
-  String get detectionHighThermalAnomaly => 'High Thermal Anomaly';
+  String get detectionHighThermalAnomaly => 'Strong Detection';
 
   @override
-  String get detectionThermalDetection => 'Thermal Detection';
+  String get detectionThermalDetection => 'Satellite Detection';
 
   @override
   String get detectionLowConfidence => 'Low Confidence Detection';
 
   @override
   String get thermalAnomalyDisclaimer =>
-      'NASA satellite detects thermal anomalies. High-confidence detections may indicate active fires, but industrial heat sources can also be detected.';
+      'NASA satellites detect heat. Detections are not verified; non-fire sources such as industry can be detected too.';
 
   @override
   String get detectionAboutTitle => 'What is this detection?';
@@ -2569,20 +2750,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapLegendTitle => 'Map Legend';
 
   @override
-  String get legendProbableFire => 'Probable Fire';
+  String get legendProbableFire => 'Very strong detection';
 
   @override
-  String get legendHighThermal => 'High Thermal Anomaly';
+  String get legendHighThermal => 'Strong detection';
 
   @override
   String get legendLowConfidence => 'Low Confidence';
 
   @override
   String get mapMarkerDisclaimerBefore =>
-      'The map shows NASA satellite thermal detections.';
+      'The map shows detections made by NASA satellites.';
 
   @override
-  String get mapMarkerDisclaimerAfter => 'markers may indicate an active fire.';
+  String get mapMarkerDisclaimerAfter =>
+      'markers are the strongest detections; not verified.';
 
   @override
   String get feedbackSend => 'Send Feedback';
@@ -2671,7 +2853,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get coachMarkWatchlistTapDesc =>
-      'Tap a saved fire to see its current status and full details.';
+      'Tap a saved detection to see its current status and full details.';
 
   @override
   String get notificationScopeTitle => 'Alert Scope';
@@ -2737,17 +2919,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Narrowing the scope means you will not be alerted about fires outside the area you picked.';
 
   @override
-  String get incidentsSectionTitle => 'Fire Events';
+  String get incidentsSectionTitle => 'Satellite Events';
 
   @override
   String get incidentsSectionSubtitle =>
       'Satellite detections grouped into events';
 
   @override
-  String get incidentStatusActive => 'Active detection';
+  String get incidentStatusActive => 'Recent detection';
 
   @override
-  String get incidentStatusAwaiting => 'Awaiting detection';
+  String get incidentStatusLastKnown => 'Last known detection';
+
+  @override
+  String get incidentStatusAwaiting => 'No longer seen';
 
   @override
   String get incidentStatusLowConfidence => 'Low confidence';
@@ -2759,12 +2944,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String incidentNoDetectionFor(String hours) {
-    return 'Fire detected, not seen for $hours hours';
+    return 'Heat detected, not seen for $hours hours';
   }
 
   @override
   String incidentNoDetectionLowConfidence(String hours) {
-    return 'Fire detected, not seen for $hours hours (low confidence)';
+    return 'Heat detected, not seen for $hours hours (low confidence)';
   }
 
   @override
@@ -2784,16 +2969,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentHeatLabel => 'Heat intensity';
 
   @override
-  String get incidentHeatLow => 'Low';
+  String get incidentHeatLow => 'Weak';
 
   @override
-  String get incidentHeatModerate => 'Moderate';
+  String get incidentHeatModerate => 'Medium';
 
   @override
-  String get incidentHeatHigh => 'High';
+  String get incidentHeatHigh => 'Strong';
 
   @override
-  String get incidentHeatVeryHigh => 'Very high';
+  String get incidentHeatVeryHigh => 'Very strong';
 
   @override
   String get incidentSpreadTitle => 'Spread (estimated)';
@@ -2821,18 +3006,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Based on the heat the satellite measures. Whether anyone is fighting the fire cannot be told from this data.';
 
   @override
-  String get incidentToggleShow => 'Fire events';
+  String get incidentToggleShow => 'Satellite events';
 
   @override
-  String get incidentToggleDetections => 'Possible fire points';
+  String get incidentToggleDetections => 'Unverified satellite detections';
 
   @override
   String get incidentLayerCaptionDetections =>
-      'Individual hot spots the satellite saw; not every one is a fire.';
+      'Detections made one by one by satellites; not verified.';
 
   @override
   String get incidentLayerCaptionEvents =>
-      'Detections of the same fire grouped into a single event.';
+      'Detections at the same spot are merged into one event.';
 
   @override
   String get incidentFilterActive => 'Active';
@@ -2842,9 +3027,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get incidentFilterAll => 'All';
-
-  @override
-  String get riskLayerToggle => 'Risk (FWI)';
 
   @override
   String get incidentToggleShowShort => 'Events';
@@ -2900,11 +3082,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get placesRiskNoData => 'No data';
 
   @override
-  String placesRiskLine(String day) {
-    return 'FWI danger · $day';
-  }
-
-  @override
   String placesActiveDetections(int count) {
     return '$count active detections';
   }
@@ -2916,10 +3093,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String placesLastDetection(String hours) {
     return 'Last detection ~$hours h ago';
   }
-
-  @override
-  String get placesResolutionNote =>
-      'The FWI class is a regional forecast from ECMWF\'s global weather model; it is meaningful at province and district scale and does not resolve at neighbourhood scale. Two nearby places showing the same class is the data\'s resolution, not an error.';
 
   @override
   String get notificationScopePlaces => 'My saved places';
@@ -2938,22 +3111,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notifPlacesFireTitle => 'Fire detection at a saved place';
+  String get notifPlacesFireTitle =>
+      'Satellite detection near your saved place';
 
   @override
   String notifPlacesFireBody(int count) {
-    return 'There are $count thermal detections around your saved places. Check the map screen.';
+    return 'There are $count satellite detections around your saved places. Check the map screen.';
   }
-
-  @override
-  String get riskLegendTitle => 'Fire danger (FWI)';
-
-  @override
-  String get riskLegendNote =>
-      'A regional danger forecast computed from weather; not a satellite detection.';
-
-  @override
-  String get riskLegendHide => 'Hide legend';
 
   @override
   String get riskClassVeryLow => 'Very low';
@@ -2974,29 +3138,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskClassExtreme => 'Extreme';
 
   @override
-  String get riskOpacityLabel => 'Opacity';
-
-  @override
-  String get riskDayToday => 'Today';
-
-  @override
-  String get riskDayTomorrow => 'Tomorrow';
-
-  @override
-  String get riskDayNotPublished =>
-      'This day\'s forecast has not been published yet. It opens once the daily model run arrives.';
-
-  @override
-  String get riskAttribution => '© European Union, Copernicus EFFIS';
-
-  @override
   String get homeLast24hTitle => 'Last 24 Hours';
 
   @override
   String get homeLast24hSubtitle => 'Summary of satellite detections';
 
   @override
-  String get homeLast24hActiveTitle => 'Active detection';
+  String get homeLast24hActiveTitle => 'Repeated detections';
 
   @override
   String homeLast24hActiveSubtitle(int hours) {
@@ -3004,12 +3152,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String homeLast24hActiveSubtitleLayered(int strong, int hours) {
-    return '$strong with strong evidence; seen by satellite in the last $hours h';
-  }
-
-  @override
-  String get homeLast24hEndedTitle => 'Detection ended';
+  String get homeLast24hEndedTitle => 'No longer seen';
 
   @override
   String get homeLast24hEndedSubtitle => 'Not a claim that they are out.';
@@ -3022,16 +3165,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Since first detection, still being detected';
 
   @override
-  String get homeLast24hStrongestTitle => 'Most intense fire';
-
-  @override
-  String homeLast24hStrongestPower(int mw) {
-    return '$mw MW';
-  }
+  String get homeLast24hStrongestTitle =>
+      'Strongest satellite detection — not verified';
 
   @override
   String get homeLast24hStrongestSubtitle =>
-      'Highest heat output right now, still being detected';
+      'The strongest detection satellites see right now';
 
   @override
   String homeLast24hStrongestSubtitleWithDuration(String duration) {
@@ -3049,7 +3188,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get incidentsEmpty => 'No grouped fire events in this range.';
+  String get incidentsEmpty => 'No grouped satellite events in this period.';
 
   @override
   String incidentsCount(int count) {
@@ -3057,7 +3196,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get incidentPanelTitle => 'Fire Event';
+  String get incidentPanelTitle => 'Satellite detection';
 
   @override
   String get incidentOfficialTitle => 'Official status';
@@ -3123,7 +3262,1476 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riskHeatUnavailable => 'Risk data is unavailable right now';
 
   @override
+  String riskRegionLevel(String region, String level) {
+    return '$region: $level';
+  }
+
+  @override
+  String riskHighestScoreLine(Object score) {
+    return 'Highest score: $score/100';
+  }
+
+  @override
+  String get riskRegionsTitle => 'Regions';
+
+  @override
+  String riskRegionWeather(String temp, String humidity, String wind) {
+    return '$temp°C · $humidity% humidity · $wind km/h';
+  }
+
+  @override
+  String riskPercent(Object value) {
+    return '$value%';
+  }
+
+  @override
+  String get riskComponentsTitle => 'How the score adds up';
+
+  @override
+  String get riskComponentsTotal => 'Total';
+
+  @override
+  String get riskComponentsCapped => 'The score cannot go above 100.';
+
+  @override
+  String get riskComponentsUnavailable =>
+      'The score breakdown cannot be shown right now.';
+
+  @override
+  String get riskComponentWindLabel => 'Wind';
+
+  @override
+  String get riskComponentTempMild => 'Warm air slowly dries out vegetation.';
+
+  @override
+  String get riskComponentTempHot => 'Hot air dries out vegetation quickly.';
+
+  @override
+  String get riskComponentHumidityMid =>
+      'As humidity falls, vegetation starts to dry.';
+
+  @override
+  String get riskComponentHumidityLow =>
+      'The air is very dry; vegetation dries quickly.';
+
+  @override
+  String get riskComponentWindMid => 'Wind can carry sparks and flames.';
+
+  @override
+  String get riskComponentWindHigh =>
+      'Strong wind speeds up the spread of fire.';
+
+  @override
+  String get riskComponentDetections =>
+      'Satellite heat detections in the region in the last 24 hours; not every detection is a fire.';
+
+  @override
+  String get riskComponentDetectionsNone =>
+      'No satellite detections in the region in the last 24 hours. This does not mean there is no fire.';
+
+  @override
+  String get riskComponentDetectionsUnknown =>
+      'The satellite detection count is unavailable right now.';
+
+  @override
+  String get riskComponentDetectionsChanged =>
+      'The score used the count from its last calculation; the count has changed since.';
+
+  @override
+  String riskComponentDetectionsValue(int count) {
+    return '$count detections';
+  }
+
+  @override
+  String get riskComponentUnknownValue => 'Unknown';
+
+  @override
+  String get riskComponentBonus => 'Hot and dry air';
+
+  @override
+  String get riskComponentBonusNote =>
+      'Extra points because heat and dry air come together.';
+
+  @override
+  String get riskExplainSum =>
+      'The score is the sum of these components (at most 100). Thresholds:';
+
+  @override
+  String riskExplainBonus(
+    int warmTemp,
+    int warmHumidity,
+    int warmPoints,
+    int hotTemp,
+    int hotHumidity,
+    int hotPoints,
+  ) {
+    return 'Hot and dry together: above $warmTemp°C with humidity below $warmHumidity% +$warmPoints; above $hotTemp°C with humidity below $hotHumidity% +$hotPoints';
+  }
+
+  @override
   String riskHeatMapSemantics(int score, String level) {
-    return 'Türkiye wildfire risk heat map. Nationwide risk score $score/100, $level.';
+    return 'Türkiye wildfire risk region map. Nationwide risk score $score/100, $level.';
+  }
+
+  @override
+  String get navRisk => 'Risk';
+
+  @override
+  String get riskAdviceCritical =>
+      'Do not light outdoor fires. Report suspicious smoke to 112 and follow official alerts.';
+
+  @override
+  String get riskAdviceHigh =>
+      'Do not light outdoor fires; avoid activities that create sparks.';
+
+  @override
+  String get riskAdviceMedium =>
+      'Take care near dry vegetation and follow local alerts.';
+
+  @override
+  String get riskAdviceLow =>
+      'Low risk is not zero risk. Never leave fire or cigarette ends outdoors.';
+
+  @override
+  String get riskScoreNotProbability =>
+      'This score does not say whether a fire will start.';
+
+  @override
+  String get riskScoresAreIndices =>
+      'Scores are a 0–100 index. They do not say whether a fire will start.';
+
+  @override
+  String riskNearbyFireCount(String count) {
+    return '$count recent nearby satellite detections.';
+  }
+
+  @override
+  String get riskNearbyFireCountUnavailable =>
+      'Recent nearby detection count is not yet available.';
+
+  @override
+  String riskPreviousScore(String score) {
+    return 'Previous score: $score/100';
+  }
+
+  @override
+  String get riskDataStale => 'Data is out of date';
+
+  @override
+  String get riskLastKnownView => 'Last known risk';
+
+  @override
+  String get homeLastKnownDetections => 'Last known satellite detections';
+
+  @override
+  String get mapNearbyFiresSubtitleStale =>
+      'Last known detections closest to your location';
+
+  @override
+  String natureShareRiskStale(String region, String level, int score) {
+    return 'Last known fire risk in $region: $level ($score/100). This data is out of date. If you see a fire, call 112 first. FireWatch TR';
+  }
+
+  @override
+  String riskCalculatedAt(String date) {
+    return 'Calculated: $date';
+  }
+
+  @override
+  String get riskSavedView => 'Saved view';
+
+  @override
+  String get riskServerUnreachable => 'Server unavailable. Showing saved data.';
+
+  @override
+  String riskServerUnreachableSavedAt(String date) {
+    return 'Server unavailable. Last saved: $date';
+  }
+
+  @override
+  String get riskRestorationCardTitle => 'Fire loss & restoration';
+
+  @override
+  String get riskRestorationCardSubtitle =>
+      'Follow monthly burned-area data over time';
+
+  @override
+  String get riskHistoryCardTitle => 'Past fires';
+
+  @override
+  String get riskHistoryCardSubtitle =>
+      'Past fire areas, dates and restoration updates';
+
+  @override
+  String get riskDistrictMapCardTitle => 'Province / district risk map';
+
+  @override
+  String get riskDistrictMapCardSubtitle =>
+      'District-level risk scores and ranking';
+
+  @override
+  String get newsTabFires => 'Fires';
+
+  @override
+  String get newsTabRecovery => 'Recovery';
+
+  @override
+  String get newsTabSolidarity => 'Solidarity';
+
+  @override
+  String get newsTabEvents => 'Events';
+
+  @override
+  String get newsShowingSaved => 'Showing saved articles.';
+
+  @override
+  String get newsNoneInTab => 'No content in this category yet.';
+
+  @override
+  String get newsEventJoin => 'Join';
+
+  @override
+  String get newsDonate => 'Donate';
+
+  @override
+  String get newsAddToCalendar => 'Add to calendar';
+
+  @override
+  String get newsCalendarFailed => 'Could not open a calendar app.';
+
+  @override
+  String get newsLinkFailed => 'Could not open link.';
+
+  @override
+  String get annualLayerToggle => 'Past years';
+
+  @override
+  String get annualLayerLoadError =>
+      'Could not load past-year files. Turn the layer off and on to retry.';
+
+  @override
+  String get riskDrynessIndexDerived =>
+      'Dryness indicator (derived from temperature, humidity and wind)';
+
+  @override
+  String get riskVegetationDensityDerived =>
+      'Vegetation pressure (derived from temperature and wind)';
+
+  @override
+  String get riskDrynessDerivation =>
+      'Derived from temperature, humidity and wind.';
+
+  @override
+  String annualPastYearChip(int year) {
+    return '$year · Past year';
+  }
+
+  @override
+  String get annualNoData => 'No data';
+
+  @override
+  String get annualMetricOgmArea => 'OGM burned area';
+
+  @override
+  String get annualMetricOgmCount => 'OGM fire count';
+
+  @override
+  String get annualMetricSatellite => 'Satellite points';
+
+  @override
+  String get annualMetricEffisArea => 'EFFIS area';
+
+  @override
+  String get annualMetricOgmAreaDesc =>
+      'Forest area burned, as recorded by OGM. Province colours always follow this value.';
+
+  @override
+  String get annualMetricOgmCountDesc =>
+      'Number of forest fires recorded by OGM.';
+
+  @override
+  String get annualMetricSatelliteDesc =>
+      'Satellite points are not a fire count. They are satellite detections over forest and shrubland.';
+
+  @override
+  String get annualMetricEffisAreaDesc =>
+      'Burned area mapped by EFFIS from satellite imagery. Coverage of small fires can differ from OGM.';
+
+  @override
+  String get annualMetricExplainTitle => 'What the values mean';
+
+  @override
+  String get annualMetricExplainHint =>
+      'Choosing one only changes the explanation; the province colour always shows OGM burned area.';
+
+  @override
+  String get annualProvinceNote =>
+      'A satellite point is not a fire count. Province fills show the yearly province total, not fire perimeters.';
+
+  @override
+  String get annualLegendTitle => 'Past years · burned area';
+
+  @override
+  String annualLegendTickMax(String value) {
+    return '≥ $value ha';
+  }
+
+  @override
+  String get annualLegendNote =>
+      'A darker colour means more burned area; provinces left blank have no data. This layer does not show today\'s fires.';
+
+  @override
+  String get districtRiskRankingTitle => 'Risk ranking';
+
+  @override
+  String get districtRiskScoresNotProbability =>
+      'Scores do not say whether a fire will start.';
+
+  @override
+  String get districtRiskSampleBanner =>
+      'SAMPLE DATA · Shapes are schematic; not real district boundaries or current risk.';
+
+  @override
+  String get districtRiskLoadFailed =>
+      'Could not load district risk data. Tap to retry.';
+
+  @override
+  String get districtRiskAllProvinces => 'Türkiye';
+
+  @override
+  String get districtRiskAllDistricts => 'All districts';
+
+  @override
+  String get districtRiskNoScore => 'No risk data';
+
+  @override
+  String get districtRiskOpenRanking => 'Open risk ranking';
+
+  @override
+  String get historyLoadFailed => 'Could not load fire history. Tap to retry.';
+
+  @override
+  String get historySourceOpenFailed => 'Could not open source.';
+
+  @override
+  String get historySampleRecord =>
+      'SAMPLE RECORD — does not represent a real fire.';
+
+  @override
+  String get historyAreaUnknown => 'Area unavailable';
+
+  @override
+  String historyAreaPitches(String hectares, String pitches) {
+    return '$hectares hectares — about $pitches football pitches.';
+  }
+
+  @override
+  String get historyPitchComparison =>
+      'Comparison: a 105 × 68 m pitch = 0.714 hectares.';
+
+  @override
+  String get historyAreaSource => 'Burnt-area source';
+
+  @override
+  String get historyRestorationTitle => 'Restoration';
+
+  @override
+  String get historyNoRestoration =>
+      'No sourced restoration record is available for this area yet. This does not mean no work has taken place.';
+
+  @override
+  String get historyComparisonSource => 'Comparison source';
+
+  @override
+  String get historyOpenAnnouncement => 'Open official announcement';
+
+  @override
+  String get historyCampaignsTitle => 'Change starts with one person';
+
+  @override
+  String get historyNoCampaigns =>
+      'No verified campaign or volunteer event has been added yet.';
+
+  @override
+  String get historyPeriodThisSummer => 'This summer';
+
+  @override
+  String get historyPeriodSinceLastSummer => 'Since last summer';
+
+  @override
+  String get historyPeriodLast3Years => 'Last 3 years';
+
+  @override
+  String get historyPeriodCustom => 'Custom range';
+
+  @override
+  String get historyNoRecords => 'No records in the selected range.';
+
+  @override
+  String get historySampleBanner =>
+      'SAMPLE DATA · Shaded areas are schematic; not real fire perimeters.';
+
+  @override
+  String get historySourceSample =>
+      'Source: sample data. Live source: NASA FIRMS (VIIRS/MODIS).';
+
+  @override
+  String get historySourceLive =>
+      'Source: NASA FIRMS (VIIRS/MODIS) · satellite heat detections';
+
+  @override
+  String historyDetections(String count, String hours) {
+    return '$count detections · $hours h';
+  }
+
+  @override
+  String historyMaxFrp(String frp) {
+    return 'Peak radiative power (FRP): $frp MW';
+  }
+
+  @override
+  String get historyFootprintNote =>
+      'The shape on the map traces where the satellite detected heat (188 m around each detection); it is not the burned-area boundary. Burned area is not measured, so no area is shown. Agricultural burns are included.';
+
+  @override
+  String get historyNearestDistrictNote =>
+      'The district is the one whose centre is nearest the fire; near a border it can be the neighbouring district.';
+
+  @override
+  String get historyOpenFirmsMap => 'Open the NASA FIRMS map';
+
+  @override
+  String get historyFirmsAttribution =>
+      'We acknowledge the use of data and/or imagery from NASA\'s Fire Information for Resource Management System (FIRMS) (https://earthdata.nasa.gov/firms), part of NASA\'s Land, Atmosphere Near real-time Capability for Earth observations (LANCE) (https://earthdata.nasa.gov/lance) and NASA\'s Earth Science Data and Information System (ESDIS).';
+
+  @override
+  String get detectionNotConfirmedNotice =>
+      'This is a satellite heat detection, not a confirmed fire. If you see fire or smoke, call 112 right away.';
+
+  @override
+  String get riskFactorTempHintNone =>
+      'Below 25°C, temperature adds nothing to the risk score.';
+
+  @override
+  String riskFactorTempHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: heat makes vegetation lose moisture faster.';
+  }
+
+  @override
+  String get riskFactorHumidityHintNone =>
+      'Above 50%, humidity adds nothing to the risk score; damp vegetation ignites less easily.';
+
+  @override
+  String riskFactorHumidityHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: low humidity dries out flammable vegetation.';
+  }
+
+  @override
+  String get riskFactorWindHintNone =>
+      'Below 10 km/h, wind adds nothing to the risk score.';
+
+  @override
+  String riskFactorWindHint(int points, int max) {
+    return 'Adds +$points/$max to the risk score: wind can carry flames and embers.';
+  }
+
+  @override
+  String riskNoteLightWind(int wind) {
+    return 'Light wind ($wind km/h)';
+  }
+
+  @override
+  String get newsFeaturedSubtitleLatest => 'Latest headline';
+
+  @override
+  String get homeBriefRiskLoading => 'Regional risk data is loading.';
+
+  @override
+  String get homeBriefRiskUnavailable =>
+      'Regional risk data is unavailable right now.';
+
+  @override
+  String homeBriefRiskHighest(String region, int score) {
+    return 'The highest regional risk is in $region: $score/100.';
+  }
+
+  @override
+  String homeBriefNationwide(int count) {
+    return '$count notable satellite detections are being monitored nationwide.';
+  }
+
+  @override
+  String get homeBriefNoneNearby =>
+      'No notable detection is visible within 100 km.';
+
+  @override
+  String homeBriefNearby(int count) {
+    return '$count detections are within 100 km; check the map for details.';
+  }
+
+  @override
+  String get homeBriefTitle => 'What should I know today?';
+
+  @override
+  String get homeBriefSubtitle => 'Quick situation brief';
+
+  @override
+  String get homeBriefViewRisk => 'View risk';
+
+  @override
+  String get homeBriefOpenMap => 'Open map';
+
+  @override
+  String get dataSourcesBordersTitle => 'Province boundaries';
+
+  @override
+  String get dataSourcesBordersBody =>
+      'The 81 province boundaries drawn in the map\'s \"Past years\" layer and the ones the server uses to assign a detection to a province come from the same file: geoBoundaries (gbOpen, TUR ADM1), derived from OpenStreetMap data. They are simplified; a point very close to a border may fall in the neighbouring province. Points at sea or outside the borders are assigned to the nearest province.';
+
+  @override
+  String get dataSourcesBordersGeoBoundariesCredit =>
+      'Province boundaries: geoBoundaries';
+
+  @override
+  String get annualLayerProvenance =>
+      'Yearly province totals were calculated in the source data set (OGM forest fire statistics; NASA FIRMS VIIRS S-NPP with ESA WorldCover 2021; EFFIS). By that data set\'s own statement, its satellite point counts were calculated with GADM 4.1 province boundaries. The province boundaries drawn on the map are geoBoundaries / OpenStreetMap.';
+
+  @override
+  String get osmAttribution => '© OpenStreetMap contributors, ODbL';
+
+  @override
+  String get odblLicenseLink => 'ODbL 1.0 licence';
+
+  @override
+  String mapDetectionConfidence(int score) {
+    return 'Detection confidence: $score/100';
+  }
+
+  @override
+  String get mapDetectionConfidenceInfoTitle => 'Detection confidence';
+
+  @override
+  String get mapDetectionConfidenceInfoBody =>
+      'Computed from NASA\'s confidence level, the strength of the detection, repeated detections within 20 km and how recent it is. Weather is not part of this score.';
+
+  @override
+  String get mapDetectionConfidenceInfoNotFire =>
+      'This score shows how distinct a satellite detection is. It does not verify a fire there.';
+
+  @override
+  String get mapStrongUnverifiedReason =>
+      'Satellites made a strong detection on a single pass; not verified.';
+
+  @override
+  String mapStrongUnverifiedBanner(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count strong unverified detections — view on Points',
+      one: '1 strong unverified detection — view on Points',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get multiPassDetectionLabel => 'Multi-pass detection';
+
+  @override
+  String get multiPassDetectionExplanation =>
+      'Satellites made strong detections at the same spot on at least two separate passes. This does not verify a fire.';
+
+  @override
+  String homeMultiPassSubtitle(int weaker) {
+    return 'At least 2 satellite passes; $weaker more weak detections under Points';
+  }
+
+  @override
+  String homeMultiPassNote(int count, int weaker) {
+    return '$count repeated detections (at least 2 satellite passes); the map shows $weaker more single-pass or weak detections. None of these is verified.';
+  }
+
+  @override
+  String get incidentExtinguishedConflict =>
+      'Official: extinguished — satellite still sees heat';
+
+  @override
+  String get fireDetailLinkedNews => 'News linked to this fire';
+
+  @override
+  String get osmTileAttribution => '© OpenStreetMap contributors';
+
+  @override
+  String get riskInfoFormulaHeatBonus =>
+      'Extra points when heat and dry air coincide (max 20 pts)';
+
+  @override
+  String myPlacesRiskLine(String level, int score) {
+    return 'Fire risk: $level ($score/100)';
+  }
+
+  @override
+  String myPlacesDetections24h(int count) {
+    return '$count detections in the last 24 hours';
+  }
+
+  @override
+  String get myPlacesNoDetections =>
+      'No detections nearby in the last 24 hours';
+
+  @override
+  String get myPlacesRiskNote =>
+      'Risk is a score from the weather and nearby satellite detections. No detection does not mean no fire.';
+
+  @override
+  String get trackedPlacesEditTitle => 'Edit place';
+
+  @override
+  String get trackedPlacesNotifyHeat => 'Notify me of new heat detected nearby';
+
+  @override
+  String get trackedPlacesNotifyRisk => 'Notify me when fire risk rises';
+
+  @override
+  String get trackedPlacesNotifyRiskDesc =>
+      'When it reaches High or Critical, at most once a day';
+
+  @override
+  String get placeSearchHint => 'Province, district, neighbourhood or address';
+
+  @override
+  String get placeSearchButton => 'Search';
+
+  @override
+  String get placeSearchRemote => 'Search as a neighbourhood or address';
+
+  @override
+  String get placeSearchNoResults =>
+      'Nothing found. You can pick it on the map.';
+
+  @override
+  String get placeSearchFailed =>
+      'Search isn\'t available right now. You can pick it on the map.';
+
+  @override
+  String get placeSearchTooShort => 'Type at least 3 letters.';
+
+  @override
+  String get placeSearchPrivacy =>
+      'Province and district searches stay on your phone. Neighbourhood and address searches go through our server to OpenStreetMap; what you type is not stored.';
+
+  @override
+  String get placeSearchAttribution =>
+      'Search results © OpenStreetMap contributors (Nominatim)';
+
+  @override
+  String get detectionNoneTitle =>
+      'In the last 24 hours, satellites detected no strong heat in forest and natural areas in Türkiye.';
+
+  @override
+  String get detectionLimitNote =>
+      'Satellites may miss small fires or fires under cloud.';
+
+  @override
+  String detectionLastUpdate(String time) {
+    return 'Last update: $time';
+  }
+
+  @override
+  String get detectionStaleTitle => 'Satellite data is out of date.';
+
+  @override
+  String get detectionStaleBody =>
+      'So we can\'t say whether there are detections right now.';
+
+  @override
+  String get detectionUnavailableTitle => 'Couldn\'t get satellite data.';
+
+  @override
+  String get detectionUnavailableBody =>
+      'This doesn\'t mean there are no detections. Check your connection and try again.';
+
+  @override
+  String get detectionCall112Line => 'If you see a fire, call 112 first.';
+
+  @override
+  String get detectionReportLine =>
+      'If you notice a fire that isn\'t in the app, or an error, tell us with Report.';
+
+  @override
+  String get detectionReportButton => 'Report';
+
+  @override
+  String get detectionShowLast7Days => 'Show last 7 days';
+
+  @override
+  String get detectionOpenRisk => 'Turn on risk layer';
+
+  @override
+  String detectionLatest(String when, String city) {
+    return 'Latest detection: $when, $city';
+  }
+
+  @override
+  String detectionLatestNoCity(String when) {
+    return 'Latest detection: $when';
+  }
+
+  @override
+  String detectionDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String detectionHoursAgo(int hours) {
+    return '$hours hours ago';
+  }
+
+  @override
+  String get detectionJustNow => 'less than an hour ago';
+
+  @override
+  String get riskColorsNotFire =>
+      'The colours show the risk of a fire starting, not fires.';
+
+  @override
+  String get mapRiskLayer => 'Risk';
+
+  @override
+  String get mapRiskLegendTitle => 'Risk score (by region)';
+
+  @override
+  String get mapRiskLegendLow => 'Low · 0–24';
+
+  @override
+  String get mapRiskLegendMedium => 'Medium · 25–49';
+
+  @override
+  String get mapRiskLegendHigh => 'High · 50–74';
+
+  @override
+  String get mapRiskLegendCritical => 'Critical · 75–100';
+
+  @override
+  String get mapRiskUnavailable => 'Couldn\'t get risk data.';
+
+  @override
+  String mapRiskRegionTap(String region, int score, String level) {
+    return '$region: $score/100, $level';
+  }
+
+  @override
+  String get reportPanelNotEmergency =>
+      'This report is not passed to emergency services; in an emergency, call 112.';
+
+  @override
+  String get reportPanelTypeLabel => 'Report type';
+
+  @override
+  String get reportTypeFire => 'Fire sighting';
+
+  @override
+  String get reportTypeMissingFire => 'Fire not shown in the app';
+
+  @override
+  String get reportTypeWrongInfo => 'Wrong information/app error';
+
+  @override
+  String get reportPanelWrongInfoHint =>
+      'Tell us what is wrong: which screen, what you saw, what it should be.';
+
+  @override
+  String get reportPanelWrongInfoNeedText => 'Please describe what is wrong.';
+
+  @override
+  String get reportPanelWrongInfoSent => 'Report received. Thank you.';
+
+  @override
+  String get riskTabPlaces => 'My Places';
+
+  @override
+  String get riskPointBack => 'Back to My Places';
+
+  @override
+  String get riskPointAdviceTitle => 'Advice';
+
+  @override
+  String get riskPointWhyTitle => 'Why this level';
+
+  @override
+  String get riskPointNearbyTitle => 'Nearby detections';
+
+  @override
+  String riskPointNearby(int km, int count) {
+    return '$count satellite detections within $km km in the last 24 hours';
+  }
+
+  @override
+  String riskPointNearbyNone(int km) {
+    return 'No satellite detections within $km km in the last 24 hours. This does not mean there is no fire.';
+  }
+
+  @override
+  String get riskPointNearbyUnknown =>
+      'Nearby satellite detections are unknown right now; the score uses the weather only.';
+
+  @override
+  String riskPointCalculatedAt(String time) {
+    return 'Calculated: $time';
+  }
+
+  @override
+  String get riskPointUnavailable =>
+      'Risk can\'t be calculated right now. Try again.';
+
+  @override
+  String get riskCopernicusTitle => 'Copernicus fire danger index';
+
+  @override
+  String get riskCopernicusNote =>
+      'Separate from the FireWatch risk score, based on a weather model; it does not feed into the score.';
+
+  @override
+  String get riskCopernicusAttribution =>
+      '© European Union, Copernicus EFFIS · CC BY 4.0';
+
+  @override
+  String get commonDetails => 'Details';
+
+  @override
+  String incidentPeakPowerDetail(String mw) {
+    return 'Peak radiative power (FRP): $mw MW';
+  }
+
+  @override
+  String get commonAllTechnical => 'All technical information';
+
+  @override
+  String dsStrong(String city) {
+    return 'Satellites detected a strong fire signature near $city.';
+  }
+
+  @override
+  String get dsStrongNoCity => 'Satellites detected a strong fire signature.';
+
+  @override
+  String dsNormal(String city) {
+    return 'Satellites detected a fire signature near $city.';
+  }
+
+  @override
+  String get dsNormalNoCity => 'Satellites detected a fire signature.';
+
+  @override
+  String get dsNotVerified => 'Not verified yet.';
+
+  @override
+  String get dsNewsVerified => 'Confirmed in the news.';
+
+  @override
+  String get dsFarmland => 'It is farmland, so it may also be stubble burning.';
+
+  @override
+  String get dsBuilt =>
+      'It is an industrial or built-up area, so it may also be a fixed heat source.';
+
+  @override
+  String get dsSeenJustNow => 'Seen just now.';
+
+  @override
+  String dsSeenHours(int hours) {
+    return 'Seen $hours hours ago.';
+  }
+
+  @override
+  String dsSeenDays(int days) {
+    return 'Seen $days days ago.';
+  }
+
+  @override
+  String lastSeenHours(int hours) {
+    return 'Last seen: $hours hours ago';
+  }
+
+  @override
+  String lastSeenDays(int days) {
+    return 'Last seen: $days days ago';
+  }
+
+  @override
+  String incidentSeenPasses(int passes) {
+    return 'Satellites saw this spot on $passes separate passes.';
+  }
+
+  @override
+  String get incidentSeenOnce => 'Satellites saw this spot once.';
+
+  @override
+  String get newsVerifiedLabel => 'Confirmed in the news';
+
+  @override
+  String get relatedNewsTitle => 'Related news';
+
+  @override
+  String get mapPointFarmland => 'On farmland — may be stubble burning';
+
+  @override
+  String get mapPointBuilt =>
+      'In an industrial or built-up area — may be a fixed heat source';
+
+  @override
+  String systemStatusFresh(String time) {
+    return 'System working · Last check: $time';
+  }
+
+  @override
+  String systemStatusStale(String time) {
+    return 'Satellite data is out of date · Last check: $time';
+  }
+
+  @override
+  String get mapStatusNoneBody =>
+      'In the last 24 hours, satellites did not detect fire in forest areas.';
+
+  @override
+  String mapStatusStrongBody(int count) {
+    return 'Strong detections in forest areas in the last 24 hours: $count. They are not shown under Events right now; see Points.';
+  }
+
+  @override
+  String mapStatusOtherLine(int count) {
+    return 'Detections on farmland or industry: $count';
+  }
+
+  @override
+  String get mapStatusShowPoints => 'Show points';
+
+  @override
+  String get mapLayerRiskDesc => 'Latest calculated fire risk by region.';
+
+  @override
+  String get mapLayerAnnualDesc => 'Burned area by province in past years.';
+
+  @override
+  String mapAnnualNote(String year) {
+    return 'Burned area in $year. It does not show today\'s fires.';
+  }
+
+  @override
+  String get mapSourcesLink => 'Sources';
+
+  @override
+  String detectionOtherLine(int count) {
+    return 'There are $count strong detections on farmland and industrial areas; they are on the Points layer.';
+  }
+
+  @override
+  String get fireDetailBrightness =>
+      'Surface brightness temperature measured by the satellite';
+
+  @override
+  String get fireDetailBrightnessNote =>
+      'This is not the air temperature. It is the heat the satellite reads from the ground and does not show how hot a fire is.';
+
+  @override
+  String get homeTodayTitle => 'At your location today';
+
+  @override
+  String get homeNearbyNone =>
+      'Satellites made no strong detection within 25 km.';
+
+  @override
+  String homeNearbySome(int count) {
+    return 'Satellites made $count strong detections within 25 km.';
+  }
+
+  @override
+  String homeWind(String speed) {
+    return 'Wind: $speed km/h';
+  }
+
+  @override
+  String get homeLocationNeeded =>
+      'Turn on your location to see the risk where you are.';
+
+  @override
+  String get homeLocationOutside =>
+      'Your location appears to be outside Türkiye.';
+
+  @override
+  String get homeLocationEnable => 'Turn on location';
+
+  @override
+  String get homeRiskUnavailable => 'Risk can\'t be calculated right now.';
+
+  @override
+  String homeTurkeyLine(int natural, int other) {
+    return 'Last 24 hours: $natural strong detections in forest and natural areas, $other on farmland and industry.';
+  }
+
+  @override
+  String get homeSeeOnMap => 'See on map';
+
+  @override
+  String get homeNewsTitle => 'News';
+
+  @override
+  String get newsNewBadge => 'New';
+
+  @override
+  String get coachMarksDisableAll => 'Turn off all tips';
+
+  @override
+  String get settingsTipsTitle => 'Tips';
+
+  @override
+  String get settingsTipsSubtitle => 'Show short tips on screens';
+
+  @override
+  String get pageAboutLink => 'About this page';
+
+  @override
+  String get dataSourcesLandCoverTitle => 'Land cover';
+
+  @override
+  String get dataSourcesLandCoverBody =>
+      'Whether a detection is on forest, farmland or industry comes from the ESA WorldCover 2021 map, looking at the 750 metres around it. © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium. Licence: CC BY 4.0.';
+
+  @override
+  String get homeOverviewNewsNoFresh => 'No new articles';
+
+  @override
+  String get navNature => 'Nature';
+
+  @override
+  String natureSource(String name) {
+    return 'Source: $name';
+  }
+
+  @override
+  String get natureTodayTask => 'Today\'s task';
+
+  @override
+  String get natureTaskSaved => 'Saved. A new task will be here tomorrow.';
+
+  @override
+  String get natureYes => 'Done';
+
+  @override
+  String get natureNo => 'Not today';
+
+  @override
+  String get natureAnotherTask => 'Another task';
+
+  @override
+  String get natureShare => 'Share';
+
+  @override
+  String get naturePickProvince => 'Choose your province';
+
+  @override
+  String get natureProvince => 'Your province';
+
+  @override
+  String get natureOpenInat => 'Open iNaturalist';
+
+  @override
+  String natureProvinceStat(
+    String province,
+    int year,
+    int hectares,
+    int fires,
+  ) {
+    return 'OGM data for $province: $hectares hectares and $fires fires in $year.';
+  }
+
+  @override
+  String natureShareRisk(String region, String level, int score) {
+    return 'Fire risk in $region today: $level ($score/100). If you see a fire, call 112 first. FireWatch TR';
+  }
+
+  @override
+  String natureStreak(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get natureWeeklyChallenge => 'This week\'s goal';
+
+  @override
+  String get natureGoalDays => 'Look at your task on 4 days this week';
+
+  @override
+  String get natureGoalLesson => 'Finish a lesson';
+
+  @override
+  String get natureGoalShares => 'Share two facts or risk cards';
+
+  @override
+  String get natureFactTitle => 'Today\'s nature fact';
+
+  @override
+  String get natureLessons => 'Short lessons';
+
+  @override
+  String natureLessonLength(int cards) {
+    return '$cards cards';
+  }
+
+  @override
+  String get natureBadges => 'Badges';
+
+  @override
+  String get natureBadgeFirst => 'First step';
+
+  @override
+  String get natureBadgeSeven => 'Seven days';
+
+  @override
+  String get natureBadgeThirty => 'Thirty days';
+
+  @override
+  String get natureBadgeSeasons => 'Four seasons';
+
+  @override
+  String get natureBadgeCurious => 'Curious';
+
+  @override
+  String get natureBadgeAllLessons => 'Well informed';
+
+  @override
+  String get natureBadgeSharer => 'Sharer';
+
+  @override
+  String get natureBadgeObserver => 'Observer';
+
+  @override
+  String get natureOnDevice =>
+      'Your progress is kept on this phone. If you sign in with Google it comes with you between phones. Your location and My Places are never part of it.';
+
+  @override
+  String get natureReminder => 'Daily reminder';
+
+  @override
+  String get natureReminderDesc =>
+      'At most once a day. Not sent if you have already marked today\'s task.';
+
+  @override
+  String get natureReminderText => 'Today\'s nature task is ready.';
+
+  @override
+  String get natureShowStreak => 'Show streak';
+
+  @override
+  String get natureDeleteTitle => 'Delete my Nature data';
+
+  @override
+  String get natureDeleteBody =>
+      'Your tasks, streak, lessons and badges will be deleted from this phone. This cannot be undone.';
+
+  @override
+  String get natureDeleteConfirm => 'Delete';
+
+  @override
+  String get natureFinish => 'Finish';
+
+  @override
+  String get natureReminderTime => 'Time';
+
+  @override
+  String get fidanName => 'Fidan';
+
+  @override
+  String get fidanStage0 => 'Seed';
+
+  @override
+  String get fidanStage1 => 'Sprout';
+
+  @override
+  String get fidanStage2 => 'Sapling';
+
+  @override
+  String get fidanStage3 => 'Young tree';
+
+  @override
+  String get fidanStage4 => 'Blossoming tree';
+
+  @override
+  String get fidanStage5 => 'Fruit tree';
+
+  @override
+  String get fidanDone => 'Done ✓';
+
+  @override
+  String get fidanTaskDone => 'Today’s task is done! A new one comes tomorrow.';
+
+  @override
+  String get fidanContinueLessons => 'Continue lessons';
+
+  @override
+  String get fidanDidYouKnow => '💡 Did you know?';
+
+  @override
+  String get fidanThirsty => 'Fidan is waiting for you 💧';
+
+  @override
+  String get fidanThirstyBody =>
+      'A little thirsty, that’s all. Come back when you’re ready.';
+
+  @override
+  String get fidanPath => 'Fidan’s path';
+
+  @override
+  String get fidanNewApple => 'A new apple! 🍎';
+
+  @override
+  String get fidanRewardTask => 'Great job! Fidan is very happy.';
+
+  @override
+  String get fidanRewardLesson =>
+      'You finished the lesson. Fidan is very happy.';
+
+  @override
+  String get fidanContinue => 'Continue';
+
+  @override
+  String get fidanCorrect => 'Correct! 🎉';
+
+  @override
+  String get fidanFullGrown =>
+      '🎉 Fidan has grown into a big fruit tree! You took great care of it.';
+
+  @override
+  String get fidanNoApples =>
+      'No apples yet. Finish a lesson to get your first one!';
+
+  @override
+  String get fidanShare => 'Share my tree';
+
+  @override
+  String get fidanReminderChannel => 'Nature notes';
+
+  @override
+  String get fidanAccount => 'Account';
+
+  @override
+  String get fidanAccountNone =>
+      'Keep your tree when you change phones. Optional.';
+
+  @override
+  String get fidanContinueGoogle => 'Continue with Google';
+
+  @override
+  String get fidanSignInTitle => 'Keep your tree with you';
+
+  @override
+  String get fidanSignInBody =>
+      'Your progress stays when you change phones. An account is not required.';
+
+  @override
+  String get fidanSavedList =>
+      'Saved: streak, XP, apples, lessons and your tree.';
+
+  @override
+  String get fidanNeverSaved => 'Your location and My Places are never saved.';
+
+  @override
+  String get fidanCanDelete =>
+      'You can delete your account and progress at any time.';
+
+  @override
+  String get fidanUnder13 => 'If you are under 13, use this with an adult.';
+
+  @override
+  String get fidanSkip => 'Not now';
+
+  @override
+  String get fidanSignInFailed =>
+      'Google sign-in is not available right now. Please try again later.';
+
+  @override
+  String get fidanSignedIn => 'Signed in with Google';
+
+  @override
+  String get fidanSignOut => 'Sign out';
+
+  @override
+  String get fidanDeleteAccount => 'Delete my account and progress';
+
+  @override
+  String get fidanDeleteAccountBody =>
+      'Your account, your progress in the cloud and your tree on this phone are deleted. This cannot be undone.';
+
+  @override
+  String get fidanDeleted => 'Your account and progress were deleted.';
+
+  @override
+  String get newsReadAtSource => 'Read at the source';
+
+  @override
+  String get newsFireStory => 'The story of the fire';
+
+  @override
+  String get newsInProvince => 'News from your province';
+
+  @override
+  String get newsStageStarted => 'Started';
+
+  @override
+  String get newsStageControlled => 'Brought under control';
+
+  @override
+  String get newsStageOut => 'Put out';
+
+  @override
+  String get newsStageRestoration => 'Replanting and recovery';
+
+  @override
+  String get newsStoryNote =>
+      'Only real news matched to this fire is shown. A step with no news does not appear.';
+
+  @override
+  String get newsStoryOther => 'Other news';
+
+  @override
+  String fidanXpTotal(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String fidanXpGain(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String fidanGrew(String stage) {
+    return 'Fidan grew: $stage!';
+  }
+
+  @override
+  String fidanWeekGoal(int done, int goal) {
+    return 'This week $done/$goal days';
+  }
+
+  @override
+  String fidanAppleLesson(String lesson) {
+    return '🍎 You finished “$lesson”';
+  }
+
+  @override
+  String fidanAppleWeek(String week) {
+    return '🍎 You met your goal in the week of $week';
+  }
+
+  @override
+  String fidanShareCard(int days) {
+    return 'My tree is $days days old 🍎';
+  }
+
+  @override
+  String newsImageCredit(String date) {
+    return 'Image: NASA · $date';
+  }
+
+  @override
+  String newsSameFire(int count) {
+    return '$count stories about this fire';
+  }
+
+  @override
+  String newsCount(int count) {
+    return '$count stories';
+  }
+
+  @override
+  String get homeGridLast24h => 'Last 24 hours';
+
+  @override
+  String get homeGridNear => 'Within 100 km';
+
+  @override
+  String get homeGridNationwide => 'All of Türkiye';
+
+  @override
+  String get homeGridNews => 'Last 72 hours';
+
+  @override
+  String get homeGridLocationOff => 'Location off';
+
+  @override
+  String get fidanLocked => 'Finish the previous lesson first.';
+
+  @override
+  String get factAnother => 'Another fact';
+
+  @override
+  String get newsNoneRecent => 'No new stories in the last 30 days.';
+
+  @override
+  String get settingsNatureNotesSubtitle =>
+      '2-3 short facts a week. Separate from fire alerts.';
+
+  @override
+  String get settingsNatureNotesSample => 'Send a sample';
+
+  @override
+  String newsArchive(int count) {
+    return 'Archive ($count stories)';
+  }
+
+  @override
+  String get fidanReplay => 'Play again';
+
+  @override
+  String get fidanRewardReplay => 'You played it again. It sticks better now!';
+
+  @override
+  String get fidanSectionReward => 'Section reward';
+
+  @override
+  String get fidanAllDone => 'You finished every lesson!';
+
+  @override
+  String get fidanAlmost => 'Almost!';
+
+  @override
+  String get fidanCheck => 'Check';
+
+  @override
+  String get fidanOrderHelp => 'Drag, or use the arrows, to put them in order.';
+
+  @override
+  String get fidanMatchHelp => 'Tap one on the left, then one on the right.';
+
+  @override
+  String get fidanTrue => 'True';
+
+  @override
+  String get fidanFalse => 'False';
+
+  @override
+  String get fidanMoveUp => 'Move up';
+
+  @override
+  String get fidanMoveDown => 'Move down';
+
+  @override
+  String fidanSectionDone(String section) {
+    return '“$section” is done! A flower opened on your tree.';
+  }
+
+  @override
+  String fidanReplayMode(int xp) {
+    return 'Replay mode: play any lesson again, +$xp XP each time.';
+  }
+
+  @override
+  String fidanAppleSection(String section) {
+    return '🍎 You finished “$section”';
   }
 }

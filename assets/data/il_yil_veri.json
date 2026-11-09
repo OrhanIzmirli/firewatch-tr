@@ -1,0 +1,5281 @@
+{
+ "aciklama": "OGM, NASA FIRMS ve EFFIS verilerinin il-yıl özeti, 2016-2025. Anahtar: plaka -> yıl.",
+ "kaynak": "OGM Ormancılık İstatistikleri; NASA FIRMS VIIRS S-NPP + ESA WorldCover 2021; EFFIS; il sınırları GADM 4.1",
+ "renk": {
+  "olcek": "log10(ogm_yanan_alan_ha + 1) / log_max",
+  "log_max": 4.7808,
+  "duraklar": [
+   "#fff7ed",
+   "#fdba74",
+   "#f97316",
+   "#7c2d12"
+  ]
+ },
+ "iller": {
+  "01": {
+   "il": "Adana",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 132,
+     "ogm_yanan_alan_ha": 146.3,
+     "uydu_orman_maki_noktasi": 209,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 99,
+     "ogm_yanan_alan_ha": 82.9,
+     "uydu_orman_maki_noktasi": 132,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 90,
+     "ogm_yanan_alan_ha": 65.8,
+     "uydu_orman_maki_noktasi": 123,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 132,
+     "ogm_yanan_alan_ha": 52.8,
+     "uydu_orman_maki_noktasi": 95,
+     "effis_yanan_alan_ha": 25.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 125,
+     "ogm_yanan_alan_ha": 2644.8,
+     "uydu_orman_maki_noktasi": 250,
+     "effis_yanan_alan_ha": 5124.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 126,
+     "ogm_yanan_alan_ha": 4919.3,
+     "uydu_orman_maki_noktasi": 293,
+     "effis_yanan_alan_ha": 6076.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 78,
+     "ogm_yanan_alan_ha": 58.4,
+     "uydu_orman_maki_noktasi": 77,
+     "effis_yanan_alan_ha": 7.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 89,
+     "ogm_yanan_alan_ha": 255.2,
+     "uydu_orman_maki_noktasi": 73,
+     "effis_yanan_alan_ha": 215.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 104,
+     "ogm_yanan_alan_ha": 114.0,
+     "uydu_orman_maki_noktasi": 60,
+     "effis_yanan_alan_ha": 342.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 105,
+     "ogm_yanan_alan_ha": 586.0,
+     "uydu_orman_maki_noktasi": 63,
+     "effis_yanan_alan_ha": 498.0
+    }
+   }
+  },
+  "02": {
+   "il": "Adıyaman",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 39,
+     "ogm_yanan_alan_ha": 243.6,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 57.4,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 58.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 162.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 219.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 85.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 936.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 111.8,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1807.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 70.6,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 897.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 27.8,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 59.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 142.9,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 220.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 56,
+     "ogm_yanan_alan_ha": 89.0,
+     "uydu_orman_maki_noktasi": 24,
+     "effis_yanan_alan_ha": 7070.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 270.5,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 1734.0
+    }
+   }
+  },
+  "03": {
+   "il": "Afyonkarahisar",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 21.2,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 301.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 4.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 736.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 12.4,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 1169.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 101.1,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 829.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 25.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 1180.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 0.7,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 3634.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 17.2,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 315.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 51.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 915.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 167.0,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 2842.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 431.8,
+     "uydu_orman_maki_noktasi": 95,
+     "effis_yanan_alan_ha": 3072.0
+    }
+   }
+  },
+  "04": {
+   "il": "Ağrı",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 558.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 3977.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 6.6,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1374.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1152.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 193.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 591.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.9,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 145.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 2802.0
+    }
+   }
+  },
+  "05": {
+   "il": "Amasya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 25.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 6.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 21.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 50.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 6.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 15.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 4.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 24.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 1.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 21.8,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 26.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 24.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 13.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 92.7,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 114.0
+    }
+   }
+  },
+  "06": {
+   "il": "Ankara",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 86,
+     "ogm_yanan_alan_ha": 385.9,
+     "uydu_orman_maki_noktasi": 55,
+     "effis_yanan_alan_ha": 2105.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 67,
+     "ogm_yanan_alan_ha": 78.3,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 235.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 6.9,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 217.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 38,
+     "ogm_yanan_alan_ha": 47.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 65.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 731.9,
+     "uydu_orman_maki_noktasi": 36,
+     "effis_yanan_alan_ha": 1204.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 15.4,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 31.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 1.6,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 129.8,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 137.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 53,
+     "ogm_yanan_alan_ha": 113.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 488.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 6.8,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 136.0
+    }
+   }
+  },
+  "07": {
+   "il": "Antalya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 281,
+     "ogm_yanan_alan_ha": 2159.0,
+     "uydu_orman_maki_noktasi": 232,
+     "effis_yanan_alan_ha": 2313.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 274,
+     "ogm_yanan_alan_ha": 2755.8,
+     "uydu_orman_maki_noktasi": 179,
+     "effis_yanan_alan_ha": 2572.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 244,
+     "ogm_yanan_alan_ha": 593.6,
+     "uydu_orman_maki_noktasi": 75,
+     "effis_yanan_alan_ha": 295.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 199,
+     "ogm_yanan_alan_ha": 234.9,
+     "uydu_orman_maki_noktasi": 77,
+     "effis_yanan_alan_ha": 160.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 260,
+     "ogm_yanan_alan_ha": 399.6,
+     "uydu_orman_maki_noktasi": 85,
+     "effis_yanan_alan_ha": 427.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 294,
+     "ogm_yanan_alan_ha": 60366.6,
+     "uydu_orman_maki_noktasi": 2677,
+     "effis_yanan_alan_ha": 71746.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 189,
+     "ogm_yanan_alan_ha": 194.4,
+     "uydu_orman_maki_noktasi": 63,
+     "effis_yanan_alan_ha": 139.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 171,
+     "ogm_yanan_alan_ha": 786.1,
+     "uydu_orman_maki_noktasi": 119,
+     "effis_yanan_alan_ha": 733.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 276,
+     "ogm_yanan_alan_ha": 339.0,
+     "uydu_orman_maki_noktasi": 73,
+     "effis_yanan_alan_ha": 367.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 200,
+     "ogm_yanan_alan_ha": 1532.3,
+     "uydu_orman_maki_noktasi": 201,
+     "effis_yanan_alan_ha": 1709.0
+    }
+   }
+  },
+  "08": {
+   "il": "Artvin",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 5.4,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 0.9,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 16.7,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 18.2,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 24.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 18.9,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 37.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 3.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 21.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "09": {
+   "il": "Aydın",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 65,
+     "ogm_yanan_alan_ha": 232.4,
+     "uydu_orman_maki_noktasi": 54,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 23.0,
+     "uydu_orman_maki_noktasi": 42,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 78.9,
+     "uydu_orman_maki_noktasi": 52,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 20.0,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 55.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 64,
+     "ogm_yanan_alan_ha": 326.6,
+     "uydu_orman_maki_noktasi": 84,
+     "effis_yanan_alan_ha": 1393.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 77,
+     "ogm_yanan_alan_ha": 1596.5,
+     "uydu_orman_maki_noktasi": 136,
+     "effis_yanan_alan_ha": 2840.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 45,
+     "ogm_yanan_alan_ha": 285.9,
+     "uydu_orman_maki_noktasi": 43,
+     "effis_yanan_alan_ha": 297.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 62,
+     "ogm_yanan_alan_ha": 35.1,
+     "uydu_orman_maki_noktasi": 28,
+     "effis_yanan_alan_ha": 72.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 81,
+     "ogm_yanan_alan_ha": 1765.0,
+     "uydu_orman_maki_noktasi": 129,
+     "effis_yanan_alan_ha": 993.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 67,
+     "ogm_yanan_alan_ha": 97.0,
+     "uydu_orman_maki_noktasi": 160,
+     "effis_yanan_alan_ha": 4026.0
+    }
+   }
+  },
+  "10": {
+   "il": "Balıkesir",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 74,
+     "ogm_yanan_alan_ha": 602.4,
+     "uydu_orman_maki_noktasi": 50,
+     "effis_yanan_alan_ha": 177.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 167.2,
+     "uydu_orman_maki_noktasi": 35,
+     "effis_yanan_alan_ha": 308.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 60,
+     "ogm_yanan_alan_ha": 23.5,
+     "uydu_orman_maki_noktasi": 27,
+     "effis_yanan_alan_ha": 38.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 72,
+     "ogm_yanan_alan_ha": 74.8,
+     "uydu_orman_maki_noktasi": 34,
+     "effis_yanan_alan_ha": 212.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 80,
+     "ogm_yanan_alan_ha": 104.2,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 24.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 89,
+     "ogm_yanan_alan_ha": 117.7,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 48.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 92,
+     "ogm_yanan_alan_ha": 183.2,
+     "uydu_orman_maki_noktasi": 33,
+     "effis_yanan_alan_ha": 242.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 68,
+     "ogm_yanan_alan_ha": 383.4,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 423.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 102,
+     "ogm_yanan_alan_ha": 260.0,
+     "uydu_orman_maki_noktasi": 42,
+     "effis_yanan_alan_ha": 1131.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 118,
+     "ogm_yanan_alan_ha": 558.7,
+     "uydu_orman_maki_noktasi": 59,
+     "effis_yanan_alan_ha": 1947.0
+    }
+   }
+  },
+  "11": {
+   "il": "Bilecik",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 42.9,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 228.9,
+     "uydu_orman_maki_noktasi": 67,
+     "effis_yanan_alan_ha": 1219.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 5.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 59.1,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 79.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 6.7,
+     "uydu_orman_maki_noktasi": 31,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 13.2,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 12.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 79.9,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 125.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 90.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 2.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 30.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 45.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 11469.6,
+     "uydu_orman_maki_noktasi": 362,
+     "effis_yanan_alan_ha": 19325.0
+    }
+   }
+  },
+  "12": {
+   "il": "Bingöl",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 14.1,
+     "uydu_orman_maki_noktasi": 56,
+     "effis_yanan_alan_ha": 2452.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 3.8,
+     "uydu_orman_maki_noktasi": 39,
+     "effis_yanan_alan_ha": 495.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 6.7,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 2709.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 122.8,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 442.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 27.5,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1043.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 134.7,
+     "uydu_orman_maki_noktasi": 45,
+     "effis_yanan_alan_ha": 3009.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 24.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 41.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 62.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 492.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 65,
+     "ogm_yanan_alan_ha": 113.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 548.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 65,
+     "ogm_yanan_alan_ha": 5.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 654.0
+    }
+   }
+  },
+  "13": {
+   "il": "Bitlis",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 1.6,
+     "uydu_orman_maki_noktasi": 68,
+     "effis_yanan_alan_ha": 825.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 263.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 4.8,
+     "uydu_orman_maki_noktasi": 89,
+     "effis_yanan_alan_ha": 1666.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 42.3,
+     "uydu_orman_maki_noktasi": 25,
+     "effis_yanan_alan_ha": 1106.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 44,
+     "ogm_yanan_alan_ha": 50.4,
+     "uydu_orman_maki_noktasi": 62,
+     "effis_yanan_alan_ha": 3020.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 119.5,
+     "uydu_orman_maki_noktasi": 43,
+     "effis_yanan_alan_ha": 2064.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 66.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 203.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 111.5,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 240.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 208.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 769.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 11.1,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1379.0
+    }
+   }
+  },
+  "14": {
+   "il": "Bolu",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 39,
+     "ogm_yanan_alan_ha": 22.8,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 277.4,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 159.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 19.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 18.9,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 60.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 36,
+     "ogm_yanan_alan_ha": 185.9,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 238.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 17.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 12.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 14.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 30,
+     "ogm_yanan_alan_ha": 407.6,
+     "uydu_orman_maki_noktasi": 29,
+     "effis_yanan_alan_ha": 352.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 46,
+     "ogm_yanan_alan_ha": 3615.0,
+     "uydu_orman_maki_noktasi": 122,
+     "effis_yanan_alan_ha": 4756.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 46,
+     "ogm_yanan_alan_ha": 160.3,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 88.0
+    }
+   }
+  },
+  "15": {
+   "il": "Burdur",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 1.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 77.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 11.6,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 27.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 5.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 29.9,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 361.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 619.7,
+     "uydu_orman_maki_noktasi": 42,
+     "effis_yanan_alan_ha": 649.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 27,
+     "ogm_yanan_alan_ha": 25.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 36.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 19.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 78.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 1.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 4.0
+    }
+   }
+  },
+  "16": {
+   "il": "Bursa",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 62,
+     "ogm_yanan_alan_ha": 97.3,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 23.0,
+     "uydu_orman_maki_noktasi": 25,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 56.9,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 37.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 70,
+     "ogm_yanan_alan_ha": 245.2,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 439.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 51,
+     "ogm_yanan_alan_ha": 89.8,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 54.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 22.5,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 71,
+     "ogm_yanan_alan_ha": 200.7,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 213.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 56,
+     "ogm_yanan_alan_ha": 305.0,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 452.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 90,
+     "ogm_yanan_alan_ha": 674.0,
+     "uydu_orman_maki_noktasi": 58,
+     "effis_yanan_alan_ha": 992.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 88,
+     "ogm_yanan_alan_ha": 5379.8,
+     "uydu_orman_maki_noktasi": 303,
+     "effis_yanan_alan_ha": 6719.0
+    }
+   }
+  },
+  "17": {
+   "il": "Çanakkale",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 48,
+     "ogm_yanan_alan_ha": 111.5,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 316.5,
+     "uydu_orman_maki_noktasi": 15,
+     "effis_yanan_alan_ha": 612.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 127.2,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 74,
+     "ogm_yanan_alan_ha": 238.6,
+     "uydu_orman_maki_noktasi": 34,
+     "effis_yanan_alan_ha": 373.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 101,
+     "ogm_yanan_alan_ha": 871.7,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 2007.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 74,
+     "ogm_yanan_alan_ha": 103.6,
+     "uydu_orman_maki_noktasi": 27,
+     "effis_yanan_alan_ha": 233.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 118,
+     "ogm_yanan_alan_ha": 599.7,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 350.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 132,
+     "ogm_yanan_alan_ha": 5069.7,
+     "uydu_orman_maki_noktasi": 216,
+     "effis_yanan_alan_ha": 7495.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 124,
+     "ogm_yanan_alan_ha": 1706.0,
+     "uydu_orman_maki_noktasi": 90,
+     "effis_yanan_alan_ha": 3280.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 143,
+     "ogm_yanan_alan_ha": 6650.6,
+     "uydu_orman_maki_noktasi": 412,
+     "effis_yanan_alan_ha": 18114.0
+    }
+   }
+  },
+  "18": {
+   "il": "Çankırı",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 15.5,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 131.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 10.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 130.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 48.8,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 227.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 36.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 52.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 4.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 1.2,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 127.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 733.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 132.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 221.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 64.9,
+     "uydu_orman_maki_noktasi": 15,
+     "effis_yanan_alan_ha": 375.0
+    }
+   }
+  },
+  "19": {
+   "il": "Çorum",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 152.2,
+     "uydu_orman_maki_noktasi": 28,
+     "effis_yanan_alan_ha": 1070.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 20.8,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 12.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 459.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 9.5,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 802.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 367.4,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 564.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 19.3,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 33.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 28.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 80.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 456.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 24.8,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 275.0
+    }
+   }
+  },
+  "20": {
+   "il": "Denizli",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 68,
+     "ogm_yanan_alan_ha": 94.3,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 35,
+     "ogm_yanan_alan_ha": 436.7,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 649.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 80.8,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 8.5,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 340.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 321.7,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 122.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 1022.9,
+     "uydu_orman_maki_noktasi": 33,
+     "effis_yanan_alan_ha": 1752.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 270.7,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 378.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 38.2,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 261.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 79,
+     "ogm_yanan_alan_ha": 1181.0,
+     "uydu_orman_maki_noktasi": 120,
+     "effis_yanan_alan_ha": 1962.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 51,
+     "ogm_yanan_alan_ha": 2724.1,
+     "uydu_orman_maki_noktasi": 59,
+     "effis_yanan_alan_ha": 855.0
+    }
+   }
+  },
+  "21": {
+   "il": "Diyarbakır",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 219.9,
+     "uydu_orman_maki_noktasi": 87,
+     "effis_yanan_alan_ha": 15226.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 643.5,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 2316.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 46,
+     "ogm_yanan_alan_ha": 524.8,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 2288.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 240.9,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 1462.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 67,
+     "ogm_yanan_alan_ha": 60.2,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 4837.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 53,
+     "ogm_yanan_alan_ha": 101.4,
+     "uydu_orman_maki_noktasi": 28,
+     "effis_yanan_alan_ha": 1514.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 58,
+     "ogm_yanan_alan_ha": 253.7,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 96,
+     "ogm_yanan_alan_ha": 305.6,
+     "uydu_orman_maki_noktasi": 27,
+     "effis_yanan_alan_ha": 2807.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 80,
+     "ogm_yanan_alan_ha": 377.0,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 4088.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 113,
+     "ogm_yanan_alan_ha": 98.6,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 3708.0
+    }
+   }
+  },
+  "22": {
+   "il": "Edirne",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 400.6,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 472.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 11.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 57.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 12.1,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 51.9,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 79.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 202.9,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 5.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 3.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 6.8,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 61.6,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 31.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 46,
+     "ogm_yanan_alan_ha": 497.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 1331.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 1176.1,
+     "uydu_orman_maki_noktasi": 43,
+     "effis_yanan_alan_ha": 1582.0
+    }
+   }
+  },
+  "23": {
+   "il": "Elazığ",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 15.6,
+     "uydu_orman_maki_noktasi": 46,
+     "effis_yanan_alan_ha": 1190.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 3.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 36.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 30.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 764.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 45,
+     "ogm_yanan_alan_ha": 88.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1092.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 48.7,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 1296.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 34.5,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 1802.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 19.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 73.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 76.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 35,
+     "ogm_yanan_alan_ha": 155.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 2813.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 2.1,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 330.0
+    }
+   }
+  },
+  "24": {
+   "il": "Erzincan",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 63.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 572.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 86.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 379.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 14.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 97.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 520.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 25.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 154.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 117.6,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 28.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 7.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 139.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 270.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 13.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 393.0
+    }
+   }
+  },
+  "25": {
+   "il": "Erzurum",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 211.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 585.1,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 962.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 10.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 75.1,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 188.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 13.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 205.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 45.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 91.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 5.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 338.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 10.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 219.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1113.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 26.3,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1507.0
+    }
+   }
+  },
+  "26": {
+   "il": "Eskişehir",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 27,
+     "ogm_yanan_alan_ha": 204.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 27.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 71.8,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 48.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 7.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 44.9,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 76.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 45.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 119.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 11.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 116.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 18.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 17.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 361.7,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 577.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 36,
+     "ogm_yanan_alan_ha": 11.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 321.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 345.2,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 376.0
+    }
+   }
+  },
+  "27": {
+   "il": "Gaziantep",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 52.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1041.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 12.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 1694.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 37.7,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 993.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 342.6,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 493.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 61,
+     "ogm_yanan_alan_ha": 94.9,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 42.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 30,
+     "ogm_yanan_alan_ha": 33.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 380.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 8.8,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 162.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 145.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 150.0,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 980.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 55.0,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 710.0
+    }
+   }
+  },
+  "28": {
+   "il": "Giresun",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 40.6,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 11.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 8.7,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 86.8,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 20.9,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 63.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 22.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 22.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 16.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 13.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 28.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 13.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "29": {
+   "il": "Gümüşhane",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 5.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 12.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 6.2,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 14.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 26.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 24.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 55.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 2.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 43.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 32.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 123.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 3.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 9.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 98.0
+    }
+   }
+  },
+  "30": {
+   "il": "Hakkari",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 2.2,
+     "uydu_orman_maki_noktasi": 153,
+     "effis_yanan_alan_ha": 7865.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 2.5,
+     "uydu_orman_maki_noktasi": 55,
+     "effis_yanan_alan_ha": 2622.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 20.3,
+     "uydu_orman_maki_noktasi": 48,
+     "effis_yanan_alan_ha": 2783.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 31.6,
+     "uydu_orman_maki_noktasi": 84,
+     "effis_yanan_alan_ha": 4378.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 35.6,
+     "uydu_orman_maki_noktasi": 35,
+     "effis_yanan_alan_ha": 3924.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 40.3,
+     "uydu_orman_maki_noktasi": 58,
+     "effis_yanan_alan_ha": 8727.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 17.7,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 850.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 13.1,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 868.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 53.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 238.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 54.8,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 3045.0
+    }
+   }
+  },
+  "31": {
+   "il": "Hatay",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 129,
+     "ogm_yanan_alan_ha": 204.9,
+     "uydu_orman_maki_noktasi": 69,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 126,
+     "ogm_yanan_alan_ha": 206.3,
+     "uydu_orman_maki_noktasi": 95,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 96,
+     "ogm_yanan_alan_ha": 1308.5,
+     "uydu_orman_maki_noktasi": 139,
+     "effis_yanan_alan_ha": 1249.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 79,
+     "ogm_yanan_alan_ha": 72.0,
+     "uydu_orman_maki_noktasi": 27,
+     "effis_yanan_alan_ha": 267.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 100,
+     "ogm_yanan_alan_ha": 4978.6,
+     "uydu_orman_maki_noktasi": 250,
+     "effis_yanan_alan_ha": 6237.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 64,
+     "ogm_yanan_alan_ha": 334.6,
+     "uydu_orman_maki_noktasi": 52,
+     "effis_yanan_alan_ha": 617.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 121.2,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 22.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 723.8,
+     "uydu_orman_maki_noktasi": 55,
+     "effis_yanan_alan_ha": 764.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 269.0,
+     "uydu_orman_maki_noktasi": 49,
+     "effis_yanan_alan_ha": 428.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 3255.3,
+     "uydu_orman_maki_noktasi": 187,
+     "effis_yanan_alan_ha": 3766.0
+    }
+   }
+  },
+  "32": {
+   "il": "Isparta",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 28.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 20.1,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 24.1,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 43.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 53.1,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 38,
+     "ogm_yanan_alan_ha": 16.5,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 280.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 1422.9,
+     "uydu_orman_maki_noktasi": 94,
+     "effis_yanan_alan_ha": 1682.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 102.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 25.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 222.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 39,
+     "ogm_yanan_alan_ha": 24.0,
+     "uydu_orman_maki_noktasi": 15,
+     "effis_yanan_alan_ha": 284.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 30.1,
+     "uydu_orman_maki_noktasi": 35,
+     "effis_yanan_alan_ha": 905.0
+    }
+   }
+  },
+  "33": {
+   "il": "Mersin",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 107,
+     "ogm_yanan_alan_ha": 198.2,
+     "uydu_orman_maki_noktasi": 73,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 54,
+     "ogm_yanan_alan_ha": 927.7,
+     "uydu_orman_maki_noktasi": 80,
+     "effis_yanan_alan_ha": 1188.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 71,
+     "ogm_yanan_alan_ha": 70.0,
+     "uydu_orman_maki_noktasi": 39,
+     "effis_yanan_alan_ha": 30.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 90,
+     "ogm_yanan_alan_ha": 360.8,
+     "uydu_orman_maki_noktasi": 63,
+     "effis_yanan_alan_ha": 109.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 87,
+     "ogm_yanan_alan_ha": 509.1,
+     "uydu_orman_maki_noktasi": 75,
+     "effis_yanan_alan_ha": 742.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 89,
+     "ogm_yanan_alan_ha": 9661.2,
+     "uydu_orman_maki_noktasi": 681,
+     "effis_yanan_alan_ha": 14575.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 99,
+     "ogm_yanan_alan_ha": 2118.1,
+     "uydu_orman_maki_noktasi": 160,
+     "effis_yanan_alan_ha": 2974.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 82,
+     "ogm_yanan_alan_ha": 898.1,
+     "uydu_orman_maki_noktasi": 53,
+     "effis_yanan_alan_ha": 978.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 107,
+     "ogm_yanan_alan_ha": 69.0,
+     "uydu_orman_maki_noktasi": 62,
+     "effis_yanan_alan_ha": 180.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 105,
+     "ogm_yanan_alan_ha": 6046.9,
+     "uydu_orman_maki_noktasi": 384,
+     "effis_yanan_alan_ha": 7372.0
+    }
+   }
+  },
+  "34": {
+   "il": "İstanbul",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 195,
+     "ogm_yanan_alan_ha": 33.8,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 138,
+     "ogm_yanan_alan_ha": 16.2,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 42.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 74,
+     "ogm_yanan_alan_ha": 14.9,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 177,
+     "ogm_yanan_alan_ha": 36.2,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 147,
+     "ogm_yanan_alan_ha": 62.3,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 52,
+     "ogm_yanan_alan_ha": 12.7,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 10.5,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 84,
+     "ogm_yanan_alan_ha": 78.1,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 31.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 76,
+     "ogm_yanan_alan_ha": 21.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 8.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 86,
+     "ogm_yanan_alan_ha": 201.8,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 24.0
+    }
+   }
+  },
+  "35": {
+   "il": "İzmir",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 255,
+     "ogm_yanan_alan_ha": 930.7,
+     "uydu_orman_maki_noktasi": 85,
+     "effis_yanan_alan_ha": 1030.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 167,
+     "ogm_yanan_alan_ha": 1787.2,
+     "uydu_orman_maki_noktasi": 163,
+     "effis_yanan_alan_ha": 3099.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 167,
+     "ogm_yanan_alan_ha": 298.9,
+     "uydu_orman_maki_noktasi": 43,
+     "effis_yanan_alan_ha": 331.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 146,
+     "ogm_yanan_alan_ha": 4858.8,
+     "uydu_orman_maki_noktasi": 206,
+     "effis_yanan_alan_ha": 7445.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 167,
+     "ogm_yanan_alan_ha": 2329.2,
+     "uydu_orman_maki_noktasi": 92,
+     "effis_yanan_alan_ha": 3488.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 148,
+     "ogm_yanan_alan_ha": 672.0,
+     "uydu_orman_maki_noktasi": 53,
+     "effis_yanan_alan_ha": 962.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 169,
+     "ogm_yanan_alan_ha": 720.7,
+     "uydu_orman_maki_noktasi": 51,
+     "effis_yanan_alan_ha": 1296.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 163,
+     "ogm_yanan_alan_ha": 2227.3,
+     "uydu_orman_maki_noktasi": 84,
+     "effis_yanan_alan_ha": 2818.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 196,
+     "ogm_yanan_alan_ha": 4378.0,
+     "uydu_orman_maki_noktasi": 294,
+     "effis_yanan_alan_ha": 9503.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 145,
+     "ogm_yanan_alan_ha": 10639.9,
+     "uydu_orman_maki_noktasi": 690,
+     "effis_yanan_alan_ha": 29035.0
+    }
+   }
+  },
+  "36": {
+   "il": "Kars",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 93.3,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 353.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 1.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 33.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 2.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 7.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 4.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 1.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 13.6,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 355.0
+    }
+   }
+  },
+  "37": {
+   "il": "Kastamonu",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 67,
+     "ogm_yanan_alan_ha": 31.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 84,
+     "ogm_yanan_alan_ha": 86.2,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 51,
+     "ogm_yanan_alan_ha": 280.3,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 231.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 65,
+     "ogm_yanan_alan_ha": 41.9,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 155,
+     "ogm_yanan_alan_ha": 1491.4,
+     "uydu_orman_maki_noktasi": 93,
+     "effis_yanan_alan_ha": 1472.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 61,
+     "ogm_yanan_alan_ha": 51.9,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 5.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 12.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 16.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 80,
+     "ogm_yanan_alan_ha": 76.0,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 6.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 69,
+     "ogm_yanan_alan_ha": 2020.8,
+     "uydu_orman_maki_noktasi": 128,
+     "effis_yanan_alan_ha": 2902.0
+    }
+   }
+  },
+  "38": {
+   "il": "Kayseri",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 74.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1836.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 42.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 82.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 37.9,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 52.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 6.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 107.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 52.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 532.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 101.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 873.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 1.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 93.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 85.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 3376.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 20.1,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 517.0
+    }
+   }
+  },
+  "39": {
+   "il": "Kırklareli",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 8.1,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 3.3,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 9.8,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 204.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 10.2,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 113.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 17.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 32.7,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 23.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 32.4,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 80.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 570.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 129.2,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 17.0
+    }
+   }
+  },
+  "40": {
+   "il": "Kırşehir",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 3.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 88.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 1.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 6.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 34.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 15.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 6.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 21.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 3.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 2.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 8.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 15.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 256.0
+    }
+   }
+  },
+  "41": {
+   "il": "Kocaeli",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 16.2,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 8.4,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 2.9,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 34.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 32.2,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 6.1,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 16.2,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 21.2,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 27.0,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 22.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 525.7,
+     "uydu_orman_maki_noktasi": 43,
+     "effis_yanan_alan_ha": 659.0
+    }
+   }
+  },
+  "42": {
+   "il": "Konya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 29.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 2698.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 10.5,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 126.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 7.5,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 610.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 16.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 311.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 58.2,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 1656.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 8.4,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 1021.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 70.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 20.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1013.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 30,
+     "ogm_yanan_alan_ha": 32.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 2347.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 356.4,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 2578.0
+    }
+   }
+  },
+  "43": {
+   "il": "Kütahya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 68,
+     "ogm_yanan_alan_ha": 284.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 860.6,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 264.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 52,
+     "ogm_yanan_alan_ha": 44.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 38,
+     "ogm_yanan_alan_ha": 112.2,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 146.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 58,
+     "ogm_yanan_alan_ha": 118.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 25.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 23.6,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 57,
+     "ogm_yanan_alan_ha": 275.9,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 258.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 35,
+     "ogm_yanan_alan_ha": 230.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 204.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 115,
+     "ogm_yanan_alan_ha": 121.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 135.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 60,
+     "ogm_yanan_alan_ha": 157.9,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 205.0
+    }
+   }
+  },
+  "44": {
+   "il": "Malatya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 4.8,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 1415.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 5.3,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 68.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 17.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 133.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 281.6,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 947.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 37.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 488.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 21.1,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 441.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 86.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 241.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 107.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 2444.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 48.3,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 1515.0
+    }
+   }
+  },
+  "45": {
+   "il": "Manisa",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 122,
+     "ogm_yanan_alan_ha": 109.9,
+     "uydu_orman_maki_noktasi": 41,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 67,
+     "ogm_yanan_alan_ha": 234.9,
+     "uydu_orman_maki_noktasi": 36,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 98,
+     "ogm_yanan_alan_ha": 95.9,
+     "uydu_orman_maki_noktasi": 24,
+     "effis_yanan_alan_ha": 50.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 93,
+     "ogm_yanan_alan_ha": 45.2,
+     "uydu_orman_maki_noktasi": 37,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 121,
+     "ogm_yanan_alan_ha": 1790.8,
+     "uydu_orman_maki_noktasi": 63,
+     "effis_yanan_alan_ha": 2249.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 115,
+     "ogm_yanan_alan_ha": 153.6,
+     "uydu_orman_maki_noktasi": 30,
+     "effis_yanan_alan_ha": 217.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 128,
+     "ogm_yanan_alan_ha": 579.7,
+     "uydu_orman_maki_noktasi": 29,
+     "effis_yanan_alan_ha": 263.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 154,
+     "ogm_yanan_alan_ha": 506.7,
+     "uydu_orman_maki_noktasi": 40,
+     "effis_yanan_alan_ha": 481.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 205,
+     "ogm_yanan_alan_ha": 4803.0,
+     "uydu_orman_maki_noktasi": 211,
+     "effis_yanan_alan_ha": 8906.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 176,
+     "ogm_yanan_alan_ha": 4563.4,
+     "uydu_orman_maki_noktasi": 207,
+     "effis_yanan_alan_ha": 6100.0
+    }
+   }
+  },
+  "46": {
+   "il": "Kahramanmaraş",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 75,
+     "ogm_yanan_alan_ha": 54.3,
+     "uydu_orman_maki_noktasi": 14,
+     "effis_yanan_alan_ha": 4938.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 29.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 236.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 47,
+     "ogm_yanan_alan_ha": 142.3,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 222.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 122.8,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 4378.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 94,
+     "ogm_yanan_alan_ha": 305.5,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 396.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 102,
+     "ogm_yanan_alan_ha": 433.3,
+     "uydu_orman_maki_noktasi": 33,
+     "effis_yanan_alan_ha": 483.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 70,
+     "ogm_yanan_alan_ha": 61.8,
+     "uydu_orman_maki_noktasi": 37,
+     "effis_yanan_alan_ha": 217.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 111,
+     "ogm_yanan_alan_ha": 359.8,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 321.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 182,
+     "ogm_yanan_alan_ha": 844.0,
+     "uydu_orman_maki_noktasi": 38,
+     "effis_yanan_alan_ha": 4912.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 118,
+     "ogm_yanan_alan_ha": 2305.2,
+     "uydu_orman_maki_noktasi": 108,
+     "effis_yanan_alan_ha": 3517.0
+    }
+   }
+  },
+  "47": {
+   "il": "Mardin",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 36,
+     "ogm_yanan_alan_ha": 486.2,
+     "uydu_orman_maki_noktasi": 37,
+     "effis_yanan_alan_ha": 49328.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 194.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 10538.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 169.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 1481.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 278.5,
+     "uydu_orman_maki_noktasi": 51,
+     "effis_yanan_alan_ha": 34160.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 60.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 17497.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 33.3,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 1745.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 91.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 77.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 95.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1453.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 58,
+     "ogm_yanan_alan_ha": 186.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 22866.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 47,
+     "ogm_yanan_alan_ha": 26.8,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 3374.0
+    }
+   }
+  },
+  "48": {
+   "il": "Muğla",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 304,
+     "ogm_yanan_alan_ha": 247.2,
+     "uydu_orman_maki_noktasi": 57,
+     "effis_yanan_alan_ha": 865.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 190,
+     "ogm_yanan_alan_ha": 418.9,
+     "uydu_orman_maki_noktasi": 74,
+     "effis_yanan_alan_ha": 550.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 299,
+     "ogm_yanan_alan_ha": 151.0,
+     "uydu_orman_maki_noktasi": 38,
+     "effis_yanan_alan_ha": 198.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 264,
+     "ogm_yanan_alan_ha": 939.3,
+     "uydu_orman_maki_noktasi": 136,
+     "effis_yanan_alan_ha": 2215.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 260,
+     "ogm_yanan_alan_ha": 478.2,
+     "uydu_orman_maki_noktasi": 65,
+     "effis_yanan_alan_ha": 507.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 296,
+     "ogm_yanan_alan_ha": 50602.9,
+     "uydu_orman_maki_noktasi": 2756,
+     "effis_yanan_alan_ha": 55828.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 234,
+     "ogm_yanan_alan_ha": 5523.1,
+     "uydu_orman_maki_noktasi": 279,
+     "effis_yanan_alan_ha": 5820.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 261,
+     "ogm_yanan_alan_ha": 369.8,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 374.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 296,
+     "ogm_yanan_alan_ha": 1698.0,
+     "uydu_orman_maki_noktasi": 267,
+     "effis_yanan_alan_ha": 4347.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 146,
+     "ogm_yanan_alan_ha": 2216.6,
+     "uydu_orman_maki_noktasi": 158,
+     "effis_yanan_alan_ha": 3166.0
+    }
+   }
+  },
+  "49": {
+   "il": "Muş",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 188.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 407.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 890.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 5.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 494.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 126.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 20.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 308.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 13.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 22.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1245.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 16.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 5373.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 1.8,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1575.0
+    }
+   }
+  },
+  "50": {
+   "il": "Nevşehir",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 4.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 373.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 18.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 31.6,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 6.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 86.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 2.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 1.6,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 9.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 77.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 25.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 261.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 366.0
+    }
+   }
+  },
+  "51": {
+   "il": "Niğde",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 29.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 223.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 124.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.5,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 526.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 118.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 317.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 0.3,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 79.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 45.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 2.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 78.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 2011.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 37.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 976.0
+    }
+   }
+  },
+  "52": {
+   "il": "Ordu",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 9.0,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 43.9,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 25.6,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 28,
+     "ogm_yanan_alan_ha": 38.2,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 57.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 41,
+     "ogm_yanan_alan_ha": 58.0,
+     "uydu_orman_maki_noktasi": 15,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 81.1,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 32.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 27,
+     "ogm_yanan_alan_ha": 37.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 58,
+     "ogm_yanan_alan_ha": 65.0,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 44,
+     "ogm_yanan_alan_ha": 43.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "53": {
+   "il": "Rize",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 13.5,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 30.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 8.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 37.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 18.4,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 14.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 41.5,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 2.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.6,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 4.7,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 27.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 11.3,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 5.0
+    }
+   }
+  },
+  "54": {
+   "il": "Sakarya",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 29.7,
+     "uydu_orman_maki_noktasi": 30,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 73.8,
+     "uydu_orman_maki_noktasi": 54,
+     "effis_yanan_alan_ha": 84.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 7.7,
+     "uydu_orman_maki_noktasi": 35,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 22.1,
+     "uydu_orman_maki_noktasi": 55,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 86,
+     "ogm_yanan_alan_ha": 57.8,
+     "uydu_orman_maki_noktasi": 35,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 9.6,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 16.3,
+     "uydu_orman_maki_noktasi": 16,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 26.7,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 51,
+     "ogm_yanan_alan_ha": 33.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 7.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 61,
+     "ogm_yanan_alan_ha": 4275.3,
+     "uydu_orman_maki_noktasi": 156,
+     "effis_yanan_alan_ha": 167.0
+    }
+   }
+  },
+  "55": {
+   "il": "Samsun",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 28.5,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 32,
+     "ogm_yanan_alan_ha": 59.6,
+     "uydu_orman_maki_noktasi": 33,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 7.0,
+     "uydu_orman_maki_noktasi": 17,
+     "effis_yanan_alan_ha": 55.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 30,
+     "ogm_yanan_alan_ha": 33.2,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 281.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 53,
+     "ogm_yanan_alan_ha": 97.7,
+     "uydu_orman_maki_noktasi": 51,
+     "effis_yanan_alan_ha": 467.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 34.3,
+     "uydu_orman_maki_noktasi": 32,
+     "effis_yanan_alan_ha": 15.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.3,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 17.1,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 55,
+     "ogm_yanan_alan_ha": 31.0,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 15.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 35,
+     "ogm_yanan_alan_ha": 13.4,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 19.0
+    }
+   }
+  },
+  "56": {
+   "il": "Siirt",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 233.7,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 5389.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 195.6,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 704.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 460.9,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 1409.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 265.8,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 1152.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 43,
+     "ogm_yanan_alan_ha": 58.8,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 1484.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 18.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1095.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 7.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 29.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 246.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 770.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 8.6,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 1180.0
+    }
+   }
+  },
+  "57": {
+   "il": "Sinop",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 10.4,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 17.3,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 18.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 68.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 56,
+     "ogm_yanan_alan_ha": 467.6,
+     "uydu_orman_maki_noktasi": 46,
+     "effis_yanan_alan_ha": 513.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 9.8,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 2.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 27,
+     "ogm_yanan_alan_ha": 12.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 41,
+     "ogm_yanan_alan_ha": 66.0,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 38.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 24.7,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 20.0
+    }
+   }
+  },
+  "58": {
+   "il": "Sivas",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 35.1,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 3256.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 40.9,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 1166.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 39.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 77.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 11.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 521.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 14.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 1589.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 12.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 40.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 9.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 698.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 60.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 2362.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 82.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 6458.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 69.8,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 1439.0
+    }
+   }
+  },
+  "59": {
+   "il": "Tekirdağ",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 42.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 17.5,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 1.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 8.3,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 99.2,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 37.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 10.7,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 26.5,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 121.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 31.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 7.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 192.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 33,
+     "ogm_yanan_alan_ha": 4139.7,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 410.0
+    }
+   }
+  },
+  "60": {
+   "il": "Tokat",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 48,
+     "ogm_yanan_alan_ha": 194.9,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 44.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 10.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 103.5,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 57,
+     "ogm_yanan_alan_ha": 81.6,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 109.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 23.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 21.6,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 6.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 17,
+     "ogm_yanan_alan_ha": 21.7,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 92.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 54,
+     "ogm_yanan_alan_ha": 111.0,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 123.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 36,
+     "ogm_yanan_alan_ha": 31.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 160.0
+    }
+   }
+  },
+  "61": {
+   "il": "Trabzon",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 39.9,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 115.5,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 16.4,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 381.7,
+     "uydu_orman_maki_noktasi": 61,
+     "effis_yanan_alan_ha": 236.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 55.5,
+     "uydu_orman_maki_noktasi": 31,
+     "effis_yanan_alan_ha": 20.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 40,
+     "ogm_yanan_alan_ha": 147.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 18.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 33.1,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 12.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 57.0,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 2.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 82.7,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 237.0
+    }
+   }
+  },
+  "62": {
+   "il": "Tunceli",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 2.6,
+     "uydu_orman_maki_noktasi": 59,
+     "effis_yanan_alan_ha": 138.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 4.2,
+     "uydu_orman_maki_noktasi": 103,
+     "effis_yanan_alan_ha": 651.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 65,
+     "effis_yanan_alan_ha": 556.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 53.7,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 223.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 7.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 237.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 2427.1,
+     "uydu_orman_maki_noktasi": 107,
+     "effis_yanan_alan_ha": 2287.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 45.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 67.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 7.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 54.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 78.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 255.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 17.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 33.0
+    }
+   }
+  },
+  "63": {
+   "il": "Şanlıurfa",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 14.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 14.4,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1768.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 14.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 521.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 18,
+     "ogm_yanan_alan_ha": 65.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1607.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 31,
+     "ogm_yanan_alan_ha": 105.5,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 2200.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 24,
+     "ogm_yanan_alan_ha": 56.2,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 659.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 1.5,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 57.2,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 797.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 83.0,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 10211.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 37.5,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 305.0
+    }
+   }
+  },
+  "64": {
+   "il": "Uşak",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 23.6,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 7.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 121.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 6.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 104.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 220.7,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 631.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 51.5,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 378.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 26,
+     "ogm_yanan_alan_ha": 17.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 5.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 17.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 24.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 45,
+     "ogm_yanan_alan_ha": 1474.0,
+     "uydu_orman_maki_noktasi": 34,
+     "effis_yanan_alan_ha": 2468.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 36,
+     "ogm_yanan_alan_ha": 1018.2,
+     "uydu_orman_maki_noktasi": 64,
+     "effis_yanan_alan_ha": 2135.0
+    }
+   }
+  },
+  "65": {
+   "il": "Van",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 86.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 439.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 16.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 239.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 30.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 246.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 1.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 9.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 16.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 25.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 1.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 152.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 7.7,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 719.0
+    }
+   }
+  },
+  "66": {
+   "il": "Yozgat",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 79.6,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 529.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 11.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 19.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 426.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 18.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 10.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 14.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 4.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 2.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 27.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 97.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 46.0,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 110.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 1.3,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 86.0
+    }
+   }
+  },
+  "67": {
+   "il": "Zonguldak",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 4.5,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 14.8,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 3.6,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 2.2,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 20,
+     "ogm_yanan_alan_ha": 55.2,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 33.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 11.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 1.4,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 5.3,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 4.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 12,
+     "ogm_yanan_alan_ha": 8.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 4.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 9.9,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "68": {
+   "il": "Aksaray",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 4.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 97.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 549.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 42.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 963.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 745.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 4.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 827.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 257.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 11.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 344.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 11.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 746.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 5.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 173.0
+    }
+   }
+  },
+  "69": {
+   "il": "Bayburt",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 1.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 8.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 244.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 10.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 24.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 2.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 155.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 2.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 10.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.9,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 300.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 250.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 31.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 321.0
+    }
+   }
+  },
+  "70": {
+   "il": "Karaman",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 51.1,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.9,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 1.4,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 5.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 13,
+     "ogm_yanan_alan_ha": 13.2,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 6.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 5.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 34.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.2,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 1.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 3.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 20.0,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 41.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 97.4,
+     "uydu_orman_maki_noktasi": 18,
+     "effis_yanan_alan_ha": 63.0
+    }
+   }
+  },
+  "71": {
+   "il": "Kırıkkale",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 6.9,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 321.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 1.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 18.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 259.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 3.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 99.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 2.9,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 3.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 2.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 202.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 11.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "72": {
+   "il": "Batman",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 86.0,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 2518.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 4.0,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 199.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 396.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 19.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 2471.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 9.3,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 5087.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 85.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 195.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 2.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 254.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 19,
+     "ogm_yanan_alan_ha": 58.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 2197.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 52.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 183.0
+    }
+   }
+  },
+  "73": {
+   "il": "Şırnak",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 18.0,
+     "uydu_orman_maki_noktasi": 227,
+     "effis_yanan_alan_ha": 12676.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 24.0,
+     "uydu_orman_maki_noktasi": 70,
+     "effis_yanan_alan_ha": 6072.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 51.5,
+     "uydu_orman_maki_noktasi": 139,
+     "effis_yanan_alan_ha": 14349.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 136.3,
+     "uydu_orman_maki_noktasi": 49,
+     "effis_yanan_alan_ha": 7613.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 46,
+     "ogm_yanan_alan_ha": 16.8,
+     "uydu_orman_maki_noktasi": 261,
+     "effis_yanan_alan_ha": 25179.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 25,
+     "ogm_yanan_alan_ha": 25.1,
+     "uydu_orman_maki_noktasi": 124,
+     "effis_yanan_alan_ha": 10786.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 2.7,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 219.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 23,
+     "ogm_yanan_alan_ha": 31.5,
+     "uydu_orman_maki_noktasi": 53,
+     "effis_yanan_alan_ha": 2992.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 1822.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 27,
+     "ogm_yanan_alan_ha": 36.2,
+     "uydu_orman_maki_noktasi": 37,
+     "effis_yanan_alan_ha": 1534.0
+    }
+   }
+  },
+  "74": {
+   "il": "Bartın",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 2.7,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 2.4,
+     "uydu_orman_maki_noktasi": 5,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 7.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 1.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 7,
+     "ogm_yanan_alan_ha": 1.4,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 34.5,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 23.0
+    }
+   }
+  },
+  "75": {
+   "il": "Ardahan",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 5.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 15,
+     "ogm_yanan_alan_ha": 136.7,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 104.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.2,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 3.7,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 138.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 16.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 13.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 5.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 28.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 5.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 8.0
+    }
+   }
+  },
+  "76": {
+   "il": "Iğdır",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 48.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 268.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 484.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 140.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 139.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 6.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 12.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 482.0
+    }
+   }
+  },
+  "77": {
+   "il": "Yalova",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 1.3,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 3,
+     "ogm_yanan_alan_ha": 1.7,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 0.1,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.8,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.8,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 0,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 30.0,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 24.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.8,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "78": {
+   "il": "Karabük",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 22.1,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 49,
+     "ogm_yanan_alan_ha": 58.5,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 2.9,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 11,
+     "ogm_yanan_alan_ha": 6.5,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 38,
+     "ogm_yanan_alan_ha": 32.7,
+     "uydu_orman_maki_noktasi": 3,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 16,
+     "ogm_yanan_alan_ha": 50.7,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 1.3,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 21,
+     "ogm_yanan_alan_ha": 12.6,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 44,
+     "ogm_yanan_alan_ha": 135.0,
+     "uydu_orman_maki_noktasi": 23,
+     "effis_yanan_alan_ha": 137.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 37,
+     "ogm_yanan_alan_ha": 6852.8,
+     "uydu_orman_maki_noktasi": 352,
+     "effis_yanan_alan_ha": 7702.0
+    }
+   }
+  },
+  "79": {
+   "il": "Kilis",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 3.5,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 1.0,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 1,
+     "ogm_yanan_alan_ha": 0.9,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 134.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 51.0,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 8,
+     "ogm_yanan_alan_ha": 3.6,
+     "uydu_orman_maki_noktasi": 61,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 98.6,
+     "uydu_orman_maki_noktasi": 12,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 0.4,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 6,
+     "ogm_yanan_alan_ha": 8.1,
+     "uydu_orman_maki_noktasi": 0,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 9,
+     "ogm_yanan_alan_ha": 19.0,
+     "uydu_orman_maki_noktasi": 2,
+     "effis_yanan_alan_ha": 374.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 2.2,
+     "uydu_orman_maki_noktasi": 1,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "80": {
+   "il": "Osmaniye",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 51,
+     "ogm_yanan_alan_ha": 30.8,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 50,
+     "ogm_yanan_alan_ha": 74.1,
+     "uydu_orman_maki_noktasi": 20,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 34,
+     "ogm_yanan_alan_ha": 97.4,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 42,
+     "ogm_yanan_alan_ha": 106.3,
+     "uydu_orman_maki_noktasi": 26,
+     "effis_yanan_alan_ha": 111.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 62,
+     "ogm_yanan_alan_ha": 156.7,
+     "uydu_orman_maki_noktasi": 22,
+     "effis_yanan_alan_ha": 223.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 66,
+     "ogm_yanan_alan_ha": 3149.8,
+     "uydu_orman_maki_noktasi": 118,
+     "effis_yanan_alan_ha": 4005.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 30,
+     "ogm_yanan_alan_ha": 428.1,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 41,
+     "ogm_yanan_alan_ha": 90.8,
+     "uydu_orman_maki_noktasi": 8,
+     "effis_yanan_alan_ha": 3.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 29,
+     "ogm_yanan_alan_ha": 9.0,
+     "uydu_orman_maki_noktasi": 11,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 56,
+     "ogm_yanan_alan_ha": 52.1,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 0.0
+    }
+   }
+  },
+  "81": {
+   "il": "Düzce",
+   "yillar": {
+    "2016": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 7.2,
+     "uydu_orman_maki_noktasi": 6,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2017": {
+     "ogm_yangin_sayisi": 4,
+     "ogm_yanan_alan_ha": 1.7,
+     "uydu_orman_maki_noktasi": 9,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2018": {
+     "ogm_yangin_sayisi": 2,
+     "ogm_yanan_alan_ha": 2.0,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2019": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 23.2,
+     "uydu_orman_maki_noktasi": 7,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2020": {
+     "ogm_yangin_sayisi": 22,
+     "ogm_yanan_alan_ha": 17.8,
+     "uydu_orman_maki_noktasi": 13,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2021": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 10.2,
+     "uydu_orman_maki_noktasi": 21,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2022": {
+     "ogm_yangin_sayisi": 5,
+     "ogm_yanan_alan_ha": 0.8,
+     "uydu_orman_maki_noktasi": 19,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2023": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 7.5,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2024": {
+     "ogm_yangin_sayisi": 10,
+     "ogm_yanan_alan_ha": 3.0,
+     "uydu_orman_maki_noktasi": 10,
+     "effis_yanan_alan_ha": 0.0
+    },
+    "2025": {
+     "ogm_yangin_sayisi": 14,
+     "ogm_yanan_alan_ha": 49.8,
+     "uydu_orman_maki_noktasi": 4,
+     "effis_yanan_alan_ha": 29.0
+    }
+   }
+  }
+ }
+}

@@ -1,31 +1,33 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/utils/news_content_analysis.dart';
 import '../../core/utils/turkish_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/news_item.dart';
+import '../../models/tracked_place.dart';
+import '../../services/tracked_places_provider.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/news_service.dart';
 import '../../services/offline_cache_service.dart';
 import '../../shared/coach_mark_keys.dart';
 import '../../shared/widgets/coach_mark_overlay.dart';
 import '../../shared/widgets/english_translation_banner.dart';
-import '../../shared/widgets/glass_panel.dart';
-import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/skeleton_loader.dart';
 import '../../shared/widgets/state_views.dart';
-import '../../shared/widgets/color_dot.dart';
-import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/trust_info_card.dart';
-import 'widgets/featured_news_card.dart';
-import 'widgets/news_card.dart';
-
-enum _NewsFilterKind { all, critical, active, monitoring, info, myRegion }
+import 'news_feed.dart';
+import 'news_story_screen.dart';
+import '../nature/fact_widgets.dart';
+import 'widgets/news_visual.dart';
+import '../../services/location_disclosure.dart';
+import '../../services/device_position.dart';
+import '../../shared/widgets/alerts_bell.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -36,7 +38,7 @@ class NewsScreen extends StatefulWidget {
 
 class _NewsScreenState extends State<NewsScreen> {
   static const _cacheKey = 'news_list';
-  static const _pageSize = 20;
+  static const _pageSize = 100;
 
   // Static (not instance) so it survives this screen being disposed and
   // recreated on every tab switch — "once per session" means once per app
@@ -47,91 +49,40 @@ class _NewsScreenState extends State<NewsScreen> {
   final FireApiService _fireApiService = FireApiService();
   final ScrollController _scrollController = ScrollController();
 
-  String _selectedCategory = 'Tümü';
-  _NewsFilterKind _selectedFilter = _NewsFilterKind.all;
-  String? _myRegionRaw;
+  final String _contentType = 'fires';
+  Map<String, NewsStory> _storyByNews = const {};
+  final Set<String> _placeCities = {};
+  String? _myCityRaw;
   List<NewsItem> _allNews = [];
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  bool _showingCached = false;
   String? _errorMessage;
+
+  /// Raw items fetched for the current tab, before the client-side
+  /// content-type filter — the next page's offset.
+  int _fetchedCount = 0;
+
+  /// Bumped on every reload so a slow response for a tab the user already
+  /// left cannot overwrite the tab they are looking at.
+  int _loadGeneration = 0;
+
+  bool get _isFiresTab => _contentType == 'fires';
+
+  /// The fires tab keeps the original cache key so existing installs keep
+  /// their saved feed; the new tabs get one key each.
+  String get _tabCacheKey => _isFiresTab ? _cacheKey : 'news_$_contentType';
+
+  String? get _contentTypeParam => _isFiresTab ? null : _contentType;
+
+  List<NewsItem> _ofCurrentType(List<NewsItem> items) =>
+      items.where((n) => n.contentType == _contentType).toList();
 
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  static const List<String> _categories = [
-    'Tümü', 'Risk', 'Operasyon', 'Güvenlik', 'Güncelleme',
-  ];
-
-  static const Map<String, String?> _categoryParams = {
-    'Tümü': null,
-    'Risk': 'Risk',
-    'Operasyon': 'Operasyon',
-    'Güvenlik': 'Güvenlik',
-    'Güncelleme': 'Güncelleme',
-  };
-
-  String _categoryLabel(AppLocalizations l10n, String key) {
-    switch (key) {
-      case 'Risk': return l10n.newsCategoryRisk;
-      case 'Operasyon': return l10n.newsCategoryOperation;
-      case 'Güvenlik': return l10n.newsCategorySafety;
-      case 'Güncelleme': return l10n.newsCategoryUpdate;
-      default: return l10n.commonAll;
-    }
-  }
-
-  /// The four risk filters are distinguished by colour, so they get a dot.
-  /// "All" and "My region" are not risk levels and would be lying if they
-  /// carried one, so they get an icon instead.
-  Widget? _filterLeading(_NewsFilterKind kind) {
-    switch (kind) {
-      case _NewsFilterKind.all:
-        return const Icon(Icons.list_rounded, size: 15, color: AppColors.primary);
-      case _NewsFilterKind.myRegion:
-        return const Icon(Icons.place_rounded, size: 15, color: AppColors.primary);
-      case _NewsFilterKind.critical:
-        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.critical), size: 9);
-      case _NewsFilterKind.active:
-        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.active), size: 9);
-      case _NewsFilterKind.monitoring:
-        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.monitoring), size: 9);
-      case _NewsFilterKind.info:
-        return ColorDot(color: newsRiskLevelColor(NewsRiskLevel.info), size: 9);
-    }
-  }
-
-  String _filterLabel(AppLocalizations l10n, _NewsFilterKind kind) {
-    switch (kind) {
-      case _NewsFilterKind.all: return l10n.commonAll;
-      case _NewsFilterKind.critical: return newsRiskLevelLabel(l10n, NewsRiskLevel.critical);
-      case _NewsFilterKind.active: return newsRiskLevelLabel(l10n, NewsRiskLevel.active);
-      case _NewsFilterKind.monitoring: return newsRiskLevelLabel(l10n, NewsRiskLevel.monitoring);
-      case _NewsFilterKind.info: return newsRiskLevelLabel(l10n, NewsRiskLevel.info);
-      case _NewsFilterKind.myRegion: return l10n.newsFilterMyRegion;
-    }
-  }
-
-  bool _matchesContentFilter(NewsItem item) {
-    switch (_selectedFilter) {
-      case _NewsFilterKind.all:
-        return true;
-      case _NewsFilterKind.myRegion:
-        final myRegion = _myRegionRaw;
-        if (myRegion == null) return false;
-        return foldTurkish(item.relatedRegion) == foldTurkish(myRegion);
-      case _NewsFilterKind.critical:
-        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.critical;
-      case _NewsFilterKind.active:
-        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.active;
-      case _NewsFilterKind.monitoring:
-        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.monitoring;
-      case _NewsFilterKind.info:
-        return classifyNewsRiskLevel('${item.title} ${item.summary}') == NewsRiskLevel.info;
-    }
   }
 
   /// Best-effort location fetch for the "My Region" filter — silently does
@@ -142,14 +93,17 @@ class _NewsScreenState extends State<NewsScreen> {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) return;
       var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (!mounted) return;
+        permission = await LocationDisclosure.requestPermission(context);
+      }
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low, timeLimit: Duration(seconds: 8)),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 8));
       final cityInfo = await _fireApiService.getNearestCity(position.latitude, position.longitude);
       if (!mounted || cityInfo.outsideTurkey) return;
-      setState(() => _myRegionRaw = cityInfo.region);
+      setState(() {
+        _myCityRaw = cityInfo.city;
+      });
     } catch (_) {
       // "My Region" filter just won't be available.
     }
@@ -160,6 +114,7 @@ class _NewsScreenState extends State<NewsScreen> {
     super.initState();
     _loadNews().then((_) => _maybeShowNewsCoachMarks());
     _loadMyRegion();
+    _loadPlaceCities();
     _scrollController.addListener(_onScroll);
   }
 
@@ -179,16 +134,6 @@ class _NewsScreenState extends State<NewsScreen> {
             description: l10n.coachMarkNewsFeaturedDesc,
           ),
           CoachMarkStep(
-            targetKey: CoachMarkKeys.newsCategoryFilters,
-            title: l10n.coachMarkNewsCategoryTitle,
-            description: l10n.coachMarkNewsCategoryDesc,
-          ),
-          CoachMarkStep(
-            targetKey: CoachMarkKeys.newsRegionFilters,
-            title: l10n.coachMarkNewsRegionTitle,
-            description: l10n.coachMarkNewsRegionDesc,
-          ),
-          CoachMarkStep(
             targetKey: CoachMarkKeys.newsList,
             title: l10n.coachMarkNewsListTitle,
             description: l10n.coachMarkNewsListDesc,
@@ -206,36 +151,48 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Future<void> _loadNews() async {
+    final generation = ++_loadGeneration;
+    _loadStories();
     setState(() {
       _isLoading = true;
       _errorMessage = null;
       _hasMore = true;
     });
+    await _showSavedWhileLoading(generation);
 
     try {
-      final news = await _newsService.fetchNewsFromRender(
-        category: _categoryParams[_selectedCategory],
+      final raw = await _newsService.fetchNewsFromRender(
+        category: null,
+        contentType: _contentTypeParam,
         limit: _pageSize,
         offset: 0,
       );
-      if (_selectedCategory == 'Tümü') {
-        await OfflineCacheService.instance.save(_cacheKey, news.map((n) => n.toJson()).toList());
+      final news = _ofCurrentType(raw);
+      {
+        await OfflineCacheService.instance.save(_tabCacheKey, news.map((n) => n.toJson()).toList());
       }
-      if (!mounted) return;
+      if (!mounted || generation != _loadGeneration) return;
       setState(() {
         _allNews = news;
+        _fetchedCount = raw.length;
         _isLoading = false;
-        _hasMore = news.length >= _pageSize;
+        _showingCached = false;
+        _hasMore = raw.length >= _pageSize;
       });
     } catch (e) {
-      if (!mounted) return;
-      final cached = await OfflineCacheService.instance.load(_cacheKey);
+      debugPrint('News load failed: $e');
+      if (!mounted || generation != _loadGeneration) return;
+      final cached = await OfflineCacheService.instance.load(_tabCacheKey);
+      if (!mounted || generation != _loadGeneration) return;
       if (cached != null) {
         final (data, _) = cached;
         setState(() {
-          _allNews = (data as List).map((e) => NewsItem.fromJson(e as Map<String, dynamic>)).toList();
+          _allNews = (data as List)
+              .map((e) => NewsItem.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList();
           _isLoading = false;
           _hasMore = false;
+          _showingCached = true;
         });
       } else {
         setState(() {
@@ -246,18 +203,34 @@ class _NewsScreenState extends State<NewsScreen> {
     }
   }
 
+  /// The list from last time appears at once and is replaced when the new
+  /// one arrives, so a slow connection does not mean an empty screen.
+  Future<void> _showSavedWhileLoading(int generation) async {
+    if (_allNews.isNotEmpty) return;
+    final cached = await OfflineCacheService.instance.load(_tabCacheKey);
+    if (cached == null || !mounted || generation != _loadGeneration) return;
+    final (data, _) = cached;
+    setState(() {
+      _allNews = (data as List).map((e) => NewsItem.fromJson(Map<String, dynamic>.from(e as Map))).toList();
+      _isLoading = false;
+    });
+  }
+
   Future<void> _loadMore() async {
+    final generation = _loadGeneration;
     setState(() => _isLoadingMore = true);
     try {
-      final more = await _newsService.fetchNewsFromRender(
-        category: _categoryParams[_selectedCategory],
+      final raw = await _newsService.fetchNewsFromRender(
+        category: null,
+        contentType: _contentTypeParam,
         limit: _pageSize,
-        offset: _allNews.length,
+        offset: _fetchedCount,
       );
-      if (!mounted) return;
+      if (!mounted || generation != _loadGeneration) return;
       setState(() {
-        _allNews = [..._allNews, ...more];
-        _hasMore = more.length >= _pageSize;
+        _allNews = [..._allNews, ..._ofCurrentType(raw)];
+        _fetchedCount += raw.length;
+        _hasMore = raw.length >= _pageSize;
         _isLoadingMore = false;
       });
     } catch (_) {
@@ -266,78 +239,113 @@ class _NewsScreenState extends State<NewsScreen> {
     }
   }
 
-  List<NewsItem> get _filteredItems {
-    return _allNews.where((item) {
-      final categoryMatch = _selectedCategory == 'Tümü' ||
-          item.category.toLowerCase() == _selectedCategory.toLowerCase();
-      return categoryMatch && _matchesContentFilter(item);
+  /// One row per fire: the newest headline stands for its story.
+  List<NewsItem> get _feed {
+    final seen = <String>{};
+    return _allNews.where((n) {
+      final story = _storyByNews[n.id];
+      return story == null || seen.add(story.id);
     }).toList();
   }
 
-  Widget _buildFilterChip({
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-    required bool isDark,
-    Widget? leading,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        height: 48,
-        child: Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.16)
-                  : (isDark
-                      ? AppColors.white.withValues(alpha: 0.03)
-                      : Colors.black.withValues(alpha: 0.03)),
-              borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-              border: Border.all(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.34)
-                    : (isDark
-                        ? AppColors.white.withValues(alpha: 0.08)
-                        : Colors.black.withValues(alpha: 0.08)),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (leading != null) ...[leading, const SizedBox(width: 7)],
-                Text(
-                  label,
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: isSelected
-                        ? AppColors.primary
-                        : (isDark
-                            ? AppColors.white.withValues(alpha: 0.78)
-                            : Colors.black.withValues(alpha: 0.72)),
-                  ),
-                ),
-              ],
+  /// Headlines naming the province the phone is in or one of the Yerlerim.
+  List<NewsItem> _localNews(List<NewsItem> feed) {
+    final mine = {if (_myCityRaw != null) foldTurkish(_myCityRaw!), ..._placeCities};
+    if (mine.isEmpty) return const [];
+    return feed.where((n) => n.province.isNotEmpty && mine.contains(foldTurkish(n.province))).take(4).toList();
+  }
+
+  Future<void> _loadStories() async {
+    try {
+      final stories = await _newsService.fetchStories();
+      if (!mounted) return;
+      setState(() {
+        _storyByNews = {for (final s in stories) for (final i in s.items) '${i.id}': s};
+      });
+    } catch (_) {
+      // The list simply stays ungrouped.
+    }
+  }
+
+  Future<void> _loadPlaceCities() async {
+    final raw = (await SharedPreferences.getInstance()).getString(TrackedPlacesNotifier.cacheKey);
+    if (raw == null) return;
+    final places = [for (final p in jsonDecode(raw) as List) TrackedPlace.fromJson(Map<String, dynamic>.from(p as Map))];
+    for (final place in places) {
+      try {
+        final info = await _fireApiService.getNearestCity(place.latitude, place.longitude);
+        if (!mounted) return;
+        if (!info.outsideTurkey && info.city != null) setState(() => _placeCities.add(foldTurkish(info.city!)));
+      } catch (_) {
+        // Skip this place.
+      }
+    }
+  }
+
+  void _openStory(NewsStory story) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => NewsStoryScreen(story: story)));
+
+  Widget? _groupLink(AppLocalizations l10n, NewsItem item) {
+    final story = _storyByNews[item.id];
+    if (story == null) return null;
+    return InkWell(
+      key: Key('newsGroup-${story.id}'),
+      onTap: () => _openStory(story),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(children: [
+          const Icon(Icons.layers_outlined, size: 17, color: AppColors.primary),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              story.isTimeline ? '${l10n.newsFireStory} · ${l10n.newsCount(story.count)}' : l10n.newsSameFire(story.count),
+              style: GoogleFonts.ibmPlexSans(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 14),
             ),
           ),
-        ),
+          const Icon(Icons.chevron_right, size: 18, color: AppColors.primary),
+        ]),
       ),
+    );
+  }
+
+  Widget _featured(AppLocalizations l10n, NewsItem item) {
+    final muted = Theme.of(context).textTheme.bodySmall?.color;
+    return Column(
+      key: CoachMarkKeys.newsFeatured,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () => openNewsSource(item.sourceUrl),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            ClipRRect(borderRadius: BorderRadius.circular(16), child: SizedBox(height: 186, child: NewsImage(title: item.title, thumbPath: item.thumbPath, kind: item.kind, full: true))),
+            const SizedBox(height: 9),
+            Row(children: [
+              NewsSourceMark(source: item.source, logoUrl: item.sourceLogoUrl, size: 22),
+              const SizedBox(width: 7),
+              Expanded(child: Text(item.source, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600, color: muted))),
+              Text(formatNewsTimeAgo(l10n, item.publishedAt), style: GoogleFonts.ibmPlexSans(fontSize: 12.5, color: muted)),
+            ]),
+            const SizedBox(height: 5),
+            NewsTitle(id: item.id, title: item.title, maxLines: 4, style: GoogleFonts.ibmPlexSans(fontSize: 22, fontWeight: FontWeight.w800, height: 1.2)),
+            const SizedBox(height: 8),
+          ]),
+        ),
+        ?_groupLink(l10n, item),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final filteredItems = _filteredItems;
+    final view = arrangeNews(_feed, DateTime.now());
+    final feed = view.main;
+    final local = _localNews(feed);
+    final shownLocal = {for (final n in local) n.id};
+    final list = feed.where((n) => !shownLocal.contains(n.id)).toList();
+    const thinLine = Divider(height: 1, thickness: 0.6);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final titleColor = theme.textTheme.titleLarge?.color ??
-        (isDark ? AppColors.white : AppColors.lightText);
     final secondaryTextColor = isDark
         ? AppColors.white.withValues(alpha: 0.74)
         : Colors.black.withValues(alpha: 0.66);
@@ -349,7 +357,9 @@ class _NewsScreenState extends State<NewsScreen> {
           style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700),
         ),
         actions: [
+          const AlertsBell(),
           IconButton(
+            tooltip: l10n.commonRefresh,
             icon: const Icon(Icons.refresh_rounded),
             onPressed: _loadNews,
           ),
@@ -365,191 +375,83 @@ class _NewsScreenState extends State<NewsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Header ────────────────────────────────────────
-            GlassPanel(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatusChip(
-                    label: l10n.newsLiveFeed,
-                    icon: Icons.newspaper_rounded,
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    l10n.newsCenterTitle,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: titleColor,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    l10n.newsCenterSubtitle,
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 15,
-                      height: 1.45,
-                      color: secondaryTextColor,
-                    ),
-                  ),
-                ],
+            if (_showingCached && !_isLoading)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: Row(
+                  children: [
+                    const Icon(Icons.cloud_off_rounded, size: 16, color: AppColors.warning),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(child: Text(l10n.newsShowingSaved, style: GoogleFonts.ibmPlexSans(fontSize: 13, color: secondaryTextColor))),
+                  ],
+                ),
               ),
-            ).animate().fadeIn(duration: 450.ms).scale(
-                  begin: const Offset(0.97, 0.97),
-                  end: const Offset(1, 1),
-                  curve: Curves.easeOutCubic,
-                ).slideY(begin: 0.06, end: 0),
-
-            const SizedBox(height: AppSpacing.md),
-            TrustInfoCardGroup(
-              meaning: l10n.trustNewsMeaning,
-              source: l10n.trustNewsSource,
-              interpret: l10n.trustNewsInterpret,
-              action: l10n.trustNewsAction,
-            ),
-
-            const SizedBox(height: AppSpacing.xxl),
-
-            // ── Featured Card ──────────────────────────────────
-            if (_allNews.isNotEmpty) ...[
-              SectionHeader(
-                key: CoachMarkKeys.newsFeatured,
-                title: l10n.newsFeatured,
-                subtitle: l10n.newsFeaturedSubtitle,
-                icon: const Icon(Icons.bolt_rounded),
-              ).animate(delay: 80.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-              const SizedBox(height: AppSpacing.md),
-
-              FeaturedNewsCard(
-                item: _allNews.first,
-                onTap: () => context.push('/news-detail', extra: _allNews.first),
-              ).animate(delay: 140.ms).fadeIn(duration: 320.ms).slideY(begin: 0.08, end: 0),
-
-              const SizedBox(height: AppSpacing.xxxl),
-            ],
-
-            // ── Kategoriler ────────────────────────────────────
-            SectionHeader(
-              title: l10n.newsCategories,
-              subtitle: l10n.newsCategoriesSubtitle,
-              icon: const Icon(Icons.tune_rounded),
-            ).animate(delay: 120.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-            const SizedBox(height: AppSpacing.md),
-
-            SingleChildScrollView(
-              key: CoachMarkKeys.newsCategoryFilters,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _categories.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final category = entry.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: _buildFilterChip(
-                      label: _categoryLabel(l10n, category),
-                      isSelected: _selectedCategory == category,
-                      isDark: isDark,
-                      onTap: () {
-                        setState(() => _selectedCategory = category);
-                      },
-                    ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
-                        .fadeIn(duration: 240.ms)
-                        .slideY(begin: 0.18, end: 0),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.xxl),
-
-            // ── Durum Filtreleri ────────────────────────────────
-            SectionHeader(
-              title: l10n.newsContentFiltersTitle,
-              subtitle: l10n.newsContentFiltersSubtitle,
-              icon: const Icon(Icons.filter_alt_rounded),
-            ).animate(delay: 140.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-            const SizedBox(height: AppSpacing.md),
-
-            SingleChildScrollView(
-              key: CoachMarkKeys.newsRegionFilters,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _NewsFilterKind.values.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final kind = entry.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: _buildFilterChip(
-                      label: _filterLabel(l10n, kind),
-                      leading: _filterLeading(kind),
-                      isSelected: _selectedFilter == kind,
-                      isDark: isDark,
-                      onTap: () {
-                        setState(() => _selectedFilter = kind);
-                      },
-                    ).animate(delay: Duration(milliseconds: 160 + (index * 60)))
-                        .fadeIn(duration: 240.ms)
-                        .slideY(begin: 0.18, end: 0),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: AppSpacing.xxxl),
-
-            // ── Son Haberler ───────────────────────────────────
-            SectionHeader(
-              key: CoachMarkKeys.newsList,
-              title: l10n.newsLatest,
-              subtitle: _isLoading
-                  ? l10n.commonLoading
-                  : l10n.newsRecordsFound(filteredItems.length),
-              icon: const Icon(Icons.article_rounded),
-            ).animate(delay: 160.ms).fadeIn(duration: 280.ms).slideX(begin: -0.03, end: 0),
-
-            const SizedBox(height: AppSpacing.md),
-
             if (Localizations.localeOf(context).languageCode == 'en' && !_englishBannerDismissed)
-              EnglishTranslationBanner(
-                onDismiss: () => setState(() => _englishBannerDismissed = true),
-              ),
+              EnglishTranslationBanner(onDismiss: () => setState(() => _englishBannerDismissed = true)),
 
             if (_isLoading)
               const SkeletonListLoader(count: 4)
             else if (_errorMessage != null)
               ErrorStateView(message: _errorMessage, onRetry: _loadNews)
-            else if (filteredItems.isEmpty)
-              EmptyStateView(
-                icon: Icons.article_outlined,
-                title: l10n.newsNoneInCategory,
-              )
             else ...[
-              ...filteredItems.asMap().entries.map((entry) {
-                final index = entry.key;
-                final NewsItem item = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                  child: NewsCard(
-                    item: item,
-                    onTap: () => context.push('/news-detail', extra: item),
-                  ).animate()
-                      .fadeIn(duration: 300.ms, delay: (220 + (index * 70)).ms)
-                      .slideX(begin: 0.03, end: 0)
-                      .scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1)),
-                );
-              }),
+              if (view.featured != null) ...[_featured(l10n, view.featured!), thinLine],
+              if (view.featured == null && feed.isEmpty)
+                EmptyStateView(icon: Icons.article_outlined, title: l10n.newsNoneRecent),
+              for (final (i, item) in list.indexed) ...[
+                NewsListRow(key: i == 0 ? CoachMarkKeys.newsList : null, item: item),
+                ?_groupLink(l10n, item),
+                thinLine,
+                if ((i + 1) % 5 == 0) InlineFactCard(index: (i + 1) ~/ 5),
+              ],
+              if (local.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.lg),
+                Text(l10n.newsInProvince, key: const Key('newsInProvince'), style: GoogleFonts.ibmPlexSans(fontSize: 19, fontWeight: FontWeight.w800)),
+                for (final item in local) ...[NewsListRow(item: item), thinLine],
+              ],
+              if (view.archive.isNotEmpty)
+                ListTile(
+                  key: const Key('newsArchive'),
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(l10n.newsArchive(view.archive.length), style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700)),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => NewsArchiveScreen(items: view.archive))),
+                ),
               if (_isLoadingMore)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Center(child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2.4)),
                 ),
             ],
+            const SizedBox(height: AppSpacing.lg),
+            PageAboutLink(
+              meaning: l10n.trustNewsMeaning,
+              source: l10n.trustNewsSource,
+              interpret: l10n.trustNewsInterpret,
+              action: l10n.trustNewsAction,
+            ),
           ],
         ),
         ),
+      ),
+    );
+  }
+}
+
+class NewsArchiveScreen extends StatelessWidget {
+  final List<NewsItem> items;
+  const NewsArchiveScreen({super.key, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.newsArchive(items.length), style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w700))),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        itemCount: items.length,
+        separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0.6),
+        itemBuilder: (_, i) => NewsListRow(item: items[i]),
       ),
     );
   }

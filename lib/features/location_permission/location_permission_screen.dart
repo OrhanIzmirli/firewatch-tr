@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/location_disclosure.dart';
 
 class LocationPermissionScreen extends StatefulWidget {
   const LocationPermissionScreen({super.key});
@@ -36,6 +37,10 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
         });
         return;
       }
+
+      // This screen shows the same explanation as LocationDisclosureSheet
+      // (locPermSubtitle / locPermNote), so tapping "Enable" is the consent.
+      await LocationDisclosure.markAccepted();
 
       LocationPermission permission = await Geolocator.checkPermission();
 

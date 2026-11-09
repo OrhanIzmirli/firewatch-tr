@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../nature/nature_notes.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +10,17 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../shared/widgets/language_badge.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/app_version.dart';
 import '../../services/locale_provider.dart';
+import '../../services/notification_service.dart';
+import '../../services/tracked_places_provider.dart';
 import '../../services/settings_provider.dart';
 import '../../shared/widgets/glass_panel.dart';
 import '../../shared/widgets/section_header.dart';
 import '../../shared/widgets/status_chip.dart';
 import '../../shared/widgets/feedback_sheet.dart';
+import '../../shared/widgets/app_sheet.dart';
+import '../../shared/widgets/coach_mark_overlay.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -202,6 +208,11 @@ class SettingsScreen extends ConsumerWidget {
 
             const SizedBox(height: AppSpacing.xxl),
 
+            const _NatureNotesTile(),
+            const SizedBox(height: AppSpacing.md),
+            const _TipsTile(),
+            const SizedBox(height: AppSpacing.xxl),
+
             SectionHeader(
                   title: l10n.settingsLanguage,
                   subtitle: l10n.settingsLanguageSubtitle,
@@ -339,7 +350,7 @@ class SettingsScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.md),
                       _InfoLine(
                         label: l10n.settingsInfoVersion,
-                        value: l10n.settingsInfoVersionValue,
+                        value: ref.watch(appVersionProvider).valueOrNull ?? '…',
                         delay: const Duration(milliseconds: 140),
                       ),
                       const SizedBox(height: AppSpacing.md),
@@ -387,6 +398,25 @@ class SettingsScreen extends ConsumerWidget {
                           context,
                           '${ApiConfig.backendBaseUrl}/privacy',
                           l10n,
+                        ),
+                      ),
+                      Divider(
+                        height: 24,
+                        color: isDark
+                            ? AppColors.white.withValues(alpha: 0.06)
+                            : Colors.black.withValues(alpha: 0.05),
+                      ),
+                      _LegalLinkTile(
+                        key: const Key('settingsDeleteLocationTile'),
+                        icon: Icons.location_off_outlined,
+                        label: l10n.settingsDeleteLocation,
+                        trailingIcon: Icons.chevron_right_rounded,
+                        onTap: () => confirmAndDeleteServerLocation(
+                          context,
+                          l10n,
+                          () => NotificationService.instance.deleteServerLocation(
+                            trackedPlaces: ref.read(trackedPlacesProvider.notifier),
+                          ),
                         ),
                       ),
                       Divider(
@@ -486,15 +516,58 @@ Future<void> _openLegalUrl(
   }
 }
 
+/// Settings → "Delete my location data": confirm, then erase the
+/// approximate location the backend stores for this device. [delete] is
+/// injected so the flow can be tested without Firebase.
+@visibleForTesting
+Future<void> confirmAndDeleteServerLocation(
+  BuildContext context,
+  AppLocalizations l10n,
+  Future<bool> Function() delete,
+) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: DialogTitleWithClose(title: Text(l10n.settingsDeleteLocationConfirmTitle)),
+      content: Text(l10n.settingsDeleteLocationConfirmBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(l10n.commonCancel),
+        ),
+        FilledButton(
+          key: const Key('settingsDeleteLocationConfirm'),
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text(l10n.settingsDeleteLocationConfirm),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true || !context.mounted) return;
+
+  final ok = await delete();
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        ok ? l10n.settingsDeleteLocationDone : l10n.settingsDeleteLocationFailed,
+      ),
+    ),
+  );
+}
+
 class _LegalLinkTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final IconData trailingIcon;
 
   const _LegalLinkTile({
+    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
+    this.trailingIcon = Icons.open_in_new_rounded,
   });
 
   @override
@@ -532,7 +605,7 @@ class _LegalLinkTile extends StatelessWidget {
               ),
             ),
             Icon(
-              Icons.open_in_new_rounded,
+              trailingIcon,
               size: 18,
               color: isDark
                   ? AppColors.white.withValues(alpha: 0.4)
@@ -826,6 +899,102 @@ class _LanguageOptionTile extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Doğa notları": on by default, separate from fire alerts.
+class _NatureNotesTile extends StatefulWidget {
+  const _NatureNotesTile();
+
+  @override
+  State<_NatureNotesTile> createState() => _NatureNotesTileState();
+}
+
+class _NatureNotesTileState extends State<_NatureNotesTile> {
+  bool _on = true;
+
+  @override
+  void initState() {
+    super.initState();
+    NatureNotes.enabled().then((on) {
+      if (mounted) setState(() => _on = on);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(children: [
+          SwitchListTile(
+            key: const Key('settingsNatureNotes'),
+            contentPadding: EdgeInsets.zero,
+            value: _on,
+            title: Text(l10n.fidanReminderChannel),
+            subtitle: Text(l10n.settingsNatureNotesSubtitle),
+            onChanged: (on) async {
+              setState(() => _on = on);
+              await NatureNotes.setEnabled(on, l10n, lang);
+            },
+          ),
+          if (_on)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                key: const Key('settingsNatureNotesSample'),
+                onPressed: () => NatureNotes.showSample(l10n, lang),
+                child: Text(l10n.settingsNatureNotesSample),
+              ),
+            ),
+        ]),
+      ),
+    );
+  }
+}
+
+/// Tips on or off. Turning them back on shows each one again, once.
+class _TipsTile extends StatefulWidget {
+  const _TipsTile();
+
+  @override
+  State<_TipsTile> createState() => _TipsTileState();
+}
+
+class _TipsTileState extends State<_TipsTile> {
+  bool _on = true;
+
+  @override
+  void initState() {
+    super.initState();
+    coachMarksEnabled().then((on) {
+      if (mounted) setState(() => _on = on);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xs),
+      child: Material(
+        type: MaterialType.transparency,
+        child: SwitchListTile(
+          key: const Key('settingsTips'),
+          contentPadding: EdgeInsets.zero,
+          value: _on,
+          title: Text(l10n.settingsTipsTitle),
+          subtitle: Text(l10n.settingsTipsSubtitle),
+          onChanged: (on) async {
+            setState(() => _on = on);
+            await setCoachMarksEnabled(on);
+          },
         ),
       ),
     );

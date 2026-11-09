@@ -5,11 +5,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/l10n_lookup.dart';
-import '../models/alert_scope.dart';
 import '../models/fire_point.dart';
 import 'fire_api_service.dart';
 import 'notification_service.dart';
-import 'saved_places_provider.dart';
+import 'device_position.dart';
+import 'render_api_service.dart';
+import '../shared/widgets/system_status_line.dart';
 
 class FireMonitoringService {
   FireMonitoringService._();
@@ -67,53 +68,6 @@ class FireMonitoringService {
   Future<void> checkNow({bool triggerNotification = false}) async {
     final l10n = await currentAppLocalizations();
     try {
-      // AlertScope.places is enforced here, on the device: the backend does
-      // not know that scope yet, and this scan is what makes it real. The
-      // scope and the places are read straight from prefs because this
-      // service runs outside the widget tree.
-      final prefs = await SharedPreferences.getInstance();
-      final scope =
-          AlertScopeWire.fromWire(prefs.getString(kAlertScopePrefsKey));
-      if (scope == AlertScope.places) {
-        final places = SavedPlacesNotifier.decode(
-          prefs.getString(SavedPlacesNotifier.prefsKey),
-        );
-        if (places.isNotEmpty) {
-          statusNotifier.value = l10n.monitorStatusFetchingData;
-          final fires = await _fireApiService.fetchTurkeyFires();
-          if (fires.isEmpty) {
-            statusNotifier.value = l10n.monitorStatusNoActiveFires;
-            nearbyMatchesNotifier.value = <FirePoint>[];
-            return;
-          }
-          final matches = fires
-              .where(
-                (fire) => places.any(
-                  (place) => place.contains(fire.latitude, fire.longitude),
-                ),
-              )
-              .toList();
-          nearbyMatchesNotifier.value = matches;
-          if (matches.isEmpty) {
-            statusNotifier.value =
-                l10n.monitorStatusNoNearbyFires(fires.length);
-            return;
-          }
-          statusNotifier.value =
-              l10n.monitorStatusNearbyFiresFound(matches.length);
-          if (triggerNotification &&
-              await _shouldSendNearbyAlert(matches.length)) {
-            await NotificationService.instance.showSavedPlacesFireAlert(
-              count: matches.length,
-            );
-            await _rememberNearbyAlert(matches.length);
-          }
-          return;
-        }
-        // No places saved: fall through to the GPS-based scan rather than
-        // silently scanning nothing.
-      }
-
       statusNotifier.value = l10n.monitorStatusGettingLocation;
 
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -134,22 +88,26 @@ class FireMonitoringService {
         return;
       }
 
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
+      final position = await DevicePosition.current(accuracy: LocationAccuracy.low, timeLimit: const Duration(seconds: 10));
 
       statusNotifier.value = l10n.monitorStatusFetchingData;
 
       final fires = await _fireApiService.fetchTurkeyFires();
 
       if (fires.isEmpty) {
-        statusNotifier.value = l10n.monitorStatusNoActiveFires;
+        // "No detections" may only be said about data that is known to be recent.
+        final status = await RenderApiService().fetchDetectionStatus();
+        statusNotifier.value = detectionsOutdated(status, DateTime.now())
+            ? l10n.detectionStaleTitle
+            : l10n.monitorStatusNoActiveFires;
         nearbyMatchesNotifier.value = <FirePoint>[];
         return;
       }
+
+      // Same rule as the map and server alerts: farmland and industry do
+      // not raise a fire alert.
+      final incidents = await RenderApiService().fetchIncidents(days: 2, limit: 300);
+      final offEvents = incidents.where((i) => i.isKeptOffEvents).toList();
 
       final nearby = fires.where((fire) {
         final meters = Geolocator.distanceBetween(
@@ -158,7 +116,9 @@ class FireMonitoringService {
           fire.latitude,
           fire.longitude,
         );
-        return meters <= _nearbyRadiusMeters;
+        return meters <= _nearbyRadiusMeters &&
+            !offEvents.any((i) =>
+                Geolocator.distanceBetween(i.latitude, i.longitude, fire.latitude, fire.longitude) <= 1500);
       }).toList();
 
       nearbyMatchesNotifier.value = nearby;

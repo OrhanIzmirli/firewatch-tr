@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../models/detection_status.dart';
 import 'package:flutter/foundation.dart';
 import '../core/config/api_config.dart';
 import '../models/alert_scope.dart';
@@ -6,15 +7,17 @@ import '../models/fire_incident.dart';
 import '../models/incident_summary.dart';
 
 class RenderApiService {
-  RenderApiService();
+  RenderApiService({Dio? dio})
+      : _dio = dio ??
+            Dio(
+              BaseOptions(
+                baseUrl: ApiConfig.apiBaseUrl,
+                connectTimeout: const Duration(seconds: 20),
+                receiveTimeout: const Duration(seconds: 20),
+              ),
+            );
 
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: ApiConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
-    ),
-  );
+  final Dio _dio;
 
   // HABERLER
   Future<List<Map<String, dynamic>>> fetchNews({
@@ -96,6 +99,21 @@ class RenderApiService {
     }
   }
 
+  // SUNUCUDAKİ KONUMU SİL — Ayarlar > "Konum verimi sil". Yalnızca
+  // fcm_tokens.latitude/longitude silinir; bildirimler ve kapsam aynen kalır.
+  Future<bool> deleteStoredLocation(String token) async {
+    try {
+      final response = await _dio.post(
+        '/notify/location/delete',
+        data: {'token': token},
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error deleting stored location: $e');
+      return false;
+    }
+  }
+
   // PUSH NOTIFICATION TOKEN'I PASİFLEŞTİR (eski POST /unsubscribe — hâlâ
   // destekleniyor, bkz. setNotificationActive için PATCH tabanlı alternatif)
   Future<bool> unsubscribeFromNotifications(String token) async {
@@ -141,6 +159,28 @@ class RenderApiService {
     } catch (e) {
       if (kDebugMode) debugPrint('Error updating notification status: $e');
       return false;
+    }
+  }
+
+  /// Reads the scope the backend holds for [token] without changing it: a
+  /// PATCH that carries only is_active (the caller passes the current push
+  /// setting, so that doesn't change either) answers with the stored row.
+  Future<ServerScope?> readServerScope(String token, {required bool isActive}) async {
+    try {
+      final response = await _dio.patch(
+        '/notify/subscribe',
+        data: {'token': token, 'is_active': isActive},
+      );
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>?;
+      if (data == null) return null;
+      return ServerScope(
+        scope: AlertScopeWire.fromWire(data['alert_scope'] as String?),
+        regionKey: data['region_key'] as String?,
+        cityId: (data['city_id'] as num?)?.toInt(),
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error reading server scope: $e');
+      return null;
     }
   }
 
@@ -193,6 +233,19 @@ class RenderApiService {
     final incidents = await fetchIncidents(days: 3, limit: 500);
     if (incidents.isEmpty) return null;
     return IncidentSummary.fromIncidents(incidents);
+  }
+
+  /// Never null and never an empty answer: a failed request is
+  /// [DetectionStatus.unavailable], which the app must not read as "quiet".
+  Future<DetectionStatus> fetchDetectionStatus() async {
+    try {
+      final response = await _dio.get('/incidents/status');
+      final data = response.data['data'];
+      if (data is Map<String, dynamic>) return DetectionStatus.fromJson(data);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error fetching detection status: $e');
+    }
+    return DetectionStatus.unavailable;
   }
 
   /// Asks the backend which province/region a coordinate falls in.

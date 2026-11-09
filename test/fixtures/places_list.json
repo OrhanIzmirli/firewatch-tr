@@ -1,0 +1,26 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "id": "0b1f6a52-7c1e-4d1a-9a55-2f0b6c3e9d10",
+      "name": "Ev",
+      "latitude": 38.42,
+      "longitude": 27.14,
+      "radius_km": 10,
+      "notify_heat": true,
+      "created_at": "2026-11-07T14:00:00.000Z",
+      "last_alert_at": null
+    },
+    {
+      "id": "5a3c9e1d-2b44-4f7a-8c61-0d9e7b2a4f33",
+      "name": "Yazlık",
+      "latitude": 36.85,
+      "longitude": 28.27,
+      "radius_km": 25,
+      "notify_heat": false,
+      "created_at": "2026-11-07T14:05:00.000Z",
+      "last_alert_at": "2026-11-07T16:30:00.000Z"
+    }
+  ],
+  "max_places": 5
+}

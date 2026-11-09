@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/l10n_lookup.dart';
 import '../models/alert_scope.dart';
 import '../router/app_router.dart';
 import 'render_api_service.dart';
+import 'tracked_places_api.dart';
+import 'tracked_places_provider.dart';
+import 'alert_inbox.dart';
 
 class NotificationService {
   NotificationService._();
@@ -16,8 +22,16 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  /// Lazy: reading FirebaseMessaging.instance before Firebase.initializeApp
+  /// throws, and the background isolate constructs this service too.
+  FirebaseMessaging get _fcm => FirebaseMessaging.instance;
+  bool _localReady = false;
+  bool _messagingReady = false;
   final RenderApiService _renderApi = RenderApiService();
+
+  /// Tracked-place heat alerts (backend placeAlertJob). Its own channel so
+  /// users can silence them in system settings without losing fire alerts.
+  static const placesChannelId = 'firewatch_places';
 
   static const AndroidNotificationChannel _alertsChannel =
       AndroidNotificationChannel(
@@ -27,7 +41,18 @@ class NotificationService {
     importance: Importance.max,
   );
 
+  /// Full setup for the app: local notifications, then FCM.
   Future<void> initialize() async {
+    await initializeLocal();
+    await _setupFirebaseMessaging();
+  }
+
+  /// Local notifications only (inbox, plugin, channels). Enough for the
+  /// background fire check, which shows alerts but must not register FCM
+  /// listeners or ask for permissions from a headless isolate.
+  Future<void> initializeLocal() async {
+    if (_localReady) return;
+    await AlertInbox.instance.initialize();
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -41,28 +66,30 @@ class NotificationService {
     );
 
     await _createAndroidChannel();
-    await _setupFirebaseMessaging();
+    _localReady = true;
   }
 
+  /// Whether app start may raise the system notification prompt.
+  ///
+  /// A fresh install must not: the prompt used to appear before the first
+  /// screen, ahead of the onboarding step that explains why we ask. That
+  /// step (NotificationPermissionScreen) now asks. Installs that already
+  /// went through onboarding keep the old behaviour — Android shows the
+  /// prompt only while the answer is undecided, so for them this is a
+  /// no-op or the same single prompt they always got.
+  static bool shouldRequestPermissionAtStartup({required bool hasSeenOnboarding}) =>
+      hasSeenOnboarding;
+
+  /// Order matters. Listeners and the launch notification come first and
+  /// cannot be blocked: they used to be registered only after getToken and
+  /// two backend calls (20 s timeouts each on a cold Render start), so a tap
+  /// that cold-started the app waited up to ~40 s, foreground messages in
+  /// that window were dropped, and an offline getToken failure left the
+  /// whole session without listeners. Token registration now runs last,
+  /// unawaited, and its failures are contained.
   Future<void> _setupFirebaseMessaging() async {
-    final settings = await _fcm.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    if (kDebugMode) {
-      print('FCM Permission status: ${settings.authorizationStatus}');
-    }
-
-    final token = await _fcm.getToken();
-    if (token != null && token.isNotEmpty) {
-      await _renderApi.subscribeToNotifications(token);
-    }
+    if (_messagingReady) return;
+    _messagingReady = true;
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (kDebugMode) {
@@ -74,9 +101,7 @@ class NotificationService {
         showManualAlert(
           title: notification.title ?? l10n.appName,
           body: notification.body ?? l10n.notifNewNotificationBody,
-          payload: message.data['fire_id'] != null
-              ? 'fire:${message.data['fire_id']}'
-              : 'alerts_tab',
+          payload: payloadForData(message.data),
         );
       }
     });
@@ -85,33 +110,93 @@ class NotificationService {
       if (kDebugMode) {
         print('Background message opened: ${message.notification?.title}');
       }
-      final fireId = message.data['fire_id'];
-      // Fetched fresh and used synchronously within this callback (no
-      // await in between) — the analyzer flags it only because the
-      // enclosing _setupFirebaseMessaging is itself async, not because
-      // this context is actually stale.
+      final payload = payloadForData(message.data);
+      AlertInbox.instance.add(message.notification?.title ?? 'FireWatch TR', message.notification?.body ?? '', payload: payload == 'alerts_tab' ? null : payload, id: message.messageId);
+      // Fetched fresh and used synchronously in this callback; the lint
+      // fires only because the enclosing method is async.
       final context = rootNavigatorKey.currentContext;
-      if (context != null && fireId != null) {
+      if (context != null) {
         // ignore: use_build_context_synchronously
-        GoRouter.of(context).go('/fire/$fireId');
+        openPayload(GoRouter.of(context), payload);
       }
     });
 
-    final initialMessage = await _fcm.getInitialMessage();
-    if (initialMessage != null) {
-      final fireId = initialMessage.data['fire_id'];
-      if (fireId != null) {
+    // A rotated token must reach both device tables, or alerts silently
+    // stop: fcm_tokens (region alerts) and place_devices (tracked places).
+    _fcm.onTokenRefresh.listen((newToken) async {
+      if (newToken.isEmpty) return;
+      try {
+        await _renderApi.subscribeToNotifications(newToken);
+        await TrackedPlacesApi().updateDevice(fcmToken: newToken);
+      } catch (e) {
+        if (kDebugMode) debugPrint('Token refresh registration failed: $e');
+      }
+    });
+
+    try {
+      final initialMessage = await _fcm.getInitialMessage();
+      if (initialMessage != null) {
+        final payload = payloadForData(initialMessage.data);
+        await AlertInbox.instance.add(initialMessage.notification?.title ?? 'FireWatch TR', initialMessage.notification?.body ?? '', payload: payload == 'alerts_tab' ? null : payload, id: initialMessage.messageId);
         Future.delayed(const Duration(seconds: 1), () {
-          // Fetched fresh here (not captured before the delay) since the
-          // root navigator's context can only be resolved at the moment
-          // it's actually used.
+          // Resolved at the moment of use: the root navigator may not
+          // exist yet when the launch message is read.
           final context = rootNavigatorKey.currentContext;
           if (context != null) {
             // ignore: use_build_context_synchronously
-            GoRouter.of(context).go('/fire/$fireId');
+            openPayload(GoRouter.of(context), payload);
           }
         });
       }
+    } catch (e) {
+      if (kDebugMode) debugPrint('getInitialMessage failed: $e');
+    }
+
+    try {
+      final hasSeenOnboarding =
+          await SharedPreferencesAsync().getBool('hasSeenOnboarding') ?? false;
+      final settings = shouldRequestPermissionAtStartup(hasSeenOnboarding: hasSeenOnboarding)
+          ? await _fcm.requestPermission(
+              alert: true,
+              announcement: false,
+              badge: true,
+              carPlay: false,
+              criticalAlert: false,
+              provisional: false,
+              sound: true,
+            )
+          : await _fcm.getNotificationSettings();
+      if (kDebugMode) {
+        print('FCM Permission status: ${settings.authorizationStatus}');
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('Notification permission check failed: $e');
+    }
+
+    unawaited(_registerToken());
+  }
+
+  /// Registers this install's token with the backend. Network-bound and
+  /// best-effort: nothing waits on it, and a failure (offline, cold
+  /// backend) only means the next start tries again.
+  Future<void> _registerToken() async {
+    try {
+      final token = await _fcm.getToken();
+      if (token != null && token.isNotEmpty) {
+        await _renderApi.subscribeToNotifications(token);
+      }
+
+      // Tracked places: the server deletes an install it hasn't seen for 90
+      // days (privacy policy: "if you don't open the app for 90 days"), so
+      // every start counts as "seen" — and keeps the token and language
+      // current. A no-op for installs that never added a place.
+      final localeName = (await currentAppLocalizations()).localeName;
+      await TrackedPlacesApi().updateDevice(
+        fcmToken: token != null && token.isNotEmpty ? token : null,
+        locale: localeName,
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Token registration failed: $e');
     }
   }
 
@@ -122,22 +207,61 @@ class NotificationService {
     final context = rootNavigatorKey.currentContext;
     if (context == null) return;
 
-    if (payload == null || payload.isEmpty) {
-      GoRouter.of(context).go('/app?tab=alerts');
+    openPayload(GoRouter.of(context), payload);
+  }
+
+  /// Local-notification payload for an FCM data map:
+  /// `place:<lat>,<lng>` for a tracked-place heat alert (opens the map
+  /// there), `places` for the "N new detections" summary (opens the
+  /// tracked-places list), `fire:<id>` for a fire, otherwise the alerts tab.
+  static String payloadForData(Map<String, dynamic> data) {
+    if (data['type'] == 'place_heat_summary') return 'places';
+    if (data['type'] == 'place_heat') {
+      final lat = double.tryParse('${data['lat']}');
+      final lng = double.tryParse('${data['lng']}');
+      if (lat != null && lng != null) return 'place:$lat,$lng';
+      return 'alerts_tab';
+    }
+    if (data['fire_id'] != null) return 'fire:${data['fire_id']}';
+    return 'alerts_tab';
+  }
+
+  static void openPayload(GoRouter router, String? payload) {
+    if (payload == null || payload.isEmpty || payload == 'alerts_tab') {
+      router.go('/app?section=alerts');
       return;
     }
     if (payload.startsWith('fire:')) {
-      final fireId = payload.replaceFirst('fire:', '');
-      GoRouter.of(context).go('/fire/$fireId');
+      router.go('/fire/${payload.substring(5)}');
       return;
     }
-    GoRouter.of(context).go('/app?tab=alerts');
+    if (payload == 'places') {
+      router.go('/tracked-places');
+      return;
+    }
+    if (payload.startsWith('place:')) {
+      final parts = payload.substring(6).split(',');
+      final lat = parts.length == 2 ? double.tryParse(parts[0]) : null;
+      final lng = parts.length == 2 ? double.tryParse(parts[1]) : null;
+      if (lat != null && lng != null) {
+        router.go('/map', extra: {'lat': lat, 'lng': lng});
+        return;
+      }
+    }
+    router.go('/app?section=alerts');
   }
 
   Future<void> _createAndroidChannel() async {
     final androidPlugin =
         _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     await androidPlugin?.createNotificationChannel(_alertsChannel);
+    final l10n = await currentAppLocalizations();
+    await androidPlugin?.createNotificationChannel(AndroidNotificationChannel(
+      placesChannelId,
+      l10n.notifPlacesChannelName,
+      description: l10n.notifPlacesChannelDescription,
+      importance: Importance.high,
+    ));
   }
 
   Future<bool> requestPermission() async {
@@ -177,6 +301,33 @@ class NotificationService {
     } else {
       await _renderApi.setNotificationActive(token, false);
     }
+  }
+
+  /// Settings → "Delete my location data": erases the approximate location
+  /// the backend keeps for this device (notifications stay on) and every
+  /// tracked place with its anonymous identity. Without an FCM token the
+  /// device was never registered for alerts, so there is no location to
+  /// erase there.
+  Future<bool> deleteServerLocation({TrackedPlacesNotifier? trackedPlaces}) async {
+    String? token;
+    try {
+      token = await _fcm.getToken();
+    } catch (_) {
+      token = null;
+    }
+    final locationOk = token == null || token.isEmpty ? true : await _renderApi.deleteStoredLocation(token);
+    final placesOk = trackedPlaces != null ? await trackedPlaces.deleteAll() : await TrackedPlacesApi().deleteAll();
+    return locationOk && placesOk;
+  }
+
+  /// The scope the backend holds for this device, read without changing it
+  /// (see RenderApiService.readServerScope). Null when unknown.
+  Future<ServerScope?> readServerScope() async {
+    final token = await _fcm.getToken();
+    if (token == null || token.isEmpty) return null;
+    final prefs = await SharedPreferences.getInstance();
+    final pushEnabled = prefs.getBool('settings_push_notifications') ?? true;
+    return _renderApi.readServerScope(token, isActive: pushEnabled);
   }
 
   /// Pushes the user's alert-scope choice to the backend so targeted fire
@@ -224,23 +375,11 @@ class NotificationService {
     required String distanceLabel,
   }) async {
     final l10n = await currentAppLocalizations();
+    await AlertInbox.instance.add(l10n.notifNearbyFireTitle, l10n.notifNearbyFireBody(distanceLabel, count));
     await _plugin.show(
       2001,
       l10n.notifNearbyFireTitle,
       l10n.notifNearbyFireBody(distanceLabel, count),
-      _notificationDetails(),
-      payload: 'alerts_tab',
-    );
-  }
-
-  /// Local alert for detections inside the user's saved places — the
-  /// device-side arm of AlertScope.places.
-  Future<void> showSavedPlacesFireAlert({required int count}) async {
-    final l10n = await currentAppLocalizations();
-    await _plugin.show(
-      2002,
-      l10n.notifPlacesFireTitle,
-      l10n.notifPlacesFireBody(count),
       _notificationDetails(),
       payload: 'alerts_tab',
     );
@@ -251,6 +390,7 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
+    await AlertInbox.instance.add(title, body, payload: 'fire:$fireId');
     await _plugin.show(
       3001,
       title,
@@ -265,6 +405,7 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
+    await AlertInbox.instance.add(title, body, payload: payload);
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title,

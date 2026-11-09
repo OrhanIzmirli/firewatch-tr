@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
+import 'app_sheet.dart';
 
 class GlassPanel extends StatelessWidget {
   final Widget child;
@@ -20,6 +21,7 @@ class GlassPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FlatGlassScope.of(context)) return Padding(padding: padding ?? const EdgeInsets.all(AppSpacing.xl), child: child);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 

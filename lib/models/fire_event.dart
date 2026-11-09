@@ -25,6 +25,9 @@ class FireEvent {
   final String affectedArea;
   final String spreadRisk;
   final List<String> recommendedActions;
+
+  /// Instrument details, shown only under "Tüm teknik bilgiler".
+  final List<String> technicalLines;
   final double lat;
   final double lng;
 
@@ -52,6 +55,7 @@ class FireEvent {
     required this.affectedArea,
     required this.spreadRisk,
     required this.recommendedActions,
+    this.technicalLines = const [],
     required this.lat,
     required this.lng,
     this.frp = 0,

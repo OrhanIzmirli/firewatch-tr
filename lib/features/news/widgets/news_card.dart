@@ -159,7 +159,7 @@ class _NewsCardState extends State<NewsCard> {
                             showDot: true,
                             color: newsRiskLevelColor(riskLevel),
                           ),
-                          if (widget.item.isBreaking)
+                          if (widget.item.isBreakingNow())
                             StatusChip(
                               label: l10n.newsBreakingBadge,
                               icon: Icons.bolt_rounded,

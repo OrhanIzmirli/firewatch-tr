@@ -6,31 +6,55 @@ import '../../l10n/app_localizations.dart';
 /// the /api/risk/summary backend endpoint. Used by any screen that shows
 /// risk-region data (Risk screen, Home screen overview cards, ...).
 
-Color colorForApiRiskLevel(String level) {
-  switch (level) {
-    case 'Critical':
-    case 'High':
-      return AppColors.danger;
-    case 'Medium':
-      return AppColors.warning;
-    default:
-      return AppColors.success;
-  }
+/// Two missed runs of the 3-hourly calculator, as on the server.
+const Duration kRiskStaleAfter = Duration(hours: 6);
+
+/// A score too old to read as the current risk: the server says so, or a
+/// saved copy has aged past the limit since it was fetched.
+bool isRiskRowStale(Map<String, dynamic> row, {DateTime? now}) {
+  if (row['is_stale'] == true) return true;
+  final at = DateTime.tryParse('${row['created_at'] ?? ''}');
+  return at != null && (now ?? DateTime.now()).difference(at) > kRiskStaleAfter;
 }
 
-/// Colors a 0-100 risk score directly: red above 70, orange 40-70, green
-/// below 40 — used by the regional distribution bar chart.
-Color riskScoreColor(int score) {
-  if (score > 70) return AppColors.danger;
-  if (score >= 40) return AppColors.warning;
-  return AppColors.success;
-}
+/// The single source of the risk bands: 0-24 Low, 25-49 Medium, 50-74 High,
+/// 75-100 Critical — the same cutoffs the backend uses for risk_level.
+/// Lower bound inclusive. Scores are indices, never probabilities.
+const double riskMediumFrom = 25;
+const double riskHighFrom = 50;
+const double riskCriticalFrom = 75;
+
+String riskLevelForScore(num score) => score >= riskCriticalFrom
+    ? 'Critical'
+    : score >= riskHighFrom
+        ? 'High'
+        : score >= riskMediumFrom
+            ? 'Medium'
+            : 'Low';
+
+Color colorForApiRiskLevel(String level) => switch (level) {
+  'Critical' => AppColors.riskCritical,
+  'High' => AppColors.riskHigh,
+  'Medium' => AppColors.riskMedium,
+  _ => AppColors.riskLow,
+};
+
+Color riskScoreColor(num score) => colorForApiRiskLevel(riskLevelForScore(score));
+
+/// One short, actionable sentence per band.
+String riskAdvice(AppLocalizations l10n, num score) =>
+    switch (riskLevelForScore(score)) {
+      'Critical' => l10n.riskAdviceCritical,
+      'High' => l10n.riskAdviceHigh,
+      'Medium' => l10n.riskAdviceMedium,
+      _ => l10n.riskAdviceLow,
+    };
 
 String displayRegionName(AppLocalizations l10n, String region) {
   switch (region) {
-    case 'Ic Anadolu': return l10n.regionIcAnadolu;
-    case 'Dogu Anadolu': return l10n.regionDoguAnadolu;
-    case 'Guneydogu Anadolu': return l10n.regionGuneydoguAnadolu;
+    case 'Ic Anadolu' || 'İç Anadolu': return l10n.regionIcAnadolu;
+    case 'Dogu Anadolu' || 'Doğu Anadolu': return l10n.regionDoguAnadolu;
+    case 'Guneydogu Anadolu' || 'Güneydoğu Anadolu': return l10n.regionGuneydoguAnadolu;
     case 'Ege': return l10n.regionEge;
     case 'Akdeniz': return l10n.regionAkdeniz;
     case 'Marmara': return l10n.regionMarmara;

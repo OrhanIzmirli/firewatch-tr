@@ -7,7 +7,12 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/fire_incident.dart';
+import '../../../shared/widgets/detection_safety_notice.dart';
 import '../../../shared/widgets/glass_panel.dart';
+import '../../../shared/widgets/app_sheet.dart';
+import '../../../core/utils/detection_summary.dart';
+import '../../../shared/widgets/related_news_section.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Detail panel for one clustered fire event.
 ///
@@ -19,18 +24,21 @@ class IncidentSheet extends StatelessWidget {
   final FireIncident incident;
   final String? cityName;
 
-  const IncidentSheet({super.key, required this.incident, this.cityName});
+  /// The satellite data behind this incident cannot be called current.
+  final bool outdated;
+
+  const IncidentSheet({super.key, required this.incident, this.cityName, this.outdated = false});
 
   static Future<void> show(
     BuildContext context, {
     required FireIncident incident,
     String? cityName,
+    bool outdated = false,
   }) {
-    return showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => IncidentSheet(incident: incident, cityName: cityName),
+    return showAppSheet(
+      context,
+      bare: true,
+      builder: (_) => IncidentSheet(incident: incident, cityName: cityName, outdated: outdated),
     );
   }
 
@@ -39,6 +47,9 @@ class IncidentSheet extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final status = incident.status;
+    final place = cityName ?? incident.cityName;
+    final strong = incident.isSignificant || (incident.maxFrpMw ?? 0) >= 15;
+    final fresh = incident.hoursSinceLastDetection <= 6;
     final titleColor = Theme.of(context).textTheme.titleMedium?.color ??
         (isDark ? AppColors.white : AppColors.lightText);
     final bodyColor = isDark
@@ -48,7 +59,7 @@ class IncidentSheet extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.62,
       minChildSize: 0.4,
-      maxChildSize: 0.92,
+      maxChildSize: kSheetMaxHeightFraction,
       expand: false,
       builder: (context, controller) => Container(
         decoration: BoxDecoration(
@@ -60,54 +71,63 @@ class IncidentSheet extends StatelessWidget {
         child: ListView(
           controller: controller,
           padding: const EdgeInsets.fromLTRB(
-            AppSpacing.xl, AppSpacing.md, AppSpacing.xl, AppSpacing.xxl,
+            AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.xxl,
           ),
           children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: bodyColor.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(AppSpacing.pillRadius),
-                ),
-              ),
-            ),
+            const SheetHeader(),
             const SizedBox(height: AppSpacing.xl),
 
-            _StatusHeader(status: status, titleColor: titleColor),
+            _StatusHeader(status: status, titleColor: titleColor, outdated: outdated),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              detectionSummaryText(
+                l10n,
+                city: place,
+                strong: strong,
+                newsVerified: incident.newsVerification != null,
+                landCover: incident.landCover,
+                age: Duration(minutes: (incident.hoursSinceLastDetection * 60).round()),
+              ),
+              key: const Key('incidentSummary'),
+              style: GoogleFonts.ibmPlexSans(fontSize: 15, height: 1.5, fontWeight: FontWeight.w600, color: titleColor),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            // 112 is on every card; only how loud it is changes.
+            DetectionSafetyNotice(prominent: fresh && strong && !incident.isKeptOffEvents),
             const SizedBox(height: AppSpacing.lg),
 
-            if (cityName != null) ...[
+            if (incident.newsVerification case final news?) ...[
+              _NewsVerified(news: news, titleColor: titleColor, bodyColor: bodyColor),
+              const SizedBox(height: AppSpacing.md),
+            ],
+
+            // Official "extinguished" while a satellite still sees heat.
+            // Only reachable behind FeatureFlags.officialStatus.
+            if (incident.hasExtinguishedConflict) ...[
               _Line(
-                icon: Icons.place_rounded,
-                text: cityName!,
-                color: titleColor,
+                icon: Icons.report_problem_rounded,
+                text: l10n.incidentExtinguishedConflict,
+                color: AppColors.warning,
                 emphasis: true,
               ),
               const SizedBox(height: AppSpacing.md),
             ],
 
             _Line(
-              icon: Icons.schedule_rounded,
-              text: _durationText(l10n),
-              color: bodyColor,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            _Line(
               icon: Icons.satellite_alt_rounded,
-              text: _satelliteText(l10n),
+              text: incident.overpassCount >= 2
+                  ? l10n.incidentSeenPasses(incident.overpassCount)
+                  : l10n.incidentSeenOnce,
               color: bodyColor,
             ),
-            const SizedBox(height: AppSpacing.sm),
-            _Line(
-              icon: Icons.scatter_plot_rounded,
-              text: l10n.incidentEvidence(
-                incident.detectionCount,
-                incident.overpassCount,
+            if (incident.overpassCount >= 2 && incident.durationHours >= 1) ...[
+              const SizedBox(height: AppSpacing.sm),
+              _Line(
+                icon: Icons.schedule_rounded,
+                text: l10n.incidentDurationOngoing(_hours(incident.durationHours)),
+                color: bodyColor,
               ),
-              color: bodyColor,
-            ),
+            ],
 
             if (incident.maxFrpMw != null) ...[
               const SizedBox(height: AppSpacing.xl),
@@ -131,20 +151,6 @@ class IncidentSheet extends StatelessWidget {
                 incident: incident,
                 titleColor: titleColor,
                 bodyColor: bodyColor,
-              ),
-            ],
-
-            // Which instruments actually saw this. The evidence line above
-            // gives a count; this says where the count came from, so
-            // "21 detections" can be checked rather than believed.
-            if (incident.sources.isNotEmpty) ...[
-              const SizedBox(height: AppSpacing.md),
-              _Line(
-                icon: Icons.sensors_rounded,
-                text: incident.sources
-                    .map((s) => '${s.label} (${s.count})')
-                    .join(' · '),
-                color: bodyColor,
               ),
             ],
 
@@ -182,12 +188,50 @@ class IncidentSheet extends StatelessWidget {
               ),
             ],
 
-            // Reads official.state but never invents it. Today this is always
-            // null, so the section simply does not render.
-            if (incident.hasOfficialStatus) ...[
+            // Reads official.state but never invents it, and only behind
+            // FeatureFlags.officialStatus (off until a TR source exists).
+            if (incident.hasShownOfficialStatus) ...[
               const SizedBox(height: AppSpacing.xl),
               _OfficialCard(incident: incident, titleColor: titleColor, bodyColor: bodyColor),
             ],
+
+            RelatedNewsSection(city: place, from: incident.firstDetectedAt ?? DateTime.now(), to: incident.lastDetectedAt ?? DateTime.now()),
+
+            Material(
+              type: MaterialType.transparency,
+              child: ExpansionTile(
+                key: const Key('incidentTechnicalDetails'),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                title: Text(
+                  l10n.commonAllTechnical,
+                  style: GoogleFonts.ibmPlexSans(fontSize: 13.5, fontWeight: FontWeight.w600, color: titleColor),
+                ),
+                children: [
+                  _Line(
+                    icon: Icons.scatter_plot_rounded,
+                    text: l10n.incidentEvidence(incident.detectionCount, incident.overpassCount),
+                    color: bodyColor,
+                  ),
+                  if (incident.maxFrpMw != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      l10n.incidentPeakPowerDetail(incident.maxFrpMw!.toStringAsFixed(incident.maxFrpMw! < 10 ? 1 : 0)),
+                      style: AppTheme.mono(size: 13, weight: FontWeight.w700, color: bodyColor),
+                    ),
+                  ],
+                  if (incident.sources.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    _Line(
+                      icon: Icons.sensors_rounded,
+                      text: incident.sources.map((s) => '${s.label} (${s.count})').join(' · '),
+                      color: bodyColor,
+                    ),
+                  ],
+                ],
+              ),
+            ),
 
             const SizedBox(height: AppSpacing.xl),
             GlassPanel(
@@ -214,36 +258,52 @@ class IncidentSheet extends StatelessWidget {
     );
   }
 
-  String _durationText(AppLocalizations l10n) {
-    if (incident.overpassCount <= 1 || incident.durationHours < 1) {
-      return l10n.incidentDurationShort;
-    }
-    return l10n.incidentDurationOngoing(_hours(incident.durationHours));
-  }
-
-  String _satelliteText(AppLocalizations l10n) {
-    final hours = _hours(incident.hoursSinceLastDetection);
-    switch (incident.status) {
-      case IncidentStatus.activeDetection:
-        return l10n.incidentDetectedHoursAgo(hours);
-      case IncidentStatus.awaitingConfirmation:
-        return l10n.incidentNoDetectionFor(hours);
-      case IncidentStatus.lowConfidence:
-        return l10n.incidentNoDetectionLowConfidence(hours);
-      case IncidentStatus.persistentHeatSource:
-        return l10n.incidentDetectedHoursAgo(hours);
-    }
-  }
-
   static String _hours(double value) =>
       value < 10 ? value.toStringAsFixed(1) : value.round().toString();
+}
+
+class _NewsVerified extends StatelessWidget {
+  final IncidentNews news;
+  final Color titleColor;
+  final Color bodyColor;
+
+  const _NewsVerified({required this.news, required this.titleColor, required this.bodyColor});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InkWell(
+      key: const Key('incidentNewsVerified'),
+      onTap: news.url == null ? null : () => launchUrl(Uri.parse(news.url!), mode: LaunchMode.externalApplication),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.verified_rounded, size: 18, color: AppColors.success),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.newsVerifiedLabel, style: GoogleFonts.ibmPlexSans(fontSize: 13.5, fontWeight: FontWeight.w800, color: AppColors.success)),
+                Text(news.title, style: GoogleFonts.ibmPlexSans(fontSize: 13.5, height: 1.35, color: titleColor)),
+                if (news.source != null) Text(news.source!, style: GoogleFonts.ibmPlexSans(fontSize: 12, color: bodyColor)),
+              ],
+            ),
+          ),
+          if (news.url != null) const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.primary),
+        ],
+      ),
+    );
+  }
 }
 
 class _StatusHeader extends StatelessWidget {
   final IncidentStatus status;
   final Color titleColor;
 
-  const _StatusHeader({required this.status, required this.titleColor});
+  final bool outdated;
+
+  const _StatusHeader({required this.status, required this.titleColor, required this.outdated});
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +335,7 @@ class _StatusHeader extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                status.label(l10n),
+                status.label(l10n, outdated: outdated),
                 style: GoogleFonts.ibmPlexSans(
                   fontSize: 19,
                   fontWeight: FontWeight.w800,
@@ -326,8 +386,8 @@ class _Line extends StatelessWidget {
   }
 }
 
-/// Radiative power turned into something a person can act on, with the raw
-/// megawatt figure kept alongside so the judgement is auditable.
+/// Radiative power turned into something a person can act on. The number
+/// itself is under "Tüm teknik bilgiler".
 class _HeatMeter extends StatelessWidget {
   final double frpMw;
   final Color titleColor;
@@ -342,15 +402,13 @@ class _HeatMeter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // Thresholds follow the usual reading of FIRMS FRP for vegetation fires:
-    // tens of MW is a routine burn, hundreds is a major event.
-    final (label, fill, color) = frpMw >= 200
+    // Same words as the sentence above it: what counts as strong there
+    // (8 MW and up) never reads "weak" here.
+    final (label, fill, color) = frpMw >= 50
         ? (l10n.incidentHeatVeryHigh, 1.0, AppColors.danger)
-        : frpMw >= 50
-            ? (l10n.incidentHeatHigh, 0.75, AppColors.danger)
-            : frpMw >= 15
-                ? (l10n.incidentHeatModerate, 0.5, AppColors.primary)
-                : (l10n.incidentHeatLow, 0.25, AppColors.warning);
+        : frpMw >= 8
+            ? (l10n.incidentHeatHigh, 0.6, AppColors.primary)
+            : (l10n.incidentHeatLow, 0.25, AppColors.warning);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -367,17 +425,9 @@ class _HeatMeter extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              '$label  ·  ',
+              label,
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 13, fontWeight: FontWeight.w700, color: color,
-              ),
-            ),
-            // The MW reading is a live measurement — mono with tabular
-            // figures so it does not jitter between refreshes.
-            Text(
-              '${frpMw.toStringAsFixed(frpMw < 10 ? 1 : 0)} MW',
-              style: AppTheme.mono(
-                size: 13, weight: FontWeight.w700, color: color,
               ),
             ),
           ],

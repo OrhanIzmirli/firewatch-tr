@@ -8,3 +8,6 @@ build/
 android/key.properties
 *.jks
 *.keystore
+
+# Editor settings (a .vscode folder once arrived with a malicious task)
+.vscode/

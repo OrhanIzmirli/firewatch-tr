@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
+import 'app_sheet.dart';
 
 /// Small collapsible transparency note — tap to expand/collapse. Used on
 /// every main screen to briefly explain where its data comes from.
@@ -114,6 +115,34 @@ class TrustInfoCardGroup extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         TrustInfoCard(title: l10n.trustAspectActionTitle, icon: Icons.touch_app_rounded, text: action),
       ],
+    );
+  }
+}
+
+/// One small link in place of the four explanation rows.
+class PageAboutLink extends StatelessWidget {
+  final String meaning;
+  final String source;
+  final String interpret;
+  final String action;
+
+  const PageAboutLink({super.key, required this.meaning, required this.source, required this.interpret, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return TextButton.icon(
+      key: const Key('pageAboutLink'),
+      style: TextButton.styleFrom(padding: EdgeInsets.zero, visualDensity: VisualDensity.compact),
+      onPressed: () => showAppSheet<void>(
+        context,
+        builder: (sheetContext) => Padding(
+          padding: const EdgeInsets.fromLTRB(AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.xl),
+          child: TrustInfoCardGroup(meaning: meaning, source: source, interpret: interpret, action: action),
+        ),
+      ),
+      icon: const Icon(Icons.info_outline_rounded, size: 16),
+      label: Text(l10n.pageAboutLink, style: GoogleFonts.ibmPlexSans(fontSize: 13, fontWeight: FontWeight.w600)),
     );
   }
 }

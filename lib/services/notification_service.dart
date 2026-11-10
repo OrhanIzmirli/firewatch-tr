@@ -14,6 +14,7 @@ import 'tracked_places_api.dart';
 import 'tracked_places_provider.dart';
 import 'alert_inbox.dart';
 import 'alert_preference.dart';
+import 'foreground_location_sync.dart';
 
 class NotificationService {
   NotificationService._();
@@ -69,17 +70,6 @@ class NotificationService {
     await _createAndroidChannel();
     _localReady = true;
   }
-
-  /// Whether app start may raise the system notification prompt.
-  ///
-  /// A fresh install must not: the prompt used to appear before the first
-  /// screen, ahead of the onboarding step that explains why we ask. That
-  /// step (NotificationPermissionScreen) now asks. Installs that already
-  /// went through onboarding keep the old behaviour — Android shows the
-  /// prompt only while the answer is undecided, so for them this is a
-  /// no-op or the same single prompt they always got.
-  static bool shouldRequestPermissionAtStartup({required bool hasSeenOnboarding}) =>
-      hasSeenOnboarding;
 
   /// Order matters. Listeners and the launch notification come first and
   /// cannot be blocked: they used to be registered only after getToken and
@@ -156,19 +146,8 @@ class NotificationService {
     }
 
     try {
-      final hasSeenOnboarding =
-          await SharedPreferencesAsync().getBool('hasSeenOnboarding') ?? false;
-      final settings = shouldRequestPermissionAtStartup(hasSeenOnboarding: hasSeenOnboarding)
-          ? await _fcm.requestPermission(
-              alert: true,
-              announcement: false,
-              badge: true,
-              carPlay: false,
-              criticalAlert: false,
-              provisional: false,
-              sound: true,
-            )
-          : await _fcm.getNotificationSettings();
+      // Only read: the prompt comes after an explanation, on a screen.
+      final settings = await _fcm.getNotificationSettings();
       if (kDebugMode) {
         print('FCM Permission status: ${settings.authorizationStatus}');
       }
@@ -303,6 +282,7 @@ class NotificationService {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(kAlertsWantedKey, active);
+    if (!active) await ForegroundLocationSync.forgetLastCell();
     final token = await _fcm.getToken();
     if (token == null || token.isEmpty) return;
     if (active) {
@@ -317,12 +297,20 @@ class NotificationService {
     }
   }
 
+  /// The already rounded location from [ForegroundLocationSync].
+  Future<bool> sendForegroundLocation(double latitude, double longitude) async {
+    final token = await _fcm.getToken();
+    if (token == null || token.isEmpty) return false;
+    return _renderApi.subscribeToNotifications(token, latitude: latitude, longitude: longitude, isActive: true);
+  }
+
   /// Settings → "Delete my location data": erases the approximate location
   /// the backend keeps for this device (notifications stay on) and every
   /// tracked place with its anonymous identity. Without an FCM token the
   /// device was never registered for alerts, so there is no location to
   /// erase there.
   Future<bool> deleteServerLocation({TrackedPlacesNotifier? trackedPlaces}) async {
+    await ForegroundLocationSync.disable();
     String? token;
     try {
       token = await _fcm.getToken();

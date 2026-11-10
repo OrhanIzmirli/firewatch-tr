@@ -986,66 +986,6 @@ abstract class AppLocalizations {
   /// **'Otomatik Taramayı Durdur'**
   String get notificationsStopMonitoring;
 
-  /// No description provided for @notificationsBackgroundTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka Planda Takip'**
-  String get notificationsBackgroundTitle;
-
-  /// No description provided for @notificationsBackgroundSubtitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Uygulama kapalıyken uydu tespitlerini aralıklarla kontrol edin. Android bu kontrolleri geciktirebilir, uydu verisi de saatlerce gecikebilir.'**
-  String get notificationsBackgroundSubtitle;
-
-  /// No description provided for @notificationsEnableBackground.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka Plan Takibini Aç'**
-  String get notificationsEnableBackground;
-
-  /// No description provided for @notificationsDisableBackground.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka Plan Takibini Kapat'**
-  String get notificationsDisableBackground;
-
-  /// No description provided for @backgroundLocationDialogTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka Plan Konum İzni'**
-  String get backgroundLocationDialogTitle;
-
-  /// No description provided for @backgroundLocationDialogBody.
-  ///
-  /// In tr, this message translates to:
-  /// **'FireWatch TR, uygulama kapalıyken de yakınınızdaki yangınları kontrol edip sizi uyarabilmek için konumunuza arka planda erişim istiyor. Bu kontroller telefonunuzda yapılır; bu sırada konumunuz sunucuya gönderilmez. Bu izni vermezseniz uygulama sadece açıkken tarama yapabilir. Sistem izin ekranında \"Her zaman izin ver\" seçeneğini seçmeniz gerekir.'**
-  String get backgroundLocationDialogBody;
-
-  /// No description provided for @backgroundLocationDialogConfirm.
-  ///
-  /// In tr, this message translates to:
-  /// **'Devam Et'**
-  String get backgroundLocationDialogConfirm;
-
-  /// No description provided for @backgroundLocationPermissionDenied.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka plan konum izni verilmedi. Arka plan takibi açılamadı.'**
-  String get backgroundLocationPermissionDenied;
-
-  /// No description provided for @backgroundMonitoringEnabled.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka plan takibi açıldı.'**
-  String get backgroundMonitoringEnabled;
-
-  /// No description provided for @backgroundMonitoringDisabled.
-  ///
-  /// In tr, this message translates to:
-  /// **'Arka plan takibi kapatıldı.'**
-  String get backgroundMonitoringDisabled;
-
   /// No description provided for @notificationsNearbyLiveFires.
   ///
   /// In tr, this message translates to:
@@ -2938,32 +2878,20 @@ abstract class AppLocalizations {
   /// No description provided for @notifPermTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Önemli uyarıları kaçırmayın'**
+  /// **'Bildirimlere izin verin'**
   String get notifPermTitle;
 
   /// No description provided for @notifPermSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirim izniyle yakınınızdaki uydu tespitlerini ve önemli değişiklikleri anında öğrenebilirsiniz.'**
+  /// **'Bildirim izniyle yakınınızdaki uydu tespitlerini, Yerlerim uyarılarını ve önemli değişiklikleri öğrenebilirsiniz.'**
   String get notifPermSubtitle;
 
   /// No description provided for @notifPermNote.
   ///
   /// In tr, this message translates to:
-  /// **'Bu izin zorunlu değil. İsterseniz şimdilik atlayıp uygulamayı yine kullanabilirsiniz.'**
+  /// **'Bu izin zorunlu değil. Vermezseniz uygulamayı yine kullanabilir, daha sonra telefon ayarlarından açabilirsiniz.'**
   String get notifPermNote;
-
-  /// No description provided for @notifPermEnable.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bildirimleri Etkinleştir'**
-  String get notifPermEnable;
-
-  /// No description provided for @notifPermSkip.
-  ///
-  /// In tr, this message translates to:
-  /// **'Şimdilik Geç'**
-  String get notifPermSkip;
 
   /// No description provided for @notifPermGranted.
   ///
@@ -2976,6 +2904,54 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bildirim izni verilmedi. Ayarlardan daha sonra açabilirsiniz.'**
   String get notifPermDenied;
+
+  /// No description provided for @locDisclosureNotNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi değil'**
+  String get locDisclosureNotNow;
+
+  /// No description provided for @disclosureAccept.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kabul ediyorum'**
+  String get disclosureAccept;
+
+  /// No description provided for @disclosureDecline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayır, teşekkürler'**
+  String get disclosureDecline;
+
+  /// No description provided for @locDisclosureLead.
+  ///
+  /// In tr, this message translates to:
+  /// **'FireWatch TR, yakınınızdaki uydu ısı tespitlerini ve yangın riskini göstermek ve yakın tespitler için size bildirim gönderebilmek amacıyla konum verilerinizi toplar.'**
+  String get locDisclosureLead;
+
+  /// No description provided for @locDisclosureServer.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz, bulunduğunuz ili ve riski göstermek için sunucumuza gönderilir. Bu sorgular kalıcı olarak saklanmaz.'**
+  String get locDisclosureServer;
+
+  /// No description provided for @locDisclosureShared.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konumunuz satılmaz, reklam için kullanılmaz ve başkalarıyla paylaşılmaz. Hava ve yangın indeksi verisi için hizmet sağlayıcılara yalnızca yaklaşık 10 km\'ye yuvarlanmış nokta iletilir.'**
+  String get locDisclosureShared;
+
+  /// No description provided for @notifPermData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim gönderebilmek için telefonunuzun bildirim kimliği (FCM belirteci) ve uygulama sürümü sunucumuzda saklanır. Uygulamayı 90 gün açmazsanız silinir.'**
+  String get notifPermData;
+
+  /// No description provided for @reportPanelPhotoDisclosure.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraf yalnızca raporu gönderirseniz sunucumuza yüklenir. Konum bilgisi ve diğer üst veriler silinir, fotoğraf 90 gün sonra silinir. Kamerayı seçerseniz kamera izni istenir.'**
+  String get reportPanelPhotoDisclosure;
 
   /// No description provided for @locPermServiceOff.
   ///
@@ -3001,83 +2977,41 @@ abstract class AppLocalizations {
   /// **'Konum izni alınırken bir sorun oluştu. Şimdilik geçebilirsiniz.'**
   String get locPermError;
 
-  /// No description provided for @locPermTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Yakınınızdaki olayları gösterelim'**
-  String get locPermTitle;
-
-  /// No description provided for @locPermSubtitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Konumunuzla yakınınızdaki uydu tespitlerini ve çevrenizdeki riski gösterebiliriz. Mesafeler telefonunuzda hesaplanır.'**
-  String get locPermSubtitle;
-
-  /// No description provided for @locPermNote.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bildirimler için otomatik taramayı başlatırsanız konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır; bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil ile hemen silinir. Bu izin zorunlu değil, şimdilik atlayabilirsiniz.'**
-  String get locPermNote;
-
-  /// No description provided for @locPermEnable.
-  ///
-  /// In tr, this message translates to:
-  /// **'Konumu Etkinleştir'**
-  String get locPermEnable;
-
-  /// No description provided for @locPermSkip.
-  ///
-  /// In tr, this message translates to:
-  /// **'Şimdilik Geç'**
-  String get locPermSkip;
-
   /// No description provided for @locDisclosureTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Konumunuzu nasıl kullanıyoruz?'**
+  /// **'Konum verilerinizi topluyoruz'**
   String get locDisclosureTitle;
 
-  /// No description provided for @locDisclosureOnDevice.
+  /// No description provided for @locDisclosureForeground.
   ///
   /// In tr, this message translates to:
-  /// **'Yakınınızdaki uydu tespitlerine olan mesafe telefonunuzda hesaplanır.'**
-  String get locDisclosureOnDevice;
+  /// **'Konumunuz yalnızca uygulama açık ve ekrandayken okunur.'**
+  String get locDisclosureForeground;
 
-  /// No description provided for @locDisclosureNearestCity.
+  /// No description provided for @settingsAlertsLocationNote.
   ///
   /// In tr, this message translates to:
-  /// **'Bulunduğunuz ili göstermek için konumunuz, riski hesaplamak için yaklaşık 10 km\'ye yuvarlanmış konumunuz sunucumuza gönderilir; bu sorgular saklanmaz.'**
-  String get locDisclosureNearestCity;
+  /// **'Bildirimler son açtığınız konuma göre gider; ev/yazlık için Yerlerim\'i kullanın.'**
+  String get settingsAlertsLocationNote;
 
   /// No description provided for @locDisclosureStored.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimler için otomatik taramayı başlatırsanız, bölgenizle ilgili uyarı gönderebilmek için konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumunuz saklanmaz.'**
+  /// **'Otomatik taramayı başlatırsanız, uygulamayı her açtığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda güncellenir ve bildirimler bu son konuma göre gider. Yerlerim\'deki yerler ve yangın bildirimleri de böyle saklanır. Tam konumunuz saklanmaz.'**
   String get locDisclosureStored;
 
   /// No description provided for @locDisclosureDelete.
   ///
   /// In tr, this message translates to:
-  /// **'Bildirimleri kapattığınızda ya da Ayarlar → Konum verimi sil\'e dokunduğunuzda hemen silinir. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir.'**
+  /// **'Hemen silmek için bildirimleri kapatın veya Ayarlar → Konum verimi sil\'e dokunun. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir. Yangın bildirimleri 90 gün sonra silinir.'**
   String get locDisclosureDelete;
 
   /// No description provided for @locDisclosureOptional.
   ///
   /// In tr, this message translates to:
-  /// **'Konum izni zorunlu değil; uygulamayı konumsuz da kullanabilir, izni istediğiniz zaman telefon ayarlarından kaldırabilirsiniz.'**
+  /// **'Konum izni zorunlu değil; istediğiniz zaman telefon ayarlarından kaldırabilirsiniz.'**
   String get locDisclosureOptional;
-
-  /// No description provided for @locDisclosureContinue.
-  ///
-  /// In tr, this message translates to:
-  /// **'Devam et'**
-  String get locDisclosureContinue;
-
-  /// No description provided for @locDisclosureNotNow.
-  ///
-  /// In tr, this message translates to:
-  /// **'Şimdi değil'**
-  String get locDisclosureNotNow;
 
   /// No description provided for @trackedPlacesTitle.
   ///
@@ -3282,12 +3216,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'{count} yer eklendi.'**
   String trackedPlacesMigrateDone(int count);
-
-  /// No description provided for @locDisclosureTracked.
-  ///
-  /// In tr, this message translates to:
-  /// **'Yerlerim\'e eklediğiniz yerlerin adı, yaklaşık 1 km\'ye yuvarlanmış konumu ve yarıçapı sunucumuzda saklanır. Bir yeri listeden, hepsini Ayarlar → Konum verimi sil ile silebilirsiniz.'**
-  String get locDisclosureTracked;
 
   /// No description provided for @notifPlacesChannelName.
   ///
@@ -4289,7 +4217,7 @@ abstract class AppLocalizations {
   /// No description provided for @trustAlertsSource.
   ///
   /// In tr, this message translates to:
-  /// **'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla telefonunuzda karşılaştırır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak saklanır.'**
+  /// **'Uydu tespitleri uygulama açıkken belirli aralıklarla kontrol edilir ve konumunuzla telefonunuzda karşılaştırılır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattıysanız uygulamayı son açtığınız konum yaklaşık 1 km\'ye yuvarlanarak saklanır.'**
   String get trustAlertsSource;
 
   /// No description provided for @trustAlertsInterpret.

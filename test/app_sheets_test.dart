@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firewatch_tr/l10n/app_localizations.dart';
 import 'package:firewatch_tr/models/fire_incident.dart';
 import 'package:firewatch_tr/features/map/widgets/incident_sheet.dart';
-import 'package:firewatch_tr/services/location_disclosure.dart';
 import 'package:firewatch_tr/shared/widgets/app_sheet.dart';
 import 'package:firewatch_tr/shared/widgets/feedback_sheet.dart';
 import 'package:firewatch_tr/shared/widgets/info_icon_button.dart';
@@ -114,10 +113,6 @@ void main() {
   testWidgets('bug report window', (tester) async {
     await _checkSheet(tester, (c) => showBugReportSheet(c));
   });
-  testWidgets('location disclosure window', (tester) async {
-    await _checkSheet(tester, (c) => showAppSheet<bool>(c, scrollable: false, builder: (_) => const LocationDisclosureSheet()));
-  });
-
   testWidgets('detection window: X, outside, Back', (tester) async {
     final context = await _host(tester);
     bool isOpen() => find.byKey(const Key('sheetClose')).evaluate().isNotEmpty;

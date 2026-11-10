@@ -23,7 +23,6 @@ import 'package:firewatch_tr/models/news_item.dart';
 import 'package:firewatch_tr/services/app_version.dart';
 import 'package:firewatch_tr/services/device_position.dart';
 import 'package:firewatch_tr/services/fire_api_service.dart';
-import 'package:firewatch_tr/services/notification_service.dart';
 import 'package:firewatch_tr/features/map/widgets/incident_legend.dart';
 import 'package:firewatch_tr/shared/widgets/detection_safety_notice.dart';
 
@@ -227,13 +226,6 @@ void main() {
     });
   });
 
-  group('notification permission is asked in onboarding, not before it', () {
-    test('a fresh install is not prompted at startup; onboarded installs keep the old behaviour', () {
-      expect(NotificationService.shouldRequestPermissionAtStartup(hasSeenOnboarding: false), isFalse);
-      expect(NotificationService.shouldRequestPermissionAtStartup(hasSeenOnboarding: true), isTrue);
-    });
-  });
-
   group('position falls back to the last known fix', () {
     final now = DateTime(2026, 11, 7, 17);
 
@@ -286,12 +278,7 @@ void main() {
   });
 
   group('general scan fixes', () {
-    test('background monitoring initialises Firebase before the notification service', () {
-      final src = File('lib/services/background_task_service.dart').readAsStringSync();
-      final init = src.indexOf('Firebase.initializeApp(');
-      expect(init, greaterThan(0));
-      expect(init, lessThan(src.indexOf('NotificationService.instance.initializeLocal()')));
-      // The service no longer touches Firebase when constructed.
+    test('the notification service does not touch Firebase when constructed', () {
       expect(File('lib/services/notification_service.dart').readAsStringSync(),
           contains('FirebaseMessaging get _fcm => FirebaseMessaging.instance;'));
     });

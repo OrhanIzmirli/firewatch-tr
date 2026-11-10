@@ -91,14 +91,12 @@ void main() {
     });
 
     test('no in-app text still claims location is never stored', () {
-      for (final text in [tr.locPermNote, tr.locPermSubtitle, tr.trustAlertsSource, tr.backgroundLocationDialogBody]) {
+      for (final text in [tr.locDisclosureStored, tr.trustAlertsSource]) {
         expect(text.toLowerCase(), isNot(contains('hiç saklanmaz')));
       }
-      for (final text in [en.locPermNote, en.locPermSubtitle, en.trustAlertsSource, en.backgroundLocationDialogBody]) {
+      for (final text in [en.locDisclosureStored, en.trustAlertsSource]) {
         expect(text.toLowerCase(), isNot(contains('never stored server-side')));
       }
-      expect(tr.locPermNote, contains('1 km'));
-      expect(en.locPermNote, contains('1 km'));
     });
   });
 
@@ -109,7 +107,7 @@ void main() {
 
       await tester.tap(find.text('go'));
       await tester.pumpAndSettle();
-      expect(find.byType(LocationDisclosureSheet), findsOneWidget);
+      expect(find.byType(LocationDisclosurePage), findsOneWidget);
       expect(find.text(AppLocalizationsTr().locDisclosureTitle), findsOneWidget);
       expect(find.textContaining('1 km'), findsWidgets);
 
@@ -123,7 +121,7 @@ void main() {
       // Second time: no sheet, straight through.
       await tester.tap(find.text('go'));
       await tester.pumpAndSettle();
-      expect(find.byType(LocationDisclosureSheet), findsNothing);
+      expect(find.byType(LocationDisclosurePage), findsNothing);
       expect(results, [true, true]);
     });
 
@@ -142,7 +140,7 @@ void main() {
 
       await tester.tap(find.text('go'));
       await tester.pumpAndSettle();
-      expect(find.byType(LocationDisclosureSheet), findsNothing);
+      expect(find.byType(LocationDisclosurePage), findsNothing);
       expect(results, [false, false]);
     });
 
@@ -163,7 +161,7 @@ void main() {
       force = true;
       await tester.tap(find.text('go'));
       await tester.pumpAndSettle();
-      expect(find.byType(LocationDisclosureSheet), findsOneWidget);
+      expect(find.byType(LocationDisclosurePage), findsOneWidget);
       await tester.ensureVisible(find.byKey(const Key('locDisclosureContinue')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('locDisclosureContinue')));
@@ -177,9 +175,9 @@ void main() {
       );
       await tester.tap(find.text('go'));
       await tester.pumpAndSettle();
-      expect(find.text('How we use your location'), findsOneWidget);
-      expect(find.text('Continue'), findsOneWidget);
-      expect(find.text('Not now'), findsOneWidget);
+      expect(find.text('We collect your location data'), findsOneWidget);
+      expect(find.text('I agree'), findsOneWidget);
+      expect(find.text('No, thanks'), findsOneWidget);
     });
   });
 

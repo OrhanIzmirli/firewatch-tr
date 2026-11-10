@@ -1,68 +1,22 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
-import '../firebase_options.dart';
-import 'fire_monitoring_service.dart';
-import 'notification_service.dart';
+const String _retiredTask = 'backgroundFireCheckTask';
+const String _retiredFlag = 'background_monitoring_enabled';
 
-const String backgroundFireCheckTask = 'backgroundFireCheckTask';
-
-/// Runs in a separate background isolate — the Flutter engine bindings and
-/// the notification plugin/channel are not set up there automatically, so
-/// they're (re-)initialized here before reusing FireMonitoringService.
+/// A task an older version scheduled may still fire once before it is
+/// cancelled. It does nothing, and reads no location.
 @pragma('vm:entry-point')
-void backgroundTaskCallbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    try {
-      WidgetsFlutterBinding.ensureInitialized();
-      // This isolate starts with nothing initialised. Without Firebase the
-      // check used to throw before doing anything, so background
-      // monitoring never ran; and it needs only local notifications, not
-      // FCM listeners or permission prompts.
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-      await NotificationService.instance.initializeLocal();
-      await FireMonitoringService.instance.initialize();
-      await FireMonitoringService.instance.checkNow(triggerNotification: true);
-      return Future.value(true);
-    } catch (_) {
-      return Future.value(false);
-    }
-  });
+void retiredBackgroundDispatcher() {
+  Workmanager().executeTask((task, inputData) async => true);
 }
 
-/// Registers/cancels the periodic background fire check. Only ever called
-/// after the user has explicitly opted in and granted
-/// ACCESS_BACKGROUND_LOCATION — never at app startup unconditionally.
-class BackgroundTaskService {
-  BackgroundTaskService._();
-  static final BackgroundTaskService instance = BackgroundTaskService._();
-
-  static const String prefsKey = 'background_monitoring_enabled';
-
-  Future<bool> isEnabled() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(prefsKey) ?? false;
-  }
-
-  Future<void> setEnabled(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(prefsKey, value);
-  }
-
-  Future<void> initialize() async {
-    await Workmanager().initialize(backgroundTaskCallbackDispatcher);
-    await Workmanager().registerPeriodicTask(
-      backgroundFireCheckTask,
-      backgroundFireCheckTask,
-      frequency: const Duration(minutes: 15),
-      existingWorkPolicy: ExistingWorkPolicy.keep,
-      constraints: Constraints(networkType: NetworkType.connected),
-    );
-  }
-
-  Future<void> stop() async {
-    await Workmanager().cancelByUniqueName(backgroundFireCheckTask);
-  }
+/// Background checks were removed in 1.2.0+10. Android keeps a scheduled task
+/// across app updates, so the one older versions registered is cancelled here.
+Future<void> cancelRetiredBackgroundTask() async {
+  final prefs = await SharedPreferences.getInstance();
+  if (!(prefs.getBool(_retiredFlag) ?? false)) return;
+  await Workmanager().initialize(retiredBackgroundDispatcher);
+  await Workmanager().cancelByUniqueName(_retiredTask);
+  await prefs.remove(_retiredFlag);
 }

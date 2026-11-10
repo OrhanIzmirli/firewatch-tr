@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -13,10 +12,10 @@ import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/detection_status.dart';
 import '../../models/fire_point.dart';
-import '../../services/background_task_service.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
+import '../../services/foreground_location_sync.dart';
 import '../../services/notification_service.dart';
 import '../../services/render_api_service.dart';
 import '../../services/settings_provider.dart';
@@ -32,7 +31,6 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
-import '../../shared/widgets/app_sheet.dart';
 import '../home/widgets/recent_alerts.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -169,6 +167,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Future<void> _checkNearbyFireRisk() async {
+    await LocationDisclosure.requestPermission(context, force: true);
+    if (!mounted) return;
     setState(() => _isBusy = true);
     await _monitor.checkNow(triggerNotification: true);
     if (!mounted) return;
@@ -192,12 +192,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final accepted = await LocationDisclosure.ensureAccepted(context, force: true);
     if (!accepted || !mounted) return;
 
-    setState(() => _isBusy = true);
-
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+    final permission = await LocationDisclosure.requestPermission(context, force: true);
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       if (!mounted) return;
@@ -208,35 +203,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       return;
     }
     if (!mounted) return;
-
-    final wantsBackground = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: DialogTitleWithClose(title: Text(l10n.backgroundLocationDialogTitle)),
-        content: Text(l10n.backgroundLocationDialogBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.backgroundLocationDialogConfirm),
-          ),
-        ],
-      ),
-    );
-
-    var backgroundGranted = false;
-    if (wantsBackground == true) {
-      final backgroundStatus = await Permission.locationAlways.request();
-      backgroundGranted = backgroundStatus.isGranted;
-    }
-
-    if (backgroundGranted) {
-      await BackgroundTaskService.instance.initialize();
-      await BackgroundTaskService.instance.setEnabled(true);
-    }
+    setState(() => _isBusy = true);
 
     await _monitor.startMonitoring();
 
@@ -256,16 +223,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, true);
     await settings.recordPushPreference(true);
+    await ForegroundLocationSync.enable();
 
     if (!mounted) return;
     setState(() => _isBusy = false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          backgroundGranted
-              ? l10n.backgroundMonitoringEnabled
-              : l10n.monitorStatusStarted,
-        ),
+        content: Text(l10n.monitorStatusStarted),
       ),
     );
   }
@@ -275,9 +239,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _isBusy = true);
 
     await _monitor.stopMonitoring();
-    await BackgroundTaskService.instance.stop();
-    await BackgroundTaskService.instance.setEnabled(false);
     await NotificationService.instance.updateSubscription(active: false);
+    await ForegroundLocationSync.disable();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, false);

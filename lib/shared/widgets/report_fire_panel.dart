@@ -21,6 +21,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/feedback_service.dart';
+import '../../services/location_disclosure.dart';
 import '../../services/report_spam_guard.dart';
 import 'glass_panel.dart';
 import 'status_chip.dart';
@@ -103,10 +104,8 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
         return;
       }
 
-      var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
+      if (!mounted) return;
+      final permission = await LocationDisclosure.requestPermission(context, force: true);
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         _showSnack(l10n.reportPanelLocationPermissionDenied);
@@ -171,6 +170,10 @@ class _ReportFirePanelState extends State<ReportFirePanel> {
       builder: (ctx) => SafeArea(
         child: Wrap(
           children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.sm),
+              child: Text(l10n.reportPanelPhotoDisclosure, style: GoogleFonts.ibmPlexSans(fontSize: 16, height: 1.4)),
+            ),
             ListTile(
               leading: const Icon(Icons.photo_camera_rounded),
               title: Text(l10n.reportPanelPhotoSourceCamera),

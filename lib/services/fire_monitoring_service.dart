@@ -77,10 +77,8 @@ class FireMonitoringService {
         return;
       }
 
-      var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
+      // Never asks: the prompt belongs after the disclosure, on a screen.
+      final permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         statusNotifier.value = l10n.monitorStatusLocationDenied;

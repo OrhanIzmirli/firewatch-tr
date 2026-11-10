@@ -510,16 +510,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsDisableBackground => 'Disable Background Monitoring';
 
   @override
-  String get backgroundLocationDialogTitle => 'Background Location Permission';
-
-  @override
-  String get backgroundLocationDialogBody =>
-      'FireWatch TR wants to access your location in the background so it can check for nearby fires and alert you even when the app is closed. These checks run on your phone; your location is not sent to the server during them. If you don\'t grant this, the app can only scan while it\'s open. On the system permission screen, choose \"Allow all the time\".';
-
-  @override
-  String get backgroundLocationDialogConfirm => 'Continue';
-
-  @override
   String get backgroundLocationPermissionDenied =>
       'Background location permission was not granted. Background monitoring could not be enabled.';
 
@@ -1613,21 +1603,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'There\'s nothing here to display right now.';
 
   @override
-  String get notifPermTitle => 'Don\'t miss important alerts';
+  String get notifPermTitle => 'Allow notifications';
 
   @override
   String get notifPermSubtitle =>
-      'With notification permission, you\'ll hear about nearby satellite detections and important changes right away.';
+      'With notification permission, you\'ll hear about nearby satellite detections, My Places alerts and important changes.';
 
   @override
   String get notifPermNote =>
-      'This permission isn\'t required. You can skip it for now and still use the app.';
-
-  @override
-  String get notifPermEnable => 'Enable Notifications';
-
-  @override
-  String get notifPermSkip => 'Skip for Now';
+      'This permission isn\'t required. Without it you can still use the app, and you can turn it on later in your phone\'s settings.';
 
   @override
   String get notifPermGranted => 'Notification permission granted. Thanks!';
@@ -1635,6 +1619,58 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notifPermDenied =>
       'Notification permission denied. You can enable it later in Settings.';
+
+  @override
+  String get locDisclosureNotNow => 'Not now';
+
+  @override
+  String get disclosureAccept => 'I agree';
+
+  @override
+  String get disclosureDecline => 'No, thanks';
+
+  @override
+  String get locDisclosureLead =>
+      'FireWatch TR collects your location data to show satellite heat detections and fire risk near you, and to send you notifications about nearby detections.';
+
+  @override
+  String get locDisclosureBackground =>
+      'If you start automatic monitoring, your location data is also collected when the app is closed or not in use, to check for nearby detections. A separate permission is requested for this.';
+
+  @override
+  String get locDisclosureServer =>
+      'Your location is sent to our server to show your province and the risk. These lookups are not kept permanently.';
+
+  @override
+  String get locDisclosureShared =>
+      'Your location is not sold, not used for ads and not shared. Weather and fire index providers receive only a point rounded to about 10 km.';
+
+  @override
+  String get backgroundDisclosureTitle => 'Location data in the background';
+
+  @override
+  String get backgroundDisclosureLead =>
+      'FireWatch TR collects your location data to check for satellite heat detections near you and notify you, even when the app is closed or not in use. This happens only if you start automatic monitoring.';
+
+  @override
+  String get backgroundDisclosureDevice =>
+      'These checks run on your phone at regular intervals. During them your location is not sent to our server, not stored and not shared.';
+
+  @override
+  String get backgroundDisclosureStop =>
+      'To stop, end automatic monitoring on the Notifications screen or remove the permission in your phone\'s settings.';
+
+  @override
+  String get backgroundDisclosureOptional =>
+      'This permission is optional; without it, monitoring runs only while the app is open. If you agree, choose \"Allow all the time\" on the next screen.';
+
+  @override
+  String get notifPermData =>
+      'To send notifications, your phone\'s notification ID (FCM token) and the app version are stored on our server. They are deleted if you don\'t open the app for 90 days.';
+
+  @override
+  String get reportPanelPhotoDisclosure =>
+      'A photo is uploaded to our server only if you send the report. Location data and other metadata are removed, and the photo is deleted after 90 days. If you choose the camera, camera permission is requested.';
 
   @override
   String get locPermServiceOff =>
@@ -1653,50 +1689,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong getting location permission. You can skip for now.';
 
   @override
-  String get locPermTitle => 'Let\'s show you nearby events';
-
-  @override
-  String get locPermSubtitle =>
-      'With your location we can show satellite detections and the risk around you. Distances are calculated on your phone.';
-
-  @override
-  String get locPermNote =>
-      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km; it is deleted immediately when you turn notifications off or use Settings → Delete my location data. This permission isn\'t required, you can skip it for now.';
-
-  @override
-  String get locPermEnable => 'Enable Location';
-
-  @override
-  String get locPermSkip => 'Skip for Now';
-
-  @override
-  String get locDisclosureTitle => 'How we use your location';
-
-  @override
-  String get locDisclosureOnDevice =>
-      'Distance to nearby satellite detections is calculated on your phone.';
-
-  @override
-  String get locDisclosureNearestCity =>
-      'To show which province you are in, your location is sent to our server, and to calculate risk, your location rounded to about 10 km; these lookups are not stored.';
+  String get locDisclosureTitle => 'We collect your location data';
 
   @override
   String get locDisclosureStored =>
-      'If you start automatic monitoring for notifications, your location is stored on our server rounded to about 1 km so we can send alerts for your area. Your exact location is never stored.';
+      'If you start automatic monitoring, add a place to My Places or report a fire, the location is stored on our server rounded to about 1 km. Your exact location is never stored.';
 
   @override
   String get locDisclosureDelete =>
-      'It is deleted immediately when you turn notifications off or tap Settings → Delete my location data. If you don\'t open the app for 90 days, your record is deleted entirely.';
+      'To delete it now, turn notifications off or tap Settings → Delete my location data. If you don\'t open the app for 90 days, your record is deleted. Fire reports are deleted after 90 days.';
 
   @override
   String get locDisclosureOptional =>
-      'Location permission is optional; you can use the app without it and revoke it at any time in your phone\'s settings.';
-
-  @override
-  String get locDisclosureContinue => 'Continue';
-
-  @override
-  String get locDisclosureNotNow => 'Not now';
+      'Location permission is optional; you can remove it at any time in your phone\'s settings.';
 
   @override
   String get trackedPlacesTitle => 'My Places';
@@ -1819,10 +1824,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String trackedPlacesMigrateDone(int count) {
     return '$count places added.';
   }
-
-  @override
-  String get locDisclosureTracked =>
-      'For places in My Places, the name, the location rounded to about 1 km and the radius are stored on our server. Delete one from the list, or all of them with Settings → Delete my location data.';
 
   @override
   String get notifPlacesChannelName => 'My places';

@@ -23,7 +23,6 @@ import 'package:firewatch_tr/models/news_item.dart';
 import 'package:firewatch_tr/services/app_version.dart';
 import 'package:firewatch_tr/services/device_position.dart';
 import 'package:firewatch_tr/services/fire_api_service.dart';
-import 'package:firewatch_tr/services/notification_service.dart';
 import 'package:firewatch_tr/features/map/widgets/incident_legend.dart';
 import 'package:firewatch_tr/shared/widgets/detection_safety_notice.dart';
 
@@ -224,13 +223,6 @@ void main() {
       addTearDown(container.dispose);
       expect(await container.read(appVersionProvider.future), 'v1.2.0 (5)');
       expect(File('lib/l10n/app_tr.arb').readAsStringSync(), isNot(contains('v1.0.0')));
-    });
-  });
-
-  group('notification permission is asked in onboarding, not before it', () {
-    test('a fresh install is not prompted at startup; onboarded installs keep the old behaviour', () {
-      expect(NotificationService.shouldRequestPermissionAtStartup(hasSeenOnboarding: false), isFalse);
-      expect(NotificationService.shouldRequestPermissionAtStartup(hasSeenOnboarding: true), isTrue);
     });
   });
 

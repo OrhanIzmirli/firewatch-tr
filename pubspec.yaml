@@ -2,7 +2,7 @@ name: firewatch_tr
 description: "A wildfire tracking mobile app for Turkey."
 publish_to: 'none'
 
-version: 1.2.0+8
+version: 1.2.0+9
 
 environment:
   sdk: ^3.11.4

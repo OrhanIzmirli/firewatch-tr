@@ -70,17 +70,6 @@ class NotificationService {
     _localReady = true;
   }
 
-  /// Whether app start may raise the system notification prompt.
-  ///
-  /// A fresh install must not: the prompt used to appear before the first
-  /// screen, ahead of the onboarding step that explains why we ask. That
-  /// step (NotificationPermissionScreen) now asks. Installs that already
-  /// went through onboarding keep the old behaviour — Android shows the
-  /// prompt only while the answer is undecided, so for them this is a
-  /// no-op or the same single prompt they always got.
-  static bool shouldRequestPermissionAtStartup({required bool hasSeenOnboarding}) =>
-      hasSeenOnboarding;
-
   /// Order matters. Listeners and the launch notification come first and
   /// cannot be blocked: they used to be registered only after getToken and
   /// two backend calls (20 s timeouts each on a cold Render start), so a tap
@@ -156,19 +145,8 @@ class NotificationService {
     }
 
     try {
-      final hasSeenOnboarding =
-          await SharedPreferencesAsync().getBool('hasSeenOnboarding') ?? false;
-      final settings = shouldRequestPermissionAtStartup(hasSeenOnboarding: hasSeenOnboarding)
-          ? await _fcm.requestPermission(
-              alert: true,
-              announcement: false,
-              badge: true,
-              carPlay: false,
-              criticalAlert: false,
-              provisional: false,
-              sound: true,
-            )
-          : await _fcm.getNotificationSettings();
+      // Only read: the prompt comes after an explanation, on a screen.
+      final settings = await _fcm.getNotificationSettings();
       if (kDebugMode) {
         print('FCM Permission status: ${settings.authorizationStatus}');
       }

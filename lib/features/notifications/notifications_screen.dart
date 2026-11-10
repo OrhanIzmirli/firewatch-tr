@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -32,7 +31,6 @@ import '../../shared/widgets/trust_info_card.dart';
 import 'widgets/alert_scope_section.dart';
 import '../../services/location_disclosure.dart';
 import '../../services/device_position.dart';
-import '../../shared/widgets/app_sheet.dart';
 import '../home/widgets/recent_alerts.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -169,6 +167,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Future<void> _checkNearbyFireRisk() async {
+    await LocationDisclosure.requestPermission(context, force: true);
+    if (!mounted) return;
     setState(() => _isBusy = true);
     await _monitor.checkNow(triggerNotification: true);
     if (!mounted) return;
@@ -192,12 +192,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final accepted = await LocationDisclosure.ensureAccepted(context, force: true);
     if (!accepted || !mounted) return;
 
-    setState(() => _isBusy = true);
-
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+    final permission = await LocationDisclosure.requestPermission(context, force: true);
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       if (!mounted) return;
@@ -208,30 +203,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       return;
     }
     if (!mounted) return;
+    setState(() => _isBusy = true);
 
-    final wantsBackground = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: DialogTitleWithClose(title: Text(l10n.backgroundLocationDialogTitle)),
-        content: Text(l10n.backgroundLocationDialogBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.backgroundLocationDialogConfirm),
-          ),
-        ],
-      ),
-    );
-
-    var backgroundGranted = false;
-    if (wantsBackground == true) {
-      final backgroundStatus = await Permission.locationAlways.request();
-      backgroundGranted = backgroundStatus.isGranted;
-    }
+    final backgroundGranted = await LocationDisclosure.requestBackground(context);
+    if (!mounted) return;
 
     if (backgroundGranted) {
       await BackgroundTaskService.instance.initialize();

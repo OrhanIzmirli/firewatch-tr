@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/config/api_config.dart';
@@ -16,6 +15,7 @@ import 'l10n/app_localizations.dart';
 import 'router/app_router.dart';
 import 'services/app_update_gate.dart';
 import 'services/background_task_service.dart';
+import 'services/foreground_location_sync.dart';
 import 'services/fire_monitoring_service.dart';
 import 'services/locale_provider.dart';
 import 'services/notification_service.dart';
@@ -58,10 +58,15 @@ Future<void> main() async {
   // above), which is all these services need to be safe to construct.
   if (!kIsWeb) {
     unawaited(_initializeBackgroundServices());
+    _foregroundListener = AppLifecycleListener(onResume: () => unawaited(ForegroundLocationSync.instance.sync()));
     unawaited(ReviewPrompt.noteAppOpen());
     if (defaultTargetPlatform == TargetPlatform.android) unawaited(AppUpdateGate.instance.check());
   }
 }
+
+// Held so the listener stays registered for the life of the app.
+// ignore: unused_element
+AppLifecycleListener? _foregroundListener;
 
 Future<void> _initializeBackgroundServices() async {
   try {
@@ -75,22 +80,11 @@ Future<void> _initializeBackgroundServices() async {
     if (kDebugMode) debugPrint('FireMonitoringService.initialize failed: $e\n$st');
   }
   try {
-    // Re-arm background monitoring silently on relaunch, but only if the
-    // user previously opted in AND the OS permission is still granted —
-    // never request it here. If the user revoked it via system settings,
-    // clear the stale flag instead of leaving it dangling.
-    final backgroundTask = BackgroundTaskService.instance;
-    if (await backgroundTask.isEnabled()) {
-      final status = await Permission.locationAlways.status;
-      if (status.isGranted) {
-        await backgroundTask.initialize();
-      } else {
-        await backgroundTask.setEnabled(false);
-      }
-    }
+    await cancelRetiredBackgroundTask();
   } catch (e, st) {
-    if (kDebugMode) debugPrint('BackgroundTaskService re-arm failed: $e\n$st');
+    if (kDebugMode) debugPrint('Retired task cleanup failed: $e\n$st');
   }
+  await ForegroundLocationSync.instance.sync();
 }
 
 class FireWatchApp extends ConsumerWidget {

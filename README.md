@@ -102,7 +102,7 @@ The data held up. The wording did not: 19 problems were found and fixed. The mos
 
 ## Limits
 
-Satellites pass only a few times a day, cannot see through cloud or smoke, and NASA's processing adds delay. Risk is calculated from one representative point per region. Android may delay background checks.
+Satellites pass only a few times a day, cannot see through cloud or smoke, and NASA's processing adds delay. Risk is calculated from one representative point per region.
 
 ## Run it locally
 

@@ -494,29 +494,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationsStopMonitoring => 'Otomatik Taramayı Durdur';
 
   @override
-  String get notificationsBackgroundTitle => 'Arka Planda Takip';
-
-  @override
-  String get notificationsBackgroundSubtitle =>
-      'Uygulama kapalıyken uydu tespitlerini aralıklarla kontrol edin. Android bu kontrolleri geciktirebilir, uydu verisi de saatlerce gecikebilir.';
-
-  @override
-  String get notificationsEnableBackground => 'Arka Plan Takibini Aç';
-
-  @override
-  String get notificationsDisableBackground => 'Arka Plan Takibini Kapat';
-
-  @override
-  String get backgroundLocationPermissionDenied =>
-      'Arka plan konum izni verilmedi. Arka plan takibi açılamadı.';
-
-  @override
-  String get backgroundMonitoringEnabled => 'Arka plan takibi açıldı.';
-
-  @override
-  String get backgroundMonitoringDisabled => 'Arka plan takibi kapatıldı.';
-
-  @override
   String get notificationsNearbyLiveFires => 'Yakındaki Uydu Tespitleri';
 
   @override
@@ -1630,35 +1607,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'FireWatch TR, yakınınızdaki uydu ısı tespitlerini ve yangın riskini göstermek ve yakın tespitler için size bildirim gönderebilmek amacıyla konum verilerinizi toplar.';
 
   @override
-  String get locDisclosureBackground =>
-      'Otomatik taramayı başlatırsanız konum verileriniz, yakın tespitleri denetlemek için uygulama kapalıyken veya kullanılmıyorken de toplanır. Bunun için ayrıca izin istenir.';
-
-  @override
   String get locDisclosureServer =>
       'Konumunuz, bulunduğunuz ili ve riski göstermek için sunucumuza gönderilir. Bu sorgular kalıcı olarak saklanmaz.';
 
   @override
   String get locDisclosureShared =>
       'Konumunuz satılmaz, reklam için kullanılmaz ve başkalarıyla paylaşılmaz. Hava ve yangın indeksi verisi için hizmet sağlayıcılara yalnızca yaklaşık 10 km\'ye yuvarlanmış nokta iletilir.';
-
-  @override
-  String get backgroundDisclosureTitle => 'Arka planda konum verisi';
-
-  @override
-  String get backgroundDisclosureLead =>
-      'FireWatch TR, yakınınızdaki uydu ısı tespitlerini denetleyip size bildirim gösterebilmek için uygulama kapalıyken veya kullanılmıyorken de konum verilerinizi toplar. Bu yalnızca otomatik taramayı başlatırsanız olur.';
-
-  @override
-  String get backgroundDisclosureDevice =>
-      'Bu denetimler düzenli aralıklarla telefonunuzda yapılır. Bu sırada konumunuz sunucumuza gönderilmez, saklanmaz ve paylaşılmaz.';
-
-  @override
-  String get backgroundDisclosureStop =>
-      'Durdurmak için Bildirimler ekranından otomatik taramayı durdurun veya izni telefon ayarlarından kaldırın.';
-
-  @override
-  String get backgroundDisclosureOptional =>
-      'Bu izin zorunlu değil; vermezseniz tarama yalnızca uygulama açıkken çalışır. Kabul ederseniz sonraki ekranda \"Her zaman izin ver\" seçeneğini seçin.';
 
   @override
   String get notifPermData =>
@@ -1688,12 +1642,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locDisclosureTitle => 'Konum verilerinizi topluyoruz';
 
   @override
+  String get locDisclosureForeground =>
+      'Konumunuz yalnızca uygulama açık ve ekrandayken okunur.';
+
+  @override
+  String get settingsAlertsLocationNote =>
+      'Bildirimler son açtığınız konuma göre gider; ev/yazlık için Yerlerim\'i kullanın.';
+
+  @override
   String get locDisclosureStored =>
-      'Otomatik taramayı başlatırsanız, Yerlerim\'e yer eklerseniz veya yangın bildirirseniz konum yaklaşık 1 km\'ye yuvarlanarak sunucumuzda saklanır. Tam konumunuz saklanmaz.';
+      'Otomatik taramayı başlatırsanız, uygulamayı her açtığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak sunucumuzda güncellenir ve bildirimler bu son konuma göre gider. Yerlerim\'deki yerler ve yangın bildirimleri de böyle saklanır. Tam konumunuz saklanmaz.';
 
   @override
   String get locDisclosureDelete =>
-      'Silmek için bildirimleri kapatın veya Ayarlar → Konum verimi sil\'e dokunun; hemen silinir. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir. Yangın bildirimleri 90 gün sonra silinir.';
+      'Hemen silmek için bildirimleri kapatın veya Ayarlar → Konum verimi sil\'e dokunun. Uygulamayı 90 gün açmazsanız kaydınız tamamen silinir. Yangın bildirimleri 90 gün sonra silinir.';
 
   @override
   String get locDisclosureOptional =>
@@ -2417,7 +2379,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trustAlertsSource =>
-      'Arka plan izleme, NASA FIRMS verilerini belirli aralıklarla kontrol eder ve yeni tespitleri cihazınızın son bilinen konumuyla telefonunuzda karşılaştırır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattığınızda konumunuz yaklaşık 1 km\'ye yuvarlanarak saklanır.';
+      'Uydu tespitleri uygulama açıkken belirli aralıklarla kontrol edilir ve konumunuzla telefonunuzda karşılaştırılır. Sunucudan gelen bölgesel uyarılar için, otomatik taramayı başlattıysanız uygulamayı son açtığınız konum yaklaşık 1 km\'ye yuvarlanarak saklanır.';
 
   @override
   String get trustAlertsInterpret =>

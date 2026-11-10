@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +23,7 @@ class LocationDisclosure {
   LocationDisclosure._();
 
   /// Bump the suffix when the disclosed practice changes, so everyone sees
-  /// the new text once. v3 (1.2.0+9) is the rewrite Google Play asked for.
+  /// the new text once. v3 (1.2.0+10) is the rewrite Google Play asked for.
   static const prefsKey = 'location_disclosure_v3_accepted';
 
   /// Long enough to cover one flow, so an acceptance is not asked for twice
@@ -122,19 +121,6 @@ class LocationDisclosure {
     return result;
   }
 
-  /// The separate disclosure and prompt for "Allow all the time". Returns
-  /// whether background location is granted afterwards.
-  static Future<bool> requestBackground(BuildContext context) async {
-    if (await Permission.locationAlways.isGranted) return true;
-    if (!context.mounted) return false;
-    final accepted =
-        await Navigator.of(context, rootNavigator: true).push<bool>(
-          MaterialPageRoute(fullscreenDialog: true, builder: (_) => const BackgroundLocationDisclosurePage()),
-        ) ??
-        false;
-    if (!accepted) return false;
-    return (await Permission.locationAlways.request()).isGranted;
-  }
 }
 
 /// One disclosure, as plain page text: every paragraph at body size and full
@@ -249,7 +235,7 @@ class PermissionDisclosureView extends StatelessWidget {
 
 List<String> locationDisclosureParagraphs(AppLocalizations l10n) => [
   l10n.locDisclosureLead,
-  l10n.locDisclosureBackground,
+  l10n.locDisclosureForeground,
   l10n.locDisclosureServer,
   l10n.locDisclosureStored,
   l10n.locDisclosureShared,
@@ -267,28 +253,6 @@ class LocationDisclosurePage extends StatelessWidget {
       body: PermissionDisclosureView(
         title: l10n.locDisclosureTitle,
         paragraphs: locationDisclosureParagraphs(l10n),
-        onAccept: () => Navigator.of(context).pop(true),
-        onDecline: () => Navigator.of(context).pop(false),
-      ),
-    );
-  }
-}
-
-class BackgroundLocationDisclosurePage extends StatelessWidget {
-  const BackgroundLocationDisclosurePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      body: PermissionDisclosureView(
-        title: l10n.backgroundDisclosureTitle,
-        paragraphs: [
-          l10n.backgroundDisclosureLead,
-          l10n.backgroundDisclosureDevice,
-          l10n.backgroundDisclosureStop,
-          l10n.backgroundDisclosureOptional,
-        ],
         onAccept: () => Navigator.of(context).pop(true),
         onDecline: () => Navigator.of(context).pop(false),
       ),

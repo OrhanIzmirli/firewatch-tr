@@ -12,10 +12,10 @@ import '../../core/constants/app_spacing.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/detection_status.dart';
 import '../../models/fire_point.dart';
-import '../../services/background_task_service.dart';
 import '../../services/fire_api_service.dart';
 import '../../services/fire_mapper.dart';
 import '../../services/fire_monitoring_service.dart';
+import '../../services/foreground_location_sync.dart';
 import '../../services/notification_service.dart';
 import '../../services/render_api_service.dart';
 import '../../services/settings_provider.dart';
@@ -205,14 +205,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     if (!mounted) return;
     setState(() => _isBusy = true);
 
-    final backgroundGranted = await LocationDisclosure.requestBackground(context);
-    if (!mounted) return;
-
-    if (backgroundGranted) {
-      await BackgroundTaskService.instance.initialize();
-      await BackgroundTaskService.instance.setEnabled(true);
-    }
-
     await _monitor.startMonitoring();
 
     Position? position;
@@ -231,16 +223,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, true);
     await settings.recordPushPreference(true);
+    await ForegroundLocationSync.enable();
 
     if (!mounted) return;
     setState(() => _isBusy = false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          backgroundGranted
-              ? l10n.backgroundMonitoringEnabled
-              : l10n.monitorStatusStarted,
-        ),
+        content: Text(l10n.monitorStatusStarted),
       ),
     );
   }
@@ -250,9 +239,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _isBusy = true);
 
     await _monitor.stopMonitoring();
-    await BackgroundTaskService.instance.stop();
-    await BackgroundTaskService.instance.setEnabled(false);
     await NotificationService.instance.updateSubscription(active: false);
+    await ForegroundLocationSync.disable();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_notificationsEnabledKey, false);

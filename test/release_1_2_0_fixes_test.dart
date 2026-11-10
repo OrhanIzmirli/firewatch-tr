@@ -278,12 +278,7 @@ void main() {
   });
 
   group('general scan fixes', () {
-    test('background monitoring initialises Firebase before the notification service', () {
-      final src = File('lib/services/background_task_service.dart').readAsStringSync();
-      final init = src.indexOf('Firebase.initializeApp(');
-      expect(init, greaterThan(0));
-      expect(init, lessThan(src.indexOf('NotificationService.instance.initializeLocal()')));
-      // The service no longer touches Firebase when constructed.
+    test('the notification service does not touch Firebase when constructed', () {
       expect(File('lib/services/notification_service.dart').readAsStringSync(),
           contains('FirebaseMessaging get _fcm => FirebaseMessaging.instance;'));
     });

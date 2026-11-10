@@ -54,11 +54,23 @@ void main() {
       }
     });
 
-    test('uses Google\'s background wording, on both pages', () {
-      expect(tr.locDisclosureBackground, contains('uygulama kapalıyken veya kullanılmıyorken de'));
-      expect(tr.backgroundDisclosureLead, contains('uygulama kapalıyken veya kullanılmıyorken de'));
-      expect(en.locDisclosureBackground, contains('when the app is closed or not in use'));
-      expect(en.backgroundDisclosureLead, contains('when the app is closed or not in use'));
+    test('says the location is read only with the app on screen', () {
+      expect(tr.locDisclosureForeground, contains('uygulama açık ve ekrandayken'));
+      expect(en.locDisclosureForeground, contains('while the app is open on your screen'));
+      for (final file in ['lib/l10n/app_tr.arb', 'lib/l10n/app_en.arb']) {
+        final arb = File(file).readAsStringSync();
+        expect(arb, isNot(contains('kapalıyken')));
+        expect(arb, isNot(contains('app is closed')));
+        expect(arb.toLowerCase(), isNot(contains('arka plan')));
+        expect(arb.toLowerCase(), isNot(contains('background')));
+      }
+    });
+
+    test('says alerts follow the last location', () {
+      expect(tr.locDisclosureStored, contains('son konuma göre'));
+      expect(en.locDisclosureStored, contains('last location'));
+      expect(tr.settingsAlertsLocationNote, "Bildirimler son açtığınız konuma göre gider; ev/yazlık için Yerlerim'i kullanın.");
+      expect(en.settingsAlertsLocationNote, contains('My Places'));
     });
 
     test('says server, about 1 km, not shared, how to delete', () {
@@ -79,10 +91,6 @@ void main() {
       expect(en.disclosureDecline, 'No, thanks');
     });
 
-    test('background checks stay on the phone', () {
-      expect(tr.backgroundDisclosureDevice, contains('sunucumuza gönderilmez'));
-      expect(en.backgroundDisclosureDevice, contains('not sent to our server'));
-    });
   });
 
   group('every prompt goes through the disclosure', () {
@@ -90,7 +98,7 @@ void main() {
       final raising = _dartFiles()
           .where((f) {
             final s = f.readAsStringSync();
-            return s.contains('Geolocator.requestPermission(') || s.contains('locationAlways.request(');
+            return s.contains('Geolocator.requestPermission(');
           })
           .map((f) => f.path.replaceAll(r'\', '/'))
           .toList();
@@ -122,18 +130,6 @@ void main() {
       _expectPlainBodyText(tester, locationDisclosureParagraphs(l10n));
       expect(find.byKey(const Key('disclosurePrivacyPolicy')), findsOneWidget);
       expect(find.byType(BackdropFilter), findsNothing);
-    });
-
-    testWidgets('$locale: the background page is plain body text', (tester) async {
-      await tester.pumpWidget(_app(const BackgroundLocationDisclosurePage(), locale));
-      await tester.pump();
-      expect(find.text(l10n.backgroundDisclosureTitle), findsOneWidget);
-      _expectPlainBodyText(tester, [
-        l10n.backgroundDisclosureLead,
-        l10n.backgroundDisclosureDevice,
-        l10n.backgroundDisclosureStop,
-        l10n.backgroundDisclosureOptional,
-      ]);
     });
 
     testWidgets('$locale: the notification page says what is stored', (tester) async {

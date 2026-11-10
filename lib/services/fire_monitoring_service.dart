@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,6 +54,8 @@ class FireMonitoringService {
     await checkNow(triggerNotification: true);
 
     _timer = Timer.periodic(_pollInterval, (_) async {
+      // The app may be behind another one; the location is read only on screen.
+      if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) return;
       await checkNow(triggerNotification: true);
     });
   }

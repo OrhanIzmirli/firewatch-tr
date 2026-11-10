@@ -149,6 +149,12 @@ class SettingsScreen extends ConsumerWidget {
                         onChanged: notifier.toggleNearbyAlerts,
                         icon: Icons.location_on_rounded,
                       ),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
+                        l10n.settingsAlertsLocationNote,
+                        key: const Key('settingsAlertsLocationNote'),
+                        style: GoogleFonts.ibmPlexSans(fontSize: 14, height: 1.4),
+                      ),
                     ],
                   ),
                 )

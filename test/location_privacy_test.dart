@@ -91,10 +91,10 @@ void main() {
     });
 
     test('no in-app text still claims location is never stored', () {
-      for (final text in [tr.locDisclosureStored, tr.trustAlertsSource, tr.backgroundDisclosureDevice]) {
+      for (final text in [tr.locDisclosureStored, tr.trustAlertsSource]) {
         expect(text.toLowerCase(), isNot(contains('hiç saklanmaz')));
       }
-      for (final text in [en.locDisclosureStored, en.trustAlertsSource, en.backgroundDisclosureDevice]) {
+      for (final text in [en.locDisclosureStored, en.trustAlertsSource]) {
         expect(text.toLowerCase(), isNot(contains('never stored server-side')));
       }
     });

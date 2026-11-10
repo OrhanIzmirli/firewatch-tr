@@ -497,29 +497,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsStopMonitoring => 'Stop Auto Monitoring';
 
   @override
-  String get notificationsBackgroundTitle => 'Background Monitoring';
-
-  @override
-  String get notificationsBackgroundSubtitle =>
-      'Check satellite detections at intervals while the app is closed. Android can delay these checks, and satellite data can be hours late.';
-
-  @override
-  String get notificationsEnableBackground => 'Enable Background Monitoring';
-
-  @override
-  String get notificationsDisableBackground => 'Disable Background Monitoring';
-
-  @override
-  String get backgroundLocationPermissionDenied =>
-      'Background location permission was not granted. Background monitoring could not be enabled.';
-
-  @override
-  String get backgroundMonitoringEnabled => 'Background monitoring enabled.';
-
-  @override
-  String get backgroundMonitoringDisabled => 'Background monitoring disabled.';
-
-  @override
   String get notificationsNearbyLiveFires => 'Nearby Satellite Detections';
 
   @override
@@ -1634,35 +1611,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'FireWatch TR collects your location data to show satellite heat detections and fire risk near you, and to send you notifications about nearby detections.';
 
   @override
-  String get locDisclosureBackground =>
-      'If you start automatic monitoring, your location data is also collected when the app is closed or not in use, to check for nearby detections. A separate permission is requested for this.';
-
-  @override
   String get locDisclosureServer =>
       'Your location is sent to our server to show your province and the risk. These lookups are not kept permanently.';
 
   @override
   String get locDisclosureShared =>
       'Your location is not sold, not used for ads and not shared. Weather and fire index providers receive only a point rounded to about 10 km.';
-
-  @override
-  String get backgroundDisclosureTitle => 'Location data in the background';
-
-  @override
-  String get backgroundDisclosureLead =>
-      'FireWatch TR collects your location data to check for satellite heat detections near you and notify you, even when the app is closed or not in use. This happens only if you start automatic monitoring.';
-
-  @override
-  String get backgroundDisclosureDevice =>
-      'These checks run on your phone at regular intervals. During them your location is not sent to our server, not stored and not shared.';
-
-  @override
-  String get backgroundDisclosureStop =>
-      'To stop, end automatic monitoring on the Notifications screen or remove the permission in your phone\'s settings.';
-
-  @override
-  String get backgroundDisclosureOptional =>
-      'This permission is optional; without it, monitoring runs only while the app is open. If you agree, choose \"Allow all the time\" on the next screen.';
 
   @override
   String get notifPermData =>
@@ -1692,8 +1646,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locDisclosureTitle => 'We collect your location data';
 
   @override
+  String get locDisclosureForeground =>
+      'Your location is read only while the app is open on your screen.';
+
+  @override
+  String get settingsAlertsLocationNote =>
+      'Alerts go by the location where you last opened the app; use My Places for your home or summer house.';
+
+  @override
   String get locDisclosureStored =>
-      'If you start automatic monitoring, add a place to My Places or report a fire, the location is stored on our server rounded to about 1 km. Your exact location is never stored.';
+      'If you start automatic monitoring, each time you open the app your location is updated on our server rounded to about 1 km, and alerts go by that last location. Places in My Places and fire reports are stored the same way. Your exact location is never stored.';
 
   @override
   String get locDisclosureDelete =>
@@ -2423,7 +2385,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustAlertsSource =>
-      'Background monitoring checks NASA FIRMS data on a schedule and compares new detections against your device\'s last known location on your phone. For regional alerts from our server, your location is stored rounded to about 1 km when you start automatic monitoring.';
+      'Satellite detections are checked at intervals while the app is open and compared with your location on your phone. For regional alerts from our server, if you started automatic monitoring, the location where you last opened the app is stored rounded to about 1 km.';
 
   @override
   String get trustAlertsInterpret =>
